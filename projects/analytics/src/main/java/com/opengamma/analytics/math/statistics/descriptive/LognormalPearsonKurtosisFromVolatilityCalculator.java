@@ -15,13 +15,13 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Calculates the Pearson kurtosis of a lognormal distribution using the standard deviation and time.
- * $$
- * \begin{align*}
- * \y &= \sigma^2 t\\
- * \kappa &= y^8 + 6y^3 + 15y^4 + 16y^2 + 3
- * \end{align*}
- * $$
  */
+// * $$
+// * \begin{align*}
+// * \y &= \sigma^2 t\\
+// * \kappa &= y^8 + 6y^3 + 15y^4 + 16y^2 + 3
+// * \end{align*}
+// * $$
 @LognormalStatistic(aliases = "Lognormal Pearson Kurtosis From Volatility")
 public class LognormalPearsonKurtosisFromVolatilityCalculator extends LognormalStatisticsCalculator {
   /**

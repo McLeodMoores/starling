@@ -5,17 +5,20 @@
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
-
 /**
- * European call spread option pays max(S1-S2-K,0) whereas European put spread option pays max(K-S1+S2,0)
+ * European call spread option pays max(S1-S2-K,0) whereas European put spread option pays max(K-S1+S2,0).
  */
 public class EuropeanSpreadOptionFunctionProvider extends OptionFunctionProvider2D {
 
   /**
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
    */
   public EuropeanSpreadOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall) {
     super(strike, timeToExpiry, steps, isCall);
@@ -65,7 +68,7 @@ public class EuropeanSpreadOptionFunctionProvider extends OptionFunctionProvider
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

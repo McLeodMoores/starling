@@ -31,7 +31,7 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public class CurrencyPairsFunction extends AbstractFunction.NonCompiledInvoker {
 
-  /** Name of the currency pairs name property */
+  /** Name of the currency pairs name property. */
   public static final String CURRENCY_PAIRS_NAME = "CurrencyPairsName";
 
   @Override
@@ -61,7 +61,8 @@ public class CurrencyPairsFunction extends AbstractFunction.NonCompiledInvoker {
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target,
+      final ValueRequirement desiredValue) {
     final Set<String> names = desiredValue.getConstraints().getValues(CURRENCY_PAIRS_NAME);
     if (names == null || names.size() != 1) {
       return null;

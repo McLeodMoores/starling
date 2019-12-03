@@ -21,7 +21,7 @@ import com.opengamma.web.analytics.rest.MasterType;
 public class MasterChangeManager {
 
   /** Listeners for changes in data in a master */
-  private final Set<MasterChangeListener> _listeners = new CopyOnWriteArraySet<MasterChangeListener>();
+  private final Set<MasterChangeListener> _listeners = new CopyOnWriteArraySet<>();
 
   /**
    * Creates a new instance that will receive change events from the change providers and dispatch them to its
@@ -29,30 +29,30 @@ public class MasterChangeManager {
    * @param changeProviders Providers of change events from masters keyed by the type of the master which
    * produces their events.
    */
-  public MasterChangeManager(Map<MasterType, ChangeProvider> changeProviders) {
-    for (Map.Entry<MasterType, ChangeProvider> entry : changeProviders.entrySet()) {
+  public MasterChangeManager(final Map<MasterType, ChangeProvider> changeProviders) {
+    for (final Map.Entry<MasterType, ChangeProvider> entry : changeProviders.entrySet()) {
       final MasterType masterType = entry.getKey();
-      ChangeProvider changeProvider = entry.getValue();
+      final ChangeProvider changeProvider = entry.getValue();
       changeProvider.changeManager().addChangeListener(new ChangeListener() {
         @Override
-        public void entityChanged(ChangeEvent event) {
+        public void entityChanged(final ChangeEvent event) {
           MasterChangeManager.this.entityChanged(masterType);
         }
       });
     }
   }
 
-  /* package */ void addChangeListener(MasterChangeListener listener) {
+  /* package */ void addChangeListener(final MasterChangeListener listener) {
     ArgumentChecker.notNull(listener, "listener");
     _listeners.add(listener);
   }
 
-  /* package */ void removeChangeListener(MasterChangeListener listener) {
+  /* package */ void removeChangeListener(final MasterChangeListener listener) {
     _listeners.remove(listener);
   }
 
-  private void entityChanged(MasterType masterType) {
-    for (MasterChangeListener listener : _listeners) {
+  private void entityChanged(final MasterType masterType) {
+    for (final MasterChangeListener listener : _listeners) {
       listener.masterChanged(masterType);
     }
   }

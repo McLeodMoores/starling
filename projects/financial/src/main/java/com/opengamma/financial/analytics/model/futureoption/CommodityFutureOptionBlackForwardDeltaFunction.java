@@ -25,7 +25,7 @@ import com.opengamma.engine.value.ValueSpecification;
 public class CommodityFutureOptionBlackForwardDeltaFunction extends CommodityFutureOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public CommodityFutureOptionBlackForwardDeltaFunction() {
     super(ValueRequirementNames.FORWARD_DELTA);
@@ -35,7 +35,7 @@ public class CommodityFutureOptionBlackForwardDeltaFunction extends CommodityFut
   protected boolean getFunctionIncludesCurrencyProperty() {
     return false;
   }
-  
+
   @Override
   protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {

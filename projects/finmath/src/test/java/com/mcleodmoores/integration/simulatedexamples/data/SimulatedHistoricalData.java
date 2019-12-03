@@ -33,7 +33,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class SimulatedHistoricalData {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SimulatedHistoricalData.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimulatedHistoricalData.class);
 
   /**
    * OG Simulated data provider name
@@ -69,9 +69,9 @@ public class SimulatedHistoricalData {
       while ((line = reader.readNext()) != null) {
         lineNum++;
         if ((line.length == 0) || line[0].startsWith("#")) {
-          s_logger.debug("Empty line on {}", lineNum);
+          LOGGER.debug("Empty line on {}", lineNum);
         } else if (line.length != NUM_FIELDS) {
-          s_logger.error("Invalid number of fields ({}) in CSV on line {}", line.length, lineNum);
+          LOGGER.error("Invalid number of fields ({}) in CSV on line {}", line.length, lineNum);
         } else {
           final String scheme = line[0];
           final String identifier = line[1];

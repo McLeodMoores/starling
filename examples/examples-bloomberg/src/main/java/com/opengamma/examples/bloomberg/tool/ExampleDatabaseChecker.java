@@ -24,7 +24,7 @@ import com.opengamma.util.db.tool.DbTool;
 public class ExampleDatabaseChecker {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleDatabaseChecker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleDatabaseChecker.class);
 
   /** Shared database URL. */
   private static final String KEY_SHARED_URL = "db.standard.url";
@@ -45,8 +45,9 @@ public class ExampleDatabaseChecker {
 
   /**
    * Main method to run the tool. No arguments are needed.
-   * <p/>
-   * If the command line is empty, the "development" configuration file is started. This file is intended for use with an IDE and a checked out source code tree.
+   * <p>
+   * If the command line is empty, the "development" configuration file is started. This file is intended for use with an IDE and
+   * a checked out source code tree.
    * It relies on the <code>web</code> directory being relative to <code>examples-bloomberg</code> in the file system as per a standard checkout of Starling.
    *
    * @param args the arguments, unused
@@ -56,7 +57,7 @@ public class ExampleDatabaseChecker {
       ExampleDatabaseChecker.run(args);
       System.exit(0);
     } catch (final Exception ex) {
-      s_logger.error("Caught exception", ex);
+      LOGGER.error("Caught exception", ex);
       ex.printStackTrace();
       System.exit(1);
     }
@@ -82,15 +83,15 @@ public class ExampleDatabaseChecker {
       props.load(in);
     }
 
-    s_logger.info("Checking main database...");
+    LOGGER.info("Checking main database...");
     final DbTool dbTool = new DbTool();
     dbTool.setJdbcUrl(Objects.requireNonNull(props.getProperty(KEY_SHARED_URL)));
     dbTool.setUser(props.getProperty(KEY_SHARED_USER_NAME, ""));
     dbTool.setPassword(props.getProperty(KEY_SHARED_PASSWORD, ""));
     dbTool.setCatalog(CATALOG); // ignored, as it is parsed from the url
     final List<String> tables = dbTool.listTables();
-    s_logger.debug("url: " + Objects.requireNonNull(props.getProperty(KEY_SHARED_URL)));
-    s_logger.info(tables.isEmpty() ? "Main database not found" : "Found existing database");
+    LOGGER.debug("url: " + Objects.requireNonNull(props.getProperty(KEY_SHARED_URL)));
+    LOGGER.info(tables.isEmpty() ? "Main database not found" : "Found existing database");
     return tables;
   }
 

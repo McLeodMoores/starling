@@ -28,7 +28,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -37,16 +36,15 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of instruments using SABR parameter surfaces and
- * curves constructed using the discounting method.
+ * Calculates the present value of instruments using SABR parameter surfaces and curves constructed using the discounting method.
  */
 public class NoExtrapolationSABRDiscountingPVFunction extends SABRDiscountingFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, MultipleCurrencyAmount> CALCULATOR =
-      PresentValueSABRSwaptionCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, MultipleCurrencyAmount> CALCULATOR = PresentValueSABRSwaptionCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public NoExtrapolationSABRDiscountingPVFunction() {
     super(PRESENT_VALUE);
@@ -60,7 +58,7 @@ public class NoExtrapolationSABRDiscountingPVFunction extends SABRDiscountingFun
       protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
           final ComputationTarget target, final Set<ValueRequirement> desiredValues, final InstrumentDerivative derivative,
           final FXMatrix fxMatrix) {
-        final DayCount dayCount = DayCounts.ACT_360; //TODO [PLAT-6236] 
+        final DayCount dayCount = DayCounts.ACT_360; // TODO [PLAT-6236]
         final SABRSwaptionProvider sabrData = getSABRSurfaces(executionContext, inputs, target, fxMatrix, dayCount);
         final MultipleCurrencyAmount mca = derivative.accept(CALCULATOR, sabrData);
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.currency.rest;
@@ -27,7 +27,7 @@ public class RemoteCurrencyMatrixSource extends AbstractRemoteSource<CurrencyMat
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri the base target URI for all RESTful web services, not null
    */
   public RemoteCurrencyMatrixSource(final URI baseUri) {
@@ -42,27 +42,27 @@ public class RemoteCurrencyMatrixSource extends AbstractRemoteSource<CurrencyMat
   // CurrencyMatrixSource
 
   @Override
-  public CurrencyMatrix getCurrencyMatrix(String name, VersionCorrection versionCorrection) {
+  public CurrencyMatrix getCurrencyMatrix(final String name, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(name, "name");
     try {
-      URI uri = DataCurrencyMatrixSourceUris.uriGetMatrix(getBaseUri(), name, versionCorrection);
+      final URI uri = DataCurrencyMatrixSourceUris.uriGetMatrix(getBaseUri(), name, versionCorrection);
       return accessRemote(uri).get(CurrencyMatrix.class);
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       return null;
     }
   }
 
   @Override
-  public CurrencyMatrix get(UniqueId identifier) {
+  public CurrencyMatrix get(final UniqueId identifier) {
     ArgumentChecker.notNull(identifier, "identifier");
-    URI uri = DataCurrencyMatrixSourceUris.uriGetMatrix(getBaseUri(), identifier);
+    final URI uri = DataCurrencyMatrixSourceUris.uriGetMatrix(getBaseUri(), identifier);
     return accessRemote(uri).get(CurrencyMatrix.class);
   }
 
   @Override
-  public CurrencyMatrix get(ObjectId identifier, VersionCorrection versionCorrection) {
+  public CurrencyMatrix get(final ObjectId identifier, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(identifier, "identifier");
-    URI uri = DataCurrencyMatrixSourceUris.uriGetMatrix(getBaseUri(), identifier, versionCorrection);
+    final URI uri = DataCurrencyMatrixSourceUris.uriGetMatrix(getBaseUri(), identifier, versionCorrection);
     return accessRemote(uri).get(CurrencyMatrix.class);
   }
 

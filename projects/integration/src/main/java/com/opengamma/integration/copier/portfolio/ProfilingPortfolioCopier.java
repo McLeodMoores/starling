@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.portfolio;
@@ -23,8 +23,8 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class ProfilingPortfolioCopier implements PortfolioCopier {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ProfilingPortfolioCopier.class);
-  private String[] _structure;
+  private static final Logger LOGGER = LoggerFactory.getLogger(ProfilingPortfolioCopier.class);
+  private final String[] _structure;
 
   private int _readTime;
   private int _writeTime;
@@ -34,21 +34,21 @@ public class ProfilingPortfolioCopier implements PortfolioCopier {
   }
 
 
-  public ProfilingPortfolioCopier(String[] structure) {
+  public ProfilingPortfolioCopier(final String[] structure) {
     _structure = structure;
   }
 
   @Override
-  public void copy(PositionReader positionReader, PositionWriter positionWriter) {
+  public void copy(final PositionReader positionReader, final PositionWriter positionWriter) {
     copy(positionReader, positionWriter, null);
   }
 
   @Override
-  public void copy(PositionReader positionReader, PositionWriter positionWriter, PortfolioCopierVisitor visitor) {
+  public void copy(final PositionReader positionReader, final PositionWriter positionWriter, final PortfolioCopierVisitor visitor) {
 
     ArgumentChecker.notNull(positionWriter, "positionWriter");
     ArgumentChecker.notNull(positionReader, "positionReader");
-    
+
     ObjectsPair<ManageablePosition, ManageableSecurity[]> next;
 
     while (true) {
@@ -58,22 +58,22 @@ public class ProfilingPortfolioCopier implements PortfolioCopier {
       // Read in next row, checking for errors and EOF
       try {
         next = positionReader.readNext();
-      } catch (Exception e) {
+      } catch (final Exception e) {
         // skip to next row on uncaught exception while parsing row
-        s_logger.error("Unable to parse row", e);
+        LOGGER.error("Unable to parse row", e);
         continue;
       }
       if (next == null) {
         // stop loading on EOF
         break;
       }
-      
+
       _readTime += time.until(Instant.now(), ChronoUnit.MILLIS);
       time = Instant.now();
 
       // Is position and security data is available for the current row?
-      ManageablePosition position = next.getFirst();
-      ManageableSecurity[] securities = next.getSecond();
+      final ManageablePosition position = next.getFirst();
+      final ManageableSecurity[] securities = next.getSecond();
 
       // Is position and security data available for the current row?
       if (position != null && securities != null) {
@@ -91,9 +91,9 @@ public class ProfilingPortfolioCopier implements PortfolioCopier {
         positionWriter.setPath(path);
 
         // Write position and security data
-        ObjectsPair<ManageablePosition, ManageableSecurity[]> written =
+        final ObjectsPair<ManageablePosition, ManageableSecurity[]> written =
             positionWriter.writePosition(position, securities);
-        
+
         if (visitor != null && written != null) {
           visitor.info(StringUtils.arrayToDelimitedString(path, "/"), written.getFirst(), written.getSecond());
         }

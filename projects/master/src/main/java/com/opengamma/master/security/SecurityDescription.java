@@ -18,11 +18,15 @@ import java.lang.annotation.Target;
 public @interface SecurityDescription {
   /**
    * Security or index type.
+   * 
+   * @return the type
    */
   String type();
-  
+
   /**
    * A short description of the security type/index to be used in GUIs.
+   * 
+   * @return the description
    */
   String description();
 

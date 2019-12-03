@@ -35,7 +35,6 @@ import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.view.ViewProcessor;
 import com.opengamma.engine.view.helper.AvailableOutputsProvider;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.exchange.ExchangeMaster;
@@ -176,11 +175,6 @@ public class ToolContext extends DirectBean implements Closeable {
   @PropertyDefinition
   private volatile MarketDataSnapshotSource _marketDataSnapshotSource;
   /**
-   * The convention bundle source.
-   */
-  @PropertyDefinition
-  private volatile ConventionBundleSource _conventionBundleSource;
-  /**
    * The convention source.
    */
   @PropertyDefinition
@@ -221,9 +215,9 @@ public class ToolContext extends DirectBean implements Closeable {
    */
   @PropertyDefinition
   private volatile AvailableOutputsProvider _avaliableOutputsProvider;
-  
+
   /**
-   * The function configuration source
+   * The function configuration source.
    */
   @PropertyDefinition
   private volatile FunctionConfigurationSource _functionConfigSource;
@@ -234,26 +228,27 @@ public class ToolContext extends DirectBean implements Closeable {
   public ToolContext() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Closes the context, freeing any underlying resources. This calls the manager instance if present.
    */
   @Override
   public void close() {
-    Object manager = getContextManager();
+    final Object manager = getContextManager();
     ReflectionUtils.close(manager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Sets the tool context, used to free any underlying resources.
    * <p>
    * The method {@link ReflectionUtils#isCloseable(Class)} must return true for the object. Call {@link #close()} to close the manager.
-   * 
-   * @param contextManager the context manager.
+   *
+   * @param contextManager
+   *          the context manager.
    */
-  public void setContextManager(Object contextManager) {
-    if (ReflectionUtils.isCloseable(contextManager.getClass()) == false) {
+  public void setContextManager(final Object contextManager) {
+    if (!ReflectionUtils.isCloseable(contextManager.getClass())) {
       throw new IllegalArgumentException("Object is not closeable: " + contextManager);
     }
     _contextManager = contextManager;
@@ -822,31 +817,6 @@ public class ToolContext extends DirectBean implements Closeable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the convention bundle source.
-   * @return the value of the property
-   */
-  public ConventionBundleSource getConventionBundleSource() {
-    return _conventionBundleSource;
-  }
-
-  /**
-   * Sets the convention bundle source.
-   * @param conventionBundleSource  the new value of the property
-   */
-  public void setConventionBundleSource(ConventionBundleSource conventionBundleSource) {
-    this._conventionBundleSource = conventionBundleSource;
-  }
-
-  /**
-   * Gets the the {@code conventionBundleSource} property.
-   * @return the property, not null
-   */
-  public final Property<ConventionBundleSource> conventionBundleSource() {
-    return metaBean().conventionBundleSource().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
    * Gets the convention source.
    * @return the value of the property
    */
@@ -1047,7 +1017,7 @@ public class ToolContext extends DirectBean implements Closeable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the function configuration source
+   * Gets the function configuration source.
    * @return the value of the property
    */
   public FunctionConfigurationSource getFunctionConfigSource() {
@@ -1055,7 +1025,7 @@ public class ToolContext extends DirectBean implements Closeable {
   }
 
   /**
-   * Sets the function configuration source
+   * Sets the function configuration source.
    * @param functionConfigSource  the new value of the property
    */
   public void setFunctionConfigSource(FunctionConfigurationSource functionConfigSource) {
@@ -1105,7 +1075,6 @@ public class ToolContext extends DirectBean implements Closeable {
           JodaBeanUtils.equal(getLegalEntitySource(), other.getLegalEntitySource()) &&
           JodaBeanUtils.equal(getHistoricalTimeSeriesSource(), other.getHistoricalTimeSeriesSource()) &&
           JodaBeanUtils.equal(getMarketDataSnapshotSource(), other.getMarketDataSnapshotSource()) &&
-          JodaBeanUtils.equal(getConventionBundleSource(), other.getConventionBundleSource()) &&
           JodaBeanUtils.equal(getConventionSource(), other.getConventionSource()) &&
           JodaBeanUtils.equal(getSecurityProvider(), other.getSecurityProvider()) &&
           JodaBeanUtils.equal(getSecurityLoader(), other.getSecurityLoader()) &&
@@ -1144,7 +1113,6 @@ public class ToolContext extends DirectBean implements Closeable {
     hash = hash * 31 + JodaBeanUtils.hashCode(getLegalEntitySource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesSource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getMarketDataSnapshotSource());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getConventionBundleSource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getConventionSource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getSecurityProvider());
     hash = hash * 31 + JodaBeanUtils.hashCode(getSecurityLoader());
@@ -1159,7 +1127,7 @@ public class ToolContext extends DirectBean implements Closeable {
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(1056);
+    StringBuilder buf = new StringBuilder(1024);
     buf.append("ToolContext{");
     int len = buf.length();
     toString(buf);
@@ -1193,7 +1161,6 @@ public class ToolContext extends DirectBean implements Closeable {
     buf.append("legalEntitySource").append('=').append(JodaBeanUtils.toString(getLegalEntitySource())).append(',').append(' ');
     buf.append("historicalTimeSeriesSource").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesSource())).append(',').append(' ');
     buf.append("marketDataSnapshotSource").append('=').append(JodaBeanUtils.toString(getMarketDataSnapshotSource())).append(',').append(' ');
-    buf.append("conventionBundleSource").append('=').append(JodaBeanUtils.toString(getConventionBundleSource())).append(',').append(' ');
     buf.append("conventionSource").append('=').append(JodaBeanUtils.toString(getConventionSource())).append(',').append(' ');
     buf.append("securityProvider").append('=').append(JodaBeanUtils.toString(getSecurityProvider())).append(',').append(' ');
     buf.append("securityLoader").append('=').append(JodaBeanUtils.toString(getSecurityLoader())).append(',').append(' ');
@@ -1326,11 +1293,6 @@ public class ToolContext extends DirectBean implements Closeable {
     private final MetaProperty<MarketDataSnapshotSource> _marketDataSnapshotSource = DirectMetaProperty.ofReadWrite(
         this, "marketDataSnapshotSource", ToolContext.class, MarketDataSnapshotSource.class);
     /**
-     * The meta-property for the {@code conventionBundleSource} property.
-     */
-    private final MetaProperty<ConventionBundleSource> _conventionBundleSource = DirectMetaProperty.ofReadWrite(
-        this, "conventionBundleSource", ToolContext.class, ConventionBundleSource.class);
-    /**
      * The meta-property for the {@code conventionSource} property.
      */
     private final MetaProperty<ConventionSource> _conventionSource = DirectMetaProperty.ofReadWrite(
@@ -1402,7 +1364,6 @@ public class ToolContext extends DirectBean implements Closeable {
         "legalEntitySource",
         "historicalTimeSeriesSource",
         "marketDataSnapshotSource",
-        "conventionBundleSource",
         "conventionSource",
         "securityProvider",
         "securityLoader",
@@ -1466,8 +1427,6 @@ public class ToolContext extends DirectBean implements Closeable {
           return _historicalTimeSeriesSource;
         case -2019554651:  // marketDataSnapshotSource
           return _marketDataSnapshotSource;
-        case -1281578674:  // conventionBundleSource
-          return _conventionBundleSource;
         case 225875692:  // conventionSource
           return _conventionSource;
         case 809869649:  // securityProvider
@@ -1683,14 +1642,6 @@ public class ToolContext extends DirectBean implements Closeable {
     }
 
     /**
-     * The meta-property for the {@code conventionBundleSource} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<ConventionBundleSource> conventionBundleSource() {
-      return _conventionBundleSource;
-    }
-
-    /**
      * The meta-property for the {@code conventionSource} property.
      * @return the meta-property, not null
      */
@@ -1810,8 +1761,6 @@ public class ToolContext extends DirectBean implements Closeable {
           return ((ToolContext) bean).getHistoricalTimeSeriesSource();
         case -2019554651:  // marketDataSnapshotSource
           return ((ToolContext) bean).getMarketDataSnapshotSource();
-        case -1281578674:  // conventionBundleSource
-          return ((ToolContext) bean).getConventionBundleSource();
         case 225875692:  // conventionSource
           return ((ToolContext) bean).getConventionSource();
         case 809869649:  // securityProvider
@@ -1902,9 +1851,6 @@ public class ToolContext extends DirectBean implements Closeable {
           return;
         case -2019554651:  // marketDataSnapshotSource
           ((ToolContext) bean).setMarketDataSnapshotSource((MarketDataSnapshotSource) newValue);
-          return;
-        case -1281578674:  // conventionBundleSource
-          ((ToolContext) bean).setConventionBundleSource((ConventionBundleSource) newValue);
           return;
         case 225875692:  // conventionSource
           ((ToolContext) bean).setConventionSource((ConventionSource) newValue);

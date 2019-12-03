@@ -42,13 +42,13 @@ public class EquityIndexOptionSecurityFudgeBuilder extends AbstractFudgeBuilder 
   public static final String EXCHANGE_FIELD_NAME = "exchange";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, EquityIndexOptionSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final EquityIndexOptionSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     EquityIndexOptionSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, EquityIndexOptionSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final EquityIndexOptionSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, OPTION_TYPE_FIELD_NAME, object.getOptionType());
     addToMessage(msg, STRIKE_FIELD_NAME, object.getStrike());
@@ -61,13 +61,13 @@ public class EquityIndexOptionSecurityFudgeBuilder extends AbstractFudgeBuilder 
   }
 
   @Override
-  public EquityIndexOptionSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    EquityIndexOptionSecurity object = new EquityIndexOptionSecurity();
+  public EquityIndexOptionSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final EquityIndexOptionSecurity object = new EquityIndexOptionSecurity();
     EquityIndexOptionSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, EquityIndexOptionSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final EquityIndexOptionSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setOptionType(msg.getFieldValue(OptionType.class, msg.getByName(OPTION_TYPE_FIELD_NAME)));
     object.setStrike(msg.getDouble(STRIKE_FIELD_NAME));

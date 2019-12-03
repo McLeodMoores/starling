@@ -8,8 +8,6 @@ package com.opengamma.component.factory.source;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -31,6 +29,8 @@ import com.opengamma.core.config.impl.RemoteConfigSource;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.impl.EHCachingMasterConfigSource;
 import com.opengamma.master.config.impl.MasterConfigSource;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory providing the {@code ConfigSource}.
@@ -63,15 +63,15 @@ public class ConfigSourceComponentFactory extends AbstractComponentFactory {
   /**
    * Initializes the config source, setting up component information and REST.
    * Override using {@link #createConfigSource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    ConfigSource source = createConfigSource(repo);
-    
-    ComponentInfo info = new ComponentInfo(ConfigSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final ConfigSource source = createConfigSource(repo);
+
+    final ComponentInfo info = new ComponentInfo(ConfigSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteConfigSource.class);
@@ -84,11 +84,11 @@ public class ConfigSourceComponentFactory extends AbstractComponentFactory {
 
   /**
    * Creates the config source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the config source, not null
    */
-  protected ConfigSource createConfigSource(ComponentRepository repo) {
+  protected ConfigSource createConfigSource(final ComponentRepository repo) {
     ConfigSource source = new MasterConfigSource(getConfigMaster());
     if (getCacheManager() != null) {
       source = new EHCachingMasterConfigSource(getConfigMaster(), getCacheManager());

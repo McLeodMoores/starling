@@ -12,7 +12,6 @@ import com.google.common.collect.Lists;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.core.change.ChangeProvider;
 import com.opengamma.core.position.Position;
-import com.opengamma.core.position.PositionSource;
 import com.opengamma.core.position.Trade;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
@@ -28,13 +27,16 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicSPI;
 
 /**
- * A {@code PositionSource} implemented using an underlying {@code PositionMaster} and {@code PortfolioMaster}.
+ * A {@code PositionSource} implemented using an underlying
+ * {@code PositionMaster} and {@code PortfolioMaster}.
  * <p>
- * The {@link PositionSource} interface provides portfolio and position to the engine via a narrow API. This class provides the source on top of a standard {@link PortfolioMaster} and
+ * The {@link com.opengamma.core.position.PositionSource} interface provides
+ * portfolio and position to the engine via a narrow API. This class provides
+ * the source on top of a standard {@link PortfolioMaster} and
  * {@link PositionMaster}.
  */
 @PublicSPI
-public class MasterPositionSource extends AbstractMasterPositionSource implements PositionSource {
+public class MasterPositionSource extends AbstractMasterPositionSource {
   // TODO: This still needs work re versioning, as it crosses the boundary between two masters
 
   /**
@@ -93,7 +95,7 @@ public class MasterPositionSource extends AbstractMasterPositionSource implement
     }
     return manTrade;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   public String toString() {
@@ -106,8 +108,8 @@ public class MasterPositionSource extends AbstractMasterPositionSource implement
   }
 
   @Override
-  protected Collection<Position> positions(PositionSearchRequest positionSearch) {
-    List<Position> result = Lists.newArrayList();
+  protected Collection<Position> positions(final PositionSearchRequest positionSearch) {
+    final List<Position> result = Lists.newArrayList();
     final PositionSearchResult positions = getPositionMaster().search(positionSearch);
     for (final PositionDocument position : positions.getDocuments()) {
       result.add(position.getPosition().toPosition());

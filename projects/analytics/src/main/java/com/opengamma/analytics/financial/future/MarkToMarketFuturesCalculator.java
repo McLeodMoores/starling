@@ -67,7 +67,8 @@ public abstract class MarkToMarketFuturesCalculator extends InstrumentDerivative
   public Double visitInterestRateFutureTransaction(final InterestRateFutureTransaction future, final SimpleFutureDataBundle dataBundle) {
     ArgumentChecker.notNull(future, "future");
     ArgumentChecker.notNull(dataBundle, "data bundle");
-    return Double.valueOf(getResult(dataBundle, future.getReferencePrice(), future.getUnderlyingSecurity().getNotional() * future.getUnderlyingSecurity().getPaymentAccrualFactor() * future.getQuantity(),
+    return Double.valueOf(getResult(dataBundle, future.getReferencePrice(),
+        future.getUnderlyingSecurity().getNotional() * future.getUnderlyingSecurity().getPaymentAccrualFactor() * future.getQuantity(),
         future.getUnderlyingSecurity().getTradingLastTime()));
   }
 
@@ -109,7 +110,7 @@ public abstract class MarkToMarketFuturesCalculator extends InstrumentDerivative
   abstract double getResult(SimpleFutureDataBundle dataBundle, double strike, double unitAmount, double t);
 
   /**
-   * Calculates the present value
+   * Calculates the present value.
    */
   public static final class PresentValueCalculator extends MarkToMarketFuturesCalculator {
     private static final PresentValueCalculator INSTANCE = new PresentValueCalculator();
@@ -148,12 +149,14 @@ public abstract class MarkToMarketFuturesCalculator extends InstrumentDerivative
   }
 
   /**
-   * Calculates the value delta of a Future.<p>
-   * ValueDelta is defined as S(t) * dV/dS, hence it should be equal to unitAmount * market_price. <p>
-   * ValueDelta represents the cash value of the position or, the value of money one would make if the underlying increased in price by 100%.<p>
-   * Observe: PNL = dV/dS * (change in S) = S(t) * dV/dS * (S(T) - S(t)) / S(t),
-   * thus S(t)* dV/dS (ValueDelta) would be the PNL if 1.0 = (S(T) - S(t)) / S(t) => S(T) = 2*S(t),
-   * i.e. if the underlying doubled (increased by 100%). It thus gives a measure of the sensitivity as a relative measure.
+   * Calculates the value delta of a Future.
+   * <p>
+   * ValueDelta is defined as S(t) * dV/dS, hence it should be equal to unitAmount * market_price.
+   * <p>
+   * ValueDelta represents the cash value of the position or, the value of money one would make if the underlying increased in price by 100%.
+   * <p>
+   * Observe: PNL = dV/dS * (change in S) = S(t) * dV/dS * (S(T) - S(t)) / S(t), thus S(t)* dV/dS (ValueDelta) would be the PNL if 1.0 = (S(T) - S(t)) / S(t)
+   * =&gt; S(T) = 2*S(t), i.e. if the underlying doubled (increased by 100%). It thus gives a measure of the sensitivity as a relative measure.
    */
   public static final class ValueDeltaCalculator extends MarkToMarketFuturesCalculator {
     private static final ValueDeltaCalculator INSTANCE = new ValueDeltaCalculator();
@@ -172,7 +175,7 @@ public abstract class MarkToMarketFuturesCalculator extends InstrumentDerivative
   }
 
   /**
-   * Calculates the rates delta
+   * Calculates the rates delta.
    */
   public static final class RatesDeltaCalculator extends MarkToMarketFuturesCalculator {
     private static final RatesDeltaCalculator INSTANCE = new RatesDeltaCalculator();
@@ -191,7 +194,7 @@ public abstract class MarkToMarketFuturesCalculator extends InstrumentDerivative
   }
 
   /**
-   * Calculates the pv01
+   * Calculates the pv01.
    */
   public static final class PV01Calculator extends MarkToMarketFuturesCalculator {
     private static final PV01Calculator INSTANCE = new PV01Calculator();
@@ -210,7 +213,7 @@ public abstract class MarkToMarketFuturesCalculator extends InstrumentDerivative
   }
 
   /**
-   * Gets the spot price
+   * Gets the spot price.
    */
   public static final class SpotPriceCalculator extends MarkToMarketFuturesCalculator {
     private static final SpotPriceCalculator INSTANCE = new SpotPriceCalculator();
@@ -233,7 +236,7 @@ public abstract class MarkToMarketFuturesCalculator extends InstrumentDerivative
   }
 
   /**
-   * Gets the forward price
+   * Gets the forward price.
    */
   public static final class ForwardPriceCalculator extends MarkToMarketFuturesCalculator {
     private static final ForwardPriceCalculator INSTANCE = new ForwardPriceCalculator();

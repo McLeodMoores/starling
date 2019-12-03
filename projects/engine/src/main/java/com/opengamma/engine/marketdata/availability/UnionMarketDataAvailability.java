@@ -16,9 +16,9 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.async.BlockingOperation;
 
 /**
- * Indicates that market data is available if any of the underlyings claim that it is. If none of the underlying claim availability, but at least one throws a {@link MarketDataNotSatisfiableException}
- * the market data is considered missing. Otherwise it is not available.
- * 
+ * Indicates that market data is available if any of the underlyings claim that it is. If none of the underlying claim availability,
+ * but at least one throws a {@link MarketDataNotSatisfiableException} the market data is considered missing. Otherwise it is not available.
+ *
  * @param <T> the component type
  */
 public abstract class UnionMarketDataAvailability<T> {
@@ -26,7 +26,7 @@ public abstract class UnionMarketDataAvailability<T> {
   private final Collection<? extends T> _underlyings;
 
   /**
-   * 
+   *
    */
   public static class Filter extends UnionMarketDataAvailability<MarketDataAvailabilityFilter> implements MarketDataAvailabilityFilter {
 
@@ -35,7 +35,8 @@ public abstract class UnionMarketDataAvailability<T> {
     }
 
     @Override
-    protected Object getAvailabilityImpl(final ComputationTargetSpecification targetSpec, final Object target, final ValueRequirement desiredValue, final MarketDataAvailabilityFilter underlying) {
+    protected Object getAvailabilityImpl(final ComputationTargetSpecification targetSpec, final Object target, final ValueRequirement desiredValue,
+        final MarketDataAvailabilityFilter underlying) {
       return underlying.isAvailable(targetSpec, target, desiredValue) ? Boolean.TRUE : null;
     }
 
@@ -47,7 +48,7 @@ public abstract class UnionMarketDataAvailability<T> {
     @Override
     public MarketDataAvailabilityProvider withProvider(MarketDataAvailabilityProvider provider) {
       provider = AbstractMarketDataAvailabilityProvider.of(provider);
-      final List<MarketDataAvailabilityProvider> union = new ArrayList<MarketDataAvailabilityProvider>();
+      final List<MarketDataAvailabilityProvider> union = new ArrayList<>();
       for (final MarketDataAvailabilityFilter underlying : getUnderlyings()) {
         union.add(underlying.withProvider(provider));
       }
@@ -57,7 +58,7 @@ public abstract class UnionMarketDataAvailability<T> {
   }
 
   /**
-   * 
+   *
    */
   public static class Provider extends UnionMarketDataAvailability<MarketDataAvailabilityProvider> implements MarketDataAvailabilityProvider {
 
@@ -66,7 +67,8 @@ public abstract class UnionMarketDataAvailability<T> {
     }
 
     @Override
-    protected Object getAvailabilityImpl(final ComputationTargetSpecification targetSpec, final Object target, final ValueRequirement desiredValue, final MarketDataAvailabilityProvider underlying) {
+    protected Object getAvailabilityImpl(final ComputationTargetSpecification targetSpec, final Object target, final ValueRequirement desiredValue,
+        final MarketDataAvailabilityProvider underlying) {
       return underlying.getAvailability(targetSpec, target, desiredValue);
     }
 
@@ -77,7 +79,7 @@ public abstract class UnionMarketDataAvailability<T> {
 
     @Override
     public MarketDataAvailabilityFilter getAvailabilityFilter() {
-      final List<MarketDataAvailabilityFilter> union = new ArrayList<MarketDataAvailabilityFilter>();
+      final List<MarketDataAvailabilityFilter> union = new ArrayList<>();
       for (final MarketDataAvailabilityProvider underlying : getUnderlyings()) {
         union.add(underlying.getAvailabilityFilter());
       }
@@ -86,8 +88,8 @@ public abstract class UnionMarketDataAvailability<T> {
 
     @Override
     public Serializable getAvailabilityHintKey() {
-      final ArrayList<Serializable> key = new ArrayList<Serializable>(getUnderlyings().size());
-      for (MarketDataAvailabilityProvider underlying : getUnderlyings()) {
+      final ArrayList<Serializable> key = new ArrayList<>(getUnderlyings().size());
+      for (final MarketDataAvailabilityProvider underlying : getUnderlyings()) {
         key.add(underlying.getAvailabilityHintKey());
       }
       return key;
@@ -123,13 +125,11 @@ public abstract class UnionMarketDataAvailability<T> {
     if (failed) {
       // Blocking mode is off, nothing declared AVAILABLE, and at least one wanted to block
       throw BlockingOperation.block();
-    } else {
-      if (missing != null) {
-        throw missing;
-      } else {
-        return null;
-      }
     }
+    if (missing != null) {
+      throw missing;
+    }
+    return null;
   }
 
 }

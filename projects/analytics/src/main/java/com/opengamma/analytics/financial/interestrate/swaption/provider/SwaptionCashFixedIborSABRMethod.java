@@ -14,7 +14,6 @@ import com.opengamma.analytics.financial.interestrate.PresentValueSABRSensitivit
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponFixed;
 import com.opengamma.analytics.financial.interestrate.swap.provider.SwapFixedCouponDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionCashFixedIbor;
-import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedIbor;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackFunctionData;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackPriceFunction;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParRateCurveSensitivityDiscountingCalculator;
@@ -24,14 +23,13 @@ import com.opengamma.analytics.financial.provider.description.interestrate.SABRS
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- *  Class used to compute the price and sensitivity of cash-settled swaptions with SABR model.
+ * Class used to compute the price and sensitivity of cash-settled swaptions with SABR model.
  */
 public final class SwaptionCashFixedIborSABRMethod {
 
@@ -42,6 +40,7 @@ public final class SwaptionCashFixedIborSABRMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static SwaptionCashFixedIborSABRMethod getInstance() {
@@ -63,8 +62,11 @@ public final class SwaptionCashFixedIborSABRMethod {
 
   /**
    * Computes the present value of a cash-settled European swaption in the SABR model.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final SwaptionCashFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
@@ -85,11 +87,15 @@ public final class SwaptionCashFixedIborSABRMethod {
 
   /**
    * Computes the present value rate sensitivity of a cash delivery European swaption in the SABR model. The strike equivalent dependency on curve is ignored.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data. The SABR function need to be the Hagan function.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data. The SABR function need to be the Hagan function.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionCashFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final SwaptionCashFixedIbor swaption,
+      final SABRSwaptionProviderInterface sabrData) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(sabrData, "SABR swaption provider");
     final MulticurveProviderInterface multicurves = sabrData.getMulticurveProvider();
@@ -123,8 +129,11 @@ public final class SwaptionCashFixedIborSABRMethod {
 
   /**
    * Computes the present value SABR sensitivity of a physical delivery European swaption in the SABR model.
-   * @param swaption The swaption.
-   * @param sabrData The SABR data. The SABR function need to be the Hagan function.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR data. The SABR function need to be the Hagan function.
    * @return The present value SABR sensitivity.
    */
   public PresentValueSABRSensitivityDataBundle presentValueSABRSensitivity(final SwaptionCashFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {
@@ -143,18 +152,21 @@ public final class SwaptionCashFixedIborSABRMethod {
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatilityAdjoint[0]);
     final double[] bsAdjoint = blackFunction.getPriceAdjoint(swaption, dataBlack);
     final double discountFactorSettle = multicurves.getDiscountFactor(ccy, swaption.getSettlementTime());
-    final double omega = (swaption.isLong() ? 1.0 : -1.0);
+    final double omega = swaption.isLong() ? 1.0 : -1.0;
     sensi.addAlpha(expiryMaturity, omega * discountFactorSettle * pvbp * bsAdjoint[2] * volatilityAdjoint[3]);
     sensi.addBeta(expiryMaturity, omega * discountFactorSettle * pvbp * bsAdjoint[2] * volatilityAdjoint[4]);
     sensi.addRho(expiryMaturity, omega * discountFactorSettle * pvbp * bsAdjoint[2] * volatilityAdjoint[5]);
     sensi.addNu(expiryMaturity, omega * discountFactorSettle * pvbp * bsAdjoint[2] * volatilityAdjoint[6]);
     return sensi;
   }
-  
+
   /**
    * Computes the present value of a physical delivery European swaption in the SABR model.
-   * @param swaption The swaption.
-   * @param sabrData The SABR and multi-curves provider.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param sabrData
+   *          The SABR and multi-curves provider.
    * @return The implied volatility.
    */
   public double impliedVolatility(final SwaptionCashFixedIbor swaption, final SABRSwaptionProviderInterface sabrData) {

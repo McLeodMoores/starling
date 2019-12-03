@@ -24,7 +24,7 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 public final class PermissiveSecurityManager extends DefaultWebSecurityManager {
 
   /**
-   * The default security manager
+   * The default security manager.
    */
   static final PermissiveSecurityManager DEFAULT = new PermissiveSecurityManager();
 
@@ -37,10 +37,10 @@ public final class PermissiveSecurityManager extends DefaultWebSecurityManager {
 
   //-------------------------------------------------------------------------
   @Override
-  protected SubjectContext copy(SubjectContext subjectContext) {
+  protected SubjectContext copy(final SubjectContext subjectContext) {
     // this is the only way to trick the superclass into believing subject is always authenticated
-    UsernamePasswordToken token = new UsernamePasswordToken("permissive", "nopassword");
-    SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(token.getPrincipal(), token.getCredentials(), "Permissive");
+    final UsernamePasswordToken token = new UsernamePasswordToken("permissive", "nopassword");
+    final SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(token.getPrincipal(), token.getCredentials(), "Permissive");
     subjectContext.setAuthenticated(true);
     subjectContext.setAuthenticationToken(token);
     subjectContext.setAuthenticationInfo(info);
@@ -54,13 +54,13 @@ public final class PermissiveSecurityManager extends DefaultWebSecurityManager {
   class PermissiveRealm extends AuthorizingRealm {
 
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken token) throws AuthenticationException {
       return new SimpleAuthenticationInfo(token.getPrincipal(), token.getCredentials(), getName());
     }
 
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-      SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals) {
+      final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
       info.addObjectPermission(new AllPermission());
       return info;
     }

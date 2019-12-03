@@ -29,7 +29,7 @@ public class RemoteReferenceDataProvider extends AbstractRemoteClient implements
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteReferenceDataProvider(final URI baseUri) {
@@ -41,21 +41,21 @@ public class RemoteReferenceDataProvider extends AbstractRemoteClient implements
   // code copied from AbstractReferenceDataProvider due to lack of multiple inheritance
   //-------------------------------------------------------------------------
   @Override
-  public String getReferenceDataValue(String identifier, String dataField) {
+  public String getReferenceDataValue(final String identifier, final String dataField) {
     return getReferenceDataValues(Collections.singleton(identifier), dataField).get(identifier);
   }
 
   @Override
-  public Map<String, String> getReferenceDataValues(String identifier, Iterable<String> dataFields) {
-    Set<String> fields = ImmutableSet.copyOf(dataFields);  // copy to avoid implementation bugs
-    Map<String, FudgeMsg> data = getReferenceData(Collections.singleton(identifier), dataFields);
-    
+  public Map<String, String> getReferenceDataValues(final String identifier, final Iterable<String> dataFields) {
+    final Set<String> fields = ImmutableSet.copyOf(dataFields);  // copy to avoid implementation bugs
+    final Map<String, FudgeMsg> data = getReferenceData(Collections.singleton(identifier), dataFields);
+
     // extract field to value
-    Map<String, String> map = Maps.newHashMap();
-    FudgeMsg msg = data.get(identifier);
+    final Map<String, String> map = Maps.newHashMap();
+    final FudgeMsg msg = data.get(identifier);
     if (msg != null) {
-      for (String field : fields) {
-        String value = msg.getString(field);
+      for (final String field : fields) {
+        final String value = msg.getString(field);
         if (value != null) {
           map.put(identifier, value);
         }
@@ -65,13 +65,13 @@ public class RemoteReferenceDataProvider extends AbstractRemoteClient implements
   }
 
   @Override
-  public Map<String, String> getReferenceDataValues(Iterable<String> identifiers, String dataField) {
-    Map<String, FudgeMsg> data = getReferenceData(identifiers, Collections.singleton(dataField));
-    
+  public Map<String, String> getReferenceDataValues(final Iterable<String> identifiers, final String dataField) {
+    final Map<String, FudgeMsg> data = getReferenceData(identifiers, Collections.singleton(dataField));
+
     // extract identifier to value
-    Map<String, String> map = Maps.newHashMap();
-    for (String identifier : data.keySet()) {
-      String value = data.get(identifier).getString(dataField);
+    final Map<String, String> map = Maps.newHashMap();
+    for (final String identifier : data.keySet()) {
+      final String value = data.get(identifier).getString(dataField);
       if (value != null) {
         map.put(identifier, value);
       }
@@ -80,22 +80,22 @@ public class RemoteReferenceDataProvider extends AbstractRemoteClient implements
   }
 
   @Override
-  public Map<String, FudgeMsg> getReferenceData(Iterable<String> identifiers, Iterable<String> dataFields) {
-    ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(identifiers, dataFields, true);
+  public Map<String, FudgeMsg> getReferenceData(final Iterable<String> identifiers, final Iterable<String> dataFields) {
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(identifiers, dataFields, true);
     return AbstractReferenceDataProvider.queryMap(request, this);
   }
 
   @Override
-  public Map<String, FudgeMsg> getReferenceDataIgnoreCache(Iterable<String> identifiers, Iterable<String> dataFields) {
-    ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(identifiers, dataFields, false);
+  public Map<String, FudgeMsg> getReferenceDataIgnoreCache(final Iterable<String> identifiers, final Iterable<String> dataFields) {
+    final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(identifiers, dataFields, false);
     return AbstractReferenceDataProvider.queryMap(request, this);
   }
 
   @Override
-  public ReferenceDataProviderGetResult getReferenceData(ReferenceDataProviderGetRequest request) {
+  public ReferenceDataProviderGetResult getReferenceData(final ReferenceDataProviderGetRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
-    URI uri = DataReferenceDataProviderResource.uriGet(getBaseUri());
+
+    final URI uri = DataReferenceDataProviderResource.uriGet(getBaseUri());
     return accessRemote(uri).post(ReferenceDataProviderGetResult.class, request);
   }
 

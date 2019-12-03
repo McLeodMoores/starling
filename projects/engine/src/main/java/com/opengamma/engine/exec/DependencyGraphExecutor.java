@@ -21,13 +21,13 @@ public interface DependencyGraphExecutor {
   /**
    * Evaluates a dependency graph.
    * <p>
-   * A graph may be executed in its entirety, but more typically a set of values that are already known will be supplied. Execution of the graph will consist of nodes that consume these values leading
-   * towards the root of the graph. For example this might be the market data for the cycle ({@link MarketDataSourcingFunction} nodes are never executed), or a more complete buffer of data if this is
-   * a delta execution cycle.
+   * A graph may be executed in its entirety, but more typically a set of values that are already known will be supplied. Execution of the graph
+   * will consist of nodes that consume these values leading towards the root of the graph. For example this might be the market data for the
+   * cycle ({@link MarketDataSourcingFunction} nodes are never executed), or a more complete buffer of data if this is a delta execution cycle.
    * <p>
-   * The parameters allow execution to be modified from what is described in the initial graph. Any nodes producing outputs which are keys in the map will instead be executed with the given
-   * parameters.
-   * 
+   * The parameters allow execution to be modified from what is described in the initial graph. Any nodes producing outputs which are keys in
+   * the map will instead be executed with the given parameters.
+   *
    * @param graph a dependency graph to be executed, not null
    * @param sharedValues values that are already calculated and available; nodes producing these will not be executed, not null and not containing null
    * @param parameters substitute parameters to adjust the execution, not null and not containing null

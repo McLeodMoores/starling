@@ -12,8 +12,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.MutableFudgeMsg;
 import org.testng.Assert;
@@ -41,6 +39,8 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.TestLifecycle;
 import com.opengamma.util.test.Timeout;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * Test.
  */
@@ -51,9 +51,9 @@ public class DistributedLiveDataClientTest {
   public static final LiveDataSpecification TEST_LIVE_DATA_SPEC = new LiveDataSpecification("Foo", ExternalId.of(TEST_IDENTIFICATION_SCHEME, "baz"));
 
   private static final long TIMEOUT = 3 * Timeout.standardTimeoutMillis();
-  private static String TEST_ID_1 = "id1";
-  private static String TEST_ID_2 = "id2";
-  private static UserPrincipal TEST_USER = new UserPrincipal("alice", "127.0.0.1");
+  private static final String TEST_ID_1 = "id1";
+  private static final String TEST_ID_2 = "id2";
+  private static final UserPrincipal TEST_USER = new UserPrincipal("alice", "127.0.0.1");
 
   private MockLiveDataServer _server;
   private MutableFudgeMsg[] _testMsgs;
@@ -71,16 +71,16 @@ public class DistributedLiveDataClientTest {
 
   @BeforeMethod
   public void initialize() {
-    MutableFudgeMsg testMsg1 = OpenGammaFudgeContext.getInstance().newMessage();
+    final MutableFudgeMsg testMsg1 = OpenGammaFudgeContext.getInstance().newMessage();
     testMsg1.add("LAST", 9.86);
 
-    MutableFudgeMsg testMsg2 = OpenGammaFudgeContext.getInstance().newMessage();
+    final MutableFudgeMsg testMsg2 = OpenGammaFudgeContext.getInstance().newMessage();
     testMsg2.add("BID", 10.00);
     testMsg2.add("ASK", 10.05);
 
     _testMsgs = new MutableFudgeMsg[] {testMsg1, testMsg2 };
 
-    Map<String, FudgeMsg> uniqueId2TestMsg = new HashMap<String, FudgeMsg>();
+    final Map<String, FudgeMsg> uniqueId2TestMsg = new HashMap<>();
     uniqueId2TestMsg.put(TEST_LIVE_DATA_SPEC.getIdentifier(TEST_IDENTIFICATION_SCHEME), testMsg1);
     uniqueId2TestMsg.put(TEST_ID_1, testMsg1);
     uniqueId2TestMsg.put(TEST_ID_2, testMsg2);
@@ -99,7 +99,7 @@ public class DistributedLiveDataClientTest {
       // don't start server
       final DistributedLiveDataClient client = createClient(threads);
       try {
-        LiveDataSubscriptionResponse response = client.snapshot(TEST_USER, TEST_LIVE_DATA_SPEC, 1000);
+        final LiveDataSubscriptionResponse response = client.snapshot(TEST_USER, TEST_LIVE_DATA_SPEC, 1000);
         assertNotNull(response);
         assertEquals(LiveDataSubscriptionResult.INTERNAL_ERROR, response.getSubscriptionResult());
         assertEquals(true, response.getUserMessage().contains("Connection to market data API down"));
@@ -118,7 +118,7 @@ public class DistributedLiveDataClientTest {
       _server.start();
       final DistributedLiveDataClient client = createClient(threads);
       try {
-        LiveDataSubscriptionResponse response = client.snapshot(TEST_USER, TEST_LIVE_DATA_SPEC, 1000);
+        final LiveDataSubscriptionResponse response = client.snapshot(TEST_USER, TEST_LIVE_DATA_SPEC, 1000);
         assertNotNull(response);
         assertEquals(LiveDataSubscriptionResult.SUCCESS, response.getSubscriptionResult());
         assertNotNull(response.getSnapshot());
@@ -139,12 +139,14 @@ public class DistributedLiveDataClientTest {
       _server.start();
       final DistributedLiveDataClient client = createClient(threads);
       try {
-        LiveDataSpecification spec1 = new LiveDataSpecification(StandardRules.getNoNormalization().getId(), ExternalId.of(TEST_IDENTIFICATION_SCHEME, TEST_ID_1));
-        LiveDataSpecification spec2 = new LiveDataSpecification(StandardRules.getNoNormalization().getId(), ExternalId.of(TEST_IDENTIFICATION_SCHEME, TEST_ID_2));
-        Collection<LiveDataSubscriptionResponse> responses = client.snapshot(TEST_USER, Sets.newHashSet(spec1, spec2), 1000);
+        final LiveDataSpecification spec1 = new LiveDataSpecification(StandardRules.getNoNormalization().getId(),
+            ExternalId.of(TEST_IDENTIFICATION_SCHEME, TEST_ID_1));
+        final LiveDataSpecification spec2 = new LiveDataSpecification(StandardRules.getNoNormalization().getId(),
+            ExternalId.of(TEST_IDENTIFICATION_SCHEME, TEST_ID_2));
+        final Collection<LiveDataSubscriptionResponse> responses = client.snapshot(TEST_USER, Sets.newHashSet(spec1, spec2), 1000);
         assertNotNull(responses);
         assertEquals(2, responses.size());
-        for (LiveDataSubscriptionResponse response : responses) {
+        for (final LiveDataSubscriptionResponse response : responses) {
           assertEquals(LiveDataSubscriptionResult.SUCCESS, response.getSubscriptionResult());
           assertNotNull(response.getSnapshot());
           if (response.getRequestedSpecification().equals(spec1)) {
@@ -170,12 +172,12 @@ public class DistributedLiveDataClientTest {
       _server.start();
       final DistributedLiveDataClient client = createClient(threads);
       try {
-        CollectingLiveDataListener listener = new CollectingLiveDataListener();
+        final CollectingLiveDataListener listener = new CollectingLiveDataListener();
         client.subscribe(TEST_USER, TEST_LIVE_DATA_SPEC, listener);
         listener.waitForResponses(1, TIMEOUT);
         assertEquals(1, listener.getSubscriptionResponses().size());
         assertEquals(LiveDataSubscriptionResult.SUCCESS, listener.getSubscriptionResponses().get(0).getSubscriptionResult());
-        // As part of subscribe(), the client does a snapshot and sends it to the listener. 
+        // As part of subscribe(), the client does a snapshot and sends it to the listener.
         listener.waitForUpdates(1, TIMEOUT);
         assertEquals(1, listener.getValueUpdates().size());
         assertEquals(_testMsgs[0], listener.getValueUpdates().get(0).getFields());
@@ -199,9 +201,11 @@ public class DistributedLiveDataClientTest {
       _server.start();
       final DistributedLiveDataClient client = createClient(threads);
       try {
-        LiveDataSpecification spec1 = new LiveDataSpecification(StandardRules.getNoNormalization().getId(), ExternalId.of(TEST_IDENTIFICATION_SCHEME, TEST_ID_1));
-        LiveDataSpecification spec2 = new LiveDataSpecification(StandardRules.getNoNormalization().getId(), ExternalId.of(TEST_IDENTIFICATION_SCHEME, TEST_ID_2));
-        CollectingLiveDataListener listener = new CollectingLiveDataListener();
+        final LiveDataSpecification spec1 = new LiveDataSpecification(StandardRules.getNoNormalization().getId(),
+            ExternalId.of(TEST_IDENTIFICATION_SCHEME, TEST_ID_1));
+        final LiveDataSpecification spec2 = new LiveDataSpecification(StandardRules.getNoNormalization().getId(),
+            ExternalId.of(TEST_IDENTIFICATION_SCHEME, TEST_ID_2));
+        final CollectingLiveDataListener listener = new CollectingLiveDataListener();
         client.subscribe(TEST_USER, Sets.newHashSet(spec1, spec2), listener);
         listener.waitForResponses(2, TIMEOUT);
         assertEquals(2, listener.getSubscriptionResponses().size());
@@ -215,7 +219,7 @@ public class DistributedLiveDataClientTest {
         listener.waitForUpdates(2, TIMEOUT);
         assertEquals(4, listener.getValueUpdates().size());
         for (int i = 0; i < listener.getValueUpdates().size(); i++) {
-          LiveDataValueUpdate update = listener.getValueUpdates().get(i);
+          final LiveDataValueUpdate update = listener.getValueUpdates().get(i);
           if (update.getSpecification().equals(spec1)) {
             assertEquals(_testMsgs[0], update.getFields());
           } else if (update.getSpecification().equals(spec2)) {
@@ -240,12 +244,12 @@ public class DistributedLiveDataClientTest {
       final DistributedLiveDataClient client = createClient(threads);
       try {
         assertEquals(0, _server.getSubscriptions().size());
-        CollectingLiveDataListener listener = new CollectingLiveDataListener();
+        final CollectingLiveDataListener listener = new CollectingLiveDataListener();
         client.subscribe(TEST_USER, TEST_LIVE_DATA_SPEC, listener);
         listener.waitForResponses(1, TIMEOUT);
         assertEquals(1, _server.getSubscriptions().size());
         client.unsubscribe(TEST_USER, TEST_LIVE_DATA_SPEC, listener);
-        // there would need to be a timeout before actual unsubscribe happens 
+        // there would need to be a timeout before actual unsubscribe happens
         assertEquals(1, _server.getSubscriptions().size());
         assertEquals(1, listener.getSubscriptionResponses().size());
         listener.waitForUpdates(1, TIMEOUT);

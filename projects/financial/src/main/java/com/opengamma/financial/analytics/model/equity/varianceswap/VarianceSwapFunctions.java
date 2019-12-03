@@ -18,7 +18,7 @@ public class VarianceSwapFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Default instance of a repository configuration source exposing the functions from this package.
-   * 
+   *
    * @return the configuration source exposing functions from this package
    */
   public static FunctionConfigurationSource instance() {
@@ -32,7 +32,6 @@ public class VarianceSwapFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(EquityVarianceSwapPureLocalVolPVFunction.class));
     functions.add(functionConfiguration(EquityVarianceSwapStaticReplicationPresentValueFunction.class));
     functions.add(functionConfiguration(EquityVarianceSwapStaticReplicationVegaFunction.class));
-    functions.add(functionConfiguration(EquityVarianceSwapStaticReplicationYCNSFunction.class));
   }
 
 }

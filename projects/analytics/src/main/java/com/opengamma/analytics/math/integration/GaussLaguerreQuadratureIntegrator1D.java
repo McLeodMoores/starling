@@ -38,17 +38,17 @@ public class GaussLaguerreQuadratureIntegrator1D extends GaussianQuadratureInteg
 
   /**
    * {@inheritDoc}
-   * The function $f(x)$ that is to be integrated is transformed into a form
-   * suitable for this quadrature method using:
-   * $$
-   * \begin{align*}
-   * \int_{0}^{\infty} f(x) dx
-   * &= \int_{0}^{\infty} f(x) e^x e^{-x} dx\\
-   * &= \int_{0}^{\infty} g(x) e^{-x} dx
-   * \end{align*} 
-   * $$
    * @throws UnsupportedOperationException If the lower limit is not $-\infty$ or the upper limit is not $\infty$
    */
+  // * The function $f(x)$ that is to be integrated is transformed into a form
+  // * suitable for this quadrature method using:
+  // * $$
+  // * \begin{align*}
+  // * \int_{0}^{\infty} f(x) dx
+  // * &= \int_{0}^{\infty} f(x) e^x e^{-x} dx\\
+  // * &= \int_{0}^{\infty} g(x) e^{-x} dx
+  // * \end{align*}
+  // * $$
   @Override
   public Function1D<Double, Double> getIntegralFunction(final Function1D<Double, Double> function, final Double lower, final Double upper) {
     if (lower.equals(LIMITS[0]) && upper.equals(LIMITS[1])) {

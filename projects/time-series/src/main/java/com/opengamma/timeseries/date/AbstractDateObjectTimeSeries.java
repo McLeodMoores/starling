@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.date;
@@ -15,7 +15,7 @@ import com.opengamma.timeseries.TimeSeriesUtils;
 
 /**
  * Abstract implementation of {@code DateObjectTimeSeries}.
- * 
+ *
  * @param <T>  the date type
  * @param <V>  the value being viewed over time
  */
@@ -30,7 +30,7 @@ public abstract class AbstractDateObjectTimeSeries<T, V> implements DateObjectTi
   //-------------------------------------------------------------------------
   /**
    * Converts the specified date to the {@code int} form.
-   * 
+   *
    * @param date  the date to convert, not null
    * @return the {@code int} date
    */
@@ -38,7 +38,7 @@ public abstract class AbstractDateObjectTimeSeries<T, V> implements DateObjectTi
 
   /**
    * Converts the specified date from the {@code int} form.
-   * 
+   *
    * @param date  the {@code int} date to convert
    * @return the date, not null
    */
@@ -46,7 +46,7 @@ public abstract class AbstractDateObjectTimeSeries<T, V> implements DateObjectTi
 
   /**
    * Creates an array of the correct T type.
-   * 
+   *
    * @param size  the size of the array to create
    * @return the array, not null
    */
@@ -60,17 +60,17 @@ public abstract class AbstractDateObjectTimeSeries<T, V> implements DateObjectTi
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean containsTime(T date) {
+  public boolean containsTime(final T date) {
     return containsTime(convertToInt(date));
   }
 
   @Override
-  public V getValue(T date) {
+  public V getValue(final T date) {
     return getValue(convertToInt(date));
   }
 
   @Override
-  public T getTimeAtIndex(int index) {
+  public T getTimeAtIndex(final int index) {
     return convertFromInt(getTimeAtIndexFast(index));
   }
 
@@ -92,11 +92,11 @@ public abstract class AbstractDateObjectTimeSeries<T, V> implements DateObjectTi
       private int _index = -1;
       @Override
       public boolean hasNext() {
-        return (_index + 1) < size();
+        return _index + 1 < size();
       }
       @Override
       public T next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements");
         }
         _index++;
@@ -113,7 +113,7 @@ public abstract class AbstractDateObjectTimeSeries<T, V> implements DateObjectTi
   public List<T> times() {
     return new AbstractList<T>() {
       @Override
-      public T get(int index) {
+      public T get(final int index) {
         return getTimeAtIndex(index);
       }
       @Override
@@ -129,8 +129,8 @@ public abstract class AbstractDateObjectTimeSeries<T, V> implements DateObjectTi
 
   @Override
   public T[] timesArray() {
-    int[] times = timesArrayFast();
-    T[] result = createArray(times.length);
+    final int[] times = timesArrayFast();
+    final T[] result = createArray(times.length);
     for (int i = 0; i < times.length; i++) {
       result[i] = convertFromInt(times[i]);
     }
@@ -143,11 +143,11 @@ public abstract class AbstractDateObjectTimeSeries<T, V> implements DateObjectTi
       private int _index = -1;
       @Override
       public boolean hasNext() {
-        return (_index + 1) < size();
+        return _index + 1 < size();
       }
       @Override
       public V next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements");
         }
         _index++;
@@ -164,7 +164,7 @@ public abstract class AbstractDateObjectTimeSeries<T, V> implements DateObjectTi
   public List<V> values() {
     return new AbstractList<V>() {
       @Override
-      public V get(int index) {
+      public V get(final int index) {
         return getValueAtIndex(index);
       }
       @Override
@@ -180,14 +180,14 @@ public abstract class AbstractDateObjectTimeSeries<T, V> implements DateObjectTi
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj instanceof DateDoubleTimeSeries) {
-      DateDoubleTimeSeries<?> other = (DateDoubleTimeSeries<?>) obj;
-      return Arrays.equals(timesArrayFast(), other.timesArrayFast()) &&
-              Arrays.equals(valuesArray(), other.valuesArray());
+      final DateDoubleTimeSeries<?> other = (DateDoubleTimeSeries<?>) obj;
+      return Arrays.equals(timesArrayFast(), other.timesArrayFast())
+             && Arrays.equals(valuesArray(), other.valuesArray());
     }
     return false;
   }

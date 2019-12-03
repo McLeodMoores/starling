@@ -61,7 +61,7 @@ public abstract class DoublesSurfaceTestCase {
       final double y = i < 5 ? 0 : 1;
       final double z = 4 * x;
       final DoublesPair xy = DoublesPair.of(x, y);
-      final Triple<Double, Double, Double> xyz = new Triple<>(x, y, z);
+      final Triple<Double, Double, Double> xyz = Triple.of(x, y, z);
       X_PRIMITIVE[i] = x;
       Y_PRIMITIVE[i] = y;
       Z_PRIMITIVE[i] = z;
@@ -220,7 +220,7 @@ public abstract class DoublesSurfaceTestCase {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull25() {
-    final List<Triple<Double, Double, Double>> l = Arrays.asList(new Triple<>(1., 2., 3.), null);
+    final List<Triple<Double, Double, Double>> l = Arrays.asList(Triple.of(1., 2., 3.), null);
     new DummySurface(l, NAME);
   }
 
@@ -355,7 +355,7 @@ public abstract class DoublesSurfaceTestCase {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull50() {
-    final List<Triple<Double, Double, Double>> l = Arrays.asList(new Triple<>(1., 2., 3.), null);
+    final List<Triple<Double, Double, Double>> l = Arrays.asList(Triple.of(1., 2., 3.), null);
     new DummySurface(l);
   }
 

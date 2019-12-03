@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.sabrswaption;
@@ -25,10 +25,10 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCalculator extends
-    InstrumentDerivativeVisitorSameMethodAdapter<SABRSwaptionProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+InstrumentDerivativeVisitorSameMethodAdapter<SABRSwaptionProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The cut-off strike. The smile is extrapolated above that level.
@@ -49,8 +49,11 @@ public final class PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCal
 
   /**
    * Constructor.
-   * @param cutOffStrike The cut-off strike.
-   * @param mu The tail thickness parameter.
+   *
+   * @param cutOffStrike
+   *          The cut-off strike.
+   * @param mu
+   *          The tail thickness parameter.
    */
   public PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCalculator(final double cutOffStrike, final double mu) {
     _mu = mu;
@@ -66,7 +69,7 @@ public final class PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCal
     return derivative.accept(this, sabr);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitCouponCMS(final CouponCMS payment, final SABRSwaptionProviderInterface sabr) {
@@ -83,14 +86,16 @@ public final class PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCal
     if (sabr.getSABRParameter() instanceof SABRInterestRateCorrelationParameters) {
       // TODO: improve correlation data handling
       final SABRInterestRateCorrelationParameters sabrCorrelation = (SABRInterestRateCorrelationParameters) sabr.getSABRParameter();
-      final CapFloorCMSSpreadSABRBinormalMethod method = new CapFloorCMSSpreadSABRBinormalMethod(sabrCorrelation.getCorrelation(), _methodExtraCMSCap, _methodExtraCMSCpn);
+      final CapFloorCMSSpreadSABRBinormalMethod method = new CapFloorCMSSpreadSABRBinormalMethod(sabrCorrelation.getCorrelation(), _methodExtraCMSCap,
+          _methodExtraCMSCpn);
       return method.presentValueCurveSensitivity(payment, sabr);
     }
     throw new UnsupportedOperationException(
-        "The PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCalculator visitor visitCapFloorCMSSpread requires a SABRInterestRateCorrelationParameters as data.");
+        "The PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCalculator visitor visitCapFloorCMSSpread requires a "
+            + "SABRInterestRateCorrelationParameters as data.");
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public MultipleCurrencyMulticurveSensitivity visitGenericAnnuity(final Annuity<? extends Payment> annuity, final SABRSwaptionProviderInterface sabr) {
@@ -102,10 +107,11 @@ public final class PresentValueCurveSensitivitySABRSwaptionRightExtrapolationCal
     return pvcs;
   }
 
-  // -----     Swaption     ------
+  // ----- Swaption ------
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final SABRSwaptionProviderInterface sabr) {
+  public MultipleCurrencyMulticurveSensitivity visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption,
+      final SABRSwaptionProviderInterface sabr) {
     return _methodSwptPhys.presentValueCurveSensitivity(swaption, sabr);
   }
 

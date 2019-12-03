@@ -5,7 +5,6 @@
  */
 package com.opengamma.provider.security;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -51,10 +50,10 @@ public class SecurityEnhancerResult extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param result  the map of results, not null
    */
-  public SecurityEnhancerResult(List<? extends Security> result) {
+  public SecurityEnhancerResult(final List<? extends Security> result) {
     getResultList().addAll(result);
   }
 
@@ -62,21 +61,20 @@ public class SecurityEnhancerResult extends DirectBean {
   /**
    * Inserts the results into the specified map.
    * <p>
-   * This is used to allow a map of securities to be enhanced.
-   * The map must have a fixed order, such as with {@link LinkedHashMap}.
+   * This is used to allow a map of securities to be enhanced. The map must have a fixed order, such as with {@link java.util.LinkedHashMap}.
    * <p>
-   * There are three steps. Firstly, the values from the map are passed to the
-   * {@link SecurityEnhancerRequest}. Secondly, the securities are enhanced.
-   * Thirdly, this method is used to re-populate the map.
-   * 
-   * @param map  the map to push the results into, not null
+   * There are three steps. Firstly, the values from the map are passed to the {@link SecurityEnhancerRequest}. Secondly, the securities are enhanced. Thirdly,
+   * this method is used to re-populate the map.
+   *
+   * @param map
+   *          the map to push the results into, not null
    */
-  public void insertIntoMapValues(Map<?, Security> map) {
+  public void insertIntoMapValues(final Map<?, Security> map) {
     if (map.size() != getResultList().size()) {
       throw new IllegalArgumentException("Map specified cannot be matched");
     }
     int i = 0;
-    for (Entry<?, Security> entry : map.entrySet()) {
+    for (final Entry<?, Security> entry : map.entrySet()) {
       entry.setValue(getResultList().get(i++));
     }
   }

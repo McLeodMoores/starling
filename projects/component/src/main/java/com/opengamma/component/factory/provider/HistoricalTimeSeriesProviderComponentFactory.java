@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.provider;
@@ -50,7 +50,7 @@ public class HistoricalTimeSeriesProviderComponentFactory extends AbstractCompon
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     final HistoricalTimeSeriesProvider provider = initHistoricalTimeSeriesProvider(repo);
     final ComponentInfo info = new ComponentInfo(HistoricalTimeSeriesProvider.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
@@ -69,17 +69,17 @@ public class HistoricalTimeSeriesProviderComponentFactory extends AbstractCompon
    * <p>
    * This implementation uses {@link NoneFoundHistoricalTimeSeriesProvider} and is intended
    * to be subclassed.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the provider, not null
    */
-  protected HistoricalTimeSeriesProvider initHistoricalTimeSeriesProvider(ComponentRepository repo) {
+  protected HistoricalTimeSeriesProvider initHistoricalTimeSeriesProvider(final ComponentRepository repo) {
     return new NoneFoundHistoricalTimeSeriesProvider();
   }
 
   /**
    * Gets the accepted types string describing what the provider accepts.
-   * 
+   *
    * @return the comma separated list of data sources the provider accepts, not null
    */
   protected String getAcceptedTypes() {

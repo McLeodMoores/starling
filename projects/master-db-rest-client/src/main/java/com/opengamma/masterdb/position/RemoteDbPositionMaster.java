@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.position;
@@ -21,7 +21,7 @@ public class RemoteDbPositionMaster extends RemotePositionMaster {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteDbPositionMaster(final URI baseUri) {
@@ -30,25 +30,25 @@ public class RemoteDbPositionMaster extends RemotePositionMaster {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager, not null
    */
-  public RemoteDbPositionMaster(final URI baseUri, ChangeManager changeManager) {
+  public RemoteDbPositionMaster(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri, changeManager);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Overrides the current time seen by the remote position master to a fixed instant.
-   * 
+   *
    * @param instant  the instant, or null to remove an existing override.
    */
   public void setTimeOverride(final Instant instant) {
-    URI uri = DataDbPositionMasterUris.uriTimeOverride(getBaseUri());
-    TimeOverrideRequest request = new TimeOverrideRequest();
+    final URI uri = DataDbPositionMasterUris.uriTimeOverride(getBaseUri());
+    final TimeOverrideRequest request = new TimeOverrideRequest();
     request.setTimeOverride(instant);
     accessRemote(uri).put(request);
   }
-  
+
 }

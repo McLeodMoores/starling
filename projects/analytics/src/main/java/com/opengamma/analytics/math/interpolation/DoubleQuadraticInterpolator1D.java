@@ -56,7 +56,7 @@ public class DoubleQuadraticInterpolator1D extends Interpolator1D {
     final RealPolynomialFunction1D quadratic1 = quadraticData.getQuadratic(low - 1);
     final RealPolynomialFunction1D quadratic2 = quadraticData.getQuadratic(high - 1);
     final double w = _weightFunction.getWeight((xData[high] - value) / (xData[high] - xData[low]));
-    //final double w = (xData[high] - value) / (xData[high] - xData[low]);
+    // final double w = (xData[high] - value) / (xData[high] - xData[low]);
     final double res = w * quadratic1.evaluate(value - xData[low]) + (1 - w) * quadratic2.evaluate(value - xData[high]);
     return res;
   }
@@ -87,8 +87,8 @@ public class DoubleQuadraticInterpolator1D extends Interpolator1D {
     final RealPolynomialFunction1D quadratic1FirstDerivative = quadraticData.getQuadraticFirstDerivative(low - 1);
     final RealPolynomialFunction1D quadratic2FirstDerivative = quadraticData.getQuadraticFirstDerivative(high - 1);
     final double w = _weightFunction.getWeight((xData[high] - value) / (xData[high] - xData[low]));
-    final double res = w * quadratic1FirstDerivative.evaluate(value - xData[low]) + (1 - w) * quadratic2FirstDerivative.evaluate(value - xData[high]) +
-        (quadratic2.evaluate(value - xData[high]) - quadratic1.evaluate(value - xData[low])) / (xData[high] - xData[low]);
+    final double res = w * quadratic1FirstDerivative.evaluate(value - xData[low]) + (1 - w) * quadratic2FirstDerivative.evaluate(value - xData[high])
+        + (quadratic2.evaluate(value - xData[high]) - quadratic1.evaluate(value - xData[low])) / (xData[high] - xData[low]);
     return res;
   }
 

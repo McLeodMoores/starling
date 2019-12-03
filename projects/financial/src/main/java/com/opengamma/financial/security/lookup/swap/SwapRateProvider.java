@@ -14,7 +14,7 @@ import com.opengamma.financial.security.swap.SwapSecurity;
 public class SwapRateProvider implements SecurityValueProvider<SwapSecurity> {
 
   @Override
-  public Object getValue(SwapSecurity security) {
+  public Object getValue(final SwapSecurity security) {
     return new RateVisitor().visit(security).getFirst();
   }
 }

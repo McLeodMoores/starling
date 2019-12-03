@@ -1,16 +1,12 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.source;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -33,6 +29,10 @@ import com.opengamma.core.security.impl.NonVersionedEHCachingSecuritySource;
 import com.opengamma.core.security.impl.NonVersionedRedisSecuritySource;
 import com.opengamma.core.security.impl.RemoteSecuritySource;
 import com.opengamma.util.redis.RedisConnector;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 
 /**
  * Component factory providing {@link NonVersionedRedisSecuritySource}.
@@ -75,31 +75,32 @@ public class NonVersionedRedisSecuritySourceComponentFactory extends AbstractCom
    */
   @PropertyDefinition
   private int _lruCacheElements;
-  
+
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    NonVersionedRedisSecuritySource source = new NonVersionedRedisSecuritySource(getRedisConnector().getJedisPool(), getRedisPrefix());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final NonVersionedRedisSecuritySource source = new NonVersionedRedisSecuritySource(getRedisConnector().getJedisPool(), getRedisPrefix());
     SecuritySource rawSource = source;
-    
-    if ((getCacheManager() != null) && (getLruCacheElements() > 0)) {
-      Cache cache = new Cache("NonVersionedRedisSecuritySource", getLruCacheElements(), MemoryStoreEvictionPolicy.LRU, false, null, true, -1L, -1L, false, -1L, null);
+
+    if (getCacheManager() != null && getLruCacheElements() > 0) {
+      final Cache cache =
+          new Cache("NonVersionedRedisSecuritySource", getLruCacheElements(), MemoryStoreEvictionPolicy.LRU, false, null, true, -1L, -1L, false, -1L, null);
       getCacheManager().addCache(cache);
       rawSource = new NonVersionedEHCachingSecuritySource(source, cache);
     }
-    
-    String rawClassifier = getCachingClassifier() != null ? getCachingClassifier() : getClassifier();
-    
-    ComponentInfo sourceInfo = new ComponentInfo(SecuritySource.class, rawClassifier);
+
+    final String rawClassifier = getCachingClassifier() != null ? getCachingClassifier() : getClassifier();
+
+    final ComponentInfo sourceInfo = new ComponentInfo(SecuritySource.class, rawClassifier);
     sourceInfo.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       sourceInfo.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteSecuritySource.class);
     }
     repo.registerComponent(sourceInfo, rawSource);
 
-    ComponentInfo redisInfo = new ComponentInfo(NonVersionedRedisSecuritySource.class, getClassifier());
+    final ComponentInfo redisInfo = new ComponentInfo(NonVersionedRedisSecuritySource.class, getClassifier());
     redisInfo.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     repo.registerComponent(redisInfo, source);
-    
+
     if (isPublishRest()) {
       repo.getRestComponents().publish(sourceInfo, new DataSecuritySourceResource(rawSource));
     }

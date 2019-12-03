@@ -45,10 +45,10 @@ public class CalculationConfiguration extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the calculation name, not null
    */
-  public CalculationConfiguration(String name) {
+  public CalculationConfiguration(final String name) {
     _name = name;
   }
 

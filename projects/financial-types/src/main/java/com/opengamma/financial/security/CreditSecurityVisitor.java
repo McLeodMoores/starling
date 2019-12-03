@@ -17,22 +17,30 @@ import com.opengamma.financial.security.cds.StandardVanillaCDSSecurity;
 import com.opengamma.financial.security.option.CreditDefaultSwapOptionSecurity;
 
 /**
- * @param <T> The return type of the visitor
+ * @param <T>
+ *          The return type of the visitor
  */
 public interface CreditSecurityVisitor<T> {
 
+  @Deprecated
   T visitCDSSecurity(CDSSecurity security);
 
+  @Deprecated
   T visitStandardVanillaCDSSecurity(StandardVanillaCDSSecurity security);
 
+  @Deprecated
   T visitStandardFixedRecoveryCDSSecurity(StandardFixedRecoveryCDSSecurity security);
 
+  @Deprecated
   T visitStandardRecoveryLockCDSSecurity(StandardRecoveryLockCDSSecurity security);
 
+  @Deprecated
   T visitLegacyVanillaCDSSecurity(LegacyVanillaCDSSecurity security);
 
+  @Deprecated
   T visitLegacyFixedRecoveryCDSSecurity(LegacyFixedRecoveryCDSSecurity security);
 
+  @Deprecated
   T visitLegacyRecoveryLockCDSSecurity(LegacyRecoveryLockCDSSecurity security);
 
   T visitCreditDefaultSwapIndexDefinitionSecurity(CreditDefaultSwapIndexDefinitionSecurity security);

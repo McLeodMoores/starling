@@ -14,21 +14,22 @@ import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Metal future option definition
+ * Metal future option definition.
  */
 public class MetalFutureOptionDefinition extends CommodityFutureOptionDefinition<MetalFutureDefinition, MetalFutureOption> {
 
   /**
-   * Constructor for future options
+   * Constructor for future options.
    *
-   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading, as well as the final settlement price for that contract
+   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading,
+   * as well as the final settlement price for that contract
    * @param underlying  underlying future
    * @param strike  strike price
    * @param exerciseType  exercise type - European or American
    * @param isCall  call if true, put if false
    */
-  public MetalFutureOptionDefinition(final ZonedDateTime expiryDate, final MetalFutureDefinition underlying, final double strike, final ExerciseDecisionType exerciseType,
-      final boolean isCall) {
+  public MetalFutureOptionDefinition(final ZonedDateTime expiryDate, final MetalFutureDefinition underlying, final double strike,
+      final ExerciseDecisionType exerciseType, final boolean isCall) {
     super(expiryDate, underlying, strike, exerciseType, isCall);
   }
 

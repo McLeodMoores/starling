@@ -32,39 +32,39 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyPositionDbPositionMasterWorkerRemovePositionTest extends AbstractDbPositionMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyPositionDbPositionMasterWorkerRemovePositionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyPositionDbPositionMasterWorkerRemovePositionTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyPositionDbPositionMasterWorkerRemovePositionTest(String databaseType, String databaseVersion) {
+  public ModifyPositionDbPositionMasterWorkerRemovePositionTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_removePosition_versioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbPos", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbPos", "0", "0");
     _posMaster.remove(uniqueId);
   }
 
   @Test
   public void test_removePosition_removed() {
-    Instant now = Instant.now(_posMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbPos", "122", "0");
+    final Instant now = Instant.now(_posMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbPos", "122", "0");
     _posMaster.remove(uniqueId);
-    PositionDocument test = _posMaster.get(uniqueId);
-    
+    final PositionDocument test = _posMaster.get(uniqueId);
+
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(now, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePosition position = test.getPosition();
+    final ManageablePosition position = test.getPosition();
     assertNotNull(position);
     assertEquals(uniqueId, position.getUniqueId());
     assertEquals(BigDecimal.valueOf(122.987), position.getQuantity());
-    ExternalIdBundle secKey = position.getSecurityLink().getExternalId();
+    final ExternalIdBundle secKey = position.getSecurityLink().getExternalId();
     assertEquals(1, secKey.size());
     assertEquals(ExternalId.of("TICKER", "ORCL"), secKey.getExternalIds().iterator().next());
   }

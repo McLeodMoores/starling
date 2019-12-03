@@ -158,8 +158,8 @@ public class CalculationNodeTest {
     }
   }
 
-  private CalculationJobResultItem getResultWithLogging(final MockFunction mockFunction, final ThreadLocalLogEventListener logEventListener, final TestCalculationNode calcNode,
-      final CalculationJob calcJob) throws AsynchronousExecution {
+  private CalculationJobResultItem getResultWithLogging(final MockFunction mockFunction, final ThreadLocalLogEventListener logEventListener,
+      final TestCalculationNode calcNode, final CalculationJob calcJob) throws AsynchronousExecution {
     LogBridge.getInstance().addListener(logEventListener);
     CalculationJobResult jobResult;
     try {
@@ -179,18 +179,20 @@ public class CalculationNodeTest {
 
   private MockFunction getMockLoggingFunction() {
     final MockFunction fn = new MockLoggingFunction(MockFunction.UNIQUE_ID, ComputationTarget.NULL);
-    fn.addResult(new ValueSpecification("OUTPUT", ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get()), "Result");
+    fn.addResult(new ValueSpecification("OUTPUT",
+        ComputationTargetSpecification.NULL, ValueProperties.with(ValuePropertyNames.FUNCTION, MockFunction.UNIQUE_ID).get()), "Result");
     return fn;
   }
 
   private class MockLoggingFunction extends MockFunction {
 
-    public MockLoggingFunction(final String uniqueId, final ComputationTarget target) {
+    MockLoggingFunction(final String uniqueId, final ComputationTarget target) {
       super(uniqueId, target);
     }
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
+        final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
       final LogEvent logEvent = new SimpleLogEvent(LogLevel.WARN, "Warning during execution");
       LogBridge.getInstance().log(logEvent);
       return super.execute(executionContext, inputs, target, desiredValues);

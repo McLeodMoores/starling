@@ -30,7 +30,8 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class DependencyGraphImpl implements DependencyGraph, Serializable {
 
-  // TODO: Change DependencyGraph from an interface to an abstract class and put the static stuff into it rather than have static methods & instanceof checks here
+  // TODO: Change DependencyGraph from an interface to an abstract class and put the static stuff into it rather than have static
+  // methods & instanceof checks here
 
   // TODO: Make ExecutionOrderNodeIterator package visible
 
@@ -63,19 +64,20 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
 
   /**
    * Creates a new dependency graph for the named configuration with given roots and terminal outputs.
-   * 
+   *
    * @param calcConfigName the configuration name, not null
    * @param roots the roots of the graph, not null and not containing null
    * @param size the size of the graph
    * @param terminalOutputs the terminal outputs from the graph, not null and not containing null
    */
-  public DependencyGraphImpl(final String calcConfigName, final Collection<DependencyNode> roots, final int size, final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs) {
+  public DependencyGraphImpl(final String calcConfigName, final Collection<DependencyNode> roots, final int size,
+      final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs) {
     ArgumentChecker.notNull(calcConfigName, "calcConfigName");
     ArgumentChecker.noNulls(roots, "roots");
     ArgumentChecker.notNull(terminalOutputs, "terminalOutputs");
     _calculationConfigurationName = calcConfigName;
     _terminalOutputs = Maps.newHashMapWithExpectedSize(terminalOutputs.size());
-    for (Map.Entry<ValueSpecification, Set<ValueRequirement>> terminalOutput : terminalOutputs.entrySet()) {
+    for (final Map.Entry<ValueSpecification, Set<ValueRequirement>> terminalOutput : terminalOutputs.entrySet()) {
       ArgumentChecker.notNull(terminalOutput.getKey(), "terminalOutput.key");
       ArgumentChecker.notNull(terminalOutput.getValue(), "terminalOutput.value");
       _terminalOutputs.put(terminalOutput.getKey(), ImmutableSet.copyOf(terminalOutput.getValue()));
@@ -84,7 +86,8 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
     _size = size;
   }
 
-  private DependencyGraphImpl(final String calcConfigName, final DependencyNode[] roots, final int size, final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs) {
+  private DependencyGraphImpl(final String calcConfigName, final DependencyNode[] roots, final int size,
+      final Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs) {
     _calculationConfigurationName = calcConfigName;
     _roots = roots;
     _size = size;
@@ -108,9 +111,9 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
   }
 
   private static int calculateSize(final DependencyNode[] roots) {
-    final Set<DependencyNode> nodes = new HashSet<DependencyNode>();
+    final Set<DependencyNode> nodes = new HashSet<>();
     int size = 0;
-    for (DependencyNode root : roots) {
+    for (final DependencyNode root : roots) {
       size += calculateSize(root, nodes);
     }
     return size;
@@ -138,7 +141,7 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
 
   /**
    * Returns the set of terminal outputs produced by a graph.
-   * 
+   *
    * @param graph the graph to query, not null
    * @return the terminal output set, not null
    */
@@ -147,8 +150,8 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
   }
 
   private Map<ValueSpecification, DependencyNode> getAllOutputs() {
-    final Map<ValueSpecification, DependencyNode> outputs = new HashMap<ValueSpecification, DependencyNode>();
-    for (DependencyNode root : _roots) {
+    final Map<ValueSpecification, DependencyNode> outputs = new HashMap<>();
+    for (final DependencyNode root : _roots) {
       DependencyNodeImpl.gatherOutputValues(root, outputs);
     }
     return outputs;
@@ -156,30 +159,29 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
 
   /**
    * Returns all outputs produced within a graph with the node that produces each; this is the total set of all terminal and non-terminal outputs.
-   * 
+   *
    * @param graph the graph to query, not null
    * @return the full output set as a map of value specification to the node that produces it, not null
    */
   public static Map<ValueSpecification, DependencyNode> getAllOutputs(final DependencyGraph graph) {
     if (graph instanceof DependencyGraphImpl) {
       return ((DependencyGraphImpl) graph).getAllOutputs();
-    } else {
-      final Map<ValueSpecification, DependencyNode> outputs = new HashMap<ValueSpecification, DependencyNode>();
-      final Iterator<DependencyNode> itr = graph.nodeIterator();
-      while (itr.hasNext()) {
-        final DependencyNode node = itr.next();
-        final int count = node.getOutputCount();
-        for (int i = 0; i < count; i++) {
-          outputs.put(node.getOutputValue(i), node);
-        }
-      }
-      return outputs;
     }
+    final Map<ValueSpecification, DependencyNode> outputs = new HashMap<>();
+    final Iterator<DependencyNode> itr = graph.nodeIterator();
+    while (itr.hasNext()) {
+      final DependencyNode node = itr.next();
+      final int count = node.getOutputCount();
+      for (int i = 0; i < count; i++) {
+        outputs.put(node.getOutputValue(i), node);
+      }
+    }
+    return outputs;
   }
 
   /**
    * Returns the set of all outputs produced by a graph; this is the total set of all terminal and non-terminal outputs.
-   * 
+   *
    * @param graph the graph to query, not null
    * @return the full output set, not null
    */
@@ -197,15 +199,16 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
   /**
    * Returns all of the nodes from a graph.
    * <p>
-   * This is provided mainly for tests and compatibility with code prior to major changes made to the {@link DependencyGraph} class. It is unlikely to be efficient in terms of memory or the time taken
-   * to construct the collection as the work may be performed twice; once building a set to ensure that each node is visited only once (see {@link #executionOrderIterator}) and again for the returned
-   * set.
-   * 
-   * @param graph the graph to query, not null
+   * This is provided mainly for tests and compatibility with code prior to major changes made to the {@link DependencyGraph} class. It is unlikely to be
+   * efficient in terms of memory or the time taken to construct the collection as the work may be performed twice; once building a set to ensure that each node
+   * is visited only once (see {@link #nodeIterator}) and again for the returned set.
+   *
+   * @param graph
+   *          the graph to query, not null
    * @return all of the nodes in the graph, not null and not containing null
    */
   public static Collection<DependencyNode> getDependencyNodes(final DependencyGraph graph) {
-    final Collection<DependencyNode> nodes = new ArrayList<DependencyNode>(graph.getSize());
+    final Collection<DependencyNode> nodes = new ArrayList<>(graph.getSize());
     final Iterator<DependencyNode> itr = graph.nodeIterator();
     while (itr.hasNext()) {
       nodes.add(itr.next());
@@ -215,7 +218,7 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
 
   /**
    * Returns all of the root nodes from a graph.
-   * 
+   *
    * @param graph the graph to query, not null
    * @return the root nodes from the graph, not null and not containing null
    */
@@ -230,14 +233,14 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
 
   /**
    * Returns all of the value specifications that correspond to market-data-sourcing functions at the leaves of the graph.
-   * 
+   *
    * @param graph the graph to query, not null
    * @return the value specifications, not null and not containing null
    */
   public static Set<ValueSpecification> getMarketData(final DependencyGraph graph) {
     // TODO: CompiledViewCalcConfig has a better signature and implementation. Swap to that instead?
     final Iterator<DependencyNode> itr = graph.nodeIterator();
-    final Set<ValueSpecification> marketData = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> marketData = new HashSet<>();
     while (itr.hasNext()) {
       final DependencyNode node = itr.next();
       if (MarketDataSourcingFunction.UNIQUE_ID.equals(node.getFunction().getFunctionId())) {
@@ -264,10 +267,11 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
     return backward;
   }
 
-  private static Map<ValueSpecification, DependencyNode> findRoots(final DependencyGraph graph, final Map<ValueSpecification, ?> terminals, final Collection<DependencyNode> roots) {
+  private static Map<ValueSpecification, DependencyNode> findRoots(final DependencyGraph graph, final Map<ValueSpecification, ?> terminals,
+      final Collection<DependencyNode> roots) {
     final DependencyNode[] nodes = reverseExecution(graph);
     final Map<ValueSpecification, DependencyNode> necessary = Maps.newHashMapWithExpectedSize(nodes.length);
-    findNodes: for (DependencyNode node : nodes) { //CSIGNORE
+    findNodes: for (final DependencyNode node : nodes) { //CSIGNORE
       int count = node.getOutputCount();
       boolean isTerminal = false;
       for (int i = 0; i < count; i++) {
@@ -293,29 +297,31 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
         }
       }
     }
-    for (Map.Entry<ValueSpecification, ?> terminal : terminals.entrySet()) {
+    for (final Map.Entry<ValueSpecification, ?> terminal : terminals.entrySet()) {
       necessary.put(terminal.getKey(), null);
     }
     return necessary;
   }
 
   /**
-   * Removes any unnecessary values from a graph, returning the new graph. A necessary output is one that is marked as terminal or is consumed by a node that produces a necessary value.
+   * Removes any unnecessary values from a graph, returning the new graph. A necessary output is one that is marked as terminal or is consumed by a
+   * node that produces a necessary value.
    * <p>
-   * Graph construction may be based on functions which can produce multiple outputs which may not then be needed. Removing them may make execution more efficient. Similarly an incremental graph build
-   * may have fragments of graph from an earlier iteration producing values which are no longer terminal and no longer need to be calculated, making execution more efficient.
-   * 
+   * Graph construction may be based on functions which can produce multiple outputs which may not then be needed. Removing them may make execution
+   * more efficient. Similarly an incremental graph build may have fragments of graph from an earlier iteration producing values which are no longer
+   * terminal and no longer need to be calculated, making execution more efficient.
+   *
    * @param graph the graph to remove values from, not null
    * @return the new graph object, or the previous graph instance if it only contains necessary values
    */
   public static DependencyGraph removeUnnecessaryValues(final DependencyGraph graph) {
     final int rootCount = graph.getRootCount();
-    final Collection<DependencyNode> roots = new ArrayList<DependencyNode>(rootCount);
+    final Collection<DependencyNode> roots = new ArrayList<>(rootCount);
     final Map<ValueSpecification, DependencyNode> necessary = findRoots(graph, graph.getTerminalOutputs(), roots);
     final DependencyNode[] newRoots = new DependencyNode[roots.size()];
     // Note: this is tightly coupled to how the ExecutionOrderNodeIterator works
     int i = newRoots.length;
-    for (DependencyNode root : roots) {
+    for (final DependencyNode root : roots) {
       final DependencyNode newRoot = DependencyNodeImpl.removeUnnecessaryValues(root, necessary);
       assert newRoot != null;
       newRoots[--i] = newRoot;
@@ -346,11 +352,11 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
       return;
     }
     indent = indent + "  ";
-    int inputs = node.getInputCount();
+    final int inputs = node.getInputCount();
     for (int i = 0; i < inputs; i++) {
       out.println(indent + "Iv=" + node.getInputValue(i));
     }
-    int outputs = node.getOutputCount();
+    final int outputs = node.getOutputCount();
     for (int i = 0; i < outputs; i++) {
       out.println(indent + "Ov=" + node.getOutputValue(i));
     }
@@ -362,13 +368,14 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
   /**
    * Produces an ASCII representation of a dependency graph.
    * <p>
-   * This is provided for diagnostic/debugging purposes only. It must not be used for any form of data interchange or persistence as the formatting may change in future releases without prior notice.
-   * 
+   * This is provided for diagnostic/debugging purposes only. It must not be used for any form of data interchange or persistence as the
+   * formatting may change in future releases without prior notice.
+   *
    * @param graph the graph to dump out, not null
    * @param out the stream to write to, not null
    */
   public static void dumpStructureASCII(final DependencyGraph graph, final PrintStream out) {
-    final Map<DependencyNode, Integer> uid = new HashMap<DependencyNode, Integer>(graph.getSize());
+    final Map<DependencyNode, Integer> uid = new HashMap<>(graph.getSize());
     final int count = graph.getRootCount();
     for (int i = 0; i < count; i++) {
       dumpNodeASCII(out, "", graph.getRootNode(i), uid);
@@ -379,8 +386,8 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
   public int hashCode() {
     int hc = _hashCode;
     if (hc == 0) {
-      hc = ((_calculationConfigurationName.hashCode() * 31) + _terminalOutputs.hashCode()) * 31;
-      for (DependencyNode root : _roots) {
+      hc = (_calculationConfigurationName.hashCode() * 31 + _terminalOutputs.hashCode()) * 31;
+      for (final DependencyNode root : _roots) {
         hc += DependencyNode.HASHING_STRATEGY.hashCode(root);
       }
       if (hc == 0) {
@@ -400,7 +407,7 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
    * </ul>
    * <p>
    * Note that comparing two graphs in this way can be an expensive operation.
-   * 
+   *
    * @param o the object to compare to
    * @return true if the object is a graph and equal to this one, false otherwise
    */
@@ -432,7 +439,7 @@ public class DependencyGraphImpl implements DependencyGraph, Serializable {
       final DependencyNode nodeThis = _roots[i];
       final int hashCodeThis = DependencyNode.HASHING_STRATEGY.hashCode(nodeThis);
       for (int j = i; j < roots; j++) {
-        if (!matched[j] && (hashCodeThis == hashCodesOther[j]) && DependencyNode.HASHING_STRATEGY.equals(nodeThis, other.getRootNode(j))) {
+        if (!matched[j] && hashCodeThis == hashCodesOther[j] && DependencyNode.HASHING_STRATEGY.equals(nodeThis, other.getRootNode(j))) {
           matched[j] = true;
           continue loopThis;
         }

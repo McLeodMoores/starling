@@ -33,8 +33,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  * Returns all of the known pay cash-flows, including floating payments that have fixed.
  * The payments are always positive.
  */
-public final class FixedPayCashFlowVisitor extends InstrumentDefinitionVisitorSameValueAdapter<DoubleTimeSeries<LocalDate>, Map<LocalDate, MultipleCurrencyAmount>> {
-  private static final Logger s_logger = LoggerFactory.getLogger(FixedPayCashFlowVisitor.class);
+public final class FixedPayCashFlowVisitor
+extends InstrumentDefinitionVisitorSameValueAdapter<DoubleTimeSeries<LocalDate>, Map<LocalDate, MultipleCurrencyAmount>> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(FixedPayCashFlowVisitor.class);
   private static final FixedPayCashFlowVisitor INSTANCE = new FixedPayCashFlowVisitor();
 
   public static FixedPayCashFlowVisitor getInstance() {
@@ -70,7 +71,7 @@ public final class FixedPayCashFlowVisitor extends InstrumentDefinitionVisitorSa
    */
   @Override
   public Map<LocalDate, MultipleCurrencyAmount> visitCashDefinition(final CashDefinition cash, final DoubleTimeSeries<LocalDate> indexFixingTimeSeries) {
-    s_logger.info("An index fixing time series was supplied, but will not be used");
+    LOGGER.info("An index fixing time series was supplied, but will not be used");
     return visitCashDefinition(cash);
   }
 
@@ -98,8 +99,9 @@ public final class FixedPayCashFlowVisitor extends InstrumentDefinitionVisitorSa
    * @return A map containing the (single) payment date and amount
    */
   @Override
-  public Map<LocalDate, MultipleCurrencyAmount> visitPaymentFixedDefinition(final PaymentFixedDefinition payment, final DoubleTimeSeries<LocalDate> indexFixingTimeSeries) {
-    s_logger.info("An index fixing time series was supplied, but will not be used");
+  public Map<LocalDate, MultipleCurrencyAmount> visitPaymentFixedDefinition(final PaymentFixedDefinition payment,
+      final DoubleTimeSeries<LocalDate> indexFixingTimeSeries) {
+    LOGGER.info("An index fixing time series was supplied, but will not be used");
     return visitPaymentFixedDefinition(payment);
   }
 
@@ -127,8 +129,9 @@ public final class FixedPayCashFlowVisitor extends InstrumentDefinitionVisitorSa
    * @return A map containing the (single) payment date and amount
    */
   @Override
-  public Map<LocalDate, MultipleCurrencyAmount> visitCouponFixedDefinition(final CouponFixedDefinition coupon, final DoubleTimeSeries<LocalDate> indexFixingTimeSeries) {
-    s_logger.info("An index fixing time series was supplied, but will not be used");
+  public Map<LocalDate, MultipleCurrencyAmount> visitCouponFixedDefinition(final CouponFixedDefinition coupon,
+      final DoubleTimeSeries<LocalDate> indexFixingTimeSeries) {
+    LOGGER.info("An index fixing time series was supplied, but will not be used");
     return visitCouponFixedDefinition(coupon);
   }
 
@@ -147,7 +150,8 @@ public final class FixedPayCashFlowVisitor extends InstrumentDefinitionVisitorSa
    * @return A map containing the (single) payment date and amount if fixing has taken place, otherwise an empty map
    */
   @Override
-  public Map<LocalDate, MultipleCurrencyAmount> visitCouponIborDefinition(final CouponIborDefinition coupon, final DoubleTimeSeries<LocalDate> indexFixingTimeSeries) {
+  public Map<LocalDate, MultipleCurrencyAmount> visitCouponIborDefinition(final CouponIborDefinition coupon,
+      final DoubleTimeSeries<LocalDate> indexFixingTimeSeries) {
     ArgumentChecker.notNull(coupon, "coupon");
     if (coupon.getNotional() > 0) {
       return Collections.emptyMap();
@@ -274,7 +278,8 @@ public final class FixedPayCashFlowVisitor extends InstrumentDefinitionVisitorSa
    * @return A map containing the payment dates and amounts
    */
   @Override
-  public Map<LocalDate, MultipleCurrencyAmount> visitSwapFixedIborDefinition(final SwapFixedIborDefinition swap, final DoubleTimeSeries<LocalDate> indexFixingTimeSeries) {
+  public Map<LocalDate, MultipleCurrencyAmount> visitSwapFixedIborDefinition(final SwapFixedIborDefinition swap,
+      final DoubleTimeSeries<LocalDate> indexFixingTimeSeries) {
     ArgumentChecker.notNull(swap, "swap");
     if (swap.getFixedLeg().isPayer()) {
       return swap.getFixedLeg().accept(this, indexFixingTimeSeries);
@@ -335,7 +340,7 @@ public final class FixedPayCashFlowVisitor extends InstrumentDefinitionVisitorSa
    */
   @Override
   public Map<LocalDate, MultipleCurrencyAmount> visitForexDefinition(final ForexDefinition fx, final DoubleTimeSeries<LocalDate> indexFixingTimeSeries) {
-    s_logger.info("An index fixing time series was supplied, but will not be used");
+    LOGGER.info("An index fixing time series was supplied, but will not be used");
     return visitForexDefinition(fx);
   }
 
@@ -365,7 +370,7 @@ public final class FixedPayCashFlowVisitor extends InstrumentDefinitionVisitorSa
   @Override
   public Map<LocalDate, MultipleCurrencyAmount> visitForexNonDeliverableForwardDefinition(final ForexNonDeliverableForwardDefinition ndf,
       final DoubleTimeSeries<LocalDate> indexFixingTimeSeries) {
-    s_logger.info("An index fixing time series was supplied but will not be used");
+    LOGGER.info("An index fixing time series was supplied but will not be used");
     return visitForexNonDeliverableForwardDefinition(ndf);
   }
 

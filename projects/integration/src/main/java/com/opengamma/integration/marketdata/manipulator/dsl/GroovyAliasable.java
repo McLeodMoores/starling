@@ -6,12 +6,13 @@
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
 /**
- * 
+ *
  */
 public interface GroovyAliasable {
 
   /**
-   * The alias to use in the groovy script
+   * The alias to use in the groovy script.
+   * 
    * @return the alias
    */
   String getGroovyAlias();

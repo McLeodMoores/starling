@@ -18,10 +18,10 @@ import com.opengamma.util.ArgumentChecker;
  */
 public final class HolidayDateRemovalFunction {
   private static final LocalDate[] EMPTY_ARRAY = new LocalDate[0];
-  private static final HolidayDateRemovalFunction s_instance = new HolidayDateRemovalFunction();
+  private static final HolidayDateRemovalFunction INSTANCE = new HolidayDateRemovalFunction();
 
   public static HolidayDateRemovalFunction getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   private HolidayDateRemovalFunction() {

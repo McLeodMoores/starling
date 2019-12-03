@@ -25,7 +25,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Fudge builder for {@link HullWhiteOneFactorParameters}
+ * Fudge builder for {@link HullWhiteOneFactorParameters}.
  */
 @FudgeBuilderFor(HullWhiteOneFactorParameters.class)
 public class HullWhiteOneFactorParametersBuilder extends AbstractFudgeBuilder<HullWhiteOneFactorParameters> {

@@ -5,7 +5,6 @@
  */
 package com.opengamma.util.tuple;
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -32,8 +31,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
  * @param <B> the type of the second side of the pair
  */
 public final class ObjectsPair<A, B>
-    extends Pair<A, B>
-    implements Serializable {
+    extends Pair<A, B> {
   // this ImmutableBean is not auto-generated
 
   /** Serialization version. */
@@ -47,27 +45,27 @@ public final class ObjectsPair<A, B>
   //-------------------------------------------------------------------------
   /**
    * Creates a pair inferring the types.
-   * 
+   *
    * @param <A> the first element type
    * @param <B> the second element type
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @return a pair formed from the two parameters, not null
    */
-  public static <A, B> ObjectsPair<A, B> of(A first, B second) {
+  public static <A, B> ObjectsPair<A, B> of(final A first, final B second) {
     return new ObjectsPair<>(first, second);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Constructs a pair.
-   * 
+   *
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @deprecated Use of(first, second)
    */
   @Deprecated
-  public ObjectsPair(A first, B second) {
+  public ObjectsPair(final A first, final B second) { // CSIGNORE
     this.first = first;
     this.second = second;
   }
@@ -83,6 +81,7 @@ public final class ObjectsPair<A, B>
     return second;
   }
 
+  // CSOFF
   //-------------------------------------------------------------------------
   /**
    * The meta-bean for {@code ObjectsPair}.
@@ -97,14 +96,13 @@ public final class ObjectsPair<A, B>
     JodaBeanUtils.registerMetaBean(ObjectsPair.Meta.INSTANCE);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public ObjectsPair.Meta<A, B> metaBean() {
     return ObjectsPair.Meta.INSTANCE;
   }
 
   @Override
-  public <R> Property<R> property(String propertyName) {
+  public <R> Property<R> property(final String propertyName) {
     return metaBean().<R>metaProperty(propertyName).createProperty(this);
   }
 
@@ -154,7 +152,7 @@ public final class ObjectsPair<A, B>
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
       switch (propertyName) {
         case "first":
           return _first;
@@ -200,7 +198,7 @@ public final class ObjectsPair<A, B>
     //-----------------------------------------------------------------------
     @Override
     @SuppressWarnings("rawtypes")
-    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
+    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName) {
         case "first":
           return ((ObjectsPair) bean).getFirst();
@@ -211,7 +209,7 @@ public final class ObjectsPair<A, B>
     }
 
     @Override
-    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
+    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
       metaProperty(propertyName);
       if (quiet) {
         return;
@@ -242,7 +240,7 @@ public final class ObjectsPair<A, B>
 
     //-----------------------------------------------------------------------
     @Override
-    public Builder set(String propertyName, Object newValue) {
+    public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
         case "first":
           _first = newValue;
@@ -257,7 +255,7 @@ public final class ObjectsPair<A, B>
     }
 
     @Override
-    public Builder setString(String propertyName, String value) {
+    public Builder setString(final String propertyName, final String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }

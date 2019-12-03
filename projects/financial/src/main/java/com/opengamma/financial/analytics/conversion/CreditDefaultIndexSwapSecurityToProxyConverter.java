@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.conversion;
@@ -28,10 +28,10 @@ import com.opengamma.financial.security.swap.InterestRateNotional;
 import com.opengamma.id.ExternalId;
 
 /**
- * 
+ *
  */
 public class CreditDefaultIndexSwapSecurityToProxyConverter extends FinancialSecurityVisitorAdapter<CreditDefaultSwapDefinition> {
-  //TODO remove this
+  // TODO remove this
   private static final ExternalId REGION = ExternalSchemes.financialRegionId("US");
   private final SecuritySource _securitySource;
   private final HolidaySource _holidaySource;
@@ -39,7 +39,8 @@ public class CreditDefaultIndexSwapSecurityToProxyConverter extends FinancialSec
   private final LegalEntitySource _orgSource;
   private final ZonedDateTime _vaulationTime;
 
-  public CreditDefaultIndexSwapSecurityToProxyConverter(final HolidaySource holidaySource, final RegionSource regionSource, final LegalEntitySource legalEntitySource,
+  public CreditDefaultIndexSwapSecurityToProxyConverter(final HolidaySource holidaySource, final RegionSource regionSource,
+      final LegalEntitySource legalEntitySource,
       final SecuritySource securitySource, final ZonedDateTime valuationTime) {
     _securitySource = securitySource;
     _holidaySource = holidaySource;
@@ -60,7 +61,8 @@ public class CreditDefaultIndexSwapSecurityToProxyConverter extends FinancialSec
       throw new OpenGammaRuntimeException("Underlying index definition not found: " + referenceEntity);
     }
     final double recoveryRate = indexDef.getRecoveryRate();
-    final CreditDefaultSwapSecurityConverter converter = new CreditDefaultSwapSecurityConverter(_holidaySource, _regionSource, _orgSource, recoveryRate, _vaulationTime);
+    final CreditDefaultSwapSecurityConverter converter = new CreditDefaultSwapSecurityConverter(_holidaySource, _regionSource, _orgSource, recoveryRate,
+        _vaulationTime);
     final DebtSeniority debtSeniority = DebtSeniority.NONE;
     final RestructuringClause restructuringClause = RestructuringClause.NONE;
     final ZonedDateTime startDate = security.getStartDate();

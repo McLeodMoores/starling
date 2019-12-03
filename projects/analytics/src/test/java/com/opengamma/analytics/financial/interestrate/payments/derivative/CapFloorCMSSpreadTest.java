@@ -14,14 +14,15 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexSwap;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedIborDefinition;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.money.Currency;
@@ -34,9 +35,9 @@ import com.opengamma.util.time.DateUtils;
 @Test(groups = TestGroup.UNIT)
 public class CapFloorCMSSpreadTest {
 
-  //Swaps
+  // Swaps
   private static final Currency CUR = Currency.EUR;
-  private static final Calendar CALENDAR = new MondayToFridayCalendar("A");
+  private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final BusinessDayConvention BUSINESS_DAY = BusinessDayConventions.MODIFIED_FOLLOWING;
   private static final boolean IS_EOM = true;
   private static final ZonedDateTime SETTLEMENT_DATE = DateUtils.getUTCDate(2011, 3, 17);
@@ -50,12 +51,16 @@ public class CapFloorCMSSpreadTest {
   private static final IborIndex IBOR_INDEX = new IborIndex(CUR, INDEX_TENOR, SETTLEMENT_DAYS, DAY_COUNT, BUSINESS_DAY, IS_EOM, "Ibor");
   // Swap 10Y
   private static final Period ANNUITY_TENOR_1 = Period.ofYears(10);
-  private static final IndexSwap CMS_INDEX_1 = new IndexSwap(FIXED_PAYMENT_PERIOD, FIXED_DAY_COUNT, IBOR_INDEX, ANNUITY_TENOR_1, CALENDAR);
-  private static final SwapFixedIborDefinition SWAP_DEFINITION_1 = SwapFixedIborDefinition.from(SETTLEMENT_DATE, CMS_INDEX_1, 1.0, RATE, FIXED_IS_PAYER, CALENDAR);
+  private static final IndexSwap CMS_INDEX_1 = new IndexSwap(FIXED_PAYMENT_PERIOD, FIXED_DAY_COUNT, IBOR_INDEX, ANNUITY_TENOR_1,
+      CalendarAdapter.of(CALENDAR));
+  private static final SwapFixedIborDefinition SWAP_DEFINITION_1 = SwapFixedIborDefinition.from(SETTLEMENT_DATE, CMS_INDEX_1, 1.0, RATE,
+      FIXED_IS_PAYER, CalendarAdapter.of(CALENDAR));
   // Swap 2Y
   private static final Period ANNUITY_TENOR_2 = Period.ofYears(2);
-  private static final IndexSwap CMS_INDEX_2 = new IndexSwap(FIXED_PAYMENT_PERIOD, FIXED_DAY_COUNT, IBOR_INDEX, ANNUITY_TENOR_2, CALENDAR);
-  private static final SwapFixedIborDefinition SWAP_DEFINITION_2 = SwapFixedIborDefinition.from(SETTLEMENT_DATE, CMS_INDEX_2, 1.0, RATE, FIXED_IS_PAYER, CALENDAR);
+  private static final IndexSwap CMS_INDEX_2 = new IndexSwap(FIXED_PAYMENT_PERIOD, FIXED_DAY_COUNT, IBOR_INDEX, ANNUITY_TENOR_2,
+      CalendarAdapter.of(CALENDAR));
+  private static final SwapFixedIborDefinition SWAP_DEFINITION_2 = SwapFixedIborDefinition.from(SETTLEMENT_DATE, CMS_INDEX_2, 1.0, RATE,
+      FIXED_IS_PAYER, CalendarAdapter.of(CALENDAR));
   // CMS spread coupon
   private static final double NOTIONAL = 10000000;
   private static final ZonedDateTime PAYMENT_DATE = DateUtils.getUTCDate(2011, 4, 6);
@@ -71,14 +76,20 @@ public class CapFloorCMSSpreadTest {
   private static final SwapFixedCoupon<? extends Payment> SWAP_1 = SWAP_DEFINITION_1.toDerivative(REFERENCE_DATE);
   private static final SwapFixedCoupon<? extends Payment> SWAP_2 = SWAP_DEFINITION_2.toDerivative(REFERENCE_DATE);
   private static final DayCount ACT_ACT = DayCounts.ACT_ACT_ISDA;
-  private static final ZonedDateTime REFERENCE_DATE_ZONED = ZonedDateTime.of(LocalDateTime.of(REFERENCE_DATE.toLocalDate(), LocalTime.MIDNIGHT), ZoneOffset.UTC);
+  private static final ZonedDateTime REFERENCE_DATE_ZONED = ZonedDateTime
+      .of(LocalDateTime.of(REFERENCE_DATE.toLocalDate(), LocalTime.MIDNIGHT), ZoneOffset.UTC);
   private static final double PAYMENT_TIME = ACT_ACT.getDayCountFraction(REFERENCE_DATE_ZONED, PAYMENT_DATE);
   private static final double FIXING_TIME = ACT_ACT.getDayCountFraction(REFERENCE_DATE_ZONED, FIXING_DATE);
-  private static final double SETTLEMENT_TIME = ACT_ACT.getDayCountFraction(REFERENCE_DATE_ZONED, SWAP_DEFINITION_1.getFixedLeg().getNthPayment(0).getAccrualStartDate());
+  private static final double SETTLEMENT_TIME = ACT_ACT.getDayCountFraction(REFERENCE_DATE_ZONED,
+      SWAP_DEFINITION_1.getFixedLeg().getNthPayment(0).getAccrualStartDate());
 
-  private static final CapFloorCMSSpread CMS_SPREAD = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2,
+  private static final CapFloorCMSSpread CMS_SPREAD = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL,
+      FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2,
       SETTLEMENT_TIME, STRIKE, IS_CAP);
 
+  /**
+   *
+   */
   @Test
   public void testGetter() {
     assertEquals(SWAP_1, CMS_SPREAD.getUnderlyingSwap1());
@@ -89,45 +100,65 @@ public class CapFloorCMSSpreadTest {
     assertEquals(IS_CAP, CMS_SPREAD.isCap());
   }
 
+  /**
+   *
+   */
   @Test
   public void testWithNotional() {
     final double notional = NOTIONAL + 1000;
-    final CapFloorCMSSpread cmsSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, notional, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE,
+    final CapFloorCMSSpread cmsSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, notional, FIXING_TIME, SWAP_1,
+        CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE,
         IS_CAP);
     assertEquals(cmsSpread, CMS_SPREAD.withNotional(notional));
   }
 
+  /**
+   *
+   */
   @Test
   public void testEqualHash() {
-    final CapFloorCMSSpread newCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE,
+    final CapFloorCMSSpread newCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1,
+        CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE,
         IS_CAP);
     assertEquals(newCMSSpread.equals(CMS_SPREAD), true);
     assertEquals(newCMSSpread.hashCode() == CMS_SPREAD.hashCode(), true);
     final Currency newCur = Currency.USD;
     CapFloorCMSSpread modifiedCMSSpread;
-    modifiedCMSSpread = new CapFloorCMSSpread(newCur, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(newCur, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1,
+        SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
-    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME + 1.0, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME + 1.0, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1,
+        SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
-    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR + 1.0, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR + 1.0, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1,
+        SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
-    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL + 1.0, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL + 1.0, FIXING_TIME, SWAP_1, CMS_INDEX_1,
+        SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
-    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME + 1.0, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME + 1.0, SWAP_1, CMS_INDEX_1,
+        SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
-    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME + 1.0, STRIKE, IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2,
+        CMS_INDEX_2, SETTLEMENT_TIME + 1.0, STRIKE, IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
-    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE + 1.0, IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2,
+        CMS_INDEX_2, SETTLEMENT_TIME, STRIKE + 1.0, IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
-    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, !IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2,
+        CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, !IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
-    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_2, CMS_INDEX_1, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_2, CMS_INDEX_1, SWAP_2,
+        CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
-    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_2, SWAP_2, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_2, SWAP_2,
+        CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
-    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_1, CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_1,
+        CMS_INDEX_2, SETTLEMENT_TIME, STRIKE, IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
-    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2, CMS_INDEX_1, SETTLEMENT_TIME, STRIKE, IS_CAP);
+    modifiedCMSSpread = new CapFloorCMSSpread(CUR, PAYMENT_TIME, PAYMENT_ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, SWAP_1, CMS_INDEX_1, SWAP_2,
+        CMS_INDEX_1, SETTLEMENT_TIME, STRIKE, IS_CAP);
     assertEquals(modifiedCMSSpread.equals(CMS_SPREAD), false);
   }
 }

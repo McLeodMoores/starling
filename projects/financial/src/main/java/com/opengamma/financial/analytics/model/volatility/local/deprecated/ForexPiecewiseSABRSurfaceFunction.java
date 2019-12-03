@@ -12,7 +12,6 @@ import static com.opengamma.financial.analytics.model.volatility.local.deprecate
 import static com.opengamma.financial.analytics.model.volatility.local.deprecated.LocalVolatilityPDEValuePropertyNames.PROPERTY_X_AXIS;
 import static com.opengamma.financial.analytics.model.volatility.local.deprecated.LocalVolatilityPDEValuePropertyNames.PROPERTY_Y_AXIS;
 import static com.opengamma.financial.analytics.model.volatility.local.deprecated.LocalVolatilityPDEValuePropertyNames.PROPERTY_Y_AXIS_TYPE;
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -42,13 +41,15 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  * @deprecated Deprecated
  */
 @Deprecated
 public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ForexPiecewiseSABRSurfaceFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForexPiecewiseSABRSurfaceFunction.class);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -82,7 +83,8 @@ public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunct
   }
 
   @Override
-  protected ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis, final String yAxisType,
+  protected ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
+      final String yAxisType,
       final String forwardCurveCalculationMethod, final String forwardCurveName) {
     return createValueProperties()
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX)
@@ -107,7 +109,8 @@ public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunct
   }
 
   @Override
-  protected SmileSurfaceDataBundle getData(final FunctionInputs inputs, final ValueRequirement volDataRequirement, final ValueRequirement forwardCurveRequirement) {
+  protected SmileSurfaceDataBundle getData(final FunctionInputs inputs, final ValueRequirement volDataRequirement,
+      final ValueRequirement forwardCurveRequirement) {
     final Object volatilitySurfaceObject = inputs.getValue(volDataRequirement);
     if (volatilitySurfaceObject == null) {
       throw new OpenGammaRuntimeException("Could not get " + volDataRequirement);
@@ -118,7 +121,8 @@ public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunct
     }
     final ForwardCurve forwardCurve = (ForwardCurve) forwardCurveObject;
     @SuppressWarnings("unchecked")
-    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface = (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
+    final VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>> fxVolatilitySurface =
+    (VolatilitySurfaceData<Tenor, Pair<Number, FXVolQuoteType>>) volatilitySurfaceObject;
     final Tenor[] tenors = fxVolatilitySurface.getXs();
     Arrays.sort(tenors);
     final Pair<Number, FXVolQuoteType>[] quotes = fxVolatilitySurface.getYs();
@@ -153,14 +157,14 @@ public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunct
             riskReversalList.add(rr);
             strangleList.add(s);
           } else {
-            s_logger.info("Had a null value for tenor number " + j);
+            LOGGER.info("Had a null value for tenor number " + j);
           }
         }
         riskReversals[i] = riskReversalList.toDoubleArray();
         strangle[i] = strangleList.toDoubleArray();
       }
     }
-    final boolean isCallData = true; //TODO this shouldn't be hard-coded
+    final boolean isCallData = true; // TODO this shouldn't be hard-coded
     return new ForexSmileDeltaSurfaceDataBundle(forwardCurve, expiries, deltas, atms, riskReversals, strangle, isCallData);
   }
 
@@ -170,16 +174,16 @@ public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunct
       return period.getYears();
     }
     if (period.getMonths() != 0) {
-      return ((double) period.getMonths()) / 12;
+      return (double) period.getMonths() / 12;
     }
     if (period.getDays() != 0) {
-      return ((double) period.getDays()) / 365;
+      return (double) period.getDays() / 365;
     }
     throw new OpenGammaRuntimeException("Should never happen");
   }
 
   private Number[] getDeltaValues(final Pair<Number, FXVolQuoteType>[] quotes) {
-    final TreeSet<Number> values = new TreeSet<Number>();
+    final TreeSet<Number> values = new TreeSet<>();
     for (final Pair<Number, FXVolQuoteType> pair : quotes) {
       values.add(pair.getFirst());
     }

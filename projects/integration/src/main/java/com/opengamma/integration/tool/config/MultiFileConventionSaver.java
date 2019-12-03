@@ -1,15 +1,13 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.tool.config;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Map;
@@ -53,72 +51,72 @@ import com.opengamma.util.JodaBeanSerialization;
  */
 @BeanDefinition
 public class MultiFileConventionSaver extends DirectBean {
-  private static final Logger s_logger = LoggerFactory.getLogger(MultiFileConventionSaver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultiFileConventionSaver.class);
   private static final boolean PRETTY = true;
   @PropertyDefinition
   private File _zipFileName;
   @PropertyDefinition
   private ConventionMaster _conventionMaster;
-  
-  public void setZipFileName(String directory) {
+
+  public void setZipFileName(final String directory) {
     setZipFileName(new File(directory));
   }
-  
+
   public void run() throws IOException {
     ArgumentChecker.notNullInjected(getZipFileName(), "destinationZip");
     ArgumentChecker.notNullInjected(getConventionMaster(), "conventionMaster");
-    
-    ZipOutputStream out = new ZipOutputStream(new FileOutputStream(getZipFileName()));
-    ConventionMetaDataRequest request = new ConventionMetaDataRequest();
-    ConventionMetaDataResult result = getConventionMaster().metaData(request);
-    
-    for (ConventionType conventionType : result.getConventionTypes()) {
+
+    final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(getZipFileName()));
+    final ConventionMetaDataRequest request = new ConventionMetaDataRequest();
+    final ConventionMetaDataResult result = getConventionMaster().metaData(request);
+
+    for (final ConventionType conventionType : result.getConventionTypes()) {
       outputFilesForConventionType(conventionType, out);
     }
     out.close();
   }
-  
-  protected void outputFilesForConventionType(ConventionType conventionType, ZipOutputStream out) throws IOException {
-    s_logger.info("Outputting files for {}", conventionType);
-    ConventionSearchRequest searchRequest = new ConventionSearchRequest();
+
+  protected void outputFilesForConventionType(final ConventionType conventionType, final ZipOutputStream out) throws IOException {
+    LOGGER.info("Outputting files for {}", conventionType);
+    final ConventionSearchRequest searchRequest = new ConventionSearchRequest();
     searchRequest.setConventionType(conventionType);
-    ConventionSearchResult searchResult = getConventionMaster().search(searchRequest);
-    Set<ConventionDocument> latest = new HashSet<>();
-    for (ConventionDocument document : searchResult.getDocuments()) {
+    final ConventionSearchResult searchResult = getConventionMaster().search(searchRequest);
+    final Set<ConventionDocument> latest = new HashSet<>();
+    for (final ConventionDocument document : searchResult.getDocuments()) {
       latest.add(getConventionMaster().get(document.getObjectId(), VersionCorrection.LATEST));
     }
 
-    Set<String> fileNames = new HashSet<>();
-    for (ConventionDocument document : latest) {
-      ManageableConvention convention = document.getConvention();
+    final Set<String> fileNames = new HashSet<>();
+    for (final ConventionDocument document : latest) {
+      final ManageableConvention convention = document.getConvention();
       String fileName = escapeFileName(convention.getName());
       if (!convention.getName().equals(document.getName())) {
-        s_logger.warn("Convention document {} contains convention with differing name {}", document.getName(), convention.getName());
+        LOGGER.warn("Convention document {} contains convention with differing name {}", document.getName(), convention.getName());
       }
       if (fileNames.contains(fileName)) {
-        int count = 1;
+        final int count = 1;
         String duplicateFileName;
         do {
           duplicateFileName = fileName + " (" + count + ")";
         } while (fileNames.contains(duplicateFileName));
-        s_logger.warn("Found duplicate convention {}, exporting as {}", fileName, duplicateFileName);
+        LOGGER.warn("Found duplicate convention {}, exporting as {}", fileName, duplicateFileName);
         fileName = duplicateFileName;
       }
       fileNames.add(fileName);
-      ZipEntry entry = new ZipEntry(conventionType.getName() + "/" + fileName + ".xml");
+      final ZipEntry entry = new ZipEntry(conventionType.getName() + "/" + fileName + ".xml");
       out.putNextEntry(entry);
-      JodaBeanXmlWriter xmlWriter = JodaBeanSerialization.serializer(PRETTY).xmlWriter();
-      StringBuilder sb = xmlWriter.writeToBuilder(convention, PRETTY);
+      final JodaBeanXmlWriter xmlWriter = JodaBeanSerialization.serializer(PRETTY).xmlWriter();
+      final StringBuilder sb = xmlWriter.writeToBuilder(convention, PRETTY);
       out.write(sb.toString().getBytes(Charset.forName("UTF-8")));
       out.closeEntry();
     }
   }
-  
-  private String escapeFileName(String name) {
-    String escapedForwardSlashes = name.replaceAll("/", " SLASH ");
+
+  private String escapeFileName(final String name) {
+    final String escapedForwardSlashes = name.replaceAll("/", " SLASH ");
     return escapedForwardSlashes.replaceAll("~", " TILDE ").replaceAll("\\\\", " BACKSLASH ");
   }
-  
+
 
   //------------------------- AUTOGENERATED START -------------------------
   ///CLOVER:OFF

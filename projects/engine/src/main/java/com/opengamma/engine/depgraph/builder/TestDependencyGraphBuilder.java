@@ -41,8 +41,8 @@ public class TestDependencyGraphBuilder {
 
     private final DependencyNodeFunction _function;
     private final ComputationTargetSpecification _target;
-    private final Set<ValueSpecification> _inputs = new HashSet<ValueSpecification>();
-    private final Set<ValueSpecification> _outputs = new HashSet<ValueSpecification>();
+    private final Set<ValueSpecification> _inputs = new HashSet<>();
+    private final Set<ValueSpecification> _outputs = new HashSet<>();
 
     private NodeBuilder(final DependencyNodeFunction function, final ComputationTargetSpecification target) {
       _function = function;
@@ -70,7 +70,8 @@ public class TestDependencyGraphBuilder {
 
     public ValueSpecification addTerminalOutput(final String name) {
       final ValueSpecification output = createOutput(name);
-      final ValueRequirement requirement = new ValueRequirement(name, output.getTargetSpecification(), output.getProperties().withoutAny(ValuePropertyNames.FUNCTION));
+      final ValueRequirement requirement =
+          new ValueRequirement(name, output.getTargetSpecification(), output.getProperties().withoutAny(ValuePropertyNames.FUNCTION));
       addTerminalOutput(output, requirement);
       return output;
     }
@@ -83,8 +84,8 @@ public class TestDependencyGraphBuilder {
   }
 
   private final String _calcConfig;
-  private final List<NodeBuilder> _nodes = new ArrayList<NodeBuilder>();
-  private final Map<ValueSpecification, Set<ValueRequirement>> _terminals = new HashMap<ValueSpecification, Set<ValueRequirement>>();
+  private final List<NodeBuilder> _nodes = new ArrayList<>();
+  private final Map<ValueSpecification, Set<ValueRequirement>> _terminals = new HashMap<>();
 
   public TestDependencyGraphBuilder(final String calcConfig) {
     _calcConfig = calcConfig;
@@ -116,7 +117,8 @@ public class TestDependencyGraphBuilder {
     _terminals.put(valueSpecification, valueRequirements);
   }
 
-  private DependencyNode buildNode(final ValueSpecification valueSpec, final Map<ValueSpecification, NodeBuilder> builders, final Map<ValueSpecification, DependencyNode> nodes) {
+  private DependencyNode buildNode(final ValueSpecification valueSpec, final Map<ValueSpecification, NodeBuilder> builders,
+      final Map<ValueSpecification, DependencyNode> nodes) {
     DependencyNode node = nodes.get(valueSpec);
     if (node == null) {
       final NodeBuilder builder = builders.get(valueSpec);
@@ -124,34 +126,35 @@ public class TestDependencyGraphBuilder {
         throw new IllegalArgumentException();
       }
       node = buildNode(builder, builders, nodes);
-      for (ValueSpecification output : builder._outputs) {
+      for (final ValueSpecification output : builder._outputs) {
         nodes.put(output, node);
       }
     }
     return node;
   }
 
-  private DependencyNode buildNode(final NodeBuilder builder, final Map<ValueSpecification, NodeBuilder> builders, final Map<ValueSpecification, DependencyNode> nodes) {
-    final Map<ValueSpecification, DependencyNode> inputs = new HashMap<ValueSpecification, DependencyNode>();
-    for (ValueSpecification input : builder._inputs) {
+  private DependencyNode buildNode(final NodeBuilder builder, final Map<ValueSpecification, NodeBuilder> builders,
+      final Map<ValueSpecification, DependencyNode> nodes) {
+    final Map<ValueSpecification, DependencyNode> inputs = new HashMap<>();
+    for (final ValueSpecification input : builder._inputs) {
       inputs.put(input, buildNode(input, builders, nodes));
     }
     return new DependencyNodeImpl(builder._function, builder._target, builder._outputs, inputs);
   }
 
   public DependencyGraph buildGraph() {
-    final Map<ValueSpecification, NodeBuilder> nodeBuilders = new HashMap<ValueSpecification, NodeBuilder>();
-    final Map<ValueSpecification, DependencyNode> nodes = new HashMap<ValueSpecification, DependencyNode>();
-    final Set<ValueSpecification> intermediates = new HashSet<ValueSpecification>();
-    for (NodeBuilder node : _nodes) {
-      for (ValueSpecification output : node._outputs) {
+    final Map<ValueSpecification, NodeBuilder> nodeBuilders = new HashMap<>();
+    final Map<ValueSpecification, DependencyNode> nodes = new HashMap<>();
+    final Set<ValueSpecification> intermediates = new HashSet<>();
+    for (final NodeBuilder node : _nodes) {
+      for (final ValueSpecification output : node._outputs) {
         nodeBuilders.put(output, node);
       }
       intermediates.addAll(node._inputs);
     }
-    final Collection<DependencyNode> roots = new ArrayList<DependencyNode>();
-    nodeLoop: for (NodeBuilder node : _nodes) { //CSIGNORE
-      for (ValueSpecification output : node._outputs) {
+    final Collection<DependencyNode> roots = new ArrayList<>();
+    nodeLoop: for (final NodeBuilder node : _nodes) { //CSIGNORE
+      for (final ValueSpecification output : node._outputs) {
         if (intermediates.contains(output)) {
           continue nodeLoop;
         }

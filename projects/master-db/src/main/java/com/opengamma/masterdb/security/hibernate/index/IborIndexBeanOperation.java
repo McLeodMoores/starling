@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -32,7 +32,7 @@ public final class IborIndexBeanOperation extends AbstractSecurityBeanOperation<
   }
 
   @Override
-  public IborIndexBean createBean(final OperationContext context, HibernateSecurityMasterDao secMasterSession, IborIndex index) {
+  public IborIndexBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final IborIndex index) {
     final IborIndexBean bean = new IborIndexBean();
     bean.setDescription(index.getDescription());
     bean.setConventionId(externalIdToExternalIdBean(index.getConventionId()));
@@ -44,13 +44,13 @@ public final class IborIndexBeanOperation extends AbstractSecurityBeanOperation<
   }
 
   @Override
-  public IborIndex createSecurity(final OperationContext context, IborIndexBean bean) {
-    String description = bean.getDescription();
-    Tenor tenor = tenorBeanToTenor(bean.getTenor());
-    ExternalId conventionId = externalIdBeanToExternalId(bean.getConventionId());
-    IborIndex iborIndex = new IborIndex("", description, tenor, conventionId);
+  public IborIndex createSecurity(final OperationContext context, final IborIndexBean bean) {
+    final String description = bean.getDescription();
+    final Tenor tenor = tenorBeanToTenor(bean.getTenor());
+    final ExternalId conventionId = externalIdBeanToExternalId(bean.getConventionId());
+    final IborIndex iborIndex = new IborIndex("", description, tenor, conventionId);
     if (bean.getIndexFamilyId() != null) {
-      ExternalId indexFamilyId = externalIdBeanToExternalId(bean.getIndexFamilyId());
+      final ExternalId indexFamilyId = externalIdBeanToExternalId(bean.getIndexFamilyId());
       iborIndex.setIndexFamilyId(indexFamilyId);
     }
     return iborIndex;

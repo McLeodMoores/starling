@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -10,20 +10,25 @@ import java.util.Arrays;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
 
-  private int _nTimes;
-  private double[] _exerciseTimes;
-  private int[] _exerciseSteps;
+  private final int _nTimes;
+  private final double[] _exerciseTimes;
+  private final int[] _exerciseSteps;
 
   /**
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param exerciseTimes a set of dates on which option can be exercised
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param exerciseTimes
+   *          a set of dates on which option can be exercised
    */
   public BermudanOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double[] exerciseTimes) {
     super(strike, timeToExpiry, steps, isCall);
@@ -59,7 +64,8 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   @Override
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double baseAssetPrice, final double sumCashDiv,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values,
+      final double baseAssetPrice, final double sumCashDiv,
       final double downFactor, final double upOverDown, final int steps) {
     final double strike = getStrike();
     final int nStepsP = steps + 1;
@@ -99,7 +105,8 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   @Override
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability, final double[] values,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability,
+      final double[] values,
       final double baseAssetPrice, final double sumCashDiv, final double downFactor, final double middleOverDown, final int steps) {
     final double strike = getStrike();
     final int nNodes = 2 * steps + 1;
@@ -110,7 +117,8 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
       final double sign = getSign();
       double assetPrice = baseAssetPrice * Math.pow(downFactor, steps);
       for (int j = 0; j < nNodes; ++j) {
-        res[j] = Math.max(discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]), sign * (assetPrice + sumCashDiv - strike));
+        res[j] = Math.max(discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]),
+            sign * (assetPrice + sumCashDiv - strike));
         assetPrice *= middleOverDown;
       }
     } else {
@@ -123,7 +131,8 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access number of exercise times
+   * Access number of exercise times.
+   *
    * @return _nTimes
    */
   public int getNumberOfExerciseTimes() {
@@ -131,7 +140,8 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access exercise times
+   * Access exercise times.
+   *
    * @return _exerciseTimes
    */
   public double[] getExerciseTimes() {
@@ -139,7 +149,8 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   /**
-   * Access exercise steps
+   * Access exercise steps.
+   *
    * @return _exerciseSteps
    */
   public int[] getExerciseSteps() {
@@ -187,7 +198,7 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -197,7 +208,7 @@ public class BermudanOptionFunctionProvider extends OptionFunctionProvider1D {
     if (!(obj instanceof BermudanOptionFunctionProvider)) {
       return false;
     }
-    BermudanOptionFunctionProvider other = (BermudanOptionFunctionProvider) obj;
+    final BermudanOptionFunctionProvider other = (BermudanOptionFunctionProvider) obj;
     if (!Arrays.equals(_exerciseTimes, other._exerciseTimes)) {
       return false;
     }

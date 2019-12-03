@@ -18,7 +18,8 @@ import com.opengamma.financial.convention.frequency.SimpleFrequency;
  */
 public class ScheduleFactory {
 
-  public static LocalDate[] getSchedule(final LocalDate startDate, final LocalDate endDate, final Frequency frequency, final boolean endOfMonth, final boolean fromEnd,
+  public static LocalDate[] getSchedule(final LocalDate startDate, final LocalDate endDate, final Frequency frequency, final boolean endOfMonth,
+      final boolean fromEnd,
       final boolean generateRecursive) {
     Validate.notNull(startDate, "start date");
     Validate.notNull(endDate, "end date");
@@ -35,7 +36,8 @@ public class ScheduleFactory {
     return getSchedule(startDate, endDate, periodsPerYear, endOfMonth, fromEnd, generateRecursive);
   }
 
-  public static LocalDate[] getSchedule(final LocalDate startDate, final LocalDate endDate, final int periodsPerYear, final boolean endOfMonth, final boolean fromEnd,
+  public static LocalDate[] getSchedule(final LocalDate startDate, final LocalDate endDate, final int periodsPerYear, final boolean endOfMonth,
+      final boolean fromEnd,
       final boolean generateRecursive) {
     Validate.notNull(startDate, "start date");
     Validate.notNull(endDate, "end date");
@@ -104,7 +106,8 @@ public class ScheduleFactory {
     return result;
   }
 
-  public static ZonedDateTime[] getSchedule(final ZonedDateTime startDate, final ZonedDateTime endDate, final Frequency frequency, final boolean endOfMonth, final boolean fromEnd,
+  public static ZonedDateTime[] getSchedule(final ZonedDateTime startDate, final ZonedDateTime endDate, final Frequency frequency, final boolean endOfMonth,
+      final boolean fromEnd,
       final boolean generateRecursive) {
     Validate.notNull(startDate, "start date");
     Validate.notNull(endDate, "end date");
@@ -121,7 +124,8 @@ public class ScheduleFactory {
     return getSchedule(startDate, endDate, periodsPerYear, endOfMonth, fromEnd, generateRecursive);
   }
 
-  public static ZonedDateTime[] getSchedule(final ZonedDateTime startDate, final ZonedDateTime endDate, final int periodsPerYear, final boolean endOfMonth, final boolean fromEnd,
+  public static ZonedDateTime[] getSchedule(final ZonedDateTime startDate, final ZonedDateTime endDate, final int periodsPerYear, final boolean endOfMonth,
+      final boolean fromEnd,
       final boolean generateRecursive) {
     Validate.notNull(startDate, "start date");
     Validate.notNull(endDate, "end date");

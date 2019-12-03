@@ -43,95 +43,96 @@ public class DataFinancialClientUris {
    */
   public static final String HEARTBEAT_PATH = "heartbeat";
 
- 
+
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param userName  the user name, not null
    * @param clientName  the client name, not null
    * @return the URI, not null
    */
-  public static URI uriSecurityMaster(URI baseUri, String userName, String clientName) {
-    UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(SECURITY_MASTER_PATH);
+  public static URI uriSecurityMaster(final URI baseUri, final String userName, final String clientName) {
+    final UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(SECURITY_MASTER_PATH);
     return bld.build();
   }
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param userName  the user name, not null
    * @param clientName  the client name, not null
    * @return the URI, not null
    */
-  public static URI uriPositionMaster(URI baseUri, String userName, String clientName) {
-    UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(POSITION_MASTER_PATH);
+  public static URI uriPositionMaster(final URI baseUri, final String userName, final String clientName) {
+    final UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(POSITION_MASTER_PATH);
     return bld.build();
   }
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param userName  the user name, not null
    * @param clientName  the client name, not null
    * @return the URI, not null
    */
-  public static URI uriPortfolioMaster(URI baseUri, String userName, String clientName) {
-    UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(PORTFOLIO_MASTER_PATH);
+  public static URI uriPortfolioMaster(final URI baseUri, final String userName, final String clientName) {
+    final UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(PORTFOLIO_MASTER_PATH);
     return bld.build();
   }
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param userName  the user name, not null
    * @param clientName  the client name, not null
    * @return the URI, not null
    */
-  public static URI uriConfigMaster(URI baseUri, String userName, String clientName) {
-    UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(CONFIG_MASTER_PATH);
+  public static URI uriConfigMaster(final URI baseUri, final String userName, final String clientName) {
+    final UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(CONFIG_MASTER_PATH);
     return bld.build();
   }
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param userName  the user name, not null
    * @param clientName  the client name, not null
    * @return the URI, not null
    */
-  public static URI uriInterpolatedYieldCurveDefinitionMaster(URI baseUri, String userName, String clientName) {
-    UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(INTERPOLATED_YIELD_CURVE_DEFINITION_MASTER_PATH);
+  public static URI uriInterpolatedYieldCurveDefinitionMaster(final URI baseUri, final String userName, final String clientName) {
+    final UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName))
+        .path(INTERPOLATED_YIELD_CURVE_DEFINITION_MASTER_PATH);
     return bld.build();
   }
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param userName  the user name, not null
    * @param clientName  the client name, not null
    * @return the URI, not null
    */
-  public static URI uriSnapshotMaster(URI baseUri, String userName, String clientName) {
-    UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(MARKET_DATA_SNAPSHOT_MASTER_PATH);
+  public static URI uriSnapshotMaster(final URI baseUri, final String userName, final String clientName) {
+    final UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(MARKET_DATA_SNAPSHOT_MASTER_PATH);
     return bld.build();
   }
 
   /**
    * Builds a URI.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param userName  the user name, not null
    * @param clientName  the client name, not null
    * @return the URI, not null
    */
-  public static URI uriHeartbeat(URI baseUri, String userName, String clientName) {
-    UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(HEARTBEAT_PATH);
+  public static URI uriHeartbeat(final URI baseUri, final String userName, final String clientName) {
+    final UriBuilder bld = UriBuilder.fromUri(DataFinancialClientManagerUris.uriClient(baseUri, userName, clientName)).path(HEARTBEAT_PATH);
     return bld.build();
   }
 

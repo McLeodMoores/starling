@@ -18,29 +18,32 @@ import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
  */
 public class FinancialSecurityFudgeBuilder extends AbstractFudgeBuilder {
 
-  public static void toFudgeMsg(FudgeSerializer serializer, FinancialSecurity object, final MutableFudgeMsg msg) {
+  /**
+   * Converts a security to a Fudge message.
+   * 
+   * @param serializer
+   *          the Fudge serializer, not null
+   * @param object
+   *          the security, not null
+   * @param msg
+   *          the message to add security information to, not null
+   */
+  public static void toFudgeMsg(final FudgeSerializer serializer, final FinancialSecurity object, final MutableFudgeMsg msg) {
     ManageableSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, FinancialSecurity object) {
+  /**
+   * Converts a Fudge message to a security.
+   * 
+   * @param deserializer
+   *          the Fudge deserializer, not null
+   * @param msg
+   *          the message, not null
+   * @param object
+   *          the security to have its fields populated, not null
+   */
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final FinancialSecurity object) {
     ManageableSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
   }
-
-//  public static <T> T backdoorCreateClass(Class<T> clazz) {
-//    return backdoorCreateClass(clazz, Object.class);
-//  }
-//
-//  public static <T> T backdoorCreateClass(Class<T> clazz, Class<? super T> parent) {
-//    try {
-//      ReflectionFactory rf = ReflectionFactory.getReflectionFactory();
-//      Constructor<?> objDef = parent.getDeclaredConstructor();
-//      Constructor<?> intConstr = rf.newConstructorForSerialization(clazz, objDef);
-//      return clazz.cast(intConstr.newInstance());
-//    } catch (RuntimeException ex) {
-//      throw ex;
-//    } catch (Exception ex) {
-//      throw new IllegalStateException("Cannot create object", ex);
-//    }
-//  }
 
 }

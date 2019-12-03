@@ -83,260 +83,219 @@ import com.opengamma.util.time.Expiry;
 
   // TODO this should be configurable, should be able to add from client projects
   /** All the securities and related types supported by the blotter. */
-  private static final Set<MetaBean> s_metaBeans = Sets.<MetaBean>newHashSet(
-      FXForwardSecurity.meta(),
-      SwapSecurity.meta(),
-      SwaptionSecurity.meta(),
-      CapFloorCMSSpreadSecurity.meta(),
-      NonDeliverableFXOptionSecurity.meta(),
-      FXOptionSecurity.meta(),
-      FRASecurity.meta(),
-      CapFloorSecurity.meta(),
-      EquityVarianceSwapSecurity.meta(),
-      FXBarrierOptionSecurity.meta(),
-      FXDigitalOptionSecurity.meta(),
-      FixedInterestRateLeg.meta(),
-      FloatingInterestRateLeg.meta(),
-      FloatingSpreadIRLeg.meta(),
-      FloatingGearingIRLeg.meta(),
-      FixedInflationSwapLeg.meta(),
-      InflationIndexSwapLeg.meta(),
-      InterestRateNotional.meta(),
-      LegacyVanillaCDSSecurity.meta(),
-      LegacyRecoveryLockCDSSecurity.meta(),
-      LegacyFixedRecoveryCDSSecurity.meta(),
-      StandardVanillaCDSSecurity.meta(),
-      StandardRecoveryLockCDSSecurity.meta(),
-      StandardFixedRecoveryCDSSecurity.meta(),
-      CreditDefaultSwapIndexSecurity.meta(),
-      CreditDefaultSwapOptionSecurity.meta(),
-      YearOnYearInflationSwapSecurity.meta(),
-      ZeroCouponInflationSwapSecurity.meta(),
-      CashSecurity.meta());
+  private static final Set<MetaBean> META_BEANS = Sets.<MetaBean> newHashSet(FXForwardSecurity.meta(), SwapSecurity.meta(), SwaptionSecurity.meta(),
+      CapFloorCMSSpreadSecurity.meta(), NonDeliverableFXOptionSecurity.meta(), FXOptionSecurity.meta(), FRASecurity.meta(), CapFloorSecurity.meta(),
+      EquityVarianceSwapSecurity.meta(), FXBarrierOptionSecurity.meta(), FXDigitalOptionSecurity.meta(), FixedInterestRateLeg.meta(),
+      FloatingInterestRateLeg.meta(), FloatingSpreadIRLeg.meta(), FloatingGearingIRLeg.meta(), FixedInflationSwapLeg.meta(), InflationIndexSwapLeg.meta(),
+      InterestRateNotional.meta(), LegacyVanillaCDSSecurity.meta(), LegacyRecoveryLockCDSSecurity.meta(), LegacyFixedRecoveryCDSSecurity.meta(),
+      StandardVanillaCDSSecurity.meta(), StandardRecoveryLockCDSSecurity.meta(), StandardFixedRecoveryCDSSecurity.meta(), CreditDefaultSwapIndexSecurity.meta(),
+      CreditDefaultSwapOptionSecurity.meta(), YearOnYearInflationSwapSecurity.meta(), ZeroCouponInflationSwapSecurity.meta(), CashSecurity.meta());
 
   /** Meta bean factory for looking up meta beans by type name. */
-  private static final MetaBeanFactory s_metaBeanFactory = new MapMetaBeanFactory(s_metaBeans);
+  private static final MetaBeanFactory META_BEAN_FACTORY = new MapMetaBeanFactory(META_BEANS);
   /** Formatter for decimal numbers, DecimalFormat isn't thread safe. */
-  private static final ThreadLocal<DecimalFormat> s_decimalFormat = new ThreadLocal<DecimalFormat>() {
+  private static final ThreadLocal<DecimalFormat> DECIMAL_FORMAT = new ThreadLocal<DecimalFormat>() {
     @Override
     protected DecimalFormat initialValue() {
-      DecimalFormat decimalFormat = new DecimalFormat("#,###.#####");
+      final DecimalFormat decimalFormat = new DecimalFormat("#,###.#####");
       decimalFormat.setParseBigDecimal(true);
       return decimalFormat;
     }
   };
 
   /**
-   * For traversing trade and security {@link MetaBean}s and building instances from the data sent from the blotter.
-   * The security type name is filtered out because it is a read-only property. The external ID bundle is filtered
-   * out because it is always empty for trades and securities entered via the blotter but isn't nullable. Therefore
-   * it has to be explicitly set to an empty bundle after the client data is processed but before the object is built.
+   * For traversing trade and security {@link MetaBean}s and building instances from the data sent from the blotter. The security type name is filtered out
+   * because it is a read-only property. The external ID bundle is filtered out because it is always empty for trades and securities entered via the blotter but
+   * isn't nullable. Therefore it has to be explicitly set to an empty bundle after the client data is processed but before the object is built.
    */
-  private static final BeanTraverser s_beanBuildingTraverser = new BeanTraverser(
-      new PropertyFilter(FinancialSecurity.meta().externalIdBundle()),
+  private static final BeanTraverser BEAN_BUILDING_TRAVERSER = new BeanTraverser(new PropertyFilter(FinancialSecurity.meta().externalIdBundle()),
       new PropertyFilter(ManageableSecurity.meta().securityType()));
 
   /** For converting between strings values used by the UI and real objects. */
-  private static final StringConvert s_stringConvert;
+  private static final StringConvert STRING_CONVERT;
   /** For converting property values when creating trades and securities from JSON. */
-  private static final Converters s_beanBuildingConverters;
+  private static final Converters BEAN_BUILDING_CONVERTERS;
   /** For converting property values when creating JSON objects from trades and securities. */
-  private static final Converters s_jsonBuildingConverters;
+  private static final Converters JSON_BUILDING_CONVERTERS;
 
   static {
-    StringToRegionIdConverter stringToRegionIdConverter = new StringToRegionIdConverter();
+    final StringToRegionIdConverter stringToRegionIdConverter = new StringToRegionIdConverter();
     // for building beans from JSON
-    Map<MetaProperty<?>, Converter<?, ?>> beanRegionConverters = Maps.newHashMap();
-    beanRegionConverters.putAll(
-        ImmutableMap.<MetaProperty<?>, Converter<?, ?>>of(
-            CashSecurity.meta().regionId(), stringToRegionIdConverter,
-            CreditDefaultSwapSecurity.meta().regionId(), stringToRegionIdConverter,
-            EquityVarianceSwapSecurity.meta().regionId(), stringToRegionIdConverter,
-            FRASecurity.meta().regionId(), stringToRegionIdConverter,
-            SwapLeg.meta().regionId(), stringToRegionIdConverter));
-    beanRegionConverters.putAll(
-        ImmutableMap.<MetaProperty<?>, Converter<?, ?>>of(
-            FXForwardSecurity.meta().regionId(), new FXRegionConverter(),
-            NonDeliverableFXForwardSecurity.meta().regionId(), new FXRegionConverter()));
+    final Map<MetaProperty<?>, Converter<?, ?>> beanRegionConverters = Maps.newHashMap();
+    beanRegionConverters.putAll(ImmutableMap.<MetaProperty<?>, Converter<?, ?>> of(CashSecurity.meta().regionId(), stringToRegionIdConverter,
+        CreditDefaultSwapSecurity.meta().regionId(), stringToRegionIdConverter, EquityVarianceSwapSecurity.meta().regionId(), stringToRegionIdConverter,
+        FRASecurity.meta().regionId(), stringToRegionIdConverter, SwapLeg.meta().regionId(), stringToRegionIdConverter));
+    beanRegionConverters.putAll(ImmutableMap.<MetaProperty<?>, Converter<?, ?>> of(FXForwardSecurity.meta().regionId(), new FXRegionConverter(),
+        NonDeliverableFXForwardSecurity.meta().regionId(), new FXRegionConverter()));
 
     // for building JSON from beans
-    RegionIdToStringConverter regionIdToStringConverter = new RegionIdToStringConverter();
-    Map<MetaProperty<?>, Converter<?, ?>> jsonRegionConverters =
-        ImmutableMap.<MetaProperty<?>, Converter<?, ?>>of(
-            CashSecurity.meta().regionId(), regionIdToStringConverter,
-            CreditDefaultSwapSecurity.meta().regionId(), regionIdToStringConverter,
-            EquityVarianceSwapSecurity.meta().regionId(), regionIdToStringConverter,
-            FRASecurity.meta().regionId(), regionIdToStringConverter,
-            SwapLeg.meta().regionId(), regionIdToStringConverter);
+    final RegionIdToStringConverter regionIdToStringConverter = new RegionIdToStringConverter();
+    final Map<MetaProperty<?>, Converter<?, ?>> jsonRegionConverters = ImmutableMap.<MetaProperty<?>, Converter<?, ?>> of(CashSecurity.meta().regionId(),
+        regionIdToStringConverter, CreditDefaultSwapSecurity.meta().regionId(), regionIdToStringConverter, EquityVarianceSwapSecurity.meta().regionId(),
+        regionIdToStringConverter, FRASecurity.meta().regionId(), regionIdToStringConverter, SwapLeg.meta().regionId(), regionIdToStringConverter);
 
-    s_stringConvert = new StringConvert();
-    s_stringConvert.register(BigDecimal.class, new BigDecimalConverter());
-    s_stringConvert.register(Double.class, new DoubleConverter());
-    s_stringConvert.register(Double.TYPE, new DoubleConverter());
-    s_stringConvert.register(ExternalIdBundle.class, new JodaBeanConverters.ExternalIdBundleConverter());
-    s_stringConvert.register(Expiry.class, new ExpiryConverter());
-    s_stringConvert.register(MonitoringType.class, new EnumConverter<MonitoringType>());
-    s_stringConvert.register(BarrierType.class, new EnumConverter<BarrierType>());
-    s_stringConvert.register(BarrierDirection.class, new EnumConverter<BarrierDirection>());
-    s_stringConvert.register(SamplingFrequency.class, new EnumConverter<SamplingFrequency>());
-    s_stringConvert.register(LongShort.class, new EnumConverter<LongShort>());
-    s_stringConvert.register(OptionType.class, new EnumConverter<OptionType>());
-    s_stringConvert.register(ZonedDateTime.class, new ZonedDateTimeConverter());
-    s_stringConvert.register(OffsetTime.class, new OffsetTimeConverter());
-    s_stringConvert.register(DebtSeniority.class, new EnumConverter<DebtSeniority>());
-    s_stringConvert.register(StubType.class, new EnumConverter<StubType>());
+    STRING_CONVERT = new StringConvert();
+    STRING_CONVERT.register(BigDecimal.class, new BigDecimalConverter());
+    STRING_CONVERT.register(Double.class, new DoubleConverter());
+    STRING_CONVERT.register(Double.TYPE, new DoubleConverter());
+    STRING_CONVERT.register(ExternalIdBundle.class, new JodaBeanConverters.ExternalIdBundleConverter());
+    STRING_CONVERT.register(Expiry.class, new ExpiryConverter());
+    STRING_CONVERT.register(MonitoringType.class, new EnumConverter<MonitoringType>());
+    STRING_CONVERT.register(BarrierType.class, new EnumConverter<BarrierType>());
+    STRING_CONVERT.register(BarrierDirection.class, new EnumConverter<BarrierDirection>());
+    STRING_CONVERT.register(SamplingFrequency.class, new EnumConverter<SamplingFrequency>());
+    STRING_CONVERT.register(LongShort.class, new EnumConverter<LongShort>());
+    STRING_CONVERT.register(OptionType.class, new EnumConverter<OptionType>());
+    STRING_CONVERT.register(ZonedDateTime.class, new ZonedDateTimeConverter());
+    STRING_CONVERT.register(OffsetTime.class, new OffsetTimeConverter());
+    STRING_CONVERT.register(DebtSeniority.class, new EnumConverter<DebtSeniority>());
+    STRING_CONVERT.register(StubType.class, new EnumConverter<StubType>());
 
-    s_jsonBuildingConverters = new Converters(jsonRegionConverters, s_stringConvert);
-    s_beanBuildingConverters = new Converters(beanRegionConverters, s_stringConvert);
+    JSON_BUILDING_CONVERTERS = new Converters(jsonRegionConverters, STRING_CONVERT);
+    BEAN_BUILDING_CONVERTERS = new Converters(beanRegionConverters, STRING_CONVERT);
   }
 
   /**
-   * Filters out region ID for FX forwards when building JSON for the security and HTML screens showing the structure.
-   * The property value is hard-coded to {@code FINANCIAL_REGION~GB} for FX forwards so its value is of no interest
-   * to the client and it can't be updated.
+   * Filters out region ID for FX forwards when building JSON for the security and HTML screens showing the structure. The property value is hard-coded to
+   * {@code FINANCIAL_REGION~GB} for FX forwards so its value is of no interest to the client and it can't be updated.
    */
-  private static final PropertyFilter s_fxRegionFilter =
-      new PropertyFilter(FXForwardSecurity.meta().regionId(), NonDeliverableFXForwardSecurity.meta().regionId());
+  private static final PropertyFilter FX_REGION_FILTER = new PropertyFilter(FXForwardSecurity.meta().regionId(),
+      NonDeliverableFXForwardSecurity.meta().regionId());
 
   /**
-   * Filters out the {@code externalIdBundle} property from OTC securities when building the HTML showing the security
-   * structure. OTC security details are passed to the blotter back end which generates the ID so this
-   * info is irrelevant to the client.
+   * Filters out the {@code externalIdBundle} property from OTC securities when building the HTML showing the security structure. OTC security details are
+   * passed to the blotter back end which generates the ID so this info is irrelevant to the client.
    */
-  private static final BeanVisitorDecorator s_externalIdBundleFilter = new PropertyNameFilter("externalIdBundle");
+  private static final BeanVisitorDecorator EXTERNAL_ID_BUNDLE_FILTER = new PropertyNameFilter("externalIdBundle");
 
   /**
-   * Filters out the underlying ID field of {@link SwaptionSecurity} when building the HTML showing the security
-   * structure. The back end creates the underlying security and fills this field in so it's of no interest
-   * to the client.
+   * Filters out the underlying ID field of {@link SwaptionSecurity} when building the HTML showing the security structure. The back end creates the underlying
+   * security and fills this field in so it's of no interest to the client.
    */
-  private static final PropertyFilter s_swaptionUnderlyingFilter = new PropertyFilter(SwaptionSecurity.meta().underlyingId());
+  private static final PropertyFilter SWAPTION_UNDERLYING_FILTER = new PropertyFilter(SwaptionSecurity.meta().underlyingId());
 
   /**
-   * Filters out the underlying ID field of {@link CreditDefaultSwapOptionSecurity} when building the HTML showing the security
-   * structure. The back end creates the underlying security and fills this field in so it's of no interest
-   * to the client.
+   * Filters out the underlying ID field of {@link CreditDefaultSwapOptionSecurity} when building the HTML showing the security structure. The back end creates
+   * the underlying security and fills this field in so it's of no interest to the client.
    */
-  private static final PropertyFilter s_cdsOptionUnderlyingFilter = new PropertyFilter(CreditDefaultSwapOptionSecurity.meta().underlyingId());
+  private static final PropertyFilter CDS_OPTION_UNDERLYING_FILTER = new PropertyFilter(CreditDefaultSwapOptionSecurity.meta().underlyingId());
 
   /**
-   * Filters out the {@code securityType} field for all securities when building the HTML showing the security
-   * structure. This value is read-only in each security type and is of no interest to the client.
+   * Filters out the {@code securityType} field for all securities when building the HTML showing the security structure. This value is read-only in each
+   * security type and is of no interest to the client.
    */
-  private static final PropertyFilter s_securityTypeFilter = new PropertyFilter(ManageableSecurity.meta().securityType());
+  private static final PropertyFilter SECURITY_TYPE_FILTER = new PropertyFilter(ManageableSecurity.meta().securityType());
 
   /**
    * @return A thread-local formatter instance set to parse numbers into BigDecimals.
    */
   /* package */ static DecimalFormat getDecimalFormat() {
-    return s_decimalFormat.get();
+    return DECIMAL_FORMAT.get();
   }
 
-  /* package */ static FinancialSecurity buildSecurity(BeanDataSource data) {
+  /* package */ static FinancialSecurity buildSecurity(final BeanDataSource data) {
     return buildSecurity(data, ExternalIdBundle.EMPTY);
   }
 
   @SuppressWarnings("unchecked")
-  /* package */ static FinancialSecurity buildSecurity(BeanDataSource data, ExternalIdBundle idBundle) {
-    BeanVisitor<BeanBuilder<FinancialSecurity>> visitor = new BeanBuildingVisitor<>(data, s_metaBeanFactory,
-                                                                                    s_beanBuildingConverters);
-    MetaBean metaBean = s_metaBeanFactory.beanFor(data);
+  /* package */ static FinancialSecurity buildSecurity(final BeanDataSource data, final ExternalIdBundle idBundle) {
+    final BeanVisitor<BeanBuilder<FinancialSecurity>> visitor = new BeanBuildingVisitor<>(data, META_BEAN_FACTORY, BEAN_BUILDING_CONVERTERS);
+    final MetaBean metaBean = META_BEAN_FACTORY.beanFor(data);
     // TODO check it's a FinancialSecurity metaBean
     if (!(metaBean instanceof FinancialSecurity.Meta)) {
       throw new IllegalArgumentException("MetaBean " + metaBean + " isn't for a FinancialSecurity");
     }
-    BeanBuilder<FinancialSecurity> builder = (BeanBuilder<FinancialSecurity>) s_beanBuildingTraverser.traverse(metaBean, visitor);
+    final BeanBuilder<FinancialSecurity> builder = (BeanBuilder<FinancialSecurity>) BEAN_BUILDING_TRAVERSER.traverse(metaBean, visitor);
     // externalIdBundle needs to be specified or building fails because it's not nullable
     builder.set(FinancialSecurity.meta().externalIdBundle(), idBundle);
     return builder.build();
   }
 
-  // TODO move to BlotterUtils
   /* package */ static StringConvert getStringConvert() {
-    return s_stringConvert;
+    return STRING_CONVERT;
   }
 
   /* package */ static Converters getJsonBuildingConverters() {
-    return s_jsonBuildingConverters;
+    return JSON_BUILDING_CONVERTERS;
   }
 
   /* package */ static Converters getBeanBuildingConverters() {
-    return s_beanBuildingConverters;
+    return BEAN_BUILDING_CONVERTERS;
   }
 
   /* package */ static Set<MetaBean> getMetaBeans() {
-    return s_metaBeans;
+    return META_BEANS;
   }
 
   /* package */ static BeanTraverser structureBuildingTraverser() {
-    return new BeanTraverser(s_externalIdBundleFilter, s_securityTypeFilter, s_swaptionUnderlyingFilter, s_cdsOptionUnderlyingFilter, s_fxRegionFilter);
+    return new BeanTraverser(EXTERNAL_ID_BUNDLE_FILTER, SECURITY_TYPE_FILTER, SWAPTION_UNDERLYING_FILTER, CDS_OPTION_UNDERLYING_FILTER, FX_REGION_FILTER);
   }
 
   /* package */
   static BeanTraverser securityJsonBuildingTraverser() {
-    return new BeanTraverser(s_securityTypeFilter, s_fxRegionFilter);
+    return new BeanTraverser(SECURITY_TYPE_FILTER, FX_REGION_FILTER);
   }
 }
 
 // ----------------------------------------------------------------------------------
 
-
 /**
- * For converting between enum instances and strings. The enum value names are made more readable by downcasing
- * and capitalizing them and replacing underscores with spaces.
- * @param <T> Type of the enum
+ * For converting between enum instances and strings. The enum value names are made more readable by downcasing and capitalizing them and replacing underscores
+ * with spaces.
+ *
+ * @param <T>
+ *          Type of the enum
  */
-@SuppressWarnings({"rawtypes", "unchecked" })
+@SuppressWarnings({ "rawtypes", "unchecked" })
 /* package */ class EnumConverter<T extends Enum> implements StringConverter<T> {
 
   @Override
-  public T convertFromString(Class<? extends T> type, String str) {
+  public T convertFromString(final Class<? extends T> type, final String str) {
     // IntelliJ says this cast is redundant but javac disagrees
-    //noinspection RedundantCast
+    // noinspection RedundantCast
     return (T) Enum.valueOf(type, str.toUpperCase().replace(' ', '_'));
   }
 
   @Override
-  public String convertToString(T e) {
+  public String convertToString(final T e) {
     return WordUtils.capitalize(e.name().toLowerCase().replace('_', ' '));
   }
 }
 
 /**
- * Converts {@link ZonedDateTime} to a local date string (e.g. 2012-12-21) and creates a {@link ZonedDateTime} from
- * a local date string with a time of 11:00 and a zone of UTC.
+ * Converts {@link ZonedDateTime} to a local date string (e.g. 2012-12-21) and creates a {@link ZonedDateTime} from a local date string with a time of 11:00 and
+ * a zone of UTC.
  */
 /* package */ class ZonedDateTimeConverter implements StringConverter<ZonedDateTime> {
 
   @Override
-  public ZonedDateTime convertFromString(Class<? extends ZonedDateTime> cls, String localDateString) {
-    LocalDate localDate = LocalDate.parse(localDateString);
+  public ZonedDateTime convertFromString(final Class<? extends ZonedDateTime> cls, final String localDateString) {
+    final LocalDate localDate = LocalDate.parse(localDateString);
     return localDate.atTime(11, 0).atZone(ZoneOffset.UTC);
   }
 
   @Override
-  public String convertToString(ZonedDateTime dateTime) {
+  public String convertToString(final ZonedDateTime dateTime) {
     return dateTime.toLocalDate().toString();
   }
 }
 
 /**
- * Converts an {@link OffsetTime} to a time string (e.g. 11:35) and discards the offset. Creates
- * an {@link OffsetTime} instance by parsing a local date string and using UTC as the offset.
+ * Converts an {@link OffsetTime} to a time string (e.g. 11:35) and discards the offset. Creates an {@link OffsetTime} instance by parsing a local date string
+ * and using UTC as the offset.
  */
 /* package */ class OffsetTimeConverter implements StringConverter<OffsetTime> {
 
   @Override
-  public OffsetTime convertFromString(Class<? extends OffsetTime> cls, String timeString) {
+  public OffsetTime convertFromString(final Class<? extends OffsetTime> cls, final String timeString) {
     if (!StringUtils.isEmpty(timeString)) {
       return OffsetTime.of(LocalTime.parse(timeString.trim()), ZoneOffset.UTC);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
-  public String convertToString(OffsetTime time) {
+  public String convertToString(final OffsetTime time) {
     return time.toLocalTime().toString();
   }
 }
@@ -347,13 +306,13 @@ import com.opengamma.util.time.Expiry;
 /* package */ class ExpiryConverter implements StringConverter<Expiry> {
 
   @Override
-  public Expiry convertFromString(Class<? extends Expiry> cls, String localDateString) {
-    LocalDate localDate = LocalDate.parse(localDateString);
+  public Expiry convertFromString(final Class<? extends Expiry> cls, final String localDateString) {
+    final LocalDate localDate = LocalDate.parse(localDateString);
     return new Expiry(localDate.atTime(11, 0).atZone(ZoneOffset.UTC));
   }
 
   @Override
-  public String convertToString(Expiry expiry) {
+  public String convertToString(final Expiry expiry) {
     return expiry.getExpiry().toLocalDate().toString();
   }
 }
@@ -364,16 +323,16 @@ import com.opengamma.util.time.Expiry;
 /* package */ class DoubleConverter implements StringConverter<Double> {
 
   @Override
-  public Double convertFromString(Class<? extends Double> cls, String str) {
+  public Double convertFromString(final Class<? extends Double> cls, final String str) {
     try {
       return BlotterUtils.getDecimalFormat().parse(str).doubleValue();
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       throw new IllegalArgumentException("Failed to parse number", e);
     }
   }
 
   @Override
-  public String convertToString(Double value) {
+  public String convertToString(final Double value) {
     return BlotterUtils.getDecimalFormat().format(value);
   }
 }
@@ -384,23 +343,22 @@ import com.opengamma.util.time.Expiry;
 /* package */ class BigDecimalConverter implements StringConverter<BigDecimal> {
 
   @Override
-  public BigDecimal convertFromString(Class<? extends BigDecimal> cls, String str) {
+  public BigDecimal convertFromString(final Class<? extends BigDecimal> cls, final String str) {
     try {
-      Number number = BlotterUtils.getDecimalFormat().parse(str);
+      final Number number = BlotterUtils.getDecimalFormat().parse(str);
       // bizarrely if you call setParseBigDecimal(true) on a DecimalFormat it returns a BigDecimal unless the number
       // is NaN or +/- infinity in which case it returns a Double
       if (number instanceof BigDecimal) {
         return (BigDecimal) number;
-      } else {
-        throw new IllegalArgumentException("Failed to parse number as BigDecimal: " + number);
       }
-    } catch (ParseException e) {
+      throw new IllegalArgumentException("Failed to parse number as BigDecimal: " + number);
+    } catch (final ParseException e) {
       throw new IllegalArgumentException("Failed to parse number", e);
     }
   }
 
   @Override
-  public String convertToString(BigDecimal value) {
+  public String convertToString(final BigDecimal value) {
     return BlotterUtils.getDecimalFormat().format(value);
   }
 }
@@ -412,11 +370,13 @@ import com.opengamma.util.time.Expiry;
 
   /**
    * Converts a string to an {@link ExternalId} with a scheme of {@link ExternalSchemes#FINANCIAL}.
-   * @param region The region name, not empty
+   *
+   * @param region
+   *          The region name, not empty
    * @return An {@link ExternalId} with a scheme of {@link ExternalSchemes#FINANCIAL} and a value of {@code region}.
    */
   @Override
-  public ExternalId convert(String region) {
+  public ExternalId convert(final String region) {
     if (StringUtils.isEmpty(region)) {
       throw new IllegalArgumentException("Region must not be empty");
     }
@@ -430,12 +390,14 @@ import com.opengamma.util.time.Expiry;
 /* package */ class RegionIdToStringConverter implements Converter<ExternalId, String> {
 
   /**
-   * Converts an {@link ExternalId} to a string
-   * @param regionId The region ID, not null
+   * Converts an {@link ExternalId} to a string.
+   *
+   * @param regionId
+   *          The region ID, not null
    * @return {@code regionId}'s value
    */
   @Override
-  public String convert(ExternalId regionId) {
+  public String convert(final ExternalId regionId) {
     ArgumentChecker.notNull(regionId, "regionId");
     return regionId.getValue();
   }

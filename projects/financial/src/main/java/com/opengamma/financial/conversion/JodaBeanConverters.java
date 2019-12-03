@@ -33,7 +33,7 @@ import com.opengamma.util.time.Tenor;
  * done in the constructor and after that the instance doesn't do anything.
  */
 public final class JodaBeanConverters {
-  
+
   /**
    * Singleton instance.
    */
@@ -44,7 +44,7 @@ public final class JodaBeanConverters {
   // ZonedDateTime needs a default zone, based on OpenGammaClock.getTimeZone(), only for certain properties
 
   private JodaBeanConverters() {
-    StringConvert stringConvert = JodaBeanUtils.stringConverter();
+    final StringConvert stringConvert = JodaBeanUtils.stringConverter();
     stringConvert.register(ExternalIdBundle.class, new ExternalIdBundleConverter());
     stringConvert.register(Expiry.class, new ExpiryConverter());
     stringConvert.register(Notional.class, new NotionalConverter());
@@ -54,7 +54,7 @@ public final class JodaBeanConverters {
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static JodaBeanConverters getInstance() {
@@ -63,26 +63,26 @@ public final class JodaBeanConverters {
 
   private abstract static class AbstractConverter<T> implements StringConverter<T> {
     @Override
-    public String convertToString(T t) {
+    public String convertToString(final T t) {
       return t.toString();
     }
   }
 
   public static class ExternalIdBundleConverter extends AbstractConverter<ExternalIdBundle> {
-  
+
     @Override
-    public String convertToString(ExternalIdBundle object) {
-      String str = object.toString();
+    public String convertToString(final ExternalIdBundle object) {
+      final String str = object.toString();
       return str.substring(str.indexOf('[') + 1, str.lastIndexOf(']')).trim();
     }
-    
+
     @Override
-    public ExternalIdBundle convertFromString(Class<? extends ExternalIdBundle> cls, String str) {
+    public ExternalIdBundle convertFromString(final Class<? extends ExternalIdBundle> cls, final String str) {
       if (StringUtils.isEmpty(str)) {
         return ExternalIdBundle.EMPTY;
       }
-      List<String> strings = Lists.newArrayList();
-      for (String s : str.split(",")) {
+      final List<String> strings = Lists.newArrayList();
+      for (final String s : str.split(",")) {
         strings.add(s.trim());
       }
       return ExternalIdBundle.parse(strings);
@@ -93,12 +93,12 @@ public final class JodaBeanConverters {
   public static class ExpiryConverter extends AbstractConverter<Expiry> {
 
     @Override
-    public String convertToString(Expiry expiry) {
+    public String convertToString(final Expiry expiry) {
       return expiry.getExpiry().toString();
     }
 
     @Override
-    public Expiry convertFromString(Class<? extends Expiry> cls, String str) {
+    public Expiry convertFromString(final Class<? extends Expiry> cls, final String str) {
       return new Expiry(ZonedDateTime.parse(str));
     }
   }
@@ -106,32 +106,32 @@ public final class JodaBeanConverters {
   private static class NotionalConverter extends AbstractConverter<Notional> {
 
     @Override
-    public String convertToString(Notional notional) {
+    public String convertToString(final Notional notional) {
       if (notional.getClass().isAssignableFrom(InterestRateNotional.class)) {
-        return ((InterestRateNotional) notional).getCurrency().getCode() 
+        return ((InterestRateNotional) notional).getCurrency().getCode()
             + " " + String.format("%f", ((InterestRateNotional) notional).getAmount());
       } else if (notional.getClass().isAssignableFrom(CommodityNotional.class)) {
         return notional.toString();
       } else if (notional.getClass().isAssignableFrom(SecurityNotional.class)) {
         return ((SecurityNotional) notional).getNotionalId().toString();
       } else if (notional.getClass().isAssignableFrom(VarianceSwapNotional.class)) {
-        return ((VarianceSwapNotional) notional).getCurrency().getCode() 
+        return ((VarianceSwapNotional) notional).getCurrency().getCode()
             + " " + String.format("%f", ((VarianceSwapNotional) notional).getAmount());
       }
       return notional.toString();
     }
 
     @Override
-    public Notional convertFromString(Class<? extends Notional> cls, String str) {      
+    public Notional convertFromString(final Class<? extends Notional> cls, final String str) {
       if (cls.isAssignableFrom(InterestRateNotional.class)) {
-        String[] s = str.split(" ", 2);        
+        final String[] s = str.split(" ", 2);
         return new InterestRateNotional(Currency.of(s[0].trim()), Double.parseDouble(s[1].trim()));
       } else if (cls.isAssignableFrom(CommodityNotional.class)) {
         return new CommodityNotional();
       } else if (cls.isAssignableFrom(SecurityNotional.class)) {
         return new SecurityNotional(UniqueId.parse(str));
       } else if (cls.isAssignableFrom(VarianceSwapNotional.class)) {
-        String[] s = str.split(" ", 2);
+        final String[] s = str.split(" ", 2);
         return new VarianceSwapNotional(Currency.of(s[0].trim()), Double.parseDouble(s[1].trim()));
       }
       return null;
@@ -141,46 +141,46 @@ public final class JodaBeanConverters {
   private static class BondFutureDeliverableConverter extends AbstractConverter<BondFutureDeliverable> {
 
     @Override
-    public String convertToString(BondFutureDeliverable object) {
+    public String convertToString(final BondFutureDeliverable object) {
       String ids = object.getIdentifiers().toString();
       ids = ids.substring(ids.indexOf("["), ids.indexOf("]") + 1);
       return ids + " " + Double.toString(object.getConversionFactor());
     }
 
     @Override
-    public BondFutureDeliverable convertFromString(Class<? extends BondFutureDeliverable> cls, String str) {
-      List<String> ids = Lists.newArrayList();
-      for (String s : str.substring(str.indexOf('[') + 1, str.lastIndexOf(']')).trim().split(",")) {
+    public BondFutureDeliverable convertFromString(final Class<? extends BondFutureDeliverable> cls, final String str) {
+      final List<String> ids = Lists.newArrayList();
+      for (final String s : str.substring(str.indexOf('[') + 1, str.lastIndexOf(']')).trim().split(",")) {
         ids.add(s.trim());
       }
-      BondFutureDeliverable result = new BondFutureDeliverable();
+      final BondFutureDeliverable result = new BondFutureDeliverable();
       result.setIdentifiers(ExternalIdBundle.parse(ids));
       result.setConversionFactor(Double.parseDouble(str.substring(str.indexOf(']') + 1).trim()));
       return result;
     }
   }
-  
+
   private static class CDSIndexTermsConverter extends AbstractConverter<CDSIndexTerms> {
 
     @Override
-    public String convertToString(CDSIndexTerms object) {
-      Set<Tenor> tenors = object.getTenors();
+    public String convertToString(final CDSIndexTerms object) {
+      final Set<Tenor> tenors = object.getTenors();
       return tenors.toString();
     }
-    
+
     @Override
-    public CDSIndexTerms convertFromString(Class<? extends CDSIndexTerms> cls, String str) {
-      String[] tenorStrs = str.split(",");
-      Tenor[] tenors = new Tenor[tenorStrs.length];
+    public CDSIndexTerms convertFromString(final Class<? extends CDSIndexTerms> cls, final String str) {
+      final String[] tenorStrs = str.split(",");
+      final Tenor[] tenors = new Tenor[tenorStrs.length];
       for (int i = 0; i < tenorStrs.length; i++) {
-        Tenor tenor = Tenor.parse(tenorStrs[i]);
+        final Tenor tenor = Tenor.parse(tenorStrs[i]);
         tenors[i] = tenor;
       }
       return CDSIndexTerms.of(tenors);
     }
-    
+
   }
-  
+
 //  private static class CDSIndexComponentBundleConverter extends AbstractConverter<CDSIndexComponentBundle> {
 //
 //    @Override
@@ -200,6 +200,6 @@ public final class JodaBeanConverters {
 //    public CDSIndexComponentBundle convertFromString(Class<? extends CDSIndexComponentBundle> cls, String str) {
 //      return null;
 //    }
-//    
+//
 //  }
 }

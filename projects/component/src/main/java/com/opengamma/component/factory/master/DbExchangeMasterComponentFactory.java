@@ -27,29 +27,29 @@ import com.opengamma.util.rest.AbstractDataResource;
  */
 @BeanDefinition
 public class DbExchangeMasterComponentFactory extends AbstractDocumentDbMasterComponentFactory<ExchangeMaster, DbExchangeMaster> {
-  
+
   public DbExchangeMasterComponentFactory() {
     super("exg", ExchangeMaster.class);
   }
-  
+
   @Override
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteExchangeMaster.class;
   }
-  
+
 
   @Override
   protected DbExchangeMaster createDbDocumentMaster() {
     return new DbExchangeMaster(getDbConnector());
   }
-  
+
   @Override
-  protected AbstractDataResource createPublishedResource(DbExchangeMaster dbMaster, ExchangeMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbExchangeMaster dbMaster, final ExchangeMaster postProcessedMaster) {
     return new DataExchangeMasterResource(postProcessedMaster);
   }
-      
+
   @Override
-  protected ExchangeMaster wrapMasterWithTrackingInterface(ExchangeMaster postProcessedMaster) {
+  protected ExchangeMaster wrapMasterWithTrackingInterface(final ExchangeMaster postProcessedMaster) {
     return new DataTrackingExchangeMaster(postProcessedMaster);
   }
 

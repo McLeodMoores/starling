@@ -17,10 +17,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.config.Configuration;
-
 import org.fudgemsg.FudgeContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,14 +41,18 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.Configuration;
+
 /**
  * A test of the remote View Computation Cache Source infrastucture operating
  * over proper sockets.
  */
 @Test(groups = {TestGroup.INTEGRATION, "ehcache"})
 public class ServerSocketRemoteViewComputationCacheTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(ServerSocketRemoteViewComputationCacheTest.class);
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServerSocketRemoteViewComputationCacheTest.class);
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   private static final int NUM_THREADS = 5;
   private static final int NUM_LOOKUPS = 1000;
   private static final int FLUSH_DELAY = 600;
@@ -79,8 +79,8 @@ public class ServerSocketRemoteViewComputationCacheTest {
 
   //-------------------------------------------------------------------------
   private void setupCacheSource(final boolean lazyReads, final int cacheSize, final int flushDelay) {
-    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(s_fudgeContext);
-    ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
+    final InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
+    final ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
     _serverSocket = new ServerSocketFudgeConnectionReceiver(cache.getFudgeContext(), server, Executors
         .newCachedThreadPool());
     _serverSocket.setLazyFudgeMsgReads(lazyReads);
@@ -89,18 +89,18 @@ public class ServerSocketRemoteViewComputationCacheTest {
     _socket.setFlushDelay(flushDelay);
     try {
       _socket.setInetAddress(InetAddress.getLocalHost());
-    } catch (UnknownHostException e) {
+    } catch (final UnknownHostException e) {
       throw new OpenGammaRuntimeException("", e);
     }
     _socket.setPortNumber(_serverSocket.getPortNumber());
 
-    RemoteCacheClient client = new RemoteCacheClient(_socket);
-    Configuration configuration = new Configuration();
-    CacheConfiguration cacheConfig = new CacheConfiguration();
+    final RemoteCacheClient client = new RemoteCacheClient(_socket);
+    final Configuration configuration = new Configuration();
+    final CacheConfiguration cacheConfig = new CacheConfiguration();
     cacheConfig.setMaxElementsInMemory(cacheSize);
     configuration.setDefaultCacheConfiguration(cacheConfig);
     _cacheSource = new RemoteViewComputationCacheSource(client, new DefaultFudgeMessageStoreFactory(
-        new InMemoryBinaryDataStoreFactory(), s_fudgeContext), _cacheManager);
+        new InMemoryBinaryDataStoreFactory(), FUDGE_CONTEXT), _cacheManager);
   }
 
   private void shutDown() {
@@ -118,7 +118,7 @@ public class ServerSocketRemoteViewComputationCacheTest {
   @SuppressWarnings("unchecked")
   private void assertLikelyValue(final Object value) {
     assertTrue(value instanceof List<?>);
-    for (Object valueElement : (List<Object>) value) {
+    for (final Object valueElement : (List<Object>) value) {
       assertTrue(valueElement instanceof double[]);
     }
   }
@@ -138,13 +138,13 @@ public class ServerSocketRemoteViewComputationCacheTest {
     final AtomicBoolean failed = new AtomicBoolean(false);
     final AtomicLong getTime = new AtomicLong(0);
     final AtomicLong putTime = new AtomicLong(0);
-    List<Thread> threads = new ArrayList<Thread>();
-    UniqueId cycle0Id = UniqueId.of("Test", "MultiThreadedTestViewCycle", "0");
-    UniqueId cycle1Id = UniqueId.of("Test", "MultiThreadedTestViewCycle", "1");
+    final List<Thread> threads = new ArrayList<>();
+    final UniqueId cycle0Id = UniqueId.of("Test", "MultiThreadedTestViewCycle", "0");
+    final UniqueId cycle1Id = UniqueId.of("Test", "MultiThreadedTestViewCycle", "1");
     for (int i = 0; i < NUM_THREADS; i++) {
       // Half the threads on one cycle, half on another
-      final UniqueId cycleId = ((i & 1) == 0) ? cycle0Id : cycle1Id;
-      Thread t = new Thread(new Runnable() {
+      final UniqueId cycleId = (i & 1) == 0 ? cycle0Id : cycle1Id;
+      final Thread t = new Thread(new Runnable() {
         @Override
         public void run() {
           final ViewComputationCache cache = _cacheSource.getCache(cycleId, "default");
@@ -152,15 +152,15 @@ public class ServerSocketRemoteViewComputationCacheTest {
             long tGet = 0;
             long tPut = 0;
             for (int j = 0; j < NUM_LOOKUPS; j++) {
-              int randomValue = rand.nextInt(100);
-              String valueName = "Value" + randomValue;
-              ValueSpecification valueSpec = new ValueSpecification("Test Value",
+              final int randomValue = rand.nextInt(100);
+              final String valueName = "Value" + randomValue;
+              final ValueSpecification valueSpec = new ValueSpecification("Test Value",
                   ComputationTargetSpecification.of(UniqueId.of("Kirk", valueName)), ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
               boolean putValue = true;
               if (j > 0) {
                 // Don't try and get on the first attempt as the cache probably isn't created at the server
                 tGet -= System.nanoTime();
-                Object ultimateValue = cache.getValue(valueSpec);
+                final Object ultimateValue = cache.getValue(valueSpec);
                 tGet += System.nanoTime();
                 if (ultimateValue != null) {
                   assertLikelyValue(ultimateValue);
@@ -169,34 +169,34 @@ public class ServerSocketRemoteViewComputationCacheTest {
               }
 
               if (putValue) {
-                ComputedValue cv = new ComputedValue(valueSpec, createValue(rand));
+                final ComputedValue cv = new ComputedValue(valueSpec, createValue(rand));
                 tPut -= System.nanoTime();
                 cache.putSharedValue(cv);
                 tPut += System.nanoTime();
               }
             }
-            s_logger.debug("Get = {}ms, Put = {}ms", (double) tGet / 1e6, (double) tPut / 1e6);
+            LOGGER.debug("Get = {}ms, Put = {}ms", tGet / 1.e6, tPut / 1.e6);
             getTime.addAndGet(tGet);
             putTime.addAndGet(tPut);
-          } catch (Throwable e) {
-            s_logger.error("Failed", e);
+          } catch (final Throwable e) {
+            LOGGER.error("Failed", e);
             failed.set(true);
           }
         }
       });
       threads.add(t);
     }
-    for (Thread t : threads) {
+    for (final Thread t : threads) {
       t.start();
     }
-    for (Thread t : threads) {
+    for (final Thread t : threads) {
       ThreadUtils.safeJoin(t, 10000L);
     }
     assertFalse("One thread failed. Check logs.", failed.get());
-    final double get = (double) getTime.get() / (1e6 * NUM_THREADS * NUM_LOOKUPS);
-    final double put = (double) putTime.get() / (1e6 * NUM_THREADS * NUM_LOOKUPS);
-    s_logger.info("{} get operations @ {}ms", NUM_THREADS * NUM_LOOKUPS, get);
-    s_logger.info("{} put operations @ {}ms", NUM_THREADS * NUM_LOOKUPS, put);
+    final double get = getTime.get() / (1e6 * NUM_THREADS * NUM_LOOKUPS);
+    final double put = putTime.get() / (1e6 * NUM_THREADS * NUM_LOOKUPS);
+    LOGGER.info("{} get operations @ {}ms", NUM_THREADS * NUM_LOOKUPS, get);
+    LOGGER.info("{} put operations @ {}ms", NUM_THREADS * NUM_LOOKUPS, put);
     return Pairs.of(get, put);
   }
 
@@ -234,14 +234,14 @@ public class ServerSocketRemoteViewComputationCacheTest {
     // Repeat to allow for timing discrepencies
     for (int i = 0; i < 5; i++) {
       final StringBuilder result = new StringBuilder();
-      for (int delay : delays) {
+      for (final int delay : delays) {
         setupCacheSource(true, 1, delay);
         final Pair<Double, Double> times = multiThreadedTestImpl();
         shutDown();
         result.append("\r\n").append("Delay=").append(delay).append("ms. Get=").append(times.getFirst()).append(
             "ms, Put=").append(times.getSecond()).append("ms");
       }
-      s_logger.info("{}", result);
+      LOGGER.info("{}", result);
     }
   }
 

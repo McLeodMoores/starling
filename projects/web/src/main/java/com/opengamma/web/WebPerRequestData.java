@@ -6,6 +6,7 @@
 package com.opengamma.web;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.core.UriInfo;
 
@@ -20,7 +21,6 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
-import java.util.Set;
 
 /**
  * Data class for per-request web-based bundles.

@@ -33,7 +33,7 @@ public class BatchByteArrayFudgeMessageReceiver implements BatchByteArrayMessage
    * Creates a receiver based on an underlying Fudge receiver.
    * @param underlying  the underlying receiver, not null
    */
-  public BatchByteArrayFudgeMessageReceiver(BatchFudgeMessageReceiver underlying) {
+  public BatchByteArrayFudgeMessageReceiver(final BatchFudgeMessageReceiver underlying) {
     this(underlying, OpenGammaFudgeContext.getInstance());
   }
 
@@ -42,7 +42,7 @@ public class BatchByteArrayFudgeMessageReceiver implements BatchByteArrayMessage
    * @param underlying  the underlying receiver, not null
    * @param fudgeContext  the context to use, not null
    */
-  public BatchByteArrayFudgeMessageReceiver(BatchFudgeMessageReceiver underlying, FudgeContext fudgeContext) {
+  public BatchByteArrayFudgeMessageReceiver(final BatchFudgeMessageReceiver underlying, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(underlying, "underlying");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     _underlying = underlying;
@@ -72,10 +72,10 @@ public class BatchByteArrayFudgeMessageReceiver implements BatchByteArrayMessage
    * @param messages  the list of byte arrays to process, not null
    */
   @Override
-  public void messagesReceived(List<byte[]> messages) {
-    List<FudgeMsgEnvelope> fudgeMessages = new ArrayList<FudgeMsgEnvelope>(messages.size());
-    for (byte[] bytes : messages) {
-      FudgeMsgEnvelope msgEnvelope = getFudgeContext().deserialize(bytes);
+  public void messagesReceived(final List<byte[]> messages) {
+    final List<FudgeMsgEnvelope> fudgeMessages = new ArrayList<>(messages.size());
+    for (final byte[] bytes : messages) {
+      final FudgeMsgEnvelope msgEnvelope = getFudgeContext().deserialize(bytes);
       fudgeMessages.add(msgEnvelope);
     }
     getUnderlying().messagesReceived(getFudgeContext(), fudgeMessages);

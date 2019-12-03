@@ -52,12 +52,12 @@ public class MarketDataPointRandomizingManipulatorTest {
 
   @Test
   public void testValuesAreDistributed() {
-    StructureManipulator<Double> manipulator = createManipulator(0.9, 1.1);
-    Set<Double> producedValues = new HashSet<>(10000);
+    final StructureManipulator<Double> manipulator = createManipulator(0.9, 1.1);
+    final Set<Double> producedValues = new HashSet<>(10000);
     for (int i = 0; i < 10000; i++) {
-      ValueProperties properties = ValueProperties.with(ValuePropertyNames.FUNCTION, "notUsed").get();
-      ValueSpecification valueSpec = new ValueSpecification("notUsed", ComputationTargetSpecification.NULL, properties);
-      Double shifted = manipulator.execute(1000d, valueSpec, new FunctionExecutionContext());
+      final ValueProperties properties = ValueProperties.with(ValuePropertyNames.FUNCTION, "notUsed").get();
+      final ValueSpecification valueSpec = new ValueSpecification("notUsed", ComputationTargetSpecification.NULL, properties);
+      final Double shifted = manipulator.execute(1000d, valueSpec, new FunctionExecutionContext());
       assertTrue("Expected shifted to be >= 900 but was " + shifted, shifted >= 900);
       assertTrue("Expected shifted to be < 1100 but was " + shifted, shifted < 1100);
       producedValues.add(shifted);
@@ -67,7 +67,7 @@ public class MarketDataPointRandomizingManipulatorTest {
       producedValues.size() > 100);
   }
 
-  private MarketDataPointRandomizingManipulator createManipulator(Double lowerBound, Double upperBound) {
+  private MarketDataPointRandomizingManipulator createManipulator(final Double lowerBound, final Double upperBound) {
     return new MarketDataPointRandomizingManipulator(lowerBound, upperBound);
   }
 }

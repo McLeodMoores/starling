@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.snapshot.reader;
@@ -27,12 +27,12 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class MasterSnapshotReader implements SnapshotReader {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SnapshotReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SnapshotReader.class);
 
-  private MarketDataSnapshotMaster _snapshotMaster;
-  private StructuredMarketDataSnapshot _snapshot;
+  private final MarketDataSnapshotMaster _snapshotMaster;
+  private final StructuredMarketDataSnapshot _snapshot;
 
-  public MasterSnapshotReader(UniqueId uniqueId, MarketDataSnapshotMaster marketDataSnapshotMaster) {
+  public MasterSnapshotReader(final UniqueId uniqueId, final MarketDataSnapshotMaster marketDataSnapshotMaster) {
     ArgumentChecker.notNull(marketDataSnapshotMaster, "marketDataSnapshotMaster");
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     _snapshotMaster = marketDataSnapshotMaster;

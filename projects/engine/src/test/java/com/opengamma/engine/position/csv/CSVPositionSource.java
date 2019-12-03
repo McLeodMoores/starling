@@ -24,8 +24,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.change.ChangeManager;
@@ -36,7 +34,6 @@ import com.opengamma.core.position.Position;
 import com.opengamma.core.position.PositionSource;
 import com.opengamma.core.position.Trade;
 import com.opengamma.core.position.impl.SimplePortfolio;
-import com.opengamma.core.position.impl.SimplePortfolioNode;
 import com.opengamma.core.position.impl.SimplePosition;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -45,13 +42,15 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
  * A source of positions based on CSV-formatted files.
  */
 public class CSVPositionSource implements PositionSource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(CSVPositionSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CSVPositionSource.class);
 
   /**
    * The base file directory.
@@ -60,19 +59,19 @@ public class CSVPositionSource implements PositionSource {
   /**
    * The portfolio by identifier.
    */
-  private final ConcurrentMap<ObjectId, Object> _portfolios = new ConcurrentSkipListMap<ObjectId, Object>();
+  private final ConcurrentMap<ObjectId, Object> _portfolios = new ConcurrentSkipListMap<>();
   /**
    * The nodes by identifier.
    */
-  private final Map<UniqueId, PortfolioNode> _nodes = new TreeMap<UniqueId, PortfolioNode>();
+  private final Map<UniqueId, PortfolioNode> _nodes = new TreeMap<>();
   /**
    * The positions by identifier.
    */
-  private final Map<ObjectId, Position> _positions = new TreeMap<ObjectId, Position>();
+  private final Map<ObjectId, Position> _positions = new TreeMap<>();
   /**
    * The trades by identifier.
    */
-  private final Map<UniqueId, Trade> _trades = new TreeMap<UniqueId, Trade>();
+  private final Map<UniqueId, Trade> _trades = new TreeMap<>();
 
   /**
    * Creates an empty CSV position source.
@@ -85,7 +84,7 @@ public class CSVPositionSource implements PositionSource {
    * Creates a CSV position source using the specified directory.
    * @param baseDirectoryName  the directory name, not null
    */
-  public CSVPositionSource(String baseDirectoryName) {
+  public CSVPositionSource(final String baseDirectoryName) {
     this(new File(baseDirectoryName));
   }
 
@@ -93,17 +92,17 @@ public class CSVPositionSource implements PositionSource {
    * Creates a CSV position source using the specified directory.
    * @param baseDirectory  the directory, not null
    */
-  public CSVPositionSource(File baseDirectory) {
+  public CSVPositionSource(final File baseDirectory) {
     ArgumentChecker.notNull(baseDirectory, "base directory");
-    if (baseDirectory.exists() == false) {
+    if (!baseDirectory.exists()) {
       throw new IllegalArgumentException("Base directory must exist: " + baseDirectory);
     }
-    if (baseDirectory.isDirectory() == false) {
+    if (!baseDirectory.isDirectory()) {
       throw new IllegalArgumentException("Base directory must be a directory: " + baseDirectory);
     }
     try {
       _baseDirectory = baseDirectory.getCanonicalFile();
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Base directory must resolve to a canonical reference: " + baseDirectory, ex);
     }
     populatePortfolioIds();
@@ -113,17 +112,17 @@ public class CSVPositionSource implements PositionSource {
    * Populate the portfolio identifiers from the base directory.
    */
   private void populatePortfolioIds() {
-    File[] filesInBaseDirectory = getBaseDirectory().listFiles();
-    for (File file : filesInBaseDirectory) {
-      if (file.isFile() == false || file.isHidden() || file.canRead() == false) {
+    final File[] filesInBaseDirectory = getBaseDirectory().listFiles();
+    for (final File file : filesInBaseDirectory) {
+      if (!file.isFile() || file.isHidden() || !file.canRead()) {
         continue;
       }
-      String portfolioName = buildPortfolioName(file.getName());
+      final String portfolioName = buildPortfolioName(file.getName());
       _portfolios.put(ObjectId.of("CSV-" + file.getName(), portfolioName), file);
     }
   }
 
-  private String buildPortfolioName(String fileName) {
+  private String buildPortfolioName(final String fileName) {
     if (fileName.endsWith(".csv") || fileName.endsWith(".txt")) {
       return fileName.substring(0, fileName.length() - 4);
     }
@@ -131,7 +130,7 @@ public class CSVPositionSource implements PositionSource {
   }
 
   private Position getPosition(final ObjectId positionId) {
-    Position position = _positions.get(positionId);
+    final Position position = _positions.get(positionId);
     if (position == null) {
       throw new DataNotFoundException("Unable to find position: " + positionId);
     }
@@ -153,16 +152,16 @@ public class CSVPositionSource implements PositionSource {
   }
 
   @Override
-  public Portfolio getPortfolio(UniqueId portfolioId, final VersionCorrection versionCorrection) {
+  public Portfolio getPortfolio(final UniqueId portfolioId, final VersionCorrection versionCorrection) {
     // Ignore the version
     return getPortfolio(portfolioId.getObjectId(), VersionCorrection.LATEST);
   }
 
   @Override
-  public Portfolio getPortfolio(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Portfolio getPortfolio(final ObjectId objectId, final VersionCorrection versionCorrection) {
     Object portfolio = _portfolios.get(objectId);
     if (portfolio instanceof File) {
-      Portfolio created = loadPortfolio(objectId, (File) portfolio);
+      final Portfolio created = loadPortfolio(objectId, (File) portfolio);
       _portfolios.replace(objectId, portfolio, created);
       portfolio = _portfolios.get(objectId);
     }
@@ -173,8 +172,8 @@ public class CSVPositionSource implements PositionSource {
   }
 
   @Override
-  public PortfolioNode getPortfolioNode(UniqueId nodeId, final VersionCorrection versionCorrection) {
-    PortfolioNode node = _nodes.get(nodeId);
+  public PortfolioNode getPortfolioNode(final UniqueId nodeId, final VersionCorrection versionCorrection) {
+    final PortfolioNode node = _nodes.get(nodeId);
     if (node == null) {
       throw new DataNotFoundException("Unable to find node: " + nodeId);
     }
@@ -182,20 +181,20 @@ public class CSVPositionSource implements PositionSource {
   }
 
   @Override
-  public Position getPosition(UniqueId positionId) {
+  public Position getPosition(final UniqueId positionId) {
     // Ignore the version
     return getPosition(positionId.getObjectId());
   }
-  
+
   @Override
-  public Position getPosition(ObjectId positionId, VersionCorrection versionCorrection) {
+  public Position getPosition(final ObjectId positionId, final VersionCorrection versionCorrection) {
     // Ignore the version
     return getPosition(positionId);
   }
 
   @Override
-  public Trade getTrade(UniqueId tradeId) {
-    Trade trade = _trades.get(tradeId);
+  public Trade getTrade(final UniqueId tradeId) {
+    final Trade trade = _trades.get(tradeId);
     if (trade == null) {
       throw new DataNotFoundException("Unable to find trade: " + tradeId);
     }
@@ -209,63 +208,63 @@ public class CSVPositionSource implements PositionSource {
   }
 
   //-------------------------------------------------------------------------
-  private Portfolio loadPortfolio(ObjectId portfolioId, File file) {
+  private Portfolio loadPortfolio(final ObjectId portfolioId, final File file) {
     FileInputStream fis = null;
     try {
       fis = new FileInputStream(file);
       return loadPortfolio(portfolioId, fis);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Unable to parse portfolio file: " + file, ex);
     } finally {
       IOUtils.closeQuietly(fis);
     }
   }
 
-  private Portfolio loadPortfolio(ObjectId portfolioId, InputStream inStream) throws IOException {
-    SimplePortfolio portfolio = new SimplePortfolio(portfolioId.atVersion("0"), portfolioId.getValue());
-    UniqueId rootNodeId = UniqueId.of(portfolioId.getScheme(), "0");
+  private Portfolio loadPortfolio(final ObjectId portfolioId, final InputStream inStream) throws IOException {
+    final SimplePortfolio portfolio = new SimplePortfolio(portfolioId.atVersion("0"), portfolioId.getValue());
+    final UniqueId rootNodeId = UniqueId.of(portfolioId.getScheme(), "0");
     portfolio.getRootNode().setUniqueId(rootNodeId);
     _nodes.put(rootNodeId, portfolio.getRootNode());
-    
-    CSVReader csvReader = new CSVReader(new InputStreamReader(inStream));
+
+    final CSVReader csvReader = new CSVReader(new InputStreamReader(inStream));
     String[] tokens = null;
     int curIndex = 1;
     UniqueId positionId = UniqueId.of(portfolioId.getScheme(), Integer.toString(curIndex));
     while ((tokens = csvReader.readNext()) != null) {
-      SimplePosition position = parseLine(tokens, positionId);
+      final SimplePosition position = parseLine(tokens, positionId);
       if (position != null) {
-        ((SimplePortfolioNode) portfolio.getRootNode()).addPosition(position);
+        portfolio.getRootNode().addPosition(position);
         _positions.put(position.getUniqueId().getObjectId(), position);
         positionId = UniqueId.of(portfolioId.getScheme(), Integer.toString(++curIndex));
       }
     }
-    s_logger.info("{} parsed stream with {} positions", portfolioId, portfolio.getRootNode().getPositions().size());
+    LOGGER.info("{} parsed stream with {} positions", portfolioId, portfolio.getRootNode().getPositions().size());
     return portfolio;
   }
 
   /**
-   * @param line  the line to parse, not null
+   * @param tokens  the tokens to parse, not null
    * @param positionId  the portfolio id, not null
    * @return the position
    */
-  /* package for testing */ static SimplePosition parseLine(String[] tokens, UniqueId positionId) {
+  /* package for testing */ static SimplePosition parseLine(final String[] tokens, final UniqueId positionId) {
     if (tokens.length < 3) {
       return null;
     }
     // First token is the quantity
-    BigDecimal quantity = new BigDecimal(tokens[0].trim());
-    
-    // Each set of 2 tokens is then security id domain and then id 
-    List<ExternalId> securityIdentifiers = new ArrayList<ExternalId>();
-    for (int i = 1; i < (tokens.length - 1); i++) {
-      String idScheme = tokens[i].trim();
-      String idValue = tokens[++i].trim();
-      ExternalId id = ExternalId.of(idScheme, idValue);
+    final BigDecimal quantity = new BigDecimal(tokens[0].trim());
+
+    // Each set of 2 tokens is then security id domain and then id
+    final List<ExternalId> securityIdentifiers = new ArrayList<>();
+    for (int i = 1; i < tokens.length - 1; i++) {
+      final String idScheme = tokens[i].trim();
+      final String idValue = tokens[++i].trim();
+      final ExternalId id = ExternalId.of(idScheme, idValue);
       securityIdentifiers.add(id);
     }
-    ExternalIdBundle securityKey = ExternalIdBundle.of(securityIdentifiers);
-    s_logger.debug("Loaded position: {} in {}", quantity, securityKey);
-    
+    final ExternalIdBundle securityKey = ExternalIdBundle.of(securityIdentifiers);
+    LOGGER.debug("Loaded position: {} in {}", quantity, securityKey);
+
     return new SimplePosition(positionId, quantity, securityKey);
   }
 

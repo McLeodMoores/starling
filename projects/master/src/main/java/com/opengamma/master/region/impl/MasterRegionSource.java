@@ -26,14 +26,15 @@ import com.opengamma.util.paging.PagingRequest;
 /**
  * A {@code RegionSource} implemented using an underlying {@code RegionMaster}.
  * <p>
- * The {@link RegionSource} interface provides regions to the application via a narrow API. This class provides the source on top of a standard {@link RegionMaster}.
+ * The {@link RegionSource} interface provides regions to the application via a narrow API. This class provides the source on top of
+ * a standard {@link RegionMaster}.
  */
 @PublicSPI
 public class MasterRegionSource extends AbstractMasterSource<Region, RegionDocument, RegionMaster> implements RegionSource {
 
   /**
    * Creates an instance with an underlying master.
-   * 
+   *
    * @param master the master, not null
    */
   public MasterRegionSource(final RegionMaster master) {
@@ -43,48 +44,48 @@ public class MasterRegionSource extends AbstractMasterSource<Region, RegionDocum
   //-------------------------------------------------------------------------
   @SuppressWarnings({"unchecked", "rawtypes" })
   @Override
-  public Collection<Region> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
-    RegionSearchRequest request = new RegionSearchRequest(bundle);
+  public Collection<Region> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
+    final RegionSearchRequest request = new RegionSearchRequest(bundle);
     request.setVersionCorrection(versionCorrection);
     return (List) getMaster().search(request).getRegions();
   }
 
   @Override
-  public ManageableRegion getHighestLevelRegion(ExternalId regionId) {
-    RegionSearchRequest request = new RegionSearchRequest(regionId);
+  public ManageableRegion getHighestLevelRegion(final ExternalId regionId) {
+    final RegionSearchRequest request = new RegionSearchRequest(regionId);
     request.setPagingRequest(PagingRequest.ONE);
     return getMaster().search(request).getFirstRegion();
   }
 
   @Override
-  public ManageableRegion getHighestLevelRegion(ExternalIdBundle regionIds) {
-    RegionSearchRequest request = new RegionSearchRequest(regionIds);
+  public ManageableRegion getHighestLevelRegion(final ExternalIdBundle regionIds) {
+    final RegionSearchRequest request = new RegionSearchRequest(regionIds);
     request.setPagingRequest(PagingRequest.ONE);
     return getMaster().search(request).getFirstRegion();
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<Region>> getAll(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Collection<Region>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getAll(this, bundles, versionCorrection);
   }
 
   @Override
-  public Collection<Region> get(ExternalIdBundle bundle) {
+  public Collection<Region> get(final ExternalIdBundle bundle) {
     return AbstractSourceWithExternalBundle.get(this, bundle);
   }
 
   @Override
-  public Region getSingle(ExternalIdBundle bundle) {
+  public Region getSingle(final ExternalIdBundle bundle) {
     return AbstractSourceWithExternalBundle.getSingle(this, bundle);
   }
 
   @Override
-  public Region getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Region getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getSingle(this, bundle, versionCorrection);
   }
 
   @Override
-  public Map<ExternalIdBundle, Region> getSingle(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Region> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return AbstractSourceWithExternalBundle.getSingle(this, bundles, versionCorrection);
   }
 

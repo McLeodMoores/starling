@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.capletstripping;
@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.minimization.ParameterLimitsTransform;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class VolTermStructureModelProvider extends VolatilityModelProvider {
 
@@ -39,22 +39,22 @@ public class VolTermStructureModelProvider extends VolatilityModelProvider {
   }
 
   @Override
-  public VolatilityModel1D evaluate(DoubleMatrix1D x) {
+  public VolatilityModel1D evaluate(final DoubleMatrix1D x) {
     final InterpolatedDoublesCurve curve = InterpolatedDoublesCurve.from(_knots, x.getData(), _interpolator);
     return new VolatilityModel1D() {
 
       @Override
-      public Double getVolatility(double[] fwdKT) {
+      public Double getVolatility(final double[] fwdKT) {
         return curve.getYValue(fwdKT[2]);
       }
 
       @Override
-      public double getVolatility(SimpleOptionData option) {
+      public double getVolatility(final SimpleOptionData option) {
         return curve.getYValue(option.getTimeToExpiry());
       }
 
       @Override
-      public double getVolatility(double forward, double strike, double timeToExpiry) {
+      public double getVolatility(final double forward, final double strike, final double timeToExpiry) {
         return curve.getYValue(timeToExpiry);
       }
     };

@@ -120,7 +120,7 @@ public abstract class InterestRateSwapLegConvention extends FinancialConvention 
    * Creates an instance.
    * <p>
    * This instance will be incomplete with fields that are null that should not be.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    */
@@ -130,7 +130,7 @@ public abstract class InterestRateSwapLegConvention extends FinancialConvention 
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param paymentCalendars  the payment calendars, not null
@@ -149,20 +149,20 @@ public abstract class InterestRateSwapLegConvention extends FinancialConvention 
    * @param compoundingMethod  the compounding, not null
    */
   public InterestRateSwapLegConvention(final String name, final ExternalIdBundle externalIdBundle,
-      Set<ExternalId> paymentCalendars,
-      Set<ExternalId> calculationCalendars,
-      Set<ExternalId> maturityCalendars,
-      BusinessDayConvention paymentDayConvention,
-      BusinessDayConvention calculationBusinessDayConvention,
-      BusinessDayConvention maturityBusinessDayConvention,
-      DayCount dayCountConvention,
-      Frequency paymentFrequency,
-      Frequency calculationFrequency,
-      DateRelativeTo paymentRelativeTo,
-      boolean adjustedAccrual,
-      int settlementDays,
-      RollConvention rollConvention,
-      CompoundingMethod compoundingMethod) {
+      final Set<ExternalId> paymentCalendars,
+      final Set<ExternalId> calculationCalendars,
+      final Set<ExternalId> maturityCalendars,
+      final BusinessDayConvention paymentDayConvention,
+      final BusinessDayConvention calculationBusinessDayConvention,
+      final BusinessDayConvention maturityBusinessDayConvention,
+      final DayCount dayCountConvention,
+      final Frequency paymentFrequency,
+      final Frequency calculationFrequency,
+      final DateRelativeTo paymentRelativeTo,
+      final boolean adjustedAccrual,
+      final int settlementDays,
+      final RollConvention rollConvention,
+      final CompoundingMethod compoundingMethod) {
     super(name, externalIdBundle);
     setPaymentCalendars(paymentCalendars);
     setCalculationCalendars(calculationCalendars);

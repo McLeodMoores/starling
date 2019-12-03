@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics;
@@ -11,18 +11,18 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public final class LabelledMatrixUtils {
 
   protected static final Period TENOR_TOLERANCE = Period.ofDays(1);
-  
+
   /**
    * Hidden constructor.
    */
   private LabelledMatrixUtils() {
   }
-  
+
   protected static <T> Object[] toString(final T[] arr) {
     ArgumentChecker.notNull(arr, "arr");
     final Object[] result = new Object[arr.length];
@@ -31,8 +31,8 @@ public final class LabelledMatrixUtils {
     }
     return result;
   }
-  
-  protected static int compareTenorsWithTolerance(Tenor d1, Tenor d2, Period tolerance) {
+
+  protected static int compareTenorsWithTolerance(final Tenor d1, final Tenor d2, final Period tolerance) {
     if (tolerance.equals(TENOR_TOLERANCE)) {
       return d1.compareTo(d2); //TOLERANCE == 1ns => this degenerate case
     }
@@ -51,5 +51,5 @@ public final class LabelledMatrixUtils {
     }
     return 0;
   }
-  
+
 }

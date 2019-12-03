@@ -15,30 +15,30 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * An in-memory implementation of {@link FunctionRepository}.
  * This can either be used as-is through a factory which scans available functions,
- * or it can be used as a cache on top of a more costly function repository. 
+ * or it can be used as a cache on top of a more costly function repository.
  *
  */
 public class InMemoryFunctionParameterRepository implements FunctionParameterRepository {
-  private final Set<ParameterizedFunction> _functions = new HashSet<ParameterizedFunction>();
-  
+  private final Set<ParameterizedFunction> _functions = new HashSet<>();
+
   public InMemoryFunctionParameterRepository() {
   }
-  
-  public InMemoryFunctionParameterRepository(CompiledFunctionRepository repository) {
+
+  public InMemoryFunctionParameterRepository(final CompiledFunctionRepository repository) {
     addAllFunctions(repository);
   }
-  
-  public void addFunction(ParameterizedFunction function) {
+
+  public void addFunction(final ParameterizedFunction function) {
     ArgumentChecker.notNull(function, "Function");
     _functions.add(function);
     if (function.getUniqueId() == null) {
       function.setUniqueId(Integer.toString(_functions.size()));
     }
   }
-  
-  public void addAllFunctions(CompiledFunctionRepository repository) {
-    for (CompiledFunctionDefinition function : repository.getAllFunctions()) {
-      ParameterizedFunction parameterizedFunction = new ParameterizedFunction(
+
+  public void addAllFunctions(final CompiledFunctionRepository repository) {
+    for (final CompiledFunctionDefinition function : repository.getAllFunctions()) {
+      final ParameterizedFunction parameterizedFunction = new ParameterizedFunction(
           function,
           function.getFunctionDefinition().getDefaultParameters());
       addFunction(parameterizedFunction);

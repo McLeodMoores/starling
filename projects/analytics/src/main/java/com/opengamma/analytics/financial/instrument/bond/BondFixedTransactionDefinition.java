@@ -34,16 +34,23 @@ public class BondFixedTransactionDefinition extends BondTransactionDefinition<Pa
 
   /**
    * Constructor of a fixed coupon bond transaction from all the transaction details.
-   * @param underlyingBond The fixed coupon bond underlying the transaction.
-   * @param quantity The number of bonds purchased (can be negative or positive).
-   * @param settlementDate Transaction settlement date.
-   * @param cleanPrice The (clean) price of the transaction in relative term (i.e. 0.90 if the dirty price is 90% of nominal).
+   * 
+   * @param underlyingBond
+   *          The fixed coupon bond underlying the transaction.
+   * @param quantity
+   *          The number of bonds purchased (can be negative or positive).
+   * @param settlementDate
+   *          Transaction settlement date.
+   * @param cleanPrice
+   *          The (clean) price of the transaction in relative term (i.e. 0.90 if the dirty price is 90% of nominal).
    */
-  public BondFixedTransactionDefinition(final BondFixedSecurityDefinition underlyingBond, final double quantity, final ZonedDateTime settlementDate, final double cleanPrice) {
+  public BondFixedTransactionDefinition(final BondFixedSecurityDefinition underlyingBond, final double quantity, final ZonedDateTime settlementDate,
+      final double cleanPrice) {
     super(underlyingBond, quantity, settlementDate, cleanPrice);
     _accruedInterestAtSettlement = 0;
     final int nbCoupon = underlyingBond.getCoupons().getNumberOfPayments();
-    final double accruedInterest = AccruedInterestCalculator.getAccruedInterest(getUnderlyingBond().getDayCount(), getCouponIndex(), nbCoupon, getPreviousAccrualDate(),
+    final double accruedInterest = AccruedInterestCalculator.getAccruedInterest(getUnderlyingBond().getDayCount(), getCouponIndex(), nbCoupon,
+        getPreviousAccrualDate(),
         settlementDate, getNextAccrualDate(), underlyingBond.getCoupons().getNthPayment(getCouponIndex()).getRate(), underlyingBond.getCouponPerYear(),
         underlyingBond.isEOM());
     if (underlyingBond.getExCouponDays() != 0 && getNextAccrualDate().minusDays(underlyingBond.getExCouponDays()).isBefore(settlementDate)) {
@@ -55,22 +62,29 @@ public class BondFixedTransactionDefinition extends BondTransactionDefinition<Pa
 
   /**
    * Builder of a fixed coupon bond transaction from the underlying bond and the conventional yield at settlement date.
-   * @param underlyingBond The fixed coupon bond underlying the transaction.
-   * @param quantity The number of bonds purchased (can be negative or positive).
-   * @param settlementDate Transaction settlement date.
-   * @param yield The yield quoted in the underlying bond convention at settlement date. The yield is in decimal, i.e. 0.0525 for 5.25%.
+   * 
+   * @param underlyingBond
+   *          The fixed coupon bond underlying the transaction.
+   * @param quantity
+   *          The number of bonds purchased (can be negative or positive).
+   * @param settlementDate
+   *          Transaction settlement date.
+   * @param yield
+   *          The yield quoted in the underlying bond convention at settlement date. The yield is in decimal, i.e. 0.0525 for 5.25%.
    * @return The fixed coupon bond.
    */
-  public static BondFixedTransactionDefinition fromYield(final BondFixedSecurityDefinition underlyingBond, final double quantity, final ZonedDateTime settlementDate, final double yield) {
+  public static BondFixedTransactionDefinition fromYield(final BondFixedSecurityDefinition underlyingBond, final double quantity,
+      final ZonedDateTime settlementDate, final double yield) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(underlyingBond, "underlying bond");
-    BondFixedSecurity security = underlyingBond.toDerivative(settlementDate, settlementDate);
-    double cleanPrice = METHOD_BOND.cleanPriceFromYield(security, yield);
+    final BondFixedSecurity security = underlyingBond.toDerivative(settlementDate, settlementDate);
+    final double cleanPrice = METHOD_BOND.cleanPriceFromYield(security, yield);
     return new BondFixedTransactionDefinition(underlyingBond, quantity, settlementDate, cleanPrice);
   }
 
   /**
    * Gets the accrued interest at transaction settlement.
+   * 
    * @return The accrued interest at settlement.
    */
   public double getAccruedInterestAtSettlement() {
@@ -79,6 +93,7 @@ public class BondFixedTransactionDefinition extends BondTransactionDefinition<Pa
 
   /**
    * Gets the bond underlying the transaction.
+   * 
    * @return The underlying bond.
    */
   @Override
@@ -88,6 +103,7 @@ public class BondFixedTransactionDefinition extends BondTransactionDefinition<Pa
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -135,7 +151,8 @@ public class BondFixedTransactionDefinition extends BondTransactionDefinition<Pa
     }
     final double notionalStandard = getUnderlyingBond().getCoupons().getNthPayment(couponIndex).getNotional();
     double price;
-    if (getSettlementDate().toLocalDate().isBefore(date.toLocalDate())) { //Implementation note: If settlement already took place (in day terms), the price is set to 0.
+    if (getSettlementDate().toLocalDate().isBefore(date.toLocalDate())) { // Implementation note: If settlement already took place (in day terms), the price is
+                                                                          // set to 0.
       price = 0.0;
     } else {
       price = getPrice();
@@ -162,7 +179,7 @@ public class BondFixedTransactionDefinition extends BondTransactionDefinition<Pa
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_accruedInterestAtSettlement);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

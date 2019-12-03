@@ -31,21 +31,21 @@ public abstract class AbstractSingletonWebResource extends AbstractWebResource {
    * Creates the output root data.
    * <p>
    * This sets up default root data for all subclasses.
-   * 
+   *
    * @param uriInfo  the URI information, not null
    * @return the output root data, not null
    */
-  protected FlexiBean createRootData(UriInfo uriInfo) {
+  protected FlexiBean createRootData(final UriInfo uriInfo) {
     return FreemarkerOutputter.createRootData(uriInfo);
   }
 
   /**
    * Gets the Freemarker outputer.
-   * 
+   *
    * @param context  the servlet context, not null
    * @return the Freemarker outputter, not null
    */
-  protected FreemarkerOutputter getFreemarker(ServletContext context) {
+  protected FreemarkerOutputter getFreemarker(final ServletContext context) {
     return new FreemarkerOutputter(context);
   }
 

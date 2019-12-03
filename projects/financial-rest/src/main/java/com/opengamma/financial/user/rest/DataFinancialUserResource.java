@@ -24,17 +24,17 @@ public class DataFinancialUserResource extends AbstractDataResource {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param user  the user, not null
    */
-  public DataFinancialUserResource(FinancialUser user) {
+  public DataFinancialUserResource(final FinancialUser user) {
     _user = user;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the user.
-   * 
+   *
    * @return the user, not null
    */
   public FinancialUser getUser() {

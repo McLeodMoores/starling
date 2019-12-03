@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.inflation.derivative;
@@ -13,9 +13,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing an zero-coupon inflation coupon.
- * The start index value is known when the coupon is traded/issued.
- * The index for a given month is given in the yield curve and in the time series on the first of the month.
+ * Class describing an zero-coupon inflation coupon. The start index value is known when the coupon is traded/issued. The index for a given month is given in
+ * the yield curve and in the time series on the first of the month.
  */
 public class CouponInflationZeroCouponInterpolation extends CouponInflation {
 
@@ -24,17 +23,15 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
    */
   private final double _indexStartValue;
   /**
-   * The reference times for the index at the coupon end.  Two months are required for the interpolation.
-   * There is usually a difference of two or three month between the reference date and the payment date.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The reference times for the index at the coupon end. Two months are required for the interpolation. There is usually a difference of two or three month
+   * between the reference date and the payment date. The time can be negative (when the price index for the current and last month is not yet published).
    */
   private final double[] _referenceEndTime;
 
   /**
-   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon. 
-   * There is usually a difference of two or three month between the reference date and the natural payment date.
-   * the natural payment date is equal to the payment date when the lag is the conventional one.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The time for which the index at the coupon end is paid by the standard corresponding zero coupon. There is usually a difference of two or three month
+   * between the reference date and the natural payment date. the natural payment date is equal to the payment date when the lag is the conventional one. The
+   * time can be negative (when the price index for the current and last month is not yet published).
    */
   private final double _naturalPaymentTime;
 
@@ -43,24 +40,36 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
    */
   private final double _weight;
   /**
-  * Flag indicating if the notional is paid (true) or not (false) at the end of the period.
-  */
+   * Flag indicating if the notional is paid (true) or not (false) at the end of the period.
+   */
   private final boolean _payNotional;
 
   /**
    * Inflation zero-coupon constructor.
-   * @param currency The coupon currency.
-   * @param paymentTime The time to payment.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param indexStartValue The index value at the start of the coupon.
-   * @param referenceEndTime The reference time for the index at the coupon end.
-   * @param naturalPaymentTime The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
-   * @param weight The weight on the first month index in the interpolation.
-   * @param payNotional Flag indicating if the notional is paid (true) or not (false).
+   * 
+   * @param currency
+   *          The coupon currency.
+   * @param paymentTime
+   *          The time to payment.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param indexStartValue
+   *          The index value at the start of the coupon.
+   * @param referenceEndTime
+   *          The reference time for the index at the coupon end.
+   * @param naturalPaymentTime
+   *          The time for which the index at the coupon end is paid by the standard corresponding zero coupon.
+   * @param weight
+   *          The weight on the first month index in the interpolation.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
    */
-  public CouponInflationZeroCouponInterpolation(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final IndexPrice priceIndex,
+  public CouponInflationZeroCouponInterpolation(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional,
+      final IndexPrice priceIndex,
       final double indexStartValue, final double[] referenceEndTime, final double naturalPaymentTime, final double weight, final boolean payNotional) {
     super(currency, paymentTime, paymentYearFraction, notional, priceIndex);
     _indexStartValue = indexStartValue;
@@ -72,6 +81,7 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
 
   /**
    * Gets the index value at the start of the coupon.
+   * 
    * @return The index value.
    */
   public double getIndexStartValue() {
@@ -80,6 +90,7 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
 
   /**
    * Gets the reference time for the index at the coupon end.
+   * 
    * @return The reference time.
    */
   public double[] getReferenceEndTime() {
@@ -92,6 +103,7 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
 
   /**
    * Gets the weight on the first month index in the interpolation.
+   * 
    * @return The weight.
    */
   public double getWeight() {
@@ -100,6 +112,7 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
 
   /**
    * Gets the pay notional flag.
+   * 
    * @return The flag.
    */
   public boolean payNotional() {
@@ -108,7 +121,8 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
 
   @Override
   public CouponInflationZeroCouponInterpolation withNotional(final double notional) {
-    return new CouponInflationZeroCouponInterpolation(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(), _indexStartValue, _referenceEndTime, _naturalPaymentTime,
+    return new CouponInflationZeroCouponInterpolation(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(), _indexStartValue,
+        _referenceEndTime, _naturalPaymentTime,
         _weight, _payNotional);
   }
 
@@ -135,18 +149,18 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_indexStartValue);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_naturalPaymentTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_payNotional ? 1231 : 1237);
     result = prime * result + Arrays.hashCode(_referenceEndTime);
     temp = Double.doubleToLongBits(_weight);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -156,7 +170,7 @@ public class CouponInflationZeroCouponInterpolation extends CouponInflation {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CouponInflationZeroCouponInterpolation other = (CouponInflationZeroCouponInterpolation) obj;
+    final CouponInflationZeroCouponInterpolation other = (CouponInflationZeroCouponInterpolation) obj;
     if (Double.doubleToLongBits(_indexStartValue) != Double.doubleToLongBits(other._indexStartValue)) {
       return false;
     }

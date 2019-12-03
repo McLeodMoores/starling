@@ -43,7 +43,7 @@ public class PositionDocument extends AbstractDocument implements Serializable {
    * The position unique identifier.
    * This field is managed by the master but must be set for updates.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
 
   /**
@@ -118,6 +118,7 @@ public class PositionDocument extends AbstractDocument implements Serializable {
    * This field is managed by the master but must be set for updates.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -127,6 +128,7 @@ public class PositionDocument extends AbstractDocument implements Serializable {
    * This field is managed by the master but must be set for updates.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }

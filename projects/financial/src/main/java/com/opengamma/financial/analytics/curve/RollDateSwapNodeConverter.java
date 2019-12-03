@@ -41,15 +41,23 @@ public class RollDateSwapNodeConverter extends CurveNodeVisitorAdapter<Instrumen
   private final ZonedDateTime _valuationTime;
 
   /**
-   * @param securitySource The security source, not null
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param regionSource The region source, not null
-   * @param marketData The market data, not null
-   * @param dataId The id of the market data, not null
-   * @param valuationTime The valuation time, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param marketData
+   *          The market data, not null
+   * @param dataId
+   *          The id of the market data, not null
+   * @param valuationTime
+   *          The valuation time, not null
    */
-  public RollDateSwapNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
+  public RollDateSwapNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource,
+      final RegionSource regionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
     ArgumentChecker.notNull(securitySource, "security source");
     ArgumentChecker.notNull(conventionSource, "convention source");
@@ -75,7 +83,8 @@ public class RollDateSwapNodeConverter extends CurveNodeVisitorAdapter<Instrumen
     final RollDateAdjuster adjuster = RollDateAdjusterFactory.getAdjuster(swapConvention.getRollDateConvention().getValue());
     final ZonedDateTime unadjustedStartDate = _valuationTime.plus(rollDateSwapNode.getStartTenor().getPeriod());
     return NodeConverterUtils.getSwapRollDateDefinition(payLegConvention, receiveLegConvention, unadjustedStartDate, rollDateSwapNode.getRollDateStartNumber(),
-        rollDateSwapNode.getRollDateEndNumber(), adjuster, _securitySource, _regionSource, _holidaySource, _conventionSource, _marketData, _dataId, _valuationTime);
+        rollDateSwapNode.getRollDateEndNumber(), adjuster, _securitySource, _regionSource, _holidaySource, _conventionSource, _marketData, _dataId,
+        _valuationTime);
   }
-  
+
 }

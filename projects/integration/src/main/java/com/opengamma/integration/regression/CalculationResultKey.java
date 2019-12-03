@@ -5,7 +5,6 @@
  */
 package com.opengamma.integration.regression;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -53,55 +52,55 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
   @PropertyDefinition
   private final ObjectId _targetId;
 
-  public static CalculationResultKey forPosition(String calcConfigName,
-                                                 String valueName,
-                                                 ValueProperties properties,
-                                                 ObjectId positionId) {
+  public static CalculationResultKey forPosition(final String calcConfigName,
+      final String valueName,
+      final ValueProperties properties,
+      final ObjectId positionId) {
     ArgumentChecker.notNull(positionId, "positionId");
     return new CalculationResultKey(calcConfigName, valueName, properties, null, positionId);
   }
 
-  public static CalculationResultKey forCurrency(String calcConfigName,
-                                                 String valueName,
-                                                 ValueProperties properties,
-                                                 ObjectId currencyId) {
+  public static CalculationResultKey forCurrency(final String calcConfigName,
+      final String valueName,
+      final ValueProperties properties,
+      final ObjectId currencyId) {
     ArgumentChecker.notNull(currencyId, "currencyId");
     return new CalculationResultKey(calcConfigName, valueName, properties, null, currencyId);
   }
 
-  public static CalculationResultKey forPositionWithParentNode(String calcConfigName,
-                                                               String valueName,
-                                                               ValueProperties properties,
-                                                               List<String> path,
-                                                               ObjectId positionId) {
+  public static CalculationResultKey forPositionWithParentNode(final String calcConfigName,
+      final String valueName,
+      final ValueProperties properties,
+      final List<String> path,
+      final ObjectId positionId) {
     ArgumentChecker.notNull(path, "path");
     ArgumentChecker.notNull(positionId, "positionId");
     return new CalculationResultKey(calcConfigName, valueName, properties, path, positionId);
   }
 
-  public static CalculationResultKey forNode(String calcConfigName,
-                                             String valueName,
-                                             ValueProperties properties,
-                                             List<String> path) {
+  public static CalculationResultKey forNode(final String calcConfigName,
+      final String valueName,
+      final ValueProperties properties,
+      final List<String> path) {
     ArgumentChecker.notNull(path, "path");
     return new CalculationResultKey(calcConfigName, valueName, properties, path, null);
   }
 
-  public static CalculationResultKey forTrade(String calcConfigName,
-                                              String valueName,
-                                              ValueProperties properties,
-                                              ObjectId tradeId) {
+  public static CalculationResultKey forTrade(final String calcConfigName,
+      final String valueName,
+      final ValueProperties properties,
+      final ObjectId tradeId) {
     ArgumentChecker.notNull(tradeId, "tradeId");
     return new CalculationResultKey(calcConfigName, valueName, properties, null, tradeId);
   }
 
   // TODO can't let this be regenerated because of a joda beans bug handling nullable lists
   @ImmutableConstructor
-  private CalculationResultKey(String calcConfigName,
-                              String valueName,
-                              ValueProperties properties,
-                              List<String> path,
-                              ObjectId targetId) {
+  private CalculationResultKey(final String calcConfigName,
+      final String valueName,
+      final ValueProperties properties,
+      final List<String> path,
+      final ObjectId targetId) {
     ArgumentChecker.notNull(calcConfigName, "calcConfigName");
     ArgumentChecker.notNull(valueName, "valueName");
     ArgumentChecker.notNull(properties, "properties");
@@ -118,7 +117,7 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
   }
 
   @Override
-  public int compareTo(CalculationResultKey other) {
+  public int compareTo(final CalculationResultKey other) {
     return new CompareToBuilder()
         .append(getCalcConfigName(), other.getCalcConfigName())
         .append(getTargetId(), other.getTargetId())
@@ -128,7 +127,7 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
         .toComparison();
   }
 
-  private static int comparePaths(List<String> path1, List<String> path2) {
+  private static int comparePaths(final List<String> path1, final List<String> path2) {
     if (path1 == null && path2 == null) {
       return 0;
     }
@@ -145,14 +144,13 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
     } else if (path2.isEmpty()) {
       return 1;
     } else {
-      String s1 = path1.get(0);
-      String s2 = path2.get(0);
-      int cmp = s1.compareTo(s2);
+      final String s1 = path1.get(0);
+      final String s2 = path2.get(0);
+      final int cmp = s1.compareTo(s2);
       if (cmp != 0) {
         return cmp;
-      } else {
-        return comparePaths(path1.subList(1, path1.size()), path2.subList(1, path2.size()));
       }
+      return comparePaths(path1.subList(1, path1.size()), path2.subList(1, path2.size()));
     }
   }
 
@@ -254,11 +252,11 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CalculationResultKey other = (CalculationResultKey) obj;
-      return JodaBeanUtils.equal(getCalcConfigName(), other.getCalcConfigName()) &&
-          JodaBeanUtils.equal(getValueName(), other.getValueName()) &&
-          JodaBeanUtils.equal(getProperties(), other.getProperties()) &&
-          JodaBeanUtils.equal(getPath(), other.getPath()) &&
-          JodaBeanUtils.equal(getTargetId(), other.getTargetId());
+      return JodaBeanUtils.equal(_calcConfigName, other._calcConfigName) &&
+          JodaBeanUtils.equal(_valueName, other._valueName) &&
+          JodaBeanUtils.equal(_properties, other._properties) &&
+          JodaBeanUtils.equal(_path, other._path) &&
+          JodaBeanUtils.equal(_targetId, other._targetId);
     }
     return false;
   }
@@ -266,11 +264,11 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCalcConfigName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValueName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getProperties());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPath());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTargetId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_calcConfigName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_valueName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_properties);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_path);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_targetId);
     return hash;
   }
 
@@ -278,11 +276,11 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
   public String toString() {
     StringBuilder buf = new StringBuilder(192);
     buf.append("CalculationResultKey{");
-    buf.append("calcConfigName").append('=').append(getCalcConfigName()).append(',').append(' ');
-    buf.append("valueName").append('=').append(getValueName()).append(',').append(' ');
-    buf.append("properties").append('=').append(getProperties()).append(',').append(' ');
-    buf.append("path").append('=').append(getPath()).append(',').append(' ');
-    buf.append("targetId").append('=').append(JodaBeanUtils.toString(getTargetId()));
+    buf.append("calcConfigName").append('=').append(_calcConfigName).append(',').append(' ');
+    buf.append("valueName").append('=').append(_valueName).append(',').append(' ');
+    buf.append("properties").append('=').append(_properties).append(',').append(' ');
+    buf.append("path").append('=').append(_path).append(',').append(' ');
+    buf.append("targetId").append('=').append(JodaBeanUtils.toString(_targetId));
     buf.append('}');
     return buf.toString();
   }
@@ -522,19 +520,31 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

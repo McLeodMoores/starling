@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.permission;
 
 /**
- * Utility class for working with permissions in OG-liveData
+ * Utility class for working with permissions in OG-liveData.
  */
 public final class PermissionUtils {
 

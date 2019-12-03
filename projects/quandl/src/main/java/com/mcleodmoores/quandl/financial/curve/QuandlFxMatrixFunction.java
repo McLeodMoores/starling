@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.financial.curve;
 
@@ -37,8 +37,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * A function that constructs the {@link com.opengamma.analytics.financial.forex.method.FXMatrix} required to construct a bundle of
- * curves that can handle curves defined using Quandl data.
+ * A function that constructs the {@link com.opengamma.analytics.financial.forex.method.FXMatrix} required to construct a bundle of curves that can handle
+ * curves defined using Quandl data.
  */
 public class QuandlFxMatrixFunction extends FXMatrixFunction {
   /** The logger */
@@ -51,7 +51,8 @@ public class QuandlFxMatrixFunction extends FXMatrixFunction {
   private CurveDefinitionSource _curveDefinitionSource;
 
   /**
-   * @param configurationName The configuration name, not null
+   * @param configurationName
+   *          The configuration name, not null
    */
   public QuandlFxMatrixFunction(final String configurationName) {
     super(configurationName);
@@ -68,9 +69,9 @@ public class QuandlFxMatrixFunction extends FXMatrixFunction {
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
-    //TODO work out a way to use dependency graph to get curve information for this config
-    final CurveConstructionConfiguration curveConstructionConfiguration =
-        _curveConstructionConfigurationSource.getCurveConstructionConfiguration(_configurationName);
+    // TODO work out a way to use dependency graph to get curve information for this config
+    final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource
+        .getCurveConstructionConfiguration(_configurationName);
     if (curveConstructionConfiguration == null) {
       throw new OpenGammaRuntimeException("Could not get curve construction configuration called " + _configurationName);
     }

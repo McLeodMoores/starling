@@ -30,7 +30,8 @@ public class LabelledMatrix1DTest {
   private static final String[] LABELS2 = new String[] {"A", "B", "C", "D" };
   private static final double[] VALUES = new double[] {5, 6, 7, 8};
   private static final Double[] TIMES3 = new Double[] {1. / 365, 2. / 365, 7. / 365, 1. / 12, 2. / 12, 0.5, 1., 1.5, 2., 3., 4., 5., 6., 7., 8., 9., 10. };
-  private static final Object[] LABELS3 = new Object[] {"1D", "2D", "1W", "1M", "2M", "6M", "1Y", "18M", "2Y", "3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y", "10Y" };
+  private static final Object[] LABELS3 = new Object[] {
+      "1D", "2D", "1W", "1M", "2M", "6M", "1Y", "18M", "2Y", "3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y", "10Y" };
   private static final double[] VALUES3 = new double[] {0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0 };
   private static final DoubleLabelledMatrix1D M1 = new DoubleLabelledMatrix1D(TIMES3, LABELS3, VALUES3);
   private static final double HIGH_TOLERANCE = 0.25 / 365;

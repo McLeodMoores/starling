@@ -17,11 +17,6 @@ import java.util.Set;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
-import com.opengamma.security.user.Authority;
-import com.opengamma.security.user.HibernateUserManager;
-import com.opengamma.security.user.HibernateUserManagerFiles;
-import com.opengamma.security.user.User;
-import com.opengamma.security.user.UserGroup;
 import com.opengamma.util.db.DbConnectorFactoryBean;
 import com.opengamma.util.db.HibernateMappingFiles;
 import com.opengamma.util.test.AbstractDbTest;
@@ -37,7 +32,7 @@ public class HibernateUserManagerTest extends AbstractDbTest {
   private HibernateUserManager _userManager;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public HibernateUserManagerTest(String databaseType, final String databaseVersion) {
+  public HibernateUserManagerTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
   }
 
@@ -48,7 +43,7 @@ public class HibernateUserManagerTest extends AbstractDbTest {
   }
 
   @Override
-  protected void initDbConnectorFactory(DbConnectorFactoryBean factory) {
+  protected void initDbConnectorFactory(final DbConnectorFactoryBean factory) {
     factory.setHibernateMappingFiles(new HibernateMappingFiles[] {new HibernateUserManagerFiles() });
   }
 
@@ -64,16 +59,16 @@ public class HibernateUserManagerTest extends AbstractDbTest {
     // Try to get non-existent
     User user = _userManager.getUser("nonexistentuser");
     assertNull(user);
-    
+
     // Clear DB as necessary
     user = _userManager.getUser("testuser");
     if (user != null) {
-      _userManager.deleteUser(user);      
+      _userManager.deleteUser(user);
     }
-    
+
     // Add
     user = getTestUser();
-    Set<UserGroup> userGroups = new HashSet<UserGroup>();
+    final Set<UserGroup> userGroups = new HashSet<>();
     UserGroup userGroup = _userManager.getUserGroup("testusergroup");
     if (userGroup == null) {
       userGroup = new UserGroup(null, "testusergroup");
@@ -82,14 +77,14 @@ public class HibernateUserManagerTest extends AbstractDbTest {
     userGroup.getUsers().add(user);
     user.setUserGroups(userGroups);
     _userManager.addUser(user);
-    
+
     // Update
     user.setPassword("modifiedtestpw");
     _userManager.updateUser(user);
-    user = _userManager.getUser("testuser"); 
+    user = _userManager.getUser("testuser");
     assertNotNull(user);
     assertTrue(user.checkPassword("modifiedtestpw"));
-    
+
     // Delete
     _userManager.deleteUser(user);
     user = _userManager.getUser("testuser");
@@ -105,33 +100,33 @@ public class HibernateUserManagerTest extends AbstractDbTest {
     // Try to get non-existent
     UserGroup userGroup = _userManager.getUserGroup("nonexistentusergroup");
     assertNull(userGroup);
-    
+
     // Clear DB as necessary
     userGroup = _userManager.getUserGroup("testusergroup");
     if (userGroup != null) {
       _userManager.deleteUserGroup(userGroup);
     }
-    
+
     // Add
     userGroup = new UserGroup(null, "testusergroup");
-    
+
     Authority authority = _userManager.getAuthority("testauthority");
     if (authority == null) {
       authority = new Authority("testauthority");
       _userManager.addAuthority(authority);
     }
     userGroup.getAuthorities().add(authority);
-    
+
     User user = _userManager.getUser("testuser");
     if (user == null) {
       user = getTestUser();
       _userManager.addUser(user);
     }
-    
+
     _userManager.addUserGroup(userGroup);
-    
+
     // Update
-    Authority additionalAuthority = _userManager.getAuthority("additionalauthority"); 
+    Authority additionalAuthority = _userManager.getAuthority("additionalauthority");
     if (additionalAuthority == null) {
       additionalAuthority = new Authority("additionalauthority");
       _userManager.addAuthority(additionalAuthority);
@@ -141,7 +136,7 @@ public class HibernateUserManagerTest extends AbstractDbTest {
     userGroup = _userManager.getUserGroup("testusergroup");
     assertNotNull(userGroup);
     assertTrue(userGroup.getAuthorities().contains(additionalAuthority));
-    
+
     // Delete
     _userManager.deleteUserGroup(userGroup);
     userGroup  = _userManager.getUserGroup("testusergroup");
@@ -153,17 +148,17 @@ public class HibernateUserManagerTest extends AbstractDbTest {
     // Try to get non-existent
     Authority authority = _userManager.getAuthority("nonexistentauthority");
     assertNull(authority);
-    
+
     // Clear DB as necessary
     authority = _userManager.getAuthority("authority");
     if (authority != null) {
       _userManager.deleteAuthority(authority);
     }
-    
+
     // Add
     authority = new Authority("regex");
     _userManager.addAuthority(authority);
-    
+
     // Update
     authority.setRegex("newregex");
     _userManager.updateAuthority(authority);
@@ -172,7 +167,7 @@ public class HibernateUserManagerTest extends AbstractDbTest {
     authority = _userManager.getAuthority("newregex");
     assertNotNull(authority);
     assertEquals("newregex", authority.getRegex());
-    
+
     // Delete
     _userManager.deleteAuthority(authority);
     authority = _userManager.getAuthority("newregex");

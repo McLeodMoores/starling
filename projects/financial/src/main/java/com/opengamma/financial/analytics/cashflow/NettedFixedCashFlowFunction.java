@@ -18,6 +18,7 @@ import org.threeten.bp.LocalDate;
 import com.google.common.collect.Iterables;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.NettedFixedCashFlowFromDateCalculator;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.region.RegionSource;
@@ -37,12 +38,11 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.conversion.BondSecurityConverter;
 import com.opengamma.financial.analytics.conversion.CashSecurityConverter;
-import com.opengamma.financial.analytics.conversion.FRASecurityConverterDeprecated;
+import com.opengamma.financial.analytics.conversion.FRASecurityConverter;
 import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.ForexSecurityConverter;
-import com.opengamma.financial.analytics.conversion.InterestRateFutureSecurityConverterDeprecated;
-import com.opengamma.financial.analytics.conversion.SwapSecurityConverterDeprecated;
-import com.opengamma.financial.convention.ConventionBundleSource;
+import com.opengamma.financial.analytics.conversion.InterestRateFutureSecurityConverter;
+import com.opengamma.financial.analytics.conversion.SwapSecurityConverter;
 import com.opengamma.financial.currency.CurrencyPairs;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityTypes;
@@ -53,12 +53,14 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class NettedFixedCashFlowFunction extends AbstractFunction {
 
-  /** Property name for the date field */
+  /** Property name for the date field. */
   public static final String PROPERTY_DATE = "Date";
-  private static final Logger s_logger = LoggerFactory.getLogger(NettedFixedCashFlowFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NettedFixedCashFlowFunction.class);
   private static final NettedFixedCashFlowFromDateCalculator NETTING_CASH_FLOW_CALCULATOR = NettedFixedCashFlowFromDateCalculator.getInstance();
 
   @Override
@@ -66,17 +68,23 @@ public class NettedFixedCashFlowFunction extends AbstractFunction {
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context); // TODO [PLAT-5966] Remove
+    final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final HistoricalTimeSeriesResolver timeSeriesResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
     final CurrencyPairs baseQuotePairs = OpenGammaCompilationContext.getCurrencyPairsSource(context).getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
     final CashSecurityConverter cashConverter = new CashSecurityConverter(holidaySource, regionSource);
-    final FRASecurityConverterDeprecated fraConverter = new FRASecurityConverterDeprecated(holidaySource, regionSource, conventionSource);
-    final SwapSecurityConverterDeprecated swapConverter = new SwapSecurityConverterDeprecated(holidaySource, conventionSource, regionSource, false);
+    final FRASecurityConverter fraConverter = new FRASecurityConverter(securitySource, holidaySource, regionSource, conventionSource);
+    final SwapSecurityConverter swapConverter = new SwapSecurityConverter(securitySource, holidaySource, conventionSource, regionSource);
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
-    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
+    final InterestRateFutureSecurityConverter irFutureConverter = new InterestRateFutureSecurityConverter(securitySource, holidaySource, conventionSource,
+        regionSource);
     final ForexSecurityConverter fxConverter = new ForexSecurityConverter(baseQuotePairs);
-    return new Compiled(FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().cashSecurityVisitor(cashConverter).fraSecurityVisitor(fraConverter)
-        .swapSecurityVisitor(swapConverter).interestRateFutureSecurityVisitor(irFutureConverter).bondSecurityVisitor(bondConverter).fxForwardVisitor(fxConverter)
+    return new Compiled(FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder()
+        .cashSecurityVisitor(cashConverter)
+        .fraSecurityVisitor(fraConverter)
+        .swapSecurityVisitor(swapConverter)
+        .interestRateFutureSecurityVisitor(irFutureConverter)
+        .bondSecurityVisitor(bondConverter)
+        .fxForwardVisitor(fxConverter)
         .nonDeliverableFxForwardVisitor(fxConverter).create(), new FixedIncomeConverterDataProvider(conventionSource, securitySource, timeSeriesResolver));
   }
 
@@ -100,18 +108,19 @@ public class NettedFixedCashFlowFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final ValueProperties constraints = desiredValue.getConstraints();
       if (!OpenGammaCompilationContext.isPermissive(context)) {
         final String date = constraints.getStrictValue(PROPERTY_DATE);
         if (date == null) {
-          s_logger.error("Must supply a date from which to calculate the cash-flows");
+          LOGGER.error("Must supply a date from which to calculate the cash-flows");
           return null;
         }
         try {
           LocalDate.parse(date);
         } catch (final DateTimeException e) {
-          s_logger.error("Could not parse date {} - must be in form YYYY-MM-DD", date);
+          LOGGER.error("Could not parse date {} - must be in form YYYY-MM-DD", date);
           return null;
         }
       }
@@ -130,12 +139,13 @@ public class NettedFixedCashFlowFunction extends AbstractFunction {
     // FunctionInvoker
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       final InstrumentDefinition<?> definition = ((FinancialSecurity) target.getSecurity()).accept(_visitor);
       final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
       final ValueProperties properties = desiredValue.getConstraints();
       final String dateString = properties.getSingleValue(PROPERTY_DATE);
-      final LocalDate date = (dateString != null) ? LocalDate.parse(dateString) : LocalDate.now(executionContext.getValuationClock());
+      final LocalDate date = dateString != null ? LocalDate.parse(dateString) : LocalDate.now(executionContext.getValuationClock());
       final Map<LocalDate, MultipleCurrencyAmount> cashFlows;
       if (inputs.getAllValues().isEmpty()) {
         cashFlows = NETTING_CASH_FLOW_CALCULATOR.getCashFlows(definition, date);
@@ -147,8 +157,9 @@ public class NettedFixedCashFlowFunction extends AbstractFunction {
           cashFlows = NETTING_CASH_FLOW_CALCULATOR.getCashFlows(definition, fixingSeries.getTimeSeries(), date);
         }
       }
-      return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.NETTED_FIXED_CASH_FLOWS, target.toSpecification(), properties), new FixedPaymentMatrix(
-          cashFlows)));
+      return Collections.singleton(
+          new ComputedValue(new ValueSpecification(ValueRequirementNames.NETTED_FIXED_CASH_FLOWS, target.toSpecification(), properties), new FixedPaymentMatrix(
+              cashFlows)));
     }
 
   }

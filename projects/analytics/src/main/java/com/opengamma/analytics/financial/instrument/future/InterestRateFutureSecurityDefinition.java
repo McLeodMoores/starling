@@ -9,6 +9,8 @@ import org.apache.commons.lang.ObjectUtils;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.ExpiredException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
@@ -54,23 +56,34 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
   private final String _name;
   /**
    * The holiday calendar.
-   *  @deprecated Deprecated since 2.2.0.M17
+   *
+   * @deprecated Deprecated since 2.2.0.M17
    */
   @Deprecated
   private final Calendar _calendar;
 
   /**
    * Constructor.
-   * @param lastTradingDate The last trading date, not null
-   * @param fixingPeriodStartDate The start date of the Ibor fixing period, not null
-   * @param fixingPeriodEndDate The end date of the Ibor fixing period, not null. Must be after the fixing period start date
-   * @param iborIndex The Ibor index, not null
-   * @param notional  The notional
-   * @param paymentAccrualFactor The payment accrual factor, not negative or zero
-   * @param name The name, not null
-   * @param calendar The holiday calendar, not null
+   *
+   * @param lastTradingDate
+   *          The last trading date, not null
+   * @param fixingPeriodStartDate
+   *          The start date of the Ibor fixing period, not null
+   * @param fixingPeriodEndDate
+   *          The end date of the Ibor fixing period, not null. Must be after the fixing period start date
+   * @param iborIndex
+   *          The Ibor index, not null
+   * @param notional
+   *          The notional
+   * @param paymentAccrualFactor
+   *          The payment accrual factor, not negative or zero
+   * @param name
+   *          The name, not null
+   * @param calendar
+   *          The holiday calendar, not null
    */
-  public InterestRateFutureSecurityDefinition(final ZonedDateTime lastTradingDate, final ZonedDateTime fixingPeriodStartDate, final ZonedDateTime fixingPeriodEndDate, final IborIndex iborIndex,
+  public InterestRateFutureSecurityDefinition(final ZonedDateTime lastTradingDate, final ZonedDateTime fixingPeriodStartDate,
+      final ZonedDateTime fixingPeriodEndDate, final IborIndex iborIndex,
       final double notional, final double paymentAccrualFactor, final String name, final Calendar calendar) {
     super(lastTradingDate);
     ArgumentChecker.notNull(lastTradingDate, "Last trading date");
@@ -93,14 +106,22 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Constructor of the interest rate future security.
-   * @param lastTradingDate Future last trading date.
-   * @param iborIndex Ibor index associated to the future.
-   * @param notional Future notional.
-   * @param paymentAccrualFactor Future payment accrual factor.
-   * @param name Future name.
-   * @param calendar The holiday calendar for the index.
+   *
+   * @param lastTradingDate
+   *          Future last trading date.
+   * @param iborIndex
+   *          Ibor index associated to the future.
+   * @param notional
+   *          Future notional.
+   * @param paymentAccrualFactor
+   *          Future payment accrual factor.
+   * @param name
+   *          Future name.
+   * @param calendar
+   *          The holiday calendar for the index.
    */
-  public InterestRateFutureSecurityDefinition(final ZonedDateTime lastTradingDate, final IborIndex iborIndex, final double notional, final double paymentAccrualFactor,
+  public InterestRateFutureSecurityDefinition(final ZonedDateTime lastTradingDate, final IborIndex iborIndex, final double notional,
+      final double paymentAccrualFactor,
       final String name, final Calendar calendar) {
     super(lastTradingDate);
     ArgumentChecker.notNull(lastTradingDate, "Last trading date");
@@ -109,7 +130,8 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
     _iborIndex = iborIndex;
     _fixingPeriodStartDate = ScheduleCalculator.getAdjustedDate(lastTradingDate, _iborIndex.getSpotLag(), calendar);
     _fixingPeriodEndDate = ScheduleCalculator
-        .getAdjustedDate(_fixingPeriodStartDate, _iborIndex.getTenor(), _iborIndex.getBusinessDayConvention(), calendar, _iborIndex.isEndOfMonth());
+        .getAdjustedDate(_fixingPeriodStartDate, _iborIndex.getTenor(), _iborIndex.getBusinessDayConvention(), calendar,
+            _iborIndex.isEndOfMonth());
     _fixingPeriodAccrualFactor = _iborIndex.getDayCount().getDayCountFraction(_fixingPeriodStartDate, _fixingPeriodEndDate, calendar);
     _notional = notional;
     _paymentAccrualFactor = paymentAccrualFactor;
@@ -119,25 +141,63 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Build a interest rate futures transaction from the fixing period start date.
-   * @param fixingPeriodStartDate The start date of the fixing period.
-   * @param iborIndex The Ibor index associated to the future.
-   * @param notional Future notional.
-   * @param paymentAccrualFactor Future payment accrual factor.
-   * @param name The future name.
-   * @param calendar The holiday calendar for the ibor leg.
+   *
+   * @param fixingPeriodStartDate
+   *          The start date of the fixing period.
+   * @param iborIndex
+   *          The Ibor index associated to the future.
+   * @param notional
+   *          Future notional.
+   * @param paymentAccrualFactor
+   *          Future payment accrual factor.
+   * @param name
+   *          The future name.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
    * @return The interest rate futures.
    */
-  public static InterestRateFutureSecurityDefinition fromFixingPeriodStartDate(final ZonedDateTime fixingPeriodStartDate, final IborIndex iborIndex, final double notional,
+  public static InterestRateFutureSecurityDefinition fromFixingPeriodStartDate(final ZonedDateTime fixingPeriodStartDate,
+      final IborIndex iborIndex,
+      final double notional,
       final double paymentAccrualFactor, final String name, final Calendar calendar) {
     ArgumentChecker.notNull(fixingPeriodStartDate, "Fixing period start date");
     ArgumentChecker.notNull(iborIndex, "Ibor index");
     final ZonedDateTime lastTradingDate = ScheduleCalculator.getAdjustedDate(fixingPeriodStartDate, -iborIndex.getSpotLag(), calendar);
     final ZonedDateTime fixingPeriodEndDate = ScheduleCalculator.getAdjustedDate(fixingPeriodStartDate, iborIndex, calendar);
-    return new InterestRateFutureSecurityDefinition(lastTradingDate, fixingPeriodStartDate, fixingPeriodEndDate, iborIndex, notional, paymentAccrualFactor, name, calendar);
+    return new InterestRateFutureSecurityDefinition(lastTradingDate, fixingPeriodStartDate, fixingPeriodEndDate, iborIndex, notional,
+        paymentAccrualFactor,
+        name, calendar);
   }
 
-  /** Scales notional to 1.0 in curve fitting to provide better conditioning of the Jacobian
-   * @deprecated Deprecated since 2.2.0.M17 */
+  /**
+   * Build a interest rate futures transaction from the fixing period start date.
+   *
+   * @param fixingPeriodStartDate
+   *          The start date of the fixing period.
+   * @param iborIndex
+   *          The Ibor index associated to the future.
+   * @param notional
+   *          Future notional.
+   * @param paymentAccrualFactor
+   *          Future payment accrual factor.
+   * @param name
+   *          The future name.
+   * @param calendar
+   *          The holiday calendar for the ibor leg.
+   * @return The interest rate futures.
+   */
+  public static InterestRateFutureSecurityDefinition fromFixingPeriodStartDate(final ZonedDateTime fixingPeriodStartDate,
+      final IborIndex iborIndex,
+      final double notional,
+      final double paymentAccrualFactor, final String name, final WorkingDayCalendar calendar) {
+    return fromFixingPeriodStartDate(fixingPeriodStartDate, iborIndex, notional, paymentAccrualFactor, name, CalendarAdapter.of(calendar));
+  }
+
+  /**
+   * Scales notional to 1.0 in curve fitting to provide better conditioning of the Jacobian.
+   *
+   * @deprecated Deprecated since 2.2.0.M17
+   */
   @Deprecated
   public void setUnitNotional() {
     _notional = 1.0;
@@ -145,6 +205,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the Ibor index associated to the future.
+   *
    * @return The Ibor index
    */
   public IborIndex getIborIndex() {
@@ -153,6 +214,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the _unitAmount. This represents the PNL of a single long contract if its price increases by 1.0. Also known as the 'Point Value'.
+   *
    * @return the _unitAmount
    */
   public double getUnitAmount() {
@@ -161,6 +223,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the fixing period of the reference Ibor starting date.
+   *
    * @return The fixing period starting date
    */
   public ZonedDateTime getFixingPeriodStartDate() {
@@ -169,6 +232,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the fixing period of the reference Ibor end date.
+   *
    * @return The fixing period end date.
    */
   public ZonedDateTime getFixingPeriodEndDate() {
@@ -177,6 +241,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the fixing period of the reference Ibor accrual factor.
+   *
    * @return The Fixing period accrual factor.
    */
   public double getFixingPeriodAccrualFactor() {
@@ -185,6 +250,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the future notional.
+   *
    * @return The notional.
    */
   public double getNotional() {
@@ -193,6 +259,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the future payment accrual factor.
+   *
    * @return The future payment accrual factor.
    */
   public double getPaymentAccrualFactor() {
@@ -201,6 +268,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the future name.
+   *
    * @return The name
    */
   public String getName() {
@@ -209,6 +277,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * The future currency.
+   *
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -217,6 +286,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * Gets the holiday calendar.
+   *
    * @return The holiday calendar
    * @deprecated Deprecated since 2.2.0.M17
    */
@@ -227,6 +297,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -244,7 +315,9 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
     final double lastTradingTime = TimeCalculator.getTimeBetween(dateTime, getLastTradingDate());
     final double fixingPeriodStartTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodStartDate());
     final double fixingPeriodEndTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodEndDate());
-    final InterestRateFutureSecurity future = new InterestRateFutureSecurity(lastTradingTime, _iborIndex, fixingPeriodStartTime, fixingPeriodEndTime, _fixingPeriodAccrualFactor, _notional,
+    final InterestRateFutureSecurity future = new InterestRateFutureSecurity(lastTradingTime, _iborIndex, fixingPeriodStartTime,
+        fixingPeriodEndTime,
+        _fixingPeriodAccrualFactor, _notional,
         _paymentAccrualFactor, _name, discountingCurveName, forwardCurveName);
     return future;
   }
@@ -260,7 +333,9 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
     final double lastTradingTime = TimeCalculator.getTimeBetween(dateTime, getLastTradingDate());
     final double fixingPeriodStartTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodStartDate());
     final double fixingPeriodEndTime = TimeCalculator.getTimeBetween(dateTime, getFixingPeriodEndDate());
-    final InterestRateFutureSecurity future = new InterestRateFutureSecurity(lastTradingTime, _iborIndex, fixingPeriodStartTime, fixingPeriodEndTime, _fixingPeriodAccrualFactor, _notional,
+    final InterestRateFutureSecurity future = new InterestRateFutureSecurity(lastTradingTime, _iborIndex, fixingPeriodStartTime,
+        fixingPeriodEndTime,
+        _fixingPeriodAccrualFactor, _notional,
         _paymentAccrualFactor, _name);
     return future;
   }
@@ -292,15 +367,15 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_fixingPeriodAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _fixingPeriodEndDate.hashCode();
     result = prime * result + _fixingPeriodStartDate.hashCode();
     result = prime * result + _iborIndex.hashCode();
     result = prime * result + _name.hashCode();
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_paymentAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

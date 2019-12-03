@@ -97,6 +97,10 @@
 <listEntry value="com.opengamma.analytics.financial.forex.method"/>
 <listEntry value="com.opengamma.analytics.financial.forex.provider"/>
 <listEntry value="com.opengamma.analytics.financial.greeks"/>
+<listEntry value="com.opengamma.analytics.financial.horizon"/>
+<listEntry value="com.opengamma.analytics.financial.horizon.constantspread"/>
+<listEntry value="com.opengamma.analytics.financial.horizon.forwardslide"/>
+<listEntry value="com.opengamma.analytics.financial.horizon.rolldown"/>	
 <listEntry value="com.opengamma.analytics.financial.instrument"/>
 <listEntry value="com.opengamma.analytics.financial.instrument.annuity"/>
 <listEntry value="com.opengamma.analytics.financial.instrument.bond"/>
@@ -188,6 +192,11 @@
 <listEntry value="com.opengamma.analytics.financial.provider.calculator.sabrstirfutures"/>
 <listEntry value="com.opengamma.analytics.financial.provider.calculator.sabrswaption"/>
 <listEntry value="com.opengamma.analytics.financial.provider.curve"/>
+<listEntry value="com.opengamma.analytics.financial.provider.curve.bond"/>
+<listEntry value="com.opengamma.analytics.financial.provider.curve.commodity"/>
+<listEntry value="com.opengamma.analytics.financial.provider.curve.directforward"/>
+<listEntry value="com.opengamma.analytics.financial.provider.curve.discounting"/>
+<listEntry value="com.opengamma.analytics.financial.provider.curve.fxforwardpoints"/>
 <listEntry value="com.opengamma.analytics.financial.provider.curve.hullwhite"/>
 <listEntry value="com.opengamma.analytics.financial.provider.curve.inflation"/>
 <listEntry value="com.opengamma.analytics.financial.provider.curve.issuer"/>

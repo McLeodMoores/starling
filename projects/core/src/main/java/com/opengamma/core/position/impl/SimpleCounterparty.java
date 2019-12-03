@@ -46,7 +46,7 @@ public class SimpleCounterparty extends DirectBean
   /**
    * The counterparty identifier.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalId _externalId;
 
   /**
@@ -57,10 +57,10 @@ public class SimpleCounterparty extends DirectBean
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param counterpartyId  the identifier, not null
    */
-  public SimpleCounterparty(ExternalId counterpartyId) {
+  public SimpleCounterparty(final ExternalId counterpartyId) {
     ArgumentChecker.notNull(counterpartyId, "counterpartyId");
     setExternalId(counterpartyId);
   }
@@ -89,6 +89,7 @@ public class SimpleCounterparty extends DirectBean
    * Gets the counterparty identifier.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalId getExternalId() {
     return _externalId;
   }

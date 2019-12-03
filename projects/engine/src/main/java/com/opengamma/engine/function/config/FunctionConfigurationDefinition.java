@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.config;
@@ -29,7 +29,7 @@ import com.opengamma.util.ArgumentChecker;
 @Config(description = "Function configuration definition", group = ConfigGroups.MISC)
 public final class FunctionConfigurationDefinition {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FunctionConfigurationDefinition.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunctionConfigurationDefinition.class);
 
   /**
    * Function bundle name.
@@ -49,15 +49,15 @@ public final class FunctionConfigurationDefinition {
   private final List<ParameterizedFunctionConfiguration> _parameterizedFunctions;
 
   /**
-   * Creates an instance
-   * 
+   * Creates an instance.
+   *
    * @param name the name of the function configuration definition, not null.
    * @param functionConfigurationDefinitions the names of linked function configuration definition documents, not null.
    * @param staticFunctions the list of static function configurations, not null.
    * @param parameterizedFunctions the list of parameterized function configurations, not null.
    */
-  public FunctionConfigurationDefinition(final String name, final List<String> functionConfigurationDefinitions, final List<StaticFunctionConfiguration> staticFunctions,
-      final List<ParameterizedFunctionConfiguration> parameterizedFunctions) {
+  public FunctionConfigurationDefinition(final String name, final List<String> functionConfigurationDefinitions,
+      final List<StaticFunctionConfiguration> staticFunctions, final List<ParameterizedFunctionConfiguration> parameterizedFunctions) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(functionConfigurationDefinitions, "functionConfigurationDefinitions");
     ArgumentChecker.notNull(staticFunctions, "staticFunctions");
@@ -71,7 +71,7 @@ public final class FunctionConfigurationDefinition {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name
    */
   public String getName() {
@@ -80,7 +80,7 @@ public final class FunctionConfigurationDefinition {
 
   /**
    * Gets the functionConfigurationDefinitions.
-   * 
+   *
    * @return the functionConfigurationDefinitions
    */
   public List<String> getFunctionConfigurationDefinitions() {
@@ -89,7 +89,7 @@ public final class FunctionConfigurationDefinition {
 
   /**
    * Gets the staticFunctions.
-   * 
+   *
    * @return the staticFunctions
    */
   public List<StaticFunctionConfiguration> getStaticFunctions() {
@@ -98,7 +98,7 @@ public final class FunctionConfigurationDefinition {
 
   /**
    * Gets the parameterizedFunctions.
-   * 
+   *
    * @return the parameterizedFunctions
    */
   public List<ParameterizedFunctionConfiguration> getParameterizedFunctions() {
@@ -111,7 +111,7 @@ public final class FunctionConfigurationDefinition {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj);
   }
 
@@ -121,8 +121,8 @@ public final class FunctionConfigurationDefinition {
   }
 
   /**
-   * Creates a FunctionConfigurationDefinition from a given FunctionConfigurationSource
-   * 
+   * Creates a FunctionConfigurationDefinition from a given FunctionConfigurationSource.
+   *
    * @param name the definition name, not-null.
    * @param configurationSource the function configuration source, not-null.
    * @return the created function configuration definition, not-null.
@@ -132,8 +132,8 @@ public final class FunctionConfigurationDefinition {
   }
 
   /**
-   * Creates a static FunctionConfigurationDefinition from a given FunctionConfigurationSource
-   * 
+   * Creates a static FunctionConfigurationDefinition from a given FunctionConfigurationSource.
+   *
    * @param name the definition name, not-null.
    * @param linkedConfigs the list of linked configs, not-null.
    * @param configurationSource the function configuration source, not-null.
@@ -146,16 +146,16 @@ public final class FunctionConfigurationDefinition {
 
     final List<FunctionConfiguration> functions = configurationSource.getFunctionConfiguration(Instant.now()).getFunctions();
 
-    List<StaticFunctionConfiguration> staticFunctions = Lists.newArrayList();
-    List<ParameterizedFunctionConfiguration> parameterizedFunctions = Lists.newArrayList();
+    final List<StaticFunctionConfiguration> staticFunctions = Lists.newArrayList();
+    final List<ParameterizedFunctionConfiguration> parameterizedFunctions = Lists.newArrayList();
 
-    for (FunctionConfiguration functionConfiguration : functions) {
+    for (final FunctionConfiguration functionConfiguration : functions) {
       if (functionConfiguration instanceof ParameterizedFunctionConfiguration) {
         parameterizedFunctions.add((ParameterizedFunctionConfiguration) functionConfiguration);
       } else if (functionConfiguration instanceof StaticFunctionConfiguration) {
         staticFunctions.add((StaticFunctionConfiguration) functionConfiguration);
       } else {
-        s_logger.warn("Unsupported FunctionConfiguration type {} ", functionConfiguration.getClass());
+        LOGGER.warn("Unsupported FunctionConfiguration type {} ", functionConfiguration.getClass());
       }
     }
 

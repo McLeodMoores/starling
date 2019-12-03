@@ -18,22 +18,22 @@ public final class JerseyRestResourceFactory extends RestResourceFactory impleme
 
   /**
    * Creates an instance of the factory.
-   * 
+   *
    * @param type  the type to create, not null
    * @param arguments  the arguments
    */
-  public JerseyRestResourceFactory(Class<?> type, Object... arguments) {
+  public JerseyRestResourceFactory(final Class<?> type, final Object... arguments) {
     super(type, arguments);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public IoCComponentProvider getComponentProvider(Class<?> clazz) {
+  public IoCComponentProvider getComponentProvider(final Class<?> clazz) {
     return getComponentProvider(null, clazz);
   }
 
   @Override
-  public IoCComponentProvider getComponentProvider(ComponentContext cc, final Class<?> clazz) {
+  public IoCComponentProvider getComponentProvider(final ComponentContext cc, final Class<?> clazz) {
     if (clazz.equals(getType())) {
       return this;
     }
@@ -52,7 +52,7 @@ public final class JerseyRestResourceFactory extends RestResourceFactory impleme
   }
 
   @Override
-  public Object getInjectableInstance(Object o) {
+  public Object getInjectableInstance(final Object o) {
     return o;
   }
 

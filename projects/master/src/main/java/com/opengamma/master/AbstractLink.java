@@ -23,7 +23,7 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.opengamma.core.Link;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -36,18 +36,17 @@ import com.opengamma.util.PublicAPI;
 /**
  * A flexible link between two parts of the system.
  * <p>
- * A link represents a connection from one entity to another in the object model.
- * The connection can be held by an {@code ObjectId} or an {@code ExternalIdBundle}.
- * The link also stores a resolved reference to the object itself.
+ * A link represents a connection from one entity to another in the object model. The connection can be held by an {@code ObjectId} or an
+ * {@code ExternalIdBundle}. The link also stores a resolved reference to the object itself.
  * <p>
  * This class is mutable and not thread-safe.
- * 
- * @param <T> the type being linked to 
+ *
+ * @param <T>
+ *          the type being linked to
  */
 @PublicAPI
 @BeanDefinition
-public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectBean
-    implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
+public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectBean implements Link<T>, Iterable<ExternalId>, Serializable, Cloneable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -55,13 +54,12 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
   /**
    * The object identifier that strongly references the target.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ObjectId _objectId;
   /**
-   * The external identifier bundle that references the target.
-   * An empty bundle is used if not referencing a target by external bundle.
+   * The external identifier bundle that references the target. An empty bundle is used if not referencing a target by external bundle.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalId = ExternalIdBundle.EMPTY;
   /**
    * The resolved target.
@@ -77,8 +75,9 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
 
   /**
    * Creates a link from a strong object identifier.
-   * 
-   * @param objectId  the object identifier, not null
+   *
+   * @param objectId
+   *          the object identifier, not null
    */
   public AbstractLink(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
@@ -86,10 +85,10 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
   }
 
   /**
-   * Creates a link from a strong unique identifier, only
-   * storing the object identifier.
-   * 
-   * @param uniqueId  the unique identifier, not null
+   * Creates a link from a strong unique identifier, only storing the object identifier.
+   *
+   * @param uniqueId
+   *          the unique identifier, not null
    */
   public AbstractLink(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
@@ -98,8 +97,9 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
 
   /**
    * Creates a link from an external identifier bundle.
-   * 
-   * @param bundle  the identifier bundle, not null
+   *
+   * @param bundle
+   *          the identifier bundle, not null
    */
   public AbstractLink(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
@@ -107,69 +107,68 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
   }
 
   /**
-   * Creates a link from the target object.
-   * The strong reference is set using {@link #setAndLockTarget}.
-   * 
-   * @param target  the resolved target, not null
+   * Creates a link from the target object. The strong reference is set using {@link #setAndLockTarget}.
+   *
+   * @param target
+   *          the resolved target, not null
    */
   public AbstractLink(final T target) {
     ArgumentChecker.notNull(target, "target");
     setAndLockTarget(target);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Sets the resolved target, locking it for future resolution by setting the
-   * object identifier and clearing the external identifier bundle.
-   * If the target has no unique identifier, then no change is made to the references.
-   * 
-   * @param target  the target, not null
+   * Sets the resolved target, locking it for future resolution by setting the object identifier and clearing the external identifier bundle. If the target has
+   * no unique identifier, then no change is made to the references.
+   *
+   * @param target
+   *          the target, not null
    */
-  public void setAndLockTarget(T target) {
+  public void setAndLockTarget(final T target) {
     ArgumentChecker.notNull(target, "target");
     setTarget(target);
     lockTarget();
   }
 
   /**
-   * Locks the resolved target for future resolution by setting the
-   * object identifier and clearing the external identifier bundle.
-   * If the target has no unique identifier, then no change is made to the references.
+   * Locks the resolved target for future resolution by setting the object identifier and clearing the external identifier bundle. If the target has no unique
+   * identifier, then no change is made to the references.
    * <p>
-   * The target of a link is effectively treated as transient state.
-   * This method updates the object identifier based on the resolved target so
-   * that true state of the link is up to date.
+   * The target of a link is effectively treated as transient state. This method updates the object identifier based on the resolved target so that true state
+   * of the link is up to date.
    */
   public void lockTarget() {
-    T target = getTarget();
+    final T target = getTarget();
     if (target == null) {
       throw new IllegalStateException("Cannot lock a null target");
     }
-    UniqueId uniqueId = target.getUniqueId();
+    final UniqueId uniqueId = target.getUniqueId();
     if (uniqueId != null) {
       setObjectId(uniqueId.getObjectId());
       setExternalId(ExternalIdBundle.EMPTY);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the best available representation.
-   * 
+   *
    * @return the best available representation, not null
    */
   public Object getBest() {
-    T target = getTarget();
-    ObjectId objectId = getObjectId();
-    ExternalIdBundle bundle = getExternalId();
-    return Objects.firstNonNull(target, Objects.firstNonNull(objectId, bundle));
+    final T target = getTarget();
+    final ObjectId objectId = getObjectId();
+    final ExternalIdBundle bundle = getExternalId();
+    return MoreObjects.firstNonNull(target, MoreObjects.firstNonNull(objectId, bundle));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle.
-   * 
-   * @param externalId  the identifier to add, not null
+   *
+   * @param externalId
+   *          the identifier to add, not null
    */
   public void addExternalId(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
@@ -178,18 +177,19 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
 
   /**
    * Adds external identifiers to the bundle.
-   * 
-   * @param externalIds  the identifiers to add, not null
+   *
+   * @param externalIds
+   *          the identifiers to add, not null
    */
   public void addExternalIds(final Iterable<ExternalId> externalIds) {
     ArgumentChecker.notNull(externalIds, "externalIds");
     setExternalId(getExternalId().withExternalIds(externalIds));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Iterates over the external reference identifiers.
-   * 
+   *
    * @return the iterator, not null
    */
   @Override
@@ -198,9 +198,8 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
   }
 
   /**
-   * Gets the set of external reference identifiers.
-   * This excludes the strong object identifier.
-   * 
+   * Gets the set of external reference identifiers. This excludes the strong object identifier.
+   *
    * @return all the identifiers, not null
    */
   public Set<ExternalId> getExternalIds() {
@@ -208,16 +207,15 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
   }
 
   /**
-   * Gets a set of all identifiers, including the object identifier
-   * expressed as an {@code ExternalId}.
-   * 
+   * Gets a set of all identifiers, including the object identifier expressed as an {@code ExternalId}.
+   *
    * @return all the identifiers, not null
    */
   public Set<ExternalId> getAllExternalIds() {
-    Set<ExternalId> identifiers = getExternalId().getExternalIds();
-    ObjectId objectId = getObjectId();
+    final Set<ExternalId> identifiers = getExternalId().getExternalIds();
+    final ObjectId objectId = getObjectId();
     if (objectId != null) {
-      Set<ExternalId> set = new HashSet<ExternalId>(identifiers);
+      final Set<ExternalId> set = new HashSet<>(identifiers);
       set.add(ExternalId.of(ObjectId.EXTERNAL_SCHEME, objectId.toString()));
       return set;
     }
@@ -261,6 +259,7 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
    * Gets the object identifier that strongly references the target.
    * @return the value of the property
    */
+  @Override
   public ObjectId getObjectId() {
     return _objectId;
   }
@@ -283,17 +282,16 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external identifier bundle that references the target.
-   * An empty bundle is used if not referencing a target by external bundle.
+   * Gets the external identifier bundle that references the target. An empty bundle is used if not referencing a target by external bundle.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalId() {
     return _externalId;
   }
 
   /**
-   * Sets the external identifier bundle that references the target.
-   * An empty bundle is used if not referencing a target by external bundle.
+   * Sets the external identifier bundle that references the target. An empty bundle is used if not referencing a target by external bundle.
    * @param externalId  the new value of the property, not null
    */
   public void setExternalId(ExternalIdBundle externalId) {
@@ -303,7 +301,6 @@ public abstract class AbstractLink<T extends UniqueIdentifiable> extends DirectB
 
   /**
    * Gets the the {@code externalId} property.
-   * An empty bundle is used if not referencing a target by external bundle.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalId() {

@@ -8,8 +8,6 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -29,6 +27,8 @@ import com.opengamma.master.region.RegionMaster;
 import com.opengamma.master.region.impl.DataRegionMasterResource;
 import com.opengamma.master.region.impl.EHCachingRegionMaster;
 import com.opengamma.master.region.impl.RemoteRegionMaster;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the combined region master.
@@ -62,14 +62,14 @@ public class EHCachingRegionMasterComponentFactory extends AbstractComponentFact
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> regionuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> regionuration) {
 
-    RegionMaster master = new EHCachingRegionMaster(getClassifier(),
+    final RegionMaster master = new EHCachingRegionMaster(getClassifier(),
                                                     getUnderlying(),
                                                     getCacheManager());
 
     // register
-    ComponentInfo info = new ComponentInfo(RegionMaster.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(RegionMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteRegionMaster.class);

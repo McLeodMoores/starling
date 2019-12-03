@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.fx;
@@ -50,7 +50,7 @@ public class FXVolatilitySwapSecurity extends VolatilitySwapSecurity {
   /**
    * The counter currency.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(set = "manual", validate = "notNull")
   private Currency _counterCurrency;
 
   /**
@@ -61,19 +61,34 @@ public class FXVolatilitySwapSecurity extends VolatilitySwapSecurity {
   }
 
   /**
-   * @param currency The currency, not null
-   * @param notional The notional
-   * @param volatilitySwapType The volatility swap type, not null
-   * @param strike The strike
-   * @param settlementDate The settlement date, not null
-   * @param maturityDate The maturity date, not null
-   * @param annualizationFactor The annualization factor
-   * @param firstObservationDate The first observation date, not null
-   * @param lastObservationDate The last observation date, not null
-   * @param observationFrequency The observation frequency, not null
-   * @param baseCurrency The base currency, not null
-   * @param counterCurrency The counter currency, not null
+   * @param currency
+   *          The currency, not null
+   * @param notional
+   *          The notional
+   * @param volatilitySwapType
+   *          The volatility swap type, not null
+   * @param strike
+   *          The strike
+   * @param settlementDate
+   *          The settlement date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param annualizationFactor
+   *          The annualization factor
+   * @param firstObservationDate
+   *          The first observation date, not null
+   * @param lastObservationDate
+   *          The last observation date, not null
+   * @param observationFrequency
+   *          The observation frequency, not null
+   * @param baseCurrency
+   *          The base currency, not null
+   * @param counterCurrency
+   *          The counter currency, not null
+   * @deprecated Use the constructor that does not take the initial unused
+   *             currency argument
    */
+  @Deprecated
   public FXVolatilitySwapSecurity(final Currency currency, final double notional, final VolatilitySwapType volatilitySwapType,
       final double strike, final ZonedDateTime settlementDate, final ZonedDateTime maturityDate, final double annualizationFactor,
       final ZonedDateTime firstObservationDate, final ZonedDateTime lastObservationDate, final Frequency observationFrequency,
@@ -85,20 +100,69 @@ public class FXVolatilitySwapSecurity extends VolatilitySwapSecurity {
   }
 
   /**
-   * @param currency The currency, not null
-   * @param notional The notional
-   * @param volatilitySwapType The volatility swap type, not null
-   * @param strike The strike
-   * @param settlementDate The settlement date, not null
-   * @param maturityDate The maturity date, not null
-   * @param annualizationFactor The annualization factor
-   * @param firstObservationDate The first observation date, not null
-   * @param lastObservationDate The last observation date, not null
-   * @param observationFrequency The observation frequency, not null
-   * @param underlyingId The id of the underlying fixing series, not null
-   * @param baseCurrency The base currency, not null
-   * @param counterCurrency The counter currency, not null
+   * @param notional
+   *          The notional
+   * @param volatilitySwapType
+   *          The volatility swap type, not null
+   * @param strike
+   *          The strike
+   * @param settlementDate
+   *          The settlement date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param annualizationFactor
+   *          The annualization factor
+   * @param firstObservationDate
+   *          The first observation date, not null
+   * @param lastObservationDate
+   *          The last observation date, not null
+   * @param observationFrequency
+   *          The observation frequency, not null
+   * @param baseCurrency
+   *          The base currency, not null
+   * @param counterCurrency
+   *          The counter currency, not null
    */
+  public FXVolatilitySwapSecurity(final double notional, final VolatilitySwapType volatilitySwapType, final double strike, final ZonedDateTime settlementDate,
+      final ZonedDateTime maturityDate, final double annualizationFactor, final ZonedDateTime firstObservationDate, final ZonedDateTime lastObservationDate,
+      final Frequency observationFrequency, final Currency baseCurrency, final Currency counterCurrency) {
+    super(SECURITY_TYPE, counterCurrency, notional, volatilitySwapType, strike, settlementDate, maturityDate, annualizationFactor, firstObservationDate,
+        lastObservationDate, observationFrequency);
+    setBaseCurrency(baseCurrency);
+    setCounterCurrency(counterCurrency);
+  }
+
+  /**
+   * @param currency
+   *          The currency, not null
+   * @param notional
+   *          The notional
+   * @param volatilitySwapType
+   *          The volatility swap type, not null
+   * @param strike
+   *          The strike
+   * @param settlementDate
+   *          The settlement date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param annualizationFactor
+   *          The annualization factor
+   * @param firstObservationDate
+   *          The first observation date, not null
+   * @param lastObservationDate
+   *          The last observation date, not null
+   * @param observationFrequency
+   *          The observation frequency, not null
+   * @param underlyingId
+   *          The id of the underlying fixing series, not null
+   * @param baseCurrency
+   *          The base currency, not null
+   * @param counterCurrency
+   *          The counter currency, not null
+   * @deprecated Use the constructor that does not take the initial unused
+   *             currency argument
+   */
+  @Deprecated
   public FXVolatilitySwapSecurity(final Currency currency, final double notional, final VolatilitySwapType volatilitySwapType,
       final double strike, final ZonedDateTime settlementDate, final ZonedDateTime maturityDate, final double annualizationFactor,
       final ZonedDateTime firstObservationDate, final ZonedDateTime lastObservationDate, final Frequency observationFrequency,
@@ -107,6 +171,53 @@ public class FXVolatilitySwapSecurity extends VolatilitySwapSecurity {
         annualizationFactor, firstObservationDate, lastObservationDate, observationFrequency, underlyingId);
     setBaseCurrency(baseCurrency);
     setCounterCurrency(counterCurrency);
+  }
+
+  /**
+   * @param notional
+   *          The notional
+   * @param volatilitySwapType
+   *          The volatility swap type, not null
+   * @param strike
+   *          The strike
+   * @param settlementDate
+   *          The settlement date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param annualizationFactor
+   *          The annualization factor
+   * @param firstObservationDate
+   *          The first observation date, not null
+   * @param lastObservationDate
+   *          The last observation date, not null
+   * @param observationFrequency
+   *          The observation frequency, not null
+   * @param underlyingId
+   *          The id of the underlying fixing series, not null
+   * @param baseCurrency
+   *          The base currency, not null
+   * @param counterCurrency
+   *          The counter currency, not null
+   */
+  public FXVolatilitySwapSecurity(final double notional, final VolatilitySwapType volatilitySwapType, final double strike, final ZonedDateTime settlementDate,
+      final ZonedDateTime maturityDate, final double annualizationFactor, final ZonedDateTime firstObservationDate, final ZonedDateTime lastObservationDate,
+      final Frequency observationFrequency, final ExternalId underlyingId, final Currency baseCurrency, final Currency counterCurrency) {
+    super(SECURITY_TYPE, counterCurrency, notional, volatilitySwapType, strike, settlementDate, maturityDate, annualizationFactor, firstObservationDate,
+        lastObservationDate, observationFrequency, underlyingId);
+    setBaseCurrency(baseCurrency);
+    setCounterCurrency(counterCurrency);
+  }
+
+  /**
+   * Sets the counter currency and the currency field of the superclass.
+   * 
+   * @param counterCurrency
+   *          the new value of the property, not null
+   */
+  public void setCounterCurrency(final Currency counterCurrency) {
+    JodaBeanUtils.notNull(counterCurrency, "counterCurrency");
+    this._counterCurrency = counterCurrency;
+    setCurrency(counterCurrency);
   }
 
   //-------------------------------------------------------------------------
@@ -167,15 +278,6 @@ public class FXVolatilitySwapSecurity extends VolatilitySwapSecurity {
    */
   public Currency getCounterCurrency() {
     return _counterCurrency;
-  }
-
-  /**
-   * Sets the counter currency.
-   * @param counterCurrency  the new value of the property, not null
-   */
-  public void setCounterCurrency(Currency counterCurrency) {
-    JodaBeanUtils.notNull(counterCurrency, "counterCurrency");
-    this._counterCurrency = counterCurrency;
   }
 
   /**

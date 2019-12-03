@@ -39,18 +39,18 @@ public class PointSelectorFudgeBuilder implements FudgeBuilder<PointSelector> {
   private static final String SECURITY_TYPES = "securityTypes";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, PointSelector selector) {
-    MutableFudgeMsg msg = serializer.newMessage();
-    MutableFudgeMsg calcConfigsMsg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final PointSelector selector) {
+    final MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg calcConfigsMsg = serializer.newMessage();
     if (selector.getCalculationConfigurationNames() != null) {
-      for (String calcConfigName : selector.getCalculationConfigurationNames()) {
+      for (final String calcConfigName : selector.getCalculationConfigurationNames()) {
         serializer.addToMessage(calcConfigsMsg, null, null, calcConfigName);
       }
       serializer.addToMessage(msg, CALC_CONFIGS, null, calcConfigsMsg);
     }
     if (selector.getIds() != null) {
-      MutableFudgeMsg idsMsg = serializer.newMessage();
-      for (ExternalId id : selector.getIds()) {
+      final MutableFudgeMsg idsMsg = serializer.newMessage();
+      for (final ExternalId id : selector.getIds()) {
         serializer.addToMessage(idsMsg, null, null, id);
       }
       serializer.addToMessage(msg, IDS, null, idsMsg);
@@ -68,8 +68,8 @@ public class PointSelectorFudgeBuilder implements FudgeBuilder<PointSelector> {
       serializer.addToMessage(msg, ID_LIKE_PATTERN, null, selector.getIdLikePattern().pattern());
     }
     if (selector.getSecurityTypes() != null) {
-      MutableFudgeMsg securityTypesMsg = serializer.newMessage();
-      for (String securityType : selector.getSecurityTypes()) {
+      final MutableFudgeMsg securityTypesMsg = serializer.newMessage();
+      for (final String securityType : selector.getSecurityTypes()) {
         serializer.addToMessage(securityTypesMsg, null, null, securityType);
       }
       serializer.addToMessage(msg, SECURITY_TYPES, null, securityTypesMsg);
@@ -78,13 +78,13 @@ public class PointSelectorFudgeBuilder implements FudgeBuilder<PointSelector> {
   }
 
   @Override
-  public PointSelector buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public PointSelector buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     Set<ExternalId> ids;
     if (msg.hasField(IDS)) {
       ids = Sets.newHashSet();
-      FudgeMsg idsMsg = msg.getMessage(IDS);
-      for (FudgeField field : idsMsg) {
-        ExternalId id = deserializer.fieldValueToObject(ExternalId.class, field);
+      final FudgeMsg idsMsg = msg.getMessage(IDS);
+      for (final FudgeField field : idsMsg) {
+        final ExternalId id = deserializer.fieldValueToObject(ExternalId.class, field);
         ids.add(id);
       }
     } else {
@@ -93,7 +93,7 @@ public class PointSelectorFudgeBuilder implements FudgeBuilder<PointSelector> {
 
     ExternalScheme idMatchScheme;
     if (msg.hasField(ID_MATCH_SCHEME)) {
-      String idMatchSchemeStr = deserializer.fieldValueToObject(String.class, msg.getByName(ID_MATCH_SCHEME));
+      final String idMatchSchemeStr = deserializer.fieldValueToObject(String.class, msg.getByName(ID_MATCH_SCHEME));
       idMatchScheme = ExternalScheme.of(idMatchSchemeStr);
     } else {
       idMatchScheme = null;
@@ -101,7 +101,7 @@ public class PointSelectorFudgeBuilder implements FudgeBuilder<PointSelector> {
 
     Pattern idMatchPattern;
     if (msg.hasField(ID_MATCH_PATTERN)) {
-      String idMatchPatternStr = deserializer.fieldValueToObject(String.class, msg.getByName(ID_MATCH_PATTERN));
+      final String idMatchPatternStr = deserializer.fieldValueToObject(String.class, msg.getByName(ID_MATCH_PATTERN));
       idMatchPattern = Pattern.compile(idMatchPatternStr);
     } else {
       idMatchPattern = null;
@@ -109,7 +109,7 @@ public class PointSelectorFudgeBuilder implements FudgeBuilder<PointSelector> {
 
     ExternalScheme idLikeScheme;
     if (msg.hasField(ID_LIKE_SCHEME)) {
-      String idLikeSchemeStr = deserializer.fieldValueToObject(String.class, msg.getByName(ID_LIKE_SCHEME));
+      final String idLikeSchemeStr = deserializer.fieldValueToObject(String.class, msg.getByName(ID_LIKE_SCHEME));
       idLikeScheme = ExternalScheme.of(idLikeSchemeStr);
     } else {
       idLikeScheme = null;
@@ -117,7 +117,7 @@ public class PointSelectorFudgeBuilder implements FudgeBuilder<PointSelector> {
 
     Pattern idLikePattern;
     if (msg.hasField(ID_LIKE_PATTERN)) {
-      String idLikePatternStr = deserializer.fieldValueToObject(String.class, msg.getByName(ID_LIKE_PATTERN));
+      final String idLikePatternStr = deserializer.fieldValueToObject(String.class, msg.getByName(ID_LIKE_PATTERN));
       idLikePattern = Pattern.compile(idLikePatternStr);
     } else {
       idLikePattern = null;
@@ -126,8 +126,8 @@ public class PointSelectorFudgeBuilder implements FudgeBuilder<PointSelector> {
     Set<String> calcConfigNames;
     if (msg.hasField(CALC_CONFIGS)) {
       calcConfigNames = Sets.newHashSet();
-      FudgeMsg calcConfigsMsg = msg.getMessage(CALC_CONFIGS);
-      for (FudgeField field : calcConfigsMsg) {
+      final FudgeMsg calcConfigsMsg = msg.getMessage(CALC_CONFIGS);
+      for (final FudgeField field : calcConfigsMsg) {
         calcConfigNames.add(deserializer.fieldValueToObject(String.class, field));
       }
     } else {
@@ -137,9 +137,9 @@ public class PointSelectorFudgeBuilder implements FudgeBuilder<PointSelector> {
     Set<String> securityTypes;
     if (msg.hasField(SECURITY_TYPES)) {
       securityTypes = Sets.newHashSet();
-      FudgeMsg securityTypesMsg = msg.getMessage(SECURITY_TYPES);
-      for (FudgeField field : securityTypesMsg) {
-        String securityType = deserializer.fieldValueToObject(String.class, field);
+      final FudgeMsg securityTypesMsg = msg.getMessage(SECURITY_TYPES);
+      for (final FudgeField field : securityTypesMsg) {
+        final String securityType = deserializer.fieldValueToObject(String.class, field);
         securityTypes.add(securityType);
       }
     } else {

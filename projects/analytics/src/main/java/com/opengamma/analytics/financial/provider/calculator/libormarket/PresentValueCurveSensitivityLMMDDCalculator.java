@@ -15,7 +15,7 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
  * Calculator of the present value as a multiple currency amount.
  */
 public final class PresentValueCurveSensitivityLMMDDCalculator extends
-    InstrumentDerivativeVisitorAdapter<LiborMarketModelDisplacedDiffusionProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+InstrumentDerivativeVisitorAdapter<LiborMarketModelDisplacedDiffusionProviderInterface, MultipleCurrencyMulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -24,6 +24,7 @@ public final class PresentValueCurveSensitivityLMMDDCalculator extends
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityLMMDDCalculator getInstance() {
@@ -41,10 +42,11 @@ public final class PresentValueCurveSensitivityLMMDDCalculator extends
    */
   private static final SwaptionPhysicalFixedIborLMMDDMethod METHOD_SWT_PHYS = SwaptionPhysicalFixedIborLMMDDMethod.getInstance();
 
-  // -----     Swaption     ------
+  // ----- Swaption ------
 
   @Override
-  public MultipleCurrencyMulticurveSensitivity visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final LiborMarketModelDisplacedDiffusionProviderInterface lmm) {
+  public MultipleCurrencyMulticurveSensitivity visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption,
+      final LiborMarketModelDisplacedDiffusionProviderInterface lmm) {
     return METHOD_SWT_PHYS.presentValueCurveSensitivity(swaption, lmm);
   }
 

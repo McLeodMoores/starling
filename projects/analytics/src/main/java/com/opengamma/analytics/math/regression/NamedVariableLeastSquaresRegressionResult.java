@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class NamedVariableLeastSquaresRegressionResult extends LeastSquaresRegressionResult {
-  private static final Logger s_logger = LoggerFactory.getLogger(NamedVariableLeastSquaresRegressionResult.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NamedVariableLeastSquaresRegressionResult.class);
   private final List<String> _independentVariableNames;
   private final LeastSquaresRegressionResult _result;
   private static final String INTERCEPT_STRING = "Intercept";
@@ -60,7 +60,7 @@ public class NamedVariableLeastSquaresRegressionResult extends LeastSquaresRegre
       throw new IllegalArgumentException("Map was null");
     }
     if (namesAndValues.isEmpty()) {
-      s_logger.warn("Map was empty: returning 0");
+      LOGGER.warn("Map was empty: returning 0");
       return 0.;
     }
     final double[] betas = getBetas();

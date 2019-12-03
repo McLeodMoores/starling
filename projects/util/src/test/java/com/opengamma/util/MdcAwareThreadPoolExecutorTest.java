@@ -23,34 +23,25 @@ import org.testng.annotations.Test;
 
 import com.opengamma.util.test.TestGroup;
 
-
 /**
- * Tests that MdcAwareThreadPoolExecutorTest correctly segregates MDC
- * information from different threads. Prints output to standard out
- * as it's otherwise difficult to check that everything is created by
- * the expected thread.
+ * Tests that MdcAwareThreadPoolExecutorTest correctly segregates MDC information from different threads. Prints output to standard out as it's otherwise
+ * difficult to check that everything is created by the expected thread.
  */
 @Test(groups = TestGroup.UNIT)
 public class MdcAwareThreadPoolExecutorTest {
 
-  private ExecutorService createMdcAwareService(int threads) {
-    return new MdcAwareThreadPoolExecutor(threads,
-                                              threads,
-                                              60,
-                                              TimeUnit.SECONDS,
-                                              new SynchronousQueue<Runnable>(),
-                                              new NamedThreadPoolFactory("mdcAware"));
+  private static ExecutorService createMdcAwareService(final int threads) {
+    return new MdcAwareThreadPoolExecutor(threads, threads, 60, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new NamedThreadPoolFactory("mdcAware"));
   }
 
-  private ExecutorService createStandardService(int threads) {
-    return new ThreadPoolExecutor(threads,
-                                              threads,
-                                              60,
-                                              TimeUnit.SECONDS,
-                                              new SynchronousQueue<Runnable>(),
-                                              new NamedThreadPoolFactory("standard"));
+  private static ExecutorService createStandardService(final int threads) {
+    return new ThreadPoolExecutor(threads, threads, 60, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new NamedThreadPoolFactory("standard"));
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   @Test(enabled = false)
   public void testMdcIdLostWhenUsingStandardPool() throws InterruptedException {
 
@@ -67,6 +58,10 @@ public class MdcAwareThreadPoolExecutorTest {
     assertThat(checkCount.get(), is(3));
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   @Test
   public void testMdcIdLoggedForSingleThread() throws InterruptedException {
 
@@ -79,6 +74,10 @@ public class MdcAwareThreadPoolExecutorTest {
     assertThat(checkCount.get(), is(1));
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   @Test
   public void testCorrectIdLoggedForMultipleThreads() throws InterruptedException {
 
@@ -91,6 +90,10 @@ public class MdcAwareThreadPoolExecutorTest {
     assertThat(checkCount.get(), is(3));
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   @Test
   public void testCorrectIdLoggedForMultipleThreadsWithPoolReuse() throws InterruptedException {
 
@@ -112,48 +115,44 @@ public class MdcAwareThreadPoolExecutorTest {
     assertThat(checkCount.get(), is(12));
   }
 
-  private void createStarterThreads(int qty,
-                                    final ExecutorService service,
-                                    final AtomicInteger checkCount,
-                                    final boolean mdcPropagationExpected) {
+  private static void createStarterThreads(final int qty, final ExecutorService service, final AtomicInteger checkCount, final boolean mdcPropagationExpected) {
 
-    Set<Thread> threads = new HashSet<>();
+    final Set<Thread> threads = new HashSet<>();
     for (int i = 0; i < qty; i++) {
 
       final int value = i;
       threads.add(new Thread(new Runnable() {
         @Override
         public void run() {
-          Map<String, String> contextMap = new HashMap<>();
+          final Map<String, String> contextMap = new HashMap<>();
           contextMap.put("some_key" + value, "somevalue");
           contextMap.put("name", Thread.currentThread().getName());
           System.out.println("Putting MDC values: " + contextMap);
           MDC.setContextMap(contextMap);
-          Map<String, String> expectedContext = mdcPropagationExpected ? contextMap : null;
+          final Map<String, String> expectedContext = mdcPropagationExpected ? contextMap : null;
           service.execute(createCheckJob(expectedContext, checkCount));
         }
       }, "starter" + i));
     }
     System.out.println("Threads created - MDC contains: " + MDC.getCopyOfContextMap());
-    for (Thread thread : threads) {
+    for (final Thread thread : threads) {
       thread.start();
     }
     System.out.println("Threads started - MDC contains: " + MDC.getCopyOfContextMap());
   }
 
-  private Runnable createCheckJob(final Map<String, String> expectedContext, final AtomicInteger checkCount) {
+  private static Runnable createCheckJob(final Map<String, String> expectedContext, final AtomicInteger checkCount) {
 
-    System.out.println("Creating check job on thread - " +  Thread.currentThread().getName() + " MDC: " + MDC.getCopyOfContextMap());
+    System.out.println("Creating check job on thread - " + Thread.currentThread().getName() + " MDC: " + MDC.getCopyOfContextMap());
     return new Runnable() {
       @Override
       public void run() {
-        @SuppressWarnings("unchecked")
-        Map<String, String> mdc = MDC.getCopyOfContextMap();
-        System.out.println("Running on thread-" + Thread.currentThread().getName() + " => " + mdc) ;
+        final Map<String, String> mdc = MDC.getCopyOfContextMap();
+        System.out.println("Running on thread-" + Thread.currentThread().getName() + " => " + mdc);
         try {
           assertThat(mdc, is(expectedContext));
           checkCount.incrementAndGet();
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
           System.out.println(e);
         }
       }

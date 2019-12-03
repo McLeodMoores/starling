@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.instrument.payment;
@@ -27,8 +27,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing an average coupon by weighted mean of index values with difference fixing dates. 
- * The weighted averages over several sub-periods are compounded over the total period.
+ * Class describing an average coupon by weighted mean of index values with difference fixing dates. The weighted averages over several sub-periods are
+ * compounded over the total period.
  */
 public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDefinition
     implements InstrumentDefinitionWithData<Payment, DoubleTimeSeries<ZonedDateTime>> {
@@ -49,18 +49,30 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
   private final double[] _paymentAccrualFactors;
 
   /**
-   * Constructor without start dates and end dates of fixing period
-   * @param currency The coupon currency
-   * @param paymentDate The coupon payment date.
-   * @param accrualStartDate The start date of the accrual period
-   * @param accrualEndDate The end date of the accrual period
-   * @param paymentAccrualFactor The accrual factor of the total accrual period
-   * @param notional The coupon notional
-   * @param paymentAccrualFactors The accrual factors associated to the sub-periods
-   * @param index The coupon Ibor index
-   * @param fixingDates The coupon fixing dates
-   * @param weights The weights for the index
-   * @param iborCalendar The holiday calendar for the index
+   * Constructor without start dates and end dates of fixing period.
+   *
+   * @param currency
+   *          The coupon currency
+   * @param paymentDate
+   *          The coupon payment date.
+   * @param accrualStartDate
+   *          The start date of the accrual period
+   * @param accrualEndDate
+   *          The end date of the accrual period
+   * @param paymentAccrualFactor
+   *          The accrual factor of the total accrual period
+   * @param notional
+   *          The coupon notional
+   * @param paymentAccrualFactors
+   *          The accrual factors associated to the sub-periods
+   * @param index
+   *          The coupon Ibor index
+   * @param fixingDates
+   *          The coupon fixing dates
+   * @param weights
+   *          The weights for the index
+   * @param iborCalendar
+   *          The holiday calendar for the index
    */
   public CouponIborAverageFixingDatesCompoundingDefinition(final Currency currency, final ZonedDateTime paymentDate,
       final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double paymentAccrualFactor,
@@ -96,20 +108,34 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
   }
 
   /**
-   * Constructor with full details
-   * @param currency The coupon currency
-   * @param paymentDate The coupon payment date.
-   * @param accrualStartDate The start date of the accrual period
-   * @param accrualEndDate The end date of the accrual period
-   * @param paymentAccrualFactor The accrual factor of the total accrual period
-   * @param notional The coupon notional
-   * @param paymentAccrualFactors The accrual factors associated to the sub-periods
-   * @param index The coupon Ibor index
-   * @param fixingDates The coupon fixing dates
-   * @param weights The weights for the index
-   * @param fixingPeriodStartDates The start date of the fixing periods
-   * @param fixingPeriodEndDates The end date of the fixing periods
-   * @param fixingPeriodAccrualFactors The accrual factors of fixing periods
+   * Constructor with full details.
+   *
+   * @param currency
+   *          The coupon currency
+   * @param paymentDate
+   *          The coupon payment date.
+   * @param accrualStartDate
+   *          The start date of the accrual period
+   * @param accrualEndDate
+   *          The end date of the accrual period
+   * @param paymentAccrualFactor
+   *          The accrual factor of the total accrual period
+   * @param notional
+   *          The coupon notional
+   * @param paymentAccrualFactors
+   *          The accrual factors associated to the sub-periods
+   * @param index
+   *          The coupon Ibor index
+   * @param fixingDates
+   *          The coupon fixing dates
+   * @param weights
+   *          The weights for the index
+   * @param fixingPeriodStartDates
+   *          The start date of the fixing periods
+   * @param fixingPeriodEndDates
+   *          The end date of the fixing periods
+   * @param fixingPeriodAccrualFactors
+   *          The accrual factors of fixing periods
    */
   public CouponIborAverageFixingDatesCompoundingDefinition(final Currency currency, final ZonedDateTime paymentDate,
       final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double paymentAccrualFactor,
@@ -140,18 +166,30 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
   }
 
   /**
-   * Construct a coupon without start dates and end dates of fixing period
-   * @param currency The coupon currency
-   * @param paymentDate The coupon payment date.
-   * @param accrualStartDate The start date of the accrual period
-   * @param accrualEndDate The end date of the accrual period
-   * @param paymentAccrualFactor The accrual factor of the total accrual period
-   * @param notional The coupon notional
-   * @param paymentAccrualFactors The accrual factors associated to the sub-periods
-   * @param index The coupon Ibor index
-   * @param fixingDates The coupon fixing dates
-   * @param weights The weights for the index
-   * @param iborCalendar The holiday calendar for the index
+   * Construct a coupon without start dates and end dates of fixing period.
+   *
+   * @param currency
+   *          The coupon currency
+   * @param paymentDate
+   *          The coupon payment date.
+   * @param accrualStartDate
+   *          The start date of the accrual period
+   * @param accrualEndDate
+   *          The end date of the accrual period
+   * @param paymentAccrualFactor
+   *          The accrual factor of the total accrual period
+   * @param notional
+   *          The coupon notional
+   * @param paymentAccrualFactors
+   *          The accrual factors associated to the sub-periods
+   * @param index
+   *          The coupon Ibor index
+   * @param fixingDates
+   *          The coupon fixing dates
+   * @param weights
+   *          The weights for the index
+   * @param iborCalendar
+   *          The holiday calendar for the index
    * @return The coupon
    */
   public static CouponIborAverageFixingDatesCompoundingDefinition from(final Currency currency, final ZonedDateTime paymentDate,
@@ -163,20 +201,34 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
   }
 
   /**
-   * Construct coupon with full details
-   * @param currency The coupon currency
-   * @param paymentDate The coupon payment date.
-   * @param accrualStartDate The start date of the accrual period
-   * @param accrualEndDate The end date of the accrual period
-   * @param paymentAccrualFactor The accrual factor of the total accrual period
-   * @param notional The coupon notional
-   * @param paymentAccrualFactors The accrual factors associated to the sub-periods
-   * @param index The coupon Ibor index
-   * @param fixingDates The coupon fixing dates
-   * @param weights The weights for the index
-   * @param fixingPeriodStartDates The start date of the fixing periods
-   * @param fixingPeriodEndDates The end date of the fixing periods
-   * @param fixingPeriodAccrualFactors The accrual factors of fixing periods
+   * Construct coupon with full details.
+   *
+   * @param currency
+   *          The coupon currency
+   * @param paymentDate
+   *          The coupon payment date.
+   * @param accrualStartDate
+   *          The start date of the accrual period
+   * @param accrualEndDate
+   *          The end date of the accrual period
+   * @param paymentAccrualFactor
+   *          The accrual factor of the total accrual period
+   * @param notional
+   *          The coupon notional
+   * @param paymentAccrualFactors
+   *          The accrual factors associated to the sub-periods
+   * @param index
+   *          The coupon Ibor index
+   * @param fixingDates
+   *          The coupon fixing dates
+   * @param weights
+   *          The weights for the index
+   * @param fixingPeriodStartDates
+   *          The start date of the fixing periods
+   * @param fixingPeriodEndDates
+   *          The end date of the fixing periods
+   * @param fixingPeriodAccrualFactors
+   *          The accrual factors of fixing periods
    * @return The coupon
    */
   public static CouponIborAverageFixingDatesCompoundingDefinition from(final Currency currency, final ZonedDateTime paymentDate,
@@ -190,8 +242,10 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
   }
 
   /**
-   * Construct a new coupon with the same detail except notional
-   * @param notional The notional
+   * Construct a new coupon with the same detail except notional.
+   *
+   * @param notional
+   *          The notional
    * @return The coupon
    */
   public CouponIborAverageFixingDatesCompoundingDefinition withNotional(final double notional) {
@@ -214,6 +268,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the index.
+   *
    * @return the index
    */
   public IborIndex getIndex() {
@@ -222,6 +277,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the paymentAccrualFactors.
+   *
    * @return the paymentAccrualFactors
    */
   public double[] getPaymentAccrualFactors() {
@@ -230,6 +286,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the weight.
+   *
    * @return the weight
    */
   public double[][] getWeight() {
@@ -238,6 +295,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the fixingPeriodStartDates.
+   *
    * @return the fixingPeriodStartDates
    */
   public ZonedDateTime[][] getFixingPeriodStartDates() {
@@ -246,6 +304,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the fixingPeriodEndDates.
+   *
    * @return the fixingPeriodEndDates
    */
   public ZonedDateTime[][] getFixingPeriodEndDates() {
@@ -254,6 +313,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the fixingDates.
+   *
    * @return the fixingDates
    */
   public ZonedDateTime[][] getFixingDates() {
@@ -262,6 +322,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
 
   /**
    * Gets the fixingPeriodAccrualFactor.
+   *
    * @return the fixingPeriodAccrualFactor
    */
   public double[][] getFixingPeriodAccrualFactor() {
@@ -275,8 +336,9 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
     final int[] nDates = new int[nPeriods]; // Number of fixing dates per sub-period, can be different for each sub-period.
     final LocalDate dayConversion = date.toLocalDate();
     ArgumentChecker.isTrue(!dayConversion.isAfter(getPaymentDate().toLocalDate()), "date is after payment date");
-    ArgumentChecker.isTrue(!dayConversion.isAfter(getFixingDates()[0][0].toLocalDate()), "Do not have any fixing data but are asking for a derivative at " + date
-        + " which is after fixing date " + getFixingDates()[0][0]);
+    ArgumentChecker.isTrue(!dayConversion.isAfter(getFixingDates()[0][0].toLocalDate()),
+        "Do not have any fixing data but are asking for a derivative at " + date
+            + " which is after fixing date " + getFixingDates()[0][0]);
     // Fixing dates are in increasing order; only the first one need to be checked.
     final double paymentTime = TimeCalculator.getTimeBetween(date, getPaymentDate());
     final double[][] fixingTime = new double[nPeriods][];
@@ -293,12 +355,13 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
         fixingPeriodEndTime[i][j] = TimeCalculator.getTimeBetween(date, getFixingPeriodEndDates()[i][j]);
       }
     }
-    return new CouponIborAverageFixingDatesCompounding(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPaymentAccrualFactors(), getIndex(), fixingTime, getWeight(),
+    return new CouponIborAverageFixingDatesCompounding(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), getPaymentAccrualFactors(),
+        getIndex(), fixingTime, getWeight(),
         fixingPeriodStartTime, fixingPeriodEndTime, getFixingPeriodAccrualFactor(), 0.0, 1.0);
   }
 
   @Override
-  public Coupon toDerivative(ZonedDateTime dateTime, DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries) {
+  public Coupon toDerivative(final ZonedDateTime dateTime, final DoubleTimeSeries<ZonedDateTime> indexFixingTimeSeries) {
     final LocalDate dateConversion = dateTime.toLocalDate();
     ArgumentChecker.notNull(indexFixingTimeSeries, "Index fixing time series");
     ArgumentChecker.isTrue(!dateConversion.isAfter(getPaymentDate().toLocalDate()), "date is after payment date");
@@ -317,7 +380,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
     int posDate = 0;
     double amountAccrued = 1.;
     double sumRateFixed = 0.0;
-    while (posPeriod < nPeriods && !(dayConversion.isBefore(getFixingDates()[posPeriod][0].toLocalDate()))) {
+    while (posPeriod < nPeriods && !dayConversion.isBefore(getFixingDates()[posPeriod][0].toLocalDate())) {
       sumRateFixed = 0.0;
       posDate = 0;
       nDates[posPeriod] = getFixingDates()[posPeriod].length;
@@ -337,7 +400,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
         }
       }
       if (posDate == nDates[posPeriod]) {
-        amountAccrued *= (1.0 + sumRateFixed * getPaymentAccrualFactors()[posPeriod]);
+        amountAccrued *= 1.0 + sumRateFixed * getPaymentAccrualFactors()[posPeriod];
         sumRateFixed = 0.0;
       }
       ++posPeriod;
@@ -354,7 +417,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
     final int shift = posDate != nDates[posPeriod - 1] ? 1 : 0;
     final int nRemovedPeriod = posPeriod - shift;
     final int nPeriodsLeft = nPeriods - nRemovedPeriod; // include partially fixed period
-    nDates[posPeriod - 1] -= posDate; //can be 0
+    nDates[posPeriod - 1] -= posDate; // can be 0
     final double[][] fixingTimeLeft = new double[nPeriodsLeft][];
     final double[][] fixingPeriodStartTimeLeft = new double[nPeriodsLeft][];
     final double[][] fixingPeriodEndTimeLeft = new double[nPeriodsLeft][];
@@ -397,22 +460,25 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
       System.arraycopy(_fixingPeriodAccrualFactors[nRemovedPeriod], posDate, fixingPeriodAccrualFactorLeft[0], 0, nDates[nRemovedPeriod]);
     }
 
-    return new CouponIborAverageFixingDatesCompounding(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), paymentAccrualFactorsLeft, getIndex(), fixingTimeLeft, weightLeft,
+    return new CouponIborAverageFixingDatesCompounding(getCurrency(), paymentTime, getPaymentYearFraction(), getNotional(), paymentAccrualFactorsLeft,
+        getIndex(), fixingTimeLeft, weightLeft,
         fixingPeriodStartTimeLeft, fixingPeriodEndTimeLeft, fixingPeriodAccrualFactorLeft, amountAccrued, sumRateFixed);
   }
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Override
   @Deprecated
-  public Coupon toDerivative(ZonedDateTime date, DoubleTimeSeries<ZonedDateTime> data, String... yieldCurveNames) {
+  public Coupon toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> data, final String... yieldCurveNames) {
     throw new NotImplementedException("toDerivative not implemented with yield curve names.");
   }
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Override
@@ -429,14 +495,14 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
     result = prime * result + Arrays.deepHashCode(_fixingPeriodAccrualFactors);
     result = prime * result + Arrays.deepHashCode(_fixingPeriodEndDates);
     result = prime * result + Arrays.deepHashCode(_fixingPeriodStartDates);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     result = prime * result + Arrays.hashCode(_paymentAccrualFactors);
     result = prime * result + Arrays.deepHashCode(_weights);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -446,7 +512,7 @@ public class CouponIborAverageFixingDatesCompoundingDefinition extends CouponDef
     if (!(obj instanceof CouponIborAverageFixingDatesCompoundingDefinition)) {
       return false;
     }
-    CouponIborAverageFixingDatesCompoundingDefinition other = (CouponIborAverageFixingDatesCompoundingDefinition) obj;
+    final CouponIborAverageFixingDatesCompoundingDefinition other = (CouponIborAverageFixingDatesCompoundingDefinition) obj;
     if (!Arrays.deepEquals(_fixingDates, other._fixingDates)) {
       return false;
     }

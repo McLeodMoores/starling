@@ -20,7 +20,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.id.ExternalId;
 
 /**
- * 
+ *
  */
 public class InflationIssuerCurveTypeConfiguration extends CurveTypeConfiguration {
 
@@ -88,7 +88,7 @@ public class InflationIssuerCurveTypeConfiguration extends CurveTypeConfiguratio
    * Sets the reference.
    * @param reference  the new value of the property, not null
    */
-  public void setReference(String reference) {
+  public void setReference(final String reference) {
     JodaBeanUtils.notNull(reference, "reference");
     this._reference = reference;
   }
@@ -114,7 +114,7 @@ public class InflationIssuerCurveTypeConfiguration extends CurveTypeConfiguratio
    * Sets the price index convention.
    * @param priceIndex  the new value of the property, not null
    */
-  public void setPriceIndex(ExternalId priceIndex) {
+  public void setPriceIndex(final ExternalId priceIndex) {
     JodaBeanUtils.notNull(priceIndex, "priceIndex");
     this._priceIndex = priceIndex;
   }
@@ -134,12 +134,12 @@ public class InflationIssuerCurveTypeConfiguration extends CurveTypeConfiguratio
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj != null && obj.getClass() == this.getClass()) {
-      InflationIssuerCurveTypeConfiguration other = (InflationIssuerCurveTypeConfiguration) obj;
+      final InflationIssuerCurveTypeConfiguration other = (InflationIssuerCurveTypeConfiguration) obj;
       return JodaBeanUtils.equal(getReference(), other.getReference()) &&
           JodaBeanUtils.equal(getPriceIndex(), other.getPriceIndex()) &&
           super.equals(obj);
@@ -157,9 +157,9 @@ public class InflationIssuerCurveTypeConfiguration extends CurveTypeConfiguratio
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(96);
+    final StringBuilder buf = new StringBuilder(96);
     buf.append("InflationIssuerCurveTypeConfiguration{");
-    int len = buf.length();
+    final int len = buf.length();
     toString(buf);
     if (buf.length() > len) {
       buf.setLength(buf.length() - 2);
@@ -169,7 +169,7 @@ public class InflationIssuerCurveTypeConfiguration extends CurveTypeConfiguratio
   }
 
   @Override
-  protected void toString(StringBuilder buf) {
+  protected void toString(final StringBuilder buf) {
     super.toString(buf);
     buf.append("reference").append('=').append(JodaBeanUtils.toString(getReference())).append(',').append(' ');
     buf.append("priceIndex").append('=').append(JodaBeanUtils.toString(getPriceIndex())).append(',').append(' ');
@@ -210,7 +210,7 @@ public class InflationIssuerCurveTypeConfiguration extends CurveTypeConfiguratio
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
       switch (propertyName.hashCode()) {
         case -925155509:  // reference
           return _reference;
@@ -222,7 +222,7 @@ public class InflationIssuerCurveTypeConfiguration extends CurveTypeConfiguratio
 
     @Override
     public BeanBuilder<? extends InflationIssuerCurveTypeConfiguration> builder() {
-      return new DirectBeanBuilder<InflationIssuerCurveTypeConfiguration>(new InflationIssuerCurveTypeConfiguration());
+      return new DirectBeanBuilder<>(new InflationIssuerCurveTypeConfiguration());
     }
 
     @Override
@@ -254,7 +254,7 @@ public class InflationIssuerCurveTypeConfiguration extends CurveTypeConfiguratio
 
     //-----------------------------------------------------------------------
     @Override
-    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
+    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName.hashCode()) {
         case -925155509:  // reference
           return ((InflationIssuerCurveTypeConfiguration) bean).getReference();
@@ -265,7 +265,7 @@ public class InflationIssuerCurveTypeConfiguration extends CurveTypeConfiguratio
     }
 
     @Override
-    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
+    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
       switch (propertyName.hashCode()) {
         case -925155509:  // reference
           ((InflationIssuerCurveTypeConfiguration) bean).setReference((String) newValue);
@@ -278,7 +278,7 @@ public class InflationIssuerCurveTypeConfiguration extends CurveTypeConfiguratio
     }
 
     @Override
-    protected void validate(Bean bean) {
+    protected void validate(final Bean bean) {
       JodaBeanUtils.notNull(((InflationIssuerCurveTypeConfiguration) bean)._reference, "reference");
       JodaBeanUtils.notNull(((InflationIssuerCurveTypeConfiguration) bean)._priceIndex, "priceIndex");
       super.validate(bean);

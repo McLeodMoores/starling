@@ -23,7 +23,7 @@ public class WebMarketDataSnapshotUris {
    * Creates an instance.
    * @param data  the web data, not null
    */
-  public WebMarketDataSnapshotUris(WebMarketDataSnapshotData data) {
+  public WebMarketDataSnapshotUris(final WebMarketDataSnapshotData data) {
     _data = data;
   }
 

@@ -55,16 +55,17 @@ public class CombiningFunctionConfigurationSource implements FunctionConfigurati
   }
 
   /**
-   * Creates an instance that is the union of the given sources. The sources are not queried for their configuration until the composite object get queried.
+   * Creates an instance that is the union of the given sources. The sources are not queried for their configuration until the composite
+   * object get queried.
    * <p>
-   * Any nulls in the combined sources are ignored. Any sources that are themselves {@code CombinedRepositoryConfigurationSource} instances are expanded and their members used directly in the
-   * composite.
-   * 
+   * Any nulls in the combined sources are ignored. Any sources that are themselves {@code CombinedRepositoryConfigurationSource}
+   * instances are expanded and their members used directly in the composite.
+   *
    * @param sources the sources to combine, may contain nulls
    * @return the composite source, not null
    */
   public static FunctionConfigurationSource of(final FunctionConfigurationSource... sources) {
-    if ((sources == null) || (sources.length == 0)) {
+    if (sources == null || sources.length == 0) {
       return new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(Collections.<FunctionConfiguration>emptyList()));
     }
     int i = 0;
@@ -96,7 +97,7 @@ public class CombiningFunctionConfigurationSource implements FunctionConfigurati
 
   @Override
   public FunctionConfigurationBundle getFunctionConfiguration(final Instant version) {
-    final List<FunctionConfiguration> configs = new ArrayList<FunctionConfiguration>();
+    final List<FunctionConfiguration> configs = new ArrayList<>();
     for (final FunctionConfigurationSource source : getSources()) {
       configs.addAll(source.getFunctionConfiguration(version).getFunctions());
     }
@@ -106,7 +107,7 @@ public class CombiningFunctionConfigurationSource implements FunctionConfigurati
   @Override
   public ChangeManager changeManager() {
     PassthroughChangeManager changeManager = null;
-    for (FunctionConfigurationSource source : getSources()) {
+    for (final FunctionConfigurationSource source : getSources()) {
       final ChangeManager cm = source.changeManager();
       if (cm != DummyChangeManager.INSTANCE) {
         if (changeManager == null) {
@@ -117,9 +118,8 @@ public class CombiningFunctionConfigurationSource implements FunctionConfigurati
     }
     if (changeManager == null) {
       return DummyChangeManager.INSTANCE;
-    } else {
-      return changeManager;
     }
+    return changeManager;
   }
 
 }

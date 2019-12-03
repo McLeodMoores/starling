@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -21,9 +21,9 @@ public class BerkeleyDBBinaryDataStoreFactory implements BinaryDataStoreFactory 
   }
 
   @Override
-  public BinaryDataStore createDataStore(ViewComputationCacheKey cacheKey) {
-    String dbName = cacheKey.getViewCycleId() + "-" + cacheKey.getCalculationConfigurationName();
-    BerkeleyDBBinaryDataStore dataStore = new BerkeleyDBBinaryDataStore(_dbEnvironment, dbName);
+  public BinaryDataStore createDataStore(final ViewComputationCacheKey cacheKey) {
+    final String dbName = cacheKey.getViewCycleId() + "-" + cacheKey.getCalculationConfigurationName();
+    final BerkeleyDBBinaryDataStore dataStore = new BerkeleyDBBinaryDataStore(_dbEnvironment, dbName);
     dataStore.start();
     return dataStore;
   }

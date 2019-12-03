@@ -22,9 +22,9 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A {@link SecuritySource} wrapper which sets a specific version/correction on all requests that would otherwise request "latest".
  * <p>
- * Where possible, code should be written that explicitly passes the necessary version/correction information around - this is an intermediate solution for working with existing code that is not
- * properly version aware.
- * 
+ * Where possible, code should be written that explicitly passes the necessary version/correction information around - this
+ * is an intermediate solution for working with existing code that is not properly version aware.
+ *
  * @deprecated Call code that is properly version aware (whenever possible)
  */
 @Deprecated
@@ -48,61 +48,60 @@ public class VersionLockedSecuritySource implements SecuritySource {
 
   protected VersionCorrection lockVersionCorrection(final VersionCorrection versionCorrection) {
     if (versionCorrection.containsLatest()) {
-      final Instant version = (versionCorrection.getVersionAsOf() == null) ? getVersionCorrection().getVersionAsOf() : versionCorrection.getVersionAsOf();
-      final Instant correction = (versionCorrection.getCorrectedTo() == null) ? getVersionCorrection().getCorrectedTo() : versionCorrection.getCorrectedTo();
+      final Instant version = versionCorrection.getVersionAsOf() == null ? getVersionCorrection().getVersionAsOf() : versionCorrection.getVersionAsOf();
+      final Instant correction = versionCorrection.getCorrectedTo() == null ? getVersionCorrection().getCorrectedTo() : versionCorrection.getCorrectedTo();
       return VersionCorrection.of(version, correction);
-    } else {
-      return versionCorrection;
     }
+    return versionCorrection;
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return getUnderlying().get(bundle, lockVersionCorrection(versionCorrection));
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<Security>> getAll(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Collection<Security>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return getUnderlying().getAll(bundles, lockVersionCorrection(versionCorrection));
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle) {
+  public Collection<Security> get(final ExternalIdBundle bundle) {
     return getUnderlying().get(bundle, getVersionCorrection());
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle) {
+  public Security getSingle(final ExternalIdBundle bundle) {
     return getUnderlying().getSingle(bundle, getVersionCorrection());
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return getUnderlying().getSingle(bundle, lockVersionCorrection(versionCorrection));
   }
 
   @Override
-  public Map<ExternalIdBundle, Security> getSingle(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Security> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return getUnderlying().getSingle(bundles, lockVersionCorrection(versionCorrection));
   }
 
   @Override
-  public Security get(UniqueId uniqueId) {
+  public Security get(final UniqueId uniqueId) {
     return getUnderlying().get(uniqueId);
   }
 
   @Override
-  public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     return getUnderlying().get(objectId, lockVersionCorrection(versionCorrection));
   }
 
   @Override
-  public Map<UniqueId, Security> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, Security> get(final Collection<UniqueId> uniqueIds) {
     return getUnderlying().get(uniqueIds);
   }
 
   @Override
-  public Map<ObjectId, Security> get(Collection<ObjectId> objectIds, VersionCorrection versionCorrection) {
+  public Map<ObjectId, Security> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
     return getUnderlying().get(objectIds, lockVersionCorrection(versionCorrection));
   }
 

@@ -49,35 +49,35 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_SLOW)
 public class BloombergTickWriterTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergTickWriterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergTickWriterTest.class);
 
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   private static final int TICKS_GENERATOR_THREAD_SIZE = 1;
   private static final int RUN_DURATION = 5000;
   private static final long REPORT_INTERVAL = RUN_DURATION * 3;
-  private static final long WRITER_SPEED_THRESHOLD = 1024000; 
+  private static final long WRITER_SPEED_THRESHOLD = 1024000;
   private static final int MAX_QUEUE_SIZE = 1000;
 
-  private BlockingQueue<FudgeMsg> _allTicksQueue = new ArrayBlockingQueue<FudgeMsg>(MAX_QUEUE_SIZE);
+  private final BlockingQueue<FudgeMsg> _allTicksQueue = new ArrayBlockingQueue<>(MAX_QUEUE_SIZE);
   private BloombergTickWriter _writer;
-  private File _rootDir = new File(SystemUtils.getJavaIoTmpDir(), "tickDataTest");
+  private final File _rootDir = new File(SystemUtils.getJavaIoTmpDir(), "tickDataTest");
   private RandomTicksGeneratorJob _ticksGenerator;
-  private Map<String, String> _ticker2buid = ImmutableMap.of("QQQQ US Equity", "EQ0082335400001000");
+  private final Map<String, String> _ticker2buid = ImmutableMap.of("QQQQ US Equity", "EQ0082335400001000");
 
   @BeforeMethod
-  public void setUp(Method m) throws Exception {
-    _writer = new BloombergTickWriter(s_fudgeContext, _allTicksQueue, _ticker2buid, _rootDir.getAbsolutePath(), StorageMode.MULTI);
-    _ticksGenerator = new RandomTicksGeneratorJob(new ArrayList<String>(_ticker2buid.keySet()), _allTicksQueue);
+  public void setUp(final Method m) throws Exception {
+    _writer = new BloombergTickWriter(FUDGE_CONTEXT, _allTicksQueue, _ticker2buid, _rootDir.getAbsolutePath(), StorageMode.MULTI);
+    _ticksGenerator = new RandomTicksGeneratorJob(new ArrayList<>(_ticker2buid.keySet()), _allTicksQueue);
     makeRootDir();
   }
 
   private void makeRootDir() {
     if (!_rootDir.exists()) {
-      if(!_rootDir.mkdirs()) {
+      if (!_rootDir.mkdirs()) {
         throw new OpenGammaRuntimeException("unable to create root dir " + _rootDir);
       }
-    } 
+    }
   }
 
   @AfterMethod
@@ -92,40 +92,40 @@ public class BloombergTickWriterTest {
   //-------------------------------------------------------------------------
   @Test
   public void ticksWriting() throws Exception {
-    ZonedDateTime startTime = ZonedDateTime.now(Clock.systemUTC());
-    
+    final ZonedDateTime startTime = ZonedDateTime.now(Clock.systemUTC());
+
     //run test for 5secs
-    long runTime = 5000;
-    ExecutorService writerExecutor = Executors.newSingleThreadExecutor();
-    Future<?> writerFuture = writerExecutor.submit(_writer);
-    
+    final long runTime = 5000;
+    final ExecutorService writerExecutor = Executors.newSingleThreadExecutor();
+    final Future<?> writerFuture = writerExecutor.submit(_writer);
+
     //create ticks generators
-    ExecutorService ticksGeneratorExec = Executors.newSingleThreadExecutor();
-    Future<?> ticksGenFuture = ticksGeneratorExec.submit(_ticksGenerator);
-    
-    s_logger.info("Test running for {}ms to generate ticks", runTime);
+    final ExecutorService ticksGeneratorExec = Executors.newSingleThreadExecutor();
+    final Future<?> ticksGenFuture = ticksGeneratorExec.submit(_ticksGenerator);
+
+    LOGGER.info("Test running for {}ms to generate ticks", runTime);
     Thread.sleep(runTime);
-    
+
     //terminate ticks generation after 1mins
     _ticksGenerator.terminate();
     sendTerminateMessage();
-    
+
     //test should fail if ticksGenerator throws an exception
     ticksGenFuture.get();
     ticksGeneratorExec.shutdown();
     ticksGeneratorExec.awaitTermination(1, TimeUnit.SECONDS);
-    
+
     //test should fail if writer throws an exception
     writerFuture.get();
     writerExecutor.shutdown();
     writerExecutor.awaitTermination(1, TimeUnit.SECONDS);
-    
-    ZonedDateTime endTime = ZonedDateTime.now(Clock.systemUTC());
-    
+
+    final ZonedDateTime endTime = ZonedDateTime.now(Clock.systemUTC());
+
     //now lets replay generated allTicks.dat
-    Set<String> buids = Sets.newHashSet(_ticker2buid.values());
-    UnitTestTickReceiver receiver = new UnitTestTickReceiver();
-    BloombergTicksReplayer player = new BloombergTicksReplayer(Mode.AS_FAST_AS_POSSIBLE, _rootDir.getAbsolutePath(), receiver, startTime, endTime, buids);
+    final Set<String> buids = Sets.newHashSet(_ticker2buid.values());
+    final UnitTestTickReceiver receiver = new UnitTestTickReceiver();
+    final BloombergTicksReplayer player = new BloombergTicksReplayer(Mode.AS_FAST_AS_POSSIBLE, _rootDir.getAbsolutePath(), receiver, startTime, endTime, buids);
     player.start();
     while (player.isRunning()) {
       Thread.sleep(1000);
@@ -135,54 +135,54 @@ public class BloombergTickWriterTest {
 
   @Test(invocationCount = 5, successPercentage = 19)
   public void performance() throws Exception {
-    ExecutorService writerExecutor = Executors.newSingleThreadExecutor();
-    Future<?> writerFuture = writerExecutor.submit(_writer);
-    
-    double nStartTime = System.currentTimeMillis ();
-    
+    final ExecutorService writerExecutor = Executors.newSingleThreadExecutor();
+    final Future<?> writerFuture = writerExecutor.submit(_writer);
+
+    final double nStartTime = System.currentTimeMillis();
+
     //create ticks generators
-    List<RandomTicksGeneratorJob> ticksGeneratorsList = new ArrayList<RandomTicksGeneratorJob>();
-    List<Thread> ticksGeneratorThreads = new ArrayList<Thread>();
+    final List<RandomTicksGeneratorJob> ticksGeneratorsList = new ArrayList<>();
+    final List<Thread> ticksGeneratorThreads = new ArrayList<>();
     for (int i = 0; i < TICKS_GENERATOR_THREAD_SIZE; i++) {
-      RandomTicksGeneratorJob ticksGeneratorJob = new RandomTicksGeneratorJob(new ArrayList<String>(_ticker2buid.keySet()), _allTicksQueue);
+      final RandomTicksGeneratorJob ticksGeneratorJob = new RandomTicksGeneratorJob(new ArrayList<>(_ticker2buid.keySet()), _allTicksQueue);
       ticksGeneratorsList.add(ticksGeneratorJob);
-      Thread thread = new Thread(ticksGeneratorJob, "TicksGenerator"+i);
+      final Thread thread = new Thread(ticksGeneratorJob, "TicksGenerator" + i);
       thread.start();
       ticksGeneratorThreads.add(thread);
     }
-    
-    s_logger.info("Test running for 1min to gather stats");
+
+    LOGGER.info("Test running for 1min to gather stats");
     Thread.sleep(RUN_DURATION);
-    
-    for (RandomTicksGeneratorJob ticksGeneratorJob : ticksGeneratorsList) {
+
+    for (final RandomTicksGeneratorJob ticksGeneratorJob : ticksGeneratorsList) {
       ticksGeneratorJob.terminate();
     }
-    
+
     //wait for all ticksGenerator threads to finish
-    for (Thread thread : ticksGeneratorThreads) {
+    for (final Thread thread : ticksGeneratorThreads) {
       thread.join();
     }
-    
+
     //send terminate message for tickWriter to terminate
     sendTerminateMessage();
-    
+
     //test should fail if writer throws an exception
     writerFuture.get();
     writerExecutor.shutdown();
     writerExecutor.awaitTermination(1, TimeUnit.SECONDS);
-    
-    double nRunDuration = System.currentTimeMillis () - nStartTime;
-    
-    double nTicks = ((double)_writer.getNTicks()/nRunDuration) * 1000;
-    s_logger.info("ticks {}/s", nTicks);
-    double nWrites = ((double)_writer.getNWrites()/nRunDuration) * 1000;
-    s_logger.info("fileOperations {}/s", nWrites);
-    double nBlocks = (double)_writer.getNBlocks()/(double)_writer.getNWrites();
-    s_logger.info("average blocks {}bytes", nBlocks);
-    
+
+    final double nRunDuration = System.currentTimeMillis() - nStartTime;
+
+    final double nTicks = _writer.getNTicks() / nRunDuration * 1000;
+    LOGGER.info("ticks {}/s", nTicks);
+    final double nWrites = _writer.getNWrites() / nRunDuration * 1000;
+    LOGGER.info("fileOperations {}/s", nWrites);
+    final double nBlocks = (double) _writer.getNBlocks() / (double) _writer.getNWrites();
+    LOGGER.info("average blocks {}bytes", nBlocks);
+
     assertTrue("reportInterval > testRunTime", REPORT_INTERVAL > nRunDuration);
-    if ((nWrites * nBlocks) < WRITER_SPEED_THRESHOLD) {
-      s_logger.warn("BloombergTickWriter looks like running really slower than {}b/s", WRITER_SPEED_THRESHOLD);
+    if (nWrites * nBlocks < WRITER_SPEED_THRESHOLD) {
+      LOGGER.warn("BloombergTickWriter looks like running really slower than {}b/s", WRITER_SPEED_THRESHOLD);
     }
   }
 
@@ -191,14 +191,15 @@ public class BloombergTickWriterTest {
   }
 
   private class UnitTestTickReceiver implements BloombergTickReceiver {
-    private Random _valueGenerator = new Random(RandomTicksGeneratorJob.RANDOM_SEED);
+    private final Random _valueGenerator = new Random(RandomTicksGeneratorJob.RANDOM_SEED);
     private int _count;
-    
-    public void tickReceived(BloombergTick msg) {
+
+    @Override
+    public void tickReceived(final BloombergTick msg) {
       _count++;
-      FudgeMsg randomStandardTick = BloombergTestUtils.makeRandomStandardTick(_valueGenerator, s_fudgeContext);
-      FudgeMsg actual = msg.getFields();
-      FudgeMsg expected = randomStandardTick.getMessage(FIELDS_KEY);
+      final FudgeMsg randomStandardTick = BloombergTestUtils.makeRandomStandardTick(_valueGenerator, FUDGE_CONTEXT);
+      final FudgeMsg actual = msg.getFields();
+      final FudgeMsg expected = randomStandardTick.getMessage(FIELDS_KEY);
       assertAllFieldsMatch(expected, actual);
     }
 
@@ -207,7 +208,7 @@ public class BloombergTickWriterTest {
     }
   }
 
-  private static void assertAllFieldsMatch(FudgeMsg expectedMsg, FudgeMsg actualMsg) {
+  private static void assertAllFieldsMatch(final FudgeMsg expectedMsg, final FudgeMsg actualMsg) {
     FudgeUtils.assertAllFieldsMatch(expectedMsg, actualMsg, true);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -19,13 +19,13 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.swap.SwapSecurity;
 import com.opengamma.masterdb.security.hibernate.SecurityBean;
 import com.opengamma.masterdb.security.hibernate.TenorBean;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * A Hibernate bean representation of {@link SwapSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.swap.SwapSecurity}.
  */
 @BeanDefinition
 public class SwapSecurityBean extends SecurityBean {

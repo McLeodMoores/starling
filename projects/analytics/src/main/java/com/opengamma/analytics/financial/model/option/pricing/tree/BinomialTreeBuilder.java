@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -16,16 +16,22 @@ import com.opengamma.analytics.financial.model.tree.RecombiningBinomialTree;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Builds a binomial tree
- * @param <T> StandardOptionDataBundle
+ * Builds a binomial tree.
+ *
+ * @param <T>
+ *          StandardOptionDataBundle
  */
 public abstract class BinomialTreeBuilder<T extends StandardOptionDataBundle> {
 
   /**
-   * Builds a tree of an asset prices
-   * @param maturity The time span (in years) of the tree
-   * @param data OptionDataBundle
-   * @param nSteps The number of steps in the tree (need at least 1 step)
+   * Builds a tree of an asset prices.
+   *
+   * @param maturity
+   *          The time span (in years) of the tree
+   * @param data
+   *          OptionDataBundle
+   * @param nSteps
+   *          The number of steps in the tree (need at least 1 step)
    * @return tree of an asset prices
    */
   @SuppressWarnings("unchecked")
@@ -89,7 +95,7 @@ public abstract class BinomialTreeBuilder<T extends StandardOptionDataBundle> {
       spots = nodes;
     }
 
-    // fill out the final column of nodes - probability is set to zero
+    // fill out the column of nodes - probability is set to zero
     tree[nSteps] = new BinomialTreeNode[nSteps + 1];
     for (int j = 0; j <= nSteps; j++) {
       tree[nSteps][j] = new BinomialTreeNode<>(spots[j], 0.0);
@@ -98,23 +104,28 @@ public abstract class BinomialTreeBuilder<T extends StandardOptionDataBundle> {
     return new RecombiningBinomialTree<>(tree);
   }
 
-  protected abstract double[] getForwards(final double[] spots, final T data, final double t, final double dt);
+  protected abstract double[] getForwards(double[] spots, T data, double t, double dt);
 
-  protected abstract double getNextHigherNode(final double dt, final double sigma, final double forward, final double lowerNode);
+  protected abstract double getNextHigherNode(double dt, double sigma, double forward, double lowerNode);
 
-  protected abstract double getNextLowerNode(final double dt, final double sigma, final double forward, final double higherNode);
+  protected abstract double getNextLowerNode(double dt, double sigma, double forward, double higherNode);
 
-  protected abstract DoublesPair getCentralNodePair(final double dt, final double sigma, final double forward, final double centreLevel);
+  protected abstract DoublesPair getCentralNodePair(double dt, double sigma, double forward, double centreLevel);
 
   /**
-   * Builds a tree of option prices
-   * @param definition Option Definition
-   * @param data OptionDataBundle
-   * @param assetTree A previously built asset price tree
+   * Builds a tree of option prices.
+   *
+   * @param definition
+   *          Option Definition
+   * @param data
+   *          OptionDataBundle
+   * @param assetTree
+   *          A previously built asset price tree
    * @return a tree of option prices
    */
   @SuppressWarnings("unchecked")
-  public RecombiningBinomialTree<BinomialTreeNode<Double>> buildOptionPriceTree(final OptionDefinition definition, final T data, final RecombiningBinomialTree<BinomialTreeNode<Double>> assetTree) {
+  public RecombiningBinomialTree<BinomialTreeNode<Double>> buildOptionPriceTree(final OptionDefinition definition, final T data,
+      final RecombiningBinomialTree<BinomialTreeNode<Double>> assetTree) {
 
     final int nSteps = assetTree.getDepth() - 1;
     final BinomialTreeNode<Double>[][] tree = new BinomialTreeNode[nSteps + 1][];

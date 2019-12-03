@@ -15,7 +15,7 @@ import com.google.common.base.Charsets;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test.
+ * Tests for {@link ComponentConfigIniLoader}.
  */
 @Test(groups = TestGroup.UNIT)
 public class ComponentConfigIniLoaderTest {
@@ -23,138 +23,162 @@ public class ComponentConfigIniLoaderTest {
   private static final ComponentLogger LOGGER = ComponentLogger.Sink.INSTANCE;
   private static final String NEWLINE = "\n";
 
-  public void test_loadValid() {
-    ConfigProperties properties = new ConfigProperties();
-    ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties );
-    String text =
-        "# comment" + NEWLINE +
-        "[global]" + NEWLINE +
-        "a = c" + NEWLINE +
-        "b = d" + NEWLINE +
-        "" + NEWLINE +
-        "[block]" + NEWLINE +
-        "m = p" + NEWLINE +
-        "n = ${a}" + NEWLINE +  // property from [global]
-        "o = ${input}" + NEWLINE;  // property from injected properties
-    Resource resource = new InMemoryResource(text.getBytes(Charsets.UTF_8), "Test");
+  /**
+   * Tests loading a valid ini file.
+   */
+  public void testLoadValid() {
+    final ConfigProperties properties = new ConfigProperties();
+    final ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties);
+    final String text =
+        "# comment" + NEWLINE
+        + "[global]" + NEWLINE
+        + "a = c" + NEWLINE
+        + "b = d" + NEWLINE
+        + "" + NEWLINE
+        + "[block]" + NEWLINE
+        + "m = p" + NEWLINE
+        + "n = ${a}" + NEWLINE       // property from [global]
+        + "o = ${input}" + NEWLINE;  // property from injected properties
+    final Resource resource = new InMemoryResource(text.getBytes(Charsets.UTF_8), "Test");
     properties.put("input", "text");
-    
-    ComponentConfig test = new ComponentConfig();
+
+    final ComponentConfig test = new ComponentConfig();
     loader.load(resource, 0, test);
     assertEquals(2, test.getGroups().size());
-    
-    ConfigProperties testGlobal = test.getGroup("global");
+
+    final ConfigProperties testGlobal = test.getGroup("global");
     assertEquals(2, testGlobal.size());
     assertEquals("c", testGlobal.getValue("a"));
     assertEquals("d", testGlobal.getValue("b"));
-    
-    ConfigProperties testBlock = test.getGroup("block");
+
+    final ConfigProperties testBlock = test.getGroup("block");
     assertEquals(3, testBlock.size());
     assertEquals("p", testBlock.getValue("m"));
     assertEquals("c", testBlock.getValue("n"));
     assertEquals("text", testBlock.getValue("o"));
   }
 
-  public void test_loadValid_emptyGlobal() {
-    ConfigProperties properties = new ConfigProperties();
-    ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties );
-    String text =
-        "# comment" + NEWLINE +
-        "[global]" + NEWLINE +
-        "" + NEWLINE +
-        "[block]" + NEWLINE +
-        "m = p" + NEWLINE;
-    Resource resource = new InMemoryResource(text.getBytes(Charsets.UTF_8), "Test");
-    
-    ComponentConfig test = new ComponentConfig();
+  /**
+   * Tests loading a valid ini file that does not have a global section.
+   */
+  public void testLoadValidEmptyGlobal() {
+    final ConfigProperties properties = new ConfigProperties();
+    final ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties);
+    final String text =
+        "# comment" + NEWLINE
+        + "[global]" + NEWLINE
+        + "" + NEWLINE
+        + "[block]" + NEWLINE
+        + "m = p" + NEWLINE;
+    final Resource resource = new InMemoryResource(text.getBytes(Charsets.UTF_8), "Test");
+
+    final ComponentConfig test = new ComponentConfig();
     loader.load(resource, 0, test);
     assertEquals(2, test.getGroups().size());
-    
-    ConfigProperties testGlobal = test.getGroup("global");
+
+    final ConfigProperties testGlobal = test.getGroup("global");
     assertEquals(0, testGlobal.size());
-    
-    ConfigProperties testBlock = test.getGroup("block");
+
+    final ConfigProperties testBlock = test.getGroup("block");
     assertEquals(1, testBlock.size());
     assertEquals("p", testBlock.getValue("m"));
   }
 
-  public void test_loadValid_groupPropertyOverride() {
-    ConfigProperties properties = new ConfigProperties();
-    ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties );
-    String text =
-        "# comment" + NEWLINE +
-        "[block]" + NEWLINE +
-        "m = p" + NEWLINE;
-    Resource resource = new InMemoryResource(text.getBytes(Charsets.UTF_8), "Test");
+  /**
+   * Tests loading a valid ini file that has a valid group property override.
+   */
+  public void testLoadValidGroupPropertyOverride() {
+    final ConfigProperties properties = new ConfigProperties();
+    final ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties);
+    final String text =
+        "# comment" + NEWLINE
+        + "[block]" + NEWLINE
+        + "m = p" + NEWLINE;
+    final Resource resource = new InMemoryResource(text.getBytes(Charsets.UTF_8), "Test");
     properties.put("[block].m", "override");
-    
-    ComponentConfig test = new ComponentConfig();
+
+    final ComponentConfig test = new ComponentConfig();
     loader.load(resource, 0, test);
     assertEquals(1, test.getGroups().size());
-    
-    ConfigProperties testBlock = test.getGroup("block");
+
+    final ConfigProperties testBlock = test.getGroup("block");
     assertEquals(1, testBlock.size());
     assertEquals("override", testBlock.getValue("m"));
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that a key cannot be loaded twice.
+   */
   @Test(expectedExceptions = ComponentConfigException.class)
-  public void test_loadInvalid_doubleKey() {
-    ConfigProperties properties = new ConfigProperties();
-    ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties );
-    Resource resource = new InMemoryResource(
-        "[block]" + NEWLINE +
-        "m = p" + NEWLINE +
-        "m = s" + NEWLINE
-    );
-    
+  public void testLoadInvalidDoubleKey() {
+    final ConfigProperties properties = new ConfigProperties();
+    final ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties);
+    final Resource resource = new InMemoryResource(
+        "[block]" + NEWLINE
+        + "m = p" + NEWLINE
+        + "m = s" + NEWLINE
+        );
+
     loader.load(resource, 0, new ComponentConfig());
   }
 
+  /**
+   * Tests that the string to be replaced must be valid.
+   */
   @Test(expectedExceptions = ComponentConfigException.class)
-  public void test_loadInvalid_replacementNotFound() {
-    ConfigProperties properties = new ConfigProperties();
-    ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties );
-    Resource resource = new InMemoryResource(
-        "[block]" + NEWLINE +
-        "m = ${notFound}" + NEWLINE
-    );
-    
+  public void testLoadInvalidReplacementNotFound() {
+    final ConfigProperties properties = new ConfigProperties();
+    final ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties);
+    final Resource resource = new InMemoryResource(
+        "[block]" + NEWLINE
+        + "m = ${notFound}" + NEWLINE
+        );
+
     loader.load(resource, 0, new ComponentConfig());
   }
 
+  /**
+   * Tests that a property must be in a group.
+   */
   @Test(expectedExceptions = ComponentConfigException.class)
-  public void test_loadInvalid_propertyNotInGroup() {
-    ConfigProperties properties = new ConfigProperties();
-    ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties );
-    Resource resource = new InMemoryResource(
+  public void testLoadInvalidPropertyNotInGroup() {
+    final ConfigProperties properties = new ConfigProperties();
+    final ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties);
+    final Resource resource = new InMemoryResource(
         "m = foo" + NEWLINE
-    );
-    
+        );
+
     loader.load(resource, 0, new ComponentConfig());
   }
 
+  /**
+   * Tests that there must be an equals sign between the property key and value.
+   */
   @Test(expectedExceptions = ComponentConfigException.class)
-  public void test_loadInvalid_propertyNoEquals() {
-    ConfigProperties properties = new ConfigProperties();
-    ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties );
-    Resource resource = new InMemoryResource(
-        "[block]" + NEWLINE +
-        "m" + NEWLINE
-    );
-    
+  public void testLoadInvalidPropertyNoEquals() {
+    final ConfigProperties properties = new ConfigProperties();
+    final ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties);
+    final Resource resource = new InMemoryResource(
+        "[block]" + NEWLINE
+        + "m" + NEWLINE
+        );
+
     loader.load(resource, 0, new ComponentConfig());
   }
 
+  /**
+   * Test that the property key cannot be empty.
+   */
   @Test(expectedExceptions = ComponentConfigException.class)
-  public void test_loadInvalid_propertyEmptyKey() {
-    ConfigProperties properties = new ConfigProperties();
-    ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties );
-    Resource resource = new InMemoryResource(
-        "[block]" + NEWLINE +
-        "= foo" + NEWLINE
-    );
-    
+  public void testLoadInvalidPropertyEmptyKey() {
+    final ConfigProperties properties = new ConfigProperties();
+    final ComponentConfigIniLoader loader = new ComponentConfigIniLoader(LOGGER, properties);
+    final Resource resource = new InMemoryResource(
+        "[block]" + NEWLINE
+        + "= foo" + NEWLINE
+        );
+
     loader.load(resource, 0, new ComponentConfig());
   }
 

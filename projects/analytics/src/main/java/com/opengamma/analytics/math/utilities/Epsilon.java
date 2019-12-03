@@ -1,24 +1,26 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.utilities;
 
 /**
- * 
+ *
  */
 public abstract class Epsilon {
 
   // Coefficients for the Taylor expansion of (e^x-1)/x and its first two derivatives
-  private static final double[] COEFF1 = new double[] {1 / 24., 1 / 6., 1 / 2., 1 };
-  private static final double[] COEFF2 = new double[] {1 / 144., 1 / 30., 1 / 8., 1 / 3., 1 / 2. };
-  private static final double[] COEFF3 = new double[] {1 / 168., 1 / 36., 1 / 10., 1 / 4., 1 / 3. };
+  private static final double[] COEFF1 = new double[] { 1 / 24., 1 / 6., 1 / 2., 1 };
+  private static final double[] COEFF2 = new double[] { 1 / 144., 1 / 30., 1 / 8., 1 / 3., 1 / 2. };
+  private static final double[] COEFF3 = new double[] { 1 / 168., 1 / 36., 1 / 10., 1 / 4., 1 / 3. };
 
   /**
-   * This is the Taylor expansion of $$\frac{\exp(x)-1}{x}$$ - note for $$|x| > 10^{-10}$$ the expansion is note used 
-   * @param x value
-   * @return result 
+   * This is the Taylor expansion of $$\frac{\exp(x)-1}{x}$$ - note for $$|x| &gt; 10^{-10}$$ the expansion is note used.
+   *
+   * @param x
+   *          value
+   * @return result
    */
   public static double epsilon(final double x) {
     if (Math.abs(x) > 1e-10) {
@@ -28,9 +30,11 @@ public abstract class Epsilon {
   }
 
   /**
-   * This is the Taylor expansion of the first derivative of $$\frac{\exp(x)-1}{x}$$
-   * @param x value
-   * @return result 
+   * This is the Taylor expansion of the first derivative of $$\frac{\exp(x)-1}{x}$$.
+   * 
+   * @param x
+   *          value
+   * @return result
    */
   public static double epsilonP(final double x) {
 
@@ -41,9 +45,11 @@ public abstract class Epsilon {
   }
 
   /**
-   * This is the Taylor expansion of the second derivative of $$\frac{\exp(x)-1}{x}$$
-   * @param x value
-   * @return result 
+   * This is the Taylor expansion of the second derivative of $$\frac{\exp(x)-1}{x}$$.
+   * 
+   * @param x
+   *          value
+   * @return result
    */
   public static double epsilonPP(final double x) {
 

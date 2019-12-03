@@ -143,10 +143,10 @@ public class BloombergFXForwardCurveInstrumentProvider implements ForwardCurveIn
       return false;
     }
     final BloombergFXForwardCurveInstrumentProvider other = (BloombergFXForwardCurveInstrumentProvider) obj;
-    return getPrefix().equals(other.getPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getSpotPrefix().equals(other.getSpotPrefix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getPrefix().equals(other.getPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getSpotPrefix().equals(other.getSpotPrefix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 
 }

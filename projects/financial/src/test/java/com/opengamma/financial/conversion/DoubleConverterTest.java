@@ -19,22 +19,22 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class DoubleConverterTest {
-  
+
   private final DoubleConverter _converter = new DoubleConverter();
-  
+
   @Test
   public void convert() {
-    Map<String, Double> expected = new HashMap<String, Double>();
+    final Map<String, Double> expected = new HashMap<>();
     expected.put("Foo", 5.5);
-    
-    Map<String, Double> actual = _converter.convert("Foo", 5.5);
-    
+
+    final Map<String, Double> actual = _converter.convert("Foo", 5.5);
+
     assertEquals(expected, actual);
   }
 
   @Test
   public void getConvertedClass() {
-    assertEquals(Double.class, _converter.getConvertedClass());  
+    assertEquals(Double.class, _converter.getConvertedClass());
   }
 
 }

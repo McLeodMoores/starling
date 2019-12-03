@@ -23,7 +23,9 @@ import com.opengamma.scripts.Scriptable;
 
 /**
  * Base class that creates a golden copy of a view output for use in regression testing.
- * @param <T>  the type of the tool context
+ * 
+ * @param <T>
+ *          the type of the tool context
  */
 @Scriptable
 public abstract class AbstractGoldenCopyCreationTool<T extends ToolContext> extends AbstractTool<T> {
@@ -34,18 +36,21 @@ public abstract class AbstractGoldenCopyCreationTool<T extends ToolContext> exte
   public static final String GOLDEN_COPY_VERSION_NAME = "Golden Copy";
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractGoldenCopyCreationTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGoldenCopyCreationTool.class);
   /** Unsupported character sequence */
-  private static final ImmutableSet<CharSequence> UNSUPPORTED_CHAR_SEQUENCES = ImmutableSet.<CharSequence>of("/");
+  private static final ImmutableSet<CharSequence> UNSUPPORTED_CHAR_SEQUENCES = ImmutableSet.<CharSequence> of("/");
 
   /**
    * Creates the golden copy dump.
-   * @param regressionDirectory  the directory that contains the reference files
-   * @throws IOException  if there is a problem writing the file
+   * 
+   * @param regressionDirectory
+   *          the directory that contains the reference files
+   * @throws IOException
+   *           if there is a problem writing the file
    */
   protected abstract void createDump(String regressionDirectory) throws IOException;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
     final CommandLine commandLine = getCommandLine();
@@ -54,17 +59,17 @@ public abstract class AbstractGoldenCopyCreationTool<T extends ToolContext> exte
     final String[] viewSnapshotPairs = commandLine.getArgs();
     validateAsFilesystemNames(viewSnapshotPairs);
     Preconditions.checkArgument(viewSnapshotPairs.length % 2 == 0,
-                                "Should be an even number of view/snapshot pairs. Found %s",
-                                Arrays.toString(viewSnapshotPairs));
+        "Should be an even number of view/snapshot pairs. Found %s",
+        Arrays.toString(viewSnapshotPairs));
 
     for (int i = 0; i < viewSnapshotPairs.length; i += 2) {
       final String viewName = viewSnapshotPairs[i];
       final String snapshotName = viewSnapshotPairs[i + 1];
-      s_logger.info("Executing {} against snapshot {}", viewName, snapshotName);
+      LOGGER.info("Executing {} against snapshot {}", viewName, snapshotName);
       final GoldenCopy goldenCopy = goldenCopyCreator.run(viewName, snapshotName, GOLDEN_COPY_VERSION_NAME);
-      s_logger.info("Persisting golden copy for {} against snapshot {}", viewName, snapshotName);
+      LOGGER.info("Persisting golden copy for {} against snapshot {}", viewName, snapshotName);
       new GoldenCopyPersistenceHelper(new File(regressionDirectory)).save(goldenCopy);
-      s_logger.info("Persisted golden copy for {} against snapshot {}", viewName, snapshotName);
+      LOGGER.info("Persisted golden copy for {} against snapshot {}", viewName, snapshotName);
     }
     createDump(regressionDirectory);
   }
@@ -78,7 +83,8 @@ public abstract class AbstractGoldenCopyCreationTool<T extends ToolContext> exte
 
   /**
    * Creates the output directory.
-   * @return  the options
+   * 
+   * @return the options
    */
   private static Option createDbDumpOutputDirectory() {
     final String description = "Where to write the golden copy(ies) and the corresponding dump.";
@@ -92,12 +98,15 @@ public abstract class AbstractGoldenCopyCreationTool<T extends ToolContext> exte
 
   /**
    * Validates the file names by checking that there are no more unsupported chars in the name.
-   * @param names  the file names
+   * 
+   * @param names
+   *          the file names
    */
   private static void validateAsFilesystemNames(final String[] names) {
     for (final String name : names) {
       for (final CharSequence unsupportedCharSequence : UNSUPPORTED_CHAR_SEQUENCES) {
-        Preconditions.checkArgument(!name.contains(unsupportedCharSequence), "Unsupported char sequence '%s' found in string '%s'", unsupportedCharSequence, name);
+        Preconditions.checkArgument(!name.contains(unsupportedCharSequence), "Unsupported char sequence '%s' found in string '%s'", unsupportedCharSequence,
+            name);
       }
     }
   }

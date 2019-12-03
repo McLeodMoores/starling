@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.tool;
@@ -19,22 +19,22 @@ public class DbUpgradeTool extends AbstractDbTool<DbToolContext> {
 
   //-------------------------------------------------------------------------
   @Override
-  protected void doRun(boolean write, File outputFile) throws Exception {
-    DbUpgradeOperation upgradeOp = new DbUpgradeOperation(getDbToolContext(), write, outputFile);
+  protected void doRun(final boolean write, final File outputFile) throws Exception {
+    final DbUpgradeOperation upgradeOp = new DbUpgradeOperation(getDbToolContext(), write, outputFile);
     upgradeOp.execute();
     if (!upgradeOp.isUpgradeRequired()) {
       System.out.println("Database up-to-date");
     }
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the arguments, not null
    */
-  public static void main(String[] args) { //CSIGNORE
-    boolean success = new DbUpgradeTool().initAndRun(args, DbToolContext.class);
+  public static void main(final String[] args) { //CSIGNORE
+    final boolean success = new DbUpgradeTool().initAndRun(args, DbToolContext.class);
     System.exit(success ? 0 : 1);
   }
 

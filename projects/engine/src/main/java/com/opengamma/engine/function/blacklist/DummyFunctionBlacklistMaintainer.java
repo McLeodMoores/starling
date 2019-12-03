@@ -17,16 +17,16 @@ import com.opengamma.engine.calcnode.CalculationJobItem;
  */
 public class DummyFunctionBlacklistMaintainer implements FunctionBlacklistMaintainer {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DummyFunctionBlacklistMaintainer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DummyFunctionBlacklistMaintainer.class);
 
   @Override
   public void failedJobItem(final CalculationJobItem item) {
-    s_logger.info("Failed job item: {}", item);
+    LOGGER.info("Failed job item: {}", item);
   }
 
   @Override
   public void failedJobItems(final Collection<CalculationJobItem> items) {
-    s_logger.info("Failed job item(s): {}", items);
+    LOGGER.info("Failed job item(s): {}", items);
   }
 
 }

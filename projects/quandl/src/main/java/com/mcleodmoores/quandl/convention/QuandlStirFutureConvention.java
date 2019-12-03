@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.convention;
 
@@ -27,10 +27,10 @@ import com.opengamma.util.time.Tenor;
  * Convention for short-term interest rate futures that contains the necessary meta-data to construct a
  * {@link com.opengamma.financial.security.future.InterestRateFutureSecurity} from Quandl data.
  * <p>
- * This convention contains information about the future maturity in the form of the nth day of the month
- * (e.g. the last trading date of an IMM future is the third Monday of a month).
+ * This convention contains information about the future maturity in the form of the nth day of the month (e.g. the last trading date of an IMM future is the
+ * third Monday of a month).
  */
-//TODO think about where currency, tenor and expiry information should go
+// TODO think about where currency, tenor and expiry information should go
 @BeanDefinition
 public class QuandlStirFutureConvention extends QuandlFutureConvention {
 
@@ -80,20 +80,32 @@ public class QuandlStirFutureConvention extends QuandlFutureConvention {
   }
 
   /**
-   * Creates an instance with the settlement exchange and trading exchange name created by parsing
-   * the Quandl code.
-   * @param name The name of the convention, not null
-   * @param externalIdBundle The external ids associated with this convention, not null
-   * @param currency The currency, not null
-   * @param futureTenor The tenor of the future, not null
-   * @param underlyingTenor The tenor of the underlying, not null
-   * @param lastTradeTime The last trade time on the maturity date, not null
-   * @param zoneOffsetId The time zone of the exchange where the future is traded, not null
-   * @param unitAmount The unit amount of the future, not null
-   * @param underlyingConventionId The id of the underlying index convention, not null
-   * @param nthDay The nth day of the month of the future maturity
-   * @param dayOfWeek The day of the week of the future maturity
-   * @param tradingExchangeCalendarId  the trading exchange holiday calendar id, not null
+   * Creates an instance with the settlement exchange and trading exchange name created by parsing the Quandl code.
+   * 
+   * @param name
+   *          The name of the convention, not null
+   * @param externalIdBundle
+   *          The external ids associated with this convention, not null
+   * @param currency
+   *          The currency, not null
+   * @param futureTenor
+   *          The tenor of the future, not null
+   * @param underlyingTenor
+   *          The tenor of the underlying, not null
+   * @param lastTradeTime
+   *          The last trade time on the maturity date, not null
+   * @param zoneOffsetId
+   *          The time zone of the exchange where the future is traded, not null
+   * @param unitAmount
+   *          The unit amount of the future, not null
+   * @param underlyingConventionId
+   *          The id of the underlying index convention, not null
+   * @param nthDay
+   *          The nth day of the month of the future maturity
+   * @param dayOfWeek
+   *          The day of the week of the future maturity
+   * @param tradingExchangeCalendarId
+   *          the trading exchange holiday calendar id, not null
    */
   public QuandlStirFutureConvention(final String name, final ExternalIdBundle externalIdBundle, final Currency currency,
       final Tenor futureTenor, final Tenor underlyingTenor, final String lastTradeTime, final String zoneOffsetId, final double unitAmount,
@@ -108,26 +120,42 @@ public class QuandlStirFutureConvention extends QuandlFutureConvention {
 
   /**
    * Creates an instance with the settlement exchange and trading exchange name set to null.
-   * @param name The name of the convention, not null
-   * @param externalIdBundle The external ids associated with this convention, not null
-   * @param currency The currency, not null
-   * @param futureTenor The tenor of the future, not null
-   * @param underlyingTenor The tenor of the underlying, not null
-   * @param lastTradeTime The last trade time on the maturity date, not null
-   * @param zoneOffsetId The time zone of the exchange where the future is traded, not null
-   * @param unitAmount The unit amount of the future, not null
-   * @param underlyingConventionId The id of the underlying index convention, not null
-   * @param nthDay The nth day of the month of the future maturity
-   * @param dayOfWeek The day of the week of the future maturity
-   * @param tradingExchange The name of the trading exchange, can be null
-   * @param settlementExchange The name of the settlement exchange, can be null
-   * @param tradingExchangeCalendarId  the trading exchange holiday calendar id, not null
+   * 
+   * @param name
+   *          The name of the convention, not null
+   * @param externalIdBundle
+   *          The external ids associated with this convention, not null
+   * @param currency
+   *          The currency, not null
+   * @param futureTenor
+   *          The tenor of the future, not null
+   * @param underlyingTenor
+   *          The tenor of the underlying, not null
+   * @param lastTradeTime
+   *          The last trade time on the maturity date, not null
+   * @param zoneOffsetId
+   *          The time zone of the exchange where the future is traded, not null
+   * @param unitAmount
+   *          The unit amount of the future, not null
+   * @param underlyingConventionId
+   *          The id of the underlying index convention, not null
+   * @param nthDay
+   *          The nth day of the month of the future maturity
+   * @param dayOfWeek
+   *          The day of the week of the future maturity
+   * @param tradingExchange
+   *          The name of the trading exchange, can be null
+   * @param settlementExchange
+   *          The name of the settlement exchange, can be null
+   * @param tradingExchangeCalendarId
+   *          the trading exchange holiday calendar id, not null
    */
   public QuandlStirFutureConvention(final String name, final ExternalIdBundle externalIdBundle, final Currency currency,
       final Tenor futureTenor, final Tenor underlyingTenor, final String lastTradeTime, final String zoneOffsetId, final double unitAmount,
       final ExternalId underlyingConventionId, final int nthDay, final String dayOfWeek, final String tradingExchange,
       final String settlementExchange, final ExternalId tradingExchangeCalendarId) {
-    super(name, externalIdBundle, lastTradeTime, zoneOffsetId, unitAmount, underlyingConventionId, tradingExchange, settlementExchange, tradingExchangeCalendarId);
+    super(name, externalIdBundle, lastTradeTime, zoneOffsetId, unitAmount, underlyingConventionId, tradingExchange, settlementExchange,
+        tradingExchangeCalendarId);
     setCurrency(currency);
     setFutureTenor(futureTenor);
     setUnderlyingTenor(underlyingTenor);

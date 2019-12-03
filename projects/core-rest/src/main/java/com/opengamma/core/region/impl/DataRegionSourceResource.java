@@ -40,7 +40,7 @@ public class DataRegionSourceResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param regionSource  the underlying region source, not null
    */
   public DataRegionSourceResource(final RegionSource regionSource) {
@@ -51,7 +51,7 @@ public class DataRegionSourceResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the region source.
-   * 
+   *
    * @return the region source, not null
    */
   public RegionSource getRegionSource() {
@@ -60,47 +60,46 @@ public class DataRegionSourceResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @GET
   @Path("regions")
   public Response search(
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo,
-      @QueryParam("id") List<String> externalIdStrs) {
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo,
+      @QueryParam("id") final List<String> externalIdStrs) {
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
-    Collection<? extends Region> result = getRegionSource().get(bundle, vc);
+    final Collection<? extends Region> result = getRegionSource().get(bundle, vc);
     return responseOkObject(FudgeListWrapper.of(result));
   }
 
   @GET
   @Path("regions/{regionId}")
   public Response get(
-      @PathParam("regionId") String idStr,
-      @QueryParam("version") String version,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo) {
+      @PathParam("regionId") final String idStr,
+      @QueryParam("version") final String version,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
     final ObjectId objectId = ObjectId.parse(idStr);
     if (version != null) {
       final Region result = getRegionSource().get(objectId.atVersion(version));
       return responseOkObject(result);
-    } else {
-      final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      Region result = getRegionSource().get(objectId, vc);
-      return responseOkObject(result);
     }
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final Region result = getRegionSource().get(objectId, vc);
+    return responseOkObject(result);
   }
 
   // deprecated
   //-------------------------------------------------------------------------
   @GET
   @Path("regionSearches/highest")
-  public Response searchHighest(@QueryParam("id") List<String> externalIdStrs) {
+  public Response searchHighest(@QueryParam("id") final List<String> externalIdStrs) {
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
-    Region result = getRegionSource().getHighestLevelRegion(bundle);
+    final Region result = getRegionSource().getHighestLevelRegion(bundle);
     return responseOkObject(result);
   }
 }

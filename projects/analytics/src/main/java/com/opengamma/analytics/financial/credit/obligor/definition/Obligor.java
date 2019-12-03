@@ -21,14 +21,12 @@ import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class for defining the characteristics of an obligor in a derivative contract.
- * In the credit derivative context obligors can be protection buyers, protection
- * sellers or the reference entity. More generally, an obligor is someone to whom
- * one has counterparty risk.
+ * Class for defining the characteristics of an obligor in a derivative contract. In the credit derivative context obligors can be protection buyers, protection
+ * sellers or the reference entity. More generally, an obligor is someone to whom one has counterparty risk.
  * <p>
- * @deprecated The concept of an obligor is useful for more than credit products
- * and so this version has been deprected. The newer equivalent is in
- * {@link com.opengamma.analytics.financial.legalentity.LegalEntityWithREDCode}
+ * 
+ * @deprecated The concept of an obligor is useful for more than credit products and so this version has been deprected. The newer equivalent is in
+ *             {@link com.opengamma.analytics.financial.legalentity.LegalEntityWithREDCode}
  */
 @Deprecated
 public class Obligor {
@@ -58,18 +56,30 @@ public class Obligor {
   private final String _country;
 
   /**
-   * @param obligorTicker The ticker, not null or empty
-   * @param obligorShortName The short name, not null or empty
-   * @param obligorREDCode The RED code, not null
-   * @param compositeRating The Markit composite rating, not null
-   * @param impliedRating The Markit implied rating, not null
-   * @param moodysCreditRating The Moody's rating, not null
-   * @param standardAndPoorsCreditRating The S&P rating, not null
-   * @param fitchCreditRating The Fitch rating, not null
-   * @param hasDefaulted True if the obligor has defaulted
-   * @param sector The sector, not null
-   * @param region The region, not null
-   * @param country The country, not null
+   * @param obligorTicker
+   *          The ticker, not null or empty
+   * @param obligorShortName
+   *          The short name, not null or empty
+   * @param obligorREDCode
+   *          The RED code, not null
+   * @param compositeRating
+   *          The Markit composite rating, not null
+   * @param impliedRating
+   *          The Markit implied rating, not null
+   * @param moodysCreditRating
+   *          The Moody's rating, not null
+   * @param standardAndPoorsCreditRating
+   *          The S&amp;P rating, not null
+   * @param fitchCreditRating
+   *          The Fitch rating, not null
+   * @param hasDefaulted
+   *          True if the obligor has defaulted
+   * @param sector
+   *          The sector, not null
+   * @param region
+   *          The region, not null
+   * @param country
+   *          The country, not null
    */
   public Obligor(final String obligorTicker,
       final String obligorShortName,
@@ -113,9 +123,9 @@ public class Obligor {
   }
 
   /**
-   * Constructs an equivalent non-deprecated object. The internal delegates for the
-   * {@link CreditRating}, {@link CreditRatingMoodys}, {@link CreditRatingStandardAndPoors},
-   * {@link CreditRatingFitch}, {@link Sector} and {@link Region} enums are used.
+   * Constructs an equivalent non-deprecated object. The internal delegates for the {@link CreditRating}, {@link CreditRatingMoodys},
+   * {@link CreditRatingStandardAndPoors}, {@link CreditRatingFitch}, {@link Sector} and {@link Region} enums are used.
+   * 
    * @return A {@link com.opengamma.analytics.financial.legalentity.LegalEntityWithREDCode}
    */
   public com.opengamma.analytics.financial.legalentity.LegalEntity toObligor() {
@@ -125,13 +135,15 @@ public class Obligor {
     creditRatings.add(_moodysCreditRating.toCreditRating());
     creditRatings.add(_standardAndPoorsCreditRating.toCreditRating());
     creditRatings.add(_fitchCreditRating.toCreditRating());
-    final com.opengamma.analytics.financial.legalentity.Region region = com.opengamma.analytics.financial.legalentity.Region.of(_region.name(), Country.of(_country), (Currency) null);
+    final com.opengamma.analytics.financial.legalentity.Region region = com.opengamma.analytics.financial.legalentity.Region.of(_region.name(),
+        Country.of(_country), (Currency) null);
     return new com.opengamma.analytics.financial.legalentity.LegalEntityWithREDCode(_obligorTicker, _obligorShortName, creditRatings,
         _sector.toSector(), region, _obligorREDCode);
   }
 
   /**
    * Gets the ticker.
+   * 
    * @return The ticker
    */
   public String getObligorTicker() {
@@ -140,6 +152,7 @@ public class Obligor {
 
   /**
    * Gets the short name.
+   * 
    * @return The short name
    */
   public String getObligorShortName() {
@@ -148,6 +161,7 @@ public class Obligor {
 
   /**
    * Gets the RED code.
+   * 
    * @return The RED code
    */
   public String getObligorREDCode() {
@@ -156,6 +170,7 @@ public class Obligor {
 
   /**
    * Gets the Markit composite rating.
+   * 
    * @return The Markit composite rating
    */
   public CreditRating getCompositeRating() {
@@ -164,6 +179,7 @@ public class Obligor {
 
   /**
    * Gets the implied rating.
+   * 
    * @return The implied rating
    */
   public CreditRating getImpliedRating() {
@@ -172,6 +188,7 @@ public class Obligor {
 
   /**
    * Gets the Moody's rating.
+   * 
    * @return The Moody's rating
    */
   public CreditRatingMoodys getMoodysCreditRating() {
@@ -179,8 +196,9 @@ public class Obligor {
   }
 
   /**
-   * Gets the S&P rating.
-   * @return The S&P rating
+   * Gets the S&amp;P rating.
+   *
+   * @return The S&amp;P rating
    */
   public CreditRatingStandardAndPoors getStandardAdPoorsCreditRating() {
     return _standardAndPoorsCreditRating;
@@ -188,6 +206,7 @@ public class Obligor {
 
   /**
    * Gets the Fitch rating.
+   * 
    * @return The Fitch rating
    */
   public CreditRatingFitch getFitchCreditRating() {
@@ -196,6 +215,7 @@ public class Obligor {
 
   /**
    * Returns true if the obligor has defaulted.
+   * 
    * @return True if the obligor has defaulted
    */
   public boolean getHasDefaulted() {
@@ -204,6 +224,7 @@ public class Obligor {
 
   /**
    * Gets the sector.
+   * 
    * @return The sector
    */
   public Sector getSector() {
@@ -212,6 +233,7 @@ public class Obligor {
 
   /**
    * Gets the region.
+   * 
    * @return The region
    */
   public Region getRegion() {
@@ -220,6 +242,7 @@ public class Obligor {
 
   /**
    * Gets the country.
+   * 
    * @return The country
    */
   public String getCountry() {

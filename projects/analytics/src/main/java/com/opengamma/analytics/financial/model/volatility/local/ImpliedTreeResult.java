@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.local;
@@ -11,7 +11,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.financial.model.tree.RecombiningTree;
 
 /**
- * 
+ *
  */
 public class ImpliedTreeResult {
   private final RecombiningTree<Double> _spotPrices;
@@ -21,8 +21,9 @@ public class ImpliedTreeResult {
     Validate.notNull(spotPrices, "spot price tree");
     Validate.notNull(localVolatilities, "local volatility tree");
     if (spotPrices.getDepth() - 1 != localVolatilities.getDepth()) {
-      throw new IllegalArgumentException("Spot price tree must have depth equal to the depth of the local volatility tree plus one; have " + spotPrices.getDepth() + " and "
-          + localVolatilities.getDepth());
+      throw new IllegalArgumentException(
+          "Spot price tree must have depth equal to the depth of the local volatility tree plus one; have " + spotPrices.getDepth() + " and "
+              + localVolatilities.getDepth());
     }
     _spotPrices = spotPrices;
     _localVolatilities = localVolatilities;

@@ -11,11 +11,9 @@ import com.opengamma.analytics.math.function.Function1D;
 /**
  * Finds a single root of a function using the bisection method.
  * <p>
- * If a root of a function $f(x)$ is bounded by two values $x_1$ and $x_2$,
- * then $f(x_1)f(x_2) < 0$.  The function is evaluated at the midpoint of these
- * values and the bound that gives the same sign in the function evaluation is
- * replaced. The bisection is stopped when the change in the value of $x$ is
- * below the accuracy, or the evaluation of the function at $x$ is zero.
+ * If a root of a function $f(x)$ is bounded by two values $x_1$ and $x_2$, then $f(x_1)f(x_2) &lt; 0$. The function is evaluated at the midpoint of these
+ * values and the bound that gives the same sign in the function evaluation is replaced. The bisection is stopped when the change in the value of $x$ is below
+ * the accuracy, or the evaluation of the function at $x$ is zero.
  */
 public class BisectionSingleRootFinder extends RealSingleRootFinder {
   private final double _accuracy;
@@ -23,14 +21,15 @@ public class BisectionSingleRootFinder extends RealSingleRootFinder {
   private static final double ZERO = 1e-16;
 
   /**
-   * Sets the accuracy to 10<sup>-15</sup>
+   * Sets the accuracy to 10<sup>-15</sup>.
    */
   public BisectionSingleRootFinder() {
     this(1e-15);
   }
 
   /**
-   * @param accuracy The required accuracy of the $x$-position of the root
+   * @param accuracy
+   *          The required accuracy of the $x$-position of the root
    */
   public BisectionSingleRootFinder(final double accuracy) {
     _accuracy = Math.abs(accuracy);
@@ -38,7 +37,9 @@ public class BisectionSingleRootFinder extends RealSingleRootFinder {
 
   /**
    * {@inheritDoc}
-   * @throws MathException If the root is not found to the required accuracy in 100 attempts
+   * 
+   * @throws MathException
+   *           If the root is not found to the required accuracy in 100 attempts
    */
   @Override
   public Double getRoot(final Function1D<Double, Double> function, final Double x1, final Double x2) {

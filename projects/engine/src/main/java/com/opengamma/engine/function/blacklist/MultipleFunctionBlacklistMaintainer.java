@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -20,7 +20,7 @@ public class MultipleFunctionBlacklistMaintainer implements FunctionBlacklistMai
 
   public MultipleFunctionBlacklistMaintainer(final Collection<FunctionBlacklistMaintainer> underlying) {
     ArgumentChecker.notNull(underlying, "underlying");
-    _underlying = new ArrayList<FunctionBlacklistMaintainer>(underlying);
+    _underlying = new ArrayList<>(underlying);
   }
 
   private Collection<FunctionBlacklistMaintainer> getUnderlying() {
@@ -29,14 +29,14 @@ public class MultipleFunctionBlacklistMaintainer implements FunctionBlacklistMai
 
   @Override
   public void failedJobItem(final CalculationJobItem item) {
-    for (FunctionBlacklistMaintainer underlying : getUnderlying()) {
+    for (final FunctionBlacklistMaintainer underlying : getUnderlying()) {
       underlying.failedJobItem(item);
     }
   }
 
   @Override
   public void failedJobItems(final Collection<CalculationJobItem> items) {
-    for (FunctionBlacklistMaintainer underlying : getUnderlying()) {
+    for (final FunctionBlacklistMaintainer underlying : getUnderlying()) {
       underlying.failedJobItems(items);
     }
   }

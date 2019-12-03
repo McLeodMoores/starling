@@ -23,6 +23,7 @@ import org.fudgemsg.FudgeRuntimeException;
 import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.MethodParameterScanner;
+import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.threeten.bp.Instant;
 
@@ -48,26 +49,26 @@ public final class ClasspathScanner {
     _timestamp = timestamp(_urls);
   }
 
-  private Set<URL> getClassPathElements() {
+  private static Set<URL> getClassPathElements() {
     if (s_classPathElements == null) {
       s_classPathElements = findClassPathElements();
     }
     return s_classPathElements;
   }
 
-  private Set<URL> findClassPathElements() {
-    Set<URL> results = new LinkedHashSet<URL>();
-    String javaClassPath = System.getProperty("java.class.path");
-    String[] paths = javaClassPath.split(Pattern.quote(File.pathSeparator));
-    for (String path : paths) {
-      File f = new File(path);
+  private static Set<URL> findClassPathElements() {
+    final Set<URL> results = new LinkedHashSet<>();
+    final String javaClassPath = System.getProperty("java.class.path");
+    final String[] paths = javaClassPath.split(Pattern.quote(File.pathSeparator));
+    for (final String path : paths) {
+      final File f = new File(path);
       if (!f.exists()) {
         continue;
       }
       URL url;
       try {
         url = f.toURI().toURL();
-      } catch (MalformedURLException e) {
+      } catch (final MalformedURLException e) {
         throw new FudgeRuntimeException("Could not convert file " + f + " to URL", e);
       }
       results.add(url);
@@ -77,14 +78,14 @@ public final class ClasspathScanner {
 
   private static Instant timestamp(final Iterable<URL> urls) {
     long ctime = 0;
-    for (URL url : urls) {
+    for (final URL url : urls) {
       try {
         final File f = new File(url.toURI());
         final long l = f.lastModified();
         if (l > ctime) {
           ctime = l;
         }
-      } catch (URISyntaxException e) {
+      } catch (final URISyntaxException e) {
         // Ignore this one
       }
     }
@@ -93,7 +94,7 @@ public final class ClasspathScanner {
 
   /**
    * Returns the timestamp of the most recently modified Jar (or class) in the class path.
-   * 
+   *
    * @return the timestamp, not null
    */
   public Instant getTimestamp() {
@@ -102,12 +103,12 @@ public final class ClasspathScanner {
 
   /**
    * Scans the classpath to produce a populated cache.
-   * 
+   *
    * @param annotationClass the annotation to search for
    * @return the cache, not null
    */
   @SuppressWarnings({"rawtypes", "unchecked" })
-  public AnnotationCache scan(Class<? extends Annotation> annotationClass) {
+  public AnnotationCache scan(final Class<? extends Annotation> annotationClass) {
     int scanners = 0;
     if (isScanClassAnnotations()) {
       scanners++;
@@ -121,10 +122,11 @@ public final class ClasspathScanner {
     if (isScanParameterAnnotations()) {
       scanners++;
     }
-    final Object[] config = new Object[scanners + 2];
+    final Object[] config = new Object[scanners + 3];
     scanners = 0;
     if (isScanClassAnnotations()) {
       config[scanners++] = new TypeAnnotationsScanner();
+      config[scanners++] = new SubTypesScanner();
     }
     if (isScanFieldAnnotations()) {
       config[scanners++] = new FieldAnnotationsScanner();
@@ -137,39 +139,39 @@ public final class ClasspathScanner {
     }
     config[scanners++] = ClasspathScanner.class.getClassLoader();
     config[scanners++] = Thread.currentThread().getContextClassLoader();
-    AnnotationReflector reflector = new AnnotationReflector(null, _urls, config);
-    final HashSet<String> classNames = new HashSet<String>();
+    final AnnotationReflector annotationReflector = new AnnotationReflector(null, _urls, config);
+    final HashSet<String> classNames = new HashSet<>();
     if (isScanClassAnnotations()) {
-      
+
       Set<Class<?>> classes;
       try {
-        classes = reflector.getReflector().getTypesAnnotatedWith((Class<? extends Annotation>) Class.forName(annotationClass.getName()));
-      } catch (ClassNotFoundException ex) {
+        classes = annotationReflector.getReflector().getTypesAnnotatedWith((Class<? extends Annotation>) Class.forName(annotationClass.getName()));
+      } catch (final ClassNotFoundException ex) {
         throw new OpenGammaRuntimeException("Can't find class " + annotationClass, ex);
       }
-      for (Class<?> clazz : classes) {
+      for (final Class<?> clazz : classes) {
         classNames.add(clazz.getName());
       }
     }
     if (isScanFieldAnnotations()) {
-      Set<Field> fields = reflector.getReflector().getFieldsAnnotatedWith(annotationClass);
-      for (Field field : fields) {
+      final Set<Field> fields = annotationReflector.getReflector().getFieldsAnnotatedWith(annotationClass);
+      for (final Field field : fields) {
         classNames.add(field.getDeclaringClass().getName());
       }
     }
     if (isScanMethodAnnotations()) {
-      Set<Method> methods = reflector.getReflector().getMethodsAnnotatedWith(annotationClass);
-      for (Method method : methods) {
+      final Set<Method> methods = annotationReflector.getReflector().getMethodsAnnotatedWith(annotationClass);
+      for (final Method method : methods) {
         classNames.add(method.getDeclaringClass().getName());
       }
-      Set<Constructor> constructors = reflector.getReflector().getConstructorsAnnotatedWith(annotationClass);
-      for (Constructor constructor : constructors) {
+      final Set<Constructor> constructors = annotationReflector.getReflector().getConstructorsAnnotatedWith(annotationClass);
+      for (final Constructor constructor : constructors) {
         classNames.add(constructor.getDeclaringClass().getName());
       }
     }
     if (isScanParameterAnnotations()) {
-      Set<Method> paramMethods = reflector.getReflector().getMethodsWithAnyParamAnnotated(annotationClass);
-      for (Method method : paramMethods) {
+      final Set<Method> paramMethods = annotationReflector.getReflector().getMethodsWithAnyParamAnnotated(annotationClass);
+      for (final Method method : paramMethods) {
         classNames.add(method.getDeclaringClass().getName());
       }
     }
@@ -178,7 +180,7 @@ public final class ClasspathScanner {
 
   /**
    * Gets the scanClassAnnotations.
-   * 
+   *
    * @return the scanClassAnnotations
    */
   public boolean isScanClassAnnotations() {
@@ -187,16 +189,16 @@ public final class ClasspathScanner {
 
   /**
    * Sets the scanClassAnnotations.
-   * 
+   *
    * @param scanClassAnnotations the scanClassAnnotations
    */
-  public void setScanClassAnnotations(boolean scanClassAnnotations) {
+  public void setScanClassAnnotations(final boolean scanClassAnnotations) {
     _scanClassAnnotations = scanClassAnnotations;
   }
 
   /**
    * Gets the scanMethodAnnotations.
-   * 
+   *
    * @return the scanMethodAnnotations
    */
   public boolean isScanMethodAnnotations() {
@@ -205,16 +207,16 @@ public final class ClasspathScanner {
 
   /**
    * Sets the scanMethodAnnotations.
-   * 
+   *
    * @param scanMethodAnnotations the scanMethodAnnotations
    */
-  public void setScanMethodAnnotations(boolean scanMethodAnnotations) {
+  public void setScanMethodAnnotations(final boolean scanMethodAnnotations) {
     _scanMethodAnnotations = scanMethodAnnotations;
   }
 
   /**
    * Gets the scanParameterAnnotations.
-   * 
+   *
    * @return the scanParameterAnnotations
    */
   public boolean isScanParameterAnnotations() {
@@ -223,16 +225,16 @@ public final class ClasspathScanner {
 
   /**
    * Sets the scanParameterAnnotations.
-   * 
+   *
    * @param scanParameterAnnotations the scanParameterAnnotations
    */
-  public void setScanParameterAnnotations(boolean scanParameterAnnotations) {
+  public void setScanParameterAnnotations(final boolean scanParameterAnnotations) {
     _scanParameterAnnotations = scanParameterAnnotations;
   }
 
   /**
    * Gets the scanFieldAnnotations.
-   * 
+   *
    * @return the scanFieldAnnotations
    */
   public boolean isScanFieldAnnotations() {
@@ -241,10 +243,10 @@ public final class ClasspathScanner {
 
   /**
    * Sets the scanFieldAnnotations.
-   * 
+   *
    * @param scanFieldAnnotations the scanFieldAnnotations
    */
-  public void setScanFieldAnnotations(boolean scanFieldAnnotations) {
+  public void setScanFieldAnnotations(final boolean scanFieldAnnotations) {
     _scanFieldAnnotations = scanFieldAnnotations;
   }
 

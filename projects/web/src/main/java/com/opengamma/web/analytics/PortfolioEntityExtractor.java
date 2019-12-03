@@ -31,30 +31,30 @@ import com.opengamma.web.analytics.blotter.UnderlyingSecurityVisitor;
   /** For getting underlying securities for OTCs with OTC underlyings. */
   private final UnderlyingSecurityVisitor _underlyingVisitor;
 
-  /* package */ PortfolioEntityExtractor(VersionCorrection versionCorrection, SecurityMaster securityMaster) {
+  /* package */ PortfolioEntityExtractor(final VersionCorrection versionCorrection, final SecurityMaster securityMaster) {
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(securityMaster, "securityMaster");
     _underlyingVisitor = new UnderlyingSecurityVisitor(versionCorrection, securityMaster);
   }
 
   @Override
-  public List<UniqueIdentifiable> apply(PortfolioNode node) {
+  public List<UniqueIdentifiable> apply(final PortfolioNode node) {
     return Collections.emptyList();
   }
 
   @Override
-  public List<UniqueIdentifiable> apply(PortfolioNode parent, Position position) {
-    List<UniqueIdentifiable> entities = Lists.newArrayList();
+  public List<UniqueIdentifiable> apply(final PortfolioNode parent, final Position position) {
+    final List<UniqueIdentifiable> entities = Lists.newArrayList();
     entities.add(position);
-    Security security = position.getSecurityLink().getTarget();
+    final Security security = position.getSecurityLink().getTarget();
     entities.add(security);
     if (security instanceof FinancialSecurity) {
-      ManageableSecurity underlying = ((FinancialSecurity) security).accept(_underlyingVisitor);
+      final ManageableSecurity underlying = ((FinancialSecurity) security).accept(_underlyingVisitor);
       if (underlying != null) {
         entities.add(underlying);
       }
     }
-    for (Trade trade : position.getTrades()) {
+    for (final Trade trade : position.getTrades()) {
       entities.add(trade);
     }
     return entities;

@@ -10,14 +10,15 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Supplies {@link ExposureFunction}s stored in a {@link ConfigSource}
+ * Supplies {@link ExposureFunction}s stored in a {@link ConfigSource}.
  */
 public class ConfigDBExposureFunctionsSource implements ExposureFunctionsSource {
   /** The config source */
   private final ConfigSource _configSource;
 
   /**
-   * @param configSource The config source, not null
+   * @param configSource
+   *          The config source, not null
    */
   public ConfigDBExposureFunctionsSource(final ConfigSource configSource) {
     ArgumentChecker.notNull(configSource, "config source");

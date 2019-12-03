@@ -72,46 +72,46 @@ public class FungibleTradeBuilderTest {
   public void setUp() throws Exception {
     _portfolioMaster = new InMemoryPortfolioMaster();
     _positionMaster = new InMemoryPositionMaster();
-    InMemorySecurityMaster securityMaster = new InMemorySecurityMaster();
+    final InMemorySecurityMaster securityMaster = new InMemorySecurityMaster();
     securityMaster.add(new SecurityDocument(APPLE_SECURITY));
     securityMaster.add(new SecurityDocument(INTEL_SECURITY));
-    BigDecimal quantity = BigDecimal.valueOf(20);
-    ManageablePosition position = new ManageablePosition(quantity, APPLE_SECURITY.getExternalIdBundle());
+    final BigDecimal quantity = BigDecimal.valueOf(20);
+    final ManageablePosition position = new ManageablePosition(quantity, APPLE_SECURITY.getExternalIdBundle());
     position.addTrade(new ManageableTrade(quantity,
-                                          APPLE_BUNDLE,
-                                          LocalDate.of(2012, 12, 1),
-                                          OffsetTime.of(LocalTime.of(9, 30), ZoneOffset.UTC),
-                                          ExternalId.of(AbstractTradeBuilder.CPTY_SCHEME, "existingCpty")));
+        APPLE_BUNDLE,
+        LocalDate.of(2012, 12, 1),
+        OffsetTime.of(LocalTime.of(9, 30), ZoneOffset.UTC),
+        ExternalId.of(AbstractTradeBuilder.CPTY_SCHEME, "existingCpty")));
     _savedPosition = _positionMaster.add(new PositionDocument(position)).getPosition();
-    ManageablePortfolioNode root = new ManageablePortfolioNode("root");
-    ManageablePortfolioNode node = new ManageablePortfolioNode("node");
+    final ManageablePortfolioNode root = new ManageablePortfolioNode("root");
+    final ManageablePortfolioNode node = new ManageablePortfolioNode("node");
     node.addPosition(_savedPosition.getUniqueId());
     root.addChildNode(node);
-    ManageablePortfolio portfolio = new ManageablePortfolio("portfolio", root);
+    final ManageablePortfolio portfolio = new ManageablePortfolio("portfolio", root);
     _savedPortfolio = _portfolioMaster.add(new PortfolioDocument(portfolio)).getPortfolio();
-    Set<MetaBean> metaBeans = Sets.<MetaBean>newHashSet(ManageableTrade.meta());
+    final Set<MetaBean> metaBeans = Sets.<MetaBean>newHashSet(ManageableTrade.meta());
     _tradeBuilder = new FungibleTradeBuilder(_positionMaster,
-                                             _portfolioMaster,
-                                             securityMaster,
-                                             metaBeans,
-                                             BlotterUtils.getStringConvert());
+        _portfolioMaster,
+        securityMaster,
+        metaBeans,
+        BlotterUtils.getStringConvert());
     _savedNode = _savedPortfolio.getRootNode().getChildNodes().get(0);
   }
 
-  private BeanDataSource createTradeData(String securityTicker, String id) {
-    String securityId = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, securityTicker).toString();
+  private static BeanDataSource createTradeData(final String securityTicker, final String id) {
+    final String securityId = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, securityTicker).toString();
     return BlotterTestUtils.beanData("uniqueId", id,
-                                     "type", FungibleTradeBuilder.TRADE_TYPE_NAME,
-                                     "tradeDate", "2012-12-21",
-                                     "tradeTime", "14:25",
-                                     "securityIdBundle", securityId,
-                                     "premium", "1234",
-                                     "premiumCurrency", "USD",
-                                     "premiumDate", "2012-12-22",
-                                     "premiumTime", "13:30",
-                                     "quantity", "30",
-                                     "counterparty", "cptyName",
-                                     "attributes", Maps.newHashMap());
+        "type", FungibleTradeBuilder.TRADE_TYPE_NAME,
+        "tradeDate", "2012-12-21",
+        "tradeTime", "14:25",
+        "securityIdBundle", securityId,
+        "premium", "1234",
+        "premiumCurrency", "USD",
+        "premiumDate", "2012-12-22",
+        "premiumTime", "13:30",
+        "quantity", "30",
+        "counterparty", "cptyName",
+        "attributes", Maps.newHashMap());
   }
 
   /**
@@ -120,8 +120,8 @@ public class FungibleTradeBuilderTest {
    */
   @Test
   public void addTradeNoExistingPosition() {
-    UniqueId tradeId = _tradeBuilder.addTrade(createTradeData("INTC US Equity", null), _savedNode.getUniqueId());
-    ManageableTrade testTrade = _positionMaster.getTrade(tradeId);
+    final UniqueId tradeId = _tradeBuilder.addTrade(createTradeData("INTC US Equity", null), _savedNode.getUniqueId());
+    final ManageableTrade testTrade = _positionMaster.getTrade(tradeId);
     assertEquals(LocalDate.of(2012, 12, 21), testTrade.getTradeDate());
     assertEquals(OffsetTime.of(LocalTime.of(14, 25), ZoneOffset.UTC), testTrade.getTradeTime());
     assertEquals(INTEL_BUNDLE, testTrade.getSecurityLink().getExternalId());
@@ -133,14 +133,14 @@ public class FungibleTradeBuilderTest {
     assertEquals(ExternalId.of(AbstractTradeBuilder.CPTY_SCHEME, "cptyName"), testTrade.getCounterpartyExternalId());
     assertTrue(testTrade.getAttributes().isEmpty());
 
-    ManageablePosition testPosition = _positionMaster.get(testTrade.getParentPositionId()).getPosition();
+    final ManageablePosition testPosition = _positionMaster.get(testTrade.getParentPositionId()).getPosition();
     assertEquals(INTEL_BUNDLE, testPosition.getSecurityLink().getExternalId());
     assertEquals(testTrade.getQuantity(), testPosition.getQuantity());
     assertEquals(1, testPosition.getTrades().size());
     assertEquals(testTrade, testPosition.getTrades().get(0));
 
-    ManageablePortfolio testPortfolio = _portfolioMaster.get(_savedNode.getPortfolioId()).getPortfolio();
-    ManageablePortfolioNode testNode = testPortfolio.getRootNode().getChildNodes().get(0);
+    final ManageablePortfolio testPortfolio = _portfolioMaster.get(_savedNode.getPortfolioId()).getPortfolio();
+    final ManageablePortfolioNode testNode = testPortfolio.getRootNode().getChildNodes().get(0);
     assertEquals(2, testNode.getPositionIds().size());
     assertEquals(_savedPosition.getUniqueId().getObjectId(), testNode.getPositionIds().get(0));
     assertEquals(testPosition.getUniqueId().getObjectId(), testNode.getPositionIds().get(1));
@@ -151,8 +151,8 @@ public class FungibleTradeBuilderTest {
    */
   @Test
   public void addTradeToExistingPosition() {
-    UniqueId tradeId = _tradeBuilder.addTrade(createTradeData("AAPL US Equity", null), _savedNode.getUniqueId());
-    ManageableTrade testTrade = _positionMaster.getTrade(tradeId);
+    final UniqueId tradeId = _tradeBuilder.addTrade(createTradeData("AAPL US Equity", null), _savedNode.getUniqueId());
+    final ManageableTrade testTrade = _positionMaster.getTrade(tradeId);
     assertEquals(LocalDate.of(2012, 12, 21), testTrade.getTradeDate());
     assertEquals(OffsetTime.of(LocalTime.of(14, 25), ZoneOffset.UTC), testTrade.getTradeTime());
     assertEquals(APPLE_BUNDLE, testTrade.getSecurityLink().getExternalId());
@@ -164,14 +164,14 @@ public class FungibleTradeBuilderTest {
     assertEquals(ExternalId.of(AbstractTradeBuilder.CPTY_SCHEME, "cptyName"), testTrade.getCounterpartyExternalId());
     assertTrue(testTrade.getAttributes().isEmpty());
 
-    ManageablePosition testPosition = _positionMaster.get(testTrade.getParentPositionId()).getPosition();
+    final ManageablePosition testPosition = _positionMaster.get(testTrade.getParentPositionId()).getPosition();
     assertEquals(APPLE_BUNDLE, testPosition.getSecurityLink().getExternalId());
     assertEquals(BigDecimal.valueOf(50), testPosition.getQuantity());
     assertEquals(2, testPosition.getTrades().size());
     assertEquals(testTrade, testPosition.getTrades().get(1));
 
-    ManageablePortfolio testPortfolio = _portfolioMaster.get(_savedNode.getPortfolioId()).getPortfolio();
-    ManageablePortfolioNode testNode = testPortfolio.getRootNode().getChildNodes().get(0);
+    final ManageablePortfolio testPortfolio = _portfolioMaster.get(_savedNode.getPortfolioId()).getPortfolio();
+    final ManageablePortfolioNode testNode = testPortfolio.getRootNode().getChildNodes().get(0);
     assertEquals(1, testNode.getPositionIds().size());
     assertEquals(_savedPosition.getUniqueId().getObjectId(), testNode.getPositionIds().get(0));
   }
@@ -181,11 +181,11 @@ public class FungibleTradeBuilderTest {
    */
   @Test
   public void updateTrade() {
-    ManageableTrade previousTrade = _savedPosition.getTrades().get(0);
-    BeanDataSource tradeData = createTradeData("AAPL US Equity", previousTrade.getUniqueId().toString());
-    UniqueId updatedId = _tradeBuilder.updateTrade(tradeData);
+    final ManageableTrade previousTrade = _savedPosition.getTrades().get(0);
+    final BeanDataSource tradeData = createTradeData("AAPL US Equity", previousTrade.getUniqueId().toString());
+    final UniqueId updatedId = _tradeBuilder.updateTrade(tradeData);
 
-    ManageableTrade updatedTrade = _positionMaster.getTrade(updatedId);
+    final ManageableTrade updatedTrade = _positionMaster.getTrade(updatedId);
     assertEquals(LocalDate.of(2012, 12, 21), updatedTrade.getTradeDate());
     assertEquals(OffsetTime.of(LocalTime.of(14, 25), ZoneOffset.UTC), updatedTrade.getTradeTime());
     assertEquals(APPLE_BUNDLE, updatedTrade.getSecurityLink().getExternalId());
@@ -203,16 +203,16 @@ public class FungibleTradeBuilderTest {
    */
   @Test
   public void updatePositionWithNoTrades() {
-    ManageablePosition position = new ManageablePosition(BigDecimal.valueOf(42), APPLE_SECURITY.getExternalIdBundle());
-    ManageablePosition savedPosition = _positionMaster.add(new PositionDocument(position)).getPosition();
+    final ManageablePosition position = new ManageablePosition(BigDecimal.valueOf(42), APPLE_SECURITY.getExternalIdBundle());
+    final ManageablePosition savedPosition = _positionMaster.add(new PositionDocument(position)).getPosition();
     assertEquals(BigDecimal.valueOf(42), savedPosition.getQuantity());
 
     _tradeBuilder.updatePosition(createTradeData("AAPL US Equity", null), savedPosition.getUniqueId());
-    ManageablePosition updatedPosition = _positionMaster.get(savedPosition.getUniqueId().getObjectId(),
-                                                             VersionCorrection.LATEST).getPosition();
+    final ManageablePosition updatedPosition = _positionMaster.get(savedPosition.getUniqueId().getObjectId(),
+        VersionCorrection.LATEST).getPosition();
     assertEquals(BigDecimal.valueOf(30), updatedPosition.getQuantity());
     assertEquals(1, updatedPosition.getTrades().size());
-    ManageableTrade trade = updatedPosition.getTrades().get(0);
+    final ManageableTrade trade = updatedPosition.getTrades().get(0);
     assertEquals(LocalDate.of(2012, 12, 21), trade.getTradeDate());
     assertEquals(OffsetTime.of(LocalTime.of(14, 25), ZoneOffset.UTC), trade.getTradeTime());
     assertEquals(APPLE_BUNDLE, trade.getSecurityLink().getExternalId());
@@ -230,8 +230,8 @@ public class FungibleTradeBuilderTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void updateTradeChangeSecurity() {
-    ManageableTrade previousTrade = _savedPosition.getTrades().get(0);
-    BeanDataSource tradeData = createTradeData("INTC US Equity", previousTrade.getUniqueId().toString());
+    final ManageableTrade previousTrade = _savedPosition.getTrades().get(0);
+    final BeanDataSource tradeData = createTradeData("INTC US Equity", previousTrade.getUniqueId().toString());
     _tradeBuilder.updateTrade(tradeData);
   }
 }

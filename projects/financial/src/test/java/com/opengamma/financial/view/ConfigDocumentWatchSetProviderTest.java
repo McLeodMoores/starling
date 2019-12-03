@@ -23,7 +23,10 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Tests the {@link ConfigDocumentWatchSetProvider} class.
+ * 
+ * @deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class ConfigDocumentWatchSetProviderTest {
 
@@ -42,7 +45,7 @@ public class ConfigDocumentWatchSetProviderTest {
     assertEquals(provider.getAdditionalWatchSet(Collections.<ObjectId>singleton(ObjectId.of("Foo", "Bar"))), Collections.emptySet());
   }
 
-  private ConfigItem<ConfigDocumentWatchSetProviderTest> configItem(final int id) {
+  private static ConfigItem<ConfigDocumentWatchSetProviderTest> configItem(final int id) {
     final ConfigItem<ConfigDocumentWatchSetProviderTest> item = ConfigItem.of(null);
     item.setType(ConfigDocumentWatchSetProviderTest.class);
     item.setUniqueId(UniqueId.of("Foo", Integer.toString(id), "V"));

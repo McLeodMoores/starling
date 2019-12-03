@@ -35,29 +35,29 @@ public abstract class FinancialSecurity extends ManageableSecurity {
 
   /**
    * Creates an instance with a security type.
-   * 
+   *
    * @param securityType  the security type, not null
    */
-  protected FinancialSecurity(String securityType) {
+  protected FinancialSecurity(final String securityType) {
     super(securityType);
   }
 
   /**
    * Creates a fully populated instance.
-   * 
+   *
    * @param uniqueId  the security unique identifier, may be null
    * @param name  the display name, not null
    * @param securityType  the security type, not null
    * @param bundle  the security external identifier bundle, not null
    */
-  protected FinancialSecurity(UniqueId uniqueId, String name, String securityType, ExternalIdBundle bundle) {
+  protected FinancialSecurity(final UniqueId uniqueId, final String name, final String securityType, final ExternalIdBundle bundle) {
     super(uniqueId, name, securityType, bundle);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
-   * 
+   *
    * @param <T> the result type of the visitor
    * @param visitor  the visitor, not null
    * @return the result

@@ -7,7 +7,8 @@ package com.opengamma.financial.analytics.model.volatility.surface;
 
 import java.util.List;
 
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -34,20 +35,20 @@ public class SurfaceFunctions extends AbstractFunctionConfigurationBean {
    */
   public static class Defaults extends AbstractFunctionConfigurationBean {
 
-    private String _xInterpolatorName = Interpolator1DFactory.LINEAR;
-    private String _yInterpolatorName = Interpolator1DFactory.LINEAR;
-    private String _leftXExtrapolatorName = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-    private String _rightXExtrapolatorName = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-    private String _leftYExtrapolatorName = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-    private String _rightYExtrapolatorName = Interpolator1DFactory.FLAT_EXTRAPOLATOR;
-    private boolean _useFixedAlpha; /* = false;*/
+    private String _xInterpolatorName = LinearInterpolator1dAdapter.NAME;
+    private String _yInterpolatorName = LinearInterpolator1dAdapter.NAME;
+    private String _leftXExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
+    private String _rightXExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
+    private String _leftYExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
+    private String _rightYExtrapolatorName = FlatExtrapolator1dAdapter.NAME;
+    private boolean _useFixedAlpha; /* = false; */
     private boolean _useFixedBeta = true;
-    private boolean _useFixedRho; /* = false;*/
-    private boolean _useFixedNu; /* = false;*/
+    private boolean _useFixedRho; /* = false; */
+    private boolean _useFixedNu; /* = false; */
     private double _alpha = 0.05;
     private double _beta = 1.0;
     private double _rho = 0.07;
-    private double _nu; /* = 0.0;*/
+    private double _nu; /* = 0.0; */
     private double _error = 0.001;
 
     public void setXInterpolatorName(final String xInterpolatorName) {
@@ -184,8 +185,10 @@ public class SurfaceFunctions extends AbstractFunctionConfigurationBean {
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       functions.add(functionConfiguration(SABRIRFutureOptionNLSSDefaults.class,
-          getXInterpolatorName(), getYInterpolatorName(), getLeftXExtrapolatorName(), getRightXExtrapolatorName(), getLeftYExtrapolatorName(), getRightYExtrapolatorName(),
-          Boolean.toString(isUseFixedAlpha()), Boolean.toString(isUseFixedBeta()), Boolean.toString(isUseFixedRho()), Boolean.toString(isUseFixedNu()), Double.toString(getAlpha()),
+          getXInterpolatorName(), getYInterpolatorName(), getLeftXExtrapolatorName(), getRightXExtrapolatorName(), getLeftYExtrapolatorName(),
+          getRightYExtrapolatorName(),
+          Boolean.toString(isUseFixedAlpha()), Boolean.toString(isUseFixedBeta()), Boolean.toString(isUseFixedRho()), Boolean.toString(isUseFixedNu()),
+          Double.toString(getAlpha()),
           Double.toString(getBeta()), Double.toString(getRho()), Double.toString(getNu()), Double.toString(getError())));
     }
 

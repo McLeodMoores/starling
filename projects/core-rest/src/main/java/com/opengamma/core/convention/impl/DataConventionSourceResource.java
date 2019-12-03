@@ -44,108 +44,163 @@ public class DataConventionSourceResource extends AbstractDataResource {
   /**
    * The convention source.
    */
-  private final ConventionSource _secSource;
+  private final ConventionSource _conventionSource;
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param conventionSource  the underlying convention source, not null
    */
   public DataConventionSourceResource(final ConventionSource conventionSource) {
     ArgumentChecker.notNull(conventionSource, "conventionSource");
-    _secSource = conventionSource;
+    _conventionSource = conventionSource;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the convention source.
-   * 
+   *
    * @return the convention source, not null
    */
   public ConventionSource getConventionSource() {
-    return _secSource;
+    return _conventionSource;
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets a HATEAOS response.
+   *
+   * @param uriInfo
+   *          the URI, not null
+   * @return the response
+   */
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
+  /**
+   * Searches for a convention by version, correction and external identifiers.
+   *
+   * @param versionAsOf
+   *          the version, can be null. If null, the latest is used.
+   * @param correctedTo
+   *          the correction, can be null. If null, the latest is used.
+   * @param externalIdStrs
+   *          the external ids, not null
+   * @return the conventions as a Fudge message
+   */
   @GET
   @Path("conventions")
   public Response search(
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo,
-      @QueryParam("id") List<String> externalIdStrs) {
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo,
+      @QueryParam("id") final List<String> externalIdStrs) {
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
-    Collection<? extends Convention> result = getConventionSource().get(bundle, vc);
+    final Collection<? extends Convention> result = getConventionSource().get(bundle, vc);
     return responseOkObject(FudgeListWrapper.of(result));
   }
 
+  /**
+   * Searches for a convention by identifier, version, version and correction.
+   *
+   * @param idStr
+   *          the object identifier, not null
+   * @param version
+   *          the version, can be null. If null, the latest is used
+   * @param versionAsOf
+   *          the version, can be null. If null, the latest is used.
+   * @param correctedTo
+   *          the correction, can be null. If null, the latest is used.
+   * @return the convention as a Fudge message
+   */
   @GET
   @Path("conventions/{conventionId}")
   public Response get(
-      @PathParam("conventionId") String idStr,
-      @QueryParam("version") String version,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo) {
+      @PathParam("conventionId") final String idStr,
+      @QueryParam("version") final String version,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
     final ObjectId objectId = ObjectId.parse(idStr);
     if (version != null) {
       final Convention result = getConventionSource().get(objectId.atVersion(version));
       return responseOkObject(result);
-    } else {
-      final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      Convention result = getConventionSource().get(objectId, vc);
-      return responseOkObject(result);
     }
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final Convention result = getConventionSource().get(objectId, vc);
+    return responseOkObject(result);
   }
 
+  /**
+   * Gets multiple conventions.
+   *
+   * @param uniqueIdStrs
+   *          the convention identifiers, not null
+   * @return the conventions as a Fudge message
+   */
   @GET
   @Path("conventionSearches/bulk")
   public Response getBulk(
-      @QueryParam("id") List<String> uniqueIdStrs) {
+      @QueryParam("id") final List<String> uniqueIdStrs) {
     final List<UniqueId> uids = IdUtils.parseUniqueIds(uniqueIdStrs);
-    Map<UniqueId, Convention> result = getConventionSource().get(uids);
+    final Map<UniqueId, Convention> result = getConventionSource().get(uids);
     return responseOkObject(FudgeListWrapper.of(result.values()));
   }
 
   // deprecated
   //-------------------------------------------------------------------------
+  /**
+   * Searches for conventions by external identifiers.
+   *
+   * @param externalIdStrs
+   *          the external ids, not null
+   * @return the conventions as a Fudge message
+   */
   @GET
   @Path("conventionSearches/list")
-  public Response searchList(@QueryParam("id") List<String> externalIdStrs) {
+  public Response searchList(@QueryParam("id") final List<String> externalIdStrs) {
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
     @SuppressWarnings("deprecation")
-    Collection<? extends Convention> result = getConventionSource().get(bundle);
+    final Collection<? extends Convention> result = getConventionSource().get(bundle);
     return responseOkObject(FudgeListWrapper.of(result));
   }
 
+  /**
+   * Searches for conventions by identifiers, version, version and correction.
+   *
+   * @param externalIdStrs
+   *          the object identifier, not null
+   * @param versionAsOf
+   *          the version, can be null. If null, the latest is used.
+   * @param correctedTo
+   *          the correction, can be null. If null, the latest is used.
+   * @param typeStr
+   *          the type of the convention, can be null
+   * @return the conventions as a Fudge message
+   */
   @GET
   @Path("conventionSearches/single")
   public Response searchSingle(
-      @QueryParam("id") List<String> externalIdStrs,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo,
-      @QueryParam("type") String typeStr) {
-    
+      @QueryParam("id") final List<String> externalIdStrs,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo,
+      @QueryParam("type") final String typeStr) {
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
     if (typeStr != null) {
-      Class<? extends Convention> type = ClassUtils.loadClassRuntime(typeStr, Convention.class);
-      Convention result = getConventionSource().getSingle(bundle, vc, type);
-      return responseOkObject(result);
-    } else {
-      Convention result = getConventionSource().getSingle(bundle, vc);
+      final Class<? extends Convention> type = ClassUtils.loadClassRuntime(typeStr, Convention.class);
+      final Convention result = getConventionSource().getSingle(bundle, vc, type);
       return responseOkObject(result);
     }
+    final Convention result = getConventionSource().getSingle(bundle, vc);
+    return responseOkObject(result);
   }
 
   //-------------------------------------------------------------------------
   /**
    * For debugging purposes only.
-   * 
+   *
    * @return some debug information about the state of this resource object
    */
   @GET

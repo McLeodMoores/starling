@@ -50,37 +50,37 @@ public class JodaBeanXmlProducerConsumer implements MessageBodyReader<Object>, M
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-    return Bean.class.isAssignableFrom(type) || type == FudgeResponse.class ||
-        FudgeMsgEnvelope.class.isAssignableFrom(type) || FudgeMsg.class.isAssignableFrom(type);
+  public boolean isReadable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
+    return Bean.class.isAssignableFrom(type) || type == FudgeResponse.class
+        || FudgeMsgEnvelope.class.isAssignableFrom(type) || FudgeMsg.class.isAssignableFrom(type);
   }
 
   @Override
-  public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations,
-      MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
-    boolean isBean = Bean.class.isAssignableFrom(type);
-    Class<? extends Bean> cls = (isBean ? type.asSubclass(Bean.class) : FlexiBean.class);
-    Bean bean = JodaBeanSer.PRETTY.xmlReader().read(entityStream, cls);
+  public Object readFrom(final Class<Object> type, final Type genericType, final Annotation[] annotations,
+      final MediaType mediaType, final MultivaluedMap<String, String> httpHeaders, final InputStream entityStream) throws IOException, WebApplicationException {
+    final boolean isBean = Bean.class.isAssignableFrom(type);
+    final Class<? extends Bean> cls = isBean ? type.asSubclass(Bean.class) : FlexiBean.class;
+    final Bean bean = JodaBeanSer.PRETTY.xmlReader().read(entityStream, cls);
     if (isBean) {
       return bean;
     }
-    FlexiBean fbean = (FlexiBean) bean;
-    if (((Object) type) == FudgeResponse.class) {
+    final FlexiBean fbean = (FlexiBean) bean;
+    if ((Object) type == FudgeResponse.class) {
       return FudgeResponse.of(fbean.get("value"));
     }
-    if (((Object) type) == FudgeMsg.class) {
+    if ((Object) type == FudgeMsg.class) {
       return createMessage(bean);
     }
-    if (((Object) type) == FudgeMsgEnvelope.class) {
+    if ((Object) type == FudgeMsgEnvelope.class) {
       return new FudgeMsgEnvelope(createMessage(bean));
     }
     return bean;
   }
 
-  private MutableFudgeMsg createMessage(Bean bean) {
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
-    for (MetaProperty<?> mp : bean.metaBean().metaPropertyIterable()) {
-      Object obj = mp.get(bean);
+  private MutableFudgeMsg createMessage(final Bean bean) {
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    for (final MetaProperty<?> mp : bean.metaBean().metaPropertyIterable()) {
+      final Object obj = mp.get(bean);
       if (obj instanceof Bean) {
         msg.add(mp.name(), createMessage((Bean) obj));
       } else  {
@@ -91,45 +91,45 @@ public class JodaBeanXmlProducerConsumer implements MessageBodyReader<Object>, M
   }
 
   @Override
-  public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-    return Bean.class.isAssignableFrom(type) || type == FudgeResponse.class ||
-        FudgeMsgEnvelope.class.isAssignableFrom(type) || FudgeMsg.class.isAssignableFrom(type);
+  public boolean isWriteable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
+    return Bean.class.isAssignableFrom(type) || type == FudgeResponse.class
+        || FudgeMsgEnvelope.class.isAssignableFrom(type) || FudgeMsg.class.isAssignableFrom(type);
   }
 
   @Override
-  public long getSize(Object bean, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+  public long getSize(final Object bean, final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
     return -1;
   }
 
   @Override
-  public void writeTo(Object obj, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-      MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
+  public void writeTo(final Object obj, final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType,
+      final MultivaluedMap<String, Object> httpHeaders, final OutputStream entityStream) throws IOException, WebApplicationException {
     Bean bean = null;
     if (Bean.class.isAssignableFrom(type)) {
       bean = (Bean) obj;
     } else {
-      if (((Object) type) == FudgeResponse.class) {
-        FudgeResponse rsp = (FudgeResponse) obj;
-        FlexiBean fb = new FlexiBean();
+      if ((Object) type == FudgeResponse.class) {
+        final FudgeResponse rsp = (FudgeResponse) obj;
+        final FlexiBean fb = new FlexiBean();
         fb.set("value", rsp.getValue());
         bean = fb;
-      } else if (((Object) type) == FudgeMsg.class) {
-        FudgeMsg msg = (FudgeMsg) obj;
+      } else if ((Object) type == FudgeMsg.class) {
+        final FudgeMsg msg = (FudgeMsg) obj;
         bean = createBean(msg);
-      } else if (((Object) type) == FudgeMsgEnvelope.class) {
-        FudgeMsgEnvelope env = (FudgeMsgEnvelope) obj;
+      } else if ((Object) type == FudgeMsgEnvelope.class) {
+        final FudgeMsgEnvelope env = (FudgeMsgEnvelope) obj;
         bean = createBean(env.getMessage());
       }
     }
-    String xml = JodaBeanSer.PRETTY.xmlWriter().write(bean);
-    byte[] bytes = xml.getBytes(StandardCharsets.UTF_8);
+    final String xml = JodaBeanSer.PRETTY.xmlWriter().write(bean);
+    final byte[] bytes = xml.getBytes(StandardCharsets.UTF_8);
     entityStream.write(bytes);
   }
 
-  private Bean createBean(FudgeMsg msg) {
-    FlexiBean fb = new FlexiBean();
-    for (FudgeField field : msg.getAllFields()) {
-      Object obj = field.getValue();
+  private Bean createBean(final FudgeMsg msg) {
+    final FlexiBean fb = new FlexiBean();
+    for (final FudgeField field : msg.getAllFields()) {
+      final Object obj = field.getValue();
       if (obj instanceof FudgeMsg) {
         fb.set(field.getName(), createBean((FudgeMsg) obj));
       } else  {

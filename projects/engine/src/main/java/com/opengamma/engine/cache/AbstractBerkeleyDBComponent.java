@@ -23,7 +23,7 @@ import com.sleepycat.je.Environment;
  * A component which wraps a single BerkeleyDB Database.
  */
 public abstract class AbstractBerkeleyDBComponent implements Lifecycle {
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractBerkeleyDBComponent.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBerkeleyDBComponent.class);
   // Injected inputs:
   private final Environment _dbEnvironment;
   private final String _databaseName;
@@ -31,8 +31,8 @@ public abstract class AbstractBerkeleyDBComponent implements Lifecycle {
   // Runtime state:
   private final AtomicBoolean _started = new AtomicBoolean(false);
   private Database _database;
-  
-  protected AbstractBerkeleyDBComponent(Environment dbEnvironment, String databaseName) {
+
+  protected AbstractBerkeleyDBComponent(final Environment dbEnvironment, final String databaseName) {
     ArgumentChecker.notNull(dbEnvironment, "dbEnvironment");
     ArgumentChecker.notNull(databaseName, "databaseName");
     _dbEnvironment = dbEnvironment;
@@ -67,7 +67,7 @@ public abstract class AbstractBerkeleyDBComponent implements Lifecycle {
    * Sets the database field.
    * @param database  the database
    */
-  private void setDatabase(Database database) {
+  private void setDatabase(final Database database) {
     _database = database;
   }
 
@@ -78,23 +78,23 @@ public abstract class AbstractBerkeleyDBComponent implements Lifecycle {
 
   @Override
   public void start() {
-    s_logger.info("Starting, and opening Database.");
-    DatabaseConfig dbConfig = getDatabaseConfig();
-    Database database = getDbEnvironment().openDatabase(null, getDatabaseName(), dbConfig);
+    LOGGER.info("Starting, and opening Database.");
+    final DatabaseConfig dbConfig = getDatabaseConfig();
+    final Database database = getDbEnvironment().openDatabase(null, getDatabaseName(), dbConfig);
     setDatabase(database);
     postStartInitialization();
     _started.set(true);
   }
-  
+
   protected abstract DatabaseConfig getDatabaseConfig();
-  
+
   protected void postStartInitialization() {
-    
+
   }
 
   @Override
   public void stop() {
-    s_logger.info("Shutting down Database.");
+    LOGGER.info("Shutting down Database.");
     if (getDatabase() != null) {
       getDatabase().close();
     }

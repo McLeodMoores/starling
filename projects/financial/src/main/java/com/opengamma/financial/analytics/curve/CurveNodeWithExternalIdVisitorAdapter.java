@@ -23,15 +23,16 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Adapter for visiting all concrete curve node types.
  *
- * @param <T> The return type for this visitor.
+ * @param <T>
+ *          The return type for this visitor.
  */
 public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithExternalIdVisitor<T> {
 
   /**
-   * Creates builder for a {@link CurveNodeWithExternalIdVisitor}. The underlying visitor
-   * has no implemented methods.
+   * Creates builder for a {@link CurveNodeWithExternalIdVisitor}. The underlying visitor has no implemented methods.
    *
-   * @param <T> The return type of the visitor
+   * @param <T>
+   *          The return type of the visitor
    * @return A builder
    */
   public static <T> Builder<T> builder() {
@@ -39,11 +40,12 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
   }
 
   /**
-   * Creates builder for a {@link CurveNodeWithExternalIdVisitor} that uses the supplied
-   * visitor as the initial underlying
+   * Creates builder for a {@link CurveNodeWithExternalIdVisitor} that uses the supplied visitor as the initial underlying.
    *
-   * @param <T> The return type of the visitor
-   * @param visitor The underlying visitor, not null
+   * @param <T>
+   *          The return type of the visitor
+   * @param visitor
+   *          The underlying visitor, not null
    * @return A builder
    */
   public static <T> Builder<T> builder(final CurveNodeWithExternalIdVisitor<T> visitor) {
@@ -51,60 +53,62 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
   }
 
   @Override
-  public T visitCashNode(final CashNode node, ExternalId externalId) {
+  public T visitCashNode(final CashNode node, final ExternalId externalId) {
     throw new UnsupportedOperationException(getUnsupportedOperationMessage(getClass(), node));
   }
 
   @Override
-  public T visitContinuouslyCompoundedRateNode(final ContinuouslyCompoundedRateNode node, ExternalId externalId) {
+  public T visitContinuouslyCompoundedRateNode(final ContinuouslyCompoundedRateNode node, final ExternalId externalId) {
     throw new UnsupportedOperationException(getUnsupportedOperationMessage(getClass(), node));
   }
 
   @Override
-  public T visitCreditSpreadNode(final CreditSpreadNode node, ExternalId externalId) {
+  public T visitCreditSpreadNode(final CreditSpreadNode node, final ExternalId externalId) {
     throw new UnsupportedOperationException(getUnsupportedOperationMessage(getClass(), node));
   }
 
   @Override
-  public T visitDeliverableSwapFutureNode(final DeliverableSwapFutureNode node, ExternalId externalId) {
+  public T visitDeliverableSwapFutureNode(final DeliverableSwapFutureNode node, final ExternalId externalId) {
     throw new UnsupportedOperationException(getUnsupportedOperationMessage(getClass(), node));
   }
 
   @Override
-  public T visitDiscountFactorNode(final DiscountFactorNode node, ExternalId externalId) {
+  public T visitDiscountFactorNode(final DiscountFactorNode node, final ExternalId externalId) {
     throw new UnsupportedOperationException(getUnsupportedOperationMessage(getClass(), node));
   }
 
   @Override
-  public T visitFRANode(final FRANode node, ExternalId externalId) {
+  public T visitFRANode(final FRANode node, final ExternalId externalId) {
     throw new UnsupportedOperationException(getUnsupportedOperationMessage(getClass(), node));
   }
 
   @Override
-  public T visitFXForwardNode(final FXForwardNode node, ExternalId externalId) {
+  public T visitFXForwardNode(final FXForwardNode node, final ExternalId externalId) {
     throw new UnsupportedOperationException(getUnsupportedOperationMessage(getClass(), node));
   }
 
   @Override
-  public T visitRateFutureNode(final RateFutureNode node, ExternalId externalId) {
+  public T visitRateFutureNode(final RateFutureNode node, final ExternalId externalId) {
     throw new UnsupportedOperationException(getUnsupportedOperationMessage(getClass(), node));
   }
 
   @Override
-  public T visitSwapNode(final SwapNode node, ExternalId externalId) {
+  public T visitSwapNode(final SwapNode node, final ExternalId externalId) {
     throw new UnsupportedOperationException(getUnsupportedOperationMessage(getClass(), node));
   }
 
   @Override
-  public T visitZeroCouponInflationNode(final ZeroCouponInflationNode node, ExternalId externalId) {
+  public T visitZeroCouponInflationNode(final ZeroCouponInflationNode node, final ExternalId externalId) {
     throw new UnsupportedOperationException(getUnsupportedOperationMessage(getClass(), node));
   }
 
   /**
-   * Generic message for unsupported methods in {@link CurveNodeWithExternalIdVisitor} implementations
+   * Generic message for unsupported methods in {@link CurveNodeWithExternalIdVisitor} implementations.
    *
-   * @param clazz the implementation class, not null
-   * @param node the curve node, not null
+   * @param clazz
+   *          the implementation class, not null
+   * @param node
+   *          the curve node, not null
    * @return the message, not null;
    */
   public static String getUnsupportedOperationMessage(final Class<?> clazz, final CurveNode node) {
@@ -116,7 +120,8 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
   /**
    * Builder class for this visitor adapter.
    *
-   * @param <T> The return type of the visitor.
+   * @param <T>
+   *          The return type of the visitor.
    */
   public static class Builder<T> {
 
@@ -131,14 +136,15 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
     /**
      * Accepts a visitor.
      *
-     * @param visitor The visitor, not null
+     * @param visitor
+     *          The visitor, not null
      */
     protected Builder(final CurveNodeWithExternalIdVisitor<T> visitor) {
       ArgumentChecker.notNull(visitor, "visitor");
       _visitor = visitor;
     }
 
-    public Builder<T> cashNodeVisitor(final CurveNodeWithExternalIdVisitor<T> visitor, ExternalId externalId) {
+    public Builder<T> cashNodeVisitor(final CurveNodeWithExternalIdVisitor<T> visitor, final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override
@@ -150,23 +156,23 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
     }
 
     public Builder<T> continuouslyCompoundedRateNode(final CurveNodeWithExternalIdVisitor<T> visitor,
-                                                     ExternalId externalId) {
+        final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override
         public T visitContinuouslyCompoundedRateNode(final ContinuouslyCompoundedRateNode node,
-                                                     final ExternalId externalId) {
+            final ExternalId externalId) {
           return visitor.visitContinuouslyCompoundedRateNode(node, externalId);
         }
       };
       return this;
     }
 
-    public Builder<T> creditSpreadNode(final CurveNodeWithExternalIdVisitor<T> visitor, ExternalId externalId) {
+    public Builder<T> creditSpreadNode(final CurveNodeWithExternalIdVisitor<T> visitor, final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override
-        public T visitCreditSpreadNode(final CreditSpreadNode node, ExternalId externalId) {
+        public T visitCreditSpreadNode(final CreditSpreadNode node, final ExternalId externalId) {
           return visitor.visitCreditSpreadNode(node, externalId);
         }
       };
@@ -174,77 +180,77 @@ public class CurveNodeWithExternalIdVisitorAdapter<T> implements CurveNodeWithEx
     }
 
     public Builder<T> deliverableSwapFutureNode(final CurveNodeWithExternalIdVisitor<T> visitor,
-                                                ExternalId externalId) {
+        final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override
-        public T visitDeliverableSwapFutureNode(final DeliverableSwapFutureNode node, ExternalId externalId) {
+        public T visitDeliverableSwapFutureNode(final DeliverableSwapFutureNode node, final ExternalId externalId) {
           return visitor.visitDeliverableSwapFutureNode(node, externalId);
         }
       };
       return this;
     }
 
-    public Builder<T> discountFactorNode(final CurveNodeWithExternalIdVisitor<T> visitor, ExternalId externalId) {
+    public Builder<T> discountFactorNode(final CurveNodeWithExternalIdVisitor<T> visitor, final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override
-        public T visitDiscountFactorNode(final DiscountFactorNode node, ExternalId externalId) {
+        public T visitDiscountFactorNode(final DiscountFactorNode node, final ExternalId externalId) {
           return visitor.visitDiscountFactorNode(node, externalId);
         }
       };
       return this;
     }
 
-    public Builder<T> fraNode(final CurveNodeWithExternalIdVisitor<T> visitor, ExternalId externalId) {
+    public Builder<T> fraNode(final CurveNodeWithExternalIdVisitor<T> visitor, final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override
-        public T visitFRANode(final FRANode node, ExternalId externalId) {
+        public T visitFRANode(final FRANode node, final ExternalId externalId) {
           return visitor.visitFRANode(node, externalId);
         }
       };
       return this;
     }
 
-    public Builder<T> fxForwardNode(final CurveNodeWithExternalIdVisitor<T> visitor, ExternalId externalId) {
+    public Builder<T> fxForwardNode(final CurveNodeWithExternalIdVisitor<T> visitor, final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override
-        public T visitFXForwardNode(final FXForwardNode node, ExternalId externalId) {
+        public T visitFXForwardNode(final FXForwardNode node, final ExternalId externalId) {
           return visitor.visitFXForwardNode(node, externalId);
         }
       };
       return this;
     }
 
-    public Builder<T> rateFutureNode(final CurveNodeWithExternalIdVisitor<T> visitor, ExternalId externalId) {
+    public Builder<T> rateFutureNode(final CurveNodeWithExternalIdVisitor<T> visitor, final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override
-        public T visitRateFutureNode(final RateFutureNode node, ExternalId externalId) {
+        public T visitRateFutureNode(final RateFutureNode node, final ExternalId externalId) {
           return visitor.visitRateFutureNode(node, externalId);
         }
       };
       return this;
     }
 
-    public Builder<T> swapNode(final CurveNodeWithExternalIdVisitor<T> visitor, ExternalId externalId) {
+    public Builder<T> swapNode(final CurveNodeWithExternalIdVisitor<T> visitor, final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override
-        public T visitSwapNode(final SwapNode node, ExternalId externalId) {
+        public T visitSwapNode(final SwapNode node, final ExternalId externalId) {
           return visitor.visitSwapNode(node, externalId);
         }
       };
       return this;
     }
 
-    public Builder<T> zeroCouponInflationNode(final CurveNodeWithExternalIdVisitor<T> visitor, ExternalId externalId) {
+    public Builder<T> zeroCouponInflationNode(final CurveNodeWithExternalIdVisitor<T> visitor, final ExternalId externalId) {
       _visitor = new CurveNodeWithExternalIdVisitorDelegate<T>(_visitor) {
 
         @Override
-        public T visitZeroCouponInflationNode(final ZeroCouponInflationNode node, ExternalId externalId) {
+        public T visitZeroCouponInflationNode(final ZeroCouponInflationNode node, final ExternalId externalId) {
           return visitor.visitZeroCouponInflationNode(node, externalId);
         }
       };

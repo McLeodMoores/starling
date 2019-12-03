@@ -112,7 +112,7 @@ public class FunctionalDoublesCubeTest {
     assertEquals(CUBE.getName(), NAME1);
     assertEquals(CUBE.getFunction(), F1);
     assertEquals(CUBE.getValue(1., 2., 3.), F1.evaluate(1., 2., 3.), 0);
-    assertEquals(CUBE.getValue(new Triple<>(1., 2., 3.)), F1.evaluate(1., 2., 3.), 0);
+    assertEquals(CUBE.getValue(Triple.of(1., 2., 3.)), F1.evaluate(1., 2., 3.), 0);
   }
 
   @Test

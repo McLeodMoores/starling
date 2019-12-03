@@ -28,34 +28,34 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  */
 public class MockReferenceDataProvider extends AbstractReferenceDataProvider {
 
-  private Set<String> _expectedFields = Sets.newHashSet();
-  private Map<String, Multimap<String, String>> _mockDataMap = Maps.newHashMap();
+  private final Set<String> _expectedFields = Sets.newHashSet();
+  private final Map<String, Multimap<String, String>> _mockDataMap = Maps.newHashMap();
 
   @Override
-  protected ReferenceDataProviderGetResult doBulkGet(ReferenceDataProviderGetRequest request) {
+  protected ReferenceDataProviderGetResult doBulkGet(final ReferenceDataProviderGetRequest request) {
     if (_expectedFields.size() > 0) {
-      for (String field : _expectedFields) {
+      for (final String field : _expectedFields) {
         assertTrue(request.getFields().contains(field));
       }
     }
-    ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
-    for (String identifier : request.getIdentifiers()) {
+    final ReferenceDataProviderGetResult result = new ReferenceDataProviderGetResult();
+    for (final String identifier : request.getIdentifiers()) {
       if (_mockDataMap.containsKey(identifier)) {
         // known security
-        ReferenceData refData = new ReferenceData(identifier);
-        MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
-        
-        Multimap<String, String> fieldMap = _mockDataMap.get(identifier);
+        final ReferenceData refData = new ReferenceData(identifier);
+        final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+
+        final Multimap<String, String> fieldMap = _mockDataMap.get(identifier);
         if (fieldMap != null) {
           // security actually has data
-          for (String field : request.getFields()) {
-            Collection<String> values = fieldMap.get(field);
+          for (final String field : request.getFields()) {
+            final Collection<String> values = fieldMap.get(field);
             assertTrue("Field not found: " + field + " in " + fieldMap.keySet(), values.size() > 0);
             assertNotNull(values);
-            for (String value : values) {
+            for (final String value : values) {
               if (value != null) {
                 if (value.contains("=")) {
-                  MutableFudgeMsg submsg = OpenGammaFudgeContext.getInstance().newMessage();
+                  final MutableFudgeMsg submsg = OpenGammaFudgeContext.getInstance().newMessage();
                   submsg.add(StringUtils.substringBefore(value, "="), StringUtils.substringAfter(value, "="));
                   msg.add(field, submsg);
                 } else {
@@ -67,7 +67,7 @@ public class MockReferenceDataProvider extends AbstractReferenceDataProvider {
         }
         refData.setFieldValues(msg);
         result.addReferenceData(refData);
-        
+
       } else {
         // security wasn't marked as known
         fail("Security not found: " + identifier + " in " + _mockDataMap.keySet());
@@ -76,11 +76,11 @@ public class MockReferenceDataProvider extends AbstractReferenceDataProvider {
     return result;
   }
 
-  public void addExpectedField(String field) {
+  public void addExpectedField(final String field) {
     _expectedFields.add(field);
   }
 
-  public void addResult(String securityKey, String field, String value) {
+  public void addResult(final String securityKey, final String field, final String value) {
     if (field == null) {
       // security is known and normal (empty) result returned
       _mockDataMap.put(securityKey, null);

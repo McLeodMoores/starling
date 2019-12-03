@@ -35,14 +35,15 @@ public abstract class InterestRateLeg extends SwapLeg {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dayCount  the day count, not null
    * @param frequency  the frequency, not null
    * @param regionIdentifier  the region, not null
    * @param businessDayConvention  the business day convention, not null
    * @param notional  the notional, not null
    */
-  protected InterestRateLeg(DayCount dayCount, Frequency frequency, ExternalId regionIdentifier, BusinessDayConvention businessDayConvention, Notional notional) {
+  protected InterestRateLeg(final DayCount dayCount, final Frequency frequency, final ExternalId regionIdentifier,
+      final BusinessDayConvention businessDayConvention, final Notional notional) {
     setDayCount(dayCount);
     setFrequency(frequency);
     setRegionId(regionIdentifier);

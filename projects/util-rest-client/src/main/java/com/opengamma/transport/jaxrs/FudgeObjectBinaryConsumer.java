@@ -41,7 +41,7 @@ public class FudgeObjectBinaryConsumer extends FudgeBase implements MessageBodyR
 
   /**
    * Creates the consumer.
-   * 
+   *
    * @param context the Fudge context to use, not null
    */
   public FudgeObjectBinaryConsumer(final FudgeContext context) {
@@ -50,21 +50,21 @@ public class FudgeObjectBinaryConsumer extends FudgeBase implements MessageBodyR
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+  public boolean isReadable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
     return getFudgeContext().getObjectDictionary().getMessageBuilder(type) != null;
   }
 
   @Override
-  public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations,
-      MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
+  @SuppressWarnings("resource")
+  public Object readFrom(final Class<Object> type, final Type genericType, final Annotation[] annotations,
+      final MediaType mediaType, final MultivaluedMap<String, String> httpHeaders, final InputStream entityStream) throws IOException, WebApplicationException {
 
-    @SuppressWarnings("resource")
-    FudgeMsgReader reader = new FudgeMsgReader(new FudgeDataInputStreamReader(getFudgeContext(), entityStream));
-    FudgeMsg message = reader.nextMessage();
+    final FudgeMsgReader reader = new FudgeMsgReader(new FudgeDataInputStreamReader(getFudgeContext(), entityStream));
+    final FudgeMsg message = reader.nextMessage();
     if (message == null) {
       return null;
     }
-    FudgeDeserializer deser = new FudgeDeserializer(getFudgeContext());
+    final FudgeDeserializer deser = new FudgeDeserializer(getFudgeContext());
     return deser.fudgeMsgToObject(type, message);
   }
 

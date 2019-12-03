@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -64,7 +64,7 @@ public class DataHistoricalTimeSeriesMasterResource extends AbstractDataResource
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -77,37 +77,37 @@ public class DataHistoricalTimeSeriesMasterResource extends AbstractDataResource
 
   @GET
   @Path("metaData")
-  public Response metaData(@Context UriInfo uriInfo) {
-    HistoricalTimeSeriesInfoMetaDataRequest request = RestUtils.decodeQueryParams(uriInfo, HistoricalTimeSeriesInfoMetaDataRequest.class);
-    HistoricalTimeSeriesInfoMetaDataResult result = getHistoricalTimeSeriesMaster().metaData(request);
+  public Response metaData(@Context final UriInfo uriInfo) {
+    final HistoricalTimeSeriesInfoMetaDataRequest request = RestUtils.decodeQueryParams(uriInfo, HistoricalTimeSeriesInfoMetaDataRequest.class);
+    final HistoricalTimeSeriesInfoMetaDataResult result = getHistoricalTimeSeriesMaster().metaData(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("infoSearches")
-  public Response search(HistoricalTimeSeriesInfoSearchRequest request) {
-    HistoricalTimeSeriesInfoSearchResult result = getHistoricalTimeSeriesMaster().search(request);
+  public Response search(final HistoricalTimeSeriesInfoSearchRequest request) {
+    final HistoricalTimeSeriesInfoSearchResult result = getHistoricalTimeSeriesMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("infos")
-  public Response add(@Context UriInfo uriInfo, HistoricalTimeSeriesInfoDocument request) {
-    HistoricalTimeSeriesInfoDocument result = getHistoricalTimeSeriesMaster().add(request);
-    URI createdUri = (new DataHistoricalTimeSeriesResource()).uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response add(@Context final UriInfo uriInfo, final HistoricalTimeSeriesInfoDocument request) {
+    final HistoricalTimeSeriesInfoDocument result = getHistoricalTimeSeriesMaster().add(request);
+    final URI createdUri = new DataHistoricalTimeSeriesResource().uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @Path("infos/{infoId}")
-  public DataHistoricalTimeSeriesResource findHistoricalTimeSeries(@PathParam("infoId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataHistoricalTimeSeriesResource findHistoricalTimeSeries(@PathParam("infoId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataHistoricalTimeSeriesResource(this, id);
   }
 
   @Path("dataPoints/{dpId}")
-  public DataHistoricalDataPointsResource findHistoricalDataPoints(@PathParam("dpId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataHistoricalDataPointsResource findHistoricalDataPoints(@PathParam("dpId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataHistoricalDataPointsResource(this, id);
   }
 

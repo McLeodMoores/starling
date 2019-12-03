@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.sensitivity.hullwhite;
@@ -22,10 +22,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * For an instrument, computes the sensitivity of a value (often the par spread) to the parameters used in the curve.
- * The computation is done by shifting each node point in each curve; the curves must be interpolated yield curves for discounting and forward curves.
- * The return format is SimpleParameterSensitivity object.
- * This is a very inefficient way to compute the sensitivities. It should be used only for tests purposes or when speed is irrelevant.
+ * For an instrument, computes the sensitivity of a value (often the par spread) to the parameters used in the curve. The computation is done by shifting each
+ * node point in each curve; the curves must be interpolated yield curves for discounting and forward curves. The return format is SimpleParameterSensitivity
+ * object. This is a very inefficient way to compute the sensitivities. It should be used only for tests purposes or when speed is irrelevant.
  */
 public class SimpleParameterSensitivityHullWhiteDiscountInterpolatedFDCalculator {
 
@@ -39,21 +38,28 @@ public class SimpleParameterSensitivityHullWhiteDiscountInterpolatedFDCalculator
   private final double _shift;
 
   /**
-   * Constructor
-   * @param valueCalculator The value calculator.
-   * @param shift The shift used for finite difference.
+   * Constructor.
+   *
+   * @param valueCalculator
+   *          The value calculator.
+   * @param shift
+   *          The shift used for finite difference.
    */
-  public SimpleParameterSensitivityHullWhiteDiscountInterpolatedFDCalculator(final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, Double> valueCalculator, final double shift) {
+  public SimpleParameterSensitivityHullWhiteDiscountInterpolatedFDCalculator(
+      final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, Double> valueCalculator, final double shift) {
     ArgumentChecker.notNull(valueCalculator, "Calculator");
     _valueCalculator = valueCalculator;
     _shift = shift;
   }
 
   /**
-   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves.
-   * Only the discounting and forward curves sensitivity is computed.
-   * @param instrument The instrument.
-   * @param hwcurves The provider: all discounting, forward and issuer curves should be of the type YieldCurve with InterpolatedDoublesCurve.
+   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves. Only the discounting and forward curves
+   * sensitivity is computed.
+   *
+   * @param instrument
+   *          The instrument.
+   * @param hwcurves
+   *          The provider: all discounting, forward and issuer curves should be of the type YieldCurve with InterpolatedDoublesCurve.
    * @return The parameter sensitivity.
    */
   public SimpleParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final HullWhiteOneFactorProviderDiscount hwcurves) {
@@ -71,15 +77,18 @@ public class SimpleParameterSensitivityHullWhiteDiscountInterpolatedFDCalculator
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumpedPlus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedPlus[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
-        final HullWhiteOneFactorProviderDiscount marketDscBumpedPlus = new HullWhiteOneFactorProviderDiscount(hwcurves.getMulticurveProvider().withDiscountFactor(ccy, dscBumpedPlus),
+        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
+        final HullWhiteOneFactorProviderDiscount marketDscBumpedPlus = new HullWhiteOneFactorProviderDiscount(
+            hwcurves.getMulticurveProvider().withDiscountFactor(ccy, dscBumpedPlus),
             hwcurves.getHullWhiteParameters(), hwcurves.getHullWhiteCurrency());
         final double valueBumpedPlus = instrument.accept(_valueCalculator, marketDscBumpedPlus);
         final double[] yieldBumpedMinus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedMinus[loopnode] -= _shift;
         final YieldAndDiscountCurve dscBumpedMinus = new YieldCurve(curveInt.getName(),
             new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedMinus, curveInt.getInterpolator(), true));
-        final HullWhiteOneFactorProviderDiscount marketDscBumpedMinus = new HullWhiteOneFactorProviderDiscount(hwcurves.getMulticurveProvider().withDiscountFactor(ccy, dscBumpedMinus),
+        final HullWhiteOneFactorProviderDiscount marketDscBumpedMinus = new HullWhiteOneFactorProviderDiscount(
+            hwcurves.getMulticurveProvider().withDiscountFactor(ccy, dscBumpedMinus),
             hwcurves.getHullWhiteParameters(), hwcurves.getHullWhiteCurrency());
         final double valueBumpedMinus = instrument.accept(_valueCalculator, marketDscBumpedMinus);
         sensitivity[loopnode] = (valueBumpedPlus - valueBumpedMinus) / (2 * _shift);
@@ -100,15 +109,18 @@ public class SimpleParameterSensitivityHullWhiteDiscountInterpolatedFDCalculator
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumpedPlus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedPlus[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
-        final HullWhiteOneFactorProviderDiscount marketFwdBumpedPlus = new HullWhiteOneFactorProviderDiscount(hwcurves.getMulticurveProvider().withForward(index, dscBumpedPlus),
+        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
+        final HullWhiteOneFactorProviderDiscount marketFwdBumpedPlus = new HullWhiteOneFactorProviderDiscount(
+            hwcurves.getMulticurveProvider().withForward(index, dscBumpedPlus),
             hwcurves.getHullWhiteParameters(), hwcurves.getHullWhiteCurrency());
         final double valueBumpedPlus = instrument.accept(_valueCalculator, marketFwdBumpedPlus);
         final double[] yieldBumpedMinus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedMinus[loopnode] -= _shift;
         final YieldAndDiscountCurve dscBumpedMinus = new YieldCurve(curveInt.getName(),
             new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedMinus, curveInt.getInterpolator(), true));
-        final HullWhiteOneFactorProviderDiscount marketFwdBumpedMinus = new HullWhiteOneFactorProviderDiscount(hwcurves.getMulticurveProvider().withForward(index, dscBumpedMinus),
+        final HullWhiteOneFactorProviderDiscount marketFwdBumpedMinus = new HullWhiteOneFactorProviderDiscount(
+            hwcurves.getMulticurveProvider().withForward(index, dscBumpedMinus),
             hwcurves.getHullWhiteParameters(), hwcurves.getHullWhiteCurrency());
         final double valueBumpedMinus = instrument.accept(_valueCalculator, marketFwdBumpedMinus);
         sensitivity[loopnode] = (valueBumpedPlus - valueBumpedMinus) / (2 * _shift);
@@ -129,15 +141,18 @@ public class SimpleParameterSensitivityHullWhiteDiscountInterpolatedFDCalculator
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumpedPlus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedPlus[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
-        final HullWhiteOneFactorProviderDiscount marketFwdBumpedPlus = new HullWhiteOneFactorProviderDiscount(hwcurves.getMulticurveProvider().withForward(index, dscBumpedPlus),
+        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus, curveInt.getInterpolator(), true));
+        final HullWhiteOneFactorProviderDiscount marketFwdBumpedPlus = new HullWhiteOneFactorProviderDiscount(
+            hwcurves.getMulticurveProvider().withForward(index, dscBumpedPlus),
             hwcurves.getHullWhiteParameters(), hwcurves.getHullWhiteCurrency());
         final double valueBumpedPlus = instrument.accept(_valueCalculator, marketFwdBumpedPlus);
         final double[] yieldBumpedMinus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedMinus[loopnode] -= _shift;
         final YieldAndDiscountCurve dscBumpedMinus = new YieldCurve(curveInt.getName(),
             new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedMinus, curveInt.getInterpolator(), true));
-        final HullWhiteOneFactorProviderDiscount marketFwdBumpedMinus = new HullWhiteOneFactorProviderDiscount(hwcurves.getMulticurveProvider().withForward(index, dscBumpedMinus),
+        final HullWhiteOneFactorProviderDiscount marketFwdBumpedMinus = new HullWhiteOneFactorProviderDiscount(
+            hwcurves.getMulticurveProvider().withForward(index, dscBumpedMinus),
             hwcurves.getHullWhiteParameters(), hwcurves.getHullWhiteCurrency());
         final double valueBumpedMinus = instrument.accept(_valueCalculator, marketFwdBumpedMinus);
         sensitivity[loopnode] = (valueBumpedPlus - valueBumpedMinus) / (2 * _shift);

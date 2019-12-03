@@ -29,24 +29,24 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class BondSecurityCurveNameDefaults extends DefaultPropertyFunction {
 
-  private static final String[] s_bondValueNames = new String[] {
-    ValueRequirementNames.CLEAN_PRICE,
-    ValueRequirementNames.DIRTY_PRICE,
-    ValueRequirementNames.MACAULAY_DURATION,
-    ValueRequirementNames.MODIFIED_DURATION,
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.YTM,
-    ValueRequirementNames.Z_SPREAD,
-    ValueRequirementNames.PRESENT_VALUE_Z_SPREAD_SENSITIVITY,
-    ValueRequirementNames.CONVEXITY,
-    ValueRequirementNames.ACCRUED_INTEREST,
-    ValueRequirementNames.PV01,
-    ValueRequirementNames.DV01,
+  private static final String[] BOND_VALUE_NAMES = new String[] {
+                ValueRequirementNames.CLEAN_PRICE,
+                ValueRequirementNames.DIRTY_PRICE,
+                ValueRequirementNames.MACAULAY_DURATION,
+                ValueRequirementNames.MODIFIED_DURATION,
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.YTM,
+                ValueRequirementNames.Z_SPREAD,
+                ValueRequirementNames.PRESENT_VALUE_Z_SPREAD_SENSITIVITY,
+                ValueRequirementNames.CONVEXITY,
+                ValueRequirementNames.ACCRUED_INTEREST,
+                ValueRequirementNames.PV01,
+                ValueRequirementNames.DV01,
   };
 
-  private static final String[] s_bondFutureValueNames = new String[] {
-    ValueRequirementNames.GROSS_BASIS,
-    ValueRequirementNames.NET_BASIS
+  private static final String[] BOND_FUTURE_VALUE_NAMES = new String[] {
+                ValueRequirementNames.GROSS_BASIS,
+                ValueRequirementNames.NET_BASIS
   };
 
   private final Map<String, Pair<String, String>> _currencyAndRiskFreeCurveNames;
@@ -89,15 +89,16 @@ public class BondSecurityCurveNameDefaults extends DefaultPropertyFunction {
   protected void getDefaults(final PropertyDefaults defaults) {
     final Security target = defaults.getTarget().getSecurity();
     if (target instanceof BondSecurity) {
-      addProperties(defaults, s_bondValueNames);
+      addProperties(defaults, BOND_VALUE_NAMES);
     } else {
       assert target instanceof BondFutureSecurity;
-      addProperties(defaults, s_bondFutureValueNames);
+      addProperties(defaults, BOND_FUTURE_VALUE_NAMES);
     }
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currency = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     if (BondFunction.PROPERTY_CREDIT_CURVE.equals(propertyName)) {
       return Collections.singleton(_currencyAndCreditCurveNames.get(currency).getFirst());

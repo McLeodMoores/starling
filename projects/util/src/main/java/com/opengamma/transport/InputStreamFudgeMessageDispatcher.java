@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport;
@@ -8,7 +8,6 @@ package com.opengamma.transport;
 import java.io.InputStream;
 
 import org.fudgemsg.FudgeContext;
-import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.FudgeMsgEnvelope;
 import org.fudgemsg.wire.FudgeMsgReader;
 
@@ -16,21 +15,20 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Listens to an {@link InputStream}, splits the stream into individual
- * {@link FudgeMsg}s, and then dispatches them to a {@link FudgeMessageReceiver}.
- * Must be run in its own thread.
+ * Listens to an {@link InputStream}, splits the stream into individual {@link org.fudgemsg.FudgeMsg}s, and then dispatches them to a
+ * {@link FudgeMessageReceiver}. Must be run in its own thread.
  */
 public class InputStreamFudgeMessageDispatcher implements Runnable {
   private final InputStream _inputStream;
   private final FudgeMessageReceiver _messageReceiver;
   private final FudgeContext _fudgeContext;
   private final FudgeMsgReader _fudgeMsgReader;
-  
-  public InputStreamFudgeMessageDispatcher(InputStream inputStream, FudgeMessageReceiver messageReceiver) {
+
+  public InputStreamFudgeMessageDispatcher(final InputStream inputStream, final FudgeMessageReceiver messageReceiver) {
     this(inputStream, messageReceiver, OpenGammaFudgeContext.getInstance());
   }
 
-  public InputStreamFudgeMessageDispatcher(InputStream inputStream, FudgeMessageReceiver messageReceiver, FudgeContext fudgeContext) {
+  public InputStreamFudgeMessageDispatcher(final InputStream inputStream, final FudgeMessageReceiver messageReceiver, final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(inputStream, "inputStream");
     ArgumentChecker.notNull(messageReceiver, "messageReceiver");
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
@@ -42,6 +40,7 @@ public class InputStreamFudgeMessageDispatcher implements Runnable {
 
   /**
    * Gets the inputStream.
+   *
    * @return the inputStream
    */
   public InputStream getInputStream() {
@@ -75,7 +74,7 @@ public class InputStreamFudgeMessageDispatcher implements Runnable {
   @Override
   public void run() {
     while (true) {
-      FudgeMsgEnvelope msgEnvelope = getFudgeMsgReader().nextMessageEnvelope();
+      final FudgeMsgEnvelope msgEnvelope = getFudgeMsgReader().nextMessageEnvelope();
       if (msgEnvelope == null) {
         // End of stream reached.
         break;

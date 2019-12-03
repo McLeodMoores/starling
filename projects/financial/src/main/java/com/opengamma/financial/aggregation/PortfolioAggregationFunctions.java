@@ -24,17 +24,17 @@ public class PortfolioAggregationFunctions {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param functions  the functions, not null
    */
-  public PortfolioAggregationFunctions(Iterable<AggregationFunction<?>> functions) {
+  public PortfolioAggregationFunctions(final Iterable<AggregationFunction<?>> functions) {
     _functions = ImmutableList.copyOf(functions);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the aggregators.
-   * 
+   *
    * @return the immutable list of aggregators, not null
    */
   public List<AggregationFunction<?>> getFunctions() {
@@ -44,12 +44,12 @@ public class PortfolioAggregationFunctions {
   //-------------------------------------------------------------------------
   /**
    * Gets the aggregators mapped by name.
-   * 
+   *
    * @return the immutable map of aggregation functions, not null
    */
   public Map<String, AggregationFunction<?>> getMappedFunctions() {
-    Map<String, AggregationFunction<?>> result = new HashMap<String, AggregationFunction<?>>();
-    for (AggregationFunction<?> portfolioAggregator : _functions) {
+    final Map<String, AggregationFunction<?>> result = new HashMap<>();
+    for (final AggregationFunction<?> portfolioAggregator : _functions) {
       result.put(portfolioAggregator.getName(), portfolioAggregator);
     }
     return ImmutableMap.copyOf(result);

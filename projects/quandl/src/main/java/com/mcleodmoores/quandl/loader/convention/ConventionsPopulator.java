@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.convention;
 
@@ -37,7 +37,9 @@ public class ConventionsPopulator extends ConventionMasterInitializer {
 
   /**
    * Creates an instance.
-   * @param conventions  the conventions, not null
+   * 
+   * @param conventions
+   *          the conventions, not null
    */
   public ConventionsPopulator(final Set<ManageableConvention> conventions) {
     ArgumentChecker.notNull(conventions, "conventions");
@@ -101,12 +103,16 @@ public class ConventionsPopulator extends ConventionMasterInitializer {
   }
 
   /**
-   * If the id bundle of the ibor index convention contains a Quandl code, creates an {@link IborIndex} security and stores it
-   * in the master.
-   * @param securityMaster  the security master
-   * @param indexIdBundle  the id bundle of the ibor index convention
-   * @param indexName  the ibor index convention name
-   * @param tenor  the tenor of the index
+   * If the id bundle of the ibor index convention contains a Quandl code, creates an {@link IborIndex} security and stores it in the master.
+   * 
+   * @param securityMaster
+   *          the security master
+   * @param indexIdBundle
+   *          the id bundle of the ibor index convention
+   * @param indexName
+   *          the ibor index convention name
+   * @param tenor
+   *          the tenor of the index
    */
   private void createAndAddIborIndex(final SecurityMaster securityMaster, final ExternalIdBundle indexIdBundle, final String indexName, final Tenor tenor) {
     final Set<ExternalId> quandlId = indexIdBundle.getExternalIds(QuandlConstants.QUANDL_CODE);

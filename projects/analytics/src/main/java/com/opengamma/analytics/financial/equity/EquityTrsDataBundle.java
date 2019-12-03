@@ -27,6 +27,12 @@ public class EquityTrsDataBundle implements ParameterProviderInterface {
   /** The multi-curve provider */
   private final MulticurveProviderInterface _curves;
 
+  /**
+   * @param spotEquity
+   *          the spot equity price
+   * @param curves
+   *          discounting curves, not null
+   */
   public EquityTrsDataBundle(final double spotEquity, final MulticurveProviderInterface curves) {
     ArgumentChecker.notNull(curves, "curves");
     _spotEquity = spotEquity;
@@ -35,6 +41,7 @@ public class EquityTrsDataBundle implements ParameterProviderInterface {
 
   /**
    * Gets the spot equity price.
+   * 
    * @return the spot equity price
    */
   public double getSpotEquity() {
@@ -43,6 +50,7 @@ public class EquityTrsDataBundle implements ParameterProviderInterface {
 
   /**
    * Gets the curves.
+   * 
    * @return the curves
    */
   public MulticurveProviderInterface getCurves() {
@@ -56,7 +64,7 @@ public class EquityTrsDataBundle implements ParameterProviderInterface {
     result = prime * result + _curves.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_spotEquity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -93,12 +101,12 @@ public class EquityTrsDataBundle implements ParameterProviderInterface {
   }
 
   @Override
-  public double[] parameterSensitivity(String name, List<DoublesPair> pointSensitivity) {
+  public double[] parameterSensitivity(final String name, final List<DoublesPair> pointSensitivity) {
     return _curves.parameterSensitivity(name, pointSensitivity);
   }
 
   @Override
-  public double[] parameterForwardSensitivity(String name, List<ForwardSensitivity> pointSensitivity) {
+  public double[] parameterForwardSensitivity(final String name, final List<ForwardSensitivity> pointSensitivity) {
     return _curves.parameterForwardSensitivity(name, pointSensitivity);
   }
 

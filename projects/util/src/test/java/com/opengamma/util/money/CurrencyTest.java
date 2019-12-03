@@ -5,6 +5,7 @@
  */
 package com.opengamma.util.money;
 
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertSame;
 import static org.testng.AssertJUnit.assertTrue;
@@ -30,7 +31,10 @@ public class CurrencyTest {
   //-----------------------------------------------------------------------
   // constants
   //-----------------------------------------------------------------------
-  public void test_constants() {
+  /**
+   * Tests some of the pre-defined currencies.
+   */
+  public void testConstants() {
     assertEquals(Currency.USD, Currency.of("USD"));
     assertEquals(Currency.EUR, Currency.of("EUR"));
     assertEquals(Currency.JPY, Currency.of("JPY"));
@@ -43,8 +47,11 @@ public class CurrencyTest {
   //-----------------------------------------------------------------------
   // getAvailableCurrencies()
   //-----------------------------------------------------------------------
-  public void test_getAvailable() {
-    Set<Currency> available = Currency.getAvailableCurrencies();
+  /**
+   * Gets that pre-defined currencies are available.
+   */
+  public void testGetAvailable() {
+    final Set<Currency> available = Currency.getAvailableCurrencies();
     assertTrue(available.contains(Currency.USD));
     assertTrue(available.contains(Currency.EUR));
     assertTrue(available.contains(Currency.JPY));
@@ -57,134 +64,198 @@ public class CurrencyTest {
   //-----------------------------------------------------------------------
   // of(Currency)
   //-----------------------------------------------------------------------
-  public void test_of_Currency() {
-    Currency test = Currency.of(java.util.Currency.getInstance("GBP"));
+  /**
+   * Tests that a pre-defined currency will be returned where available.
+   */
+  public void testOfCurrency() {
+    final Currency test = Currency.of(java.util.Currency.getInstance("GBP"));
     assertEquals("GBP", test.getCode());
     assertSame(Currency.GBP, test);
   }
 
+  /**
+   * Tests that the currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_of_Currency_nullCurrency() {
+  public void testOfCurrencyNullCurrency() {
     Currency.of((java.util.Currency) null);
   }
 
   //-----------------------------------------------------------------------
   // of(String)
   //-----------------------------------------------------------------------
-  public void test_of_String() {
-    Currency test = Currency.of("SEK");
+  /**
+   * Tests that a pre-defined currency will be returned where available.
+   */
+  public void testOfString() {
+    final Currency test = Currency.of("SEK");
     assertEquals("SEK", test.getCode());
     assertSame(Currency.of("SEK"), test);
   }
 
-  public void test_of_String_unknownCurrencyCreated() {
-    Currency test = Currency.of("AAA");
+  /**
+   * Tests that an undefined currency will be added to the cache.
+   */
+  public void testOfStringUnknownCurrencyCreated() {
+    final Currency test = Currency.of("AAA");
     assertEquals("AAA", test.getCode());
     assertSame(Currency.of("AAA"), test);
   }
 
+  /**
+   * Tests that the currency string must be upper case.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_of_String_lowerCase() {
+  public void testOfStringLowerCase() {
     try {
       Currency.of("gbp");
-    } catch (IllegalArgumentException ex) {
+    } catch (final IllegalArgumentException ex) {
       assertEquals("Invalid currency code: gbp", ex.getMessage());
       throw ex;
     }
   }
 
+  /**
+   * Tests that the currency string cannot be empty.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_of_String_empty() {
+  public void testOfStringEmpty() {
     Currency.of("");
   }
 
+  /**
+   * Tests that the currency string must contain three letters.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_of_String_tooShort() {
+  public void testOfStringTooShort() {
     Currency.of("AB");
   }
 
+  /**
+   * Tests that the currency string must contain three letters.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_of_String_tooLong() {
+  public void testOfStringTooLong() {
     Currency.of("ABCD");
   }
 
+  /**
+   * Tests that the currency string cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_of_String_nullString() {
+  public void testOfStringNullString() {
     Currency.of((String) null);
   }
 
   //-----------------------------------------------------------------------
   // parse(String)
   //-----------------------------------------------------------------------
-  public void test_parse_String() {
-    Currency test = Currency.parse("GBP");
+  /**
+   * Tests that a pre-defined currency will be returned where available.
+   */
+  public void testParseString() {
+    final Currency test = Currency.parse("GBP");
     assertEquals("GBP", test.getCode());
     assertSame(Currency.GBP, test);
   }
 
-  public void test_parse_String_unknownCurrencyCreated() {
-    Currency test = Currency.parse("AAA");
+  /**
+   * Tests that an undefined currency will be added to the cache.
+   */
+  public void testParseStringUnknownCurrencyCreated() {
+    final Currency test = Currency.parse("AAA");
     assertEquals("AAA", test.getCode());
     assertSame(Currency.of("AAA"), test);
   }
 
-  public void test_parse_String_lowerCase() {
-    Currency test = Currency.parse("gbp");
+  /**
+   * Tests that the currency string must be upper case.
+   */
+  public void testParseStringLowerCase() {
+    final Currency test = Currency.parse("gbp");
     assertEquals("GBP", test.getCode());
     assertSame(Currency.GBP, test);
   }
 
+  /**
+   * Tests that the currency string cannot be empty.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_empty() {
+  public void testParseStringEmpty() {
     Currency.parse("");
   }
 
+  /**
+   * Tests that the currency string must contain three letters.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_tooShort() {
+  public void testParseStringTooShort() {
     Currency.parse("AB");
   }
 
+  /**
+   * Tests that the currency string must contain three letters.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_tooLong() {
+  public void testParseStringTooLong() {
     Currency.parse("ABCD");
   }
 
+  /**
+   * Tests that the currency string cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_parse_String_nullString() {
+  public void testParseStringNullString() {
     Currency.parse((String) null);
   }
 
   //-----------------------------------------------------------------------
   // Serialisation
   //-----------------------------------------------------------------------
-  public void test_serialization_GBP() throws Exception {
-    Currency cu = Currency.of("GBP");
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    ObjectOutputStream oos = new ObjectOutputStream(baos);
-    oos.writeObject(cu);
-    oos.close();
-    ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
-    Currency input = (Currency) ois.readObject();
-    assertSame(input, cu);
+  /**
+   * Tests the Java serialization of a currency.
+   *
+   * @throws Exception  if there is a problem with the serialization
+   */
+  public void testSerializationGBP() throws Exception {
+    final Currency cu = Currency.of("GBP");
+    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+      oos.writeObject(cu);
+      oos.close();
+      final ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
+      final Currency input = (Currency) ois.readObject();
+      assertSame(input, cu);
+    }
   }
 
-  public void test_serialization_AAB() throws Exception {
-    Currency cu = Currency.of("AAB");
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    ObjectOutputStream oos = new ObjectOutputStream(baos);
-    oos.writeObject(cu);
-    oos.close();
-    ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
-    Currency input = (Currency) ois.readObject();
-    assertSame(input, cu);
+  /**
+   * Tests the Java serialization of a currency.
+   *
+   * @throws Exception  if there is a problem with the serialization
+   */
+  public void testSerializationAAB() throws Exception {
+    final Currency cu = Currency.of("AAB");
+    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+      oos.writeObject(cu);
+      oos.close();
+      final ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
+      final Currency input = (Currency) ois.readObject();
+      assertSame(input, cu);
+    }
   }
 
   //-----------------------------------------------------------------------
   // gets
   //-----------------------------------------------------------------------
-  public void test_gets() {
-    Currency test = Currency.of("GBP");
+  /**
+   * Tests the get methods.
+   */
+  public void testGets() {
+    final Currency test = Currency.of("GBP");
     assertEquals("GBP", test.getCode());
+    assertEquals("GBP", test.getName());
     assertEquals(ObjectId.of("CurrencyISO", "GBP"), test.getObjectId());
     assertEquals(UniqueId.of("CurrencyISO", "GBP"), test.getUniqueId());
     assertEquals(java.util.Currency.getInstance("GBP"), test.toCurrency());
@@ -193,60 +264,75 @@ public class CurrencyTest {
   //-----------------------------------------------------------------------
   // compareTo()
   //-----------------------------------------------------------------------
-  public void test_compareTo() {
-    Currency a = Currency.EUR;
-    Currency b = Currency.GBP;
-    Currency c = Currency.JPY;
+  /**
+   * Tests currency comparisons.
+   */
+  public void testCompareTo() {
+    final Currency a = Currency.EUR;
+    final Currency b = Currency.GBP;
+    final Currency c = Currency.JPY;
     assertEquals(a.compareTo(a), 0);
     assertEquals(b.compareTo(b), 0);
     assertEquals(c.compareTo(c), 0);
-    
+
     assertTrue(a.compareTo(b) < 0);
     assertTrue(b.compareTo(a) > 0);
-    
+
     assertTrue(a.compareTo(c) < 0);
     assertTrue(c.compareTo(a) > 0);
-    
+
     assertTrue(b.compareTo(c) < 0);
     assertTrue(c.compareTo(b) > 0);
   }
 
+  /**
+   * Tests that a currency cannot be compared to null.
+   */
   @Test(expectedExceptions = NullPointerException.class)
-  public void test_compareTo_null() {
+  public void testCompareToNull() {
     Currency.EUR.compareTo(null);
   }
 
   //-----------------------------------------------------------------------
   // equals() hashCode()
   //-----------------------------------------------------------------------
-  public void test_equals_hashCode() {
-    Currency a = Currency.GBP;
-    Currency b = Currency.of("GBP");
-    Currency c = Currency.EUR;
+  /**
+   * Tests the equals and hashcode methods.
+   */
+  public void testEqualsHashCode() {
+    final Currency a = Currency.GBP;
+    final Currency b = Currency.of("GBP");
+    final Currency c = Currency.EUR;
     assertEquals(a.equals(a), true);
     assertEquals(b.equals(b), true);
     assertEquals(c.equals(c), true);
-    
+
     assertEquals(a.equals(b), true);
     assertEquals(b.equals(a), true);
     assertEquals(a.hashCode() == b.hashCode(), true);
-    
+
     assertEquals(a.equals(c), false);
     assertEquals(b.equals(c), false);
   }
 
-  public void test_equals_false() {
-    Currency a = Currency.GBP;
-    assertEquals(a.equals(null), false);
-    assertEquals(a.equals("String"), false);
-    assertEquals(a.equals(new Object()), false);
+  /**
+   * Tests values that are not equal.
+   */
+  public void testEqualsFalse() {
+    final Currency a = Currency.GBP;
+    assertNotEquals(null, a);
+    assertNotEquals("GBP", a);
+    assertNotEquals(new Object(), a);
   }
 
   //-----------------------------------------------------------------------
   // toString()
   //-----------------------------------------------------------------------
-  public void test_toString() {
-    Currency test = Currency.GBP;
+  /**
+   * Tests the toString method.
+   */
+  public void testToString() {
+    final Currency test = Currency.GBP;
     assertEquals(test.toString(), "GBP");
   }
 

@@ -16,12 +16,13 @@ import com.opengamma.id.ObjectId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A {@link ChangeProvider} that translates historical time series changes from a {@link HistoricalTimeSeriesSource} to one common representing changes in any hts.
+ * A {@link ChangeProvider} that translates historical time series changes from a {@link HistoricalTimeSeriesSource} to one common representing changes in any
+ * hts.
  */
 public class HistoricalTimeSeriesSourceChangeProvider implements ChangeProvider {
 
   /**
-   * Object used for registering changes in HTS
+   * Object used for registering changes in HTS.
    */
   public static final ObjectId ALL_HISTORICAL_TIME_SERIES = ObjectId.of("OpenGamma", "AllHistoricalTimeSeries");
 

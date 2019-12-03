@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.position.impl;
@@ -33,7 +33,7 @@ public class RemotePositionSource extends AbstractRemoteClient implements Positi
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemotePositionSource(final URI baseUri) {
@@ -42,7 +42,7 @@ public class RemotePositionSource extends AbstractRemoteClient implements Positi
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager, not null
    */
@@ -57,7 +57,7 @@ public class RemotePositionSource extends AbstractRemoteClient implements Positi
   public Portfolio getPortfolio(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    URI uri = DataPositionSourceUris.uriGetPortfolio(getBaseUri(), uniqueId);
+    final URI uri = DataPositionSourceUris.uriGetPortfolio(getBaseUri(), uniqueId);
     return accessRemote(uri).get(Portfolio.class);
   }
 
@@ -65,8 +65,8 @@ public class RemotePositionSource extends AbstractRemoteClient implements Positi
   public Portfolio getPortfolio(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    
-    URI uri = DataPositionSourceUris.uriGetPortfolio(getBaseUri(), objectId, versionCorrection);
+
+    final URI uri = DataPositionSourceUris.uriGetPortfolio(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(Portfolio.class);
   }
 
@@ -74,15 +74,15 @@ public class RemotePositionSource extends AbstractRemoteClient implements Positi
   public PortfolioNode getPortfolioNode(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    URI uri = DataPositionSourceUris.uriGetNode(getBaseUri(), uniqueId);
+    final URI uri = DataPositionSourceUris.uriGetNode(getBaseUri(), uniqueId);
     return accessRemote(uri).get(PortfolioNode.class);
   }
 
   @Override
-  public Position getPosition(UniqueId uniqueId) {
+  public Position getPosition(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    
-    URI uri = DataPositionSourceUris.uriGetPosition(getBaseUri(), uniqueId);
+
+    final URI uri = DataPositionSourceUris.uriGetPosition(getBaseUri(), uniqueId);
     return accessRemote(uri).get(Position.class);
   }
 
@@ -90,15 +90,15 @@ public class RemotePositionSource extends AbstractRemoteClient implements Positi
   public Position getPosition(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    URI uri = DataPositionSourceUris.uriGetPosition(getBaseUri(), objectId, versionCorrection);
+    final URI uri = DataPositionSourceUris.uriGetPosition(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(Position.class);
   }
 
   @Override
-  public Trade getTrade(UniqueId uniqueId) {
+  public Trade getTrade(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    
-    URI uri = DataPositionSourceUris.uriGetTrade(getBaseUri(), uniqueId);
+
+    final URI uri = DataPositionSourceUris.uriGetTrade(getBaseUri(), uniqueId);
     return accessRemote(uri).get(Trade.class);
   }
 

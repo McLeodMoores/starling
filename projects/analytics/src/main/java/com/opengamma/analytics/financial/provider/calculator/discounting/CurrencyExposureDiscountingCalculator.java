@@ -14,7 +14,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class CurrencyExposureDiscountingCalculator extends InstrumentDerivativeVisitorDelegate<MulticurveProviderInterface, MultipleCurrencyAmount> {
 
@@ -25,6 +25,7 @@ public final class CurrencyExposureDiscountingCalculator extends InstrumentDeriv
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static CurrencyExposureDiscountingCalculator getInstance() {
@@ -44,7 +45,7 @@ public final class CurrencyExposureDiscountingCalculator extends InstrumentDeriv
   private static final ForexDiscountingMethod METHOD_FOREX = ForexDiscountingMethod.getInstance();
   private static final ForexNonDeliverableForwardDiscountingMethod METHOD_FOREX_NDF = ForexNonDeliverableForwardDiscountingMethod.getInstance();
 
-  // -----     Forex     ------
+  // ----- Forex ------
 
   @Override
   public MultipleCurrencyAmount visitForex(final Forex derivative, final MulticurveProviderInterface multicurves) {

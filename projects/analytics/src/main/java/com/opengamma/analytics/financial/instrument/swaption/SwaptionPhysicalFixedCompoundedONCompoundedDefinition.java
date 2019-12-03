@@ -28,7 +28,8 @@ import com.opengamma.util.time.Expiry;
 /**
  * Class describing a European swaption on a vanilla swap with physical delivery.
  */
-public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition implements InstrumentDefinitionWithData<SwaptionPhysicalFixedCompoundedONCompounded, ZonedDateTimeDoubleTimeSeries> {
+public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition
+    implements InstrumentDefinitionWithData<SwaptionPhysicalFixedCompoundedONCompounded, ZonedDateTimeDoubleTimeSeries> {
 
   /**
    * Swap underlying the swaption.
@@ -57,10 +58,15 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition impleme
 
   /**
    * Constructor from the expiry date, the underlying swap and the long/short flag.
-   * @param expiryDate The expiry date.
-   * @param underlyingSwap The underlying swap.
-   * @param isCall The call / put flag.
-   * @param isLong The long (true) / short (false) flag.
+   *
+   * @param expiryDate
+   *          The expiry date.
+   * @param underlyingSwap
+   *          The underlying swap.
+   * @param isCall
+   *          The call / put flag.
+   * @param isLong
+   *          The long (true) / short (false) flag.
    */
   private SwaptionPhysicalFixedCompoundedONCompoundedDefinition(final ZonedDateTime expiryDate, final SwapFixedCompoundedONCompoundedDefinition underlyingSwap,
       final boolean isCall, final boolean isLong) {
@@ -76,16 +82,21 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition impleme
   }
 
   /**
-   * Builder from the expiry date, the underlying swap and the long/short flqg. The strike stored in the EuropeanVanillaOptionDefinition should not be used for pricing as the
-   * strike can be different for each coupon and need to be computed at the pricing method level.
-   * @param expiryDate The expiry date.
-   * @param underlyingSwap The underlying swap.
-   * @param isCall The call / put flag
-   * @param isLong The long (true) / short (false) flag.
+   * Builder from the expiry date, the underlying swap and the long/short flqg. The strike stored in the EuropeanVanillaOptionDefinition should not be used for
+   * pricing as the strike can be different for each coupon and need to be computed at the pricing method level.
+   *
+   * @param expiryDate
+   *          The expiry date.
+   * @param underlyingSwap
+   *          The underlying swap.
+   * @param isCall
+   *          The call / put flag
+   * @param isLong
+   *          The long (true) / short (false) flag.
    * @return The swaption.
    */
-  public static SwaptionPhysicalFixedCompoundedONCompoundedDefinition from(final ZonedDateTime expiryDate, final SwapFixedCompoundedONCompoundedDefinition underlyingSwap,
-      final boolean isCall, final boolean isLong) {
+  public static SwaptionPhysicalFixedCompoundedONCompoundedDefinition from(final ZonedDateTime expiryDate,
+      final SwapFixedCompoundedONCompoundedDefinition underlyingSwap, final boolean isCall, final boolean isLong) {
     ArgumentChecker.notNull(expiryDate, "expiry date");
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
     return new SwaptionPhysicalFixedCompoundedONCompoundedDefinition(expiryDate, underlyingSwap, isCall, isLong);
@@ -93,6 +104,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition impleme
 
   /**
    * Gets the underlying swap.
+   *
    * @return The underlying swap.
    */
   public SwapDefinition getUnderlyingSwap() {
@@ -101,6 +113,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition impleme
 
   /**
    * Gets the long / short flag.
+   *
    * @return True if the option is long
    */
   public boolean isLong() {
@@ -109,6 +122,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition impleme
 
   /**
    * Gets the call / put flag.
+   *
    * @return True if the option is a call
    */
   public boolean isCall() {
@@ -117,6 +131,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition impleme
 
   /**
    * Gets the expiry.
+   *
    * @return The expiry
    */
   public Expiry getExpiry() {
@@ -125,6 +140,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition impleme
 
   /**
    * Gets the currency.
+   *
    * @return The currency
    */
   public Currency getCurrency() {
@@ -153,8 +169,10 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition impleme
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
+  @SuppressWarnings("unchecked")
   @Deprecated
   @Override
   public SwaptionPhysicalFixedCompoundedONCompounded toDerivative(final ZonedDateTime dateTime, final String... yieldCurveNames) {
@@ -164,11 +182,12 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition impleme
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     final double expiryTime = TimeCalculator.getTimeBetween(dateTime, _expiry.getExpiry());
     final double settlementTime = TimeCalculator.getTimeBetween(dateTime, _settlementDate);
-    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>)
-        _underlyingSwap.toDerivative(dateTime, yieldCurveNames);
+    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>) _underlyingSwap
+        .toDerivative(dateTime, yieldCurveNames);
     return SwaptionPhysicalFixedCompoundedONCompounded.from(expiryTime, underlyingSwap, settlementTime, _isCall, _isLong);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public SwaptionPhysicalFixedCompoundedONCompounded toDerivative(final ZonedDateTime dateTime) {
     ArgumentChecker.notNull(dateTime, "date");
@@ -176,29 +195,33 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition impleme
     ArgumentChecker.isTrue(!dayConversion.isAfter(getExpiry().getExpiry().toLocalDate()), "date is after expiry date");
     final double expiryTime = TimeCalculator.getTimeBetween(dateTime, _expiry.getExpiry());
     final double settlementTime = TimeCalculator.getTimeBetween(dateTime, _settlementDate);
-    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>)
-        _underlyingSwap.toDerivative(dateTime);
+    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>) _underlyingSwap
+        .toDerivative(dateTime);
     return SwaptionPhysicalFixedCompoundedONCompounded.from(expiryTime, underlyingSwap, settlementTime, _isCall, _isLong);
   }
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
+  @SuppressWarnings("unchecked")
   @Deprecated
   @Override
-  public SwaptionPhysicalFixedCompoundedONCompounded toDerivative(final ZonedDateTime dateTime, final ZonedDateTimeDoubleTimeSeries ts, final String... yieldCurveNames) {
+  public SwaptionPhysicalFixedCompoundedONCompounded toDerivative(final ZonedDateTime dateTime, final ZonedDateTimeDoubleTimeSeries ts,
+      final String... yieldCurveNames) {
     ArgumentChecker.notNull(dateTime, "date");
     final LocalDate dayConversion = dateTime.toLocalDate();
     ArgumentChecker.isTrue(!dayConversion.isAfter(getExpiry().getExpiry().toLocalDate()), "date is after expiry date");
     ArgumentChecker.notNull(yieldCurveNames, "yield curve names");
     final double expiryTime = TimeCalculator.getTimeBetween(dateTime, _expiry.getExpiry());
     final double settlementTime = TimeCalculator.getTimeBetween(dateTime, _settlementDate);
-    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>)
-        _underlyingSwap.toDerivative(dateTime, new ZonedDateTimeDoubleTimeSeries[] {ts}, yieldCurveNames);
+    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>) _underlyingSwap
+        .toDerivative(dateTime, new ZonedDateTimeDoubleTimeSeries[] { ts }, yieldCurveNames);
     return SwaptionPhysicalFixedCompoundedONCompounded.from(expiryTime, underlyingSwap, settlementTime, _isCall, _isLong);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public SwaptionPhysicalFixedCompoundedONCompounded toDerivative(final ZonedDateTime dateTime, final ZonedDateTimeDoubleTimeSeries ts) {
     ArgumentChecker.notNull(dateTime, "date");
@@ -206,8 +229,8 @@ public final class SwaptionPhysicalFixedCompoundedONCompoundedDefinition impleme
     ArgumentChecker.isTrue(!dayConversion.isAfter(getExpiry().getExpiry().toLocalDate()), "date is after expiry date");
     final double expiryTime = TimeCalculator.getTimeBetween(dateTime, _expiry.getExpiry());
     final double settlementTime = TimeCalculator.getTimeBetween(dateTime, _settlementDate);
-    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>)
-        _underlyingSwap.toDerivative(dateTime, new ZonedDateTimeDoubleTimeSeries[] {ts});
+    final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap = (Swap<CouponFixedAccruedCompounding, CouponONCompounded>) _underlyingSwap
+        .toDerivative(dateTime, new ZonedDateTimeDoubleTimeSeries[] { ts });
     return SwaptionPhysicalFixedCompoundedONCompounded.from(expiryTime, underlyingSwap, settlementTime, _isCall, _isLong);
   }
 

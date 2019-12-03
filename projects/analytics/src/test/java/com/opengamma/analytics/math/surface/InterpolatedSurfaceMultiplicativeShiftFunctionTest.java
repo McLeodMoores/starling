@@ -29,7 +29,7 @@ public class InterpolatedSurfaceMultiplicativeShiftFunctionTest {
   private static final GridInterpolator2D INTERPOLATOR = new GridInterpolator2D(new LinearInterpolator1D(), new LinearInterpolator1D()) {
 
         @Override
-        public Double interpolate(Map<Double, Interpolator1DDataBundle> dataBundle, DoublesPair value) {
+        public Double interpolate(final Map<Double, Interpolator1DDataBundle> dataBundle, final DoublesPair value) {
           return value.getFirst() + value.getSecond();
         }
       };

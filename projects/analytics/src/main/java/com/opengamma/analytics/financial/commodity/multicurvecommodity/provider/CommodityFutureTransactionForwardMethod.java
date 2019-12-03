@@ -52,7 +52,8 @@ public final class CommodityFutureTransactionForwardMethod extends CommodityFutu
    * @param multicurves The multi-curve provider.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyCommoditySensitivity presentValueCurveSensitivity(final CommodityFutureTransaction futures, final CommodityProviderInterface multicurves) {
+  public MultipleCurrencyCommoditySensitivity presentValueCurveSensitivity(final CommodityFutureTransaction futures,
+      final CommodityProviderInterface multicurves) {
     return presentValueCurveSensitivity(futures, METHOD_SECURITY.priceCurveSensitivity(futures.getUnderlying(), multicurves));
   }
 

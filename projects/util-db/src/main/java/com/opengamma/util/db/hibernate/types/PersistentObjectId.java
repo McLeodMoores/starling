@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.StringType;
 import org.hibernate.usertype.EnhancedUserType;
 import org.slf4j.Logger;
@@ -29,90 +30,103 @@ public class PersistentObjectId implements EnhancedUserType {
    */
   public static final PersistentObjectId INSTANCE = new PersistentObjectId();
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PersistentObjectId.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PersistentObjectId.class);
 
-  private static final int[] SQL_TYPES = new int[] {Types.VARCHAR };
+  private static final int[] SQL_TYPES = new int[] { Types.VARCHAR };
 
+  @Override
   public int[] sqlTypes() {
     return SQL_TYPES;
   }
 
+  @Override
   public Class<?> returnedClass() {
     return ObjectId.class;
   }
 
-  public boolean equals(Object x, Object y) throws HibernateException {
+  @Override
+  public boolean equals(final Object x, final Object y) throws HibernateException {
     if (x == y) {
       return true;
     }
     if (x == null || y == null) {
       return false;
     }
-    ObjectId ix = (ObjectId) x;
-    ObjectId iy = (ObjectId) y;
+    final ObjectId ix = (ObjectId) x;
+    final ObjectId iy = (ObjectId) y;
     return ix.equals(iy);
   }
 
-  public int hashCode(Object object) throws HibernateException {
+  @Override
+  public int hashCode(final Object object) throws HibernateException {
     return object.hashCode();
   }
 
-  public Object nullSafeGet(ResultSet resultSet, String[] names, Object object) throws HibernateException, SQLException {
-    return nullSafeGet(resultSet, names[0]);
+  @Override
+  public Object nullSafeGet(final ResultSet resultSet, final String[] names, final SharedSessionContractImplementor session,
+      final Object object) throws HibernateException, SQLException {
+    return nullSafeGet(resultSet, names[0], session);
   }
 
-  @SuppressWarnings("deprecation")
-  public Object nullSafeGet(ResultSet resultSet, String name) throws SQLException {
-    String value = (String) (new StringType()).nullSafeGet(resultSet, name);
+  public Object nullSafeGet(final ResultSet resultSet, final String name, final SharedSessionContractImplementor session) throws SQLException {
+    final String value = new StringType().nullSafeGet(resultSet, name, session);
     if (value == null) {
       return null;
     }
     return ObjectId.parse(value);
   }
 
-  @SuppressWarnings("deprecation")
-  public void nullSafeSet(PreparedStatement preparedStatement, Object value, int index) throws HibernateException, SQLException {
+  @Override
+  public void nullSafeSet(final PreparedStatement preparedStatement, final Object value, final int index,
+      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
     if (value == null) {
-      s_logger.debug("ObjectId -> String : NULL -> NULL");
-      (new StringType()).nullSafeSet(preparedStatement, null, index);
+      LOGGER.debug("ObjectId -> String : NULL -> NULL");
+      new StringType().nullSafeSet(preparedStatement, null, index, session);
     } else {
-      s_logger.debug("ObjectId -> String : {}   ->  {}", value, ObjectId.parse((String) value));
-      (new StringType()).nullSafeSet(preparedStatement, ObjectId.parse((String) value), index);
+      LOGGER.debug("ObjectId -> String : {}   ->  {}", value, ObjectId.parse((String) value));
+      new StringType().nullSafeSet(preparedStatement, ObjectId.parse((String) value), index, session);
     }
   }
 
-  public Object deepCopy(Object value) throws HibernateException {
+  @Override
+  public Object deepCopy(final Object value) throws HibernateException {
     return value;
   }
 
+  @Override
   public boolean isMutable() {
     return false;
   }
 
-  public Serializable disassemble(Object value) throws HibernateException {
+  @Override
+  public Serializable disassemble(final Object value) throws HibernateException {
     return (Serializable) value;
   }
 
-  public Object assemble(Serializable serializable, Object value) throws HibernateException {
+  @Override
+  public Object assemble(final Serializable serializable, final Object value) throws HibernateException {
     return serializable;
   }
 
-  public Object replace(Object original, Object target, Object owner) throws HibernateException {
+  @Override
+  public Object replace(final Object original, final Object target, final Object owner) throws HibernateException {
     return original;
   }
 
   // __________ EnhancedUserType ____________________
 
-  public String objectToSQLString(Object object) {
+  @Override
+  public String objectToSQLString(final Object object) {
     throw new UnsupportedOperationException();
   }
 
-  public String toXMLString(Object object) {
+  @Override
+  public String toXMLString(final Object object) {
     return object.toString();
   }
 
-  public Object fromXMLString(String string) {
+  @Override
+  public Object fromXMLString(final String string) {
     return ObjectId.parse(string);
   }
-
 }

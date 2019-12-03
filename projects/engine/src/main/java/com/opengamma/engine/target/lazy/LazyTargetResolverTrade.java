@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -25,6 +25,7 @@ public class LazyTargetResolverTrade extends LazyTargetResolverPositionOrTrade i
     super(resolver, specification);
   }
 
+  @Override
   protected Trade getResolved() {
     return getResolvedTarget().getTrade();
   }
@@ -35,12 +36,12 @@ public class LazyTargetResolverTrade extends LazyTargetResolverPositionOrTrade i
   }
 
   @Override
-  public void setAttributes(Map<String, String> attributes) {
+  public void setAttributes(final Map<String, String> attributes) {
     getResolved().setAttributes(attributes);
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     getResolved().addAttribute(key, value);
   }
 

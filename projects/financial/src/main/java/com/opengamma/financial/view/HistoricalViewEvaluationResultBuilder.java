@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.view;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,22 +36,25 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateObjectTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
+
 /* package */class HistoricalViewEvaluationResultBuilder {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalViewEvaluationResultBuilder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalViewEvaluationResultBuilder.class);
 
   // TODO: If the duration of the time series is high, or there are simply a large quantity then we could modify these builders to
   // write directly to the time series database instead (or batch up the points in internal arrays) and the result bundle will be
   // the identifiers of the time series that were written to the database
 
   /**
-   * Builder for time-series where there is at most one result for a given date. Points may be added in any order, allowing the results to be executed in parallel.
+   * Builder for time-series where there is at most one result for a given date. Points may be added in any order, allowing the results to be executed in
+   * parallel.
    */
   private static class TimeSeriesBuilder {
 
-    private final SortedMap<Integer, Object> _datedResultMap = new Int2ObjectRBTreeMap<Object>();
+    private final SortedMap<Integer, Object> _datedResultMap = new Int2ObjectRBTreeMap<>();
 
-    public TimeSeriesBuilder() {
+    TimeSeriesBuilder() {
     }
 
     public TimeSeriesBuilder addPoint(final int date, final Object value) {
@@ -67,16 +68,15 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
     public TimeSeries makeTimeSeries() {
       if (_datedResultMap.isEmpty() || Iterables.get(_datedResultMap.values(), 0) instanceof Number) {
         return makeDoubleTimeSeries();
-      } else {
-        return makeObjectTimeSeries();
       }
+      return makeObjectTimeSeries();
     }
 
     private LocalDateDoubleTimeSeries makeDoubleTimeSeries() {
-      int[] dates = new int[_datedResultMap.size()];
-      double[] values = new double[_datedResultMap.size()];
+      final int[] dates = new int[_datedResultMap.size()];
+      final double[] values = new double[_datedResultMap.size()];
       int i = 0;
-      for (Map.Entry<Integer, Object> datedResult : _datedResultMap.entrySet()) {
+      for (final Map.Entry<Integer, Object> datedResult : _datedResultMap.entrySet()) {
         dates[i] = datedResult.getKey();
         values[i] = (Double) datedResult.getValue();
         i++;
@@ -85,10 +85,10 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
     }
 
     private LocalDateObjectTimeSeries<?> makeObjectTimeSeries() {
-      int[] dates = new int[_datedResultMap.size()];
-      Object[] values = new Object[_datedResultMap.size()];
+      final int[] dates = new int[_datedResultMap.size()];
+      final Object[] values = new Object[_datedResultMap.size()];
       int i = 0;
-      for (Map.Entry<Integer, Object> datedResult : _datedResultMap.entrySet()) {
+      for (final Map.Entry<Integer, Object> datedResult : _datedResultMap.entrySet()) {
         dates[i] = datedResult.getKey();
         values[i] = datedResult.getValue();
         i++;
@@ -100,9 +100,9 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
   private static class ConfigurationResults {
 
     private Map<ValueSpecification, Set<ValueRequirement>> _requirements;
-    private final Map<ValueRequirement, TimeSeriesBuilder> _results = new HashMap<ValueRequirement, TimeSeriesBuilder>();
+    private final Map<ValueRequirement, TimeSeriesBuilder> _results = new HashMap<>();
 
-    public ConfigurationResults(final Collection<ValueRequirement> requirements) {
+    ConfigurationResults(final Collection<ValueRequirement> requirements) {
       for (final ValueRequirement requirement : requirements) {
         _results.put(requirement, new TimeSeriesBuilder());
       }
@@ -118,7 +118,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
         for (final ValueRequirement requirement : requirements) {
           final TimeSeriesBuilder builder = _results.get(requirement);
           if (builder == null) {
-            s_logger.warn("View produced value {} for unrequested requirement {}", specification, requirement);
+            LOGGER.warn("View produced value {} for unrequested requirement {}", specification, requirement);
           } else {
             final TimeSeriesBuilder newBuilder = builder.addPoint(date, value);
             if (newBuilder != builder) {
@@ -127,7 +127,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
           }
         }
       } else {
-        s_logger.warn("View produced unrequested value {}", specification);
+        LOGGER.warn("View produced unrequested value {}", specification);
       }
     }
 
@@ -160,7 +160,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
       }
       if (aliasValueSpecs != null) {
         if (data._alias == null) {
-          data._alias = new ArrayList<ValueSpecification>(aliasValueSpecs);
+          data._alias = new ArrayList<>(aliasValueSpecs);
         } else {
           data._alias.addAll(aliasValueSpecs);
         }
@@ -168,11 +168,11 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
     }
 
     public void store(final int date, final ValueSpecification specification, final Object value) {
-      MarketData data = get(specification);
+      final MarketData data = get(specification);
       if (data != null) {
         data._builder.addPoint(date, value);
       } else {
-        s_logger.warn("View produced unrequested market data {}", specification);
+        LOGGER.warn("View produced unrequested market data {}", specification);
       }
     }
 
@@ -181,7 +181,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
       final HistoricalViewEvaluationMarketData results = new HistoricalViewEvaluationMarketData();
       for (final Map.Entry<ValueSpecification, MarketData> result : entrySet()) {
         final TimeSeries timeSeries = result.getValue()._builder.makeTimeSeries();
-        for (ValueSpecification alias : result.getValue()._alias) {
+        for (final ValueSpecification alias : result.getValue()._alias) {
           results.addTimeSeries(alias, timeSeries);
         }
       }
@@ -190,11 +190,11 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
 
   }
 
-  private final Map<String, ConfigurationResults> _results = new HashMap<String, ConfigurationResults>();
+  private final Map<String, ConfigurationResults> _results = new HashMap<>();
   private final MarketDataResults _marketData;
   private boolean _compiled;
 
-  public HistoricalViewEvaluationResultBuilder(final ViewDefinition viewDefinition, final boolean includeMarketData) {
+  HistoricalViewEvaluationResultBuilder(final ViewDefinition viewDefinition, final boolean includeMarketData) {
     for (final ViewCalculationConfiguration calcConfig : viewDefinition.getAllCalculationConfigurations()) {
       final ConfigurationResults configResults = new ConfigurationResults(calcConfig.getSpecificRequirements());
       _results.put(calcConfig.getName(), configResults);
@@ -206,13 +206,13 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
     }
   }
 
-  public synchronized void store(final CompiledViewDefinition viewDefinition) {
+  synchronized void store(final CompiledViewDefinition viewDefinition) {
     if (!_compiled) {
       for (final CompiledViewCalculationConfiguration calcConfig : viewDefinition.getCompiledCalculationConfigurations()) {
         final ConfigurationResults configResults = _results.get(calcConfig.getName());
         configResults.setRequirements(calcConfig.getTerminalOutputSpecifications());
         if (_marketData != null) {
-          for (Map.Entry<ValueSpecification, Collection<ValueSpecification>> marketDataAlias : calcConfig.getMarketDataAliases().entrySet()) {
+          for (final Map.Entry<ValueSpecification, Collection<ValueSpecification>> marketDataAlias : calcConfig.getMarketDataAliases().entrySet()) {
             _marketData.addMarketDataAlias(marketDataAlias.getKey(), marketDataAlias.getValue());
           }
         }
@@ -221,13 +221,13 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
     }
   }
 
-  public synchronized void store(LocalDate resultsDate, ViewComputationResultModel results) {
+  synchronized void store(final LocalDate resultsDate, final ViewComputationResultModel results) {
     assert _compiled;
     final int date = LocalDateToIntConverter.convertToInt(resultsDate);
     for (final ViewResultEntry viewResult : results.getAllResults()) {
       final ComputedValue computedValue = viewResult.getComputedValue();
       final Object value = computedValue.getValue();
-      if ((value != null) && !(value instanceof MissingValue)) {
+      if (value != null && !(value instanceof MissingValue)) {
         final ConfigurationResults configResults = _results.get(viewResult.getCalculationConfiguration());
         configResults.store(date, computedValue.getSpecification(), value);
       }
@@ -235,7 +235,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
     if (_marketData != null) {
       for (final ComputedValue computedValue : results.getAllMarketData()) {
         final Object value = computedValue.getValue();
-        if ((value != null) && !(value instanceof MissingValue)) {
+        if (value != null && !(value instanceof MissingValue)) {
           _marketData.store(date, computedValue.getSpecification(), value);
         }
       }

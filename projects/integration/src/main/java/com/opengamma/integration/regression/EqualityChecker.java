@@ -31,25 +31,25 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 public final class EqualityChecker {
 
   // TODO static method to populate these from the outside
-  private static final Map<Class<?>, TypeHandler<?>> s_handlers = new ClassMap<>();
-  private static final Map<MetaProperty<?>, Comparator<?>> s_propertyComparators = Maps.newHashMap();
-  private static final ObjectArrayHandler s_objectArrayHandler = new ObjectArrayHandler();
+  private static final Map<Class<?>, TypeHandler<?>> HANDLERS = new ClassMap<>();
+  private static final Map<MetaProperty<?>, Comparator<?>> PROPERTY_COMPARATORS = Maps.newHashMap();
+  private static final ObjectArrayHandler OBJECT_ARRAY_HANDLER = new ObjectArrayHandler();
 
   static {
-    s_handlers.put(Double.class, new DoubleHandler());
-    s_handlers.put(double[].class, new PrimitiveDoubleArrayHandler());
-    s_handlers.put(Double[].class, new DoubleArrayHandler());
-    s_handlers.put(Object[].class, s_objectArrayHandler);
-    s_handlers.put(List.class, new ListHandler());
-    s_handlers.put(YieldCurve.class, new YieldCurveHandler());
-    s_handlers.put(LabelledMatrix1D.class, new LabelledMatrix1DHandler());
-    s_handlers.put(MultipleCurrencyAmount.class, new MultipleCurrencyAmountHandler());
-    s_handlers.put(Bean.class, new BeanHandler());
-    s_handlers.put(InvokedSerializedForm.class, new InvokedSerializedFormHandler());
-    s_handlers.put(VolatilitySurfaceData.class, new VolatilitySurfaceDataHandler());
-    s_handlers.put(Map.class, new MapHandler());
+    HANDLERS.put(Double.class, new DoubleHandler());
+    HANDLERS.put(double[].class, new PrimitiveDoubleArrayHandler());
+    HANDLERS.put(Double[].class, new DoubleArrayHandler());
+    HANDLERS.put(Object[].class, OBJECT_ARRAY_HANDLER);
+    HANDLERS.put(List.class, new ListHandler());
+    HANDLERS.put(YieldCurve.class, new YieldCurveHandler());
+    HANDLERS.put(LabelledMatrix1D.class, new LabelledMatrix1DHandler());
+    HANDLERS.put(MultipleCurrencyAmount.class, new MultipleCurrencyAmountHandler());
+    HANDLERS.put(Bean.class, new BeanHandler());
+    HANDLERS.put(InvokedSerializedForm.class, new InvokedSerializedFormHandler());
+    HANDLERS.put(VolatilitySurfaceData.class, new VolatilitySurfaceDataHandler());
+    HANDLERS.put(Map.class, new MapHandler());
 
-    s_propertyComparators.put(Curve.meta().name(), new AlwaysEqualComparator());
+    PROPERTY_COMPARATORS.put(Curve.meta().name(), new AlwaysEqualComparator());
   }
 
   private EqualityChecker() {
@@ -62,7 +62,7 @@ public final class EqualityChecker {
    * @param delta The maximum allowable difference between two double values
    * @return true If the values are close enough to be considered equal
    */
-  public static boolean equals(Object o1, Object o2, double delta) {
+  public static boolean equals(final Object o1, final Object o2, final double delta) {
     if (o1 == null && o2 == null) {
       return true;
     }
@@ -76,20 +76,20 @@ public final class EqualityChecker {
     // by a factory method it returns an instance of InvokedSerializedForm which encodes the factory method and
     // arguments needed to recreate the object. comparing anonymous classes is obviously fraught with difficulties,
     // but comparing the serialized form will work
-    Object value1 = WriteReplaceHelper.writeReplace(o1);
-    Object value2 = WriteReplaceHelper.writeReplace(o2);
+    final Object value1 = WriteReplaceHelper.writeReplace(o1);
+    final Object value2 = WriteReplaceHelper.writeReplace(o2);
     @SuppressWarnings("unchecked")
-    TypeHandler<Object> handler = (TypeHandler<Object>) s_handlers.get(value1.getClass());
+    final
+    TypeHandler<Object> handler = (TypeHandler<Object>) HANDLERS.get(value1.getClass());
     if (handler != null) {
       return handler.equals(value1, value2, delta);
-    } else {
-      // ClassMap doesn't handle subtyping and arrays, this uses the Object[] handler for non-primitive arrays
-      if (value1.getClass().isArray() && Object[].class.isAssignableFrom(value1.getClass())) {
-        return s_objectArrayHandler.equals((Object[]) value1, (Object[]) value2, delta);
-      } else {
-        return Objects.equals(value1, value2);
-      }
     }
+    // ClassMap doesn't handle subtyping and arrays, this uses the Object[]
+    // handler for non-primitive arrays
+    if (value1.getClass().isArray() && Object[].class.isAssignableFrom(value1.getClass())) {
+      return OBJECT_ARRAY_HANDLER.equals((Object[]) value1, (Object[]) value2, delta);
+    }
+    return Objects.equals(value1, value2);
   }
 
   /**
@@ -111,7 +111,7 @@ public final class EqualityChecker {
   private static final class YieldCurveHandler implements TypeHandler<YieldCurve> {
 
     @Override
-    public boolean equals(YieldCurve value1, YieldCurve value2, double delta) {
+    public boolean equals(final YieldCurve value1, final YieldCurve value2, final double delta) {
       return EqualityChecker.equals(value1.getCurve(), value2.getCurve(), delta);
     }
   }
@@ -119,13 +119,13 @@ public final class EqualityChecker {
   private static final class DoubleArrayHandler implements TypeHandler<Double[]> {
 
     @Override
-    public boolean equals(Double[] value1, Double[] value2, double delta) {
+    public boolean equals(final Double[] value1, final Double[] value2, final double delta) {
       if (value1.length != value2.length) {
         return false;
       }
       for (int i = 0; i < value1.length; i++) {
-        double item1 = value1[i];
-        double item2 = value2[i];
+        final double item1 = value1[i];
+        final double item2 = value2[i];
         if (Math.abs(item1 - item2) > delta) {
           return false;
         }
@@ -137,13 +137,13 @@ public final class EqualityChecker {
   private static final class MultipleCurrencyAmountHandler implements TypeHandler<MultipleCurrencyAmount> {
 
     @Override
-    public boolean equals(MultipleCurrencyAmount value1, MultipleCurrencyAmount value2, double delta) {
-      for (CurrencyAmount currencyAmount : value1) {
-        double amount1 = currencyAmount.getAmount();
+    public boolean equals(final MultipleCurrencyAmount value1, final MultipleCurrencyAmount value2, final double delta) {
+      for (final CurrencyAmount currencyAmount : value1) {
+        final double amount1 = currencyAmount.getAmount();
         double amount2;
         try {
           amount2 = value2.getAmount(currencyAmount.getCurrency());
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
           return false;
         }
         if (!EqualityChecker.equals(amount1, amount2, delta)) {
@@ -157,13 +157,13 @@ public final class EqualityChecker {
   private static final class ObjectArrayHandler implements TypeHandler<Object[]> {
 
     @Override
-    public boolean equals(Object[] value1, Object[] value2, double delta) {
+    public boolean equals(final Object[] value1, final Object[] value2, final double delta) {
       if (value1.length != value2.length) {
         return false;
       }
       for (int i = 0; i < value1.length; i++) {
-        Object item1 = value1[i];
-        Object item2 = value2[i];
+        final Object item1 = value1[i];
+        final Object item2 = value2[i];
         if (!EqualityChecker.equals(item1, item2, delta)) {
           return false;
         }
@@ -175,13 +175,13 @@ public final class EqualityChecker {
   private static final class PrimitiveDoubleArrayHandler implements TypeHandler<double[]> {
 
     @Override
-    public boolean equals(double[] value1, double[] value2, double delta) {
+    public boolean equals(final double[] value1, final double[] value2, final double delta) {
       if (value1.length != value2.length) {
         return false;
       }
       for (int i = 0; i < value1.length; i++) {
-        double item1 = value1[i];
-        double item2 = value2[i];
+        final double item1 = value1[i];
+        final double item2 = value2[i];
         if (Math.abs(item1 - item2) > delta) {
           return false;
         }
@@ -193,7 +193,7 @@ public final class EqualityChecker {
   private static final class DoubleHandler implements TypeHandler<Double> {
 
     @Override
-    public boolean equals(Double value1, Double value2, double delta) {
+    public boolean equals(final Double value1, final Double value2, final double delta) {
       return Math.abs(value1 - value2) <= delta;
     }
   }
@@ -201,13 +201,13 @@ public final class EqualityChecker {
   private static final class ListHandler implements TypeHandler<List<?>> {
 
     @Override
-    public boolean equals(List<?> value1, List<?> value2, double delta) {
+    public boolean equals(final List<?> value1, final List<?> value2, final double delta) {
       if (value1.size() != value2.size()) {
         return false;
       }
-      for (Iterator<?> it1 = value1.iterator(), it2 = value2.iterator(); it1.hasNext(); ) {
-        Object item1 = it1.next();
-        Object item2 = it2.next();
+      for (Iterator<?> it1 = value1.iterator(), it2 = value2.iterator(); it1.hasNext();) {
+        final Object item1 = it1.next();
+        final Object item2 = it2.next();
         if (!EqualityChecker.equals(item1, item2, delta)) {
           return false;
         }
@@ -219,12 +219,13 @@ public final class EqualityChecker {
   private static class BeanHandler implements TypeHandler<Bean> {
 
     @Override
-    public boolean equals(Bean bean1, Bean bean2, double delta) {
-      for (MetaProperty<?> property : bean1.metaBean().metaPropertyIterable()) {
-        Object value1 = property.get(bean1);
-        Object value2 = property.get(bean2);
+    public boolean equals(final Bean bean1, final Bean bean2, final double delta) {
+      for (final MetaProperty<?> property : bean1.metaBean().metaPropertyIterable()) {
+        final Object value1 = property.get(bean1);
+        final Object value2 = property.get(bean2);
         @SuppressWarnings("unchecked")
-        Comparator<Object> comparator = (Comparator<Object>) s_propertyComparators.get(property);
+        final
+        Comparator<Object> comparator = (Comparator<Object>) PROPERTY_COMPARATORS.get(property);
         if (comparator == null) {
           if (!EqualityChecker.equals(value1, value2, delta)) {
             return false;
@@ -251,7 +252,7 @@ public final class EqualityChecker {
   private static class InvokedSerializedFormHandler implements TypeHandler<InvokedSerializedForm> {
 
     @Override
-    public boolean equals(InvokedSerializedForm value1, InvokedSerializedForm value2, double delta) {
+    public boolean equals(final InvokedSerializedForm value1, final InvokedSerializedForm value2, final double delta) {
       if (!Objects.equals(value1.getOuterClass(), value2.getOuterClass())) {
         return false;
       }
@@ -271,7 +272,7 @@ public final class EqualityChecker {
   private static class VolatilitySurfaceDataHandler implements TypeHandler<VolatilitySurfaceData<?, ?>> {
 
     @Override
-    public boolean equals(VolatilitySurfaceData<?, ?> value1, VolatilitySurfaceData<?, ?> value2, double delta) {
+    public boolean equals(final VolatilitySurfaceData<?, ?> value1, final VolatilitySurfaceData<?, ?> value2, final double delta) {
       if (!Objects.equals(value1.getDefinitionName(), value2.getDefinitionName())) {
         return false;
       }
@@ -297,13 +298,13 @@ public final class EqualityChecker {
   private static class MapHandler implements TypeHandler<Map<?, ?>> {
 
     @Override
-    public boolean equals(Map<?, ?> map1, Map<?, ?> map2, double delta) {
+    public boolean equals(final Map<?, ?> map1, final Map<?, ?> map2, final double delta) {
       if (!map1.keySet().equals(map2.keySet())) {
         return false;
       }
-      for (Map.Entry<?, ?> entry : map1.entrySet()) {
-        Object value1 = entry.getValue();
-        Object value2 = map2.get(entry.getKey());
+      for (final Map.Entry<?, ?> entry : map1.entrySet()) {
+        final Object value1 = entry.getValue();
+        final Object value2 = map2.get(entry.getKey());
         if (!EqualityChecker.equals(value1, value2, delta)) {
           return false;
         }
@@ -315,7 +316,7 @@ public final class EqualityChecker {
   private static class LabelledMatrix1DHandler implements TypeHandler<LabelledMatrix1D<?, ?>> {
 
     @Override
-    public boolean equals(LabelledMatrix1D<?, ?> value1, LabelledMatrix1D<?, ?> value2, double delta) {
+    public boolean equals(final LabelledMatrix1D<?, ?> value1, final LabelledMatrix1D<?, ?> value2, final double delta) {
       if (!Objects.equals(value1.getLabelsTitle(), value2.getLabelsTitle())) {
         return false;
       }
@@ -341,7 +342,7 @@ public final class EqualityChecker {
   private static class AlwaysEqualComparator implements Comparator<Object> {
 
     @Override
-    public int compare(Object o1, Object o2) {
+    public int compare(final Object o1, final Object o2) {
       return 0;
     }
   }

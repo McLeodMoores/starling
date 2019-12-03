@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.volatility.surface;
@@ -30,7 +30,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public class NonLinearLeastSquaresSurfaceFittingFunction extends AbstractFunction.NonCompiledInvoker {
   private final Currency _currency;
@@ -44,7 +44,8 @@ public class NonLinearLeastSquaresSurfaceFittingFunction extends AbstractFunctio
     this(Currency.of(currency), definitionName, instrumentType, resultName);
   }
 
-  public NonLinearLeastSquaresSurfaceFittingFunction(final Currency currency, final String definitionName, final String instrumentType, final String resultName) {
+  public NonLinearLeastSquaresSurfaceFittingFunction(final Currency currency, final String definitionName, final String instrumentType,
+      final String resultName) {
     Validate.notNull(currency, "currency");
     Validate.notNull(definitionName, "definition name");
     Validate.notNull(instrumentType, "instrument type");
@@ -71,7 +72,8 @@ public class NonLinearLeastSquaresSurfaceFittingFunction extends AbstractFunctio
 
   @SuppressWarnings("unused")
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Object objectSurfaceData = inputs.getValue(_surfaceRequirement);
     if (objectSurfaceData == null) {
       throw new OpenGammaRuntimeException("Could not get volatility surface data");

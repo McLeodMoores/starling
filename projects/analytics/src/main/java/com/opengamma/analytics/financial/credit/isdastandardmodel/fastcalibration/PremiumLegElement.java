@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel.fastcalibration;
@@ -19,7 +19,7 @@ import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantY
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class PremiumLegElement extends CouponOnlyElement {
 
@@ -35,7 +35,8 @@ public class PremiumLegElement extends CouponOnlyElement {
   private final double[] _p;
   private final int _n;
 
-  public PremiumLegElement(final double protectionStart, final CDSCoupon coupon, final ISDACompliantYieldCurve yieldCurve, final int creditCurveKnot, final double[] knots,
+  public PremiumLegElement(final double protectionStart, final CDSCoupon coupon, final ISDACompliantYieldCurve yieldCurve, final int creditCurveKnot,
+      final double[] knots,
       final AccrualOnDefaultFormulae formula) {
     super(coupon, yieldCurve, creditCurveKnot);
     ArgumentChecker.notNull(coupon, "coupon");
@@ -69,7 +70,7 @@ public class PremiumLegElement extends CouponOnlyElement {
     } else {
       aod = accOnDefault(creditCurve);
     }
-    return new double[] {pv[0] + aod[0], pv[1] + aod[1] };
+    return new double[] { pv[0] + aod[0], pv[1] + aod[1] };
   }
 
   private double[] accOnDefault(final ISDACompliantCreditCurve creditCurve) {
@@ -139,7 +140,7 @@ public class PremiumLegElement extends CouponOnlyElement {
       b0 = b1;
       dqdr0 = dqdr1;
     }
-    return new double[] {_coupon.getYFRatio() * pv, _coupon.getYFRatio() * pvSense };
+    return new double[] { _coupon.getYFRatio() * pv, _coupon.getYFRatio() * pvSense };
   }
 
   private double[] accOnDefaultMarkitFix(final ISDACompliantCreditCurve creditCurve) {
@@ -203,21 +204,21 @@ public class PremiumLegElement extends CouponOnlyElement {
       b0 = b1;
       dqdr0 = dqdr1;
     }
-    return new double[] {_coupon.getYFRatio() * pv, _coupon.getYFRatio() * pvSense };
+    return new double[] { _coupon.getYFRatio() * pv, _coupon.getYFRatio() * pvSense };
   }
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_coupon == null) ? 0 : _coupon.hashCode());
+    result = prime * result + (_coupon == null ? 0 : _coupon.hashCode());
     result = prime * result + _creditCurveKnot;
-    result = prime * result + ((_formula == null) ? 0 : _formula.hashCode());
+    result = prime * result + (_formula == null ? 0 : _formula.hashCode());
     result = prime * result + Arrays.hashCode(_knots);
     result = prime * result + _n;
     long temp;
     temp = Double.doubleToLongBits(_omega);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_p);
     result = prime * result + Arrays.hashCode(_rt);
     return result;

@@ -19,11 +19,11 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An audit log entry describes an operation a user attempted on an object. 
+ * An audit log entry describes an operation a user attempted on an object.
  * The entry is timestamped. Both successful and failed attempts are logged.
  */
 public class AuditLogEntry {
-  
+
   private Long _id;
   private String _user;
   private String _originatingSystem;
@@ -32,99 +32,193 @@ public class AuditLogEntry {
   private String _description;
   private boolean _success;
   private Date _timestamp;
-  
-  public AuditLogEntry(String user,
-      String originatingSystem,
-      String object,
-      String operation,
-      String description,
-      boolean success,
-      Date timestamp) {
-    ArgumentChecker.notNull(user, "User name");    
-    ArgumentChecker.notNull(originatingSystem, "Originating system");
-    ArgumentChecker.notNull(object, "Object name");
-    ArgumentChecker.notNull(operation, "Operation name");
-    ArgumentChecker.notNull(timestamp, "timestamp");
-    
+
+  /**
+   * Constructs an instance.
+   *
+   * @param user  the user, not null
+   * @param originatingSystem  the originating system, not null
+   * @param object  the object, not null
+   * @param operation  the operation, not null
+   * @param description  the description, not null
+   * @param success  true if the operation was a success
+   * @param timestamp  the time stamp, not null
+   */
+  public AuditLogEntry(final String user,
+      final String originatingSystem,
+      final String object,
+      final String operation,
+      final String description,
+      final boolean success,
+      final Date timestamp) {
     _id = null;
-    _user = user;
-    _originatingSystem = originatingSystem;
-    _object = object;
-    _operation = operation;
+    _user = ArgumentChecker.notNull(user, "user");
+    _originatingSystem = ArgumentChecker.notNull(originatingSystem, "originatingSystem");
+    _object = ArgumentChecker.notNull(object, "objectName");
+    _operation = ArgumentChecker.notNull(operation, "operationName");
     _description = description;
     _success = success;
-    _timestamp = timestamp;
+    _timestamp = ArgumentChecker.notNull(timestamp, "timestamp");
   }
-  
+
+  /**
+   * Constructs an empty instance.
+   */
   protected AuditLogEntry() {
   }
-  
+
+  /**
+   * Gets the id.
+   *
+   * @return  the id
+   */
   public Long getId() {
     return _id;
   }
 
-  public void setId(Long id) {
+  /**
+   * Sets the id.
+   *
+   * @param id  the id
+   */
+  public void setId(final Long id) {
     _id = id;
   }
 
+  /**
+   * Gets the user.
+   *
+   * @return  the user
+   */
   public String getUser() {
     return _user;
   }
 
-  public void setUser(String user) {
-    _user = user;
+  /**
+   * Sets the user.
+   *
+   * @param user  the user, not null
+   */
+  public void setUser(final String user) {
+    _user = ArgumentChecker.notNull(user, "user");
   }
-  
+
+  /**
+   * Gets the originating system.
+   *
+   * @return  the originating system
+   */
   public String getOriginatingSystem() {
     return _originatingSystem;
   }
 
-  public void setOriginatingSystem(String originatingSystem) {
-    _originatingSystem = originatingSystem;
+  /**
+   * Sets the originating system.
+   *
+   * @param originatingSystem  the originating system, not null
+   */
+  public void setOriginatingSystem(final String originatingSystem) {
+    _originatingSystem = ArgumentChecker.notNull(originatingSystem, "originatingSystem");
   }
 
+  /**
+   * Gets the object.
+   *
+   * @return  the object
+   */
   public String getObject() {
     return _object;
   }
 
-  public void setObject(String object) {
-    _object = object;
+  /**
+   * Sets the object.
+   *
+   * @param object  the object, not null
+   */
+  public void setObject(final String object) {
+    _object = ArgumentChecker.notNull(object, "object");
   }
 
+  /**
+   * Gets the operation.
+   *
+   * @return  the operation
+   */
   public String getOperation() {
     return _operation;
   }
 
-  public void setOperation(String operation) {
+  /**
+   * Sets the operation.
+   *
+   * @param operation  the operation, not null
+   */
+  public void setOperation(final String operation) {
     _operation = operation;
   }
-  
+
+  /**
+   * Gets the description.
+   *
+   * @return  the description
+   */
   public String getDescription() {
     return _description;
   }
 
-  public void setDescription(String description) {
+  /**
+   * Sets the description.
+   *
+   * @param description  the description
+   */
+  public void setDescription(final String description) {
     _description = description;
   }
 
+  /**
+   * True if the operation was a success.
+   *
+   * @return  true if the operation was a success
+   */
   public boolean isSuccess() {
     return _success;
   }
 
-  public void setSuccess(boolean success) {
+  /**
+   * Sets the success of the operation.
+   *
+   * @param success  true if the operation was a success
+   */
+  public void setSuccess(final boolean success) {
     _success = success;
   }
 
+  /**
+   * Gets the time stamp.
+   *
+   * @return  the time stamp
+   */
   public Date getTimestamp() {
     return _timestamp;
   }
 
-  public void setTimestamp(Date timestamp) {
-    _timestamp = timestamp;
+  /**
+   * Sets the time stamp.
+   *
+   * @param timestamp  the time stamp
+   */
+  public void setTimestamp(final Date timestamp) {
+    _timestamp = ArgumentChecker.notNull(timestamp, "timestamp");
   }
-  
-  public FudgeMsg toFudgeMsg(FudgeMsgFactory fudgeMessageFactory) {
-    MutableFudgeMsg msg = fudgeMessageFactory.newMessage();
+
+  /**
+   * Converts the entry to a Fudge message.
+   *
+   * @param fudgeMessageFactory  a message factory
+   * @return  the message
+   */
+  public FudgeMsg toFudgeMsg(final FudgeMsgFactory fudgeMessageFactory) {
+    final MutableFudgeMsg msg = fudgeMessageFactory.newMessage();
     msg.add("user", getUser());
     msg.add("originatingSystem", getOriginatingSystem());
     msg.add("object", getObject());
@@ -133,35 +227,41 @@ public class AuditLogEntry {
       msg.add("description", getDescription());
     }
     msg.add("success", isSuccess());
-    String yyyymmdd = new SimpleDateFormat("yyyyMMddHHmmssZ").format(getTimestamp());
+    final String yyyymmdd = new SimpleDateFormat("yyyyMMddHHmmssZ").format(getTimestamp());
     msg.add("timestamp", yyyymmdd); // change as soon as Fudge supports Date natively
     return msg;
   }
-  
-  public static AuditLogEntry fromFudgeMsg(FudgeMsg msg) {
-    String user = msg.getString("user");
-    String originatingSystem = msg.getString("originatingSystem");
-    String object = msg.getString("object");
-    String operation = msg.getString("operation");
-    String description = msg.getString("description");
-    Boolean success = msg.getBoolean("success");
-    String yyyymmdd = msg.getString("timestamp"); // change as soon as Fudge supports Date natively
+
+  /**
+   * Converts a Fudge message to an entry.
+   *
+   * @param msg  the message
+   * @return  the entry
+   */
+  public static AuditLogEntry fromFudgeMsg(final FudgeMsg msg) {
+    final String user = msg.getString("user");
+    final String originatingSystem = msg.getString("originatingSystem");
+    final String object = msg.getString("object");
+    final String operation = msg.getString("operation");
+    final String description = msg.getString("description");
+    final Boolean success = msg.getBoolean("success");
+    final String yyyymmdd = msg.getString("timestamp"); // change as soon as Fudge supports Date natively
     Date timestamp;
     try {
       timestamp = new SimpleDateFormat("yyyyMMddHHmmssZ").parse(yyyymmdd);
-    } catch (ParseException e) {
+    } catch (final ParseException e) {
       throw new OpenGammaRuntimeException("Invalid Fudge message", e);
     }
-    
+
     AuditLogEntry logEntry;
     try {
       logEntry = new AuditLogEntry(user, originatingSystem, object, operation, description, success, timestamp);
-    } catch (NullPointerException e) {
-      throw new OpenGammaRuntimeException("Invalid Fudge message", e);            
+    } catch (final NullPointerException e) {
+      throw new OpenGammaRuntimeException("Invalid Fudge message", e);
     }
     return logEntry;
   }
-  
+
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
@@ -171,12 +271,12 @@ public class AuditLogEntry {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_id == null) ? 0 : _id.hashCode());
+    result = prime * result + (_id == null ? 0 : _id.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -186,7 +286,7 @@ public class AuditLogEntry {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    AuditLogEntry other = (AuditLogEntry) obj;
+    final AuditLogEntry other = (AuditLogEntry) obj;
     if (_id == null) {
       if (other._id != null) {
         return false;

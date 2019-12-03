@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.inflation.derivative;
@@ -12,12 +12,12 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class CapFloorInflationYearOnYearMonthly extends CouponInflation implements CapFloor {
 
   /**
-   *  The fixing time of the last known fixing.
+   * The fixing time of the last known fixing.
    */
   private final double _lastKnownFixingTime;
 
@@ -28,24 +28,22 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
   private final double _referenceStartTime;
 
   /**
-   * The time for which the index at the coupon start is paid by the standard corresponding  zero coupon. 
-   * There is usually a difference of two or three month between the reference date and the natural payment date.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The time for which the index at the coupon start is paid by the standard corresponding zero coupon. There is usually a difference of two or three month
+   * between the reference date and the natural payment date. The time can be negative (when the price index for the current and last month is not yet
+   * published).
    */
   private final double _naturalPaymentStartTime;
 
   /**
-   * The reference times for the index at the coupon end.  Two months are required for the interpolation.
-   * There is usually a difference of two or three month between the reference date and the payment date.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The reference times for the index at the coupon end. Two months are required for the interpolation. There is usually a difference of two or three month
+   * between the reference date and the payment date. The time can be negative (when the price index for the current and last month is not yet published).
    */
   private final double _referenceEndTime;
 
   /**
-   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon. 
-   * There is usually a difference of two or three month between the reference date and the natural payment date.
-   * the natural payment date is equal to the payment date when the lag is the conventional one.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The time for which the index at the coupon end is paid by the standard corresponding zero coupon. There is usually a difference of two or three month
+   * between the reference date and the natural payment date. the natural payment date is equal to the payment date when the lag is the conventional one. The
+   * time can be negative (when the price index for the current and last month is not yet published).
    */
   private final double _naturalPaymentEndTime;
 
@@ -60,22 +58,37 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
 
   /**
    * Constructor from all the cap/floor details.
-   *  @param currency The coupon currency.
-   * @param paymentTime The time to payment.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param lastKnownFixingTime  The fixing time of the last known fixing.
-   * @param referenceStartTime The index value at the start of the coupon.
-   * @param naturalPaymentStartTime The time for which the index at the coupon start is paid by the standard corresponding  zero coupon.
-   * @param referenceEndTime The reference time for the index at the coupon end.
-   * @param naturalPaymentEndTime The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
-   * @param strike The strike
-   * @param isCap The cap/floor flag.
+   * 
+   * @param currency
+   *          The coupon currency.
+   * @param paymentTime
+   *          The time to payment.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param lastKnownFixingTime
+   *          The fixing time of the last known fixing.
+   * @param referenceStartTime
+   *          The index value at the start of the coupon.
+   * @param naturalPaymentStartTime
+   *          The time for which the index at the coupon start is paid by the standard corresponding zero coupon.
+   * @param referenceEndTime
+   *          The reference time for the index at the coupon end.
+   * @param naturalPaymentEndTime
+   *          The time for which the index at the coupon end is paid by the standard corresponding zero coupon.
+   * @param strike
+   *          The strike
+   * @param isCap
+   *          The cap/floor flag.
    */
-  public CapFloorInflationYearOnYearMonthly(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final IndexPrice priceIndex,
-      final double lastKnownFixingTime, final double referenceStartTime, final double naturalPaymentStartTime, final double referenceEndTime, final double naturalPaymentEndTime, double strike,
-      boolean isCap) {
+  public CapFloorInflationYearOnYearMonthly(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional,
+      final IndexPrice priceIndex,
+      final double lastKnownFixingTime, final double referenceStartTime, final double naturalPaymentStartTime, final double referenceEndTime,
+      final double naturalPaymentEndTime, final double strike,
+      final boolean isCap) {
     super(currency, paymentTime, paymentYearFraction, notional, priceIndex);
     _lastKnownFixingTime = lastKnownFixingTime;
     _referenceStartTime = referenceStartTime;
@@ -88,7 +101,9 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
 
   /**
    * Create a new cap/floor with the same characteristics except the strike.
-   * @param strike The new strike.
+   * 
+   * @param strike
+   *          The new strike.
    * @return The cap/floor.
    */
   public CapFloorInflationYearOnYearMonthly withStrike(final double strike) {
@@ -98,6 +113,7 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
 
   /**
    * Gets the fixing time of the last known fixing..
+   * 
    * @return the last known fixing time.
    */
   public double getLastKnownFixingTime() {
@@ -106,6 +122,7 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
 
   /**
    * Gets the reference time for the index at the coupon start.
+   * 
    * @return The reference time for the index at the coupon start.
    */
   public double getReferenceStartTime() {
@@ -118,6 +135,7 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
 
   /**
    * Gets the reference time for the index at the coupon end.
+   * 
    * @return The reference time for the index at the coupon end.
    */
   public double getReferenceEndTime() {
@@ -130,6 +148,7 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
 
   /**
    * Gets the cap/floor strike in years.
+   * 
    * @return The strike.
    */
   @Override
@@ -139,6 +158,7 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
 
   /**
    * Gets The cap (true) / floor (false) flag.
+   * 
    * @return The flag.
    */
   @Override
@@ -147,14 +167,14 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
   }
 
   @Override
-  public Coupon withNotional(double notional) {
+  public Coupon withNotional(final double notional) {
     return new CapFloorInflationYearOnYearMonthly(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(), _referenceStartTime,
         _lastKnownFixingTime, _naturalPaymentStartTime, _referenceEndTime, _naturalPaymentEndTime, _strike, _isCap);
   }
 
   @Override
-  public double payOff(double fixing) {
-    double omega = (_isCap) ? 1.0 : -1.0;
+  public double payOff(final double fixing) {
+    final double omega = _isCap ? 1.0 : -1.0;
     return Math.max(omega * (fixing - _strike), 0);
   }
 
@@ -175,22 +195,22 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
     result = prime * result + (_isCap ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_lastKnownFixingTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_naturalPaymentEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_naturalPaymentStartTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referenceEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referenceStartTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -200,7 +220,7 @@ public class CapFloorInflationYearOnYearMonthly extends CouponInflation implemen
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CapFloorInflationYearOnYearMonthly other = (CapFloorInflationYearOnYearMonthly) obj;
+    final CapFloorInflationYearOnYearMonthly other = (CapFloorInflationYearOnYearMonthly) obj;
     if (_isCap != other._isCap) {
       return false;
     }

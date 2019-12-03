@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -13,31 +13,35 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
- * 
+ *
  */
 public class NaturalSplineInterpolator extends PiecewisePolynomialInterpolator {
 
-  private CubicSplineSolver _solver;
+  private final CubicSplineSolver _solver;
 
   /**
-   * 
+   *
    */
   public NaturalSplineInterpolator() {
     _solver = new CubicSplineNaturalSolver();
   }
 
   /**
-   * 
-   * @param inherit 
+   *
+   * @param inherit
+   *          the underyling cubic spline solver
    */
   public NaturalSplineInterpolator(final CubicSplineSolver inherit) {
     _solver = inherit;
   }
 
   /**
-   * @param xValues X values of data
-   * @param yValues Y values of data
-   * @return {@link PiecewisePolynomialResult} containing knots, coefficients of piecewise polynomials, number of intervals, degree of polynomials, dimension of spline
+   * @param xValues
+   *          X values of data
+   * @param yValues
+   *          Y values of data
+   * @return {@link PiecewisePolynomialResult} containing knots, coefficients of piecewise polynomials, number of intervals, degree of polynomials, dimension of
+   *         spline
    */
   @Override
   public PiecewisePolynomialResult interpolate(final double[] xValues, final double[] yValues) {
@@ -86,9 +90,12 @@ public class NaturalSplineInterpolator extends PiecewisePolynomialInterpolator {
   }
 
   /**
-   * @param xValues X values of data
-   * @param yValuesMatrix Y values of data, where NumberOfRow defines dimension of the spline
-   * @return {@link PiecewisePolynomialResult} containing knots, coefficients of piecewise polynomials, number of intervals, degree of polynomials, dimension of spline
+   * @param xValues
+   *          X values of data
+   * @param yValuesMatrix
+   *          Y values of data, where NumberOfRow defines dimension of the spline
+   * @return {@link PiecewisePolynomialResult} containing knots, coefficients of piecewise polynomials, number of intervals, degree of polynomials, dimension of
+   *         spline
    */
   @Override
   public PiecewisePolynomialResult interpolate(final double[] xValues, final double[][] yValuesMatrix) {
@@ -121,21 +128,21 @@ public class NaturalSplineInterpolator extends PiecewisePolynomialInterpolator {
     }
 
     double[] xValuesSrt = new double[nDataPts];
-    double[][] yValuesMatrixSrt = new double[dim][nDataPts];
+    final double[][] yValuesMatrixSrt = new double[dim][nDataPts];
 
     for (int i = 0; i < dim; ++i) {
       xValuesSrt = Arrays.copyOf(xValues, nDataPts);
-      double[] yValuesSrt = Arrays.copyOf(yValuesMatrix[i], nDataPts);
+      final double[] yValuesSrt = Arrays.copyOf(yValuesMatrix[i], nDataPts);
       ParallelArrayBinarySort.parallelBinarySort(xValuesSrt, yValuesSrt);
 
       yValuesMatrixSrt[i] = Arrays.copyOf(yValuesSrt, nDataPts);
     }
 
-    DoubleMatrix2D[] coefMatrix = this._solver.solveMultiDim(xValuesSrt, new DoubleMatrix2D(yValuesMatrixSrt));
+    final DoubleMatrix2D[] coefMatrix = this._solver.solveMultiDim(xValuesSrt, new DoubleMatrix2D(yValuesMatrixSrt));
 
     final int nIntervals = coefMatrix[0].getNumberOfRows();
     final int nCoefs = coefMatrix[0].getNumberOfColumns();
-    double[][] resMatrix = new double[dim * nIntervals][nCoefs];
+    final double[][] resMatrix = new double[dim * nIntervals][nCoefs];
 
     for (int i = 0; i < nIntervals; ++i) {
       for (int j = 0; j < dim; ++j) {
@@ -182,7 +189,7 @@ public class NaturalSplineInterpolator extends PiecewisePolynomialInterpolator {
     final DoubleMatrix2D[] resMatrix = this._solver.solveWithSensitivity(xValues, yValues);
     final int len = resMatrix.length;
     for (int k = 0; k < len; k++) {
-      DoubleMatrix2D m = resMatrix[k];
+      final DoubleMatrix2D m = resMatrix[k];
       final int rows = m.getNumberOfRows();
       final int cols = m.getNumberOfColumns();
       for (int i = 0; i < rows; ++i) {

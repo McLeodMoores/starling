@@ -17,14 +17,14 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * Refinement of {@link HashMap2} that holds references.
- * 
+ *
  * @param <K1> key 1 type
  * @param <K2> key 2 type
  * @param <V> value type
  */
 /* package */abstract class ReferenceHashMap2<K1, K2, V> extends HashMap2<K1, K2, V> {
 
-  private final ReferenceQueue<V> _garbage = new ReferenceQueue<V>();
+  private final ReferenceQueue<V> _garbage = new ReferenceQueue<>();
 
   /* package */final class ReferenceMap implements ConcurrentMap<K2, V> {
 
@@ -202,7 +202,7 @@ import java.util.concurrent.ConcurrentMap;
 
   }
 
-  public ReferenceHashMap2(final KeyStrategy key1Strategy) {
+  ReferenceHashMap2(final KeyStrategy key1Strategy) {
     super(key1Strategy);
   }
 

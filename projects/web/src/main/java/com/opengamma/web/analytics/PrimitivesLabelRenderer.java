@@ -17,18 +17,18 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
 
   private final List<MainGridStructure.Row> _rows;
 
-  /* package */ PrimitivesLabelRenderer(List<MainGridStructure.Row> rows) {
+  /* package */ PrimitivesLabelRenderer(final List<MainGridStructure.Row> rows) {
     ArgumentChecker.notNull(rows, "rows");
     _rows = rows;
   }
 
   @Override
-  public ResultsCell getResults(int rowIndex,
-                                TypeFormatter.Format format,
-                                ResultsCache cache,
-                                Class<?> columnType,
-                                Object inlineKey) {
-    MainGridStructure.Row row = _rows.get(rowIndex);
+  public ResultsCell getResults(final int rowIndex,
+                                final TypeFormatter.Format format,
+                                final ResultsCache cache,
+                                final Class<?> columnType,
+                                final Object inlineKey) {
+    final MainGridStructure.Row row = _rows.get(rowIndex);
     return ResultsCell.forStaticValue(row.getName(), columnType, format);
   }
 }

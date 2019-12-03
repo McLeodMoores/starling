@@ -40,8 +40,8 @@ import com.opengamma.util.tuple.Pairs;
  */
 @PublicSPI
 public class MasterSnapshotSource
-    extends AbstractMasterSource<StructuredMarketDataSnapshot, MarketDataSnapshotDocument, MarketDataSnapshotMaster>
-    implements MarketDataSnapshotSource {
+extends AbstractMasterSource<StructuredMarketDataSnapshot, MarketDataSnapshotDocument, MarketDataSnapshotMaster>
+implements MarketDataSnapshotSource {
 
   /**
    * The listeners.
@@ -61,12 +61,12 @@ public class MasterSnapshotSource
   //-------------------------------------------------------------------------
   @Override
   public void addChangeListener(final UniqueId uniqueId, final MarketDataSnapshotChangeListener listener) {
-    ChangeListener changeListener = new ChangeListener() {
+    final ChangeListener changeListener = new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
-        ObjectId changedId = event.getObjectId();
-        if (changedId != null && changedId.getScheme().equals(uniqueId.getScheme()) &&
-            changedId.getValue().equals(uniqueId.getValue())) {
+      public void entityChanged(final ChangeEvent event) {
+        final ObjectId changedId = event.getObjectId();
+        if (changedId != null && changedId.getScheme().equals(uniqueId.getScheme())
+            && changedId.getValue().equals(uniqueId.getValue())) {
           //TODO This is over cautious in the case of corrections to non latest versions
           listener.objectChanged(uniqueId.getObjectId());
         }
@@ -77,22 +77,22 @@ public class MasterSnapshotSource
   }
 
   @Override
-  public void removeChangeListener(UniqueId uid, MarketDataSnapshotChangeListener listener) {
-    ChangeListener changeListener = _registeredListeners.remove(Pairs.of(uid, listener));
+  public void removeChangeListener(final UniqueId uid, final MarketDataSnapshotChangeListener listener) {
+    final ChangeListener changeListener = _registeredListeners.remove(Pairs.of(uid, listener));
     getMaster().changeManager().removeChangeListener(changeListener);
   }
 
 
   @Override
-  public <S extends NamedSnapshot> S getSingle(Class<S> type,
-                                               String snapshotName,
-                                               VersionCorrection versionCorrection) {
+  public <S extends NamedSnapshot> S getSingle(final Class<S> type,
+      final String snapshotName,
+      final VersionCorrection versionCorrection) {
 
     // Try to find an exact match using the name and type first. If this doesn't work
     // (perhaps as the type searched for is a superclass of the type held), we search
     // again by name only and check the type after.
     // TODO - review usage patterns, do we normally hit or miss using type. If names are generally unique searching by type is potentially redundant
-    TypedSnapshotSearcher<S> searcher =
+    final TypedSnapshotSearcher<S> searcher =
         new TypedSnapshotSearcher<>(getMaster(), type, snapshotName, versionCorrection);
     return searcher.search();
   }
@@ -111,7 +111,7 @@ public class MasterSnapshotSource
     /**
      * Logger for the class.
      */
-    private static final Logger s_logger = LoggerFactory.getLogger(TypedSnapshotSearcher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TypedSnapshotSearcher.class);
 
     /**
      * The master to search for data in.
@@ -141,10 +141,10 @@ public class MasterSnapshotSource
      * @param  snapshotName the name of the snapshot being searched for
      * @param  versionCorrection the version correction of the snapshot being searched for
      */
-    public TypedSnapshotSearcher(MarketDataSnapshotMaster master,
-                                 Class<S> type,
-                                 String snapshotName,
-                                 VersionCorrection versionCorrection) {
+    TypedSnapshotSearcher(final MarketDataSnapshotMaster master,
+        final Class<S> type,
+        final String snapshotName,
+        final VersionCorrection versionCorrection) {
       _master = ArgumentChecker.notNull(master, "master");
       _type = ArgumentChecker.notNull(type, "type");
       _snapshotName = ArgumentChecker.notNull(snapshotName, "snapshotName");
@@ -160,69 +160,68 @@ public class MasterSnapshotSource
      * @throws DataNotFoundException if no matching snapshot can be found
      */
     public S search() {
-      S result = findWithMatchingType();
+      final S result = findWithMatchingType();
       return result != null ? result : findWithGeneralType();
     }
 
     private S findWithMatchingType() {
-      MarketDataSnapshotSearchRequest request = createBaseSearchRequest();
+      final MarketDataSnapshotSearchRequest request = createBaseSearchRequest();
       request.setType(_type);
       return selectResult(_master.search(request).getNamedSnapshots(), true);
     }
 
     private S findWithGeneralType() {
-      MarketDataSnapshotSearchRequest request = createBaseSearchRequest();
-      S result = selectResult(_master.search(request).getNamedSnapshots(), false);
+      final MarketDataSnapshotSearchRequest request = createBaseSearchRequest();
+      final S result = selectResult(_master.search(request).getNamedSnapshots(), false);
 
       if (result != null) {
         return result;
-      } else {
-        throw new DataNotFoundException("No snapshot found with type: [" + _type.getName() + "], id: [" +
-                                            _snapshotName + "] and versionCorrection: [" + _versionCorrection + "]");
       }
+      throw new DataNotFoundException("No snapshot found with type: [" + _type.getName() + "], id: ["
+          + _snapshotName + "] and versionCorrection: [" + _versionCorrection + "]");
     }
 
     private MarketDataSnapshotSearchRequest createBaseSearchRequest() {
-      MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
+      final MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
       request.setName(_snapshotName);
       request.setVersionCorrection(_versionCorrection);
       return request;
     }
 
-    private S selectResult(List<NamedSnapshot> results, boolean warnOnTypeMismatch) {
-      List<S> filtered = filterForCorrectType(results, warnOnTypeMismatch);
+    private S selectResult(final List<NamedSnapshot> results, final boolean warnOnTypeMismatch) {
+      final List<S> filtered = filterForCorrectType(results, warnOnTypeMismatch);
       if (filtered.size() < results.size()) {
-        s_logger.info("Filtered out {} snapshot(s) where type is not: {}", results.size() - filtered.size(), _type);
+        LOGGER.info("Filtered out {} snapshot(s) where type is not: {}", results.size() - filtered.size(), _type);
       }
 
       return selectFirst(filtered);
     }
 
-    private List<S> filterForCorrectType(List<NamedSnapshot> results, boolean warnOnTypeMismatch) {
+    private List<S> filterForCorrectType(final List<NamedSnapshot> results, final boolean warnOnTypeMismatch) {
 
-      ImmutableList.Builder<S> builder = ImmutableList.builder();
+      final ImmutableList.Builder<S> builder = ImmutableList.builder();
 
-      for (NamedSnapshot snapshot : results) {
+      for (final NamedSnapshot snapshot : results) {
 
         if (_type.isAssignableFrom(snapshot.getClass())) {
           builder.add(_type.cast(snapshot));
         } else if (warnOnTypeMismatch) {
-          s_logger.warn("Found matching snapshot with expected type: {} and name: {} - but actual type was: {}",
-                        _type.getName(), _snapshotName, snapshot.getClass().getName());
+          LOGGER.warn("Found matching snapshot with expected type: {} and name: {} - but actual type was: {}",
+              _type.getName(), _snapshotName, snapshot.getClass().getName());
         }
       }
 
       return builder.build();
     }
 
-    private S selectFirst(List<S> filtered) {
+    private S selectFirst(final List<S> filtered) {
       if (filtered.isEmpty()) {
         return null;
       }
 
       if (filtered.size() > 1) {
-        s_logger.warn("Found multiple matching snapshot results for type: {} and name: {} - returning first match found",
-                      _type.getName(), _snapshotName);
+        LOGGER.warn("Found multiple matching snapshot results for type: {} and name: {} - returning first match found",
+            _type.getName(), _snapshotName);
       }
 
       return filtered.get(0);

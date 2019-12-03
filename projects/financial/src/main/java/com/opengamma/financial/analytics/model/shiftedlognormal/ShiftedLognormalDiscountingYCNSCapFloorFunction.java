@@ -42,7 +42,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
@@ -58,7 +57,7 @@ import com.opengamma.util.tuple.Pair;
 public class ShiftedLognormalDiscountingYCNSCapFloorFunction extends ShiftedLognormalDiscountingCapFloorFunction {
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
    */
   public ShiftedLognormalDiscountingYCNSCapFloorFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);
@@ -89,7 +88,8 @@ public class ShiftedLognormalDiscountingYCNSCapFloorFunction extends ShiftedLogn
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(CURVE);
         if (curveNames == null || curveNames.size() != 1) {
@@ -103,7 +103,8 @@ public class ShiftedLognormalDiscountingYCNSCapFloorFunction extends ShiftedLogn
         if (surfaces == null) {
           return null;
         }
-        final ValueProperties properties = ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_EXPOSURES, curveExposureConfigs).with(SURFACE, surfaces)
+        final ValueProperties properties = ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_EXPOSURES, curveExposureConfigs)
+            .with(SURFACE, surfaces)
             .with(PROPERTY_VOLATILITY_MODEL, SHIFTED_LOGNORMAL).get();
         final ValueProperties curveProperties = ValueProperties.with(CURVE, curveNames).get();
         final Set<String> shiftCurve = constraints.getValues(LognormalVolatilityShiftFunction.SHIFT_CURVE);
@@ -133,7 +134,8 @@ public class ShiftedLognormalDiscountingYCNSCapFloorFunction extends ShiftedLogn
       }
 
       @Override
-      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final Map<ValueSpecification, ValueRequirement> inputs) {
         String curveName = null;
         for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
           final ValueRequirement requirement = entry.getValue();

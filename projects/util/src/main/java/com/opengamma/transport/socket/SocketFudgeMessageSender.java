@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class SocketFudgeMessageSender extends AbstractSocketProcess implements FudgeMessageSender {
-  private static final Logger s_logger = LoggerFactory.getLogger(SocketFudgeMessageSender.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SocketFudgeMessageSender.class);
   private final FudgeContext _fudgeContext;
 
   private MessageBatchingWriter _writer;
@@ -36,8 +36,8 @@ public class SocketFudgeMessageSender extends AbstractSocketProcess implements F
   public SocketFudgeMessageSender() {
     this(FudgeContext.GLOBAL_DEFAULT);
   }
-  
-  public SocketFudgeMessageSender(FudgeContext fudgeContext) {
+
+  public SocketFudgeMessageSender(final FudgeContext fudgeContext) {
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     _fudgeContext = fudgeContext;
   }
@@ -51,13 +51,13 @@ public class SocketFudgeMessageSender extends AbstractSocketProcess implements F
    * Note that a return from a call to {@link #send} does not guarantee the message has been
    * received, or even sent. There may be buffering on the transport but also we batch
    * messages up to a single thread if this is called concurrently.
-   * 
+   *
    * @param message message to send
    */
   @Override
-  public void send(FudgeMsg message) {
+  public void send(final FudgeMsg message) {
     startIfNecessary();
-    s_logger.info("Sending message with {} fields", message.getNumFields());
+    LOGGER.info("Sending message with {} fields", message.getNumFields());
     _writer.write(message);
   }
 
@@ -68,7 +68,7 @@ public class SocketFudgeMessageSender extends AbstractSocketProcess implements F
   }
 
   @Override
-  protected void socketOpened(Socket socket, BufferedOutputStream os, BufferedInputStream is) {
+  protected void socketOpened(final Socket socket, final BufferedOutputStream os, final BufferedInputStream is) {
     _writer = new MessageBatchingWriter(getFudgeContext(), os);
   }
 

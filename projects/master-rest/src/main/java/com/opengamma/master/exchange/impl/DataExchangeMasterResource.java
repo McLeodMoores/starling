@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.exchange.impl;
@@ -15,7 +15,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.opengamma.id.ObjectId;
@@ -62,7 +61,7 @@ public class DataExchangeMasterResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -75,23 +74,23 @@ public class DataExchangeMasterResource extends AbstractDataResource {
 
   @POST
   @Path("exchangeSearches")
-  public Response search(ExchangeSearchRequest request) {
-    ExchangeSearchResult result = getExchangeMaster().search(request);
+  public Response search(final ExchangeSearchRequest request) {
+    final ExchangeSearchResult result = getExchangeMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("exchanges")
-  public Response add(@Context UriInfo uriInfo, ExchangeDocument request) {
-    ExchangeDocument result = getExchangeMaster().add(request);
-    URI createdUri = (new DataExchangeResource()).uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response add(@Context final UriInfo uriInfo, final ExchangeDocument request) {
+    final ExchangeDocument result = getExchangeMaster().add(request);
+    final URI createdUri = new DataExchangeResource().uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @Path("exchanges/{exchangeId}")
-  public DataExchangeResource findExchange(@PathParam("exchangeId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataExchangeResource findExchange(@PathParam("exchangeId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataExchangeResource(this, id);
   }
 

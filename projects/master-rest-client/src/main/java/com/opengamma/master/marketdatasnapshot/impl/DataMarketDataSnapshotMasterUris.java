@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.marketdatasnapshot.impl;
@@ -23,8 +23,8 @@ public class DataMarketDataSnapshotMasterUris extends AbstractDataResource {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriSearch(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("snapshotSearches");
+  public static URI uriSearch(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("snapshotSearches");
     return bld.build();
   }
 
@@ -34,8 +34,8 @@ public class DataMarketDataSnapshotMasterUris extends AbstractDataResource {
    * @param baseUri  the base URI, not null
    * @return the URI, not null
    */
-  public static URI uriAdd(URI baseUri) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("snapshots");
+  public static URI uriAdd(final URI baseUri) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("snapshots");
     return bld.build();
   }
 

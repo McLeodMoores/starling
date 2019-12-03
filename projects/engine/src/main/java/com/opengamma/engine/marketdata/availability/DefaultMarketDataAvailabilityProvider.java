@@ -23,20 +23,21 @@ import com.opengamma.id.VersionCorrection;
 /**
  * An implementation of {@link MarketDataAvailabilityProvider} that produces arbitrary value specifications for all values.
  * <p>
- * This is provided for use in test cases only, and would normally be used as the provider passed to an existing {@link MarketDataAvailabilityFilter}. A market data provider would normally require
- * more control over the specifications issued in order to manage later subscriptions to the values.
+ * This is provided for use in test cases only, and would normally be used as the provider passed to an existing {@link MarketDataAvailabilityFilter}.
+ * A market data provider would normally require more control over the specifications issued in order to manage later subscriptions to the values.
  */
 public class DefaultMarketDataAvailabilityProvider implements MarketDataAvailabilityProvider {
 
   private static IdentifierResolver s_identifiers = (IdentifierResolver) ComputationTargetType.PRIMITIVE;
 
   /**
-   * Creates a default computation target specification for an object that is either {@link ExternalBundleIdentifiable} or {@link ExternalIdentifiable} using the
-   * {@link ComputationTargetType#PRIMITIVE} logic.
+   * Creates a default computation target specification for an object that is either {@link ExternalBundleIdentifiable} or
+   * {@link ExternalIdentifiable} using the {@link ComputationTargetType#PRIMITIVE} logic.
    * <p>
-   * This is suitable for cases where the market data provider can recognize the target object identifiers, but the system could not resolve it to a strict specification (for example it is for a
-   * ticker describing a security that is not present in the security master).
-   * 
+   * This is suitable for cases where the market data provider can recognize the target object identifiers, but the system
+   * could not resolve it to a strict specification (for example it is for a ticker describing a security that is not
+   * present in the security master).
+   *
    * @param target the object to create a specification for, not null
    * @return a specification, not null
    * @throws IllegalArgumentException if the target is not a suitable type
@@ -56,11 +57,13 @@ public class DefaultMarketDataAvailabilityProvider implements MarketDataAvailabi
   }
 
   @Override
-  public ValueSpecification getAvailability(ComputationTargetSpecification targetSpec, final Object target, final ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
+  public ValueSpecification getAvailability(ComputationTargetSpecification targetSpec, final Object target,
+      final ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
     if (targetSpec == null) {
       targetSpec = createPrimitiveComputationTargetSpecification(target);
     }
-    return new ValueSpecification(desiredValue.getValueName(), targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, MarketDataSourcingFunction.UNIQUE_ID).get());
+    return new ValueSpecification(desiredValue.getValueName(), targetSpec,
+        ValueProperties.with(ValuePropertyNames.FUNCTION, MarketDataSourcingFunction.UNIQUE_ID).get());
   }
 
   @Override

@@ -19,7 +19,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public abstract class AbstractMarketDataProvider implements MarketDataProvider {
 
-  private final CopyOnWriteArraySet<MarketDataListener> _listeners = new CopyOnWriteArraySet<MarketDataListener>();
+  private final CopyOnWriteArraySet<MarketDataListener> _listeners = new CopyOnWriteArraySet<>();
 
   @Override
   public void addListener(final MarketDataListener listener) {

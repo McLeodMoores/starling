@@ -10,8 +10,8 @@ import static org.testng.AssertJUnit.assertEquals;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -21,8 +21,8 @@ import com.opengamma.util.test.TestGroup;
 public class IMMFutureAndFutureOptionMonthlyExpiryCalculatorTest {
 
   private static final IMMFutureAndFutureOptionMonthlyExpiryCalculator CALCULATOR = IMMFutureAndFutureOptionMonthlyExpiryCalculator.getInstance();
-  static final Calendar WEEKEND_CALENDAR = new MondayToFridayCalendar("a");
-  private static final Calendar CALENDAR = new MyCalendar();
+  static final WorkingDayCalendar WEEKEND_CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
+  private static final WorkingDayCalendar CALENDAR = new MyCalendar();
   private static final LocalDate AUGUST = LocalDate.of(2012, 8, 1);
   private static final LocalDate SEPTEMBER_START = LocalDate.of(2012, 9, 1);
   private static final LocalDate SEPTEMBER_END = LocalDate.of(2012, 9, 18);
@@ -44,7 +44,7 @@ public class IMMFutureAndFutureOptionMonthlyExpiryCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCalendar() {
-    CALCULATOR.getExpiryDate(2, AUGUST, null);
+    CALCULATOR.getExpiryDate(2, AUGUST, (WorkingDayCalendar) null);
   }
 
   @Test
@@ -79,10 +79,15 @@ public class IMMFutureAndFutureOptionMonthlyExpiryCalculatorTest {
     assertEquals(LocalDate.of(2013, 3, 18), CALCULATOR.getExpiryDate(6, SEPTEMBER_END, CALENDAR));
   }
 
-  private static class MyCalendar implements Calendar {
+  private static class MyCalendar implements WorkingDayCalendar {
     private static final LocalDate BANK_HOLIDAY = LocalDate.of(2012, 12, 17);
 
     public MyCalendar() {
+    }
+
+    @Override
+    public boolean isHoliday(final LocalDate date) {
+      return !isWorkingDay(date);
     }
 
     @Override
@@ -94,13 +99,13 @@ public class IMMFutureAndFutureOptionMonthlyExpiryCalculatorTest {
     }
 
     @Override
-    public String getConventionName() {
-      return null;
+    public String getName() {
+      return "MyCalendar";
     }
 
     @Override
-    public String getName() {
-      return null;
+    public boolean isWeekend(final LocalDate date) {
+      return WEEKEND_CALENDAR.isWeekend(date);
     }
 
   }

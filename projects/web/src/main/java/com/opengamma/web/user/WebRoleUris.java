@@ -23,7 +23,7 @@ public class WebRoleUris {
    * Creates an instance.
    * @param data  the web data, not null
    */
-  public WebRoleUris(WebRoleData data) {
+  public WebRoleUris(final WebRoleData data) {
     _data = data;
   }
 

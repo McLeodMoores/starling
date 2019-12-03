@@ -26,7 +26,9 @@ public class ExamplesExposureFunctionConfigsPopulator {
 
   /**
    * Populates a config master with exposure functions.
-   * @param configMaster The config master, not null
+   *
+   * @param configMaster
+   *          The config master, not null
    */
   public static void populateConfigMaster(final ConfigMaster configMaster) {
     ArgumentChecker.notNull(configMaster, "configMaster");
@@ -34,6 +36,8 @@ public class ExamplesExposureFunctionConfigsPopulator {
     storeFixedIncomeExposures(configMaster);
     storeFxExposures(configMaster);
     storeGovernmentBondExposures(configMaster);
+    storeCorporateBondExposures(configMaster);
+    storeCdsExposures(configMaster);
   }
 
   private static void storeAudFixedIncomeExposures(final ConfigMaster configMaster) {
@@ -93,6 +97,22 @@ public class ExamplesExposureFunctionConfigsPopulator {
     final String name = "Govt Bond Exposures";
     final List<String> exposureFunctionNames = Arrays.asList("Region");
     final Map<ExternalId, String> idsToNames = Collections.singletonMap(ExternalSchemes.countryRegionId(Country.US), "US Treasury");
+    final ExposureFunctions exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
+    ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
+  }
+
+  private static void storeCorporateBondExposures(final ConfigMaster configMaster) {
+    final String name = "Corp Bond Exposures";
+    final List<String> exposureFunctionNames = Arrays.asList("Region");
+    final Map<ExternalId, String> idsToNames = Collections.singletonMap(ExternalSchemes.countryRegionId(Country.US), "US Corp");
+    final ExposureFunctions exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
+    ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
+  }
+
+  private static void storeCdsExposures(final ConfigMaster configMaster) {
+    final String name = "CDS Exposures";
+    final List<String> exposureFunctionNames = Arrays.asList("Currency");
+    final Map<ExternalId, String> idsToNames = Collections.singletonMap(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), "USD ISDA");
     final ExposureFunctions exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
     ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
   }

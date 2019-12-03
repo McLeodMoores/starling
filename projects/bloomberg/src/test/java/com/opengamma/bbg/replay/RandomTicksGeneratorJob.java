@@ -29,7 +29,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class RandomTicksGeneratorJob extends TerminatableJob {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(RandomTicksGeneratorJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RandomTicksGeneratorJob.class);
   /**
    * The maximum message size.
    */
@@ -42,28 +42,28 @@ public class RandomTicksGeneratorJob extends TerminatableJob {
   /**
    * The list of required securities.
    */
-  private List<String> _securities;
+  private final List<String> _securities;
   /**
    * The queue of messages.
    */
-  private BlockingQueue<FudgeMsg> _writerQueue;
+  private final BlockingQueue<FudgeMsg> _writerQueue;
   /**
    * The random number generator.
    */
-  private Random _valueGenerator = new Random(RANDOM_SEED);
-  
+  private final Random _valueGenerator = new Random(RANDOM_SEED);
+
   /**
    * Message size generator
    */
-  private Random _messageSizeGenerator = new Random();
-  
+  private final Random _messageSizeGenerator = new Random();
+
   /**
    * Creates a job for a list of securities.
-   * 
-   * @param securities  the securities to, not null 
+   *
+   * @param securities  the securities to, not null
    * @param writerQueue  the queue to use, not null
    */
-  public RandomTicksGeneratorJob(List<String> securities, BlockingQueue<FudgeMsg> writerQueue) {
+  public RandomTicksGeneratorJob(final List<String> securities, final BlockingQueue<FudgeMsg> writerQueue) {
     super();
     _securities = securities;
     _writerQueue = writerQueue;
@@ -71,31 +71,31 @@ public class RandomTicksGeneratorJob extends TerminatableJob {
 
   @Override
   public void terminate() {
-    s_logger.debug("terminating ticksGeneratorJob");
+    LOGGER.debug("terminating ticksGeneratorJob");
     super.terminate();
   }
 
   @Override
   protected void runOneCycle() {
-    s_logger.debug("queueSize {} ", _writerQueue.size());
-    for (String security : _securities) {
-      int msgSize = _messageSizeGenerator.nextInt(MAX_MESSAGE_SIZE);
+    LOGGER.debug("queueSize {} ", _writerQueue.size());
+    for (final String security : _securities) {
+      final int msgSize = _messageSizeGenerator.nextInt(MAX_MESSAGE_SIZE);
       for (int i = 0; i < msgSize; i++) {
         try {
-          MutableFudgeMsg msg = getRandomMessage();
-          Instant instant = Clock.systemUTC().instant();
-          long epochMillis = instant.toEpochMilli();
+          final MutableFudgeMsg msg = getRandomMessage();
+          final Instant instant = Clock.systemUTC().instant();
+          final long epochMillis = instant.toEpochMilli();
           msg.add(RECEIVED_TS_KEY, epochMillis);
           msg.add(SECURITY_KEY, security);
-          s_logger.debug("generating {}", msg);
+          LOGGER.debug("generating {}", msg);
           _writerQueue.put(msg);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           Thread.interrupted();
-          s_logger.warn("interrupted exception while putting ticks message on queue");
+          LOGGER.warn("interrupted exception while putting ticks message on queue");
         }
       }
     }
-    
+
   }
 
   private MutableFudgeMsg getRandomMessage() {

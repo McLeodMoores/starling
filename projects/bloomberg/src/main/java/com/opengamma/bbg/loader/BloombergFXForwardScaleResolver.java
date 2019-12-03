@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.loader;
@@ -29,27 +29,29 @@ import com.opengamma.id.ExternalScheme;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class BloombergFXForwardScaleResolver {
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergFXForwardScaleResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergFXForwardScaleResolver.class);
   private static final Set<String> BBG_FIELD = Collections.singleton(BloombergConstants.BBG_FIELD_FWD_SCALE);
   private final ReferenceDataProvider _referenceDataProvider;
   private final boolean _useTickerSubscriptions;
-  
-  private static final ImmutableSet<ExternalScheme> s_tickerSchemes = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK);
+
+  private static final ImmutableSet<ExternalScheme> TICKER_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK);
 
   /**
-   * Creates a BloombergSecurityTypeResolver
-   * 
-   * @param referenceDataProvider the reference data provider, not null
-   * @param bbgScheme the scheme to use, not null
+   * Creates a BloombergSecurityTypeResolver.
+   *
+   * @param referenceDataProvider
+   *          the reference data provider, not null
+   * @param bbgScheme
+   *          the scheme to use, not null
    */
-  public BloombergFXForwardScaleResolver(ReferenceDataProvider referenceDataProvider, ExternalScheme bbgScheme) {
+  public BloombergFXForwardScaleResolver(final ReferenceDataProvider referenceDataProvider, final ExternalScheme bbgScheme) {
     ArgumentChecker.notNull(referenceDataProvider, "referenceDataProvider");
     ArgumentChecker.notNull(bbgScheme, "bbgScheme");
     _referenceDataProvider = referenceDataProvider;
-    _useTickerSubscriptions = s_tickerSchemes.contains(bbgScheme);
+    _useTickerSubscriptions = TICKER_SCHEMES.contains(bbgScheme);
   }
 
   public Map<ExternalIdBundle, Integer> getBloombergFXForwardScale(final Collection<ExternalIdBundle> identifiers) {
@@ -57,20 +59,20 @@ public class BloombergFXForwardScaleResolver {
     final Map<ExternalIdBundle, Integer> result = Maps.newHashMap();
     final BiMap<String, ExternalIdBundle> bundle2Bbgkey = getSubIds(identifiers);
 
-    Map<String, FudgeMsg> fwdScaleResult = ReferenceDataProviderUtils.getFields(bundle2Bbgkey.keySet(), BBG_FIELD, _referenceDataProvider);
+    final Map<String, FudgeMsg> fwdScaleResult = ReferenceDataProviderUtils.getFields(bundle2Bbgkey.keySet(), BBG_FIELD, _referenceDataProvider);
 
-    for (ExternalIdBundle identifierBundle : identifiers) {
-      String bbgKey = bundle2Bbgkey.inverse().get(identifierBundle);
+    for (final ExternalIdBundle identifierBundle : identifiers) {
+      final String bbgKey = bundle2Bbgkey.inverse().get(identifierBundle);
       if (bbgKey != null) {
-        FudgeMsg fudgeMsg = fwdScaleResult.get(bbgKey);
+        final FudgeMsg fudgeMsg = fwdScaleResult.get(bbgKey);
         if (fudgeMsg != null) {
-          String bbgFwdScale = fudgeMsg.getString(BloombergConstants.BBG_FIELD_FWD_SCALE);
+          final String bbgFwdScale = fudgeMsg.getString(BloombergConstants.BBG_FIELD_FWD_SCALE);
           Integer fwdScale = null;
-          try {            
+          try {
             fwdScale = Integer.parseInt(bbgFwdScale);
             result.put(identifierBundle, fwdScale);
-          } catch (NumberFormatException e) {
-            s_logger.warn("Could not parse FWD_SCALE with value {}", bbgFwdScale);
+          } catch (final NumberFormatException e) {
+            LOGGER.warn("Could not parse FWD_SCALE with value {}", bbgFwdScale);
           }
         }
       }
@@ -78,22 +80,21 @@ public class BloombergFXForwardScaleResolver {
     return result;
 
   }
-  
-  private BiMap<String, ExternalIdBundle> getSubIds(Collection<ExternalIdBundle> identifiers) {
+
+  private BiMap<String, ExternalIdBundle> getSubIds(final Collection<ExternalIdBundle> identifiers) {
     if (_useTickerSubscriptions) {
-      BiMap<String, ExternalIdBundle> result = HashBiMap.create();
-      for (ExternalIdBundle bundle : identifiers) {
-        for (ExternalId id : bundle) {
-          if (s_tickerSchemes.contains(id.getScheme())) {
+      final BiMap<String, ExternalIdBundle> result = HashBiMap.create();
+      for (final ExternalIdBundle bundle : identifiers) {
+        for (final ExternalId id : bundle) {
+          if (TICKER_SCHEMES.contains(id.getScheme())) {
             result.put(id.getValue(), bundle);
             break;
           }
         }
       }
       return result;
-    } else {
-      return BloombergDataUtils.convertToBloombergBuidKeys(identifiers, _referenceDataProvider);
     }
+    return BloombergDataUtils.convertToBloombergBuidKeys(identifiers, _referenceDataProvider);
   }
-  
+
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution;
@@ -12,19 +12,11 @@ import org.apache.commons.math.special.Gamma;
 import com.opengamma.analytics.math.MathException;
 
 /**
- * The non-central chi-squared distribution is a continuous probability
- * distribution with probability density function
- * $$
- * \begin{align*}
- * f_r(x) = \frac{e^-\frac{x + \lambda}{2}x^{\frac{r}{2} - 1}}{2^{\frac{r}{2}}}\sum_{k=0}^\infty \frac{(\lambda k)^k}{2^{2k}k!\Gamma(k + \frac{r}{2})}
- * \end{align*}
- * $$
- * where $r$ is the number of degrees of freedom, $\lambda$ is the
- * non-centrality parameter and $\Gamma$ is the Gamma function ({@link
- * com.opengamma.analytics.math.function.special.GammaFunction}).
+ * A non-central chi-squared distribution.
  * <p>
- * For the case where $r + \lambda > 2000$, the implementation of the cdf is taken from "An Approximation for the Noncentral Chi-Squared Distribution", Fraser et al.
- * (<a href="http://fisher.utstat.toronto.edu/dfraser/documents/192.pdf">link</a>). Otherwise, the algorithm is taken from "Computing the Non-Central Chi-Squared Distribution Function", Ding.
+ * For the case where $r + \lambda &gt; 2000$, the implementation of the cdf is taken from "An Approximation for the Noncentral Chi-Squared Distribution",
+ * Fraser et al. (<a href="http://fisher.utstat.toronto.edu/dfraser/documents/192.pdf">link</a>). Otherwise, the algorithm is taken from "Computing the
+ * Non-Central Chi-Squared Distribution Function", Ding.
  */
 public class NonCentralChiSquaredDistribution implements ProbabilityDistribution<Double> {
   private final double _lambdaOverTwo;
@@ -61,7 +53,7 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
     } else {
       z = mu - s - (_dofOverTwo * 2.0 - 1) / 2 * (Math.log(mu) - Math.log(s)) / (mu - s);
     }
-    return (new NormalDistribution(0, 1)).getCDF(z);
+    return new NormalDistribution(0, 1).getCDF(z);
   }
 
   /**
@@ -74,7 +66,7 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
       return 0.0;
     }
 
-    if ((_dofOverTwo + _lambdaOverTwo) > 1000) {
+    if (_dofOverTwo + _lambdaOverTwo > 1000) {
       return getFraserApproxCDF(x);
     }
 
@@ -122,8 +114,10 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double getInverseCDF(final Double p) {
@@ -132,8 +126,10 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double getPDF(final Double x) {
@@ -142,8 +138,10 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws NotImplementedException
+   *           not implemented
    */
   @Override
   public double nextRandom() {
@@ -170,9 +168,9 @@ public class NonCentralChiSquaredDistribution implements ProbabilityDistribution
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_dofOverTwo);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_lambdaOverTwo);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

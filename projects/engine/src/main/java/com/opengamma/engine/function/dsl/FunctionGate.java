@@ -13,7 +13,7 @@ import com.opengamma.id.UniqueId;
 
 /**
  * A function gate.
- * 
+ *
  * @param <T>  the sub-type
  */
 public class FunctionGate<T extends FunctionGate<T>> {
@@ -31,13 +31,13 @@ public class FunctionGate<T extends FunctionGate<T>> {
    */
   public static final String PROPERTIES = "PROPERTIES";
 
-  private String _name;
+  private final String _name;
   private ComputationTargetSpecification _cts;
   private ValueProperties _dslValueProperties;
   private RecordingValueProperties _recordingValueProperties;
   private TargetSpecificationReference _targetSpecificationReference;
 
-  public FunctionGate(String name) {
+  public FunctionGate(final String name) {
     _name = name;
   }
 
@@ -47,12 +47,12 @@ public class FunctionGate<T extends FunctionGate<T>> {
   }
 
   //-------------------------------------------------------------------------
-  public T properties(ValueProperties valueProperties) {
+  public T properties(final ValueProperties valueProperties) {
     _dslValueProperties = valueProperties;
     return subType();
   }
 
-  public T properties(ValueProperties.Builder builder) {
+  public T properties(final ValueProperties.Builder builder) {
     _dslValueProperties = builder.get();
     return subType();
   }
@@ -65,7 +65,7 @@ public class FunctionGate<T extends FunctionGate<T>> {
     return _recordingValueProperties;
   }
 
-  public T properties(RecordingValueProperties recordingValueProperties) {
+  public T properties(final RecordingValueProperties recordingValueProperties) {
     _recordingValueProperties = recordingValueProperties;
     return subType();
   }
@@ -74,12 +74,12 @@ public class FunctionGate<T extends FunctionGate<T>> {
     return _name;
   }
 
-  public T targetSpec(ComputationTargetType computationTargetType, UniqueId uid) {
+  public T targetSpec(final ComputationTargetType computationTargetType, final UniqueId uid) {
     _cts = new ComputationTargetSpecification(computationTargetType, uid);
     return subType();
   }
 
-  public T targetSpec(ComputationTargetSpecification computationTargetSpecification) {
+  public T targetSpec(final ComputationTargetSpecification computationTargetSpecification) {
     _cts = computationTargetSpecification;
     return subType();
   }
@@ -88,7 +88,7 @@ public class FunctionGate<T extends FunctionGate<T>> {
     return _cts;
   }
 
-  public T targetSpec(TargetSpecificationReference targetSpecificationReference) {
+  public T targetSpec(final TargetSpecificationReference targetSpecificationReference) {
     _targetSpecificationReference = targetSpecificationReference;
     return subType();
   }

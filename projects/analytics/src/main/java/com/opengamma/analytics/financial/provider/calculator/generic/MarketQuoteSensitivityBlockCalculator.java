@@ -23,17 +23,18 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Calculator of the sensitivity to the market quotes of instruments used to build the curves.
- * The sensitivities are computed as a block (vector) for each curve/currency pair.
- * The sensitivity to a particular curve can be in several currencies.
- * @param <DATA_TYPE> Data type.
+ * Calculator of the sensitivity to the market quotes of instruments used to build the curves. The sensitivities are computed as a block (vector) for each
+ * curve/currency pair. The sensitivity to a particular curve can be in several currencies.
+ * 
+ * @param <DATA_TYPE>
+ *          Data type.
  */
 public final class MarketQuoteSensitivityBlockCalculator<DATA_TYPE extends ParameterProviderInterface> {
 
   /**
    * The matrix algebra used for matrix inversion.
    */
-  private static final MatrixAlgebra MATRIX_ALGEBRA = new OGMatrixAlgebra(); //TODO make this a parameter
+  private static final MatrixAlgebra MATRIX_ALGEBRA = new OGMatrixAlgebra(); // TODO make this a parameter
   /**
    * The parameter sensitivity calculator. The parameters are the parameters used to described the curve.
    */
@@ -41,7 +42,9 @@ public final class MarketQuoteSensitivityBlockCalculator<DATA_TYPE extends Param
 
   /**
    * The constructor.
-   * @param parameterSensitivityCalculator The parameter sensitivity calculator.
+   * 
+   * @param parameterSensitivityCalculator
+   *          The parameter sensitivity calculator.
    */
   public MarketQuoteSensitivityBlockCalculator(final AbstractParameterSensitivityParameterCalculator<DATA_TYPE> parameterSensitivityCalculator) {
     _parameterSensitivityCalculator = parameterSensitivityCalculator;
@@ -49,11 +52,15 @@ public final class MarketQuoteSensitivityBlockCalculator<DATA_TYPE extends Param
 
   /**
    * Compute the market quote sensitivity from a parameter sensitivity.
-   * @param parameterSensitivity The parameter sensitivity.
-   * @param units The curve building units data.
+   * 
+   * @param parameterSensitivity
+   *          The parameter sensitivity.
+   * @param units
+   *          The curve building units data.
    * @return The market quote sensitivity.
    */
-  public MultipleCurrencyParameterSensitivity fromParameterSensitivity(final MultipleCurrencyParameterSensitivity parameterSensitivity, final CurveBuildingBlockBundle units) {
+  public MultipleCurrencyParameterSensitivity fromParameterSensitivity(final MultipleCurrencyParameterSensitivity parameterSensitivity,
+      final CurveBuildingBlockBundle units) {
     ArgumentChecker.notNull(parameterSensitivity, "Sensitivity");
     ArgumentChecker.notNull(units, "Units");
     MultipleCurrencyParameterSensitivity result = new MultipleCurrencyParameterSensitivity();
@@ -65,7 +72,8 @@ public final class MarketQuoteSensitivityBlockCalculator<DATA_TYPE extends Param
       ArgumentChecker.notNull(unitPair.getSecond(), "Jacobian");
       final DoubleMatrix1D matrix = (DoubleMatrix1D) MATRIX_ALGEBRA.multiply(parameterSensitivity.getSensitivity(nameCcy), unitPair.getSecond());
       if (matrix != null) {
-        final double[] oneCurveSensiArray = ((DoubleMatrix1D) MATRIX_ALGEBRA.multiply(parameterSensitivity.getSensitivity(nameCcy), unitPair.getSecond())).getData();
+        final double[] oneCurveSensiArray = ((DoubleMatrix1D) MATRIX_ALGEBRA.multiply(parameterSensitivity.getSensitivity(nameCcy), unitPair.getSecond()))
+            .getData();
         for (final String name2 : unitPair.getFirst().getAllNames()) {
           final int nbParameters = unitPair.getFirst().getNbParameters(name2);
           final int start = unitPair.getFirst().getStart(name2);
@@ -82,12 +90,17 @@ public final class MarketQuoteSensitivityBlockCalculator<DATA_TYPE extends Param
 
   /**
    * Compute the market quote sensitivity from an instrument.
-   * @param instrument The instrument. Not null.
-   * @param provider The provider
-   * @param units The curve building units data.
+   * 
+   * @param instrument
+   *          The instrument. Not null.
+   * @param provider
+   *          The provider
+   * @param units
+   *          The curve building units data.
    * @return The market quote sensitivity.
    */
-  public MultipleCurrencyParameterSensitivity fromInstrument(final InstrumentDerivative instrument, final DATA_TYPE provider, final CurveBuildingBlockBundle units) {
+  public MultipleCurrencyParameterSensitivity fromInstrument(final InstrumentDerivative instrument, final DATA_TYPE provider,
+      final CurveBuildingBlockBundle units) {
     ArgumentChecker.notNull(instrument, "instrument");
     ArgumentChecker.notNull(provider, "provider");
     ArgumentChecker.notNull(units, "units");

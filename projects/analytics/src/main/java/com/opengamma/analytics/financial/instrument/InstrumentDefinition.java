@@ -10,7 +10,7 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 
 /**
- * 
+ *
  * @param <T> Type of the InterestRateDerivative that the definition returns
  */
 public interface InstrumentDefinition<T extends InstrumentDerivative> {
@@ -31,9 +31,9 @@ public interface InstrumentDefinition<T extends InstrumentDerivative> {
    * @return The derivative
    */
   T toDerivative(ZonedDateTime date);
-  
+
   /**
-   * accept() method for visitors
+   * accept() method for visitors.
    * @param <U> The type of the data
    * @param <V> The return type of the visitor
    * @param visitor The visitor, not null
@@ -43,7 +43,7 @@ public interface InstrumentDefinition<T extends InstrumentDerivative> {
   <U, V> V accept(InstrumentDefinitionVisitor<U, V> visitor, U data);
 
   /**
-   * accept() method for visitors
+   * accept() method for visitors.
    * @param <V> The return type of the visitor
    * @param visitor The visitor, not null
    * @return The result from the supplied visitor appropriate to this type of instrument definition

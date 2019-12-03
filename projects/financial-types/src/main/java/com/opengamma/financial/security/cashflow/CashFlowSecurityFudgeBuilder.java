@@ -31,13 +31,13 @@ public class CashFlowSecurityFudgeBuilder extends AbstractFudgeBuilder implement
   public static final String AMOUNT_FIELD_NAME = "amount";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CashFlowSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CashFlowSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     CashFlowSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, CashFlowSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final CashFlowSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, CURRENCY_FIELD_NAME, object.getCurrency());
     addToMessage(msg, SETTLEMENT_FIELD_NAME, ZonedDateTimeFudgeBuilder.toFudgeMsg(serializer, object.getSettlement()));
@@ -45,13 +45,13 @@ public class CashFlowSecurityFudgeBuilder extends AbstractFudgeBuilder implement
   }
 
   @Override
-  public CashFlowSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    CashFlowSecurity object = new CashFlowSecurity();
+  public CashFlowSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final CashFlowSecurity object = new CashFlowSecurity();
     CashFlowSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, CashFlowSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final CashFlowSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setCurrency(msg.getValue(Currency.class, CURRENCY_FIELD_NAME));
     object.setSettlement(ZonedDateTimeFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(SETTLEMENT_FIELD_NAME)));

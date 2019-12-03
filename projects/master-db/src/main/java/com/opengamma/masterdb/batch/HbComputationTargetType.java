@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.EnhancedUserType;
 
 import com.opengamma.engine.target.ComputationTargetType;
@@ -55,7 +56,8 @@ public class HbComputationTargetType implements EnhancedUserType {
   }
 
   @Override
-  public Object nullSafeGet(final ResultSet rs, final String[] names, final Object owner) throws HibernateException, SQLException {
+  public Object nullSafeGet(final ResultSet rs, final String[] names, final SharedSessionContractImplementor session,
+      final Object owner) throws HibernateException, SQLException {
     final String value = rs.getString(names[0]);
     if (value == null) {
       return ComputationTargetType.NULL;
@@ -64,8 +66,9 @@ public class HbComputationTargetType implements EnhancedUserType {
   }
 
   @Override
-  public void nullSafeSet(final PreparedStatement st, final Object value, final int index) throws HibernateException, SQLException {
-    if ((value == null) || ComputationTargetType.NULL.equals(value)) {
+  public void nullSafeSet(final PreparedStatement st, final Object value, final int index,
+      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
+    if (value == null || ComputationTargetType.NULL.equals(value)) {
       st.setNull(index, Types.VARCHAR);
     } else {
       st.setString(index, value.toString());
@@ -84,7 +87,7 @@ public class HbComputationTargetType implements EnhancedUserType {
 
   @Override
   public int[] sqlTypes() {
-    return new int[] {Types.VARCHAR };
+    return new int[] { Types.VARCHAR };
   }
 
   @Override
@@ -104,5 +107,4 @@ public class HbComputationTargetType implements EnhancedUserType {
     // TODO: should be escaping any XML reserved characters ?
     return value.toString();
   }
-
 }

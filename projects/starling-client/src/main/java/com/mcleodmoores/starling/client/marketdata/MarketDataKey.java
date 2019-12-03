@@ -31,7 +31,7 @@ public final class MarketDataKey implements ImmutableBean {
    * The external id bundle for the market data.
    */
   @PropertyDefinition(validate = "notNull")
-  private final ExternalIdBundle _externalIdBundle;
+  private final ExternalIdBundle ExternalIdBundle;
   /**
    * The data field.
    */
@@ -124,7 +124,7 @@ public final class MarketDataKey implements ImmutableBean {
     JodaBeanUtils.notNull(source, "source");
     JodaBeanUtils.notNull(provider, "provider");
     JodaBeanUtils.notNull(normalizer, "normalizer");
-    this._externalIdBundle = externalIdBundle;
+    this.ExternalIdBundle = externalIdBundle;
     this._field = field;
     this._source = source;
     this._provider = provider;
@@ -152,7 +152,7 @@ public final class MarketDataKey implements ImmutableBean {
    * @return the value of the property, not null
    */
   public ExternalIdBundle getExternalIdBundle() {
-    return _externalIdBundle;
+    return ExternalIdBundle;
   }
 
   //-----------------------------------------------------------------------
@@ -253,7 +253,7 @@ public final class MarketDataKey implements ImmutableBean {
     /**
      * The meta-property for the {@code externalIdBundle} property.
      */
-    private final MetaProperty<ExternalIdBundle> _externalIdBundle = DirectMetaProperty.ofImmutable(
+    private final MetaProperty<ExternalIdBundle> ExternalIdBundle = DirectMetaProperty.ofImmutable(
         this, "externalIdBundle", MarketDataKey.class, ExternalIdBundle.class);
     /**
      * The meta-property for the {@code field} property.
@@ -296,7 +296,7 @@ public final class MarketDataKey implements ImmutableBean {
     protected MetaProperty<?> metaPropertyGet(String propertyName) {
       switch (propertyName.hashCode()) {
         case -736922008:  // externalIdBundle
-          return _externalIdBundle;
+          return ExternalIdBundle;
         case 97427706:  // field
           return _field;
         case -896505829:  // source
@@ -330,7 +330,7 @@ public final class MarketDataKey implements ImmutableBean {
      * @return the meta-property, not null
      */
     public MetaProperty<ExternalIdBundle> externalIdBundle() {
-      return _externalIdBundle;
+      return ExternalIdBundle;
     }
 
     /**
@@ -400,7 +400,7 @@ public final class MarketDataKey implements ImmutableBean {
    */
   public static final class Builder extends DirectFieldsBeanBuilder<MarketDataKey> {
 
-    private ExternalIdBundle _externalIdBundle;
+    private ExternalIdBundle ExternalIdBundle;
     private DataField _field;
     private DataSource _source;
     private DataProvider _provider;
@@ -417,7 +417,7 @@ public final class MarketDataKey implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(MarketDataKey beanToCopy) {
-      this._externalIdBundle = beanToCopy.getExternalIdBundle();
+      this.ExternalIdBundle = beanToCopy.getExternalIdBundle();
       this._field = beanToCopy.getField();
       this._source = beanToCopy.getSource();
       this._provider = beanToCopy.getProvider();
@@ -429,7 +429,7 @@ public final class MarketDataKey implements ImmutableBean {
     public Object get(String propertyName) {
       switch (propertyName.hashCode()) {
         case -736922008:  // externalIdBundle
-          return _externalIdBundle;
+          return ExternalIdBundle;
         case 97427706:  // field
           return _field;
         case -896505829:  // source
@@ -447,7 +447,7 @@ public final class MarketDataKey implements ImmutableBean {
     public Builder set(String propertyName, Object newValue) {
       switch (propertyName.hashCode()) {
         case -736922008:  // externalIdBundle
-          this._externalIdBundle = (ExternalIdBundle) newValue;
+          this.ExternalIdBundle = (ExternalIdBundle) newValue;
           break;
         case 97427706:  // field
           this._field = (DataField) newValue;
@@ -495,7 +495,7 @@ public final class MarketDataKey implements ImmutableBean {
     public MarketDataKey build() {
       preBuild(this);
       return new MarketDataKey(
-          _externalIdBundle,
+          ExternalIdBundle,
           _field,
           _source,
           _provider,
@@ -510,7 +510,7 @@ public final class MarketDataKey implements ImmutableBean {
      */
     public Builder externalIdBundle(ExternalIdBundle externalIdBundle) {
       JodaBeanUtils.notNull(externalIdBundle, "externalIdBundle");
-      this._externalIdBundle = externalIdBundle;
+      this.ExternalIdBundle = externalIdBundle;
       return this;
     }
 
@@ -563,7 +563,7 @@ public final class MarketDataKey implements ImmutableBean {
     public String toString() {
       StringBuilder buf = new StringBuilder(192);
       buf.append("MarketDataKey.Builder{");
-      buf.append("externalIdBundle").append('=').append(JodaBeanUtils.toString(_externalIdBundle)).append(',').append(' ');
+      buf.append("externalIdBundle").append('=').append(JodaBeanUtils.toString(ExternalIdBundle)).append(',').append(' ');
       buf.append("field").append('=').append(JodaBeanUtils.toString(_field)).append(',').append(' ');
       buf.append("source").append('=').append(JodaBeanUtils.toString(_source)).append(',').append(' ');
       buf.append("provider").append('=').append(JodaBeanUtils.toString(_provider)).append(',').append(' ');

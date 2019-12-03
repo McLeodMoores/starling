@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -37,7 +37,7 @@ public class ConstantDoublesCurve
 
   /**
    * Creates an instance specifying the <i>y</i> level of the curve.
-   * 
+   *
    * @param y  the level of the curve
    * @return a constant curve with automatically-generated name, not null
    */
@@ -47,7 +47,7 @@ public class ConstantDoublesCurve
 
   /**
    * Creates an instance specifying the <i>y</i> level of the curve and the name.
-   * 
+   *
    * @param y  the level of the curve
    * @param name  the name of the curve, not null
    * @return a constant curve with the specified name, not null
@@ -65,7 +65,7 @@ public class ConstantDoublesCurve
 
   /**
    * Creates an instance specifying the <i>y</i> level of the curve.
-   * 
+   *
    * @param y  the level of the curve
    */
   public ConstantDoublesCurve(final double y) {
@@ -75,7 +75,7 @@ public class ConstantDoublesCurve
 
   /**
    * Creates an instance specifying the <i>y</i> level of the curve and the name.
-   * 
+   *
    * @param y  the level of the curve
    * @param name  the name of the curve, not null
    */
@@ -87,7 +87,7 @@ public class ConstantDoublesCurve
   //-------------------------------------------------------------------------
   /**
    * Throws an exception as there is no <i>x</i> data.
-   * 
+   *
    * @return throws UnsupportedOperationException
    * @throws UnsupportedOperationException always
    */
@@ -98,7 +98,7 @@ public class ConstantDoublesCurve
 
   /**
    * Gets the <i>y</i> data for the curve.
-   * 
+   *
    * @return an array containing one element, the level, not null
    */
   @Override
@@ -110,7 +110,7 @@ public class ConstantDoublesCurve
    * Gets the <i>y</i> data for the <i>x</i> value.
    * <p>
    * Any <i>x</i> value may be specified, including null.
-   * 
+   *
    * @param x  the value, null ignored
    * @return the constant level value in a length one array, not null
    */
@@ -123,7 +123,7 @@ public class ConstantDoublesCurve
    * Gets the parameter sensitivity for the <i>x</i> value.
    * <p>
    * Any <i>x</i> value may be specified, including null.
-   * 
+   *
    * @param x  the value, null ignored
    * @return the value 1.0 in a length one array, not null
    */
@@ -134,7 +134,7 @@ public class ConstantDoublesCurve
 
   /**
    * Creates an interpolated curve using the specified <i>x</i> values and this constant <i>y</i> value.
-   * 
+   *
    * @param x  the array of <i>x</i> values, not null
    * @param interpolator  the interpolator, not null
    * @return the interpolated curve with constant value, not null
@@ -154,7 +154,7 @@ public class ConstantDoublesCurve
 
   /**
    * Gets the size of the curve, which is one.
-   * 
+   *
    * @return the size of the curve, one
    */
   @Override
@@ -184,7 +184,7 @@ public class ConstantDoublesCurve
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_y);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

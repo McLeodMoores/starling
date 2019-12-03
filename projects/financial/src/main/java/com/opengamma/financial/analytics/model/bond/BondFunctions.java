@@ -48,7 +48,8 @@ public class BondFunctions extends AbstractFunctionConfigurationBean {
       public CurrencyInfo() {
       }
 
-      public CurrencyInfo(final String riskFreeCurveName, final String riskFreeCurveCalculationConfig, final String creditCurveName, final String creditCurveCalculationConfig) {
+      public CurrencyInfo(final String riskFreeCurveName, final String riskFreeCurveCalculationConfig, final String creditCurveName,
+          final String creditCurveCalculationConfig) {
         setRiskFreeCurveName(riskFreeCurveName);
         setRiskFreeCurveCalculationConfig(riskFreeCurveCalculationConfig);
         setCreditCurveName(creditCurveName);
@@ -145,13 +146,6 @@ public class BondFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(BondMarketCleanPriceFunction.class));
     functions.add(functionConfiguration(BondMarketDirtyPriceFunction.class));
     functions.add(functionConfiguration(BondMarketYieldFunction.class));
-    functions.add(functionConfiguration(BondYieldFromCurvesFunction.class));
-    functions.add(functionConfiguration(BondAccruedInterestFromCurvesFunction.class));
-    functions.add(functionConfiguration(BondCleanPriceFromCurvesFunction.class));
-    functions.add(functionConfiguration(BondDirtyPriceFromCurvesFunction.class));
-    functions.add(functionConfiguration(BondMacaulayDurationFromCurvesFunction.class));
-    functions.add(functionConfiguration(BondModifiedDurationFromCurvesFunction.class));
-    functions.add(functionConfiguration(BondConvexityFromCurvesFunction.class));
     functions.add(functionConfiguration(BondAccruedInterestFromYieldFunction.class));
     functions.add(functionConfiguration(BondCleanPriceFromYieldFunction.class));
     functions.add(functionConfiguration(BondDirtyPriceFromYieldFunction.class));
@@ -163,14 +157,7 @@ public class BondFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(BondModifiedDurationFromCleanPriceFunction.class));
     functions.add(functionConfiguration(BondConvexityFromCleanPriceFunction.class));
     functions.add(functionConfiguration(BondYieldFromCleanPriceFunction.class));
-    functions.add(functionConfiguration(BondZSpreadFromCurveCleanPriceFunction.class));
-    functions.add(functionConfiguration(BondZSpreadFromMarketCleanPriceFunction.class));
-    functions.add(functionConfiguration(BondZSpreadPresentValueSensitivityFromCurveCleanPriceFunction.class));
-    functions.add(functionConfiguration(BondZSpreadPresentValueSensitivityFromMarketCleanPriceFunction.class));
     functions.add(functionConfiguration(NelsonSiegelSvenssonBondCurveFunction.class));
-    functions.add(functionConfiguration(BondPresentValueFromCurvesFunction.class));
-    functions.add(functionConfiguration(BondPresentValueFromCleanPriceFunction.class));
-    functions.add(functionConfiguration(BondPV01CurrencyCurveFunction.class));
   }
 
 }

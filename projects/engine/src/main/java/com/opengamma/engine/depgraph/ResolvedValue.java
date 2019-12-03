@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -23,13 +23,17 @@ import com.opengamma.engine.value.ValueSpecification;
    * Creates a new instance.
    * <p>
    * The {@code valueSpecification} specification must be a normalized/canonical form.
-   * 
-   * @param valueSpecification the resolved value specification, as it will appear in the dependency graph, not null
-   * @param function the function identifier and parameters, not null
-   * @param functionInputs the resolved input specifications, as they will appear in the dependency graph, not null
-   * @param functionOutputs the resolved output specifications, as they will appear in the dependency graph, not null
+   *
+   * @param valueSpecification
+   *          the resolved value specification, as it will appear in the dependency graph, not null
+   * @param function
+   *          the function identifier and parameters, not null
+   * @param functionInputs
+   *          the resolved input specifications, as they will appear in the dependency graph, not null
+   * @param functionOutputs
+   *          the resolved output specifications, as they will appear in the dependency graph, not null
    */
-  public ResolvedValue(final ValueSpecification valueSpecification, final DependencyNodeFunction function, final Set<ValueSpecification> functionInputs,
+  ResolvedValue(final ValueSpecification valueSpecification, final DependencyNodeFunction function, final Set<ValueSpecification> functionInputs,
       final Set<ValueSpecification> functionOutputs) {
     assert valueSpecification != null;
     assert function != null;

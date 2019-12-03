@@ -29,7 +29,7 @@ public class GridColumnGroup {
    * @param dependencyGraphsAvailable Whether the values in this group's cells were calculated by the engine and
    * have dependency graphs available
    */
-  /* package */ GridColumnGroup(String name, List<GridColumn> columns, boolean dependencyGraphsAvailable) {
+  /* package */ GridColumnGroup(final String name, final List<GridColumn> columns, final boolean dependencyGraphsAvailable) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(columns, "cols");
     _dependencyGraphsAvailable = dependencyGraphsAvailable;

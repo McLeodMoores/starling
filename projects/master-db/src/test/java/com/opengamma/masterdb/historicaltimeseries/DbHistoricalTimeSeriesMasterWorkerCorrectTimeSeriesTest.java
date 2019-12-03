@@ -29,12 +29,12 @@ import com.opengamma.util.test.TestGroup;
 public class DbHistoricalTimeSeriesMasterWorkerCorrectTimeSeriesTest extends AbstractDbHistoricalTimeSeriesMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbHistoricalTimeSeriesMasterWorkerCorrectTimeSeriesTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbHistoricalTimeSeriesMasterWorkerCorrectTimeSeriesTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbHistoricalTimeSeriesMasterWorkerCorrectTimeSeriesTest(String databaseType, String databaseVersion) {
+  public DbHistoricalTimeSeriesMasterWorkerCorrectTimeSeriesTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -50,23 +50,23 @@ public class DbHistoricalTimeSeriesMasterWorkerCorrectTimeSeriesTest extends Abs
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_correct_versioned_notFoundId() {
-    ObjectId oid = ObjectId.of("DbHts", "DP0");
+    final ObjectId oid = ObjectId.of("DbHts", "DP0");
     _htsMaster.correctTimeSeriesDataPoints(oid, ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES);
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_correct_101_startsFull() {
-    LocalDate[] dates = {LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 2)};
-    double[] values = {0.1d, 0.2d};
-    LocalDateDoubleTimeSeries series = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
-    
-    ObjectId oid = ObjectId.of("DbHts", "DP101");
-    UniqueId uniqueId = _htsMaster.correctTimeSeriesDataPoints(oid, series);
-    
-    ManageableHistoricalTimeSeries testCorrected = _htsMaster.getTimeSeries(uniqueId);
+    final LocalDate[] dates = {LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 2)};
+    final double[] values = {0.1d, 0.2d};
+    final LocalDateDoubleTimeSeries series = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
+
+    final ObjectId oid = ObjectId.of("DbHts", "DP101");
+    final UniqueId uniqueId = _htsMaster.correctTimeSeriesDataPoints(oid, series);
+
+    final ManageableHistoricalTimeSeries testCorrected = _htsMaster.getTimeSeries(uniqueId);
     assertEquals(uniqueId, testCorrected.getUniqueId());
-    LocalDateDoubleTimeSeries timeSeries = testCorrected.getTimeSeries();
+    final LocalDateDoubleTimeSeries timeSeries = testCorrected.getTimeSeries();
     assertEquals(3, timeSeries.size());
     assertEquals(LocalDate.of(2011, 1, 1), timeSeries.getTimeAtIndex(0));
     assertEquals(0.1d, timeSeries.getValueAtIndex(0), 0.001d);
@@ -78,16 +78,16 @@ public class DbHistoricalTimeSeriesMasterWorkerCorrectTimeSeriesTest extends Abs
 
   @Test
   public void test_correct_101_insertNew() {
-    LocalDate[] dates = {LocalDate.of(2010, 12, 31)};
-    double[] values = {0.5d};
-    LocalDateDoubleTimeSeries series = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
-    
-    ObjectId oid = ObjectId.of("DbHts", "DP101");
-    UniqueId uniqueId = _htsMaster.correctTimeSeriesDataPoints(oid, series);
-    
-    ManageableHistoricalTimeSeries testCorrected = _htsMaster.getTimeSeries(uniqueId);
+    final LocalDate[] dates = {LocalDate.of(2010, 12, 31)};
+    final double[] values = {0.5d};
+    final LocalDateDoubleTimeSeries series = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
+
+    final ObjectId oid = ObjectId.of("DbHts", "DP101");
+    final UniqueId uniqueId = _htsMaster.correctTimeSeriesDataPoints(oid, series);
+
+    final ManageableHistoricalTimeSeries testCorrected = _htsMaster.getTimeSeries(uniqueId);
     assertEquals(uniqueId, testCorrected.getUniqueId());
-    LocalDateDoubleTimeSeries timeSeries = testCorrected.getTimeSeries();
+    final LocalDateDoubleTimeSeries timeSeries = testCorrected.getTimeSeries();
     assertEquals(4, timeSeries.size());
     assertEquals(LocalDate.of(2010, 12, 31), timeSeries.getTimeAtIndex(0));
     assertEquals(0.5d, timeSeries.getValueAtIndex(0), 0.001d);

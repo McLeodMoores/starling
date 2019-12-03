@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph.ambiguity;
@@ -40,7 +40,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public abstract class ViewDefinitionAmbiguityTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewDefinitionAmbiguityTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewDefinitionAmbiguityTest.class);
 
   protected MarketDataAvailabilityProvider createMarketDataAvailabilityProvider() {
     return new OptimisticMarketDataAvailabilityFilter().withProvider(new DefaultMarketDataAvailabilityProvider());
@@ -57,7 +57,8 @@ public abstract class ViewDefinitionAmbiguityTest {
   }
 
   protected AmbiguityCheckerContext createAmbiguityCheckerContext() {
-    return new AmbiguityCheckerContext(createMarketDataAvailabilityProvider(), createFunctionCompilationContext(), createFunctionResolver(), createFunctionExclusionGroups());
+    return new AmbiguityCheckerContext(createMarketDataAvailabilityProvider(), createFunctionCompilationContext(), createFunctionResolver(),
+        createFunctionExclusionGroups());
   }
 
   protected void configureChecker(final SimpleRequirementAmbiguityChecker checker) {
@@ -91,15 +92,16 @@ public abstract class ViewDefinitionAmbiguityTest {
     } else if (resolution.isResolved()) {
       unresolved(resolution.getRequirement());
     } else {
-      s_logger.debug("Resolved {} to {}", resolution.getRequirement(), resolution);
+      LOGGER.debug("Resolved {} to {}", resolution.getRequirement(), resolution);
     }
   }
 
   protected void unresolved(final ValueRequirement requirement) {
-    s_logger.debug("Couldn't resolve {}", requirement);
+    LOGGER.debug("Couldn't resolve {}", requirement);
   }
 
-  protected void check(final PoolExecutor.Service<FullRequirementResolution> executor, final RequirementAmbiguityChecker checker, final ValueRequirement requirement) {
+  protected void check(final PoolExecutor.Service<FullRequirementResolution> executor, final RequirementAmbiguityChecker checker,
+      final ValueRequirement requirement) {
     executor.execute(new Callable<FullRequirementResolution>() {
       @Override
       public FullRequirementResolution call() throws Exception {
@@ -108,23 +110,27 @@ public abstract class ViewDefinitionAmbiguityTest {
     });
   }
 
-  protected void checkRequirements(final PoolExecutor.Service<FullRequirementResolution> executor, final RequirementAmbiguityChecker checker, final Set<Pair<String, ValueProperties>> requirements,
+  protected void checkRequirements(final PoolExecutor.Service<FullRequirementResolution> executor, final RequirementAmbiguityChecker checker,
+      final Set<Pair<String, ValueProperties>> requirements,
       final Trade trade) {
-    for (Pair<String, ValueProperties> requirement : requirements) {
-      check(executor, checker, new ValueRequirement(requirement.getFirst(), new ComputationTargetSpecification(ComputationTargetType.TRADE, trade.getUniqueId()), requirement.getSecond()));
+    for (final Pair<String, ValueProperties> requirement : requirements) {
+      check(executor, checker, new ValueRequirement(requirement.getFirst(),
+          new ComputationTargetSpecification(ComputationTargetType.TRADE, trade.getUniqueId()), requirement.getSecond()));
     }
   }
 
   protected void checkRequirements(final PoolExecutor.Service<FullRequirementResolution> executor, final RequirementAmbiguityChecker checker,
-      final Map<String, Set<Pair<String, ValueProperties>>> requirements, final PortfolioNode node, final Position position, final Set<Pair<String, ValueProperties>> aggregate) {
-    Set<Pair<String, ValueProperties>> securityRequirements = requirements.get(position.getSecurity().getSecurityType());
+      final Map<String, Set<Pair<String, ValueProperties>>> requirements, final PortfolioNode node, final Position position,
+      final Set<Pair<String, ValueProperties>> aggregate) {
+    final Set<Pair<String, ValueProperties>> securityRequirements = requirements.get(position.getSecurity().getSecurityType());
     if (securityRequirements != null) {
-      for (Trade trade : position.getTrades()) {
+      for (final Trade trade : position.getTrades()) {
         checkRequirements(executor, checker, securityRequirements, trade);
       }
       final ComputationTargetSpecification nodeSpec = new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, node.getUniqueId());
-      for (Pair<String, ValueProperties> requirement : securityRequirements) {
-        check(executor, checker, new ValueRequirement(requirement.getFirst(), nodeSpec.containing(ComputationTargetType.POSITION, position.getUniqueId()), requirement.getSecond()));
+      for (final Pair<String, ValueProperties> requirement : securityRequirements) {
+        check(executor, checker,
+            new ValueRequirement(requirement.getFirst(), nodeSpec.containing(ComputationTargetType.POSITION, position.getUniqueId()), requirement.getSecond()));
       }
       aggregate.addAll(securityRequirements);
     }
@@ -132,14 +138,15 @@ public abstract class ViewDefinitionAmbiguityTest {
 
   protected void checkRequirements(final PoolExecutor.Service<FullRequirementResolution> executor, final RequirementAmbiguityChecker checker,
       final Map<String, Set<Pair<String, ValueProperties>>> requirements, final PortfolioNode node, final Set<Pair<String, ValueProperties>> aggregate) {
-    for (PortfolioNode childNode : node.getChildNodes()) {
+    for (final PortfolioNode childNode : node.getChildNodes()) {
       checkRequirements(executor, checker, requirements, childNode, aggregate);
     }
-    for (Position position : node.getPositions()) {
+    for (final Position position : node.getPositions()) {
       checkRequirements(executor, checker, requirements, node, position, aggregate);
     }
-    for (Pair<String, ValueProperties> requirement : aggregate) {
-      check(executor, checker, new ValueRequirement(requirement.getFirst(), new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, node.getUniqueId()), requirement.getSecond()));
+    for (final Pair<String, ValueProperties> requirement : aggregate) {
+      check(executor, checker, new ValueRequirement(requirement.getFirst(),
+          new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, node.getUniqueId()), requirement.getSecond()));
     }
   }
 
@@ -152,27 +159,28 @@ public abstract class ViewDefinitionAmbiguityTest {
         public void success(final FullRequirementResolution result) {
           try {
             resolved(result);
-          } catch (Throwable t) {
+          } catch (final Throwable t) {
             failure(t);
           }
         }
 
         @Override
         public void failure(final Throwable error) {
-          s_logger.error("Internal failure", error);
+          LOGGER.error("Internal failure", error);
         }
 
       });
       final AmbiguityCheckerContext context = createAmbiguityCheckerContext();
-      long tStart = System.nanoTime();
-      for (ViewCalculationConfiguration calcConfig : view.getAllCalculationConfigurations()) {
-        s_logger.info("Testing {}.{}", view.getName(), calcConfig.getName());
+      final long tStart = System.nanoTime();
+      for (final ViewCalculationConfiguration calcConfig : view.getAllCalculationConfigurations()) {
+        LOGGER.info("Testing {}.{}", view.getName(), calcConfig.getName());
         final SimpleRequirementAmbiguityChecker checker = new SimpleRequirementAmbiguityChecker(context, Instant.now(), VersionCorrection.LATEST, calcConfig);
-        final Set<Pair<String, ValueProperties>> aggregate = new HashSet<Pair<String, ValueProperties>>();
-        checkRequirements(service, checker, calcConfig.getPortfolioRequirementsBySecurityType(), checker.getCompilationContext().getPortfolio().getRootNode(), aggregate);
+        final Set<Pair<String, ValueProperties>> aggregate = new HashSet<>();
+        checkRequirements(service, checker, calcConfig.getPortfolioRequirementsBySecurityType(),
+            checker.getCompilationContext().getPortfolio().getRootNode(), aggregate);
       }
       service.join();
-      s_logger.info("View {} tested in {}s", view.getName(), (double) (System.nanoTime() - tStart) / 1e9);
+      LOGGER.info("View {} tested in {}s", view.getName(), (System.nanoTime() - tStart) / 1e9);
     } finally {
       executor.asService().shutdown();
     }

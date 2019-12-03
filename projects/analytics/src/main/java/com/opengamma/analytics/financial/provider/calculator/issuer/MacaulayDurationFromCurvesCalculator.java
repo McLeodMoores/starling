@@ -27,14 +27,15 @@ public final class MacaulayDurationFromCurvesCalculator extends InstrumentDeriva
   /**
    * The calculator instance.
    */
-  private static final MacaulayDurationFromCurvesCalculator s_instance = new MacaulayDurationFromCurvesCalculator();
+  private static final MacaulayDurationFromCurvesCalculator INSTANCE = new MacaulayDurationFromCurvesCalculator();
 
   /**
    * Return the calculator instance.
+   *
    * @return The instance.
    */
   public static MacaulayDurationFromCurvesCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**
@@ -57,7 +58,8 @@ public final class MacaulayDurationFromCurvesCalculator extends InstrumentDeriva
     return BondSecurityDiscountingMethod.getInstance().macaulayDurationFromCurves(bond.getBondTransaction(), marketData);
   }
 
-  public Double visitBillTransaction(final BillSecurity bill, final IssuerProviderInterface marketData) {
+  @Override
+  public Double visitBillSecurity(final BillSecurity bill, final IssuerProviderInterface marketData) {
     ArgumentChecker.notNull(bill, "bill");
     ArgumentChecker.notNull(marketData, "marketData");
     return BillSecurityDiscountingMethod.getInstance().macaulayDurationFromCurves(bill, marketData);

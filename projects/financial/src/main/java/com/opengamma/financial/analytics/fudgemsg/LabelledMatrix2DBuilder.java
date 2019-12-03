@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.fudgemsg;
@@ -23,7 +23,7 @@ import com.opengamma.util.ClassUtils;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 final class LabelledMatrix2DBuilder {
   private static final String MATRIX_FIELD = "matrix";
@@ -45,16 +45,16 @@ final class LabelledMatrix2DBuilder {
   public static final class DoubleLabelledMatrix2DBuilder extends AbstractFudgeBuilder<DoubleLabelledMatrix2D> {
 
     @Override
-    protected void buildMessage(FudgeSerializer serializer, MutableFudgeMsg message, DoubleLabelledMatrix2D object) {
-      MutableFudgeMsg msg = serializer.newMessage();
+    protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final DoubleLabelledMatrix2D object) {
+      final MutableFudgeMsg msg = serializer.newMessage();
 
-      Double[] xKeys = object.getXKeys();
-      Object[] xLabels = object.getXLabels();
-      Double[] yKeys = object.getYKeys();
-      Object[] yLabels = object.getYLabels();
-      double[][] values = object.getValues();
-      int n = yKeys.length;
-      int m = xKeys.length;
+      final Double[] xKeys = object.getXKeys();
+      final Object[] xLabels = object.getXLabels();
+      final Double[] yKeys = object.getYKeys();
+      final Object[] yLabels = object.getYLabels();
+      final double[][] values = object.getValues();
+      final int n = yKeys.length;
+      final int m = xKeys.length;
       for (int i = 0; i < n; i++) {
         msg.add(Y_LABEL_TYPE_ORDINAL, yLabels[i].getClass().getName());
         msg.add(Y_KEY_ORDINAL, yKeys[i]);
@@ -81,18 +81,18 @@ final class LabelledMatrix2DBuilder {
     }
 
     @Override
-    public DoubleLabelledMatrix2D buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-      FudgeMsg msg = message.getMessage(MATRIX_FIELD);
-      Queue<String> xLabelTypes = new LinkedList<String>();
-      Queue<FudgeField> xLabelValues = new LinkedList<FudgeField>();
-      Queue<String> yLabelTypes = new LinkedList<String>();
-      Queue<FudgeField> yLabelValues = new LinkedList<FudgeField>();
+    public DoubleLabelledMatrix2D buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+      final FudgeMsg msg = message.getMessage(MATRIX_FIELD);
+      final Queue<String> xLabelTypes = new LinkedList<>();
+      final Queue<FudgeField> xLabelValues = new LinkedList<>();
+      final Queue<String> yLabelTypes = new LinkedList<>();
+      final Queue<FudgeField> yLabelValues = new LinkedList<>();
 
-      final List<Double> xKeys = new LinkedList<Double>();
-      final List<Object> xLabels = new LinkedList<Object>();
-      final List<Double> yKeys = new LinkedList<Double>();
-      final List<Object> yLabels = new LinkedList<Object>();
-      final List<List<Double>> values = new LinkedList<List<Double>>();
+      final List<Double> xKeys = new LinkedList<>();
+      final List<Object> xLabels = new LinkedList<>();
+      final List<Double> yKeys = new LinkedList<>();
+      final List<Object> yLabels = new LinkedList<>();
+      final List<List<Double>> values = new LinkedList<>();
 
       boolean newRow = true;
       int count = -1;
@@ -119,9 +119,9 @@ final class LabelledMatrix2DBuilder {
             yLabelValues.add(field);
             break;
           case VALUE_ORDINAL:
-            Double value = (Double) field.getValue();
+            final Double value = (Double) field.getValue();
             if (newRow) {
-              List<Double> row = new ArrayList<Double>();
+              final List<Double> row = new ArrayList<>();
               row.add(value);
               values.add(row);
               newRow = false;
@@ -134,7 +134,7 @@ final class LabelledMatrix2DBuilder {
         if (!xLabelTypes.isEmpty() && !xLabelValues.isEmpty()) {
           // Have a type and a value, which can be consumed
           final String labelType = xLabelTypes.remove();
-          Class<?> labelClass = ClassUtils.loadClassRuntime(labelType);
+          final Class<?> labelClass = ClassUtils.loadClassRuntime(labelType);
           final FudgeField labelValue = xLabelValues.remove();
           final Object label = deserializer.fieldValueToObject(labelClass, labelValue);
           xLabels.add(label);
@@ -142,7 +142,7 @@ final class LabelledMatrix2DBuilder {
         if (!yLabelTypes.isEmpty() && !yLabelValues.isEmpty()) {
           // Have a type and a value, which can be consumed
           final String labelType = yLabelTypes.remove();
-          Class<?> labelClass = ClassUtils.loadClassRuntime(labelType);
+          final Class<?> labelClass = ClassUtils.loadClassRuntime(labelType);
           final FudgeField labelValue = yLabelValues.remove();
           final Object label = deserializer.fieldValueToObject(labelClass, labelValue);
           yLabels.add(label);
@@ -175,21 +175,21 @@ final class LabelledMatrix2DBuilder {
     }
 
   }
-  
+
   @FudgeBuilderFor(DoubleCurrencyLabelledMatrix2D.class)
   public static final class DoubleCurrencyLabelledMatrix2DBuilder extends AbstractFudgeBuilder<DoubleCurrencyLabelledMatrix2D> {
-    
-    @Override
-    protected void buildMessage(FudgeSerializer serializer, MutableFudgeMsg message, DoubleCurrencyLabelledMatrix2D object) {
-      MutableFudgeMsg msg = serializer.newMessage();
 
-      Double[] xKeys = object.getXKeys();
-      Object[] xLabels = object.getXLabels();
-      Currency[] yKeys = object.getYKeys();
-      Object[] yLabels = object.getYLabels();
-      double[][] values = object.getValues();
-      int n = yKeys.length;
-      int m = xKeys.length;
+    @Override
+    protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final DoubleCurrencyLabelledMatrix2D object) {
+      final MutableFudgeMsg msg = serializer.newMessage();
+
+      final Double[] xKeys = object.getXKeys();
+      final Object[] xLabels = object.getXLabels();
+      final Currency[] yKeys = object.getYKeys();
+      final Object[] yLabels = object.getYLabels();
+      final double[][] values = object.getValues();
+      final int n = yKeys.length;
+      final int m = xKeys.length;
       for (int i = 0; i < n; i++) {
         msg.add(Y_LABEL_TYPE_ORDINAL, yLabels[i].getClass().getName());
         msg.add(Y_KEY_ORDINAL, yKeys[i]);
@@ -216,18 +216,18 @@ final class LabelledMatrix2DBuilder {
     }
 
     @Override
-    public DoubleCurrencyLabelledMatrix2D buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-      FudgeMsg msg = message.getMessage(MATRIX_FIELD);
-      Queue<String> xLabelTypes = new LinkedList<String>();
-      Queue<FudgeField> xLabelValues = new LinkedList<FudgeField>();
-      Queue<String> yLabelTypes = new LinkedList<String>();
-      Queue<FudgeField> yLabelValues = new LinkedList<FudgeField>();
+    public DoubleCurrencyLabelledMatrix2D buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+      final FudgeMsg msg = message.getMessage(MATRIX_FIELD);
+      final Queue<String> xLabelTypes = new LinkedList<>();
+      final Queue<FudgeField> xLabelValues = new LinkedList<>();
+      final Queue<String> yLabelTypes = new LinkedList<>();
+      final Queue<FudgeField> yLabelValues = new LinkedList<>();
 
-      final List<Double> xKeys = new LinkedList<Double>();
-      final List<Object> xLabels = new LinkedList<Object>();
-      final List<Currency> yKeys = new LinkedList<Currency>();
-      final List<Object> yLabels = new LinkedList<Object>();
-      final List<List<Double>> values = new LinkedList<List<Double>>();
+      final List<Double> xKeys = new LinkedList<>();
+      final List<Object> xLabels = new LinkedList<>();
+      final List<Currency> yKeys = new LinkedList<>();
+      final List<Object> yLabels = new LinkedList<>();
+      final List<List<Double>> values = new LinkedList<>();
 
       boolean newRow = true;
       int count = -1;
@@ -254,9 +254,9 @@ final class LabelledMatrix2DBuilder {
             yLabelValues.add(field);
             break;
           case VALUE_ORDINAL:
-            Double value = (Double) field.getValue();
+            final Double value = (Double) field.getValue();
             if (newRow) {
-              List<Double> row = new ArrayList<Double>();
+              final List<Double> row = new ArrayList<>();
               row.add(value);
               values.add(row);
               newRow = false;
@@ -269,7 +269,7 @@ final class LabelledMatrix2DBuilder {
         if (!xLabelTypes.isEmpty() && !xLabelValues.isEmpty()) {
           // Have a type and a value, which can be consumed
           final String labelType = xLabelTypes.remove();
-          Class<?> labelClass = ClassUtils.loadClassRuntime(labelType);
+          final Class<?> labelClass = ClassUtils.loadClassRuntime(labelType);
           final FudgeField labelValue = xLabelValues.remove();
           final Object label = deserializer.fieldValueToObject(labelClass, labelValue);
           xLabels.add(label);
@@ -277,7 +277,7 @@ final class LabelledMatrix2DBuilder {
         if (!yLabelTypes.isEmpty() && !yLabelValues.isEmpty()) {
           // Have a type and a value, which can be consumed
           final String labelType = yLabelTypes.remove();
-          Class<?> labelClass = ClassUtils.loadClassRuntime(labelType);
+          final Class<?> labelClass = ClassUtils.loadClassRuntime(labelType);
           final FudgeField labelValue = yLabelValues.remove();
           final Object label = deserializer.fieldValueToObject(labelClass, labelValue);
           yLabels.add(label);
@@ -308,7 +308,7 @@ final class LabelledMatrix2DBuilder {
       }
       return new DoubleCurrencyLabelledMatrix2D(xKeysArray, xLabelsArray, xTitle, yKeysArray, yLabelsArray, yTitle, valuesArray, valuesTitle);
     }
-    
+
   }
-  
+
 }

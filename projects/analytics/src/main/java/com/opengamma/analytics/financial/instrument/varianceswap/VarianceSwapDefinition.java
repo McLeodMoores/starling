@@ -22,15 +22,17 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * A variance swap is a forward contract on the realized variance of an underlying security.
- * The floating leg of a variance swap is the realized variance.
+ * A variance swap is a forward contract on the realized variance of an underlying security. The floating leg of a variance swap is the realized variance.
  */
 public class VarianceSwapDefinition implements InstrumentDefinitionWithData<VarianceSwap, DoubleTimeSeries<LocalDate>> {
   /** The currency */
   private final Currency _currency;
   /** The volatility strike. _varStrike := _volStrike^2 until we need something more elaborate */
   private final double _volStrike;
-  /** The volatility notional. _varNotional := 0.5 * _volNotional / _volStrike. Provides a rough estimate of the payoff if volatility realizes 1 point above strike */
+  /**
+   * The volatility notional. _varNotional := 0.5 * _volNotional / _volStrike. Provides a rough estimate of the payoff if volatility realizes 1 point above
+   * strike
+   */
   private final double _volNotional;
   /** The variance strike. Computed internally */
   private final double _varStrike;
@@ -54,17 +56,27 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
   /**
    * Constructor based upon vega (volatility) parameterisation - strike and notional.
    *
-   * @param obsStartDate Date of first observation, not null
-   * @param obsEndDate Date of final observation, not null
-   * @param settlementDate Date of cash settlement, not null
-   * @param obsFreq The frequency of observations, not null
-   * @param currency Currency of cash settlement, not null
-   * @param calendar Specification of good business days (and holidays), not null
-   * @param annualizationFactor Number of business days per year, not null
-   * @param volStrike Fair value of volatility, the square root of variance, struck at trade date
-   * @param volNotional Trade pays the difference between realized and strike variance multiplied by 0.5 * volNotional / volStrike
+   * @param obsStartDate
+   *          Date of first observation, not null
+   * @param obsEndDate
+   *          Date of final observation, not null
+   * @param settlementDate
+   *          Date of cash settlement, not null
+   * @param obsFreq
+   *          The frequency of observations, not null
+   * @param currency
+   *          Currency of cash settlement, not null
+   * @param calendar
+   *          Specification of good business days (and holidays), not null
+   * @param annualizationFactor
+   *          Number of business days per year, not null
+   * @param volStrike
+   *          Fair value of volatility, the square root of variance, struck at trade date
+   * @param volNotional
+   *          Trade pays the difference between realized and strike variance multiplied by 0.5 * volNotional / volStrike
    */
-  public VarianceSwapDefinition(final ZonedDateTime obsStartDate, final ZonedDateTime obsEndDate, final ZonedDateTime settlementDate, final PeriodFrequency obsFreq,
+  public VarianceSwapDefinition(final ZonedDateTime obsStartDate, final ZonedDateTime obsEndDate, final ZonedDateTime settlementDate,
+      final PeriodFrequency obsFreq,
       final Currency currency, final Calendar calendar, final double annualizationFactor, final double volStrike, final double volNotional) {
     ArgumentChecker.notNull(obsStartDate, "obsStartDate");
     ArgumentChecker.notNull(obsEndDate, "obsEndDate");
@@ -73,7 +85,8 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.notNegativeOrZero(annualizationFactor, "annualizationFactor");
     ArgumentChecker.notNull(calendar, "calendar");
-    ArgumentChecker.isTrue(obsFreq.equals(PeriodFrequency.DAILY), "Only DAILY observation frequencies are currently supported. obsFreq = " + obsFreq.toString());
+    ArgumentChecker.isTrue(obsFreq.equals(PeriodFrequency.DAILY),
+        "Only DAILY observation frequencies are currently supported. obsFreq = " + obsFreq.toString());
 
     _obsStartDate = obsStartDate;
     _obsEndDate = obsEndDate;
@@ -92,37 +105,59 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
 
   /**
    * Static constructor of a variance swap using a vega parameterisation of the contract.
-   * @param obsStartDate Date of the first observation, not null
-   * @param obsEndDate Date of the last observation, not null
-   * @param settlementDate The settlement date, not null
-   * @param obsFreq The observation frequency, not null
-   * @param currency The currency, not null
-   * @param calendar The calendar used for calculating good business days, not null
-   * @param annualizationFactor The annualisation factor
-   * @param volStrike The volatility strike
-   * @param volNotional The volatility notional
+   * 
+   * @param obsStartDate
+   *          Date of the first observation, not null
+   * @param obsEndDate
+   *          Date of the last observation, not null
+   * @param settlementDate
+   *          The settlement date, not null
+   * @param obsFreq
+   *          The observation frequency, not null
+   * @param currency
+   *          The currency, not null
+   * @param calendar
+   *          The calendar used for calculating good business days, not null
+   * @param annualizationFactor
+   *          The annualisation factor
+   * @param volStrike
+   *          The volatility strike
+   * @param volNotional
+   *          The volatility notional
    * @return The contract definition
    */
   public static VarianceSwapDefinition fromVegaParams(final ZonedDateTime obsStartDate, final ZonedDateTime obsEndDate, final ZonedDateTime settlementDate,
-      final PeriodFrequency obsFreq, final Currency currency, final Calendar calendar, final double annualizationFactor, final double volStrike, final double volNotional) {
+      final PeriodFrequency obsFreq, final Currency currency, final Calendar calendar, final double annualizationFactor, final double volStrike,
+      final double volNotional) {
     return new VarianceSwapDefinition(obsStartDate, obsEndDate, settlementDate, obsFreq, currency, calendar, annualizationFactor, volStrike, volNotional);
   }
 
   /**
    * Static constructor of a variance swap using a variance parameterisation of the contract.
-   * @param obsStartDate Date of the first observation, not null
-   * @param obsEndDate Date of the last observation, not null
-   * @param settlementDate The settlement date, not null
-   * @param obsFreq The observation frequency, not null
-   * @param currency The currency, not null
-   * @param calendar The calendar used for calculating good business days, not null
-   * @param annualizationFactor The annualisation factor
-   * @param varStrike The variance strike, not negative
-   * @param varNotional The variance notional
+   * 
+   * @param obsStartDate
+   *          Date of the first observation, not null
+   * @param obsEndDate
+   *          Date of the last observation, not null
+   * @param settlementDate
+   *          The settlement date, not null
+   * @param obsFreq
+   *          The observation frequency, not null
+   * @param currency
+   *          The currency, not null
+   * @param calendar
+   *          The calendar used for calculating good business days, not null
+   * @param annualizationFactor
+   *          The annualisation factor
+   * @param varStrike
+   *          The variance strike, not negative
+   * @param varNotional
+   *          The variance notional
    * @return The contract definition
    */
   public static VarianceSwapDefinition fromVarianceParams(final ZonedDateTime obsStartDate, final ZonedDateTime obsEndDate, final ZonedDateTime settlementDate,
-      final PeriodFrequency obsFreq, final Currency currency, final Calendar calendar, final double annualizationFactor, final double varStrike, final double varNotional) {
+      final PeriodFrequency obsFreq, final Currency currency, final Calendar calendar, final double annualizationFactor, final double varStrike,
+      final double varNotional) {
     ArgumentChecker.notNegative(varStrike, "variance strike");
     final double volStrike = Math.sqrt(varStrike);
     final double volNotional = 2 * varNotional * volStrike;
@@ -130,10 +165,14 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
   }
 
   /**
-   * @param obsStartDate The observation start date
-   * @param obsEndDate The observation end date
-   * @param calendar The holiday calendar
-   * @param obsFreq The observation frequency
+   * @param obsStartDate
+   *          The observation start date
+   * @param obsEndDate
+   *          The observation end date
+   * @param calendar
+   *          The holiday calendar
+   * @param obsFreq
+   *          The observation frequency
    * @return The number of expected business days between the start and end dates
    * @deprecated This method delegates to {@link InstrumentDefinitionUtils#countExpectedGoodDays}
    */
@@ -143,10 +182,9 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
   }
 
   /**
-   * {@inheritDoc}
-   * The definition is responsible for constructing a view of the variance swap as of a particular date.
-   * An empty time series is used for the variance observations, and so this method should only be used
-   * in the case where variance observation has not begun.
+   * {@inheritDoc} The definition is responsible for constructing a view of the variance swap as of a particular date. An empty time series is used for the
+   * variance observations, and so this method should only be used in the case where variance observation has not begun.
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -156,10 +194,8 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
   }
 
   /**
-   * {@inheritDoc}
-   * The definition is responsible for constructing a view of the variance swap as of a particular date.
-   * An empty time series is used for the variance observations, and so this method should only be used
-   * in the case where variance observation has not begun.
+   * {@inheritDoc} The definition is responsible for constructing a view of the variance swap as of a particular date. An empty time series is used for the
+   * variance observations, and so this method should only be used in the case where variance observation has not begun.
    */
   @Override
   public VarianceSwap toDerivative(final ZonedDateTime date) {
@@ -167,11 +203,10 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
   }
 
   /**
-   * {@inheritDoc}
-   * The definition is responsible for constructing a view of the variance swap as of a particular date.
-   * In particular,  it resolves calendars. The VarianceSwap needs an array of observations, as well as its *expected* length.
-   * The actual number of observations may be less than that expected at trade inception because of a market disruption event.
-   * ( For an example of a market disruption event, see http://cfe.cboe.com/Products/Spec_VT.aspx )
+   * {@inheritDoc} The definition is responsible for constructing a view of the variance swap as of a particular date. In particular, it resolves calendars. The
+   * VarianceSwap needs an array of observations, as well as its *expected* length. The actual number of observations may be less than that expected at trade
+   * inception because of a market disruption event. ( For an example of a market disruption event, see http://cfe.cboe.com/Products/Spec_VT.aspx )
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -181,11 +216,9 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
   }
 
   /**
-   * {@inheritDoc}
-   * The definition is responsible for constructing a view of the variance swap as of a particular date.
-   * In particular,  it resolves calendars. The variance swap needs an array of observations, as well as its *expected* length.
-   * The actual number of observations may be less than that expected at trade inception because of a market disruption event.
-   * ( For an example of a market disruption event, see http://cfe.cboe.com/Products/Spec_VT.aspx )
+   * {@inheritDoc} The definition is responsible for constructing a view of the variance swap as of a particular date. In particular, it resolves calendars. The
+   * variance swap needs an array of observations, as well as its *expected* length. The actual number of observations may be less than that expected at trade
+   * inception because of a market disruption event. ( For an example of a market disruption event, see http://cfe.cboe.com/Products/Spec_VT.aspx )
    */
   @Override
   public VarianceSwap toDerivative(final ZonedDateTime date, final DoubleTimeSeries<LocalDate> underlyingTimeSeries) {
@@ -205,12 +238,14 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
     final int nGoodBusinessDays = InstrumentDefinitionUtils.countExpectedGoodDays(_obsStartDate.toLocalDate(), date.toLocalDate(), _calendar, _obsFreq);
     final int nObsDisrupted = nGoodBusinessDays - observations.length;
     ArgumentChecker.isTrue(nObsDisrupted >= 0, "Have more observations {} than good business days {}", observations.length, nGoodBusinessDays);
-    return new VarianceSwap(timeToObsStart, timeToObsEnd, timeToSettlement, _varStrike, _varNotional, _currency, _annualizationFactor, _nObsExpected, nObsDisrupted,
+    return new VarianceSwap(timeToObsStart, timeToObsEnd, timeToSettlement, _varStrike, _varNotional, _currency, _annualizationFactor, _nObsExpected,
+        nObsDisrupted,
         observations, observationWeights);
   }
 
   /**
    * Gets the first observation date.
+   * 
    * @return the first observation date
    */
   public ZonedDateTime getObsStartDate() {
@@ -219,6 +254,7 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
 
   /**
    * Gets the last observation date.
+   * 
    * @return the last observation date
    */
   public ZonedDateTime getObsEndDate() {
@@ -227,6 +263,7 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
 
   /**
    * Gets the settlement date.
+   * 
    * @return the settlement date
    */
   public ZonedDateTime getSettlementDate() {
@@ -235,6 +272,7 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
 
   /**
    * Gets the observation frequency.
+   * 
    * @return the observation frequency
    */
   public PeriodFrequency getObsFreq() {
@@ -242,8 +280,9 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
   }
 
   /**
-   * Gets the number of observations expected. This is the number of good business days as expected at trade inception.
-   * The actual number of observations may be less if a market disruption event occurs.
+   * Gets the number of observations expected. This is the number of good business days as expected at trade inception. The actual number of observations may be
+   * less if a market disruption event occurs.
+   * 
    * @return the nObsExpected
    */
   public int getObsExpected() {
@@ -252,6 +291,7 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
 
   /**
    * Gets the currency.
+   * 
    * @return the currency
    */
   public Currency getCurrency() {
@@ -260,6 +300,7 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
 
   /**
    * Gets the volatility strike.
+   * 
    * @return the volatility strike
    */
   public double getVolStrike() {
@@ -268,6 +309,7 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
 
   /**
    * Gets the volatility notional.
+   * 
    * @return the volatility notional
    */
   public double getVolNotional() {
@@ -276,6 +318,7 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
 
   /**
    * Gets the variance strike.
+   * 
    * @return the variance strike
    */
   public double getVarStrike() {
@@ -284,6 +327,7 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
 
   /**
    * Gets the variance notional.
+   * 
    * @return the variance notional
    */
   public double getVarNotional() {
@@ -292,6 +336,7 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
 
   /**
    * Gets the calendar.
+   * 
    * @return the calendar
    */
   public Calendar getCalendar() {
@@ -300,6 +345,7 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
 
   /**
    * Gets the annualization factor.
+   * 
    * @return The annualization factor
    */
   public double getAnnualizationFactor() {
@@ -317,11 +363,11 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
     result = prime * result + _calendar.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_volNotional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_volStrike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_annualizationFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -343,19 +389,19 @@ public class VarianceSwapDefinition implements InstrumentDefinitionWithData<Vari
     if (Double.compare(_annualizationFactor, other._annualizationFactor) != 0) {
       return false;
     }
-    if (!(ObjectUtils.equals(_obsStartDate, other._obsStartDate))) {
+    if (!ObjectUtils.equals(_obsStartDate, other._obsStartDate)) {
       return false;
     }
-    if (!(ObjectUtils.equals(_obsEndDate, other._obsEndDate))) {
+    if (!ObjectUtils.equals(_obsEndDate, other._obsEndDate)) {
       return false;
     }
-    if (!(ObjectUtils.equals(_settlementDate, other._settlementDate))) {
+    if (!ObjectUtils.equals(_settlementDate, other._settlementDate)) {
       return false;
     }
-    if (!(ObjectUtils.equals(_currency, other._currency))) {
+    if (!ObjectUtils.equals(_currency, other._currency)) {
       return false;
     }
-    if (!(ObjectUtils.equals(_calendar, other._calendar))) {
+    if (!ObjectUtils.equals(_calendar, other._calendar)) {
       return false;
     }
     return true;

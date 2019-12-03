@@ -21,14 +21,14 @@ public final class CleanRealPriceFromCurvesCalculator extends InstrumentDerivati
   /**
    * The calculator instance.
    */
-  private static final CleanRealPriceFromCurvesCalculator s_instance = new CleanRealPriceFromCurvesCalculator();
+  private static final CleanRealPriceFromCurvesCalculator INSTANCE = new CleanRealPriceFromCurvesCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static CleanRealPriceFromCurvesCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

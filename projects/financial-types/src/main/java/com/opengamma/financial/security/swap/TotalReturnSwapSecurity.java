@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.swap;
@@ -21,6 +21,9 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.LocalDate;
 
+import com.mcleodmoores.analytics.convention.businessday.BusinessDayConventionAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.analytics.financial.instrument.annuity.DateRelativeTo;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -88,7 +91,7 @@ public abstract class TotalReturnSwapSecurity extends FinancialSecurity {
    * Flag that describes whether the reset date is relative to the start or end of the accrual periods.
    */
   @PropertyDefinition(validate = "notNull")
-  private final DateRelativeTo _resetDateRelativeTo = DateRelativeTo.START;
+  private DateRelativeTo _resetDateRelativeTo = DateRelativeTo.START;
 
   /**
    * The frequency of the return payment dates.
@@ -116,26 +119,37 @@ public abstract class TotalReturnSwapSecurity extends FinancialSecurity {
 
   /**
    * Sets only the security type.
-   * @param securityType The security type string.
+   *
+   * @param securityType
+   *          The security type string.
    */
   protected TotalReturnSwapSecurity(final String securityType) {
     super(securityType);
   }
 
   /**
-   * @param securityType The security type string, not null
-   * @param fundingLeg The funding leg, not null
-   * @param assetId The asset external id bundle, not null
-   * @param effectiveDate The effective date, not null
-   * @param maturityDate The maturity date, not null
-   * @param paymentSettlementDays The number of days to settle for the payments
-   * @param paymentBusinessDayConvention The business day convention for the payments, not null
-   * @param paymentFrequency The payment frequency, not null
-   * @param rollConvention The payment roll convention, not null
+   * @param securityType
+   *          The security type string, not null
+   * @param fundingLeg
+   *          The funding leg, not null
+   * @param assetId
+   *          The asset external id bundle, not null
+   * @param effectiveDate
+   *          The effective date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param paymentSettlementDays
+   *          The number of days to settle for the payments
+   * @param paymentBusinessDayConvention
+   *          The business day convention for the payments, not null
+   * @param paymentFrequency
+   *          The payment frequency, not null
+   * @param rollConvention
+   *          The payment roll convention, not null
    */
   public TotalReturnSwapSecurity(final String securityType, final FloatingInterestRateSwapLeg fundingLeg, final ExternalIdBundle assetId,
-      final LocalDate effectiveDate, final LocalDate maturityDate, final int paymentSettlementDays,
-      final BusinessDayConvention paymentBusinessDayConvention, final Frequency paymentFrequency, final RollConvention rollConvention) {
+      final LocalDate effectiveDate, final LocalDate maturityDate, final int paymentSettlementDays, final BusinessDayConvention paymentBusinessDayConvention,
+      final Frequency paymentFrequency, final RollConvention rollConvention) {
     super(securityType);
     setFundingLeg(fundingLeg);
     setAssetId(assetId);
@@ -148,16 +162,38 @@ public abstract class TotalReturnSwapSecurity extends FinancialSecurity {
   }
 
   /**
-   * Gets the <i>n</i>th payment date by returning a custom date if supplied for <i>n</i> or by
-   * using the payment convention information in this security.
-   * @param n The number of the payment date
-   * @param startDate The start date, not null
-   * @param calendar The calendar, not null
+   * Gets the <i>n</i>th payment date by returning a custom date if supplied for <i>n</i> or by using the payment convention information in this security.
+   *
+   * @param n
+   *          The number of the payment date
+   * @param startDate
+   *          The start date, not null
+   * @param calendar
+   *          The calendar, not null
+   * @return The <i>n</i>th payment date
+   * @deprecated Use the {@link #getPaymentDate(int, LocalDate, WorkingDayCalendar)}.
+   */
+  @Deprecated
+  public LocalDate getPaymentDate(final int n, final LocalDate startDate, final Calendar calendar) {
+    return getPaymentDate(n, startDate, WorkingDayCalendarAdapter.of(calendar));
+  }
+
+  /**
+   * Gets the <i>n</i>th payment date by returning a custom date if supplied for <i>n</i> or by using the payment convention information in this security.
+   *
+   * @param n
+   *          The number of the payment date
+   * @param startDate
+   *          The start date, not null
+   * @param calendar
+   *          The calendar, not null
    * @return The <i>n</i>th payment date
    */
-  public LocalDate getPaymentDate(final int n, final LocalDate startDate, final Calendar calendar) {
+  public LocalDate getPaymentDate(final int n, final LocalDate startDate, final WorkingDayCalendar calendar) {
     JodaBeanUtils.notNull(startDate, "startDate");
     JodaBeanUtils.notNull(calendar, "calendar");
+    // TODO will produce dates indefinitely - needs to check effective and
+    // maturity date
     if (getPaymentDates() != null && getPaymentDates().length != 0) {
       final int index = Arrays.binarySearch(_dates, n);
       if (index >= 0) {
@@ -167,7 +203,8 @@ public abstract class TotalReturnSwapSecurity extends FinancialSecurity {
     // override not provided - fall back to convention
     final int monthsToAdvance = (int) PeriodFrequency.convertToPeriodFrequency(getPaymentFrequency()).getPeriod().toTotalMonths() * n;
     final RollDateAdjuster adjuster = getRollConvention().getRollDateAdjuster(monthsToAdvance);
-    final BusinessDayConvention convention = getPaymentBusinessDayConvention();
+    final com.mcleodmoores.analytics.convention.businessday.BusinessDayConvention convention = BusinessDayConventionAdapter
+        .of(getPaymentBusinessDayConvention());
     final int settlementDays = getPaymentSettlementDays();
     return convention.adjustDate(calendar, startDate.plusMonths(adjuster.getMonthsToAdjust()).minusDays(settlementDays).with(adjuster));
   }
@@ -380,6 +417,15 @@ public abstract class TotalReturnSwapSecurity extends FinancialSecurity {
    */
   public DateRelativeTo getResetDateRelativeTo() {
     return _resetDateRelativeTo;
+  }
+
+  /**
+   * Sets flag that describes whether the reset date is relative to the start or end of the accrual periods.
+   * @param resetDateRelativeTo  the new value of the property, not null
+   */
+  public void setResetDateRelativeTo(DateRelativeTo resetDateRelativeTo) {
+    JodaBeanUtils.notNull(resetDateRelativeTo, "resetDateRelativeTo");
+    this._resetDateRelativeTo = resetDateRelativeTo;
   }
 
   /**
@@ -614,7 +660,7 @@ public abstract class TotalReturnSwapSecurity extends FinancialSecurity {
     /**
      * The meta-property for the {@code resetDateRelativeTo} property.
      */
-    private final MetaProperty<DateRelativeTo> _resetDateRelativeTo = DirectMetaProperty.ofReadOnly(
+    private final MetaProperty<DateRelativeTo> _resetDateRelativeTo = DirectMetaProperty.ofReadWrite(
         this, "resetDateRelativeTo", TotalReturnSwapSecurity.class, DateRelativeTo.class);
     /**
      * The meta-property for the {@code paymentFrequency} property.
@@ -861,10 +907,8 @@ public abstract class TotalReturnSwapSecurity extends FinancialSecurity {
           ((TotalReturnSwapSecurity) bean).setPaymentBusinessDayConvention((BusinessDayConvention) newValue);
           return;
         case 397410276:  // resetDateRelativeTo
-          if (quiet) {
-            return;
-          }
-          throw new UnsupportedOperationException("Property cannot be written: resetDateRelativeTo");
+          ((TotalReturnSwapSecurity) bean).setResetDateRelativeTo((DateRelativeTo) newValue);
+          return;
         case 863656438:  // paymentFrequency
           ((TotalReturnSwapSecurity) bean).setPaymentFrequency((Frequency) newValue);
           return;

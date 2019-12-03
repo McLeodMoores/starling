@@ -60,9 +60,9 @@ public class MockFinancialSecuritySource extends AbstractSecuritySource implemen
 
   //-------------------------------------------------------------------------
   @Override
-  public Security get(UniqueId uniqueId) {
+  public Security get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    Security security = _securities.get(uniqueId.getObjectId());
+    final Security security = _securities.get(uniqueId.getObjectId());
     if (security == null) {
       throw new DataNotFoundException("Security not found: " + uniqueId);
     }
@@ -70,10 +70,10 @@ public class MockFinancialSecuritySource extends AbstractSecuritySource implemen
   }
 
   @Override
-  public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    Security security = _securities.get(objectId);
+    final Security security = _securities.get(objectId);
     if (security == null) {
       throw new DataNotFoundException("Security not found: " + objectId);
     }
@@ -81,10 +81,10 @@ public class MockFinancialSecuritySource extends AbstractSecuritySource implemen
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle) {
+  public Collection<Security> get(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
-    List<Security> result = new ArrayList<Security>();
-    for (Security sec : _securities.values()) {
+    final List<Security> result = new ArrayList<>();
+    for (final Security sec : _securities.values()) {
       if (sec.getExternalIdBundle().containsAny(bundle)) {
         result.add(sec);
       }
@@ -93,16 +93,16 @@ public class MockFinancialSecuritySource extends AbstractSecuritySource implemen
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     // Versioning not supported
     return get(bundle);
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle) {
+  public Security getSingle(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
-    for (ExternalId secId : bundle.getExternalIds()) {
-      for (Security sec : _securities.values()) {
+    for (final ExternalId secId : bundle.getExternalIds()) {
+      for (final Security sec : _securities.values()) {
         if (sec.getExternalIdBundle().contains(secId)) {
           return sec;
         }
@@ -110,18 +110,18 @@ public class MockFinancialSecuritySource extends AbstractSecuritySource implemen
     }
     return null;
   }
-  
+
   @Override
-  public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     // Versioning not supported
     return getSingle(bundle);
   }
 
   @Override
-  public Collection<Security> getBondsWithIssuerName(String issuerName) {
+  public Collection<Security> getBondsWithIssuerName(final String issuerName) {
     ArgumentChecker.notNull(issuerName, "issuerName");
-    List<Security> result = new ArrayList<Security>();
-    for (Security sec : _securities.values()) {
+    final List<Security> result = new ArrayList<>();
+    for (final Security sec : _securities.values()) {
       if (sec instanceof BondSecurity && RegexUtils.wildcardMatch(issuerName, ((BondSecurity) sec).getIssuerName())) {
         result.add(sec);
       }
@@ -132,19 +132,19 @@ public class MockFinancialSecuritySource extends AbstractSecuritySource implemen
   //-------------------------------------------------------------------------
   /**
    * Adds a security to the master.
-   * 
+   *
    * @param security  the security to add, not null
    */
-  public void addSecurity(Security security) {
+  public void addSecurity(final Security security) {
     ArgumentChecker.notNull(security, "security");
     IdUtils.setInto(security, _uidSupplier.get());
     _securities.put(security.getUniqueId().getObjectId(), security);
   }
 
-  public void removeSecurity(Security security) {
+  public void removeSecurity(final Security security) {
     ArgumentChecker.notNull(security, "security");
     ArgumentChecker.notNull(security.getUniqueId(), "security.uniqueId");
-    Security prev = _securities.remove(security.getUniqueId().getObjectId());
+    final Security prev = _securities.remove(security.getUniqueId().getObjectId());
     if (prev == null) {
       throw new IllegalArgumentException("Security not found");
     }
@@ -154,11 +154,11 @@ public class MockFinancialSecuritySource extends AbstractSecuritySource implemen
     _changeManager.entityChanged(ChangeType.REMOVED, security.getUniqueId().getObjectId(), null, null, Instant.now());
   }
 
-  
+
   //-------------------------------------------------------------------------
   @Override
   public ChangeManager changeManager() {
     return _changeManager;
   }
-  
+
 }

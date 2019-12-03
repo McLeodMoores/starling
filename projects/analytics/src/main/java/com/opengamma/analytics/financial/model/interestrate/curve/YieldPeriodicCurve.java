@@ -34,9 +34,13 @@ public class YieldPeriodicCurve extends YieldAndDiscountCurve {
 
   /**
    * Constructor.
-   * @param name The curve name.
-   * @param compoundingPeriodsPerYear The number of composition periods per year for the storage curve (1 for annual, 2 for semi-annual, etc.).
-   * @param yieldCurve Curve containing periodically-compounded rates against maturities. Rates are unitless (eg 0.02 for two percent) and maturities are in years.
+   * 
+   * @param name
+   *          The curve name.
+   * @param compoundingPeriodsPerYear
+   *          The number of composition periods per year for the storage curve (1 for annual, 2 for semi-annual, etc.).
+   * @param yieldCurve
+   *          Curve containing periodically-compounded rates against maturities. Rates are unitless (eg 0.02 for two percent) and maturities are in years.
    */
   public YieldPeriodicCurve(final String name, final int compoundingPeriodsPerYear, final DoublesCurve yieldCurve) {
     super(name);
@@ -47,8 +51,11 @@ public class YieldPeriodicCurve extends YieldAndDiscountCurve {
 
   /**
    * Builder from a DoublesCurve using the name of the DoublesCurve as the name of the YieldCurve.
-   * @param compoundingPeriodsPerYear The number of composition periods per year for the storage curve (1 for annual, 2 for semi-annual, etc.).
-   * @param yieldCurve The underlying curve based on yields (periodically-compounded).
+   * 
+   * @param compoundingPeriodsPerYear
+   *          The number of composition periods per year for the storage curve (1 for annual, 2 for semi-annual, etc.).
+   * @param yieldCurve
+   *          The underlying curve based on yields (periodically-compounded).
    * @return The yield curve.
    */
   public static YieldPeriodicCurve from(final int compoundingPeriodsPerYear, final DoublesCurve yieldCurve) {
@@ -58,14 +65,21 @@ public class YieldPeriodicCurve extends YieldAndDiscountCurve {
 
   /**
    * Builder of an interpolated discount factor curve from yields (continuously compounded).
-   * @param nodePoints The node points for the interpolated curve.
-   * @param yields The yields (cc) at the node points.
-   * @param compoundingPeriodsPerYear The number of composition periods per year for the storage curve (1 for annual, 2 for semi-annual, etc.).
-   * @param interpolator The period yield interpolator.
-   * @param name The curve name.
+   * 
+   * @param nodePoints
+   *          The node points for the interpolated curve.
+   * @param yields
+   *          The yields (cc) at the node points.
+   * @param compoundingPeriodsPerYear
+   *          The number of composition periods per year for the storage curve (1 for annual, 2 for semi-annual, etc.).
+   * @param interpolator
+   *          The period yield interpolator.
+   * @param name
+   *          The curve name.
    * @return The periodic yield curve.
    */
-  public static YieldPeriodicCurve fromYieldsInterpolated(final double[] nodePoints, final double[] yields, final int compoundingPeriodsPerYear, final Interpolator1D interpolator, final String name) {
+  public static YieldPeriodicCurve fromYieldsInterpolated(final double[] nodePoints, final double[] yields, final int compoundingPeriodsPerYear,
+      final Interpolator1D interpolator, final String name) {
     final int nbYields = yields.length;
     ArgumentChecker.isTrue(nodePoints.length == nbYields, "Yields array of incorrect length");
     final double[] yieldPeriodic = new double[nbYields];
@@ -130,6 +144,7 @@ public class YieldPeriodicCurve extends YieldAndDiscountCurve {
 
   /**
    * Gets the underlying curve.
+   * 
    * @return The curve.
    */
   public Curve<Double, Double> getCurve() {
@@ -138,6 +153,7 @@ public class YieldPeriodicCurve extends YieldAndDiscountCurve {
 
   /**
    * Returns the number of compounding periods per year.
+   * 
    * @return the number of compounding periods per year.
    */
   public int getCompoundingPeriodsPerYear() {

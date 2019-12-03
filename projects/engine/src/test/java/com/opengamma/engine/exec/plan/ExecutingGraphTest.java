@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec.plan;
@@ -37,8 +37,8 @@ import com.opengamma.util.test.TestGroup;
 public class ExecutingGraphTest {
 
   private CalculationJobItem createItem(final int i) {
-    return new CalculationJobItem(Integer.toString(i), new EmptyFunctionParameters(), ComputationTargetSpecification.NULL, Collections.<ValueSpecification>emptySet(),
-        Collections.<ValueSpecification>emptySet(), ExecutionLogMode.INDICATORS);
+    return new CalculationJobItem(Integer.toString(i), new EmptyFunctionParameters(), ComputationTargetSpecification.NULL,
+        Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), ExecutionLogMode.INDICATORS);
   }
 
   private List<CalculationJobItem> createJobItems(final int i) {

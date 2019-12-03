@@ -50,7 +50,7 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
   }
 
   protected DirectForwardMethodCurveSetUp(final DirectForwardMethodCurveSetUp setup) {
-    //TODO copy
+    // TODO copy
     _curveNames = setup._curveNames;
     _curveTypes = setup._curveTypes;
     _preConstructedCurves = setup._preConstructedCurves;
@@ -184,7 +184,7 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
       _nodes.put(curveName, nodesForCurve);
     }
     nodesForCurve.add(definition);
-    //TODO if market data is already present, log then overwrite
+    // TODO if market data is already present, log then overwrite
     return this;
   }
 
@@ -215,7 +215,6 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
     }
     return type;
   }
-
 
   @Override
   public CurveSetUpInterface rootFindingAbsoluteTolerance(final double tolerance) {

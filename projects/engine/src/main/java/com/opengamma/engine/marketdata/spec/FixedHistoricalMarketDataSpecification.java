@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.spec;
@@ -19,34 +19,35 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 @BeanDefinition(hierarchy = "immutable")
-public class FixedHistoricalMarketDataSpecification extends HistoricalMarketDataSpecification
-    implements MarketDataSpecification {
- 
+public class FixedHistoricalMarketDataSpecification extends HistoricalMarketDataSpecification {
+
   private static final long serialVersionUID = 1L;
-  
+
   @PropertyDefinition(validate = "notNull")
   private final LocalDate _snapshotDate;
 
   /**
-   * Creates an instance with a snapshotDate
-   * 
-   * @param snapshotDate the snapshot date, not null
+   * Creates an instance with a snapshotDate.
+   *
+   * @param snapshotDate
+   *          the snapshot date, not null
    */
-  public FixedHistoricalMarketDataSpecification(LocalDate snapshotDate) {
-   this(null, snapshotDate);
+  public FixedHistoricalMarketDataSpecification(final LocalDate snapshotDate) {
+    this(null, snapshotDate);
   }
 
-  
   /**
-   * Creates an instance with a timeSeriesResolverKey and snapshotDate
-   * 
-   * @param timeSeriesResolverKey the timeseries resolver key, not null
-   * @param snapshotDate the snapshot date, not null
+   * Creates an instance with a timeSeriesResolverKey and snapshotDate.
+   *
+   * @param timeSeriesResolverKey
+   *          the timeseries resolver key, not null
+   * @param snapshotDate
+   *          the snapshot date, not null
    */
-  public FixedHistoricalMarketDataSpecification(String timeSeriesResolverKey, LocalDate snapshotDate) {
+  public FixedHistoricalMarketDataSpecification(final String timeSeriesResolverKey, final LocalDate snapshotDate) {
     super(timeSeriesResolverKey);
     _snapshotDate = ArgumentChecker.notNull(snapshotDate, "snapshotDate");
   }
@@ -114,7 +115,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       FixedHistoricalMarketDataSpecification other = (FixedHistoricalMarketDataSpecification) obj;
-      return JodaBeanUtils.equal(getSnapshotDate(), other.getSnapshotDate()) &&
+      return JodaBeanUtils.equal(_snapshotDate, other._snapshotDate) &&
           super.equals(obj);
     }
     return false;
@@ -123,7 +124,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotDate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_snapshotDate);
     return hash ^ super.hashCode();
   }
 
@@ -143,7 +144,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
   @Override
   protected void toString(StringBuilder buf) {
     super.toString(buf);
-    buf.append("snapshotDate").append('=').append(JodaBeanUtils.toString(getSnapshotDate())).append(',').append(' ');
+    buf.append("snapshotDate").append('=').append(JodaBeanUtils.toString(_snapshotDate)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -247,6 +248,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
      * @param beanToCopy  the bean to copy from, not null
      */
     protected Builder(FixedHistoricalMarketDataSpecification beanToCopy) {
+      super(beanToCopy);
       this._snapshotDate = beanToCopy.getSnapshotDate();
     }
 
@@ -280,19 +282,31 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

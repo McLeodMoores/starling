@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.portfolio.writer;
@@ -60,11 +60,11 @@ import com.opengamma.util.beancompare.BeanCompare;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * A class that writes securities and portfolio positions and trades to the OG masters
+ * A class that writes securities and portfolio positions and trades to the OG masters.
  */
 public class MasterPositionWriter implements PositionWriter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MasterPositionWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MasterPositionWriter.class);
 
   private static final int NUMBER_OF_THREADS = 30;
 
@@ -92,42 +92,47 @@ public class MasterPositionWriter implements PositionWriter {
   private boolean _multithread;
   private ExecutorService _executorService;
 
-
   /**
-   * Create a master portfolio writer
-   * @param portfolioName             The name of the portfolio to create/write to
-   * @param portfolioMaster           The portfolio master to which to write the portfolio
-   * @param positionMaster            The position master to which to write positions
-   * @param securityMaster            The security master to which to write securities
-   * @param mergePositions            If true, attempt to roll multiple positions in the same security into one position,
-   *                                  for all positions in the same portfolio node;
-   *                                  if false, each position is loaded separately
-   * @param keepCurrentPositions      If true, keep the existing portfolio node tree and add new entries;
-   *                                  if false, delete the entire existing portfolio node tree before loading the new
-   *                                  portfolio
-   * @param discardIncompleteOptions  If true, when an underlying cannot be loaded, the position/trade will be discarded;
-   *                                  if false, the option will be created with a dangling reference to the underlying
+   * Create a master portfolio writer.
+   *
+   * @param portfolioName
+   *          The name of the portfolio to create/write to
+   * @param portfolioMaster
+   *          The portfolio master to which to write the portfolio
+   * @param positionMaster
+   *          The position master to which to write positions
+   * @param securityMaster
+   *          The security master to which to write securities
+   * @param mergePositions
+   *          If true, attempt to roll multiple positions in the same security into one position, for all positions in the same portfolio node; if false, each
+   *          position is loaded separately
+   * @param keepCurrentPositions
+   *          If true, keep the existing portfolio node tree and add new entries; if false, delete the entire existing portfolio node tree before loading the
+   *          new portfolio
+   * @param discardIncompleteOptions
+   *          If true, when an underlying cannot be loaded, the position/trade will be discarded; if false, the option will be created with a dangling reference
+   *          to the underlying
    */
 
-  public MasterPositionWriter(String portfolioName,
-                              PortfolioMaster portfolioMaster,
-                              PositionMaster positionMaster,
-                              SecurityMaster securityMaster,
-                              boolean mergePositions,
-                              boolean keepCurrentPositions,
-                              boolean discardIncompleteOptions) {
+  public MasterPositionWriter(final String portfolioName,
+      final PortfolioMaster portfolioMaster,
+      final PositionMaster positionMaster,
+      final SecurityMaster securityMaster,
+      final boolean mergePositions,
+      final boolean keepCurrentPositions,
+      final boolean discardIncompleteOptions) {
     this(portfolioName, portfolioMaster, positionMaster, securityMaster, mergePositions,
-         keepCurrentPositions, discardIncompleteOptions, false);
+        keepCurrentPositions, discardIncompleteOptions, false);
   }
 
-  public MasterPositionWriter(String portfolioName,
-                              PortfolioMaster portfolioMaster,
-                              PositionMaster positionMaster,
-                              SecurityMaster securityMaster,
-                              boolean mergePositions,
-                              boolean keepCurrentPositions,
-                              boolean discardIncompleteOptions,
-                              boolean multithread) {
+  public MasterPositionWriter(final String portfolioName,
+      final PortfolioMaster portfolioMaster,
+      final PositionMaster positionMaster,
+      final SecurityMaster securityMaster,
+      final boolean mergePositions,
+      final boolean keepCurrentPositions,
+      final boolean discardIncompleteOptions,
+      final boolean multithread) {
 
     ArgumentChecker.notEmpty(portfolioName, "portfolioName");
     ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
@@ -145,19 +150,19 @@ public class MasterPositionWriter implements PositionWriter {
     _securitySource = new MasterSecuritySource(_securityMaster);
 
     // unique ID and external ID bundle are ignored when comparing securities
-    Comparator<Object> alwaysEqualComparator = new Comparator<Object>() {
+    final Comparator<Object> alwaysEqualComparator = new Comparator<Object>() {
       @Override
-      public int compare(Object notUsed1, Object notUsed2) {
+      public int compare(final Object notUsed1, final Object notUsed2) {
         return 0;
       }
     };
-    Map<MetaProperty<?>, Comparator<Object>> comparators = ImmutableMap.<MetaProperty<?>, Comparator<Object>>of(
+    final Map<MetaProperty<?>, Comparator<Object>> comparators = ImmutableMap.<MetaProperty<?>, Comparator<Object>> of(
         ManageableSecurity.meta().uniqueId(), alwaysEqualComparator,
         ManageableSecurity.meta().externalIdBundle(), alwaysEqualComparator);
-    _beanCompare = new BeanCompare(comparators, Collections.<Class<?>, Comparator<Object>>emptyMap());
+    _beanCompare = new BeanCompare(comparators, Collections.<Class<?>, Comparator<Object>> emptyMap());
 
-    //_currentPath = new String[0];
-    //_securityIdToPosition = new HashMap<ObjectId, ManageablePosition>();
+    // _currentPath = new String[0];
+    // _securityIdToPosition = new HashMap<ObjectId, ManageablePosition>();
 
     _multithread = multithread;
     if (_multithread) {
@@ -171,18 +176,20 @@ public class MasterPositionWriter implements PositionWriter {
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     _portfolioDocument.getPortfolio().addAttribute(key, value);
   }
 
   /**
-   * Returns the sum of the quantities for the specified positions. This is separated out into a method to allow
-   * custom behaviour for different clients. For instance, in one case the sums of the quantities of all the trades
-   * of both positions might be required, whereas in another case the preference might be to sum the quantities of
-   * the positions themselves without regard to the quantities specified in their trades (this is the default behaviour).
-   * This is not featured in the PositionWriter interface, and as such is a hack.
-   * @param position1 the first position
-   * @param position2 the second position
+   * Returns the sum of the quantities for the specified positions. This is separated out into a method to allow custom behaviour for different clients. For
+   * instance, in one case the sums of the quantities of all the trades of both positions might be required, whereas in another case the preference might be to
+   * sum the quantities of the positions themselves without regard to the quantities specified in their trades (this is the default behaviour). This is not
+   * featured in the PositionWriter interface, and as such is a hack.
+   *
+   * @param position1
+   *          the first position
+   * @param position2
+   *          the second position
    * @return the sum of the positions' quantities
    */
   protected BigDecimal sumPositionQuantities(final ManageablePosition position1, final ManageablePosition position2) {
@@ -190,23 +197,25 @@ public class MasterPositionWriter implements PositionWriter {
   }
 
   /**
-   * WritePosition checks if the position exists in the previous version of the portfolio.
-   * If so, the existing position is reused.
-   * @param position    the position to be written
-   * @param securities  the security(ies) related to the above position, also to be written; index 1 onwards are underlyings
-   * @return            the positions/securities in the masters after writing, null on failure
+   * WritePosition checks if the position exists in the previous version of the portfolio. If so, the existing position is reused.
+   *
+   * @param position
+   *          the position to be written
+   * @param securities
+   *          the security(ies) related to the above position, also to be written; index 1 onwards are underlyings
+   * @return the positions/securities in the masters after writing, null on failure
    */
   @Override
   public ObjectsPair<ManageablePosition, ManageableSecurity[]> writePosition(final ManageablePosition position, final ManageableSecurity[] securities) {
-    
+
     ArgumentChecker.notNull(position, "position");
     ArgumentChecker.notNull(securities, "securities");
 
     // Write securities
     final List<ManageableSecurity> writtenSecurities = new ArrayList<>();
-    for (ManageableSecurity security : securities) {
+    for (final ManageableSecurity security : securities) {
       if (security != null || !_discardIncompleteOptions) { // latter term preserves old behaviour
-        ManageableSecurity writtenSecurity = writeSecurity(security);
+        final ManageableSecurity writtenSecurity = writeSecurity(security);
         if (writtenSecurity != null) {
           writtenSecurities.add(writtenSecurity);
         }
@@ -230,31 +239,30 @@ public class MasterPositionWriter implements PositionWriter {
       existingPosition.setQuantity(sumPositionQuantities(existingPosition, position));
 
       // Add new trades to existing position's trades
-      for (ManageableTrade trade : position.getTrades()) {
+      for (final ManageableTrade trade : position.getTrades()) {
         existingPosition.addTrade(trade);
       }
 
       if (!_multithread) {
         // Save the updated existing position to the position master
-        PositionDocument addedDoc = _positionMaster.update(new PositionDocument(existingPosition));
-        s_logger.debug("Updated position {}, delta position {}", addedDoc.getPosition(), position);
+        final PositionDocument addedDoc = _positionMaster.update(new PositionDocument(existingPosition));
+        LOGGER.debug("Updated position {}, delta position {}", addedDoc.getPosition(), position);
 
         // update position map (huh?)
         _securityIdToPosition.put(writtenSecurities.get(0).getUniqueId().getObjectId(), addedDoc.getPosition());
 
         // Return the updated position
         return ObjectsPair.of(addedDoc.getPosition(), securities);
-      } else {
-        // update position map
-        _securityIdToPosition.put(writtenSecurities.get(0).getUniqueId().getObjectId(), existingPosition);
-
-         // Return the updated position
-        return ObjectsPair.of(existingPosition, securities);
       }
+      // update position map
+      _securityIdToPosition.put(writtenSecurities.get(0).getUniqueId().getObjectId(), existingPosition);
+
+      // Return the updated position
+      return ObjectsPair.of(existingPosition, securities);
     }
     // Attempt to reuse an existing position from the previous version of the portfolio, and return if an exact match is found
     if (!(_originalNode == null) && !_originalNode.getPositionIds().isEmpty()) {
-      ManageablePosition existingPosition = matchExistingPosition(position, writtenSecurities);
+      final ManageablePosition existingPosition = matchExistingPosition(position, writtenSecurities);
       if (existingPosition != null) {
         return ObjectsPair.of(existingPosition,
             writtenSecurities.toArray(new ManageableSecurity[writtenSecurities.size()]));
@@ -266,7 +274,7 @@ public class MasterPositionWriter implements PositionWriter {
       position.setSecurityLink(ManageableSecurityLink.of(writtenSecurities.get(0)));
     }
     // also check trades within position for a valid securityLink
-    for (ManageableTrade trade : position.getTrades()) {
+    for (final ManageableTrade trade : position.getTrades()) {
       if (trade.getSecurityLink().getExternalId().isEmpty() && trade.getSecurityLink().getObjectId() == null) {
         trade.setSecurityLink(ManageableSecurityLink.of(writtenSecurities.get(0))); // or reuse link from position?
       }
@@ -277,9 +285,9 @@ public class MasterPositionWriter implements PositionWriter {
     PositionDocument addedDoc;
     try {
       addedDoc = _positionMaster.add(new PositionDocument(position));
-      s_logger.debug("Added position {}", position);
-    } catch (Exception e) {
-      s_logger.error("Unable to add position " + position.getUniqueId() + ": " + e.getMessage());
+      LOGGER.debug("Added position {}", position);
+    } catch (final Exception e) {
+      LOGGER.error("Unable to add position " + position.getUniqueId() + ": " + e.getMessage());
       return null;
     }
     // Add the new position to the portfolio
@@ -294,7 +302,7 @@ public class MasterPositionWriter implements PositionWriter {
   }
 
   private ManageablePosition matchExistingPosition(final ManageablePosition position, final List<ManageableSecurity> writtenSecurities) {
-    PositionSearchRequest searchReq = new PositionSearchRequest();
+    final PositionSearchRequest searchReq = new PositionSearchRequest();
 
     // Filter positions in current node of original portfolio
     searchReq.setPositionObjectIds(_originalNode.getPositionIds());
@@ -305,13 +313,13 @@ public class MasterPositionWriter implements PositionWriter {
 
     // TODO Compare position attributes
 
-    PositionSearchResult searchResult = _positionMaster.search(searchReq);
-    for (ManageablePosition existingPosition : searchResult.getPositions()) {
+    final PositionSearchResult searchResult = _positionMaster.search(searchReq);
+    for (final ManageablePosition existingPosition : searchResult.getPositions()) {
       ManageablePosition chosenPosition = null;
       if (writtenSecurities.get(0).getUniqueId().getObjectId().equals(existingPosition.getSecurityLink().getObjectId())) {
         chosenPosition = existingPosition;
       } else {
-        for (ExternalId id : existingPosition.getSecurityLink().getExternalIds()) {
+        for (final ExternalId id : existingPosition.getSecurityLink().getExternalIds()) {
           if (writtenSecurities.get(0).getExternalIdBundle().contains(id) && existingPosition.getQuantity().equals(position.getQuantity())) {
             chosenPosition = existingPosition;
             break;
@@ -319,13 +327,13 @@ public class MasterPositionWriter implements PositionWriter {
         }
       }
       // Check for trade equality
-      if (chosenPosition != null && (chosenPosition.getTrades().size() == position.getTrades().size())) {
+      if (chosenPosition != null && chosenPosition.getTrades().size() == position.getTrades().size()) {
 
-        for (ManageableTrade trade : chosenPosition.getTrades()) {
+        for (final ManageableTrade trade : chosenPosition.getTrades()) {
 
-          ManageableTrade comparableTrade = JodaBeanUtils.clone(trade);
+          final ManageableTrade comparableTrade = JodaBeanUtils.clone(trade);
           comparableTrade.setUniqueId(null);
-          if (!(position.getTrades().contains(comparableTrade))) {
+          if (!position.getTrades().contains(comparableTrade)) {
             chosenPosition = null;
             break;
           }
@@ -349,127 +357,112 @@ public class MasterPositionWriter implements PositionWriter {
   }
 
   /**
-   * Searches for an existing security that matches an {@code ExternalId} search, and attempts to
-   * reuse/update it wherever possible, instead of creating a new one.
-   * @param security  The security to be written to the master.
+   * Searches for an existing security that matches an {@code ExternalId} search, and attempts to reuse/update it wherever possible, instead of creating a new
+   * one.
+   *
+   * @param security
+   *          The security to be written to the master.
    * @return The new security as added to the master or the existing security found in the master
    */
-  protected ManageableSecurity writeSecurity(ManageableSecurity security) {
-    
+  protected ManageableSecurity writeSecurity(final ManageableSecurity security) {
+
     ArgumentChecker.notNull(security, "security");
     return SecurityMasterUtils.addOrUpdateSecurity(_securityMaster, security);
-//    SecuritySearchResult searchResult = lookupSecurity(security);
-//
-//    ManageableSecurity foundSecurity = updateSecurityVersionIfFound(security, searchResult);
-//
-//    if (foundSecurity != null) {
-//      return foundSecurity;
-//    } else {
-//      return addSecurity(security);
-//    }
+    // SecuritySearchResult searchResult = lookupSecurity(security);
+    //
+    // ManageableSecurity foundSecurity = updateSecurityVersionIfFound(security, searchResult);
+    //
+    // if (foundSecurity != null) {
+    // return foundSecurity;
+    // } else {
+    // return addSecurity(security);
+    // }
   }
 
   /**
-   * Adds a security to master and returns the newly added security.  Returns null if 
-   * unable to add security
+   * Adds a security to master and returns the newly added security. Returns null if unable to add security
    */
-  private ManageableSecurity addSecurity(ManageableSecurity security) {
-    SecurityDocument addDoc = new SecurityDocument(security);
+  private ManageableSecurity addSecurity(final ManageableSecurity security) {
+    final SecurityDocument addDoc = new SecurityDocument(security);
     try {
-      SecurityDocument result = _securityMaster.add(addDoc);
+      final SecurityDocument result = _securityMaster.add(addDoc);
       return result.getSecurity();
-    } catch (Exception e) {
-      s_logger.error("Failed to write security " + security + " to the security master", e);
+    } catch (final Exception e) {
+      LOGGER.error("Failed to write security " + security + " to the security master", e);
       return null;
     }
   }
 
   /**
    * If there is an existing {@code ManageableSecurity} in the searchResult that matches security, for the 1st match:
-   * <p><ul>
-   * <li>if the only difference is the {@link UniqueId} do nothing and return the existing 
-   * <li> If there are other differences, update the existing and return the new security
-   * <li> If there are no matches or any errors are encountered, return null
-   * @param security new security being searched for
-   * <ul><p>
-   * @param searchResult results from search of Master for security
+   * <ul>
+   * <li>if the only difference is the {@link UniqueId} do nothing and return the existing
+   * <li>If there are other differences, update the existing and return the new security
+   * <li>If there are no matches or any errors are encountered, return null.
+   * </ul>
+   *
+   * @param security
+   *          new security being searched for
+   * @param searchResult
+   *          results from search of Master for security
    * @return found or updated security, null if no matches
    */
-  protected ManageableSecurity updateSecurityVersionIfFound(ManageableSecurity security, SecuritySearchResult searchResult) {
-    for (ManageableSecurity foundSecurity : searchResult.getSecurities()) {
+  protected ManageableSecurity updateSecurityVersionIfFound(final ManageableSecurity security, final SecuritySearchResult searchResult) {
+    for (final ManageableSecurity foundSecurity : searchResult.getSecurities()) {
       if (foundSecurity.getClass().equals(security.getClass())) {
-        s_logger.info("Returning existing security " + foundSecurity);
+        LOGGER.info("Returning existing security " + foundSecurity);
         return foundSecurity;
       }
     }
     return null;
     // TODO this is too prone to finding trivial differences and creating unnecessary new security versions
-    /*for (ManageableSecurity foundSecurity : searchResult.getSecurities()) {
-      List<BeanDifference<?>> differences = null;
-      if (foundSecurity.getClass().equals(security.getClass())) {
-        try {
-          differences = _beanCompare.compare(foundSecurity, security);
-        } catch (Exception e) {
-          s_logger.error("Error comparing securities with ID bundle " + security.getExternalIdBundle(), e);
-          return null;
-        }
-      }
-      if (differences.isEmpty()) {
-        // It's already there, don't update or add it
-        return foundSecurity;
-      } else {
-        s_logger.debug("Updating security " + foundSecurity + " due to differences: " + differences);
-        SecurityDocument updateDoc = new SecurityDocument(security);
-        updateDoc.setVersionFromInstant(Instant.now());
-        try {
-          //updateDoc.setUniqueId(foundSecurity.getUniqueId());
-          //return _securityMaster.update(updateDoc).getSecurity();
-          UniqueId newId = _securityMaster.addVersion(foundSecurity.getUniqueId().getObjectId(), updateDoc);
-          security.setUniqueId(newId);
-          return security;
-        } catch (Throwable t) {
-          s_logger.error("Unable to update security " + security.getUniqueId() + ": " + t.getMessage());
-          return null;
-        }
-      }
-    }
-    // no matching security in searchResult, return null
-    return null;*/
+    /*
+     * for (ManageableSecurity foundSecurity : searchResult.getSecurities()) { List<BeanDifference<?>> differences = null; if
+     * (foundSecurity.getClass().equals(security.getClass())) { try { differences = _beanCompare.compare(foundSecurity, security); } catch (Exception e) {
+     * LOGGER.error("Error comparing securities with ID bundle " + security.getExternalIdBundle(), e); return null; } } if (differences.isEmpty()) { // It's
+     * already there, don't update or add it return foundSecurity; } else { LOGGER.debug("Updating security " + foundSecurity + " due to differences: " +
+     * differences); SecurityDocument updateDoc = new SecurityDocument(security); updateDoc.setVersionFromInstant(Instant.now()); try {
+     * //updateDoc.setUniqueId(foundSecurity.getUniqueId()); //return _securityMaster.update(updateDoc).getSecurity(); UniqueId newId =
+     * _securityMaster.addVersion(foundSecurity.getUniqueId().getObjectId(), updateDoc); security.setUniqueId(newId); return security; } catch (Throwable t) {
+     * LOGGER.error("Unable to update security " + security.getUniqueId() + ": " + t.getMessage()); return null; } } } // no matching security in searchResult,
+     * return null return null;
+     */
   }
 
   /**
-   * Attempts to find a security in the master by {@code ExternalId}.  If any of the {@code ExternalId}s on the security
-   * match any {@code ExternalId} on an existing security, the existing security will be added to the returned 
-   * {@link SecuritySearchResult}.  The current version of the existing securities are used.
-   * @param security new security to search for in Master
+   * Attempts to find a security in the master by {@code ExternalId}. If any of the {@code ExternalId}s on the security match any {@code ExternalId} on an
+   * existing security, the existing security will be added to the returned {@link SecuritySearchResult}. The current version of the existing securities are
+   * used.
+   *
+   * @param security
+   *          new security to search for in Master
    * @return search result
    */
-  protected SecuritySearchResult lookupSecurity(ManageableSecurity security) {
-    SecuritySearchRequest searchReq = new SecuritySearchRequest();
-    ExternalIdSearch idSearch = ExternalIdSearch.of(security.getExternalIdBundle());  // match any one of the IDs
+  protected SecuritySearchResult lookupSecurity(final ManageableSecurity security) {
+    final SecuritySearchRequest searchReq = new SecuritySearchRequest();
+    final ExternalIdSearch idSearch = ExternalIdSearch.of(security.getExternalIdBundle()); // match any one of the IDs
     searchReq.setVersionCorrection(VersionCorrection.ofVersionAsOf(Instant.now())); // valid now
     searchReq.setExternalIdSearch(idSearch);
     searchReq.setFullDetail(true);
     searchReq.setSortOrder(SecuritySearchSortOrder.VERSION_FROM_INSTANT_DESC);
-    SecuritySearchResult searchResult = _securityMaster.search(searchReq);
+    final SecuritySearchResult searchResult = _securityMaster.search(searchReq);
     return searchResult;
   }
 
-  private void testQuantities(ManageablePosition position) {
+  private void testQuantities(final ManageablePosition position) {
     int tradeQty = 0;
-    for (ManageableTrade trade : position.getTrades()) {
+    for (final ManageableTrade trade : position.getTrades()) {
       tradeQty += trade.getQuantity().intValue();
     }
     if (tradeQty != position.getQuantity().intValue()) {
-      s_logger.warn("Position quantity and total trade quantities do not match for " + position);
+      LOGGER.warn("Position quantity and total trade quantities do not match for " + position);
     }
   }
 
   @Override
   public String[] getCurrentPath() {
-    Stack<ManageablePortfolioNode> stack = 
-        _portfolioDocument.getPortfolio().getRootNode().findNodeStackByObjectId(_currentNode.getUniqueId());
-    String[] result = new String[stack.size()];
+    final Stack<ManageablePortfolioNode> stack = _portfolioDocument.getPortfolio().getRootNode().findNodeStackByObjectId(_currentNode.getUniqueId());
+    final String[] result = new String[stack.size()];
     int i = stack.size();
     while (!stack.isEmpty()) {
       result[--i] = stack.pop().getName();
@@ -478,14 +471,14 @@ public class MasterPositionWriter implements PositionWriter {
   }
 
   @Override
-  public void setPath(String[] newPath) {
+  public void setPath(final String[] newPath) {
     ArgumentChecker.noNulls(newPath, "newPath");
 
     if (!Arrays.equals(newPath, _currentPath)) {
 
       // Update positions in position map, concurrently, and wait for their completion
       if (_mergePositions && _multithread) {
-        List<Callable<Integer>> tasks = new ArrayList<>();
+        final List<Callable<Integer>> tasks = new ArrayList<>();
         for (final ManageablePosition position : _securityIdToPosition.values()) {
           testQuantities(position);
           tasks.add(new Callable<Integer>() {
@@ -493,21 +486,21 @@ public class MasterPositionWriter implements PositionWriter {
             public Integer call() throws Exception {
               try {
                 // Update the position in the position master
-                PositionDocument addedDoc = _positionMaster.update(new PositionDocument(position));
-                s_logger.debug("Updated position {}", position);
-                 // Add the new position to the portfolio node
+                final PositionDocument addedDoc = _positionMaster.update(new PositionDocument(position));
+                LOGGER.debug("Updated position {}", position);
+                // Add the new position to the portfolio node
                 _currentNode.addPosition(addedDoc.getUniqueId());
-              } catch (Exception e) {
-                s_logger.error("Unable to update position " + position.getUniqueId() + ": " + e.getMessage());
+              } catch (final Exception e) {
+                LOGGER.error("Unable to update position " + position.getUniqueId() + ": " + e.getMessage());
               }
               return 0;
             }
           });
         }
         try {
-          List<Future<Integer>> futures = _executorService.invokeAll(tasks);
-        } catch (Exception e) {
-          s_logger.warn("ExecutorService invokeAll failed: " + e.getMessage());
+          final List<Future<Integer>> futures = _executorService.invokeAll(tasks);
+        } catch (final Exception e) {
+          LOGGER.warn("ExecutorService invokeAll failed: " + e.getMessage());
         }
       }
 
@@ -523,35 +516,36 @@ public class MasterPositionWriter implements PositionWriter {
 
       // If keeping original portfolio nodes and merging positions, populate position map with existing positions in node
       if (_keepCurrentPositions && _mergePositions && _originalNode != null) {
-        s_logger.debug("Storing security associations for positions " + _originalNode.getPositionIds() + " at path " + StringUtils.join(newPath, '/'));
-        for (ObjectId positionId : _originalNode.getPositionIds()) {
+        LOGGER.debug("Storing security associations for positions " + _originalNode.getPositionIds() + " at path " + StringUtils.join(newPath, '/'));
+        for (final ObjectId positionId : _originalNode.getPositionIds()) {
           ManageablePosition position = null;
           try {
             position = _positionMaster.get(positionId, VersionCorrection.LATEST).getPosition();
-          } catch (Exception e) {
+          } catch (final Exception e) {
             // no action
-            s_logger.error("Exception retrieving position " + positionId, e);
+            LOGGER.error("Exception retrieving position " + positionId, e);
           }
           if (position != null) {
             position.getSecurityLink().resolve(_securitySource);
-            if (position.getSecurity() != null) {
-              if (_securityIdToPosition.containsKey(position.getSecurity())) {
-                ManageablePosition existing = _securityIdToPosition.get(position.getSecurity());
-                s_logger.warn("Merging positions but found existing duplicates under path " + StringUtils.join(newPath, '/') + ": " + position + " and " + existing
-                    + ".  New trades for security " + position.getSecurity().getUniqueId().getObjectId() + " will be added to position " + position.getUniqueId());
-              
+            final ObjectId objectId = position.getSecurity().getUniqueId().getObjectId();
+            if (objectId != null) {
+              if (_securityIdToPosition.containsKey(objectId)) {
+                final ManageablePosition existing = _securityIdToPosition.get(objectId);
+                LOGGER.warn("Merging positions but found existing duplicates under path " + StringUtils.join(newPath, '/')
+                    + ": " + position + " and " + existing + ".  New trades for security " + objectId + " will be added to position " + position.getUniqueId());
+
               } else {
-                _securityIdToPosition.put(position.getSecurity().getUniqueId().getObjectId(), position);
+                _securityIdToPosition.put(objectId, position);
               }
             }
           }
         }
-        if (s_logger.isDebugEnabled()) {
-          StringBuilder sb = new StringBuilder("Cached security to position mappings at path ").append(StringUtils.join(newPath, '/')).append(":");
-          for (Map.Entry<ObjectId, ManageablePosition> entry : _securityIdToPosition.entrySet()) {
+        if (LOGGER.isDebugEnabled()) {
+          final StringBuilder sb = new StringBuilder("Cached security to position mappings at path ").append(StringUtils.join(newPath, '/')).append(":");
+          for (final Map.Entry<ObjectId, ManageablePosition> entry : _securityIdToPosition.entrySet()) {
             sb.append(System.lineSeparator()).append("  ").append(entry.getKey()).append(" = ").append(entry.getValue().getUniqueId());
           }
-          s_logger.debug(sb.toString());
+          LOGGER.debug(sb.toString());
         }
       }
 
@@ -563,7 +557,7 @@ public class MasterPositionWriter implements PositionWriter {
   public void flush() {
     _portfolioDocument = _portfolioMaster.update(_portfolioDocument);
   }
-  
+
   @Override
   public void close() {
     // Execute remaining position writing threads, which will update the portfolio nodes with any written positions'
@@ -575,17 +569,17 @@ public class MasterPositionWriter implements PositionWriter {
     // Write the portfolio (include the node tree) to the portfolio master
     flush();
   }
-  
-  private ManageablePortfolioNode findNode(String[] path, ManageablePortfolioNode startNode) {
+
+  private ManageablePortfolioNode findNode(final String[] path, final ManageablePortfolioNode startNode) {
 
     // Degenerate case
     if (path.length == 0) {
       return startNode;
     }
 
-    for (ManageablePortfolioNode childNode : startNode.getChildNodes()) {
+    for (final ManageablePortfolioNode childNode : startNode.getChildNodes()) {
       if (path[0].equals(childNode.getName())) {
-        ManageablePortfolioNode result = findNode((String[]) ArrayUtils.subarray(path, 1, path.length), childNode);
+        final ManageablePortfolioNode result = findNode((String[]) ArrayUtils.subarray(path, 1, path.length), childNode);
         if (result != null) {
           return result;
         }
@@ -593,19 +587,19 @@ public class MasterPositionWriter implements PositionWriter {
     }
     return null;
   }
-  
-  private ManageablePortfolioNode getOrCreateNode(String[] path, ManageablePortfolioNode startNode) {
+
+  private ManageablePortfolioNode getOrCreateNode(final String[] path, final ManageablePortfolioNode startNode) {
     ManageablePortfolioNode node = startNode;
-    for (String p : path) {
+    for (final String p : path) {
       ManageablePortfolioNode foundNode = null;
-      for (ManageablePortfolioNode n : node.getChildNodes()) {
+      for (final ManageablePortfolioNode n : node.getChildNodes()) {
         if (n.getName().equals(p)) {
           foundNode = n;
           break;
         }
       }
       if (foundNode == null) {
-        ManageablePortfolioNode newNode = new ManageablePortfolioNode(p);
+        final ManageablePortfolioNode newNode = new ManageablePortfolioNode(p);
         node.addChildNode(newNode);
         node = newNode;
       } else {
@@ -615,21 +609,21 @@ public class MasterPositionWriter implements PositionWriter {
     return node;
   }
 
-  protected void createPortfolio(String portfolioName) {
+  protected void createPortfolio(final String portfolioName) {
 
     // Check to see whether the portfolio already exists
-    PortfolioSearchRequest portSearchRequest = new PortfolioSearchRequest();
+    final PortfolioSearchRequest portSearchRequest = new PortfolioSearchRequest();
     portSearchRequest.setName(portfolioName);
-    PortfolioSearchResult portSearchResult = _portfolioMaster.search(portSearchRequest);
+    final PortfolioSearchResult portSearchResult = _portfolioMaster.search(portSearchRequest);
 
     _portfolioDocument = portSearchResult.getFirstDocument();
 
     // If it doesn't, create it (add)
     if (_portfolioDocument == null) {
       // Create a new root node
-      ManageablePortfolioNode rootNode = new ManageablePortfolioNode(portfolioName);
+      final ManageablePortfolioNode rootNode = new ManageablePortfolioNode(portfolioName);
 
-      ManageablePortfolio portfolio = new ManageablePortfolio(portfolioName, rootNode);
+      final ManageablePortfolio portfolio = new ManageablePortfolio(portfolioName, rootNode);
       _portfolioDocument = new PortfolioDocument();
       _portfolioDocument.setPortfolio(portfolio);
       _portfolioDocument = _portfolioMaster.add(_portfolioDocument);
@@ -641,7 +635,7 @@ public class MasterPositionWriter implements PositionWriter {
 
       // If it does, create a new version of the existing portfolio (update)
     } else {
-      ManageablePortfolio portfolio = _portfolioDocument.getPortfolio();
+      final ManageablePortfolio portfolio = _portfolioDocument.getPortfolio();
       _originalRoot = portfolio.getRootNode();
       _originalNode = _originalRoot;
 
@@ -668,9 +662,9 @@ public class MasterPositionWriter implements PositionWriter {
   }
 
   private static ManageablePortfolioNode cloneTree(final ManageablePortfolioNode originalRoot) {
-    ManageablePortfolioNode newRoot = JodaBeanUtils.clone(originalRoot);
+    final ManageablePortfolioNode newRoot = JodaBeanUtils.clone(originalRoot);
     newRoot.setChildNodes(new ArrayList<ManageablePortfolioNode>());
-    for (ManageablePortfolioNode child : originalRoot.getChildNodes()) {
+    for (final ManageablePortfolioNode child : originalRoot.getChildNodes()) {
       newRoot.addChildNode(cloneTree(child));
     }
     return newRoot;

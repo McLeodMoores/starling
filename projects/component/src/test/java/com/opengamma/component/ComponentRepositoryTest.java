@@ -42,9 +42,9 @@ public class ComponentRepositoryTest {
   private static final ComponentLogger LOGGER = ComponentLogger.Sink.INSTANCE;
 
   public void test_registerSimple() {
-    ComponentRepository repo = new ComponentRepository(LOGGER);
-    ComponentInfo info = new ComponentInfo(MockSimple.class, "test");
-    MockSimple mock = new MockSimple();
+    final ComponentRepository repo = new ComponentRepository(LOGGER);
+    final ComponentInfo info = new ComponentInfo(MockSimple.class, "test");
+    final MockSimple mock = new MockSimple();
     repo.registerComponent(info, mock);
     assertEquals(1, repo.getInstanceMap().size());
     assertEquals(mock, repo.getInstanceMap().get(info.toComponentKey()));
@@ -57,11 +57,11 @@ public class ComponentRepositoryTest {
     assertEquals(info, repo.findInfo(MockSimple.class, "test"));
     assertEquals(info, repo.findInfo("MockSimple", "test"));
     assertEquals(info, repo.findInfo("MockSimple::test"));
-    LinkedHashMap<String, String> input = new LinkedHashMap<>();
+    final LinkedHashMap<String, String> input = new LinkedHashMap<>();
     input.put("a", "MockSimple::test");
     input.put("b", "Rubbish::test");
     input.put("c", "MockSimple::test");
-    LinkedHashMap<String, ComponentInfo> found = repo.findInfos(input);
+    final LinkedHashMap<String, ComponentInfo> found = repo.findInfos(input);
     assertEquals(2, found.size());
     assertEquals(info, found.get("a"));
     assertEquals(info, found.get("c"));
@@ -71,9 +71,9 @@ public class ComponentRepositoryTest {
   }
 
   public void test_registerLifecycle() {
-    ComponentRepository repo = new ComponentRepository(LOGGER);
-    ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
-    MockInterfaces mock = new MockInterfaces();
+    final ComponentRepository repo = new ComponentRepository(LOGGER);
+    final ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
+    final MockInterfaces mock = new MockInterfaces();
     repo.registerComponent(info, mock);
     assertEquals(1, repo.getInstanceMap().size());
     assertEquals(mock, repo.getInstanceMap().get(info.toComponentKey()));
@@ -94,7 +94,7 @@ public class ComponentRepositoryTest {
   }
 
   public void test_registerPhased() {
-    ComponentRepository repo = new ComponentRepository(LOGGER);
+    final ComponentRepository repo = new ComponentRepository(LOGGER);
     final List<String> order = new ArrayList<>();
     class Simple1 implements Lifecycle {
       @Override
@@ -178,9 +178,9 @@ public class ComponentRepositoryTest {
   }
 
   public void test_registerSCAware() {
-    ComponentRepository repo = new ComponentRepository(LOGGER);
-    ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
-    MockInterfaces mock = new MockInterfaces();
+    final ComponentRepository repo = new ComponentRepository(LOGGER);
+    final ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
+    final MockInterfaces mock = new MockInterfaces();
     repo.registerComponent(info, mock);
     assertEquals(1, repo.getInstanceMap().size());
     assertEquals(mock, repo.getInstanceMap().get(info.toComponentKey()));
@@ -196,9 +196,9 @@ public class ComponentRepositoryTest {
   }
 
   public void test_registerInitializingBean() {
-    ComponentRepository repo = new ComponentRepository(LOGGER);
-    ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
-    MockInterfaces mock = new MockInterfaces();
+    final ComponentRepository repo = new ComponentRepository(LOGGER);
+    final ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
+    final MockInterfaces mock = new MockInterfaces();
     assertEquals(0, mock.inits);
     repo.registerComponent(info, mock);
     assertEquals(1, mock.inits);
@@ -213,9 +213,9 @@ public class ComponentRepositoryTest {
   }
 
   public void test_registerFactoryBean() {
-    ComponentRepository repo = new ComponentRepository(LOGGER);
-    ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
-    MockFactory mock = new MockFactory();
+    final ComponentRepository repo = new ComponentRepository(LOGGER);
+    final ComponentInfo info = new ComponentInfo(MockInterfaces.class, "test");
+    final MockFactory mock = new MockFactory();
     assertEquals(0, mock.inits);
     assertEquals(0, mock.created.inits);
     repo.registerComponent(info, mock);
@@ -233,8 +233,8 @@ public class ComponentRepositoryTest {
 
   @Test(expectedExceptions = RuntimeException.class)
   public void test_registerAfterStart() {
-    ComponentRepository repo = new ComponentRepository(LOGGER);
-    ComponentInfo info = new ComponentInfo(MockSimple.class, "test");
+    final ComponentRepository repo = new ComponentRepository(LOGGER);
+    final ComponentInfo info = new ComponentInfo(MockSimple.class, "test");
     repo.registerComponent(info, new MockSimple());
     repo.start();
     repo.registerComponent(info, new MockSimple());
@@ -252,11 +252,11 @@ public class ComponentRepositoryTest {
   @Test
   public void test_registerMBean() throws MalformedObjectNameException, AttributeNotFoundException, MBeanException, ReflectionException, InstanceNotFoundException {
 
-    MBeanServer server = createMBeanServer();
+    final MBeanServer server = createMBeanServer();
 
-    ComponentRepository repo = createComponentRepository(server);
+    final ComponentRepository repo = createComponentRepository(server);
 
-    ObjectName registrationName = new ObjectName("test:name=MBean");
+    final ObjectName registrationName = new ObjectName("test:name=MBean");
     repo.registerMBean(new TestMBean(), registrationName);
     repo.start();
 
@@ -277,11 +277,11 @@ public class ComponentRepositoryTest {
   @Test
   public void test_registerMXBean() throws MalformedObjectNameException, AttributeNotFoundException, MBeanException, ReflectionException, InstanceNotFoundException {
 
-    MBeanServer server = createMBeanServer();
+    final MBeanServer server = createMBeanServer();
 
-    ComponentRepository repo = createComponentRepository(server);
+    final ComponentRepository repo = createComponentRepository(server);
 
-    ObjectName registrationName = new ObjectName("test:name=MXBean");
+    final ObjectName registrationName = new ObjectName("test:name=MXBean");
     repo.registerMBean(new TestMXBean(), registrationName);
     repo.start();
 
@@ -289,21 +289,21 @@ public class ComponentRepositoryTest {
 
     // Real test is whether we can access "remotely" - we should get type of
     // CompositeData rather than ComplexAttribute
-    CompositeData data = (CompositeData) server.getAttribute(registrationName, "Answer");
+    final CompositeData data = (CompositeData) server.getAttribute(registrationName, "Answer");
 
     assertEquals(42, data.get("inty"));
     assertEquals("forty-two", data.get("stringy"));
   }
 
-  private ComponentRepository createComponentRepository(MBeanServer server) {
-    ComponentRepository repo = new ComponentRepository(LOGGER);
+  private ComponentRepository createComponentRepository(final MBeanServer server) {
+    final ComponentRepository repo = new ComponentRepository(LOGGER);
     // Register the MBean server
     repo.registerComponent(MBeanServer.class, "", server);
     return repo;
   }
 
   private MBeanServer createMBeanServer() {
-    MBeanServerFactoryBean factoryBean = new MBeanServerFactoryBean();
+    final MBeanServerFactoryBean factoryBean = new MBeanServerFactoryBean();
     factoryBean.setLocateExistingServerIfPossible(true);
 
     // Ensure the server is created
@@ -313,7 +313,7 @@ public class ComponentRepositoryTest {
 
   public static class TestMBean {
 
-    private int answer = 42;
+    private final int answer = 42;
 
     public int getAnswer() {
       return answer;
@@ -322,8 +322,9 @@ public class ComponentRepositoryTest {
 
   public static class TestMXBean implements TestMXInterface {
 
-    private ComplexAttribute answer = new ComplexAttribute();
+    private final ComplexAttribute answer = new ComplexAttribute();
 
+    @Override
     public ComplexAttribute getAnswer() {
       return answer;
     }
@@ -368,7 +369,7 @@ public class ComponentRepositoryTest {
       return false;
     }
     @Override
-    public void setServletContext(ServletContext servletContext) {
+    public void setServletContext(final ServletContext servletContext) {
       servletContexts++;
     }
     @Override

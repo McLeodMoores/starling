@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.rootfinding.newton;
@@ -11,8 +11,9 @@ import com.opengamma.analytics.math.matrix.MatrixAlgebra;
 import com.opengamma.analytics.math.matrix.OGMatrixAlgebra;
 
 /**
- * Uses the Sherman-Morrison formula to invert Broyden's Jacobian update formula, thus providing a direct update formula for the inverse Jacobian 
+ * Uses the Sherman-Morrison formula to invert Broyden's Jacobian update formula, thus providing a direct update formula for the inverse Jacobian.
  */
+@VectorRootFinderType(name = "Sherman-Morrison")
 public class ShermanMorrisonVectorRootFinder extends NewtonVectorRootFinder {
   private static final double DEF_TOL = 1e-7;
   private static final int MAX_STEPS = 100;
@@ -29,9 +30,15 @@ public class ShermanMorrisonVectorRootFinder extends NewtonVectorRootFinder {
     this(absoluteTol, relativeTol, maxSteps, decomp, new OGMatrixAlgebra());
   }
 
-  public ShermanMorrisonVectorRootFinder(final double absoluteTol, final double relativeTol, final int maxSteps, final Decomposition<?> decomp, MatrixAlgebra algebra) {
+  public ShermanMorrisonVectorRootFinder(final double absoluteTol, final double relativeTol, final int maxSteps, final Decomposition<?> decomp,
+      final MatrixAlgebra algebra) {
     super(absoluteTol, relativeTol, maxSteps, new InverseJacobianDirectionFunction(algebra), new InverseJacobianEstimateInitializationFunction(decomp),
         new ShermanMorrisonMatrixUpdateFunction(algebra));
+  }
+
+  @Override
+  public String getName() {
+    return "Sherman-Morrison";
   }
 
 }

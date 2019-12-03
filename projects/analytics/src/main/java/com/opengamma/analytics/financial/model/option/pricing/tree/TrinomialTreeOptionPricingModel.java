@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -15,12 +15,13 @@ import com.opengamma.analytics.financial.model.volatility.BlackScholesFormulaRep
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
 
   @Override
-  public double getPrice(LatticeSpecification lattice, OptionFunctionProvider1D function, double spot, double volatility, double interestRate, double dividend) {
+  public double getPrice(final LatticeSpecification lattice, final OptionFunctionProvider1D function, final double spot, final double volatility,
+      final double interestRate, final double dividend) {
     ArgumentChecker.notNull(lattice, "lattice");
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.isTrue(spot > 0., "Spot should be positive");
@@ -30,7 +31,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     ArgumentChecker.isTrue(Doubles.isFinite(interestRate), "interestRate should be finite");
     ArgumentChecker.isTrue(Doubles.isFinite(dividend), "dividend should be finite");
 
-    final LatticeSpecification modLattice = (lattice instanceof TimeVaryingLatticeSpecification) ? new TrigeorgisLatticeSpecification() : lattice;
+    final LatticeSpecification modLattice = lattice instanceof TimeVaryingLatticeSpecification ? new TrigeorgisLatticeSpecification() : lattice;
     if (function instanceof BarrierOptionFunctionProvider) {
       final BarrierOptionFunctionProvider barrierFunction = (BarrierOptionFunctionProvider) function;
       if (barrierFunction.getChecker().checkOut(spot) || barrierFunction.getChecker().checkStrikeBehindBarrier()) {
@@ -66,7 +67,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public double getPrice(OptionFunctionProvider1D function, double spot, double[] volatility, double[] interestRate, double[] dividend) {
+  public double getPrice(final OptionFunctionProvider1D function, final double spot, final double[] volatility, final double[] interestRate,
+      final double[] dividend) {
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(volatility, "volatility");
     ArgumentChecker.notNull(interestRate, "interestRate");
@@ -129,7 +131,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public double getPrice(LatticeSpecification lattice, OptionFunctionProvider1D function, double spot, double volatility, double interestRate, DividendFunctionProvider dividend) {
+  public double getPrice(final LatticeSpecification lattice, final OptionFunctionProvider1D function, final double spot, final double volatility,
+      final double interestRate, final DividendFunctionProvider dividend) {
     ArgumentChecker.notNull(lattice, "lattice");
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(dividend, "dividend");
@@ -140,7 +143,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     ArgumentChecker.isTrue(Doubles.isFinite(volatility), "volatility should be finite");
     ArgumentChecker.isTrue(Doubles.isFinite(interestRate), "interestRate should be finite");
 
-    final LatticeSpecification modLattice = (lattice instanceof TimeVaryingLatticeSpecification) ? new TrigeorgisLatticeSpecification() : lattice;
+    final LatticeSpecification modLattice = lattice instanceof TimeVaryingLatticeSpecification ? new TrigeorgisLatticeSpecification() : lattice;
     if (function instanceof BarrierOptionFunctionProvider) {
       final BarrierOptionFunctionProvider barrierFunction = (BarrierOptionFunctionProvider) function;
       if (barrierFunction.getChecker().checkOut(spot) || barrierFunction.getChecker().checkStrikeBehindBarrier()) {
@@ -186,7 +189,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
             ++counter;
           }
         }
-        values = function.getNextOptionValues(discount, upProbability, middleProbability, downProbability, values, assetPriceBase, 0., downFactor, middleOverDown, i);
+        values = function.getNextOptionValues(discount, upProbability, middleProbability, downProbability, values, assetPriceBase, 0., downFactor,
+            middleOverDown, i);
       }
     } else {
       double sumDiscountDiv = 0.;
@@ -198,7 +202,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
             ++counter;
           }
         }
-        values = function.getNextOptionValues(discount, upProbability, middleProbability, downProbability, values, assetPriceBase, sumDiscountDiv, downFactor, middleOverDown, i);
+        values = function.getNextOptionValues(discount, upProbability, middleProbability, downProbability, values, assetPriceBase, sumDiscountDiv, downFactor,
+            middleOverDown, i);
       }
     }
 
@@ -206,8 +211,9 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public double getPrice(OptionFunctionProvider2D function, double spot1, double spot2, double volatility1, double volatility2, double correlation, double interestRate, double dividend1,
-      double dividend2) {
+  public double getPrice(final OptionFunctionProvider2D function, final double spot1, final double spot2, final double volatility1, final double volatility2,
+      final double correlation, final double interestRate, final double dividend1,
+      final double dividend2) {
     ArgumentChecker.notNull(function, "function");
 
     ArgumentChecker.isTrue(spot1 > 0., "spot1 should be positive");
@@ -257,7 +263,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     final double assetPrice2 = spot2 * Math.pow(downFactor2, nSteps);
     double[][] values = function.getPayoffAtExpiryTrinomial(assetPrice1, assetPrice2, middleOverDown1, middleOverDown2);
     for (int i = nSteps - 1; i > -1; --i) {
-      values = function.getNextOptionValues(discount, uuProbability, umProbability, udProbability, muProbability, mmProbability, mdProbability, duProbability, dmProbability, ddProbability, values,
+      values = function.getNextOptionValues(discount, uuProbability, umProbability, udProbability, muProbability, mmProbability, mdProbability, duProbability,
+          dmProbability, ddProbability, values,
           spot1, spot2, downFactor1, downFactor2, middleOverDown1, middleOverDown2, i);
     }
 
@@ -265,7 +272,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public GreekResultCollection getGreeks(LatticeSpecification lattice, OptionFunctionProvider1D function, double spot, double volatility, double interestRate, double dividend) {
+  public GreekResultCollection getGreeks(final LatticeSpecification lattice, final OptionFunctionProvider1D function, final double spot,
+      final double volatility, final double interestRate, final double dividend) {
     ArgumentChecker.notNull(lattice, "lattice");
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.isTrue(spot > 0., "Spot should be positive");
@@ -276,7 +284,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     ArgumentChecker.isTrue(Doubles.isFinite(dividend), "dividend should be finite");
 
     final GreekResultCollection collection = new GreekResultCollection();
-    final LatticeSpecification modLattice = (lattice instanceof TimeVaryingLatticeSpecification) ? new TrigeorgisLatticeSpecification() : lattice;
+    final LatticeSpecification modLattice = lattice instanceof TimeVaryingLatticeSpecification ? new TrigeorgisLatticeSpecification() : lattice;
 
     final int nSteps = function.getNumberOfSteps();
     final double strike = function.getStrike();
@@ -301,8 +309,9 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     double[] values = function.getPayoffAtExpiryTrinomial(spot, downFactor, middleOverDown);
     final double[] res = new double[4];
 
-    final double[] pForDelta = new double[] {spot * downFactor, spot * middleFactor, spot * upFactor };
-    final double[] pForGamma = new double[] {pForDelta[0] * downFactor, pForDelta[0] * middleFactor, pForDelta[1] * middleFactor, pForDelta[2] * middleFactor, pForDelta[2] * upFactor };
+    final double[] pForDelta = new double[] { spot * downFactor, spot * middleFactor, spot * upFactor };
+    final double[] pForGamma = new double[] { pForDelta[0] * downFactor, pForDelta[0] * middleFactor, pForDelta[1] * middleFactor, pForDelta[2] * middleFactor,
+                  pForDelta[2] * upFactor };
 
     for (int i = nSteps - 1; i > -1; --i) {
       values = function.getNextOptionValues(discount, upProbability, middleProbability, downProbability, values, spot, 0., downFactor, middleOverDown, i);
@@ -335,7 +344,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public GreekResultCollection getGreeks(OptionFunctionProvider1D function, double spot, double[] volatility, double[] interestRate, double[] dividend) {
+  public GreekResultCollection getGreeks(final OptionFunctionProvider1D function, final double spot, final double[] volatility, final double[] interestRate,
+      final double[] dividend) {
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(volatility, "volatility");
     ArgumentChecker.notNull(interestRate, "interestRate");
@@ -386,8 +396,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     double[] values = function.getPayoffAtExpiryTrinomial(spot, downFactor, middleOverDown);
     final double[] res = new double[4];
 
-    final double[] pForDelta = new double[] {spot * downFactor, spot, spot * middleOverDown };
-    final double[] pForGamma = new double[] {pForDelta[0] * downFactor, pForDelta[0], spot, pForDelta[2], pForDelta[2] * middleOverDown };
+    final double[] pForDelta = new double[] { spot * downFactor, spot, spot * middleOverDown };
+    final double[] pForGamma = new double[] { pForDelta[0] * downFactor, pForDelta[0], spot, pForDelta[2], pForDelta[2] * middleOverDown };
 
     for (int i = nSteps - 1; i > -1; --i) {
       values = function.getNextOptionValues(df[i], upProbability[i], middleProbability[i], downProbability[i], values, spot, 0., downFactor, middleOverDown, i);
@@ -420,7 +430,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public GreekResultCollection getGreeks(LatticeSpecification lattice, OptionFunctionProvider1D function, double spot, double volatility, double interestRate, DividendFunctionProvider dividend) {
+  public GreekResultCollection getGreeks(final LatticeSpecification lattice, final OptionFunctionProvider1D function, final double spot,
+      final double volatility, final double interestRate, final DividendFunctionProvider dividend) {
     ArgumentChecker.notNull(lattice, "lattice");
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(dividend, "dividend");
@@ -432,7 +443,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     ArgumentChecker.isTrue(Doubles.isFinite(interestRate), "interestRate should be finite");
 
     final GreekResultCollection collection = new GreekResultCollection();
-    final LatticeSpecification modLattice = (lattice instanceof TimeVaryingLatticeSpecification) ? new TrigeorgisLatticeSpecification() : lattice;
+    final LatticeSpecification modLattice = lattice instanceof TimeVaryingLatticeSpecification ? new TrigeorgisLatticeSpecification() : lattice;
 
     final int nSteps = function.getNumberOfSteps();
     final double strike = function.getStrike();
@@ -474,7 +485,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
             ++counter;
           }
         }
-        values = function.getNextOptionValues(discount, upProbability, middleProbability, downProbability, values, assetPriceBase, 0., downFactor, middleOverDown, i);
+        values = function.getNextOptionValues(discount, upProbability, middleProbability, downProbability, values, assetPriceBase, 0., downFactor,
+            middleOverDown, i);
         if (i == 2) {
           final double[] pForGamma = dividend.getAssetPricesForGamma(spot, interestRate, divSteps, upFactor, middleFactor, downFactor, 0.);
           final double delta1 = (values[4] - values[3]) / (pForGamma[4] - pForGamma[3]);
@@ -504,9 +516,11 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
             ++counter;
           }
         }
-        values = function.getNextOptionValues(discount, upProbability, middleProbability, downProbability, values, assetPriceBase, sumDiscountDiv, downFactor, middleOverDown, i);
+        values = function.getNextOptionValues(discount, upProbability, middleProbability, downProbability, values, assetPriceBase, sumDiscountDiv,
+            downFactor, middleOverDown, i);
         if (i == 2) {
-          final double[] pForGamma = dividend.getAssetPricesForGamma(assetPriceBase, interestRate, divSteps, upFactor, middleFactor, downFactor, sumDiscountDiv);
+          final double[] pForGamma = dividend.getAssetPricesForGamma(assetPriceBase, interestRate, divSteps, upFactor, middleFactor, downFactor,
+              sumDiscountDiv);
           final double delta1 = (values[4] - values[3]) / (pForGamma[4] - pForGamma[3]);
           final double delta2 = (values[3] - values[2]) / (pForGamma[3] - pForGamma[2]);
           final double delta3 = (values[2] - values[1]) / (pForGamma[2] - pForGamma[1]);
@@ -518,7 +532,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
           res[3] = values[2];
         }
         if (i == 1) {
-          final double[] pForDelta = dividend.getAssetPricesForDelta(assetPriceBase, interestRate, divSteps, upFactor, middleFactor, downFactor, sumDiscountDiv);
+          final double[] pForDelta = dividend.getAssetPricesForDelta(assetPriceBase, interestRate, divSteps, upFactor, middleFactor, downFactor,
+              sumDiscountDiv);
           final double delta1 = (values[1] - values[0]) / (pForDelta[1] - pForDelta[0]);
           final double delta2 = (values[2] - values[1]) / (pForDelta[2] - pForDelta[1]);
           res[1] = 0.5 * (delta1 + delta2);
@@ -536,8 +551,9 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
   }
 
   @Override
-  public double[] getGreeks(OptionFunctionProvider2D function, double spot1, double spot2, double volatility1, double volatility2, double correlation, double interestRate, double dividend1,
-      double dividend2) {
+  public double[] getGreeks(final OptionFunctionProvider2D function, final double spot1, final double spot2, final double volatility1, final double volatility2,
+      final double correlation, final double interestRate, final double dividend1,
+      final double dividend2) {
     ArgumentChecker.notNull(function, "function");
 
     ArgumentChecker.isTrue(spot1 > 0., "spot1 should be positive");
@@ -583,10 +599,10 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     final double dmProbability = dw1 / 3. + md2 / 3. - 1. / 9.;
     final double ddProbability = dw1 / 3. + dw2 / 3. - 1. / 9. + correlation / 4.;
 
-    final double[] pForDelta1 = new double[] {spot1 * downFactor1, spot1, spot1 * middleOverDown1 };
-    final double[] pForDelta2 = new double[] {spot2 * downFactor2, spot2, spot2 * middleOverDown2 };
-    final double[] pForGamma1 = new double[] {pForDelta1[0] * downFactor1, pForDelta1[0], spot1, pForDelta1[2], pForDelta1[2] * middleOverDown1 };
-    final double[] pForGamma2 = new double[] {pForDelta2[0] * downFactor2, pForDelta2[0], spot2, pForDelta2[2], pForDelta2[2] * middleOverDown2 };
+    final double[] pForDelta1 = new double[] { spot1 * downFactor1, spot1, spot1 * middleOverDown1 };
+    final double[] pForDelta2 = new double[] { spot2 * downFactor2, spot2, spot2 * middleOverDown2 };
+    final double[] pForGamma1 = new double[] { pForDelta1[0] * downFactor1, pForDelta1[0], spot1, pForDelta1[2], pForDelta1[2] * middleOverDown1 };
+    final double[] pForGamma2 = new double[] { pForDelta2[0] * downFactor2, pForDelta2[0], spot2, pForDelta2[2], pForDelta2[2] * middleOverDown2 };
 
     final double assetPrice1 = spot1 * Math.pow(downFactor1, nSteps);
     final double assetPrice2 = spot2 * Math.pow(downFactor2, nSteps);
@@ -594,17 +610,22 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     final double[] res = new double[7];
 
     for (int i = nSteps - 1; i > -1; --i) {
-      values = function.getNextOptionValues(discount, uuProbability, umProbability, udProbability, muProbability, mmProbability, mdProbability, duProbability, dmProbability, ddProbability, values,
+      values = function.getNextOptionValues(discount, uuProbability, umProbability, udProbability, muProbability, mmProbability, mdProbability, duProbability,
+          dmProbability, ddProbability, values,
           spot1, spot2, downFactor1, downFactor2, middleOverDown1, middleOverDown2, i);
       if (i == 2) {
         final double diff11 = pForGamma1[1] - pForGamma1[0];
         final double diff12 = pForGamma1[2] - pForGamma1[1];
         final double diff13 = pForGamma1[3] - pForGamma1[2];
         final double diff14 = pForGamma1[4] - pForGamma1[3];
-        final double delta11 = (values[1][0] - values[0][0] + values[1][1] - values[0][1] + values[1][2] - values[0][2] + values[1][3] - values[0][3] + values[1][4] - values[0][4]) / diff11 / 5.;
-        final double delta12 = (values[2][0] - values[1][0] + values[2][1] - values[1][1] + values[2][2] - values[1][2] + values[2][3] - values[1][3] + values[2][4] - values[1][4]) / diff12 / 5.;
-        final double delta13 = (values[3][0] - values[2][0] + values[3][1] - values[2][1] + values[3][2] - values[2][2] + values[3][3] - values[2][3] + values[3][4] - values[2][4]) / diff13 / 5.;
-        final double delta14 = (values[4][0] - values[3][0] + values[4][1] - values[3][1] + values[4][2] - values[3][2] + values[4][3] - values[3][3] + values[4][4] - values[3][4]) / diff14 / 5.;
+        final double delta11 = (values[1][0] - values[0][0] + values[1][1] - values[0][1] + values[1][2] - values[0][2] + values[1][3] - values[0][3]
+            + values[1][4] - values[0][4]) / diff11 / 5.;
+        final double delta12 = (values[2][0] - values[1][0] + values[2][1] - values[1][1] + values[2][2] - values[1][2] + values[2][3] - values[1][3]
+            + values[2][4] - values[1][4]) / diff12 / 5.;
+        final double delta13 = (values[3][0] - values[2][0] + values[3][1] - values[2][1] + values[3][2] - values[2][2] + values[3][3] - values[2][3]
+            + values[3][4] - values[2][4]) / diff13 / 5.;
+        final double delta14 = (values[4][0] - values[3][0] + values[4][1] - values[3][1] + values[4][2] - values[3][2] + values[4][3] - values[3][3]
+            + values[4][4] - values[3][4]) / diff14 / 5.;
         res[4] = (2. * (delta12 - delta11) / (pForGamma1[2] - pForGamma1[0]) + 2. * (delta13 - delta12) / (pForGamma1[3] - pForGamma1[1])
             + 2. * (delta14 - delta13) / (pForGamma1[4] - pForGamma1[2])) / 3.;
 
@@ -612,10 +633,14 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
         final double diff22 = pForGamma2[2] - pForGamma2[1];
         final double diff23 = pForGamma2[3] - pForGamma2[2];
         final double diff24 = pForGamma2[4] - pForGamma2[3];
-        final double delta21 = (values[0][1] - values[0][0] + values[1][1] - values[1][0] + values[2][1] - values[2][0] + values[3][1] - values[3][0] + values[4][1] - values[4][0]) / diff21 / 5.;
-        final double delta22 = (values[0][2] - values[0][1] + values[1][2] - values[1][1] + values[2][2] - values[2][1] + values[3][2] - values[3][1] + values[4][2] - values[4][1]) / diff22 / 5.;
-        final double delta23 = (values[0][3] - values[0][2] + values[1][3] - values[1][2] + values[2][3] - values[2][2] + values[3][3] - values[3][2] + values[4][3] - values[4][2]) / diff23 / 5.;
-        final double delta24 = (values[0][4] - values[0][3] + values[1][4] - values[1][3] + values[2][4] - values[2][3] + values[3][4] - values[3][3] + values[4][4] - values[4][3]) / diff24 / 5.;
+        final double delta21 = (values[0][1] - values[0][0] + values[1][1] - values[1][0] + values[2][1] - values[2][0] + values[3][1] - values[3][0]
+            + values[4][1] - values[4][0]) / diff21 / 5.;
+        final double delta22 = (values[0][2] - values[0][1] + values[1][2] - values[1][1] + values[2][2] - values[2][1] + values[3][2] - values[3][1]
+            + values[4][2] - values[4][1]) / diff22 / 5.;
+        final double delta23 = (values[0][3] - values[0][2] + values[1][3] - values[1][2] + values[2][3] - values[2][2] + values[3][3] - values[3][2]
+            + values[4][3] - values[4][2]) / diff23 / 5.;
+        final double delta24 = (values[0][4] - values[0][3] + values[1][4] - values[1][3] + values[2][4] - values[2][3] + values[3][4] - values[3][3]
+            + values[4][4] - values[4][3]) / diff24 / 5.;
         res[5] = (2. * (delta22 - delta21) / (pForGamma2[2] - pForGamma2[0]) + 2. * (delta23 - delta22) / (pForGamma2[3] - pForGamma2[1])
             + 2. * (delta24 - delta23) / (pForGamma2[4] - pForGamma2[2])) / 3.;
 
@@ -656,7 +681,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     final double spot = data.getSpot();
     final double interestRate = data.getInterestRate(timeToExpiry);
     final double cost = data.getCostOfCarry();
-    double volatility = data.getVolatility(timeToExpiry, strike);
+    final double volatility = data.getVolatility(timeToExpiry, strike);
 
     final double dt = timeToExpiry / nSteps;
     final double discount = Math.exp(-interestRate * dt);
@@ -697,7 +722,7 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
           for (int k = j + 1; k < nNodes; ++k) {
             adSecLocal[j] -= (assetPriceLocal[k] - assetPriceLocal[j - 1]) * adSecLocal[k];
           }
-          adSecLocal[j] /= (assetPriceLocal[j] - assetPriceLocal[j - 1]);
+          adSecLocal[j] /= assetPriceLocal[j] - assetPriceLocal[j - 1];
         }
         ++position;
         for (int j = 0; j < position; ++j) {
@@ -705,17 +730,19 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
           for (int k = 0; k < j; ++k) {
             adSecLocal[j] -= (assetPriceLocal[j + 1] - assetPriceLocal[k]) * adSecLocal[k];
           }
-          adSecLocal[j] /= (assetPriceLocal[j + 1] - assetPriceLocal[j]);
+          adSecLocal[j] /= assetPriceLocal[j + 1] - assetPriceLocal[j];
         }
 
         if (i != nSteps) {
           final double[][] prob = new double[nNodes][3];
           prob[nNodes - 1][2] = adSec[nNodes + 1] / adSecLocal[nNodes - 1] / discount;
-          prob[nNodes - 1][1] = getMiddle(prob[nNodes - 1][2], 1. / discount, assetPriceLocal[nNodes - 1], assetPrice[nNodes - 1], assetPrice[nNodes], assetPrice[nNodes + 1]);
+          prob[nNodes - 1][1] = getMiddle(prob[nNodes - 1][2], 1. / discount, assetPriceLocal[nNodes - 1], assetPrice[nNodes - 1], assetPrice[nNodes],
+              assetPrice[nNodes + 1]);
           prob[nNodes - 1][0] = 1. - prob[nNodes - 1][2] - prob[nNodes - 1][1];
 
           prob[nNodes - 2][2] = (adSec[nNodes] / discount - prob[nNodes - 1][1] * adSecLocal[nNodes - 1]) / adSecLocal[nNodes - 2];
-          prob[nNodes - 2][1] = getMiddle(prob[nNodes - 2][2], 1. / discount, assetPriceLocal[nNodes - 2], assetPrice[nNodes - 2], assetPrice[nNodes - 1], assetPrice[nNodes]);
+          prob[nNodes - 2][1] = getMiddle(prob[nNodes - 2][2], 1. / discount, assetPriceLocal[nNodes - 2], assetPrice[nNodes - 2], assetPrice[nNodes - 1],
+              assetPrice[nNodes]);
           prob[nNodes - 2][0] = 1. - prob[nNodes - 2][2] - prob[nNodes - 2][1];
 
           for (int j = nNodes - 3; j > -1; --j) {
@@ -726,10 +753,12 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
               final double fwd = assetPriceLocal[j] / discount;
               if (fwd < assetPrice[j + 1] && fwd > assetPrice[j]) {
                 prob[j][2] = 0.5 * (fwd - assetPrice[j]) / (assetPrice[j + 2] - assetPrice[j]);
-                prob[j][0] = 0.5 * ((assetPrice[j + 2] - fwd) / (assetPrice[j + 2] - assetPrice[j]) + (assetPrice[j + 1] - fwd) / (assetPrice[j + 1] - assetPrice[j]));
+                prob[j][0] = 0.5
+                    * ((assetPrice[j + 2] - fwd) / (assetPrice[j + 2] - assetPrice[j]) + (assetPrice[j + 1] - fwd) / (assetPrice[j + 1] - assetPrice[j]));
               } else if (fwd < assetPrice[j + 2] && fwd > assetPrice[j + 1]) {
-                prob[j][2] = 0.5 * ((fwd - assetPrice[j + 1]) / (assetPrice[j + 2] - assetPrice[j]) + (fwd - assetPrice[j]) / (assetPrice[j + 2] - assetPrice[j]));
-                prob[j][0] = 0.5 * (assetPrice[j + 2] - fwd) / (assetPrice[j + 2]);
+                prob[j][2] = 0.5
+                    * ((fwd - assetPrice[j + 1]) / (assetPrice[j + 2] - assetPrice[j]) + (fwd - assetPrice[j]) / (assetPrice[j + 2] - assetPrice[j]));
+                prob[j][0] = 0.5 * (assetPrice[j + 2] - fwd) / assetPrice[j + 2];
               }
               prob[j][1] = 1. - prob[j][0] - prob[j][2];
             }
@@ -749,7 +778,8 @@ public class TrinomialTreeOptionPricingModel extends TreeOptionPricingModel {
     return values[0];
   }
 
-  private double getMiddle(final double upProbability, final double factor, final double assetBase, final double assetPrevDw, final double assetPrevMd, final double assetPrevUp) {
+  private double getMiddle(final double upProbability, final double factor, final double assetBase, final double assetPrevDw, final double assetPrevMd,
+      final double assetPrevUp) {
     return (factor * assetBase - assetPrevDw - upProbability * (assetPrevUp - assetPrevDw)) / (assetPrevMd - assetPrevDw);
   }
 

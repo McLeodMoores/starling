@@ -29,27 +29,36 @@ public class InMemoryHolidayMasterTest {
   private static final LocalDate DATE_MONDAY = LocalDate.of(2010, 10, 25);
   private static final Currency GBP = Currency.GBP;
 
-  private InMemoryHolidayMaster master;
-  private HolidayDocument addedDoc;
+  private InMemoryHolidayMaster _master;
+  private HolidayDocument _addedDoc;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
-    master = new InMemoryHolidayMaster();
-    ManageableHoliday inputHoliday = new ManageableHoliday(GBP, Collections.singletonList(DATE_MONDAY));
-    HolidayDocument inputDoc = new HolidayDocument(inputHoliday);
-    addedDoc = master.add(inputDoc);
+    _master = new InMemoryHolidayMaster();
+    final ManageableHoliday inputHoliday = new ManageableHoliday(GBP, Collections.singletonList(DATE_MONDAY));
+    final HolidayDocument inputDoc = new HolidayDocument(inputHoliday);
+    _addedDoc = _master.add(inputDoc);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_get_noMatch() {
-    master.get(UniqueId.of("A", "B"));
+  public void testGetNoMatch() {
+    _master.get(UniqueId.of("A", "B"));
   }
 
-  public void test_get_match() {
-    HolidayDocument result = master.get(addedDoc.getUniqueId());
+  /**
+   *
+   */
+  public void testGetMatch() {
+    final HolidayDocument result = _master.get(_addedDoc.getUniqueId());
     assertEquals(UniqueId.of("MemHol", "1"), result.getUniqueId());
-    assertEquals(addedDoc, result);
+    assertEquals(_addedDoc, result);
   }
 
 }

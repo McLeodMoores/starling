@@ -1,11 +1,10 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.isda.credit;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -27,33 +26,33 @@ import com.opengamma.core.marketdatasnapshot.NamedSnapshot;
 import com.opengamma.id.UniqueId;
 
 /**
- * A snapshot containing credit curve market data. This defines a set of credit curves 
+ * A snapshot containing credit curve market data. This defines a set of credit curves
  * which can be bootstrapped and used in a pricing environment. Curves are indexed
  * using {@link CreditCurveDataKey}s.
  */
 @BeanDefinition
 public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBean {
-  
+
   /**
    * The unique id of the snapshot.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final UniqueId _uniqueId;
-  
+
   /**
    * The name of the snapshot.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final String _name;
-  
+
   /**
    * The full set of credit curves defined by the snapshot.
    */
   @PropertyDefinition(validate = "notNull")
   private final ImmutableMap<CreditCurveDataKey, CreditCurveData> _creditCurves;
-  
+
   @Override
-  public NamedSnapshot withUniqueId(UniqueId uniqueId) {
+  public NamedSnapshot withUniqueId(final UniqueId uniqueId) {
     return new Builder(this).uniqueId(uniqueId).build();
   }
 
@@ -110,6 +109,7 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
    * Gets the unique id of the snapshot.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -119,6 +119,7 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
    * Gets the name of the snapshot.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }
@@ -148,9 +149,9 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CreditCurveDataSnapshot other = (CreditCurveDataSnapshot) obj;
-      return JodaBeanUtils.equal(getUniqueId(), other.getUniqueId()) &&
-          JodaBeanUtils.equal(getName(), other.getName()) &&
-          JodaBeanUtils.equal(getCreditCurves(), other.getCreditCurves());
+      return JodaBeanUtils.equal(_uniqueId, other._uniqueId) &&
+          JodaBeanUtils.equal(_name, other._name) &&
+          JodaBeanUtils.equal(_creditCurves, other._creditCurves);
     }
     return false;
   }
@@ -158,9 +159,9 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getUniqueId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCreditCurves());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_uniqueId);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_name);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_creditCurves);
     return hash;
   }
 
@@ -168,9 +169,9 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("CreditCurveDataSnapshot{");
-    buf.append("uniqueId").append('=').append(getUniqueId()).append(',').append(' ');
-    buf.append("name").append('=').append(getName()).append(',').append(' ');
-    buf.append("creditCurves").append('=').append(JodaBeanUtils.toString(getCreditCurves()));
+    buf.append("uniqueId").append('=').append(_uniqueId).append(',').append(' ');
+    buf.append("name").append('=').append(_name).append(',').append(' ');
+    buf.append("creditCurves").append('=').append(JodaBeanUtils.toString(_creditCurves));
     buf.append('}');
     return buf.toString();
   }
@@ -360,19 +361,31 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

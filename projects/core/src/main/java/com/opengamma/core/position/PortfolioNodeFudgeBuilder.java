@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.position;
@@ -43,7 +43,7 @@ public class PortfolioNodeFudgeBuilder implements FudgeBuilder<PortfolioNode> {
   private static void encodePositions(final MutableFudgeMsg message, final FudgeSerializer serializer, final Collection<Position> collection) {
     if (!collection.isEmpty()) {
       final MutableFudgeMsg msg = serializer.newMessage();
-      for (Position position : collection) {
+      for (final Position position : collection) {
         msg.add(null, null, PositionFudgeBuilder.buildMessageImpl(serializer, position));
       }
       message.add(POSITIONS_FIELD_NAME, msg);
@@ -53,7 +53,7 @@ public class PortfolioNodeFudgeBuilder implements FudgeBuilder<PortfolioNode> {
   private static void encodeSubNodes(final MutableFudgeMsg message, final FudgeSerializer serializer, final Collection<PortfolioNode> collection) {
     if (!collection.isEmpty()) {
       final MutableFudgeMsg msg = serializer.newMessage();
-      for (PortfolioNode node : collection) {
+      for (final PortfolioNode node : collection) {
         msg.add(null, null, buildMessageImpl(serializer, node));
       }
       message.add(SUBNODES_FIELD_NAME, msg);
@@ -78,9 +78,9 @@ public class PortfolioNodeFudgeBuilder implements FudgeBuilder<PortfolioNode> {
   }
 
   // -------------------------------------------------------------------------
-  private static void readPositions(FudgeDeserializer deserializer, FudgeMsg message, SimplePortfolioNode node) {
+  private static void readPositions(final FudgeDeserializer deserializer, final FudgeMsg message, final SimplePortfolioNode node) {
     if (message != null) {
-      for (FudgeField field : message) {
+      for (final FudgeField field : message) {
         if (field.getValue() instanceof FudgeMsg) {
           final SimplePosition position = PositionFudgeBuilder.buildObjectImpl(deserializer, (FudgeMsg) field.getValue());
           node.addPosition(position);
@@ -89,9 +89,9 @@ public class PortfolioNodeFudgeBuilder implements FudgeBuilder<PortfolioNode> {
     }
   }
 
-  private static void readSubNodes(FudgeDeserializer deserializer, FudgeMsg message, SimplePortfolioNode node) {
+  private static void readSubNodes(final FudgeDeserializer deserializer, final FudgeMsg message, final SimplePortfolioNode node) {
     if (message != null) {
-      for (FudgeField field : message) {
+      for (final FudgeField field : message) {
         if (field.getValue() instanceof FudgeMsg) {
           final SimplePortfolioNode child = buildObjectImpl(deserializer, (FudgeMsg) field.getValue());
           child.setParentNodeId(node.getUniqueId());
@@ -115,10 +115,10 @@ public class PortfolioNodeFudgeBuilder implements FudgeBuilder<PortfolioNode> {
   }
 
   @Override
-  public PortfolioNode buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public PortfolioNode buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     final SimplePortfolioNode node = buildObjectImpl(deserializer, message);
     final FudgeField parentField = message.getByName(PARENT_FIELD_NAME);
-    final UniqueId parentId = (parentField != null) ? deserializer.fieldValueToObject(UniqueId.class, parentField) : null;
+    final UniqueId parentId = parentField != null ? deserializer.fieldValueToObject(UniqueId.class, parentField) : null;
     if (parentId != null) {
       node.setParentNodeId(parentId);
     }

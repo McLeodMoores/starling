@@ -28,14 +28,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public class DbExchangeMasterTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbExchangeMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbExchangeMasterTest.class);
 
   private DbExchangeMaster _exgMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbExchangeMasterTest(String databaseType, String databaseVersion) {
+  public DbExchangeMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -61,15 +61,15 @@ public class DbExchangeMasterTest extends AbstractDbTest {
   //-------------------------------------------------------------------------
   @Test
   public void test_example() throws Exception {
-    ManageableExchange exchange = new ManageableExchange();
+    final ManageableExchange exchange = new ManageableExchange();
     exchange.setExternalIdBundle(ExternalIdBundle.of(ExternalId.of("A", "B"), ExternalId.of("C", "D")));
     exchange.setName("Test");
     exchange.setRegionIdBundle(ExternalIdBundle.of(ExternalId.of("E", "F"), ExternalId.of("G", "H")));
     exchange.setTimeZone(ZoneId.of("Europe/London"));
-    ExchangeDocument addDoc = new ExchangeDocument(exchange);
-    ExchangeDocument added = _exgMaster.add(addDoc);
-    
-    ExchangeDocument loaded = _exgMaster.get(added.getUniqueId());
+    final ExchangeDocument addDoc = new ExchangeDocument(exchange);
+    final ExchangeDocument added = _exgMaster.add(addDoc);
+
+    final ExchangeDocument loaded = _exgMaster.get(added.getUniqueId());
     assertEquals(added, loaded);
   }
 

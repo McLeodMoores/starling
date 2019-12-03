@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -21,7 +21,7 @@ import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests {@link AvailableOutputsFudgeBuilder}
+ * Tests {@link AvailableOutputsFudgeBuilder}.
  */
 @Test(groups = TestGroup.UNIT)
 public class AvailableOutputsBuilderTest extends AbstractFudgeBuilderTestCase {
@@ -45,7 +45,7 @@ public class AvailableOutputsBuilderTest extends AbstractFudgeBuilderTestCase {
     AvailableOutput output = cycled.getOutputs().iterator().next();
     assertEquals(output.getValueName(), "V");
     assertEquals(output.getProperties(), ValueProperties.with("P", "A", "B", "C", "D").get());
-    assertEquals(output.getSecurityTypes(), new HashSet<String>(Arrays.asList("Swap", "Option")));
+    assertEquals(output.getSecurityTypes(), new HashSet<>(Arrays.asList("Swap", "Option")));
     assertEquals(output.getPositionProperties("Swap"), ValueProperties.with("P", "A", "C").get());
     assertEquals(output.getPositionProperties("Option"), ValueProperties.with("P", "A", "D").get());
     assertEquals(output.getPortfolioNodeProperties(), ValueProperties.with("P", "A", "B").get());
@@ -58,19 +58,19 @@ public class AvailableOutputsBuilderTest extends AbstractFudgeBuilderTestCase {
     output = cycled.getPositionOutputs().iterator().next();
     assertEquals(output.getValueName(), "V");
     assertEquals(output.getProperties(), ValueProperties.with("P", "A", "C", "D").get());
-    assertEquals(output.getSecurityTypes(), new HashSet<String>(Arrays.asList("Swap", "Option")));
+    assertEquals(output.getSecurityTypes(), new HashSet<>(Arrays.asList("Swap", "Option")));
     assertEquals(output.getPositionProperties("Swap"), ValueProperties.with("P", "A", "C").get());
     assertEquals(output.getPositionProperties("Option"), ValueProperties.with("P", "A", "D").get());
     assertEquals(cycled.getPositionOutputs("Swap").size(), 1);
     output = cycled.getPositionOutputs("Swap").iterator().next();
     assertEquals(output.getValueName(), "V");
     assertEquals(output.getProperties(), ValueProperties.with("P", "A", "C").get());
-    assertEquals(output.getSecurityTypes(), new HashSet<String>(Arrays.asList("Swap")));
+    assertEquals(output.getSecurityTypes(), new HashSet<>(Arrays.asList("Swap")));
     assertEquals(cycled.getPositionOutputs("Option").size(), 1);
     output = cycled.getPositionOutputs("Option").iterator().next();
     assertEquals(output.getValueName(), "V");
     assertEquals(output.getProperties(), ValueProperties.with("P", "A", "D").get());
-    assertEquals(output.getSecurityTypes(), new HashSet<String>(Arrays.asList("Option")));
+    assertEquals(output.getSecurityTypes(), new HashSet<>(Arrays.asList("Option")));
   }
 
 }

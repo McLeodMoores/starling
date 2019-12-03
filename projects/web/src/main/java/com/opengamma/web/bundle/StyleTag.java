@@ -16,7 +16,7 @@ import com.opengamma.util.ArgumentChecker;
 public class StyleTag {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(StyleTag.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StyleTag.class);
 
   /**
    * The request data.
@@ -25,10 +25,10 @@ public class StyleTag {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param data  the request data, not null
    */
-  public StyleTag(WebBundlesData data) {
+  public StyleTag(final WebBundlesData data) {
     ArgumentChecker.notNull(data, "data");
     _data = data;
   }
@@ -36,34 +36,37 @@ public class StyleTag {
   //-------------------------------------------------------------------------
   /**
    * Outputs the HTML for the bundle.
-   * 
-   * @param bundleId  the bundle ID, not null
-   * @param media  the media type, not null
-   * @param inline  whether to inline the script
+   *
+   * @param bundleId
+   *          the bundle ID, not null
+   * @param media
+   *          the media type, not null
+   * @param inline
+   *          whether to inline the script
    * @return the HTML for the bundle, may be null
    */
-  public String print(String bundleId, String media, boolean inline) {
+  public String print(final String bundleId, final String media, final boolean inline) {
     ArgumentChecker.notNull(bundleId, "bundleId");
     ArgumentChecker.notNull(media, "media");
-    Bundle bundle = _data.getBundleManager().getBundle(bundleId);
+    final Bundle bundle = _data.getBundleManager().getBundle(bundleId);
     if (bundle == null) {
-      s_logger.warn("{} not available ", bundleId);
+      LOGGER.warn("{} not available ", bundleId);
       return "";
     }
-    DeployMode mode = _data.getMode();
+    final DeployMode mode = _data.getMode();
     switch (mode) {
       case DEV:
-        return inline ? printDevInline(bundle, media) : printDevLinked(bundle, media);
+        return inline ? printDevInline(bundle, media) : printDevLinked(bundle);
       case PROD:
         return inline ? printProdInline(bundle, media) : printProdLinked(bundle, media);
       default:
-        s_logger.warn("Unknown deployment mode type: " + mode);
+        LOGGER.warn("Unknown deployment mode type: " + mode);
         return null;
     }
   }
 
-  private String printProdInline(Bundle bundle, String media) {
-    StringBuilder buf = new StringBuilder();
+  private String printProdInline(final Bundle bundle, final String media) {
+    final StringBuilder buf = new StringBuilder();
     buf.append("<style type=\"text/css\" media=\"");
     buf.append(media);
     buf.append("\">\n");
@@ -72,9 +75,9 @@ public class StyleTag {
     return buf.toString();
   }
 
-  private String printProdLinked(Bundle bundle, String media) {
-    WebBundlesUris uris = new WebBundlesUris(_data);
-    StringBuilder buf = new StringBuilder();
+  private String printProdLinked(final Bundle bundle, final String media) {
+    final WebBundlesUris uris = new WebBundlesUris(_data);
+    final StringBuilder buf = new StringBuilder();
     buf.append("<link rel=\"stylesheet\" type=\"text/css\" media=\"");
     buf.append(media);
     buf.append("\" href=\"");
@@ -84,8 +87,8 @@ public class StyleTag {
     return buf.toString();
   }
 
-  private String printDevInline(Bundle bundle, String media) {
-    StringBuilder buf = new StringBuilder();
+  private static String printDevInline(final Bundle bundle, final String media) {
+    final StringBuilder buf = new StringBuilder();
     buf.append("<style type=\"text/css\" media=\"");
     buf.append(media);
     buf.append("\">\n");
@@ -94,12 +97,13 @@ public class StyleTag {
     return buf.toString();
   }
 
-  private String printDevLinked(Bundle bundle, String media) {
-    bundle = _data.getDevBundleManager().getBundle(bundle.getId());  // reload from dev manager
-    WebBundlesUris uris = new WebBundlesUris(_data);
-    StringBuilder buf = new StringBuilder();
+  private String printDevLinked(final Bundle bundle) {
+    // reload from dev manager
+    final Bundle reloadedBundle = _data.getDevBundleManager().getBundle(bundle.getId());
+    final WebBundlesUris uris = new WebBundlesUris(_data);
+    final StringBuilder buf = new StringBuilder();
     buf.append("<style type=\"text/css\" media=\"all\">\n");
-    String imports = BundleUtils.buildImports(bundle, uris);
+    final String imports = BundleUtils.buildImports(reloadedBundle, uris);
     buf.append(imports);
     buf.append("</style>");
     return buf.toString();

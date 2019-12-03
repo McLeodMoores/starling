@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user;
@@ -108,10 +108,10 @@ public class UserForm implements Bean {
 
   /**
    * Creates a form object.
-   * 
+   *
    * @param user  the user to copy from, not null
    */
-  public UserForm(ManageableUser user) {
+  public UserForm(final ManageableUser user) {
     setUserName(user.getUserName());
     setEmailAddress(user.getEmailAddress());
     setDisplayName(user.getProfile().getDisplayName());
@@ -124,11 +124,11 @@ public class UserForm implements Bean {
 
   /**
    * Creates a form object for changing the password.
-   * 
+   *
    * @param user  the user to copy from, not null
    * @param passwordRaw  the new password
    */
-  public UserForm(ManageableUser user, String passwordRaw) {
+  public UserForm(final ManageableUser user, final String passwordRaw) {
     setUserName(user.getUserName());
     setPasswordRaw(passwordRaw);
     setEmailAddress(user.getEmailAddress());
@@ -143,7 +143,7 @@ public class UserForm implements Bean {
 
   /**
    * Creates a form object for changing everything except the name and password.
-   * 
+   *
    * @param user  the user to copy from, not null
    * @param emailAddress  the email address, not null
    * @param displayName  the display name, not null
@@ -152,8 +152,8 @@ public class UserForm implements Bean {
    * @param dateStyleStr  the date style, not null
    * @param timeStyleStr  the time style, not null
    */
-  public UserForm(ManageableUser user, String emailAddress, String displayName,
-      String localeStr, String zoneStr, String dateStyleStr, String timeStyleStr) {
+  public UserForm(final ManageableUser user, final String emailAddress, final String displayName,
+      final String localeStr, final String zoneStr, final String dateStyleStr, final String timeStyleStr) {
     setUserName(user.getUserName());
     setPasswordRaw(null);
     setEmailAddress(emailAddress);
@@ -167,7 +167,7 @@ public class UserForm implements Bean {
 
   /**
    * Creates a form object.
-   * 
+   *
    * @param userName  the user name, not null
    * @param password  the plain text password, not null
    * @param emailAddress  the email address, not null
@@ -177,8 +177,8 @@ public class UserForm implements Bean {
    * @param dateStyleStr  the date style, not null
    * @param timeStyleStr  the time style, not null
    */
-  public UserForm(String userName, String password, String emailAddress, String displayName,
-      String localeStr, String zoneStr, String dateStyleStr, String timeStyleStr) {
+  public UserForm(final String userName, final String password, final String emailAddress, final String displayName,
+      final String localeStr, final String zoneStr, final String dateStyleStr, final String timeStyleStr) {
     setUserName(userName);
     setPasswordRaw(password);
     setEmailAddress(emailAddress);
@@ -192,67 +192,67 @@ public class UserForm implements Bean {
   //-------------------------------------------------------------------------
   /**
    * Validates and adds the proposed user to the master.
-   * 
+   *
    * @param userMaster  the user master, not null
    * @param pwService  the password service
    * @return the added user
    * @throws UserFormException if the proposed user is invalid
    */
-  public ManageableUser add(UserMaster userMaster, PasswordService pwService) {
+  public ManageableUser add(final UserMaster userMaster, final PasswordService pwService) {
     try {
-      ManageableUser user = validate(userMaster, pwService, true);
-      UniqueId uid = userMaster.add(user);
+      final ManageableUser user = validate(userMaster, pwService, true);
+      final UniqueId uid = userMaster.add(user);
       user.setUniqueId(uid);
       return user;
-    } catch (UserFormException ex) {
+    } catch (final UserFormException ex) {
       throw ex;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new UserFormException(ex);
     }
   }
 
   /**
    * Validates and updates the proposed user in the master.
-   * 
+   *
    * @param userMaster  the user master, not null
    * @param pwService  the password service
    * @return the added user
    * @throws UserFormException if the proposed user is invalid
    */
-  public ManageableUser update(UserMaster userMaster, PasswordService pwService) {
+  public ManageableUser update(final UserMaster userMaster, final PasswordService pwService) {
     try {
-      ManageableUser user = validate(userMaster, pwService, false);
-      UniqueId uid = userMaster.update(user);
+      final ManageableUser user = validate(userMaster, pwService, false);
+      final UniqueId uid = userMaster.update(user);
       user.setUniqueId(uid);
       return user;
-    } catch (UserFormException ex) {
+    } catch (final UserFormException ex) {
       throw ex;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new UserFormException(ex);
     }
   }
 
   /**
    * Validates and adds the proposed user to the master.
-   * 
+   *
    * @param userMaster  the user master, not null
    * @param pwService  the password service
    * @param add  true if adding, false if updating
    * @return the added user
    * @throws UserFormException if the proposed user is invalid
    */
-  protected ManageableUser validate(UserMaster userMaster, PasswordService pwService, boolean add) {
-    userMaster = ArgumentChecker.notNull(userMaster, "userMaster");
-    pwService = ArgumentChecker.notNull(pwService, "pwService");
-    String userName = StringUtils.trimToNull(getUserName());
-    String password = StringUtils.trimToNull(getPasswordRaw());
-    String email = StringUtils.trimToNull(getEmailAddress());
-    String displayName = StringUtils.trimToNull(getDisplayName());
-    String localeStr = StringUtils.trimToNull(getLocale());
-    String zoneStr = StringUtils.trimToNull(getZone());
-    String dateStyleStr = StringUtils.trimToNull(getDateStyle());
-    String timeStyleStr = StringUtils.trimToNull(getTimeStyle());
-    List<UserFormError> errors = new ArrayList<>();
+  protected ManageableUser validate(final UserMaster userMaster, final PasswordService pwService, final boolean add) {
+    final UserMaster master = ArgumentChecker.notNull(userMaster, "userMaster");
+    final PasswordService service = ArgumentChecker.notNull(pwService, "pwService");
+    final String userName = StringUtils.trimToNull(getUserName());
+    final String password = StringUtils.trimToNull(getPasswordRaw());
+    final String email = StringUtils.trimToNull(getEmailAddress());
+    final String displayName = StringUtils.trimToNull(getDisplayName());
+    final String localeStr = StringUtils.trimToNull(getLocale());
+    final String zoneStr = StringUtils.trimToNull(getZone());
+    final String dateStyleStr = StringUtils.trimToNull(getDateStyle());
+    final String timeStyleStr = StringUtils.trimToNull(getTimeStyle());
+    final List<UserFormError> errors = new ArrayList<>();
     // user name
     if (userName == null) {
       errors.add(UserFormError.USERNAME_MISSING);
@@ -263,7 +263,7 @@ public class UserForm implements Bean {
     } else if (isUserNameInvalid(userName)) {
       errors.add(UserFormError.USERNAME_INVALID);
     } else {
-      if (add && userMaster.nameExists(userName)) {
+      if (add && master.nameExists(userName)) {
         errors.add(UserFormError.USERNAME_ALREADY_IN_USE);
       }
     }
@@ -280,10 +280,10 @@ public class UserForm implements Bean {
       errors.add(UserFormError.PASSWORD_TOO_SHORT);
     } else if (isPasswordTooLong(password)) {
       errors.add(UserFormError.PASSWORD_TOO_LONG);
-    } else if (isPasswordWeak(userName, password)) {
+    } else if (userName != null && isPasswordWeak(userName, password)) {
       errors.add(UserFormError.PASSWORD_WEAK);
     } else {
-      passwordHash = pwService.encryptPassword(password);
+      passwordHash = service.encryptPassword(password);
     }
     // email
     if (email == null) {
@@ -306,7 +306,7 @@ public class UserForm implements Bean {
     if (localeStr != null) {
       try {
         locale = LocaleUtils.toLocale(localeStr);
-      } catch (RuntimeException ex) {
+      } catch (final RuntimeException ex) {
         errors.add(UserFormError.LOCALE_INVALID);
       }
     }
@@ -315,7 +315,7 @@ public class UserForm implements Bean {
     if (zoneStr != null) {
       try {
         zoneId = ZoneId.of(zoneStr);
-      } catch (RuntimeException ex) {
+      } catch (final RuntimeException ex) {
         errors.add(UserFormError.TIMEZONE_INVALID);
       }
     }
@@ -324,7 +324,7 @@ public class UserForm implements Bean {
     if (dateStyleStr != null) {
       try {
         dateStyle = DateStyle.valueOf(dateStyleStr);
-      } catch (RuntimeException ex) {
+      } catch (final RuntimeException ex) {
         errors.add(UserFormError.DATESTYLE_INVALID);
       }
     }
@@ -333,7 +333,7 @@ public class UserForm implements Bean {
     if (timeStyleStr != null) {
       try {
         timeStyle = TimeStyle.valueOf(timeStyleStr);
-      } catch (RuntimeException ex) {
+      } catch (final RuntimeException ex) {
         errors.add(UserFormError.TIMESTYLE_INVALID);
       }
     }
@@ -361,104 +361,104 @@ public class UserForm implements Bean {
   //-------------------------------------------------------------------------
   /**
    * Checks if the user name is too short.
-   * 
+   *
    * @param userName  the user name, not null
    * @return true if short
    */
-  protected boolean isUserNameTooShort(String userName) {
+  protected boolean isUserNameTooShort(final String userName) {
     return userName.length() < 5;
   }
 
   /**
    * Checks if the user name is too long.
-   * 
+   *
    * @param userName  the user name, not null
    * @return true if long
    */
-  protected boolean isUserNameTooLong(String userName) {
+  protected boolean isUserNameTooLong(final String userName) {
     return userName.length() > 20;
   }
 
   /**
    * Checks if the user name is invalid.
-   * 
+   *
    * @param userName  the user name, not null
    * @return true if invalid
    */
-  protected boolean isUserNameInvalid(String userName) {
-    return VALID_NAME.matcher(userName).matches() == false;
+  protected boolean isUserNameInvalid(final String userName) {
+    return !VALID_NAME.matcher(userName).matches();
   }
 
   /**
    * Checks if the password is too short.
-   * 
+   *
    * @param password  the password, not null
    * @return true if short
    */
-  protected boolean isPasswordTooShort(String password) {
+  protected boolean isPasswordTooShort(final String password) {
     return password.length() < 6;
   }
 
   /**
    * Checks if the password is too long.
-   * 
+   *
    * @param password  the password, not null
    * @return true if long
    */
-  protected boolean isPasswordTooLong(String password) {
+  protected boolean isPasswordTooLong(final String password) {
     return password.length() > 100;
   }
 
   /**
    * Checks if the password is weak.
-   * 
+   *
    * @param userName  the user name, not null
    * @param password  the password, not null
    * @return true if weak
    */
-  protected boolean isPasswordWeak(String userName, String password) {
-    userName = userName.toLowerCase(Locale.ENGLISH);
-    password = password.toLowerCase(Locale.ENGLISH);
-    return userName.equals(password) || password.equals("password");
+  protected boolean isPasswordWeak(final String userName, final String password) {
+    final String un = userName.toLowerCase(Locale.ENGLISH);
+    final String pwd = password.toLowerCase(Locale.ENGLISH);
+    return un.equals(pwd) || pwd.equals("password");
   }
 
   /**
    * Checks if the email address is too long.
-   * 
+   *
    * @param emailAddress  the email address, not null
    * @return true if long
    */
-  protected boolean isEmailAddressTooLong(String emailAddress) {
+  protected boolean isEmailAddressTooLong(final String emailAddress) {
     return emailAddress.length() > 200;
   }
 
   /**
    * Checks if the email address is invalid.
-   * 
+   *
    * @param email  the email address, not null
    * @return true if invalid
    */
-  protected boolean isEmailAddressInvalid(String email) {
-    return email.contains("@") == false;
+  protected boolean isEmailAddressInvalid(final String email) {
+    return !email.contains("@");
   }
 
   /**
    * Checks if the display name is too long.
-   * 
+   *
    * @param displayName  the display name, not null
    * @return true if invalid
    */
-  protected boolean isDisplayNameTooLong(String displayName) {
+  protected boolean isDisplayNameTooLong(final String displayName) {
     return displayName.length() > 200;
   }
 
   /**
    * Checks if the display name is invalid.
-   * 
+   *
    * @param displayName  the display name, not null
    * @return true if invalid
    */
-  protected boolean isDisplayNameInvalid(String displayName) {
+  protected boolean isDisplayNameInvalid(final String displayName) {
     return false;
   }
 

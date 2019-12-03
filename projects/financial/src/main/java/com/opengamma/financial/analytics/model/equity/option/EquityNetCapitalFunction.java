@@ -14,23 +14,23 @@ import com.opengamma.financial.security.option.EquityIndexOptionSecurity;
 import com.opengamma.financial.security.option.EquityOptionSecurity;
 
 /**
- * Prototype - Takes {@link ValueRequirementNames#NET_MARKET_VALUE} as input requirement, 
- * and scales by a constant representing, say, a fund's capital.<p>
+ * Prototype - Takes {@link ValueRequirementNames#NET_MARKET_VALUE} as input requirement, and scales by a constant representing, say, a fund's capital.
  * <p>
  * Applies only to Equity Security Types
  */
 public class EquityNetCapitalFunction extends NetCapitalFunction {
 
+  @Override
   protected String getOutputName() {
     return ValueRequirementNames.EQUITY_NET_CAPITAL;
   }
-  
+
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    Security security = target.getPositionOrTrade().getSecurity();
-    if ((security instanceof EquitySecurity) || 
-        (security instanceof EquityOptionSecurity) || 
-        (security instanceof EquityIndexOptionSecurity)) {
+    final Security security = target.getPositionOrTrade().getSecurity();
+    if (security instanceof EquitySecurity
+        || security instanceof EquityOptionSecurity
+        || security instanceof EquityIndexOptionSecurity) {
       return true;
     }
     return false;

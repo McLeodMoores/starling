@@ -20,7 +20,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * The entry point for running OpenGamma batches. 
+ * The entry point for running OpenGamma batches.
  */
 @Scriptable
 public class HtsSyncTool extends AbstractDualComponentTool {
@@ -28,42 +28,42 @@ public class HtsSyncTool extends AbstractDualComponentTool {
   /**
    * Main method to run the tool.
    * No arguments are needed.
-   * 
+   *
    * @param args  the arguments, unused
    */
-  public static void main(String[] args) { // CSIGNORE
-    boolean success = new HtsSyncTool().initAndRun(args);
+  public static void main(final String[] args) { // CSIGNORE
+    final boolean success = new HtsSyncTool().initAndRun(args);
     System.exit(success ? 0 : 1);
   }
 
   @Override
   protected void doRun() throws Exception {
-    Map<String, HistoricalTimeSeriesMaster> srcHtsMasters = getSourceRemoteComponentFactory().getHistoricalTimeSeriesMasters();
-    Map<String, HistoricalTimeSeriesMaster> destHtsMasters = getDestinationRemoteComponentFactory().getHistoricalTimeSeriesMasters();
-    boolean fast = getCommandLine().hasOption("fast");
-    boolean hardSync = getCommandLine().hasOption("hard-sync");
-    boolean verbose = getCommandLine().hasOption("verbose");
-    boolean noAdditions = getCommandLine().hasOption("no-additions");
+    final Map<String, HistoricalTimeSeriesMaster> srcHtsMasters = getSourceRemoteComponentFactory().getHistoricalTimeSeriesMasters();
+    final Map<String, HistoricalTimeSeriesMaster> destHtsMasters = getDestinationRemoteComponentFactory().getHistoricalTimeSeriesMasters();
+    final boolean fast = getCommandLine().hasOption("fast");
+    final boolean hardSync = getCommandLine().hasOption("hard-sync");
+    final boolean verbose = getCommandLine().hasOption("verbose");
+    final boolean noAdditions = getCommandLine().hasOption("no-additions");
     if (hardSync && noAdditions) {
       System.err.println("Cannot specify both hard-sync and no-additions options");
       return;
     }
-    Set<String> filteredClassifiers = filterClassifiers(srcHtsMasters.keySet(), destHtsMasters.keySet());
-    for (String classifier : filteredClassifiers) {
-      HistoricalTimeSeriesMaster srcHtsMaster = srcHtsMasters.get(classifier);
-      HistoricalTimeSeriesMaster destHtsMaster = destHtsMasters.get(classifier);
-      HistoricalTimeSeriesMasterCopier copier = new HistoricalTimeSeriesMasterCopier(srcHtsMaster, destHtsMaster);
+    final Set<String> filteredClassifiers = filterClassifiers(srcHtsMasters.keySet(), destHtsMasters.keySet());
+    for (final String classifier : filteredClassifiers) {
+      final HistoricalTimeSeriesMaster srcHtsMaster = srcHtsMasters.get(classifier);
+      final HistoricalTimeSeriesMaster destHtsMaster = destHtsMasters.get(classifier);
+      final HistoricalTimeSeriesMasterCopier copier = new HistoricalTimeSeriesMasterCopier(srcHtsMaster, destHtsMaster);
       copier.copy(fast, hardSync, verbose, noAdditions);
     }
   }
-  
-  private Set<String> filterClassifiers(Set<String> srcMasterClassifiers, Set<String> destMasterClassifiers) {
-    Set<String> commonComponentNames = Sets.newLinkedHashSet();
+
+  private Set<String> filterClassifiers(final Set<String> srcMasterClassifiers, final Set<String> destMasterClassifiers) {
+    final Set<String> commonComponentNames = Sets.newLinkedHashSet();
     commonComponentNames.addAll(srcMasterClassifiers);
     commonComponentNames.retainAll(destMasterClassifiers);
     if (getCommandLine().hasOption("classifiers")) {
-      List<String> classifiersList = Arrays.asList(getCommandLine().getOptionValues("classifiers"));
-      Set<String> classifiers = Sets.newHashSet();
+      final List<String> classifiersList = Arrays.asList(getCommandLine().getOptionValues("classifiers"));
+      final Set<String> classifiers = Sets.newHashSet();
       classifiers.addAll(classifiersList);
       classifiers.removeAll(classifiers);
       if (classifiers.size() > 0) {
@@ -72,10 +72,10 @@ public class HtsSyncTool extends AbstractDualComponentTool {
       classifiers.clear();
       classifiers.addAll(classifiersList);
       commonComponentNames.retainAll(classifiers);
-    }    
+    }
     return commonComponentNames;
   }
-  
+
   @SuppressWarnings("static-access")
   private Option createClassifiersOption() {
     return OptionBuilder.hasArgs()
@@ -85,7 +85,7 @@ public class HtsSyncTool extends AbstractDualComponentTool {
                         .withLongOpt("classifiers")
                         .create("c");
   }
-  
+
   @SuppressWarnings("static-access")
   private Option createFastOption() {
     return OptionBuilder.hasArg(false)
@@ -94,7 +94,7 @@ public class HtsSyncTool extends AbstractDualComponentTool {
                         .withLongOpt("fast")
                         .create("f");
   }
-  
+
   @SuppressWarnings("static-access")
   private Option createHardSyncOption() {
     return OptionBuilder.hasArg(false)
@@ -103,7 +103,7 @@ public class HtsSyncTool extends AbstractDualComponentTool {
                         .withLongOpt("hard-sync")
                         .create("h");
   }
-  
+
   @SuppressWarnings("static-access")
   private Option createNoAdditionsOption() {
     return OptionBuilder.hasArg(false)
@@ -112,7 +112,7 @@ public class HtsSyncTool extends AbstractDualComponentTool {
                         .withLongOpt("no-additions")
                         .create("n");
   }
-    
+
   @SuppressWarnings("static-access")
   private Option createVerboseOption() {
     return OptionBuilder.hasArg(false)
@@ -121,11 +121,11 @@ public class HtsSyncTool extends AbstractDualComponentTool {
                         .withLongOpt("verbose")
                         .create("v");
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   protected Options createOptions() {
-    Options options = super.createOptions();
+    final Options options = super.createOptions();
     options.addOption(createClassifiersOption());
     options.addOption(createVerboseOption());
     options.addOption(createFastOption());

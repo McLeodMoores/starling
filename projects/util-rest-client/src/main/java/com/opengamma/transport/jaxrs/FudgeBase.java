@@ -33,8 +33,8 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
   /**
    * Creates an instance.
-   * 
-   * @param fudgeContext the Fudge context to use
+   *
+   * @param context  the Fudge context to use
    */
   protected FudgeBase(final FudgeContext context) {
     setFudgeContext(context);
@@ -43,7 +43,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
   //-------------------------------------------------------------------------
   /**
    * Gets the Fudge context.
-   * 
+   *
    * @return the context, not null
    */
   public FudgeContext getFudgeContext() {
@@ -52,7 +52,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
   /**
    * Sets the Fudge context.
-   * 
+   *
    * @param fudgeContext the context to use, not null
    */
   public void setFudgeContext(final FudgeContext fudgeContext) {
@@ -63,7 +63,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
   //-------------------------------------------------------------------------
   /**
    * Gets the taxonomy id.
-   * 
+   *
    * @return the taxonomy id
    */
   public int getFudgeTaxonomyId() {
@@ -72,7 +72,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
   /**
    * Sets the taxonomy id.
-   * 
+   *
    * @param fudgeTaxonomyId the taxonomy id, which must be a 16-bit signed integer
    */
   public void setFudgeTaxonomyId(final int fudgeTaxonomyId) {

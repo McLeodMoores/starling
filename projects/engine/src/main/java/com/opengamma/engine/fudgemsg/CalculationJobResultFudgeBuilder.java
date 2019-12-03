@@ -22,7 +22,7 @@ import com.opengamma.engine.calcnode.CalculationJobSpecification;
 
 /**
  * Fudge message builder for {@code CalculationJob}.
- * 
+ *
  * <pre>
  * message CalculationJobResult extends CalculationJobSpecification {
  *   required long duration;                    // job execution time
@@ -40,14 +40,14 @@ public class CalculationJobResultFudgeBuilder implements FudgeBuilder<Calculatio
 
   protected FudgeMsg buildItemsMessage(final FudgeSerializer serializer, final List<CalculationJobResultItem> items) {
     final MutableFudgeMsg msg = serializer.newMessage();
-    for (CalculationJobResultItem item : items) {
+    for (final CalculationJobResultItem item : items) {
       msg.add(null, null, CalculationJobResultItemFudgeBuilder.buildMessageImpl(serializer, item));
     }
     return msg;
   }
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CalculationJobResult object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CalculationJobResult object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     CalculationJobSpecificationFudgeBuilder.buildMessageImpl(msg, object.getSpecification());
     msg.add(DURATION_FIELD_NAME, object.getDuration());
@@ -57,15 +57,15 @@ public class CalculationJobResultFudgeBuilder implements FudgeBuilder<Calculatio
   }
 
   protected List<CalculationJobResultItem> buildItemsObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
-    final List<CalculationJobResultItem> result = new ArrayList<CalculationJobResultItem>(msg.getNumFields());
-    for (FudgeField field : msg) {
+    final List<CalculationJobResultItem> result = new ArrayList<>(msg.getNumFields());
+    for (final FudgeField field : msg) {
       result.add(CalculationJobResultItemFudgeBuilder.buildObjectImpl(deserializer, (FudgeMsg) field.getValue()));
     }
     return result;
   }
 
   @Override
-  public CalculationJobResult buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public CalculationJobResult buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final CalculationJobSpecification jobSpec = CalculationJobSpecificationFudgeBuilder.buildObjectImpl(msg);
     final long duration = msg.getLong(DURATION_FIELD_NAME);
     final List<CalculationJobResultItem> jobItems = buildItemsObject(deserializer, msg.getMessage(ITEMS_FIELD_NAME));

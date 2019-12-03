@@ -50,40 +50,40 @@ public class SimpleResultBuilder {
   private final List<String> _columnNames;
   private final List<UniqueIdentifiable> _targets;
 
-  public SimpleResultBuilder(CompiledViewDefinition compiledViewDef) {
+  public SimpleResultBuilder(final CompiledViewDefinition compiledViewDef) {
     _compiledViewDef = ArgumentChecker.notNull(compiledViewDef, "compiledViewDef");
 
-    PortfolioMapperFunction<List<UniqueIdentifiable>> mapperFn = new PortfolioMapperFunction<List<UniqueIdentifiable>>() {
+    final PortfolioMapperFunction<List<UniqueIdentifiable>> mapperFn = new PortfolioMapperFunction<List<UniqueIdentifiable>>() {
       @Override
-      public List<UniqueIdentifiable> apply(PortfolioNode node) {
-        return Collections.<UniqueIdentifiable>singletonList(node);
+      public List<UniqueIdentifiable> apply(final PortfolioNode node) {
+        return Collections.<UniqueIdentifiable> singletonList(node);
       }
 
       @Override
-      public List<UniqueIdentifiable> apply(PortfolioNode parent, Position position) {
-        List<UniqueIdentifiable> targets = Lists.<UniqueIdentifiable>newArrayList(position);
-        for (Trade trade : position.getTrades()) {
+      public List<UniqueIdentifiable> apply(final PortfolioNode parent, final Position position) {
+        final List<UniqueIdentifiable> targets = Lists.<UniqueIdentifiable> newArrayList(position);
+        for (final Trade trade : position.getTrades()) {
           targets.add(trade);
         }
         return targets;
       }
     };
-    List<UniqueIdentifiable> targets = PortfolioMapper.flatMap(compiledViewDef.getPortfolio().getRootNode(), mapperFn);
+    final List<UniqueIdentifiable> targets = PortfolioMapper.flatMap(compiledViewDef.getPortfolio().getRootNode(), mapperFn);
     _idToIndex = Maps.newHashMapWithExpectedSize(targets.size());
     int rowIndex = 0;
-    for (UniqueIdentifiable target : targets) {
+    for (final UniqueIdentifiable target : targets) {
       _idToIndex.put(target.getUniqueId().getObjectId(), rowIndex++);
     }
 
-    //---------------------------------------------------
+    // ---------------------------------------------------
 
-    Collection<ViewCalculationConfiguration> calcConfigs = compiledViewDef.getViewDefinition().getAllCalculationConfigurations();
-    Set<ColumnSpec> columns = Sets.newLinkedHashSet();
-    for (ViewCalculationConfiguration calcConfig : calcConfigs) {
-      for (ViewCalculationConfiguration.Column column : calcConfig.getColumns()) {
+    final Collection<ViewCalculationConfiguration> calcConfigs = compiledViewDef.getViewDefinition().getAllCalculationConfigurations();
+    final Set<ColumnSpec> columns = Sets.newLinkedHashSet();
+    for (final ViewCalculationConfiguration calcConfig : calcConfigs) {
+      for (final ViewCalculationConfiguration.Column column : calcConfig.getColumns()) {
         columns.add(new ColumnSpec(calcConfig.getName(), column.getValueName(), column.getProperties(), column.getHeader()));
       }
-      for (Pair<String, ValueProperties> output : calcConfig.getAllPortfolioRequirements()) {
+      for (final Pair<String, ValueProperties> output : calcConfig.getAllPortfolioRequirements()) {
         String header;
         if (calcConfigs.size() == 1) {
           // if there's only 1 calc config then use the value name as the column header
@@ -96,9 +96,9 @@ public class SimpleResultBuilder {
       }
     }
     _colToIndex = Maps.newHashMapWithExpectedSize(columns.size());
-    List<String> columnNames = Lists.newArrayListWithCapacity(columns.size());
+    final List<String> columnNames = Lists.newArrayListWithCapacity(columns.size());
     int colIndex = 0;
-    for (ColumnSpec column : columns) {
+    for (final ColumnSpec column : columns) {
       _colToIndex.put(column, colIndex++);
       columnNames.add(column._header);
     }
@@ -108,45 +108,51 @@ public class SimpleResultBuilder {
 
   /**
    * Builds a {@link ScenarioResultModel} from the data calculated in a single cycle.
-   * @param resultModel The results calculated by the engine in a single calculation cycle
+   *
+   * @param resultModel
+   *          The results calculated by the engine in a single calculation cycle
    * @return A simple result model built from the results
    */
-  public SimpleResultModel build(ViewResultModel resultModel) {
+  public SimpleResultModel build(final ViewResultModel resultModel) {
     return build(resultModel, _columnNames);
   }
 
   /**
    * Builds a {@link ScenarioResultModel} from the data calculated in a single cycle.
-   * @param resultModel the results calculated by the engine in a single calculation cycle
-   * @param columnNames column name overrides
+   *
+   * @param resultModel
+   *          the results calculated by the engine in a single calculation cycle
+   * @param columnNames
+   *          column name overrides
    * @return A simple result model built from the results
-   * @throws IllegalArgumentException if the number of column names doesn't match the number of columns
+   * @throws IllegalArgumentException
+   *           if the number of column names doesn't match the number of columns
    */
-  public SimpleResultModel build(ViewResultModel resultModel, List<String> columnNames) {
+  public SimpleResultModel build(final ViewResultModel resultModel, final List<String> columnNames) {
     ArgumentChecker.notNull(columnNames, "columnNames");
     ArgumentChecker.notNull(resultModel, "resultModel");
 
     if (columnNames.size() != _columnNames.size()) {
-      throw new IllegalArgumentException("Wrong number of column names. expected: " + _columnNames.size() +
-                                             ", actual: " + columnNames.size());
+      throw new IllegalArgumentException("Wrong number of column names. expected: " + _columnNames.size()
+          + ", actual: " + columnNames.size());
     }
-    int rowCount = _idToIndex.size();
-    int colCount = columnNames.size();
-    ContiguousSet<Integer> rowIndices = ContiguousSet.create(Range.closedOpen(0, rowCount), DiscreteDomain.integers());
-    ContiguousSet<Integer> colIndices = ContiguousSet.create(Range.closedOpen(0, colCount), DiscreteDomain.integers());
-    Table<Integer, Integer, Object> table = ArrayTable.create(rowIndices, colIndices);
+    final int rowCount = _idToIndex.size();
+    final int colCount = columnNames.size();
+    final ContiguousSet<Integer> rowIndices = ContiguousSet.create(Range.closedOpen(0, rowCount), DiscreteDomain.integers());
+    final ContiguousSet<Integer> colIndices = ContiguousSet.create(Range.closedOpen(0, colCount), DiscreteDomain.integers());
+    final Table<Integer, Integer, Object> table = ArrayTable.create(rowIndices, colIndices);
 
-    for (ViewResultEntry entry : resultModel.getAllResults()) {
-      String calcConfigName = entry.getCalculationConfiguration();
-      ComputedValueResult value = entry.getComputedValue();
-      ValueSpecification valueSpec = value.getSpecification();
-      CompiledViewCalculationConfiguration calcConfig = _compiledViewDef.getCompiledCalculationConfiguration(calcConfigName);
-      Set<ValueRequirement> valueReqs = calcConfig.getTerminalOutputSpecifications().get(valueSpec);
+    for (final ViewResultEntry entry : resultModel.getAllResults()) {
+      final String calcConfigName = entry.getCalculationConfiguration();
+      final ComputedValueResult value = entry.getComputedValue();
+      final ValueSpecification valueSpec = value.getSpecification();
+      final CompiledViewCalculationConfiguration calcConfig = _compiledViewDef.getCompiledCalculationConfiguration(calcConfigName);
+      final Set<ValueRequirement> valueReqs = calcConfig.getTerminalOutputSpecifications().get(valueSpec);
 
-      for (ValueRequirement valueReq : valueReqs) {
-        ColumnSpec colSpec = new ColumnSpec(calcConfigName, valueReq.getValueName(), valueReq.getConstraints());
-        Integer colIndex = _colToIndex.get(colSpec);
-        Integer rowIndex = _idToIndex.get(valueReq.getTargetReference().getSpecification().getUniqueId().getObjectId());
+      for (final ValueRequirement valueReq : valueReqs) {
+        final ColumnSpec colSpec = new ColumnSpec(calcConfigName, valueReq.getValueName(), valueReq.getConstraints());
+        final Integer colIndex = _colToIndex.get(colSpec);
+        final Integer rowIndex = _idToIndex.get(valueReq.getTargetReference().getSpecification().getUniqueId().getObjectId());
 
         // there won't be a row or column index for specific outputs (e.g. curves)
         if (colIndex != null && rowIndex != null) {
@@ -169,14 +175,14 @@ public class SimpleResultBuilder {
     /** Column header. */
     private final String _header;
 
-    private ColumnSpec(String calcConfigName, String valueName, ValueProperties valueProperties, String header) {
+    private ColumnSpec(final String calcConfigName, final String valueName, final ValueProperties valueProperties, final String header) {
       _calcConfigName = calcConfigName;
       _valueName = valueName;
       _valueProperties = valueProperties;
       _header = header;
     }
 
-    public ColumnSpec(String calcConfigName, String valueName, ValueProperties properties) {
+    ColumnSpec(final String calcConfigName, final String valueName, final ValueProperties properties) {
       this(calcConfigName, valueName, properties, null);
     }
 
@@ -188,7 +194,7 @@ public class SimpleResultBuilder {
 
     // header is deliberately ignored for the purposes of equals and hashCode
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
       if (this == obj) {
         return true;
       }
@@ -196,10 +202,9 @@ public class SimpleResultBuilder {
         return false;
       }
       final ColumnSpec other = (ColumnSpec) obj;
-      return
-          Objects.equals(this._calcConfigName, other._calcConfigName) &&
-          Objects.equals(this._valueName, other._valueName) &&
-          Objects.equals(this._valueProperties, other._valueProperties);
+      return Objects.equals(this._calcConfigName, other._calcConfigName)
+          && Objects.equals(this._valueName, other._valueName)
+          && Objects.equals(this._valueProperties, other._valueProperties);
     }
   }
 }

@@ -16,7 +16,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class Interpolator1DCubicSplineDataBundle implements Interpolator1DDataBundle {
   private final Interpolator1DDataBundle _underlyingData;
@@ -37,12 +37,16 @@ public class Interpolator1DCubicSplineDataBundle implements Interpolator1DDataBu
   }
 
   /**
-   * Data bundle for a cubic spline 
-   * @param underlyingData the data
-   * @param leftGrad The gradient of the function at the left most knot. <b>Note: </b>to leave this unspecified (i.e. natural with zero second derivative),
-   *  set the value to Double.POSITIVE_INFINITY
-   * @param rightGrad The gradient of the function at the right most knot. <b>Note: </b>to leave this unspecified (i.e. natural with zero second derivative),
-   *  set the value to Double.POSITIVE_INFINITY
+   * Data bundle for a cubic spline .
+   * 
+   * @param underlyingData
+   *          the data
+   * @param leftGrad
+   *          The gradient of the function at the left most knot. <b>Note: </b>to leave this unspecified (i.e. natural with zero second derivative), set the
+   *          value to Double.POSITIVE_INFINITY
+   * @param rightGrad
+   *          The gradient of the function at the right most knot. <b>Note: </b>to leave this unspecified (i.e. natural with zero second derivative), set the
+   *          value to Double.POSITIVE_INFINITY
    */
   public Interpolator1DCubicSplineDataBundle(final Interpolator1DDataBundle underlyingData, final double leftGrad, final double rightGrad) {
     ArgumentChecker.notNull(underlyingData, "underlying data");
@@ -158,7 +162,7 @@ public class Interpolator1DCubicSplineDataBundle implements Interpolator1DDataBu
     return _secondDerivatives;
   }
 
-  //TODO not ideal that it recomputes the inverse matrix
+  // TODO not ideal that it recomputes the inverse matrix
   public double[][] getSecondDerivativesSensitivities() {
     if (_secondDerivativesSensitivities == null) {
       final double[] x = getKeys();
@@ -267,12 +271,12 @@ public class Interpolator1DCubicSplineDataBundle implements Interpolator1DDataBu
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_leftFirstDev);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + 1237;
     temp = Double.doubleToLongBits(_rightFirstDev);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + 1237;
-    result = prime * result + ((_underlyingData == null) ? 0 : _underlyingData.hashCode());
+    result = prime * result + (_underlyingData == null ? 0 : _underlyingData.hashCode());
     return result;
   }
 

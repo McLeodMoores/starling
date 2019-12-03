@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.generator;
 
@@ -15,8 +15,11 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
+import com.opengamma.financial.convention.OISLegConvention;
+import com.opengamma.financial.convention.OvernightIndexConvention;
+import com.opengamma.financial.convention.SwapConvention;
+import com.opengamma.financial.convention.SwapFixedLegConvention;
+import com.opengamma.financial.convention.frequency.PeriodFrequency;
 import com.opengamma.financial.generator.AbstractPortfolioGeneratorTool;
 import com.opengamma.financial.generator.LeafPortfolioNodeGenerator;
 import com.opengamma.financial.generator.NameGenerator;
@@ -71,8 +74,8 @@ public class ExampleOisPortfolioGeneratorTool extends AbstractPortfolioGenerator
     /** The tickers of the OIS rates for each currency */
     private static final List<Pair<Currency, ExternalId>> FIXINGS = new ArrayList<>();
     /** The swap tenors */
-    private static final Tenor[] TENORS = new Tenor[] {Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS,
-      Tenor.ofYears(7), Tenor.TEN_YEARS, Tenor.ofYears(15), Tenor.ofYears(20) };
+    private static final Tenor[] TENORS = new Tenor[] { Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS, Tenor.ofYears(7), Tenor.TEN_YEARS,
+        Tenor.ofYears(15), Tenor.ofYears(20) };
     /** The trade date */
     private static final LocalDate TODAY = LocalDate.now();
     /** The counterparty */
@@ -89,6 +92,7 @@ public class ExampleOisPortfolioGeneratorTool extends AbstractPortfolioGenerator
 
     /**
      * Gets the singleton instance.
+     *
      * @return The instance
      */
     public static SecurityGenerator<SwapSecurity> getInstance() {
@@ -115,28 +119,21 @@ public class ExampleOisPortfolioGeneratorTool extends AbstractPortfolioGenerator
       final Double notional = (getRandom().nextInt(9999) + 1) * 10000.;
       final ZonedDateTime tradeDateTime = TODAY.atStartOfDay(ZoneOffset.UTC);
       final ZonedDateTime maturityDateTime = maturity.atStartOfDay(ZoneOffset.UTC);
-      final ConventionBundle swapConvention = getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME,
-          ccy.getCode() + "_OIS_SWAP"));
+      final SwapConvention swapConvention = getConventionSource().getSingle(ExternalId.of("CONVENTION", ccy + " OIS"), SwapConvention.class);
       if (swapConvention == null) {
         LOGGER.error("Couldn't get swap convention for {}", ccy.getCode());
         return null;
       }
+      final SwapFixedLegConvention fixedLegConvention = getConventionSource().getSingle(swapConvention.getPayLegConvention(), SwapFixedLegConvention.class);
+      final OISLegConvention oisLegConvention = getConventionSource().getSingle(swapConvention.getReceiveLegConvention(), OISLegConvention.class);
+      final OvernightIndexConvention indexConvention = getConventionSource().getSingle(oisLegConvention.getOvernightIndexConvention(),
+          OvernightIndexConvention.class);
       final InterestRateNotional interestRateNotional = new InterestRateNotional(ccy, notional);
-      final SwapLeg fixedLeg = new FixedInterestRateLeg(swapConvention.getSwapFixedLegDayCount(),
-          swapConvention.getSwapFixedLegFrequency(),
-          swapConvention.getSwapFixedLegRegion(),
-          swapConvention.getSwapFixedLegBusinessDayConvention(),
-          interestRateNotional,
-          false,
-          fixedRate);
-      final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(swapConvention.getSwapFloatingLegDayCount(),
-          swapConvention.getSwapFloatingLegFrequency(),
-          swapConvention.getSwapFloatingLegRegion(),
-          swapConvention.getSwapFloatingLegBusinessDayConvention(),
-          interestRateNotional,
-          false,
-          floatingRateId,
-          FloatingRateType.OIS);
+      final SwapLeg fixedLeg = new FixedInterestRateLeg(fixedLegConvention.getDayCount(), PeriodFrequency.of(fixedLegConvention.getPaymentTenor().getPeriod()),
+          fixedLegConvention.getRegionCalendar(), fixedLegConvention.getBusinessDayConvention(), interestRateNotional, false, fixedRate);
+      final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(indexConvention.getDayCount(),
+          PeriodFrequency.of(oisLegConvention.getPaymentTenor().getPeriod()), indexConvention.getRegionCalendar(), oisLegConvention.getBusinessDayConvention(),
+          interestRateNotional, false, floatingRateId, FloatingRateType.OIS);
       floatingLeg.setInitialFloatingRate(initialRate);
       final boolean isPayFixed = getRandom().nextBoolean();
       final SwapLeg payLeg;

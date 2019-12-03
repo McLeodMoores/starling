@@ -29,15 +29,15 @@ import com.opengamma.util.tuple.Pair;
  *
  */
 public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProviderDiscount> {
-  private static final ParSpreadMarketQuoteDiscountingCalculator CALCULATOR =
-      ParSpreadMarketQuoteDiscountingCalculator.getInstance();
-  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator SENSITIVITY_CALCULATOR =
-      ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteDiscountingCalculator CALCULATOR = ParSpreadMarketQuoteDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator SENSITIVITY_CALCULATOR = ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator
+      .getInstance();
   private final MulticurveDiscountBuildingRepository _curveBuildingRepository;
 
   /**
    * Allows the curves to be set up.
-   * @return  a set up object
+   * 
+   * @return a set up object
    */
   public static DiscountingMethodCurveSetUp setUp() {
     return new DiscountingMethodCurveSetUp();
@@ -45,18 +45,31 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
 
   /**
    * Constructor.
-   * @param curveNames  names of the curves to be constructed, not null
-   * @param discountingCurves  maps the curve name to a particular identifier that will use that curve for discounting, not null
-   * @param iborCurves  maps the curve name to ibor indices that will use that curve to calculate forward IBOR rates, not null
-   * @param overnightCurves  maps the curve name to ibor indices that will use that curve to calculate forward overnight rates, not null
-   * @param nodes  the nodes in each curve, not null
-   * @param curveTypes  the type of each curve, not null
-   * @param fxMatrix  any FX rates required to build the curves, not null
-   * @param preConstructedCurves  pre-constructed curves, not null
-   * @param knownBundle  sensitivity data for the pre-constructed curves, can be null
-   * @param absoluteTolerance  the absolute tolerance to be used in root-finding
-   * @param relativeTolerance  the relative tolerance to be used in root-finding
-   * @param maxSteps  the maximum number of steps to be used in root-finding
+   * 
+   * @param curveNames
+   *          names of the curves to be constructed, not null
+   * @param discountingCurves
+   *          maps the curve name to a particular identifier that will use that curve for discounting, not null
+   * @param iborCurves
+   *          maps the curve name to ibor indices that will use that curve to calculate forward IBOR rates, not null
+   * @param overnightCurves
+   *          maps the curve name to ibor indices that will use that curve to calculate forward overnight rates, not null
+   * @param nodes
+   *          the nodes in each curve, not null
+   * @param curveTypes
+   *          the type of each curve, not null
+   * @param fxMatrix
+   *          any FX rates required to build the curves, not null
+   * @param preConstructedCurves
+   *          pre-constructed curves, not null
+   * @param knownBundle
+   *          sensitivity data for the pre-constructed curves, can be null
+   * @param absoluteTolerance
+   *          the absolute tolerance to be used in root-finding
+   * @param relativeTolerance
+   *          the relative tolerance to be used in root-finding
+   * @param maxSteps
+   *          the maximum number of steps to be used in root-finding
    */
   DiscountingMethodCurveBuilder(
       final List<List<String>> curveNames,
@@ -112,7 +125,8 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
       }
       convertedOvernightCurves.put(entry.getKey(), converted);
     }
-    final MulticurveProviderDiscount knownData = new MulticurveProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, fxMatrix);
+    final MulticurveProviderDiscount knownData = new MulticurveProviderDiscount(knownDiscountingCurves, knownIborCurves,
+        knownOvernightCurves, fxMatrix);
     if (knownBundle != null) {
       return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, convertedDiscountingCurves,
           convertedIborCurves, convertedOvernightCurves, CALCULATOR,

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.swap;
@@ -13,7 +13,7 @@ import com.opengamma.financial.security.swap.ZeroCouponInflationSwapSecurity;
 import com.opengamma.masterdb.security.hibernate.EnumUserType;
 
 /**
- * Custom Hibernate usertype for the SwapType enum
+ * Custom Hibernate usertype for the SwapType enum.
  */
 public class SwapTypeUserType extends EnumUserType<SwapType> {
 
@@ -27,26 +27,26 @@ public class SwapTypeUserType extends EnumUserType<SwapType> {
   }
 
   @Override
-  protected String enumToStringNoCache(SwapType value) {
+  protected String enumToStringNoCache(final SwapType value) {
     return value.accept(new FinancialSecurityVisitorAdapter<String>() {
 
       @Override
-      public String visitForwardSwapSecurity(ForwardSwapSecurity security) {
+      public String visitForwardSwapSecurity(final ForwardSwapSecurity security) {
         return FORWARD_SWAP_TYPE;
       }
 
       @Override
-      public String visitSwapSecurity(SwapSecurity security) {
+      public String visitSwapSecurity(final SwapSecurity security) {
         return SWAP_TYPE;
       }
-      
+
       @Override
-      public String visitZeroCouponInflationSwapSecurity(ZeroCouponInflationSwapSecurity security) {
+      public String visitZeroCouponInflationSwapSecurity(final ZeroCouponInflationSwapSecurity security) {
         return ZERO_COUPON_INFLATION_SWAP;
       }
 
       @Override
-      public String visitYearOnYearInflationSwapSecurity(YearOnYearInflationSwapSecurity security) {
+      public String visitYearOnYearInflationSwapSecurity(final YearOnYearInflationSwapSecurity security) {
         return YEAR_ON_YEAR_INFLATION_SWAP;
       }
     });

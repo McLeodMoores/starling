@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
@@ -30,8 +30,9 @@ import com.opengamma.util.tuple.Pair;
 
 /**
  * Pricing method of a CMS coupon in the Hull-White (extended Vasicek) model by approximation.
- * <P> Reference: M. Henrard. CMS Swaps and Caps in One-Factor Gaussian Models, SSRN working paper 985551, February 2008. 
- * Available at http://ssrn.com/abstract=985551
+ * <P>
+ * Reference: M. Henrard. CMS Swaps and Caps in One-Factor Gaussian Models, SSRN working paper 985551, February 2008. Available at
+ * http://ssrn.com/abstract=985551
  */
 public final class CouponCMSHullWhiteApproximationMethod {
 
@@ -48,6 +49,7 @@ public final class CouponCMSHullWhiteApproximationMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CouponCMSHullWhiteApproximationMethod getInstance() {
@@ -69,16 +71,19 @@ public final class CouponCMSHullWhiteApproximationMethod {
 
   /**
    * Compute the present value of a CMS coupon with the Hull-White (extended Vasicek) model by approximation.
-   * @param cms The CMS coupon.
-   * @param multicurvesHW The Hull-White and multi-curves provider.
+   *
+   * @param cms
+   *          The CMS coupon.
+   * @param multicurvesHW
+   *          The Hull-White and multi-curves provider.
    * @return The coupon price.
    */
   public MultipleCurrencyAmount presentValue(final CouponCMS cms, final HullWhiteOneFactorProviderInterface multicurvesHW) {
     ArgumentChecker.notNull(cms, "CMS");
     ArgumentChecker.notNull(multicurvesHW, "Hull-White provider");
-    Currency ccy = cms.getCurrency();
-    HullWhiteOneFactorPiecewiseConstantParameters parameters = multicurvesHW.getHullWhiteParameters();
-    MulticurveProviderInterface multicurves = multicurvesHW.getMulticurveProvider();
+    final Currency ccy = cms.getCurrency();
+    final HullWhiteOneFactorPiecewiseConstantParameters parameters = multicurvesHW.getHullWhiteParameters();
+    final MulticurveProviderInterface multicurves = multicurvesHW.getMulticurveProvider();
     final double expiryTime = cms.getFixingTime();
     final SwapFixedCoupon<? extends Payment> swap = cms.getUnderlyingSwap();
     final double dfPayment = multicurves.getDiscountFactor(ccy, cms.getPaymentTime());
@@ -89,7 +94,8 @@ public final class CouponCMSHullWhiteApproximationMethod {
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
       alphaFixed[loopcf] = MODEL.alpha(parameters, 0.0, expiryTime, expiryTime, swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
       dfFixed[loopcf] = multicurves.getDiscountFactor(ccy, swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
-      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction() * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
+      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction()
+          * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
     }
     final AnnuityPaymentFixed cfeIbor = swap.getSecondLeg().accept(CFEC, multicurves);
     final double[] alphaIbor = new double[cfeIbor.getNumberOfPayments()];
@@ -110,16 +116,19 @@ public final class CouponCMSHullWhiteApproximationMethod {
 
   /**
    * Compute the present value of a CMS coupon with the Hull-White (extended Vasicek) model by approximation.
-   * @param cms The CMS coupon.
-   * @param multicurvesHW The Hull-White and multi-curves provider.
+   *
+   * @param cms
+   *          The CMS coupon.
+   * @param multicurvesHW
+   *          The Hull-White and multi-curves provider.
    * @return The present value curve sensitivity.
    */
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponCMS cms, final HullWhiteOneFactorProviderInterface multicurvesHW) {
     ArgumentChecker.notNull(cms, "CMS");
     ArgumentChecker.notNull(multicurvesHW, "Hull-White provider");
-    Currency ccy = cms.getCurrency();
-    HullWhiteOneFactorPiecewiseConstantParameters parameters = multicurvesHW.getHullWhiteParameters();
-    MulticurveProviderInterface multicurves = multicurvesHW.getMulticurveProvider();
+    final Currency ccy = cms.getCurrency();
+    final HullWhiteOneFactorPiecewiseConstantParameters parameters = multicurvesHW.getHullWhiteParameters();
+    final MulticurveProviderInterface multicurves = multicurvesHW.getMulticurveProvider();
     final double expiryTime = cms.getFixingTime();
     final SwapFixedCoupon<? extends Payment> swap = cms.getUnderlyingSwap();
     final double payTimeCMS = cms.getPaymentTime();
@@ -131,7 +140,8 @@ public final class CouponCMSHullWhiteApproximationMethod {
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
       alphaFixed[loopcf] = MODEL.alpha(parameters, 0.0, expiryTime, expiryTime, swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
       dfFixed[loopcf] = multicurves.getDiscountFactor(ccy, swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime());
-      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction() * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
+      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction()
+          * swap.getFixedLeg().getNthPayment(loopcf).getNotional();
     }
     final AnnuityPaymentFixed cfeIbor = swap.getSecondLeg().accept(CFEC, multicurves);
     final int nbIbor = cfeIbor.getNumberOfPayments();
@@ -147,14 +157,15 @@ public final class CouponCMSHullWhiteApproximationMethod {
     final double x0 = -alphaPayment;
     final double a0 = MODEL.swapRate(x0, discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor);
     final double a2 = MODEL.swapRateDx2(x0, discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor);
-    //    final double pv = (a0 + a2 / 2) * dfPayment * cms.getNotional() * cms.getPaymentYearFraction();
+    // final double pv = (a0 + a2 / 2) * dfPayment * cms.getNotional() * cms.getPaymentYearFraction();
     // Backward sweep
     final double pvBar = 1.0;
     final double a2Bar = 0.5 * dfPayment * cms.getNotional() * cms.getPaymentYearFraction() * pvBar;
     final double a0Bar = dfPayment * cms.getNotional() * cms.getPaymentYearFraction() * pvBar;
     final double[] discountedCashFlowAdjIborBar0 = MODEL.swapRateDdcfi1(x0, discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor);
     final double[] discountedCashFlowAdjFixedBar0 = MODEL.swapRateDdcff1(x0, discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor);
-    final Pair<double[], double[]> discountedCashFlowAdjXBar2 = MODEL.swapRateDx2Ddcf1(x0, discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor);
+    final Pair<double[], double[]> discountedCashFlowAdjXBar2 = MODEL.swapRateDx2Ddcf1(x0, discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor,
+        alphaIbor);
     final double[] discountedCashFlowAdjFixedBar2 = discountedCashFlowAdjXBar2.getFirst();
     final double[] discountedCashFlowAdjIborBar2 = discountedCashFlowAdjXBar2.getSecond();
 
@@ -177,18 +188,20 @@ public final class CouponCMSHullWhiteApproximationMethod {
     }
     final double[] dfFixedBar = new double[nbFixed];
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
-      dfFixedBar[loopcf] = swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction() * swap.getFixedLeg().getNthPayment(loopcf).getNotional() *
-          discountedCashFlowFixedBar[loopcf];
+      dfFixedBar[loopcf] = swap.getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction() * swap.getFixedLeg().getNthPayment(loopcf).getNotional()
+          * discountedCashFlowFixedBar[loopcf];
     }
 
     final List<DoublesPair> listDfSensi = new ArrayList<>();
     for (int loopcf = 0; loopcf < nbIbor; loopcf++) {
-      final DoublesPair dfSensi = DoublesPair.of(cfeIbor.getNthPayment(loopcf).getPaymentTime(), -cfeIbor.getNthPayment(loopcf).getPaymentTime() * dfIbor[loopcf] * dfIborBar[loopcf]);
+      final DoublesPair dfSensi = DoublesPair.of(cfeIbor.getNthPayment(loopcf).getPaymentTime(),
+          -cfeIbor.getNthPayment(loopcf).getPaymentTime() * dfIbor[loopcf] * dfIborBar[loopcf]);
       listDfSensi.add(dfSensi);
     }
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
-      final DoublesPair dfSensi = DoublesPair.of(swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime(), -swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime() * dfFixed[loopcf] *
-          dfFixedBar[loopcf]);
+      final DoublesPair dfSensi = DoublesPair.of(swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime(),
+          -swap.getFixedLeg().getNthPayment(loopcf).getPaymentTime() * dfFixed[loopcf]
+              * dfFixedBar[loopcf]);
       listDfSensi.add(dfSensi);
     }
     final Map<String, List<DoublesPair>> pvsDF = new HashMap<>();

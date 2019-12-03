@@ -9,21 +9,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 
+ *
  */
 public class TimeSeriesSamplingFunctionFactory {
-  /** No padding */
+  /** No padding. */
   public static final String NO_PADDING = "NoPadding";
-  /** Pad with previous value */
+  /** Pad with previous value. */
   public static final String PREVIOUS_VALUE_PADDING = "PreviousValuePadding";
-  /** Pad with previous value, pad with first value in series if there is insufficient data */
+  /** Pad with previous value, pad with first value in series if there is insufficient data. */
   public static final String PREVIOUS_AND_FIRST_VALUE_PADDING = "PreviousAndFirstValuePadding";
-  /** No padding calculator */
+  /** No padding calculator. */
   public static final NoPaddingTimeSeriesSamplingFunction NO_PADDING_FUNCTION = new NoPaddingTimeSeriesSamplingFunction();
-  /** Previous value padding calculator */
+  /** Previous value padding calculator. */
   public static final PreviousValuePaddingTimeSeriesSamplingFunction PREVIOUS_VALUE_FUNCTION = new PreviousValuePaddingTimeSeriesSamplingFunction();
-  /** Pad with previous value, pad with first value in series if there is insufficient data */
-  public static final PreviousAndFirstValuePaddingTimeSeriesSamplingFunction PREVIOUS_AND_FIRST_VALUE_FUNCTION = new PreviousAndFirstValuePaddingTimeSeriesSamplingFunction();
+  /** Pad with previous value, pad with first value in series if there is insufficient data. */
+  public static final PreviousAndFirstValuePaddingTimeSeriesSamplingFunction PREVIOUS_AND_FIRST_VALUE_FUNCTION =
+      new PreviousAndFirstValuePaddingTimeSeriesSamplingFunction();
 
   private static Map<String, TimeSeriesSamplingFunction> s_instances = new HashMap<>();
 

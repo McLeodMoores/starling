@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.model.curve.future;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,12 +46,14 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdentifiable;
 import com.opengamma.id.VersionCorrection;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  * Function providing an equity future curve.
  */
 public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FuturePriceCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FuturePriceCurveFunction.class);
 
   private static final Calendar WEEKDAYS = new MondayToFridayCalendar("MTWThF");
 
@@ -63,21 +63,23 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
   }
 
   @SuppressWarnings("unchecked")
-  private FuturePriceCurveDefinition<Object> getCurveDefinition(final ComputationTarget target, final String definitionName, final VersionCorrection versionCorrection) {
+  private FuturePriceCurveDefinition<Object> getCurveDefinition(final ComputationTarget target, final String definitionName,
+      final VersionCorrection versionCorrection) {
     if (!(target.getValue() instanceof ExternalIdentifiable)) {
       return null;
     }
-    ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
+    final ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
     final String ticker = EquitySecurityUtils.getIndexOrEquityName(id);
     final String fullDefinitionName = definitionName + "_" + ticker;
     return (FuturePriceCurveDefinition<Object>) getFuturePriceCurveDefinitionSource().getDefinition(fullDefinitionName, getInstrumentType(), versionCorrection);
   }
 
-  private FuturePriceCurveSpecification getCurveSpecification(final ComputationTarget target, final String specificationName, final VersionCorrection versionCorrection) {
+  private FuturePriceCurveSpecification getCurveSpecification(final ComputationTarget target, final String specificationName,
+      final VersionCorrection versionCorrection) {
     if (!(target.getValue() instanceof ExternalIdentifiable)) {
       return null;
     }
-    ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
+    final ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
     final String ticker = EquitySecurityUtils.getIndexOrEquityName(id);
     final String fullSpecificationName = specificationName + "_" + ticker;
     return getFuturePriceCurveSpecificationSource().getSpecification(fullSpecificationName, getInstrumentType(), versionCorrection);
@@ -87,8 +89,9 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
   public static Set<ValueRequirement> buildRequirements(final FuturePriceCurveSpecification futurePriceCurveSpecification,
       final FuturePriceCurveDefinition<Object> futurePriceCurveDefinition, final ValueRequirement desiredValue, final ZonedDateTime atInstant) {
     final Set<ValueRequirement> result = new HashSet<>();
-    final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) futurePriceCurveSpecification.getCurveInstrumentProvider();
-    final String dataFieldName = getDataFieldName(futurePriceCurveProvider, desiredValue);
+    final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) futurePriceCurveSpecification
+        .getCurveInstrumentProvider();
+    final String dataFieldName = getDataFieldName(futurePriceCurveProvider);
     for (final Object x : futurePriceCurveDefinition.getXs()) {
       final ExternalId identifier = futurePriceCurveProvider.getInstrument((Number) x, atInstant.toLocalDate());
       result.add(new ValueRequirement(dataFieldName, ComputationTargetType.PRIMITIVE, identifier));
@@ -96,7 +99,7 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
     return result;
   }
 
-  private static String getDataFieldName(FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider, ValueRequirement desiredValue) {
+  private static String getDataFieldName(final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider) {
     return futurePriceCurveProvider.getDataFieldName();
   }
 
@@ -125,13 +128,15 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
       public Set<ValueSpecification> getResults(final FunctionCompilationContext myContext, final ComputationTarget target) {
         final ValueProperties curveProperties = createValueProperties().withAny(ValuePropertyNames.CURVE)
             .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType()).get();
-        final ValueSpecification futurePriceCurveResult = new ValueSpecification(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(), curveProperties);
+        final ValueSpecification futurePriceCurveResult = new ValueSpecification(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(),
+            curveProperties);
         return Collections.singleton(futurePriceCurveResult);
       }
 
-      @SuppressWarnings({"synthetic-access", "unchecked" })
+      @SuppressWarnings({ "synthetic-access", "unchecked" })
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final String curveName = constraints.getStrictValue(ValuePropertyNames.CURVE);
         if (curveName == null) {
@@ -142,18 +147,21 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
         final VersionCorrection versionCorrection = myContext.getComputationTargetResolver().getVersionCorrection();
         final FuturePriceCurveDefinition<Object> priceCurveDefinition = getCurveDefinition(target, curveDefinitionName, versionCorrection);
         if (priceCurveDefinition == null) {
-          s_logger.error("Price curve definition for target {} with curve name {} and instrument type {} was null", new Object[] {target, curveDefinitionName, getInstrumentType() });
+          LOGGER.error("Price curve definition for target {} with curve name {} and instrument type {} was null",
+              new Object[] { target, curveDefinitionName, getInstrumentType() });
           return null;
         }
         final FuturePriceCurveSpecification priceCurveSpecification = getCurveSpecification(target, curveSpecificationName, versionCorrection);
         if (priceCurveSpecification == null) {
-          s_logger.error("Price curve specification for target {} with curve name {} and instrument type {} was null", new Object[] {target, curveSpecificationName, getInstrumentType() });
+          LOGGER.error("Price curve specification for target {} with curve name {} and instrument type {} was null",
+              new Object[] { target, curveSpecificationName, getInstrumentType() });
           return null;
         }
-        final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) priceCurveSpecification.getCurveInstrumentProvider();
-        final String dataFieldName = getDataFieldName(futurePriceCurveProvider, desiredValue);
+        final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) priceCurveSpecification
+            .getCurveInstrumentProvider();
+        final String dataFieldName = getDataFieldName(futurePriceCurveProvider);
 
-        Set<ValueRequirement> requirements = Sets.newHashSet();
+        final Set<ValueRequirement> requirements = Sets.newHashSet();
         requirements.add(getSpotRequirement(target, dataFieldName));
         requirements.addAll(buildRequirements(priceCurveSpecification, priceCurveDefinition, desiredValue, atZDT));
         return requirements;
@@ -169,7 +177,7 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
         return true;
       }
 
-      @SuppressWarnings({"synthetic-access", "unchecked" })
+      @SuppressWarnings({ "synthetic-access", "unchecked" })
       @Override
       public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
           final Set<ValueRequirement> desiredValues) {
@@ -184,8 +192,9 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
         final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
         final DoubleArrayList xList = new DoubleArrayList();
         final DoubleArrayList prices = new DoubleArrayList();
-        final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) priceCurveSpecification.getCurveInstrumentProvider();
-        final String dataFieldName = getDataFieldName(futurePriceCurveProvider, desiredValue);
+        final FuturePriceCurveInstrumentProvider<Number> futurePriceCurveProvider = (FuturePriceCurveInstrumentProvider<Number>) priceCurveSpecification
+            .getCurveInstrumentProvider();
+        final String dataFieldName = getDataFieldName(futurePriceCurveProvider);
         final ExchangeTradedInstrumentExpiryCalculator expiryCalc = futurePriceCurveProvider.getExpiryRuleCalculator();
         final LocalDate valDate = now.toLocalDate();
         if (inputs.getAllValues().isEmpty()) {
@@ -206,15 +215,16 @@ public class EquityFuturePriceCurveFunction extends FuturePriceCurveFunction {
           if (inputs.getValue(requirement) != null) {
             futurePrice = (Double) inputs.getValue(requirement);
             if (futurePrice != null) {
-              LocalDate expiry = expiryCalc.getExpiryDate(xNum.intValue(), valDate, WEEKDAYS); // TODO Add true holiday calendar
+              final LocalDate expiry = expiryCalc.getExpiryDate(xNum.intValue(), valDate, WEEKDAYS); // TODO Add true holiday calendar
               final Double ttm = TimeCalculator.getTimeBetween(valDate, expiry);
               xList.add(ttm);
               prices.add(futurePrice);
             }
           }
         }
-        final ValueSpecification futurePriceCurveResult = new ValueSpecification(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(), createValueProperties()
-            .with(ValuePropertyNames.CURVE, curveName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType()).get());
+        final ValueSpecification futurePriceCurveResult = new ValueSpecification(ValueRequirementNames.FUTURE_PRICE_CURVE_DATA, target.toSpecification(),
+            createValueProperties()
+                .with(ValuePropertyNames.CURVE, curveName).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, getInstrumentType()).get());
         final NodalDoublesCurve curve = NodalDoublesCurve.from(xList.toDoubleArray(), prices.toDoubleArray());
         final ComputedValue futurePriceCurveResultValue = new ComputedValue(futurePriceCurveResult, curve);
         return Sets.newHashSet(futurePriceCurveResultValue);

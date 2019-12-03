@@ -5,11 +5,11 @@
  */
 package com.opengamma.analytics.financial.model.interestrate.definition;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import org.apache.commons.lang.ObjectUtils;
 
 import com.opengamma.util.ArgumentChecker;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  * Data bundle related to the Hull-White one factor (extended Vasicek) model with piecewise constant volatility.
@@ -21,12 +21,13 @@ public class HullWhiteOneFactorPiecewiseConstantParameters {
    */
   private final double _meanReversion;
   /**
-   * The volatility parameters. The volatility is constant between the volatility times. Volatility in t is _volatility[i] for t between _volatilityTime[i] and _volatilityTime[i+1].
+   * The volatility parameters. The volatility is constant between the volatility times. Volatility in t is _volatility[i] for t between _volatilityTime[i] and
+   * _volatilityTime[i+1].
    */
   private DoubleArrayList _volatility;
   /**
-   * The times separating the constant volatility periods. The time should be sorted by increasing order. The first time is 0 and the last time is 1000 (represents infinity).
-   * The extra time are added in the constructor.
+   * The times separating the constant volatility periods. The time should be sorted by increasing order. The first time is 0 and the last time is 1000
+   * (represents infinity). The extra time are added in the constructor.
    */
   private final DoubleArrayList _volatilityTime;
   /**
@@ -36,9 +37,13 @@ public class HullWhiteOneFactorPiecewiseConstantParameters {
 
   /**
    * Constructor from the model parameters.
-   * @param meanReversion The mean reversion speed (a) parameter.
-   * @param volatility The volatility parameters.
-   * @param volatilityTime The times separating the constant volatility periods.
+   *
+   * @param meanReversion
+   *          The mean reversion speed (a) parameter.
+   * @param volatility
+   *          The volatility parameters.
+   * @param volatilityTime
+   *          The times separating the constant volatility periods.
    */
   public HullWhiteOneFactorPiecewiseConstantParameters(final double meanReversion, final double[] volatility, final double[] volatilityTime) {
     ArgumentChecker.notNull(volatility, "volatility time");
@@ -55,6 +60,7 @@ public class HullWhiteOneFactorPiecewiseConstantParameters {
 
   /**
    * Gets the mean reversion speed (a) parameter.
+   *
    * @return The mean reversion speed (a) parameter.
    */
   public double getMeanReversion() {
@@ -63,6 +69,7 @@ public class HullWhiteOneFactorPiecewiseConstantParameters {
 
   /**
    * Gets the volatility parameters.
+   *
    * @return The volatility parameters.
    */
   public double[] getVolatility() {
@@ -71,7 +78,9 @@ public class HullWhiteOneFactorPiecewiseConstantParameters {
 
   /**
    * Sets the volatility parameters.
-   * @param volatility The volatility parameters.
+   *
+   * @param volatility
+   *          The volatility parameters.
    */
   public void setVolatility(final double[] volatility) {
     _volatility = new DoubleArrayList(volatility);
@@ -79,6 +88,7 @@ public class HullWhiteOneFactorPiecewiseConstantParameters {
 
   /**
    * Gets the times separating the constant volatility periods.
+   *
    * @return The times.
    */
   public double[] getVolatilityTime() {
@@ -87,6 +97,7 @@ public class HullWhiteOneFactorPiecewiseConstantParameters {
 
   /**
    * Gets the last volatility of the volatility list.
+   *
    * @return The last volatility.
    */
   public double getLastVolatility() {
@@ -95,7 +106,9 @@ public class HullWhiteOneFactorPiecewiseConstantParameters {
 
   /**
    * Sets the last volatility of the volatility list.
-   * @param volatility The replacing volatility.
+   *
+   * @param volatility
+   *          The replacing volatility.
    */
   public void setLastVolatility(final double volatility) {
     _volatility.set(_volatility.size() - 1, volatility);
@@ -103,8 +116,11 @@ public class HullWhiteOneFactorPiecewiseConstantParameters {
 
   /**
    * Add an extra volatility and volatility time at the end of the list.
-   * @param volatility The volatility.
-   * @param volatilityTime The times separating the constant volatility periods. Must be larger than the previous one.
+   *
+   * @param volatility
+   *          The volatility.
+   * @param volatilityTime
+   *          The times separating the constant volatility periods. Must be larger than the previous one.
    */
   public void addVolatility(final double volatility, final double volatilityTime) {
     ArgumentChecker.isTrue(volatilityTime > _volatilityTime.get(_volatilityTime.size() - 2), "Volatility times should be increasing");
@@ -119,7 +135,7 @@ public class HullWhiteOneFactorPiecewiseConstantParameters {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_meanReversion);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _volatility.hashCode();
     result = prime * result + _volatilityTime.hashCode();
     return result;

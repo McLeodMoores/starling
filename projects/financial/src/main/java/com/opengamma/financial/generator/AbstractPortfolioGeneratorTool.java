@@ -44,9 +44,9 @@ import com.opengamma.util.money.Currency;
  */
 public abstract class AbstractPortfolioGeneratorTool {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractPortfolioGeneratorTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPortfolioGeneratorTool.class);
   /**
-   * Default counter party name
+   * Default counter party name.
    */
   public static final String DEFAULT_COUNTER_PARTY = "COUNTERPARTY";
 
@@ -150,12 +150,12 @@ public abstract class AbstractPortfolioGeneratorTool {
     if (getToolContext() != null) {
       securityGenerator.setConfigSource(getToolContext().getConfigSource());
       securityGenerator.setConventionSource(getToolContext().getConventionSource());
-      securityGenerator.setConventionBundleSource(getToolContext().getConventionBundleSource());
       securityGenerator.setHolidaySource(getToolContext().getHolidaySource());
       securityGenerator.setHistoricalSource(getToolContext().getHistoricalTimeSeriesSource());
       securityGenerator.setExchangeMaster(getToolContext().getExchangeMaster());
       securityGenerator.setRegionSource(getToolContext().getRegionSource());
       securityGenerator.setLegalEntitySource(getToolContext().getLegalEntitySource());
+      securityGenerator.setLegalEntityMaster(getToolContext().getLegalEntityMaster());
       securityGenerator.setSecurityMaster(getToolContext().getSecurityMaster());
       securityGenerator.setHistoricalTimeSeriesMaster(getToolContext().getHistoricalTimeSeriesMaster());
     }
@@ -215,12 +215,12 @@ public abstract class AbstractPortfolioGeneratorTool {
       }
       final Class<?> instanceClass;
       try {
-        s_logger.debug("Trying class {}", className);
+        LOGGER.debug("Trying class {}", className);
         instanceClass = Class.forName(className);
       } catch (final ClassNotFoundException e) {
         return getInstance(clazz.getSuperclass(), security);
       }
-      s_logger.info("Loading {}", className);
+      LOGGER.info("Loading {}", className);
       final AbstractPortfolioGeneratorTool tool = (AbstractPortfolioGeneratorTool) instanceClass.newInstance();
       tool.setContext(getClassContext(), this);
       return tool;
@@ -233,17 +233,18 @@ public abstract class AbstractPortfolioGeneratorTool {
     return getInstance(getClassContext(), security);
   }
 
-  public void run(final ToolContext context, final String portfolioName, final AbstractPortfolioGeneratorTool instance, final boolean write, final Currency[] currencies) {
+  public void run(final ToolContext context, final String portfolioName, final AbstractPortfolioGeneratorTool instance, final boolean write,
+      final Currency[] currencies) {
     instance.setToolContext(context);
     instance.setCounterPartyGenerator(getCounterPartyGenerator());
     instance.setRandom(new SecureRandom());
     final SecuritySource securitySource;
     if (write) {
-      s_logger.info("Creating database security writer");
+      LOGGER.info("Creating database security writer");
       securitySource = context.getSecuritySource();
       instance.setSecurityPersister(new MasterSecurityPersister(context.getSecurityMaster()));
     } else {
-      s_logger.info("Using dummy security writer");
+      LOGGER.info("Using dummy security writer");
       final InMemorySecurityPersister securityPersister = new InMemorySecurityPersister();
       instance.setSecurityPersister(securityPersister);
       securitySource = securityPersister.getSecuritySource();
@@ -251,10 +252,10 @@ public abstract class AbstractPortfolioGeneratorTool {
     if (currencies != null && currencies.length > 0) {
       instance.setCurrencies(currencies);
     }
-    s_logger.info("Creating portfolio {}", portfolioName);
+    LOGGER.info("Creating portfolio {}", portfolioName);
     final Portfolio portfolio = instance.createPortfolio(portfolioName);
     if (write) {
-      s_logger.info("Writing portfolio to the database");
+      LOGGER.info("Writing portfolio to the database");
       final ManageablePortfolio newPortfolio = new ManageablePortfolio(portfolio.getName());
       newPortfolio.setAttributes(portfolio.getAttributes());
       newPortfolio.setRootNode(createPortfolioNode(context.getPositionMaster(), portfolio.getRootNode()));
@@ -265,7 +266,7 @@ public abstract class AbstractPortfolioGeneratorTool {
       final PortfolioSearchResult result = context.getPortfolioMaster().search(request);
       PortfolioDocument document = result.getFirstDocument();
       if (document != null) {
-        s_logger.info("Overwriting portfolio {}", document.getUniqueId());
+        LOGGER.info("Overwriting portfolio {}", document.getUniqueId());
         document.setPortfolio(newPortfolio);
         context.getPortfolioMaster().update(document);
       } else {
@@ -273,13 +274,12 @@ public abstract class AbstractPortfolioGeneratorTool {
         context.getPortfolioMaster().add(document);
       }
     } else {
-      if (s_logger.isDebugEnabled()) {
-        s_logger.debug("Portfolio {}", portfolioName);
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("Portfolio {}", portfolioName);
         writePortfolio(securitySource, portfolio.getRootNode(), "");
       }
     }
   }
-
 
   public void run(final ToolContext context, final String portfolioName, final String security, final boolean write, final Currency[] currencies) {
     final AbstractPortfolioGeneratorTool instance = getInstance(security);
@@ -288,11 +288,11 @@ public abstract class AbstractPortfolioGeneratorTool {
     instance.setRandom(new SecureRandom());
     final SecuritySource securitySource;
     if (write) {
-      s_logger.info("Creating database security writer");
+      LOGGER.info("Creating database security writer");
       securitySource = context.getSecuritySource();
       instance.setSecurityPersister(new MasterSecurityPersister(context.getSecurityMaster()));
     } else {
-      s_logger.info("Using dummy security writer");
+      LOGGER.info("Using dummy security writer");
       final InMemorySecurityPersister securityPersister = new InMemorySecurityPersister();
       instance.setSecurityPersister(securityPersister);
       securitySource = securityPersister.getSecuritySource();
@@ -300,10 +300,10 @@ public abstract class AbstractPortfolioGeneratorTool {
     if (currencies != null && currencies.length > 0) {
       instance.setCurrencies(currencies);
     }
-    s_logger.info("Creating portfolio {}", portfolioName);
+    LOGGER.info("Creating portfolio {}", portfolioName);
     final Portfolio portfolio = instance.createPortfolio(portfolioName);
     if (write) {
-      s_logger.info("Writing portfolio to the database");
+      LOGGER.info("Writing portfolio to the database");
       final ManageablePortfolio newPortfolio = new ManageablePortfolio(portfolio.getName());
       newPortfolio.setAttributes(portfolio.getAttributes());
       newPortfolio.setRootNode(createPortfolioNode(context.getPositionMaster(), portfolio.getRootNode()));
@@ -314,7 +314,7 @@ public abstract class AbstractPortfolioGeneratorTool {
       final PortfolioSearchResult result = context.getPortfolioMaster().search(request);
       PortfolioDocument document = result.getFirstDocument();
       if (document != null) {
-        s_logger.info("Overwriting portfolio {}", document.getUniqueId());
+        LOGGER.info("Overwriting portfolio {}", document.getUniqueId());
         document.setPortfolio(newPortfolio);
         context.getPortfolioMaster().update(document);
       } else {
@@ -322,8 +322,8 @@ public abstract class AbstractPortfolioGeneratorTool {
         context.getPortfolioMaster().add(document);
       }
     } else {
-      if (s_logger.isDebugEnabled()) {
-        s_logger.debug("Portfolio {}", portfolioName);
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("Portfolio {}", portfolioName);
         writePortfolio(securitySource, portfolio.getRootNode(), "");
       }
     }
@@ -348,13 +348,13 @@ public abstract class AbstractPortfolioGeneratorTool {
   }
 
   private void writePortfolio(final SecuritySource securitySource, final PortfolioNode node, final String indent) {
-    s_logger.debug("{}+{}", indent, node.getName());
+    LOGGER.debug("{}+{}", indent, node.getName());
     for (final PortfolioNode childNode : node.getChildNodes()) {
       writePortfolio(securitySource, childNode, indent + "  ");
     }
     for (final Position position : node.getPositions()) {
       final Security security = position.getSecurityLink().resolve(securitySource);
-      s_logger.debug("{} {} x {}", new Object[] {indent, position.getQuantity(), security });
+      LOGGER.debug("{} {} x {}", new Object[] { indent, position.getQuantity(), security });
     }
   }
 
@@ -369,11 +369,8 @@ public abstract class AbstractPortfolioGeneratorTool {
     options.addOption(required(new Option("s", SECURITY_OPT, true, "selects the asset class to populate the portfolio with")));
     options.addOption(new Option("w", WRITE_OPT, false, "writes the portfolio and securities to the masters"));
     options.addOption(new Option("cp", COUNTER_PARTY_OPT, true, "sets the name of the counter party"));
-    options.addOption(OptionBuilder.hasArgs()
-        .withArgName("Currency")
-        .withDescription("Specify the currencies of the securities to be generated")
-        .withLongOpt(CURRENCIES_OPT)
-        .create("ccy"));
+    options.addOption(OptionBuilder.hasArgs().withArgName("Currency").withDescription("Specify the currencies of the securities to be generated")
+        .withLongOpt(CURRENCIES_OPT).create("ccy"));
   }
 
   private Currency[] parseCurrencies(final CommandLine commandLine) {
@@ -385,16 +382,14 @@ public abstract class AbstractPortfolioGeneratorTool {
         ccys[i++] = Currency.of(ccyStr.trim());
       }
       return ccys;
-    } else {
-      return null;
     }
+    return null;
   }
 
   public void run(final ToolContext context, final CommandLine commandLine) {
     setCounterPartyGenerator(new StaticNameGenerator(commandLine.getOptionValue(COUNTER_PARTY_OPT, DEFAULT_COUNTER_PARTY)));
-    run(context, commandLine.getOptionValue(PORTFOLIO_OPT), commandLine.getOptionValue(SECURITY_OPT),
-        commandLine.hasOption(WRITE_OPT), parseCurrencies(commandLine));
+    run(context, commandLine.getOptionValue(PORTFOLIO_OPT), commandLine.getOptionValue(SECURITY_OPT), commandLine.hasOption(WRITE_OPT),
+        parseCurrencies(commandLine));
   }
 
 }
-

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.curve.forward;
@@ -44,11 +44,11 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
  */
 public class FXForwardPointsCurveMarketDataFunction extends AbstractFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardPointsCurveMarketDataFunction.class);
-  /** Name of the calculation method */
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardPointsCurveMarketDataFunction.class);
+  /** Name of the calculation method. */
   public static final String FX_FORWARD_QUOTES = "FXForwardQuotes";
 
   private ConfigDBFXForwardCurveSpecificationSource _fxForwardCurveSpecificationSource;
@@ -80,28 +80,29 @@ public class FXForwardPointsCurveMarketDataFunction extends AbstractFunction {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
         if (curveNames == null || curveNames.size() != 1) {
-          s_logger.error("Asked for FX forward curve market data, but did not supply a single FX forward curve name. The property Curve must be set.");
+          LOGGER.error("Asked for FX forward curve market data, but did not supply a single FX forward curve name. The property Curve must be set.");
           return null;
         }
         final UnorderedCurrencyPair currencyPair = UnorderedCurrencyPair.of(target.getUniqueId());
         final String curveName = curveNames.iterator().next();
         final FXForwardCurveDefinition definition = _fxForwardCurveDefinitionSource.getDefinition(curveName, currencyPair.toString());
         if (definition == null) {
-          s_logger.error("Couldn't find FX forward curve definition called " + curveName + " with target " + target);
+          LOGGER.error("Couldn't find FX forward curve definition called " + curveName + " with target " + target);
           return null;
         }
         final FXForwardCurveSpecification specification = _fxForwardCurveSpecificationSource.getSpecification(curveName, currencyPair.toString());
         if (specification == null) {
-          s_logger.error("Couldn't find FX forward curve specification called " + curveName + " with target " + target);
+          LOGGER.error("Couldn't find FX forward curve specification called " + curveName + " with target " + target);
           return null;
         }
         final QuoteType quoteType = specification.getQuoteType();
         if (quoteType != FXForwardCurveSpecification.QuoteType.Points) {
-          s_logger.error("Cannot handle quote type " + quoteType);
+          LOGGER.error("Cannot handle quote type " + quoteType);
           return null;
         }
         final Set<ValueRequirement> requirements = new HashSet<>();

@@ -8,8 +8,6 @@ package com.opengamma.master.legalentity.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +28,13 @@ import com.opengamma.util.paging.Paging;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.tuple.IntObjectPair;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * A cache decorating a {@code LegalEntityMaster}, mainly intended to reduce the frequency and repetition of queries
  * from the management UI to a database. In particular, prefetching is employed in paged queries,
  * which tend to scale poorly.
- * <p/>
+ * <p>
  * The cache is implemented using {@code EHCache}.
  */
 public class EHCachingLegalEntityMaster extends AbstractEHCachingMaster<LegalEntityDocument> implements LegalEntityMaster {
@@ -42,7 +42,7 @@ public class EHCachingLegalEntityMaster extends AbstractEHCachingMaster<LegalEnt
   /**
    * Logger.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(com.opengamma.master.legalentity.impl.EHCachingLegalEntityMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(com.opengamma.master.legalentity.impl.EHCachingLegalEntityMaster.class);
 
   /**
    * The document search cache
@@ -66,9 +66,9 @@ public class EHCachingLegalEntityMaster extends AbstractEHCachingMaster<LegalEnt
     // Create the doc search cache and register a legalentity master searcher
     _documentSearchCache = new EHCachingSearchCache(name + "LegalEntity", cacheManager, new EHCachingSearchCache.Searcher() {
       @Override
-      public IntObjectPair<List<UniqueId>> search(Bean request, PagingRequest pagingRequest) {
+      public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
         // Fetch search results from underlying master
-        LegalEntitySearchResult result = ((LegalEntityMaster) getUnderlying()).search((LegalEntitySearchRequest)
+        final LegalEntitySearchResult result = ((LegalEntityMaster) getUnderlying()).search((LegalEntitySearchRequest)
             EHCachingSearchCache.withPagingRequest(request, pagingRequest));
 
         // Cache the result documents
@@ -76,16 +76,16 @@ public class EHCachingLegalEntityMaster extends AbstractEHCachingMaster<LegalEnt
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
 
     // Create the history search cache and register a security master searcher
     _historySearchCache = new EHCachingSearchCache(name + "LegalEntityHistory", cacheManager, new EHCachingSearchCache.Searcher() {
       @Override
-      public IntObjectPair<List<UniqueId>> search(Bean request, PagingRequest pagingRequest) {
+      public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
         // Fetch search results from underlying master
-        LegalEntityHistoryResult result = ((LegalEntityMaster) getUnderlying()).history((LegalEntityHistoryRequest)
+        final LegalEntityHistoryResult result = ((LegalEntityMaster) getUnderlying()).history((LegalEntityHistoryRequest)
             EHCachingSearchCache.withPagingRequest(request, pagingRequest));
 
         // Cache the result documents
@@ -93,12 +93,12 @@ public class EHCachingLegalEntityMaster extends AbstractEHCachingMaster<LegalEnt
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
 
     // Prime search cache
-    LegalEntitySearchRequest defaultSearch = new LegalEntitySearchRequest();
+    final LegalEntitySearchRequest defaultSearch = new LegalEntitySearchRequest();
     defaultSearch.setSortOrder(LegalEntitySearchSortOrder.NAME_ASC);
     _documentSearchCache.prefetch(defaultSearch, PagingRequest.FIRST_PAGE);
 
@@ -106,38 +106,38 @@ public class EHCachingLegalEntityMaster extends AbstractEHCachingMaster<LegalEnt
 
   //-------------------------------------------------------------------------
   @Override
-  public LegalEntityMetaDataResult metaData(LegalEntityMetaDataRequest request) {
+  public LegalEntityMetaDataResult metaData(final LegalEntityMetaDataRequest request) {
     return ((LegalEntityMaster) getUnderlying()).metaData(request);
   }
 
   @Override
-  public LegalEntitySearchResult search(LegalEntitySearchRequest request) {
+  public LegalEntitySearchResult search(final LegalEntitySearchRequest request) {
     // Ensure that the relevant prefetch range is cached, otherwise fetch and cache any missing sub-ranges in background
     _documentSearchCache.prefetch(EHCachingSearchCache.withPagingRequest(request, null), request.getPagingRequest());
 
     // Fetch the paged request range; if not entirely cached then fetch and cache it in foreground
-    IntObjectPair<List<UniqueId>> pair = _documentSearchCache.search(
+    final IntObjectPair<List<UniqueId>> pair = _documentSearchCache.search(
         EHCachingSearchCache.withPagingRequest(request, null),
         request.getPagingRequest(), false); // don't block until cached
 
-    List<LegalEntityDocument> documents = new ArrayList<>();
-    for (UniqueId uniqueId : pair.getSecond()) {
+    final List<LegalEntityDocument> documents = new ArrayList<>();
+    for (final UniqueId uniqueId : pair.getSecond()) {
       documents.add(get(uniqueId));
     }
 
-    LegalEntitySearchResult result = new LegalEntitySearchResult(documents);
+    final LegalEntitySearchResult result = new LegalEntitySearchResult(documents);
     result.setPaging(Paging.of(request.getPagingRequest(), pair.getFirstInt()));
 
     // Debug: check result against underlying
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
-      LegalEntitySearchResult check = ((LegalEntityMaster) getUnderlying()).search(request);
+      final LegalEntitySearchResult check = ((LegalEntityMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
-        s_logger.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging() +
-            "\nbut the underlying master returned paging:\n" + check.getPaging());
+        LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging()
+        + "\nbut the underlying master returned paging:\n" + check.getPaging());
       }
       if (!result.getDocuments().equals(check.getDocuments())) {
-        s_logger.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments() +
-            "\nbut the underlying master returned documents:\n" + check.getDocuments());
+        LOGGER.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments()
+        + "\nbut the underlying master returned documents:\n" + check.getDocuments());
       }
     }
 
@@ -145,21 +145,21 @@ public class EHCachingLegalEntityMaster extends AbstractEHCachingMaster<LegalEnt
   }
 
   @Override
-  public LegalEntityHistoryResult history(LegalEntityHistoryRequest request) {
+  public LegalEntityHistoryResult history(final LegalEntityHistoryRequest request) {
     // Ensure that the relevant prefetch range is cached, otherwise fetch and cache any missing sub-ranges in background
     _historySearchCache.prefetch(EHCachingSearchCache.withPagingRequest(request, null), request.getPagingRequest());
 
     // Fetch the paged request range; if not entirely cached then fetch and cache it in foreground
-    IntObjectPair<List<UniqueId>> pair = _historySearchCache.search(
+    final IntObjectPair<List<UniqueId>> pair = _historySearchCache.search(
         EHCachingSearchCache.withPagingRequest(request, null),
         request.getPagingRequest(), false); // don't block until cached
 
-    List<LegalEntityDocument> documents = new ArrayList<>();
-    for (UniqueId uniqueId : pair.getSecond()) {
+    final List<LegalEntityDocument> documents = new ArrayList<>();
+    for (final UniqueId uniqueId : pair.getSecond()) {
       documents.add(get(uniqueId));
     }
 
-    LegalEntityHistoryResult result = new LegalEntityHistoryResult(documents);
+    final LegalEntityHistoryResult result = new LegalEntityHistoryResult(documents);
     result.setPaging(Paging.of(request.getPagingRequest(), pair.getFirstInt()));
     return result;
   }

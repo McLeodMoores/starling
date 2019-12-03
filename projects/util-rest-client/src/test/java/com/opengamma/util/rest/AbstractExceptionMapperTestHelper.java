@@ -26,17 +26,31 @@ import com.sun.jersey.api.client.ClientResponse.Status;
  * Abstract helper for mapper tests.
  */
 public abstract class AbstractExceptionMapperTestHelper {
-  
-  protected void init(ExceptionMapper<?> mapper, MediaType mediaType) throws Exception {
-    HttpHeaders headers = mock(HttpHeaders.class);
+
+  /**
+   * Initialises the test.
+   *
+   * @param mapper  the mapper
+   * @param mediaType  the media type
+   * @throws Exception  an exception if the test cannot be initialized
+   */
+  protected void init(final ExceptionMapper<?> mapper, final MediaType mediaType) throws Exception {
+    final HttpHeaders headers = mock(HttpHeaders.class);
     when(headers.getAcceptableMediaTypes()).thenReturn(Arrays.asList(mediaType));
-    
-    Field field = AbstractExceptionMapper.class.getDeclaredField("_headers");
+
+    final Field field = AbstractExceptionMapper.class.getDeclaredField("_headers");
     field.setAccessible(true);
     field.set(mapper, headers);
   }
 
-  protected void testResult(Response test, Status status, Throwable th) {
+  /**
+   * Tests the result.
+   *
+   * @param test  the response
+   * @param status  the status
+   * @param th  the exception
+   */
+  protected void testResult(final Response test, final Status status, final Throwable th) {
     assertEquals("Status: " + status.getStatusCode() + " " + status.getReasonPhrase() + "; Message: " + th.getMessage(), test.getEntity());
     assertEquals(status.getStatusCode(), test.getStatus());
     assertEquals(1, test.getMetadata().get(ExceptionThrowingClientFilter.EXCEPTION_TYPE).size());
@@ -48,8 +62,13 @@ public abstract class AbstractExceptionMapperTestHelper {
     assertEquals(true, test.getMetadata().get(ExceptionThrowingClientFilter.EXCEPTION_POINT).get(0).toString().contains(".java"));
   }
 
-  @DataProvider(name="mediaTypes")
-  public Object[][] data_mediaTypes() {
+  /**
+   * Provides data types for test cases.
+   *
+   * @return  the types
+   */
+  @DataProvider(name = "mediaTypes")
+  public Object[][] dataMediaTypes() {
     return new Object[][] {
         {MediaType.APPLICATION_JSON_TYPE},
         {FudgeRest.MEDIA_TYPE},

@@ -38,7 +38,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Contains results of calculations associated with curves
+ * Contains results of calculations associated with curves.
  */
 /* package */final class CurveResultBuilders {
 
@@ -46,7 +46,7 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Fudge builder for {@link SimplyCompoundedForwardSensitivity}
+   * Fudge builder for {@link SimplyCompoundedForwardSensitivity}.
    */
   @FudgeBuilderFor(SimplyCompoundedForwardSensitivity.class)
   public static final class SimplyCompoundedForwardSensitivityBuilder extends AbstractFudgeBuilder<SimplyCompoundedForwardSensitivity> {
@@ -79,7 +79,7 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Fudge builder for {@link AnnuallyCompoundedForwardSensitivity}
+   * Fudge builder for {@link AnnuallyCompoundedForwardSensitivity}.
    */
   @FudgeBuilderFor(AnnuallyCompoundedForwardSensitivity.class)
   public static final class AnnuallyCompoundedForwardSensitivityBuilder extends AbstractFudgeBuilder<AnnuallyCompoundedForwardSensitivity> {
@@ -112,7 +112,7 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Fudge builder for {@link MulticurveSensitivity}
+   * Fudge builder for {@link MulticurveSensitivity}.
    */
   @FudgeBuilderFor(MulticurveSensitivity.class)
   public static final class MulticurveSensitivityBuilder extends AbstractFudgeBuilder<MulticurveSensitivity> {
@@ -193,7 +193,7 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Fudge builder for {@link MultipleCurrencyMulticurveSensitivity}
+   * Fudge builder for {@link MultipleCurrencyMulticurveSensitivity}.
    */
   @FudgeBuilderFor(MultipleCurrencyMulticurveSensitivity.class)
   public static final class MultipleCurrencyMulticurveSensitivityBuilder extends AbstractFudgeBuilder<MultipleCurrencyMulticurveSensitivity> {
@@ -230,7 +230,7 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Fudge builder for {@link SimpleParameterSensitivity}
+   * Fudge builder for {@link SimpleParameterSensitivity}.
    */
   @FudgeBuilderFor(SimpleParameterSensitivity.class)
   public static final class SimpleParameterSensitivityBuilder extends AbstractFudgeBuilder<SimpleParameterSensitivity> {
@@ -279,7 +279,7 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Fudge builder for {@link MultipleCurrencyParameterSensitivity}
+   * Fudge builder for {@link MultipleCurrencyParameterSensitivity}.
    */
   @FudgeBuilderFor(MultipleCurrencyParameterSensitivity.class)
   public static final class MultipleCurrencyParameterSensitivityBuilder extends AbstractFudgeBuilder<MultipleCurrencyParameterSensitivity> {
@@ -336,7 +336,7 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Fudge builders for {@link CurveBuildingBlock}
+   * Fudge builders for {@link CurveBuildingBlock}.
    */
   @FudgeBuilderFor(CurveBuildingBlock.class)
   public static final class CurveBuildingBlockBuilder extends AbstractFudgeBuilder<CurveBuildingBlock> {
@@ -383,7 +383,7 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Fudge builder for {@link CurveBuildingBlockBundle}
+   * Fudge builder for {@link CurveBuildingBlockBundle}.
    */
   @FudgeBuilderFor(CurveBuildingBlockBundle.class)
   public static final class CurveBuildingBlockBundleBuilder extends AbstractFudgeBuilder<CurveBuildingBlockBundle> {
@@ -428,7 +428,7 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Fudge builder for {@link InflationSensitivity}
+   * Fudge builder for {@link InflationSensitivity}.
    */
   @FudgeBuilderFor(InflationSensitivity.class)
   public static final class InflationSensitivityBuilder extends AbstractFudgeBuilder<InflationSensitivity> {
@@ -440,7 +440,7 @@ import com.opengamma.util.tuple.Pairs;
     private static final String SENSITIVITIES_PER_PRICE_CURVE = "sensitivitiesPerPriceCurve";
     /** The time field */
     private static final String TIME = "time";
-    /** The sensitivity field*/
+    /** The sensitivity field */
     private static final String SENSITIVITY = "sensitivity";
 
     @Override
@@ -462,8 +462,8 @@ import com.opengamma.util.tuple.Pairs;
           throw new OpenGammaRuntimeException("Should have one sensitivity per time");
         }
         for (int j = 0; j < times.size(); j++) {
-          Double time = (Double) times.get(j).getValue();
-          Double sens = (Double) sensitivity.get(j).getValue();
+          final Double time = (Double) times.get(j).getValue();
+          final Double sens = (Double) sensitivity.get(j).getValue();
           sensitivities.add(DoublesPair.of(time.doubleValue(), sens.doubleValue()));
         }
         priceCurveSensitivity.put(priceCurveName, sensitivities);
@@ -488,7 +488,7 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Fudge builder for {@link MultipleCurrencyInflationSensitivity}
+   * Fudge builder for {@link MultipleCurrencyInflationSensitivity}.
    */
   @FudgeBuilderFor(MultipleCurrencyInflationSensitivity.class)
   public static final class MultipleCurrencyInflationSensitivityBuilder extends AbstractFudgeBuilder<MultipleCurrencyInflationSensitivity> {

@@ -28,14 +28,14 @@ import com.opengamma.util.test.DbTest;
 @Test(enabled = false)
 public class PerformanceTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PerformanceTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PerformanceTest.class);
 
   private DbHistoricalTimeSeriesMaster _htsMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public PerformanceTest(String databaseType, String databaseVersion) {
+  public PerformanceTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -51,16 +51,16 @@ public class PerformanceTest extends AbstractDbTest {
 
   //-------------------------------------------------------------------------
   public void createUpdateReadLotsOfTimeSeries() {
-    long start = System.nanoTime();
-    
-    int NUM_SERIES = 100;
-    int NUM_POINTS = 100;
-    
-    for (int i = 0; i < NUM_SERIES; i++) {
-      ExternalId id1 = ExternalId.of("sa" + i, "ida" + i);
-      ExternalIdBundle identifiers = ExternalIdBundle.of(id1);
-      
-      ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();
+    final long start = System.nanoTime();
+
+    final int numSeries = 100;
+    final int numPoints = 100;
+
+    for (int i = 0; i < numSeries; i++) {
+      final ExternalId id1 = ExternalId.of("sa" + i, "ida" + i);
+      final ExternalIdBundle identifiers = ExternalIdBundle.of(id1);
+
+      final ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();
       info.setName("BLOOMBERG CMPL");
       info.setDataField("CLOSE");
       info.setDataProvider("CMPL");
@@ -68,26 +68,26 @@ public class PerformanceTest extends AbstractDbTest {
       info.setObservationTime("LDN_CLOSE");
       info.setExternalIdBundle(ExternalIdBundleWithDates.of(identifiers));
       HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument(info);
-      s_logger.debug("adding timeseries {}", doc);
+      LOGGER.debug("adding timeseries {}", doc);
       doc = _htsMaster.add(doc);
-      
+
       LocalDateDoubleTimeSeries randomPoints = RandomTimeSeriesGenerator.makeRandomTimeSeries(1);
       _htsMaster.updateTimeSeriesDataPoints(doc.getInfo().getTimeSeriesObjectId(), randomPoints);
-      randomPoints = RandomTimeSeriesGenerator.makeRandomTimeSeries(NUM_POINTS);
-      
-      for (int j = 1; j < NUM_POINTS; j++) {
-        ImmutableLocalDateDoubleTimeSeries points = ImmutableLocalDateDoubleTimeSeries.of(
+      randomPoints = RandomTimeSeriesGenerator.makeRandomTimeSeries(numPoints);
+
+      for (int j = 1; j < numPoints; j++) {
+        final ImmutableLocalDateDoubleTimeSeries points = ImmutableLocalDateDoubleTimeSeries.of(
             Lists.newArrayList(randomPoints.getTimeAtIndex(j)),
             Lists.newArrayList(randomPoints.getValueAtIndex(j)));
-        s_logger.debug("adding data points {}", points);
+        LOGGER.debug("adding data points {}", points);
         _htsMaster.updateTimeSeriesDataPoints(doc.getInfo().getTimeSeriesObjectId(), points);
       }
     }
-    
-    long end = System.nanoTime();
-    
-    s_logger.info("Creating {} series with {} points each took {} ms",
-        new Object[] { NUM_SERIES, NUM_POINTS, (end - start) / 1E6 }); 
+
+    final long end = System.nanoTime();
+
+    LOGGER.info("Creating {} series with {} points each took {} ms",
+        new Object[] { numSeries, numPoints, (end - start) / 1E6 });
   }
 
 }

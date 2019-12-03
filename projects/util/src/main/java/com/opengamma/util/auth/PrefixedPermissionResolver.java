@@ -6,7 +6,6 @@
 package com.opengamma.util.auth;
 
 import org.apache.shiro.authz.Permission;
-import org.apache.shiro.authz.permission.InvalidPermissionStringException;
 import org.apache.shiro.authz.permission.PermissionResolver;
 
 /**
@@ -21,7 +20,7 @@ public interface PrefixedPermissionResolver extends PermissionResolver {
 
   /**
    * Gets the prefix that this resolver matches.
-   * 
+   *
    * @return the prefix for matched permission strings, not null
    */
   String getPrefix();
@@ -29,9 +28,11 @@ public interface PrefixedPermissionResolver extends PermissionResolver {
   /**
    * Resolves a single permission from the string form.
    *
-   * @param permissionString  the string representation of a permission, not null
+   * @param permissionString
+   *          the string representation of a permission, not null
    * @return the equivalent permission object, not null
-   * @throws InvalidPermissionStringException if the permission string is invalid
+   * @throws org.apache.shiro.authz.permission.InvalidPermissionStringException
+   *           if the permission string is invalid
    */
   @Override
   Permission resolvePermission(String permissionString);

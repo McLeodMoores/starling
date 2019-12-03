@@ -50,7 +50,7 @@ import com.opengamma.web.WebPaging;
 public class WebRolesResource extends AbstractWebRoleResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebRolesResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebRolesResource.class);
   /**
    * The ftl file.
    */
@@ -62,130 +62,178 @@ public class WebRolesResource extends AbstractWebRoleResource {
 
   /**
    * Creates the resource.
-   * @param userMaster  the user master, not null
+   * 
+   * @param userMaster
+   *          the user master, not null
    */
   public WebRolesResource(final UserMaster userMaster) {
     super(userMaster);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * Produces an HTML GET request.
+   *
+   * @param pgIdx
+   *          the paging first-item index, can be null
+   * @param pgNum
+   *          the paging page, can be null
+   * @param pgSze
+   *          the page size, can be null
+   * @param sort
+   *          the sorting type, can be null
+   * @param rolename
+   *          the role name, can be null
+   * @param name
+   *          the name, can be null
+   * @param roleIdStrs
+   *          the identifiers of the role, not null
+   * @param uriInfo
+   *          the URI info, not null
+   * @return the Freemarker output
+   */
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("sort") String sort,
-      @QueryParam("rolename") String rolename,
-      @QueryParam("name") String name,
-      @QueryParam("roleId") List<String> roleIdStrs,
-      @Context UriInfo uriInfo) {
-    sort = StringUtils.trimToNull(sort);
-    rolename = StringUtils.trimToNull(rolename);
-    name = StringUtils.trimToNull(name);
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    RoleSearchSortOrder so = buildSortOrder(sort, RoleSearchSortOrder.NAME_ASC);
-    FlexiBean out = createSearchResultData(pr, so, rolename, name, roleIdStrs, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort,
+      @QueryParam("rolename") final String rolename,
+      @QueryParam("name") final String name,
+      @QueryParam("roleId") final List<String> roleIdStrs,
+      @Context final UriInfo uriInfo) {
+    final String trimmedSort = StringUtils.trimToNull(sort);
+    final String trimmedRolename = StringUtils.trimToNull(rolename);
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final RoleSearchSortOrder so = buildSortOrder(trimmedSort, RoleSearchSortOrder.NAME_ASC);
+    final FlexiBean out = createSearchResultData(pr, so, trimmedRolename, roleIdStrs, uriInfo);
     return getFreemarker().build(ROLES_PAGE, out);
   }
 
   private FlexiBean createSearchResultData(
-      PagingRequest pr, RoleSearchSortOrder so,
-      String rolename, String name,
-      List<String> roleIdStrs, UriInfo uriInfo) {
-    FlexiBean out = createRootData();
-    
-    RoleSearchRequest searchRequest = new RoleSearchRequest();
+      final PagingRequest pr, final RoleSearchSortOrder so,
+      final String rolename, final List<String> roleIdStrs, final UriInfo uriInfo) {
+    final FlexiBean out = createRootData();
+
+    final RoleSearchRequest searchRequest = new RoleSearchRequest();
     searchRequest.setPagingRequest(pr);
     searchRequest.setSortOrder(so);
     searchRequest.setRoleName(rolename);
-    for (String roleIdStr : roleIdStrs) {
+    for (final String roleIdStr : roleIdStrs) {
       searchRequest.addObjectId(ObjectId.parse(roleIdStr));
     }
     out.put("searchRequest", searchRequest);
-    
+
     if (data().getUriInfo().getQueryParameters().size() > 0) {
-      RoleSearchResult searchResult = data().getRoleMaster().search(searchRequest);
+      final RoleSearchResult searchResult = data().getRoleMaster().search(searchRequest);
       out.put("searchResult", searchResult);
       out.put("paging", new WebPaging(searchResult.getPaging(), uriInfo));
     }
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * Creates an HTML POST response.
+   *
+   * @param roleName
+   *          the role name, can be null
+   * @param description
+   *          the description, can be null
+   * @param addRoles
+   *          the roles to add, can be null
+   * @param addPerms
+   *          the permissions to add, can be null
+   * @param addUsers
+   *          the users to add, can be null
+   * @return the Freemarket output
+   */
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
-      @FormParam("rolename") String roleName,
-      @FormParam("description") String description,
-      @FormParam("addroles") String addRoles,
-      @FormParam("addperms") String addPerms,
-      @FormParam("addusers") String addUsers) {
+      @FormParam("rolename") final String roleName,
+      @FormParam("description") final String description,
+      @FormParam("addroles") final String addRoles,
+      @FormParam("addperms") final String addPerms,
+      @FormParam("addusers") final String addUsers) {
     try {
-      RoleForm form = new RoleForm(roleName, description);
+      final RoleForm form = new RoleForm(roleName, description);
       form.setAddRoles(addRoles);
       form.setAddPermissions(addPerms);
       form.setAddUsers(addUsers);
-      ManageableRole added = form.add(data().getUserMaster());
-      URI uri = WebRoleResource.uri(data(), added.getRoleName());
+      final ManageableRole added = form.add(data().getUserMaster());
+      final URI uri = WebRoleResource.uri(data(), added.getRoleName());
       return Response.seeOther(uri).build();
-      
-    } catch (RoleFormException ex) {
-      ex.logUnexpected(s_logger);
-      FlexiBean out = createRootData();
+
+    } catch (final RoleFormException ex) {
+      ex.logUnexpected(LOGGER);
+      final FlexiBean out = createRootData();
       out.put("rolename", roleName);
       out.put("description", description);
       out.put("addroles", addRoles);
       out.put("addperms", addPerms);
       out.put("addusers", addUsers);
-      for (RoleFormError error : ex.getErrors()) {
+      for (final RoleFormError error : ex.getErrors()) {
         out.put("err_" + error.toLowerCamel(), true);
       }
       return Response.ok(getFreemarker().build(ROLE_ADD_PAGE, out)).build();
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * Finds a role by name. If there is no role of that name, the history is searched if the master supports this functionality. If no value is found, an
+   * exception is thrown.
+   *
+   * @param roleName
+   *          the role name
+   * @return the role
+   */
   @Path("name/{roleName}")
-  public WebRoleResource findRole(@PathParam("roleName") String roleName) {
+  public WebRoleResource findRole(@PathParam("roleName") final String roleName) {
     data().setUriRoleName(roleName);
     try {
-      ManageableRole role = data().getRoleMaster().getByName(roleName);
+      final ManageableRole role = data().getRoleMaster().getByName(roleName);
       data().setRole(role);
-    } catch (DataNotFoundException ex) {
-      RoleEventHistoryRequest request = new RoleEventHistoryRequest(roleName);
+    } catch (final DataNotFoundException ex) {
+      final RoleEventHistoryRequest request = new RoleEventHistoryRequest(roleName);
       try {
         data().getRoleMaster().eventHistory(request);
-        ManageableRole role = new ManageableRole(roleName);
+        final ManageableRole role = new ManageableRole(roleName);
         data().setRole(role);
-      } catch (DataNotFoundException ex2) {
+      } catch (final DataNotFoundException ex2) {
         throw ex;
       }
     }
     return new WebRoleResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   * 
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    RoleSearchRequest searchRequest = new RoleSearchRequest();
+    final FlexiBean out = super.createRootData();
+    final RoleSearchRequest searchRequest = new RoleSearchRequest();
     out.put("searchRequest", searchRequest);
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for roles.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
-  public static URI uri(WebRoleData data) {
-    UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebRolesResource.class);
+  public static URI uri(final WebRoleData data) {
+    final UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebRolesResource.class);
     return builder.build();
   }
 

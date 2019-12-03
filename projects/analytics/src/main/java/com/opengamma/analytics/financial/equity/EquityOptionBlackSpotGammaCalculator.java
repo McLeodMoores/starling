@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity;
@@ -19,14 +19,14 @@ import com.opengamma.util.ArgumentChecker;
  */
 public final class EquityOptionBlackSpotGammaCalculator extends InstrumentDerivativeVisitorAdapter<StaticReplicationDataBundle, Double> {
   /** Static instance */
-  private static final EquityOptionBlackSpotGammaCalculator s_instance = new EquityOptionBlackSpotGammaCalculator();
+  private static final EquityOptionBlackSpotGammaCalculator INSTANCE = new EquityOptionBlackSpotGammaCalculator();
 
   /**
-   * Gets the (singleton) instance of this calculator
+   * Gets the (singleton) instance of this calculator.
    * @return The instance of this calculator
    */
   public static EquityOptionBlackSpotGammaCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   private EquityOptionBlackSpotGammaCalculator() {

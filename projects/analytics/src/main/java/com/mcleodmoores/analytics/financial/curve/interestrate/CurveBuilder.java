@@ -83,7 +83,7 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     _issuerCurves = LinkedListMultimap.create();
     if (issuerCurves != null) {
       for (final Pair<String, List<Pair<Object, LegalEntityFilter<LegalEntity>>>> issuerCurve : issuerCurves) {
-        _issuerCurves.put(issuerCurve.getKey(), issuerCurve.getValue().get(0)); //TODO only one handled
+        _issuerCurves.put(issuerCurve.getKey(), issuerCurve.getValue().get(0)); // TODO only one handled
       }
     }
     _nodes = new HashMap<>(ArgumentChecker.notEmpty(nodes, "nodes"));
@@ -97,7 +97,7 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
       final YieldAndDiscountCurve curve = entry.getValue();
       final UniqueIdentifiable discountingCurveId = setUp.getDiscountingCurveId();
       if (discountingCurveId != null) {
-        _knownDiscountingCurves.put((Currency) discountingCurveId, curve); //TODO cast
+        _knownDiscountingCurves.put((Currency) discountingCurveId, curve); // TODO cast
       }
       final List<IborTypeIndex> iborCurveIndices = setUp.getIborCurveIndices();
       if (iborCurveIndices != null) {
@@ -120,7 +120,8 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     }
   }
 
-  public Pair<T, CurveBuildingBlockBundle> buildCurves(final ZonedDateTime valuationDate, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
+  public Pair<T, CurveBuildingBlockBundle> buildCurves(final ZonedDateTime valuationDate,
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
     MultiCurveBundle<GeneratorYDCurve>[] curveBundles = null;
     final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
     curveBundles = new MultiCurveBundle[_curveNames.size()];
@@ -130,7 +131,8 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
       for (int j = 0; j < curveNamesForUnit.size(); j++) {
         final String curveName = curveNamesForUnit.get(j);
         // TODO sensible behaviour if not set
-        final NodeOrderCalculator nodeOrderCalculator = new CurveUtils.NodeOrderCalculator(_curveTypes.get(curveName).getNodeTimeCalculator());
+        final NodeOrderCalculator nodeOrderCalculator = new CurveUtils.NodeOrderCalculator(
+            _curveTypes.get(curveName).getNodeTimeCalculator());
         final List<InstrumentDefinition<?>> nodesForCurve = _nodes.get(curveName);
         if (nodesForCurve == null) {
           throw new IllegalStateException("No nodes found for curve called " + curveName);
@@ -146,9 +148,11 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
         for (int k = 0; k < nNodes; k++) {
           curveInitialGuess[k] = instruments[k].accept(CurveUtils.RATES_INITIALIZATION);
         }
-        final GeneratorYDCurve instrumentGenerator = _curveTypes.get(curveName).buildCurveGenerator(valuationDate).finalGenerator(instruments);
+        final GeneratorYDCurve instrumentGenerator = _curveTypes.get(curveName).buildCurveGenerator(valuationDate)
+            .finalGenerator(instruments);
         generatorForCurve.put(curveName, instrumentGenerator);
-        unitBundle[j] = new SingleCurveBundle<>(curveName, instruments, instrumentGenerator.initialGuess(curveInitialGuess), instrumentGenerator);
+        unitBundle[j] = new SingleCurveBundle<>(curveName, instruments, instrumentGenerator.initialGuess(curveInitialGuess),
+            instrumentGenerator);
       }
       curveBundles[i] = new MultiCurveBundle<>(unitBundle);
     }
@@ -166,7 +170,6 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
       Map<Currency, YieldAndDiscountCurve> knownDiscountingCurves,
       Map<IborIndex, YieldAndDiscountCurve> knownIborCurves,
       Map<IndexON, YieldAndDiscountCurve> knownOvernightCurves);
-
 
   public Map<String, InstrumentDefinition<?>[]> getDefinitionsForCurves() {
     final Map<String, InstrumentDefinition<?>[]> definitionsForCurves = new HashMap<>();

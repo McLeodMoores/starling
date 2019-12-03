@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-import org.apache.http.concurrent.Cancellable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,15 +30,15 @@ import com.opengamma.util.async.Cancelable;
  */
 public class JobDispatcher implements JobInvokerRegister {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(JobDispatcher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JobDispatcher.class);
 
   /* package */static final int DEFAULT_MAX_JOB_ATTEMPTS = 2;
   /* package */static final long DEFAULT_MAX_JOB_EXECUTION_QUERY_TIMEOUT = 5000;
   /* package */static final String DEFAULT_JOB_FAILURE_NODE_ID = "NOT EXECUTED";
 
-  private final Queue<DispatchableJob> _pending = new LinkedList<DispatchableJob>();
-  private final Queue<JobInvoker> _invokers = new ConcurrentLinkedQueue<JobInvoker>();
-  private final Map<JobInvoker, Collection<Capability>> _capabilityCache = new ConcurrentHashMap<JobInvoker, Collection<Capability>>();
+  private final Queue<DispatchableJob> _pending = new LinkedList<>();
+  private final Queue<JobInvoker> _invokers = new ConcurrentLinkedQueue<>();
+  private final Map<JobInvoker, Collection<Capability>> _capabilityCache = new ConcurrentHashMap<>();
 
   /**
    * Maximum number of times a job will be submitted in its entirety to remote nodes before it gets partitioned to isolate an individual failure.
@@ -67,7 +66,7 @@ public class JobDispatcher implements JobInvokerRegister {
   }
 
   public JobDispatcher(final Collection<JobInvoker> invokers) {
-    for (JobInvoker invoker : invokers) {
+    for (final JobInvoker invoker : invokers) {
       registerJobInvoker(invoker);
     }
   }
@@ -109,7 +108,7 @@ public class JobDispatcher implements JobInvokerRegister {
    * Sets the maximum time for a job to be with an invoker in milliseconds. To disable the upper limit,
    * pass 0 or negative. This doesn't affect jobs already launched; only ones that are invoked after
    * the call.
-   * 
+   *
    * @param maxJobExecutionTime time in milliseconds
    */
   public synchronized void setMaxJobExecutionTime(final long maxJobExecutionTime) {
@@ -165,7 +164,7 @@ public class JobDispatcher implements JobInvokerRegister {
   @Override
   public synchronized void registerJobInvoker(final JobInvoker invoker) {
     ArgumentChecker.notNull(invoker, "invoker");
-    s_logger.debug("Registering job invoker {}", invoker);
+    LOGGER.debug("Registering job invoker {}", invoker);
     getInvokers().add(invoker);
     getCapabilityCache().put(invoker, invoker.getCapabilities());
     if (!getPending().isEmpty()) {
@@ -175,7 +174,7 @@ public class JobDispatcher implements JobInvokerRegister {
 
   // caller must already own monitor
   private void retryPending(final long failJobsBefore) {
-    s_logger.debug("Retrying pending operations");
+    LOGGER.debug("Retrying pending operations");
     final Iterator<DispatchableJob> iterator = getPending().iterator();
     while (iterator.hasNext()) {
       final DispatchableJob job = iterator.next();
@@ -184,7 +183,7 @@ public class JobDispatcher implements JobInvokerRegister {
       } else {
         if (failJobsBefore <= 0) {
           if (getInvokers().isEmpty()) {
-            s_logger.debug("No invokers available - not retrying operations");
+            LOGGER.debug("No invokers available - not retrying operations");
             break;
           }
         } else if (job.getJobCreationTime() < failJobsBefore) {
@@ -195,14 +194,16 @@ public class JobDispatcher implements JobInvokerRegister {
     }
   }
 
-  // TODO [ENG-42] schedule retryPending to be called periodically with failJobsBefore set to `System.nanoTime() - a timeout` to cancel jobs which can't be executed at all
-  // TODO [ENG-42] the invoker selection logic is inefficient; it's likely that capability requirements objects won't vary much so comparison against the capabilities of invokers should be cached
+  // TODO [ENG-42] schedule retryPending to be called periodically with failJobsBefore set to `System.nanoTime() - a timeout`
+  // to cancel jobs which can't be executed at all
+  // TODO [ENG-42] the invoker selection logic is inefficient; it's likely that capability requirements objects won't vary
+  // much so comparison against the capabilities of invokers should be cached
   // TODO [ENG-42] job dispatch should not be O(n) on number of invokers; the caching of capabilities should allow a nearer O(1) selection
 
   // caller must already own monitor
   private boolean invoke(final DispatchableJob job) {
     if (job.isCompleted()) {
-      s_logger.info("Job {} cancelled", job);
+      LOGGER.info("Job {} cancelled", job);
       return true;
     }
     Collection<JobInvoker> retry = null;
@@ -212,21 +213,20 @@ public class JobDispatcher implements JobInvokerRegister {
         final JobInvoker jobInvoker = iterator.next();
         if (job.canRunOn(jobInvoker)) {
           if (job.runOn(jobInvoker)) {
-            s_logger.debug("Invoker {} accepted job {}", jobInvoker, job);
+            LOGGER.debug("Invoker {} accepted job {}", jobInvoker, job);
             // put invoker to the end of the list
             iterator.remove();
             getInvokers().add(jobInvoker);
             return true;
-          } else {
-            s_logger.debug("Invoker {} refused to execute job {}", jobInvoker, job);
-            iterator.remove();
-            if (jobInvoker.notifyWhenAvailable(this)) {
-              s_logger.info("Invoker {} requested immediate retry", jobInvoker);
-              if (retry == null) {
-                retry = new LinkedList<JobInvoker>();
-              }
-              retry.add(jobInvoker);
+          }
+          LOGGER.debug("Invoker {} refused to execute job {}", jobInvoker, job);
+          iterator.remove();
+          if (jobInvoker.notifyWhenAvailable(this)) {
+            LOGGER.info("Invoker {} requested immediate retry", jobInvoker);
+            if (retry == null) {
+              retry = new LinkedList<>();
             }
+            retry.add(jobInvoker);
           }
         }
       }
@@ -237,13 +237,13 @@ public class JobDispatcher implements JobInvokerRegister {
         break;
       }
     } while (true);
-    s_logger.debug("No invokers available for job {}", job);
+    LOGGER.debug("No invokers available for job {}", job);
     return false;
   }
 
   protected synchronized void dispatchJobImpl(final DispatchableJob job) {
     if (!invoke(job)) {
-      s_logger.debug("Adding job to pending set");
+      LOGGER.debug("Adding job to pending set");
       getPending().add(job);
       if (getInvokers() != null) {
         retryPending(0L);
@@ -252,20 +252,21 @@ public class JobDispatcher implements JobInvokerRegister {
   }
 
   /**
-   * Puts the job into the ready queue, sent to an invoker as soon as one is available. Completion (or timeout)
-   * of the job will result in one or more callbacks to the result receiver. There is always the callback for the
-   * main job. If the job had a tail, a callback will also occur for each tail job. The {@link Cancellable}
-   * callback returned may be used to abort operation. If operation is aborted, results may still be received
-   * if they were too far in the pipeline to be stopped.
-   * 
-   * @param job The job to dispatch
-   * @param resultReceiver callback to receive the results
-   * @return A {@link Cancellable} callback to attempt to abort the job
+   * Puts the job into the ready queue, sent to an invoker as soon as one is available. Completion (or timeout) of the job will result in one or more callbacks
+   * to the result receiver. There is always the callback for the main job. If the job had a tail, a callback will also occur for each tail job. The
+   * {@link Cancelable} callback returned may be used to abort operation. If operation is aborted, results may still be received if they were too far in the
+   * pipeline to be stopped.
+   *
+   * @param job
+   *          The job to dispatch
+   * @param resultReceiver
+   *          callback to receive the results
+   * @return A {@link Cancelable} callback to attempt to abort the job
    */
   public Cancelable dispatchJob(final CalculationJob job, final JobResultReceiver resultReceiver) {
     ArgumentChecker.notNull(job, "job");
     ArgumentChecker.notNull(resultReceiver, "resultReceiver");
-    s_logger.info("Dispatching job {}", job.getSpecification().getJobId());
+    LOGGER.info("Dispatching job {}", job.getSpecification().getJobId());
     final DispatchableJob dispatchJob = new StandardJob(this, job, resultReceiver);
     dispatchJobImpl(dispatchJob);
     return dispatchJob.getCancelHandle();
@@ -273,12 +274,12 @@ public class JobDispatcher implements JobInvokerRegister {
 
   /**
    * Returns capabilities from all available invokers.
-   * 
+   *
    * @return Map of invoker identifier to capability set.
    */
   public Map<String, Collection<Capability>> getAllCapabilities() {
     final Iterator<Map.Entry<JobInvoker, Collection<Capability>>> invokerCapabilityIterator = getCapabilityCache().entrySet().iterator();
-    final Map<String, Collection<Capability>> result = new HashMap<String, Collection<Capability>>();
+    final Map<String, Collection<Capability>> result = new HashMap<>();
     while (invokerCapabilityIterator.hasNext()) {
       final Map.Entry<JobInvoker, Collection<Capability>> invokerCapability = invokerCapabilityIterator.next();
       final String identifier = invokerCapability.getKey().getInvokerId();

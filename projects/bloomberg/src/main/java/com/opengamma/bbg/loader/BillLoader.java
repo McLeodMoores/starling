@@ -67,7 +67,7 @@ import com.opengamma.util.time.ExpiryAccuracy;
 public class BillLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BillLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BillLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -97,21 +97,23 @@ public class BillLoader extends SecurityLoader {
       FIELD_DAYS_TO_SETTLE);
 
   /**
-   * The valid Bloomberg security types for bills
+   * The valid Bloomberg security types for bills.
    */
   public static final Set<String> VALID_SECURITY_TYPES2 = ImmutableSet.of("Bill");
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
   public BillLoader(final ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.BILL);
+    super(LOGGER, referenceDataProvider, SecurityType.BILL);
   }
 
   private String validateAndGetStringField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bill security");
+      LOGGER.warn(fieldName + " is null, cannot construct bill security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bill security");
     }
     return fieldData.getString(fieldName);
@@ -126,7 +128,7 @@ public class BillLoader extends SecurityLoader {
 
   private Double validateAndGetDoubleField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bill security");
+      LOGGER.warn(fieldName + " is null, cannot construct bill security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bill security");
     }
     return fieldData.getDouble(fieldName);
@@ -134,7 +136,7 @@ public class BillLoader extends SecurityLoader {
 
   private Integer validateAndGetIntegerField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bill security");
+      LOGGER.warn(fieldName + " is null, cannot construct bill security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bill security");
     }
     return fieldData.getInt(fieldName);
@@ -152,7 +154,7 @@ public class BillLoader extends SecurityLoader {
     return localDate.atTime(expiryTime).atZone(zone);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     try {
@@ -223,16 +225,19 @@ public class BillLoader extends SecurityLoader {
       parseIdentifiers(fieldData, billSecurity);
       return billSecurity;
     } catch (final OpenGammaRuntimeException ogre) {
-      s_logger.error("Error loading bill {}: {}",
+      LOGGER.error("Error loading bill {}: {}",
           fieldData.getValue(FIELD_ID_ISIN), ogre.getMessage());
       return null;
     }
   }
 
   /**
-   * Parse the identifiers from the response.  Note that we populate BLOOMBERG_TICKER with PARSEKYABLE_DES.
-   * @param fieldData  the response, not null
-   * @param security  the security to populate, not null
+   * Parse the identifiers from the response. Note that we populate BLOOMBERG_TICKER with PARSEKYABLE_DES.
+   * 
+   * @param fieldData
+   *          the response, not null
+   * @param security
+   *          the security to populate, not null
    */
   @Override
   protected void parseIdentifiers(final FudgeMsg fieldData, final ManageableSecurity security) {
@@ -266,7 +271,7 @@ public class BillLoader extends SecurityLoader {
       try {
         identifiers.add(ExternalSchemes.bloombergTCMSecurityId(ticker, coupon, maturity, marketSector));
       } catch (final Exception e) {
-        s_logger.warn("Couldn't add Bloomberg TCM to bill", e);
+        LOGGER.warn("Couldn't add Bloomberg TCM to bill", e);
       }
     }
     security.setExternalIdBundle(ExternalIdBundle.of(identifiers));

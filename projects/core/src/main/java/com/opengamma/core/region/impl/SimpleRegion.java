@@ -40,12 +40,10 @@ import com.opengamma.util.money.Currency;
  * <p>
  * This is the simplest possible implementation of the {@link Region} interface.
  * <p>
- * This class is mutable and not thread-safe.
- * It is intended to be used in the engine via the read-only {@code Region} interface.
+ * This class is mutable and not thread-safe. It is intended to be used in the engine via the read-only {@code Region} interface.
  */
 @BeanDefinition
-public class SimpleRegion extends DirectBean
-    implements Region, MutableUniqueIdentifiable, Serializable {
+public class SimpleRegion extends DirectBean implements Region, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -53,40 +51,37 @@ public class SimpleRegion extends DirectBean
   /**
    * The unique identifier of the region.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
-   * The bundle of identifiers that define the region.
-   * This will include the country, currency and time-zone.
+   * The bundle of identifiers that define the region. This will include the country, currency and time-zone.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
    * The classification of the region.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private RegionClassification _classification;
   /**
-   * The unique identifiers of the parent regions.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
+   * The unique identifiers of the parent regions. For example, a country might be a member of the World, UN, European Union and NATO.
    */
-  @PropertyDefinition(set = "setClearAddAll")
-  private Set<UniqueId> _parentRegionIds = new HashSet<UniqueId>();
+  @PropertyDefinition(set = "setClearAddAll", overrideGet = true)
+  private final Set<UniqueId> _parentRegionIds = new HashSet<>();
   /**
    * The short descriptive name for the region.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
   /**
    * The full descriptive name for the region.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _fullName = "";
   /**
-   * The extensible data store for additional information, not null.
-   * Applications may store additional region based information here.
+   * The extensible data store for additional information, not null. Applications may store additional region based information here.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final FlexiBean _data = new FlexiBean();
 
   /**
@@ -95,78 +90,86 @@ public class SimpleRegion extends DirectBean
   public SimpleRegion() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle.
-   * 
-   * @param externalId  the external identifier, not null
+   *
+   * @param externalId
+   *          the external identifier, not null
    */
   public void addExternalId(final ExternalId externalId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(externalId));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the country.
+   * 
    * @return the value of the property
    */
+  @Override
   public Country getCountry() {
-    String code = _externalIdBundle.getValue(ExternalSchemes.ISO_COUNTRY_ALPHA2);
-    return (code != null ? Country.of(code) : null);
+    final String code = _externalIdBundle.getValue(ExternalSchemes.ISO_COUNTRY_ALPHA2);
+    return code != null ? Country.of(code) : null;
   }
 
   /**
    * Sets the country, stored in the identifier set.
-   * 
-   * @param country  the country to set, null to remove any defined country
+   *
+   * @param country
+   *          the country to set, null to remove any defined country
    */
-  public void setCountry(Country country) {
-    setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_CURRENCY_ALPHA3));
+  public void setCountry(final Country country) {
+    setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_COUNTRY_ALPHA2));
     if (country != null) {
       addExternalId(ExternalSchemes.countryRegionId(country));
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the currency.
+   * 
    * @return the value of the property
    */
+  @Override
   public Currency getCurrency() {
-    String code = _externalIdBundle.getValue(ExternalSchemes.ISO_CURRENCY_ALPHA3);
-    return (code != null ? Currency.of(code) : null);
+    final String code = _externalIdBundle.getValue(ExternalSchemes.ISO_CURRENCY_ALPHA3);
+    return code != null ? Currency.of(code) : null;
   }
 
   /**
    * Sets the currency, stored in the identifier set.
-   * 
-   * @param currency  the currency to set, null to remove any currency
+   *
+   * @param currency
+   *          the currency to set, null to remove any currency
    */
-  public void setCurrency(Currency currency) {
+  public void setCurrency(final Currency currency) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_CURRENCY_ALPHA3));
     if (currency != null) {
       addExternalId(ExternalSchemes.currencyRegionId(currency));
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Gets the time-zone.
-   * For larger regions, there can be multiple time-zones, so this is only reliable
-   * for municipalities.
+   * Gets the time-zone. For larger regions, there can be multiple time-zones, so this is only reliable for municipalities.
+   * 
    * @return the value of the property
    */
+  @Override
   public ZoneId getTimeZone() {
-    String id = _externalIdBundle.getValue(ExternalSchemes.TZDB_TIME_ZONE);
-    return (id != null ? ZoneId.of(id) : null);
+    final String id = _externalIdBundle.getValue(ExternalSchemes.TZDB_TIME_ZONE);
+    return id != null ? ZoneId.of(id) : null;
   }
 
   /**
    * Sets the time-zone, stored in the identifier set.
-   * 
-   * @param timeZone  the time-zone to set, null to remove any time-zone
+   *
+   * @param timeZone
+   *          the time-zone to set, null to remove any time-zone
    */
-  public void setTimeZone(ZoneId timeZone) {
+  public void setTimeZone(final ZoneId timeZone) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.TZDB_TIME_ZONE));
     if (timeZone != null) {
       addExternalId(ExternalSchemes.timeZoneRegionId(timeZone));
@@ -197,6 +200,7 @@ public class SimpleRegion extends DirectBean
    * Gets the unique identifier of the region.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -205,6 +209,7 @@ public class SimpleRegion extends DirectBean
    * Sets the unique identifier of the region.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -219,17 +224,16 @@ public class SimpleRegion extends DirectBean
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bundle of identifiers that define the region.
-   * This will include the country, currency and time-zone.
+   * Gets the bundle of identifiers that define the region. This will include the country, currency and time-zone.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
 
   /**
-   * Sets the bundle of identifiers that define the region.
-   * This will include the country, currency and time-zone.
+   * Sets the bundle of identifiers that define the region. This will include the country, currency and time-zone.
    * @param externalIdBundle  the new value of the property, not null
    */
   public void setExternalIdBundle(ExternalIdBundle externalIdBundle) {
@@ -239,7 +243,6 @@ public class SimpleRegion extends DirectBean
 
   /**
    * Gets the the {@code externalIdBundle} property.
-   * This will include the country, currency and time-zone.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalIdBundle() {
@@ -251,6 +254,7 @@ public class SimpleRegion extends DirectBean
    * Gets the classification of the region.
    * @return the value of the property
    */
+  @Override
   public RegionClassification getClassification() {
     return _classification;
   }
@@ -273,27 +277,26 @@ public class SimpleRegion extends DirectBean
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifiers of the parent regions.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
-   * @return the value of the property
+   * Gets the unique identifiers of the parent regions. For example, a country might be a member of the World, UN, European Union and NATO.
+   * @return the value of the property, not null
    */
+  @Override
   public Set<UniqueId> getParentRegionIds() {
     return _parentRegionIds;
   }
 
   /**
-   * Sets the unique identifiers of the parent regions.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
-   * @param parentRegionIds  the new value of the property
+   * Sets the unique identifiers of the parent regions. For example, a country might be a member of the World, UN, European Union and NATO.
+   * @param parentRegionIds  the new value of the property, not null
    */
   public void setParentRegionIds(Set<UniqueId> parentRegionIds) {
+    JodaBeanUtils.notNull(parentRegionIds, "parentRegionIds");
     this._parentRegionIds.clear();
     this._parentRegionIds.addAll(parentRegionIds);
   }
 
   /**
    * Gets the the {@code parentRegionIds} property.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
    * @return the property, not null
    */
   public final Property<Set<UniqueId>> parentRegionIds() {
@@ -305,6 +308,7 @@ public class SimpleRegion extends DirectBean
    * Gets the short descriptive name for the region.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }
@@ -331,6 +335,7 @@ public class SimpleRegion extends DirectBean
    * Gets the full descriptive name for the region.
    * @return the value of the property, not null
    */
+  @Override
   public String getFullName() {
     return _fullName;
   }
@@ -354,17 +359,16 @@ public class SimpleRegion extends DirectBean
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the extensible data store for additional information, not null.
-   * Applications may store additional region based information here.
+   * Gets the extensible data store for additional information, not null. Applications may store additional region based information here.
    * @return the value of the property, not null
    */
+  @Override
   public FlexiBean getData() {
     return _data;
   }
 
   /**
-   * Sets the extensible data store for additional information, not null.
-   * Applications may store additional region based information here.
+   * Sets the extensible data store for additional information, not null. Applications may store additional region based information here.
    * @param data  the new value of the property, not null
    */
   public void setData(FlexiBean data) {
@@ -375,7 +379,6 @@ public class SimpleRegion extends DirectBean
 
   /**
    * Gets the the {@code data} property.
-   * Applications may store additional region based information here.
    * @return the property, not null
    */
   public final Property<FlexiBean> data() {
@@ -654,6 +657,7 @@ public class SimpleRegion extends DirectBean
     @Override
     protected void validate(Bean bean) {
       JodaBeanUtils.notNull(((SimpleRegion) bean)._externalIdBundle, "externalIdBundle");
+      JodaBeanUtils.notNull(((SimpleRegion) bean)._parentRegionIds, "parentRegionIds");
       JodaBeanUtils.notNull(((SimpleRegion) bean)._name, "name");
       JodaBeanUtils.notNull(((SimpleRegion) bean)._fullName, "fullName");
       JodaBeanUtils.notNull(((SimpleRegion) bean)._data, "data");

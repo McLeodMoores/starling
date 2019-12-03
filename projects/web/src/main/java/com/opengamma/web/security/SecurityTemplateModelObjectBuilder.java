@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.security;
@@ -67,74 +67,74 @@ import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Builds the model object used in the security freemarker templates
+ * Builds the model object used in the security freemarker templates.
  */
 public class SecurityTemplateModelObjectBuilder extends FinancialSecurityVisitorSameValueAdapter<Void> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityTemplateModelObjectBuilder.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityTemplateModelObjectBuilder.class);
+
   private final FlexiBean _out;
   private final SecurityMaster _securityMaster;
   private final LegalEntityMaster _legalEntityMaster;
-  
+
   SecurityTemplateModelObjectBuilder(final FlexiBean out, final SecurityMaster securityMaster, final LegalEntityMaster legalEntityMaster) {
     super(null);
     _out = out;
     _securityMaster = securityMaster;
     _legalEntityMaster = legalEntityMaster;
   }
-  
+
   private void addFutureSecurityType(final String futureType) {
     _out.put("futureSecurityType", futureType);
   }
-  
-  private void addUnderlyingSecurity(ExternalId underlyingId) {
-    ManageableSecurity security = getSecurity(underlyingId);
+
+  private void addUnderlyingSecurity(final ExternalId underlyingId) {
+    final ManageableSecurity security = getSecurity(underlyingId);
     if (security != null) {
       _out.put("underlyingSecurity", security);
     }
   }
-  
-  private ManageableSecurity getSecurity(ExternalId underlyingIdentifier) {
+
+  private ManageableSecurity getSecurity(final ExternalId underlyingIdentifier) {
     return AbstractWebSecurityResource.getSecurity(underlyingIdentifier, _securityMaster);
   }
 
   @Override
-  public Void visitSwapSecurity(SwapSecurity security) {
+  public Void visitSwapSecurity(final SwapSecurity security) {
     _out.put("payLegType", security.getPayLeg().accept(new SwapLegClassifierVisitor()));
     _out.put("receiveLegType", security.getReceiveLeg().accept(new SwapLegClassifierVisitor()));
     return null;
   }
-    
+
   @Override
-  public Void visitInterestRateFutureSecurity(InterestRateFutureSecurity security) {
+  public Void visitInterestRateFutureSecurity(final InterestRateFutureSecurity security) {
     addFutureSecurityType("InterestRate");
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
 
   @Override
-  public Void visitBondFutureSecurity(BondFutureSecurity security) {
+  public Void visitBondFutureSecurity(final BondFutureSecurity security) {
     addFutureSecurityType("BondFuture");
-    Map<String, String> basket = new TreeMap<String, String>();
-    for (BondFutureDeliverable bondFutureDeliverable : security.getBasket()) {
-      String identifierValue = bondFutureDeliverable.getIdentifiers().getValue(ExternalSchemes.BLOOMBERG_TICKER);
+    final Map<String, String> basket = new TreeMap<>();
+    for (final BondFutureDeliverable bondFutureDeliverable : security.getBasket()) {
+      final String identifierValue = bondFutureDeliverable.getIdentifiers().getValue(ExternalSchemes.BLOOMBERG_TICKER);
       basket.put(ExternalSchemes.BLOOMBERG_TICKER.getName() + "-" + identifierValue, String.valueOf(bondFutureDeliverable.getConversionFactor()));
     }
     _out.put("basket", basket);
     return null;
   }
-  
+
   @Override
-  public Void visitCapFloorSecurity(CapFloorSecurity security) {
+  public Void visitCapFloorSecurity(final CapFloorSecurity security) {
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
-  
+
   @Override
-  public Void visitCapFloorCMSSpreadSecurity(CapFloorCMSSpreadSecurity security) {
-    Security shortUnderlying = getSecurity(security.getShortId());
-    Security longUnderlying = getSecurity(security.getLongId());
+  public Void visitCapFloorCMSSpreadSecurity(final CapFloorCMSSpreadSecurity security) {
+    final Security shortUnderlying = getSecurity(security.getShortId());
+    final Security longUnderlying = getSecurity(security.getLongId());
     if (shortUnderlying != null) {
       _out.put("shortSecurity", shortUnderlying);
     }
@@ -145,152 +145,152 @@ public class SecurityTemplateModelObjectBuilder extends FinancialSecurityVisitor
   }
 
   @Override
-  public Void visitEnergyFutureSecurity(EnergyFutureSecurity security) {
+  public Void visitEnergyFutureSecurity(final EnergyFutureSecurity security) {
     addFutureSecurityType("EnergyFuture");
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
 
   @Override
-  public Void visitEquityBarrierOptionSecurity(EquityBarrierOptionSecurity security) {
+  public Void visitEquityBarrierOptionSecurity(final EquityBarrierOptionSecurity security) {
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
 
   @Override
-  public Void visitEquityFutureSecurity(EquityFutureSecurity security) {
+  public Void visitEquityFutureSecurity(final EquityFutureSecurity security) {
     addFutureSecurityType("EquityFuture");
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
 
   @Override
-  public Void visitEquityIndexDividendFutureSecurity(EquityIndexDividendFutureSecurity security) {
+  public Void visitEquityIndexDividendFutureSecurity(final EquityIndexDividendFutureSecurity security) {
     addFutureSecurityType("EquityIndexDividendFuture");
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
-  
+
   @Override
-  public Void visitEquityIndexOptionSecurity(EquityIndexOptionSecurity security) {
+  public Void visitEquityIndexOptionSecurity(final EquityIndexOptionSecurity security) {
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
 
   @Override
-  public Void visitEquityOptionSecurity(EquityOptionSecurity security) {
-    addUnderlyingSecurity(security.getUnderlyingId());
-    return null;
-  }
-  
-  @Override
-  public Void visitFRASecurity(FRASecurity security) {
+  public Void visitEquityOptionSecurity(final EquityOptionSecurity security) {
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
 
   @Override
-  public Void visitFXFutureSecurity(FXFutureSecurity security) {
+  public Void visitFRASecurity(final FRASecurity security) {
+    addUnderlyingSecurity(security.getUnderlyingId());
+    return null;
+  }
+
+  @Override
+  public Void visitFXFutureSecurity(final FXFutureSecurity security) {
     addFutureSecurityType("FxFuture");
     return null;
   }
 
   @Override
-  public Void visitIndexFutureSecurity(IndexFutureSecurity security) {
+  public Void visitIndexFutureSecurity(final IndexFutureSecurity security) {
     addFutureSecurityType("IndexFuture");
-    addUnderlyingSecurity(security.getUnderlyingId());
-    return null;
-  }
-  
-  @Override
-  public Void visitIRFutureOptionSecurity(IRFutureOptionSecurity security) {
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
 
   @Override
-  public Void visitMetalFutureSecurity(MetalFutureSecurity security) {
+  public Void visitIRFutureOptionSecurity(final IRFutureOptionSecurity security) {
+    addUnderlyingSecurity(security.getUnderlyingId());
+    return null;
+  }
+
+  @Override
+  public Void visitMetalFutureSecurity(final MetalFutureSecurity security) {
     addFutureSecurityType("MetalFuture");
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
 
   @Override
-  public Void visitStockFutureSecurity(StockFutureSecurity security) {
+  public Void visitStockFutureSecurity(final StockFutureSecurity security) {
     addFutureSecurityType("StockFuture");
-    addUnderlyingSecurity(security.getUnderlyingId());
-    return null;
-  }
-  
-  @Override
-  public Void visitSwaptionSecurity(SwaptionSecurity security) {
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
 
   @Override
-  public Void visitAgricultureFutureSecurity(AgricultureFutureSecurity security) {
+  public Void visitSwaptionSecurity(final SwaptionSecurity security) {
+    addUnderlyingSecurity(security.getUnderlyingId());
+    return null;
+  }
+
+  @Override
+  public Void visitAgricultureFutureSecurity(final AgricultureFutureSecurity security) {
     addFutureSecurityType("AgricultureFuture");
     return null;
   }
 
   @Override
-  public Void visitDeliverableSwapFutureSecurity(DeliverableSwapFutureSecurity security) {
+  public Void visitDeliverableSwapFutureSecurity(final DeliverableSwapFutureSecurity security) {
     addFutureSecurityType("DeliverableSwapFuture");
     return null;
   }
-  
+
   @Override
-  public Void visitCreditDefaultSwapIndexDefinitionSecurity(CreditDefaultSwapIndexDefinitionSecurity security) {
-    List<String> tenors = Lists.newArrayList();
-    for (Tenor tenor : security.getTerms()) {
+  public Void visitCreditDefaultSwapIndexDefinitionSecurity(final CreditDefaultSwapIndexDefinitionSecurity security) {
+    final List<String> tenors = Lists.newArrayList();
+    for (final Tenor tenor : security.getTerms()) {
       tenors.add(tenor.getPeriod().toString());
     }
     _out.put("terms", ImmutableList.copyOf(tenors));
-    Set<CreditDefaultSwapIndexComponent> components = new TreeSet<>(Collections.reverseOrder());
-    for (CreditDefaultSwapIndexComponent component : security.getComponents()) {
+    final Set<CreditDefaultSwapIndexComponent> components = new TreeSet<>(Collections.reverseOrder());
+    for (final CreditDefaultSwapIndexComponent component : security.getComponents()) {
       components.add(component);
     }
     _out.put("components", ImmutableList.copyOf(components));
     return null;
   }
-  
+
   @Override
-  public Void visitCreditDefaultSwapOptionSecurity(CreditDefaultSwapOptionSecurity security) {
-    ExternalId underlyingId = security.getUnderlyingId();
+  public Void visitCreditDefaultSwapOptionSecurity(final CreditDefaultSwapOptionSecurity security) {
+    final ExternalId underlyingId = security.getUnderlyingId();
     if (underlyingId != null) {
-      LegalEntitySearchRequest request = new LegalEntitySearchRequest();
+      final LegalEntitySearchRequest request = new LegalEntitySearchRequest();
       if (underlyingId.getScheme().equals(ExternalSchemes.MARKIT_RED_CODE)) {
         request.addExternalId(underlyingId);
 
-        LegalEntitySearchResult searchResult = _legalEntityMaster.search(request);
-        LegalEntity organization = searchResult.getSingleLegalEntity();
+        final LegalEntitySearchResult searchResult = _legalEntityMaster.search(request);
+        final LegalEntity organization = searchResult.getSingleLegalEntity();
         if (organization != null) {
           _out.put("underlyingOrganization", organization);
         }
       } else {
-        s_logger.warn("{} does not currently support CDSOption underlying lookup based on {}", WebSecuritiesResource.class, underlyingId.getScheme().getName());
+        LOGGER.warn("{} does not currently support CDSOption underlying lookup based on {}", WebSecuritiesResource.class, underlyingId.getScheme().getName());
       }
     }
     return null;
   }
-  
+
   @Override
-  public Void visitFederalFundsFutureSecurity(FederalFundsFutureSecurity security) {
+  public Void visitFederalFundsFutureSecurity(final FederalFundsFutureSecurity security) {
     addFutureSecurityType("FederalFundsFutureSecurity");
     addUnderlyingSecurity(security.getUnderlyingId());
     return null;
   }
-  
+
   @Override
-  public Void visitZeroCouponInflationSwapSecurity(ZeroCouponInflationSwapSecurity security) {
+  public Void visitZeroCouponInflationSwapSecurity(final ZeroCouponInflationSwapSecurity security) {
     _out.put("payLegType", security.getPayLeg().accept(new SwapLegClassifierVisitor()));
     _out.put("receiveLegType", security.getReceiveLeg().accept(new SwapLegClassifierVisitor()));
     return null;
   }
-  
+
   @Override
-  public Void visitYearOnYearInflationSwapSecurity(YearOnYearInflationSwapSecurity security) {
+  public Void visitYearOnYearInflationSwapSecurity(final YearOnYearInflationSwapSecurity security) {
     _out.put("payLegType", security.getPayLeg().accept(new SwapLegClassifierVisitor()));
     _out.put("receiveLegType", security.getReceiveLeg().accept(new SwapLegClassifierVisitor()));
     return null;
@@ -301,42 +301,42 @@ public class SecurityTemplateModelObjectBuilder extends FinancialSecurityVisitor
    */
   private static class SwapLegClassifierVisitor implements SwapLegVisitor<String> {
     @Override
-    public String visitFixedInterestRateLeg(FixedInterestRateLeg swapLeg) {
+    public String visitFixedInterestRateLeg(final FixedInterestRateLeg swapLeg) {
       return "FixedInterestRateLeg";
     }
 
     @Override
-    public String visitFloatingInterestRateLeg(FloatingInterestRateLeg swapLeg) {
+    public String visitFloatingInterestRateLeg(final FloatingInterestRateLeg swapLeg) {
       return "FloatingInterestRateLeg";
     }
 
     @Override
-    public String visitFloatingSpreadIRLeg(FloatingSpreadIRLeg swapLeg) {
+    public String visitFloatingSpreadIRLeg(final FloatingSpreadIRLeg swapLeg) {
       return "FloatingSpreadInterestRateLeg";
     }
 
     @Override
-    public String visitFloatingGearingIRLeg(FloatingGearingIRLeg swapLeg) {
+    public String visitFloatingGearingIRLeg(final FloatingGearingIRLeg swapLeg) {
       return "FloatingGearingInterestRateLeg";
     }
 
     @Override
-    public String visitFixedVarianceSwapLeg(FixedVarianceSwapLeg swapLeg) {
+    public String visitFixedVarianceSwapLeg(final FixedVarianceSwapLeg swapLeg) {
       return "FixedVarianceLeg";
     }
 
     @Override
-    public String visitFloatingVarianceSwapLeg(FloatingVarianceSwapLeg swapLeg) {
+    public String visitFloatingVarianceSwapLeg(final FloatingVarianceSwapLeg swapLeg) {
       return "FloatingVarianceLeg";
     }
 
     @Override
-    public String visitFixedInflationSwapLeg(FixedInflationSwapLeg swapLeg) {
+    public String visitFixedInflationSwapLeg(final FixedInflationSwapLeg swapLeg) {
       return "FixedInflationLeg";
     }
 
     @Override
-    public String visitInflationIndexSwapLeg(InflationIndexSwapLeg swapLeg) {
+    public String visitInflationIndexSwapLeg(final InflationIndexSwapLeg swapLeg) {
       return "InflationIndexLeg";
     }
   }

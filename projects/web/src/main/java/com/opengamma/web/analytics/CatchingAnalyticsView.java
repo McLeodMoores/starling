@@ -26,7 +26,7 @@ import com.opengamma.web.analytics.push.UpdateListener;
   private final ErrorManager _errorManager;
   private final UpdateListener _listener;
 
-  /* package */ CatchingAnalyticsView(AnalyticsView delegate, ErrorManager errorManager, UpdateListener listener) {
+  /* package */ CatchingAnalyticsView(final AnalyticsView delegate, final ErrorManager errorManager, final UpdateListener listener) {
     ArgumentChecker.notNull(delegate, "delegate");
     ArgumentChecker.notNull(errorManager, "errorManager");
     ArgumentChecker.notNull(listener, "listener");
@@ -36,65 +36,65 @@ import com.opengamma.web.analytics.push.UpdateListener;
   }
 
   @Override
-  public List<String> updateStructure(CompiledViewDefinition compiledViewDefinition, Portfolio resolvedPortfolio) {
+  public List<String> updateStructure(final CompiledViewDefinition compiledViewDefinition, final Portfolio resolvedPortfolio) {
     try {
       return _delegate.updateStructure(compiledViewDefinition, resolvedPortfolio);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public String viewCompilationFailed(Throwable ex) {
+  public String viewCompilationFailed(final Throwable ex) {
     try {
       return _delegate.viewCompilationFailed(ex);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public List<String> updateResults(ViewResultModel results, ViewCycle viewCycle) {
+  public List<String> updateResults(final ViewResultModel results, final ViewCycle viewCycle) {
     try {
       return _delegate.updateResults(results, viewCycle);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public GridStructure getGridStructure(GridType gridType, int viewportId) {
+  public GridStructure getGridStructure(final GridType gridType, final int viewportId) {
     try {
       return _delegate.getGridStructure(gridType, viewportId);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw e;
     }
   }
 
   @Override
-  public GridStructure getInitialGridStructure(GridType gridType) {
+  public GridStructure getInitialGridStructure(final GridType gridType) {
     try {
       return _delegate.getInitialGridStructure(gridType);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public boolean createViewport(int requestId,
-                                GridType gridType,
-                                int viewportId,
-                                String callbackId,
-                                String structureCallbackId,
-                                ViewportDefinition viewportDefinition) {
+  public boolean createViewport(final int requestId,
+                                final GridType gridType,
+                                final int viewportId,
+                                final String callbackId,
+                                final String structureCallbackId,
+                                final ViewportDefinition viewportDefinition) {
     try {
       return _delegate.createViewport(requestId,
                                       gridType,
@@ -102,114 +102,114 @@ import com.opengamma.web.analytics.push.UpdateListener;
                                       callbackId,
                                       structureCallbackId,
                                       viewportDefinition);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public String updateViewport(GridType gridType, int viewportId, ViewportDefinition viewportDefinition) {
+  public String updateViewport(final GridType gridType, final int viewportId, final ViewportDefinition viewportDefinition) {
     try {
       return _delegate.updateViewport(gridType, viewportId, viewportDefinition);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public void deleteViewport(GridType gridType, int viewportId) {
+  public void deleteViewport(final GridType gridType, final int viewportId) {
     try {
       _delegate.deleteViewport(gridType, viewportId);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public ViewportResults getData(GridType gridType, int viewportId) {
+  public ViewportResults getData(final GridType gridType, final int viewportId) {
     try {
       return _delegate.getData(gridType, viewportId);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public GridStructure getGridStructure(GridType gridType, int graphId, int viewportId) {
+  public GridStructure getGridStructure(final GridType gridType, final int graphId, final int viewportId) {
     try {
       return _delegate.getGridStructure(gridType, graphId, viewportId);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public GridStructure getInitialGridStructure(GridType gridType, int graphId) {
+  public GridStructure getInitialGridStructure(final GridType gridType, final int graphId) {
     try {
       return _delegate.getInitialGridStructure(gridType, graphId);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public void openDependencyGraph(int requestId, GridType gridType, int graphId, String callbackId, int row, int col) {
+  public void openDependencyGraph(final int requestId, final GridType gridType, final int graphId, final String callbackId, final int row, final int col) {
     try {
       _delegate.openDependencyGraph(requestId, gridType, graphId, callbackId, row, col);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public void openDependencyGraph(int requestId,
-                                  GridType gridType,
-                                  int graphId,
-                                  String callbackId,
-                                  String calcConfigName,
-                                  ValueRequirement valueRequirement) {
+  public void openDependencyGraph(final int requestId,
+                                  final GridType gridType,
+                                  final int graphId,
+                                  final String callbackId,
+                                  final String calcConfigName,
+                                  final ValueRequirement valueRequirement) {
     try {
       _delegate.openDependencyGraph(requestId, gridType, graphId, callbackId, calcConfigName, valueRequirement);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public void closeDependencyGraph(GridType gridType, int graphId) {
+  public void closeDependencyGraph(final GridType gridType, final int graphId) {
     try {
       _delegate.closeDependencyGraph(gridType, graphId);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public boolean createViewport(int requestId,
-                                GridType gridType,
-                                int graphId,
-                                int viewportId,
-                                String callbackId,
-                                String structureCallbackId,
-                                ViewportDefinition viewportDefinition) {
+  public boolean createViewport(final int requestId,
+                                final GridType gridType,
+                                final int graphId,
+                                final int viewportId,
+                                final String callbackId,
+                                final String structureCallbackId,
+                                final ViewportDefinition viewportDefinition) {
     try {
       return _delegate.createViewport(requestId,
                                       gridType,
@@ -218,52 +218,52 @@ import com.opengamma.web.analytics.push.UpdateListener;
                                       callbackId,
                                       structureCallbackId,
                                       viewportDefinition);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public String updateViewport(GridType gridType, int graphId, int viewportId, ViewportDefinition viewportDefinition) {
+  public String updateViewport(final GridType gridType, final int graphId, final int viewportId, final ViewportDefinition viewportDefinition) {
     try {
       return _delegate.updateViewport(gridType, graphId, viewportId, viewportDefinition);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public void deleteViewport(GridType gridType, int graphId, int viewportId) {
+  public void deleteViewport(final GridType gridType, final int graphId, final int viewportId) {
     try {
       _delegate.deleteViewport(gridType, graphId, viewportId);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public ViewportResults getData(GridType gridType, int graphId, int viewportId) {
+  public ViewportResults getData(final GridType gridType, final int graphId, final int viewportId) {
     try {
       return _delegate.getData(gridType, graphId, viewportId);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public List<String> entityChanged(MasterChangeNotification<?> notification) {
+  public List<String> entityChanged(final MasterChangeNotification<?> notification) {
     try {
       return _delegate.entityChanged(notification);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
@@ -273,19 +273,19 @@ import com.opengamma.web.analytics.push.UpdateListener;
   public List<String> portfolioChanged() {
     try {
       return _delegate.portfolioChanged();
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public ViewportResults getAllGridData(GridType gridType, TypeFormatter.Format format) {
+  public ViewportResults getAllGridData(final GridType gridType, final TypeFormatter.Format format) {
     try {
       return _delegate.getAllGridData(gridType, format);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
@@ -295,8 +295,8 @@ import com.opengamma.web.analytics.push.UpdateListener;
   public UniqueId getViewDefinitionId() {
     try {
       return _delegate.getViewDefinitionId();
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
@@ -306,19 +306,19 @@ import com.opengamma.web.analytics.push.UpdateListener;
   public List<ErrorInfo> getErrors() {
     try {
       return _delegate.getErrors();
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }
   }
 
   @Override
-  public void deleteError(long errorId) {
+  public void deleteError(final long errorId) {
     try {
       _delegate.deleteError(errorId);
-    } catch (Exception e) {
-      String id = _errorManager.add(e);
+    } catch (final Exception e) {
+      final String id = _errorManager.add(e);
       _listener.itemUpdated(id);
       throw e;
     }

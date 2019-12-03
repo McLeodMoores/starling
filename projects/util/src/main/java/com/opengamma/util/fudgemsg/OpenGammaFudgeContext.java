@@ -51,7 +51,7 @@ import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeri
 public final class OpenGammaFudgeContext {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(OpenGammaFudgeContext.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OpenGammaFudgeContext.class);
 
   /**
    * Restricted constructor.
@@ -73,25 +73,25 @@ public final class OpenGammaFudgeContext {
   static final class ContextHolder {
     static final FudgeContext INSTANCE = constructContext();
     private static FudgeContext constructContext() {
-      FudgeContext fudgeContext = new FudgeContext();
+      final FudgeContext fudgeContext = new FudgeContext();
       ExtendedFudgeBuilderFactory.init(fudgeContext.getObjectDictionary());
       InnerClassFudgeBuilderFactory.init(fudgeContext.getObjectDictionary());
-      
+
       // hack to handle non-existent classpath directory entries
-      List<UrlType> urlTypes = Lists.newArrayList(Vfs.getDefaultUrlTypes());
+      final List<UrlType> urlTypes = Lists.newArrayList(Vfs.getDefaultUrlTypes());
       urlTypes.add(0, new OGFileUrlType());
       urlTypes.add(1, new OGJNDIUrlType());
       Vfs.setDefaultURLTypes(urlTypes);
-      
+
       // init annotation reflector, which needs this class loader
-      Set<ClassLoader> loaders = new HashSet<>();
+      final Set<ClassLoader> loaders = new HashSet<>();
       loaders.add(OpenGammaFudgeContext.class.getClassLoader());
       try {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader != null) {
           loaders.add(loader);
         }
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         // ignore
       }
       Collection<URL> urls;
@@ -101,27 +101,27 @@ public final class OpenGammaFudgeContext {
         urls = ClasspathHelper.forManifest(ClasspathHelper.forWebInfLib(ServletContextHolder.getContext()));
         loaders.add(ServletContextHolder.getContext().getClassLoader());
       }
-      Configuration config = new ConfigurationBuilder()
+      final Configuration config = new ConfigurationBuilder()
         .setUrls(urls)
         .setScanners(new TypeAnnotationsScanner(), new FieldAnnotationsScanner(), new SubTypesScanner(false))
         .filterInputsBy(FilterBuilder.parse(AnnotationReflector.DEFAULT_ANNOTATION_REFLECTOR_FILTER))
         .addClassLoaders(loaders)
         .useParallelExecutor();
-      
+
       AnnotationReflector.initDefaultReflector(new AnnotationReflector(config));
-      AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
+      final AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
       if (!System.getProperties().containsKey("reflections.scan")) {
-        reflector.getReflector().collect();
+        Reflections.collect();
       }
       fudgeContext.getObjectDictionary().addAllAnnotatedBuilders(reflector);
       fudgeContext.getTypeDictionary().addAllAnnotatedSecondaryTypes(reflector);
-      
-      FudgeTypeDictionary td = fudgeContext.getTypeDictionary();
+
+      final FudgeTypeDictionary td = fudgeContext.getTypeDictionary();
       td.registerClassRename("com.opengamma.util.timeseries.zoneddatetime.ArrayZonedDateTimeDoubleTimeSeries", ImmutableZonedDateTimeDoubleTimeSeries.class);
       td.registerClassRename("com.opengamma.timeseries.zoneddatetime.ArrayZonedDateTimeDoubleTimeSeries", ImmutableZonedDateTimeDoubleTimeSeries.class);
       td.registerClassRename("com.opengamma.util.timeseries.zoneddatetime.ListZonedDateTimeDoubleTimeSeries", ImmutableZonedDateTimeDoubleTimeSeries.class);
       td.registerClassRename("com.opengamma.timeseries.zoneddatetime.ListZonedDateTimeDoubleTimeSeries", ImmutableZonedDateTimeDoubleTimeSeries.class);
-      
+
       td.registerClassRename("com.opengamma.util.timeseries.localdate.ArrayLocalDateDoubleTimeSeries", ImmutableLocalDateDoubleTimeSeries.class);
       td.registerClassRename("com.opengamma.timeseries.localdate.ArrayLocalDateDoubleTimeSeries", ImmutableLocalDateDoubleTimeSeries.class);
       td.registerClassRename("com.opengamma.util.timeseries.localdate.ListLocalDateDoubleTimeSeries", ImmutableLocalDateDoubleTimeSeries.class);
@@ -144,19 +144,18 @@ public final class OpenGammaFudgeContext {
   private static final class OGFileUrlType implements UrlType {
 
     @Override
-    public boolean matches(URL url) throws Exception {
+    public boolean matches(final URL url) throws Exception {
       return url.getProtocol().equals("file") && !url.toExternalForm().contains(".jar");
     }
 
     @Override
-    public Dir createDir(URL url) throws Exception {
-      File file = Vfs.getFile(url);
-      if (file == null || file.exists() == false) {
-        s_logger.warn("URL could not be resolved to a file: " + url);
+    public Dir createDir(final URL url) throws Exception {
+      final File file = Vfs.getFile(url);
+      if (file == null || !file.exists()) {
+        LOGGER.warn("URL could not be resolved to a file: " + url);
         return new EmptyDir(file);
-      } else {
-        return new SystemDir(file);
       }
+      return new SystemDir(file);
     }
 
     @Override
@@ -168,19 +167,18 @@ public final class OpenGammaFudgeContext {
   private static final class OGJNDIUrlType implements UrlType {
 
     @Override
-    public boolean matches(URL url) throws Exception {
+    public boolean matches(final URL url) throws Exception {
       return url.getProtocol().equals("jndi") && !url.toExternalForm().contains(".jar");
     }
 
     @Override
-    public Dir createDir(URL url) throws Exception {
-      File file = Vfs.getFile(url);
-      if (file == null || file.exists() == false) {
-        s_logger.warn("URL could not be resolved to a file: " + url);
+    public Dir createDir(final URL url) throws Exception {
+      final File file = Vfs.getFile(url);
+      if (file == null || !file.exists()) {
+        LOGGER.warn("URL could not be resolved to a file: " + url);
         return new EmptyDir(file);
-      } else {
-        return new SystemDir(file);
       }
+      return new SystemDir(file);
     }
 
     @Override
@@ -189,25 +187,28 @@ public final class OpenGammaFudgeContext {
     }
 
   }
-  
+
   //-------------------------------------------------------------------------
   // handle non-existent classpath directory entries
   private static final class EmptyDir implements Vfs.Dir {
     private final File _file;
 
-    private EmptyDir(File file) {
+    private EmptyDir(final File file) {
       this._file = file;
     }
 
+    @Override
     public String getPath() {
       return _file.getPath().replace("\\", "/");
     }
 
 
+    @Override
     public Iterable<Vfs.File> getFiles() {
       return Collections.emptyList();  // just return no files
     }
 
+    @Override
     public void close() {
     }
 

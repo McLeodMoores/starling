@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -9,8 +9,6 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import net.sf.ehcache.CacheManager;
 
 import org.fudgemsg.FudgeContext;
 import org.slf4j.Logger;
@@ -33,14 +31,16 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * Test.
  */
 @Test(groups = {TestGroup.UNIT, "ehcache"})
 public class ReleaseCacheMessageTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ReleaseCacheMessageTest.class);
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final Logger LOGGER = LoggerFactory.getLogger(ReleaseCacheMessageTest.class);
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   private CacheManager _cacheManager;
 
@@ -62,8 +62,8 @@ public class ReleaseCacheMessageTest {
   //-------------------------------------------------------------------------
   private static class ReportingBinaryDataStoreFactory implements BinaryDataStoreFactory {
 
-    private final Set<ViewComputationCacheKey> _cachesCreated = new HashSet<ViewComputationCacheKey>();
-    private final Set<ViewComputationCacheKey> _cachesDestroyed = new HashSet<ViewComputationCacheKey>();
+    private final Set<ViewComputationCacheKey> _cachesCreated = new HashSet<>();
+    private final Set<ViewComputationCacheKey> _cachesDestroyed = new HashSet<>();
 
     private final String _name;
 
@@ -73,13 +73,13 @@ public class ReleaseCacheMessageTest {
 
     @Override
     public BinaryDataStore createDataStore(final ViewComputationCacheKey cacheKey) {
-      s_logger.debug("{} cache created - {}", _name, cacheKey);
+      LOGGER.debug("{} cache created - {}", _name, cacheKey);
       _cachesCreated.add(cacheKey);
       return new InMemoryBinaryDataStore() {
 
         @Override
         public void delete() {
-          s_logger.debug("{} cache destroyed - {}", _name, cacheKey);
+          LOGGER.debug("{} cache destroyed - {}", _name, cacheKey);
           _cachesDestroyed.add(cacheKey);
           super.delete();
         }
@@ -99,7 +99,7 @@ public class ReleaseCacheMessageTest {
   private void pause () {
     try {
       Thread.sleep(100);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
     }
   }
 
@@ -120,13 +120,13 @@ public class ReleaseCacheMessageTest {
     final ReportingBinaryDataStoreFactory privateServerStore = new ReportingBinaryDataStoreFactory("server private");
     final ReportingBinaryDataStoreFactory sharedStore = new ReportingBinaryDataStoreFactory("server shared");
     final DefaultViewComputationCacheSource cacheSource = new DefaultViewComputationCacheSource(
-        new InMemoryIdentifierMap(), s_fudgeContext, new DefaultFudgeMessageStoreFactory(privateServerStore,
-            s_fudgeContext), new DefaultFudgeMessageStoreFactory(sharedStore, s_fudgeContext));
-    s_logger.info("Creating server local caches");
-    UniqueId viewCycle1Id = UniqueId.of("Test", "ViewCycle", "1");
-    UniqueId viewCycle2Id = UniqueId.of("Test", "ViewCycle", "2");
-    UniqueId viewCycle3Id = UniqueId.of("Test", "ViewCycle", "3");
-    UniqueId viewCycle4Id = UniqueId.of("Test", "ViewCycle", "4");
+        new InMemoryIdentifierMap(), FUDGE_CONTEXT, new DefaultFudgeMessageStoreFactory(privateServerStore,
+            FUDGE_CONTEXT), new DefaultFudgeMessageStoreFactory(sharedStore, FUDGE_CONTEXT));
+    LOGGER.info("Creating server local caches");
+    final UniqueId viewCycle1Id = UniqueId.of("Test", "ViewCycle", "1");
+    final UniqueId viewCycle2Id = UniqueId.of("Test", "ViewCycle", "2");
+    final UniqueId viewCycle3Id = UniqueId.of("Test", "ViewCycle", "3");
+    final UniqueId viewCycle4Id = UniqueId.of("Test", "ViewCycle", "4");
     putStuffIntoCache(cacheSource.getCache(viewCycle1Id, "Config 1"));
     putStuffIntoCache(cacheSource.getCache(viewCycle1Id, "Config 2"));
     putStuffIntoCache(cacheSource.getCache(viewCycle2Id, "Config 1"));
@@ -139,7 +139,7 @@ public class ReleaseCacheMessageTest {
     assertEquals(0, privateServerStore._cachesDestroyed.size());
     assertEquals(8, sharedStore._cachesCreated.size());
     assertEquals(0, sharedStore._cachesDestroyed.size());
-    s_logger.info("Releasing server local caches");
+    LOGGER.info("Releasing server local caches");
     cacheSource.releaseCaches(viewCycle1Id);
     assertEquals(2, privateServerStore._cachesDestroyed.size());
     assertEquals(2, sharedStore._cachesDestroyed.size());
@@ -151,19 +151,19 @@ public class ReleaseCacheMessageTest {
     final DirectFudgeConnection conduit = new DirectFudgeConnection(cacheSource.getFudgeContext());
     conduit.connectEnd1(server);
     final RemoteViewComputationCacheSource remoteSource = new RemoteViewComputationCacheSource(new RemoteCacheClient(
-        conduit.getEnd2()), new DefaultFudgeMessageStoreFactory(privateClientStore, s_fudgeContext), _cacheManager);
-    s_logger.info("Using server cache at remote client");
+        conduit.getEnd2()), new DefaultFudgeMessageStoreFactory(privateClientStore, FUDGE_CONTEXT), _cacheManager);
+    LOGGER.info("Using server cache at remote client");
     putStuffIntoCache(remoteSource.getCache(viewCycle2Id, "Config 1"));
     assertEquals(8, privateServerStore._cachesCreated.size());
     assertEquals(8, sharedStore._cachesCreated.size());
     assertEquals(1, privateClientStore._cachesCreated.size());
     assertEquals(0, privateClientStore._cachesDestroyed.size());
-    s_logger.info("Releasing cache used by remote client");
+    LOGGER.info("Releasing cache used by remote client");
     cacheSource.releaseCaches(viewCycle2Id);
     assertEquals(6, privateServerStore._cachesDestroyed.size());
     assertEquals(6, sharedStore._cachesDestroyed.size());
     delayedEquals(1, privateClientStore._cachesDestroyed);
-    s_logger.info("Releasing cache not used by remote client");
+    LOGGER.info("Releasing cache not used by remote client");
     cacheSource.releaseCaches(viewCycle4Id);
     assertEquals(8, privateServerStore._cachesDestroyed.size());
     assertEquals(8, sharedStore._cachesDestroyed.size());
@@ -171,13 +171,13 @@ public class ReleaseCacheMessageTest {
       assertEquals(1, privateClientStore._cachesDestroyed.size());
       pause ();
     }
-    s_logger.info("Using new cache at remote client");
-    UniqueId viewCycle5Id = UniqueId.of("Test", "ViewCycle", "5");
+    LOGGER.info("Using new cache at remote client");
+    final UniqueId viewCycle5Id = UniqueId.of("Test", "ViewCycle", "5");
     putStuffIntoCache(remoteSource.getCache(viewCycle5Id, "Config 1"));
     assertEquals(9, privateServerStore._cachesCreated.size());
     assertEquals(9, sharedStore._cachesCreated.size());
     assertEquals(2, privateClientStore._cachesCreated.size());
-    s_logger.info("Releasing cache used by remote client");
+    LOGGER.info("Releasing cache used by remote client");
     cacheSource.releaseCaches(viewCycle5Id);
     assertEquals(9, privateServerStore._cachesDestroyed.size());
     assertEquals(9, sharedStore._cachesDestroyed.size());

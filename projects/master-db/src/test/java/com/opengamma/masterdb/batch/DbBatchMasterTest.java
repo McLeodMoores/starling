@@ -54,7 +54,7 @@ public class DbBatchMasterTest extends AbstractDbBatchTest {
   private ValueSpecification _specification;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbBatchMasterTest(String databaseType, String databaseVersion) {
+  public DbBatchMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
   }
 
@@ -76,24 +76,23 @@ public class DbBatchMasterTest extends AbstractDbBatchTest {
       public UniqueId getViewCycleId() {
         return UniqueId.of("viewcycle", "viewcycle", "viewcycle");
       }
-      
+
       @Override
       public Collection<String> getAllCalculationConfigurationNames() {
         return newArrayList(calculationConfigName);
       }
 
       @Override
-      public Collection<com.opengamma.engine.ComputationTargetSpecification> getComputationTargets(String configurationName) {
+      public Collection<com.opengamma.engine.ComputationTargetSpecification> getComputationTargets(final String configurationName) {
         if (configurationName.equals(calculationConfigName)) {
           return Arrays.asList(new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("Primitive", "Value")), _compTargetSpec);
-        } else {
-          return emptyList();
         }
+        return emptyList();
       }
 
       @Override
-      public Map<ValueSpecification, Set<ValueRequirement>> getTerminalOutputs(String configurationName) {
-        Map<ValueSpecification, Set<ValueRequirement>> map = Maps.newHashMap();
+      public Map<ValueSpecification, Set<ValueRequirement>> getTerminalOutputs(final String configurationName) {
+        final Map<ValueSpecification, Set<ValueRequirement>> map = Maps.newHashMap();
         map.put(_specification, Sets.newHashSet(_requirement));
         return map;
       }
@@ -129,11 +128,11 @@ public class DbBatchMasterTest extends AbstractDbBatchTest {
   //-------------------------------------------------------------------------
   @Test
   public void searchAllBatches() {
-    final UniqueId marketDataUid = _cycleMetadataStub.getMarketDataSnapshotId();                
-    _batchMaster.createMarketData(marketDataUid);            
-    RiskRun run = _batchMaster.startRiskRun(_cycleMetadataStub, Maps.<String, String>newHashMap(), RunCreationMode.AUTO, SnapshotMode.PREPARED);
+    final UniqueId marketDataUid = _cycleMetadataStub.getMarketDataSnapshotId();
+    _batchMaster.createMarketData(marketDataUid);
+    final RiskRun run = _batchMaster.startRiskRun(_cycleMetadataStub, Maps.<String, String>newHashMap(), RunCreationMode.AUTO, SnapshotMode.PREPARED);
 
-    BatchRunSearchRequest request = new BatchRunSearchRequest();
+    final BatchRunSearchRequest request = new BatchRunSearchRequest();
 
     Pair<List<RiskRun>, Paging> result = _batchMaster.searchRiskRun(request);
     assertNotNull(result);
@@ -145,7 +144,7 @@ public class DbBatchMasterTest extends AbstractDbBatchTest {
     assertEquals(false, item.isComplete());
 
     _batchMaster.endRiskRun(item.getObjectId());
-    
+
     result = _batchMaster.searchRiskRun(request);
     assertEquals(1, result.getFirst().size());
     item = result.getFirst().get(0);
@@ -158,18 +157,18 @@ public class DbBatchMasterTest extends AbstractDbBatchTest {
 
   @Test
   public void searchOneBatch() {
-    final UniqueId marketDataUid = _cycleMetadataStub.getMarketDataSnapshotId();                
-    _batchMaster.createMarketData(marketDataUid);            
-    RiskRun run = _batchMaster.startRiskRun(_cycleMetadataStub, Maps.<String, String>newHashMap(), RunCreationMode.AUTO, SnapshotMode.PREPARED);
+    final UniqueId marketDataUid = _cycleMetadataStub.getMarketDataSnapshotId();
+    _batchMaster.createMarketData(marketDataUid);
+    final RiskRun run = _batchMaster.startRiskRun(_cycleMetadataStub, Maps.<String, String>newHashMap(), RunCreationMode.AUTO, SnapshotMode.PREPARED);
 
-    BatchRunSearchRequest request = new BatchRunSearchRequest();
+    final BatchRunSearchRequest request = new BatchRunSearchRequest();
     request.setValuationTime(run.getValuationTime());
 
-    Pair<List<RiskRun>, Paging> result = _batchMaster.searchRiskRun(request);
+    final Pair<List<RiskRun>, Paging> result = _batchMaster.searchRiskRun(request);
     assertNotNull(result);
 
     assertEquals(1, result.getFirst().size());
-    RiskRun item = result.getFirst().get(0);
+    final RiskRun item = result.getFirst().get(0);
     assertNotNull(item.getObjectId());
     assertEquals(item.getValuationTime(), run.getValuationTime());
     assertEquals(false, item.isComplete());

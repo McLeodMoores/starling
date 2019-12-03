@@ -16,7 +16,6 @@ import org.apache.commons.collections.map.HashedMap;
 
   private static final long serialVersionUID = 1L;
 
-  @SuppressWarnings("unchecked")
   public Map.Entry<K, V> getHashEntry(final K key) {
     return getEntry(key);
   }

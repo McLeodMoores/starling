@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.sampleobligors;
@@ -13,9 +13,12 @@ import com.opengamma.analytics.financial.credit.obligor.Region;
 import com.opengamma.analytics.financial.credit.obligor.Sector;
 import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 
+// CSOFF
 /**
- * 
+ *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class SampleObligors {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -62,15 +65,15 @@ public class SampleObligors {
   private static final CreditRating COMPOSITE_RATING_RefEnt = CreditRating.AA;
   private static final CreditRating IMPLIED_RATING_RefEnt = CreditRating.A;
   private static final CreditRatingMoodys MOODYS_RATING_RefEnt = CreditRatingMoodys.AA;
-  private static final CreditRatingStandardAndPoors STANDARD_AND_POORS_RATING_RefEnt = CreditRatingStandardAndPoors.A;
-  private static final CreditRatingFitch FITCH_RATING_RefEnt = CreditRatingFitch.AA;
+  private static final CreditRatingStandardAndPoors STANDARD_AND_POORS_RATING_REF_ENT = CreditRatingStandardAndPoors.A;
+  private static final CreditRatingFitch FITCH_RATING_REF_ENT = CreditRatingFitch.AA;
   private static final boolean HAS_DEFAULTED_RefEnt = false;
   private static final Sector SECTOR_RefEnt = Sector.ENERGY;
   private static final Region REGION_RefEnt = Region.NORTHAMERICA;
   private static final String COUNTRY_RefEnt = "United States";
 
   private static final Obligor OBLIGOR_RefEnt = new Obligor(TICKER_RefEnt, SHORT_NAME_RefEnt, RED_CODE_RefEnt, COMPOSITE_RATING_RefEnt, IMPLIED_RATING_RefEnt,
-      MOODYS_RATING_RefEnt, STANDARD_AND_POORS_RATING_RefEnt, FITCH_RATING_RefEnt, HAS_DEFAULTED_RefEnt, SECTOR_RefEnt, REGION_RefEnt, COUNTRY_RefEnt);
+      MOODYS_RATING_RefEnt, STANDARD_AND_POORS_RATING_REF_ENT, FITCH_RATING_REF_ENT, HAS_DEFAULTED_RefEnt, SECTOR_RefEnt, REGION_RefEnt, COUNTRY_RefEnt);
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 

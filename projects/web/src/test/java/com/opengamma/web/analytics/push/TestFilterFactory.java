@@ -30,8 +30,8 @@ public class TestFilterFactory implements ResourceFilterFactory {
   HttpContext _httpContext;
 
   @Override
-  public List<ResourceFilter> create(AbstractMethod abstractMethod) {
-    List<ResourceFilter> filters = new ArrayList<ResourceFilter>();
+  public List<ResourceFilter> create(final AbstractMethod abstractMethod) {
+    final List<ResourceFilter> filters = new ArrayList<>();
     filters.add(new TestFilter(abstractMethod));
     return filters;
   }
@@ -40,7 +40,7 @@ public class TestFilterFactory implements ResourceFilterFactory {
 
     private final AbstractMethod _method;
 
-    public TestFilter(AbstractMethod method) {
+    public TestFilter(final AbstractMethod method) {
       _method = method;
     }
 
@@ -57,11 +57,11 @@ public class TestFilterFactory implements ResourceFilterFactory {
     class TestResponseFilter implements ContainerResponseFilter {
 
       @Override
-      public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
-        AbstractResourceMethod matchedMethod = _httpContext.getUriInfo().getMatchedMethod();
-        boolean methodsEqual = matchedMethod.equals(_method);
-        String methodName = methodName(_method);
-        String matchedMethodName = methodName(matchedMethod);
+      public ContainerResponse filter(final ContainerRequest request, final ContainerResponse response) {
+        final AbstractResourceMethod matchedMethod = _httpContext.getUriInfo().getMatchedMethod();
+        final boolean methodsEqual = matchedMethod.equals(_method);
+        final String methodName = methodName(_method);
+        final String matchedMethodName = methodName(matchedMethod);
         System.out.println(methodsEqual);
         System.out.println(methodName);
         System.out.println(matchedMethodName);
@@ -70,8 +70,8 @@ public class TestFilterFactory implements ResourceFilterFactory {
     }
   }
 
-  private static String methodName(AbstractMethod abstractMethod) {
-    Method method = abstractMethod.getMethod();
+  private static String methodName(final AbstractMethod abstractMethod) {
+    final Method method = abstractMethod.getMethod();
     return method.getDeclaringClass().getSimpleName() + "." + method.getName() + "()";
   }
 }

@@ -40,7 +40,7 @@ public class ComponentTypeInfo extends DirectBean {
    * The component info.
    */
   @PropertyDefinition(validate = "notNull")
-  private final Map<String, ComponentInfo> _infoMap = new HashMap<String, ComponentInfo>();
+  private final Map<String, ComponentInfo> _infoMap = new HashMap<>();
 
   /**
    * Creates an instance.
@@ -50,24 +50,24 @@ public class ComponentTypeInfo extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param type  the type of the component, typically an interface
    */
-  public ComponentTypeInfo(Class<?> type) {
+  public ComponentTypeInfo(final Class<?> type) {
     setType(type);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the component information by classifier.
-   * 
+   *
    * @param classifier  the classifier that distinguishes the component, empty for default, not null
    * @return the component information, not null
    * @throws IllegalArgumentException if no component is available
    */
-  public ComponentInfo getInfo(String classifier) {
+  public ComponentInfo getInfo(final String classifier) {
     ArgumentChecker.notNull(classifier, "classifier");
-    ComponentInfo info = _infoMap.get(classifier);
+    final ComponentInfo info = _infoMap.get(classifier);
     if (info == null) {
       throw new IllegalArgumentException("No component available: " + _type + "::" + classifier);
     }

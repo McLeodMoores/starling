@@ -26,14 +26,15 @@ import com.opengamma.util.log.SimpleLogEvent;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link DependencyNodeJobExecutionResult} class
+ * Tests the {@link DependencyNodeJobExecutionResult} class.
  */
 @Test(groups = TestGroup.UNIT)
 public class DependencyNodeJobExecutionResultTest {
 
   public void testGetters() {
     final String nodeId = "Node";
-    final CalculationJobResultItem resultItem = new CalculationJobResultItem(Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), ExecutionLog.EMPTY);
+    final CalculationJobResultItem resultItem =
+        new CalculationJobResultItem(Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), ExecutionLog.EMPTY);
     final AggregatedExecutionLog logs = AggregatedExecutionLog.EMPTY;
     final DependencyNodeJobExecutionResult result = new DependencyNodeJobExecutionResult(nodeId, resultItem, logs);
     assertSame(result.getComputeNodeId(), nodeId);
@@ -44,8 +45,10 @@ public class DependencyNodeJobExecutionResultTest {
   private DependencyNodeJobExecutionResult[] createResults() {
     final String nodeId1 = "Node1";
     final String nodeId2 = "Node2";
-    final CalculationJobResultItem resultItem1 = new CalculationJobResultItem(Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), ExecutionLog.EMPTY);
-    final CalculationJobResultItem resultItem2 = new CalculationJobResultItem(Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), MutableExecutionLog.single(
+    final CalculationJobResultItem resultItem1 =
+        new CalculationJobResultItem(Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), ExecutionLog.EMPTY);
+    final CalculationJobResultItem resultItem2 =
+        new CalculationJobResultItem(Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), MutableExecutionLog.single(
         SimpleLogEvent.of(LogLevel.WARN, "Foo"), ExecutionLogMode.FULL));
     final AggregatedExecutionLog logs1 = AggregatedExecutionLog.EMPTY;
     final AggregatedExecutionLog logs2 = new DefaultAggregatedExecutionLog(EnumSet.of(LogLevel.WARN), null, true);

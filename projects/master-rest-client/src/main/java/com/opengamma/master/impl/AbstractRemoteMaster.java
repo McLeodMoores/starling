@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.impl;
@@ -27,7 +27,7 @@ public abstract class AbstractRemoteMaster extends AbstractRemoteClient {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public AbstractRemoteMaster(final URI baseUri) {
@@ -36,11 +36,11 @@ public abstract class AbstractRemoteMaster extends AbstractRemoteClient {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager, not null
    */
-  public AbstractRemoteMaster(final URI baseUri, ChangeManager changeManager) {
+  public AbstractRemoteMaster(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri);
     ArgumentChecker.notNull(changeManager, "changeManager");
     _changeManager = changeManager;
@@ -49,7 +49,7 @@ public abstract class AbstractRemoteMaster extends AbstractRemoteClient {
   //-------------------------------------------------------------------------
   /**
    * Gets the change manager in use.
-   * 
+   *
    * @return the change manager, not null
    */
   public ChangeManager changeManager() {

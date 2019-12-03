@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.worker;
@@ -22,9 +22,9 @@ import com.opengamma.engine.function.resolver.CompiledFunctionResolver;
 
   private final CompiledFunctionResolver _functions;
   private final Instant _valuationTime;
-  private final Map<String, Boolean> _expired = new HashMap<String, Boolean>();
+  private final Map<String, Boolean> _expired = new HashMap<>();
 
-  public InvalidFunctionDependencyNodeFilter(final CompiledFunctionResolver functions, final Instant valuationTime) {
+  InvalidFunctionDependencyNodeFilter(final CompiledFunctionResolver functions, final Instant valuationTime) {
     _functions = functions;
     _valuationTime = valuationTime;
   }

@@ -24,8 +24,8 @@ import org.threeten.bp.ZonedDateTime;
 import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
 import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
-import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
@@ -63,22 +63,23 @@ import com.opengamma.util.tuple.Pair;
 /**
  * Builds and tests EUR discounting and 3m and 6m EURIBOR curves. Curves are constructed in two ways:
  * <ul>
- *  <li> Discounting, then 3m EURIBOR, then 6m EURIBOR curves;
- *  <li> Discounting and the two EURIBOR curves simultaneously.
+ * <li>Discounting, then 3m EURIBOR, then 6m EURIBOR curves;
+ * <li>Discounting and the two EURIBOR curves simultaneously.
  * </ul>
- * In the first case, the discounting curve only has sensitivities to the market data used in its construction. In the second case, each curve
- * does have sensitivities to the other curves. The sensitivities of the discounting curve to the EURIBOR curves are
- * zero, and the sensitivities of the 3m and 6m EURIBOR curve to the market data in the other curve are zero.
+ * In the first case, the discounting curve only has sensitivities to the market data used in its construction. In the second case, each
+ * curve does have sensitivities to the other curves. The sensitivities of the discounting curve to the EURIBOR curves are zero, and the
+ * sensitivities of the 3m and 6m EURIBOR curve to the market data in the other curve are zero.
  * <p>
- * The discounting curve contains the EONIA rate and OIS. The 3m EURIBOR curve contains the 3m EURIBOR rate, 3m FRAs
- * and 3m floating / 1Y fixed swaps. The 6m EURIBOR curve contains the 6m EURIBOR rate, 6m FRAs and 6m floating / 1Y fixed swaps.
+ * The discounting curve contains the EONIA rate and OIS. The 3m EURIBOR curve contains the 3m EURIBOR rate, 3m FRAs and 3m floating / 1Y
+ * fixed swaps. The 6m EURIBOR curve contains the 6m EURIBOR rate, 6m FRAs and 6m floating / 1Y fixed swaps.
  */
 @Test(groups = TestGroup.UNIT)
 public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   /** The interpolator used for all curves */
-  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
   /** A calendar containing only Saturday and Sunday holidays */
-  private static final CalendarAdapter TARGET = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
+  private static final WorkingDayCalendar TARGET = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   /** The base FX matrix */
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.EUR);
   /** Generates OIS for the discounting curve */
@@ -86,11 +87,14 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   /** EONIA */
   private static final IndexON EONIA_INDEX = GENERATOR_OIS_EUR.getIndex();
   /** Generates the EONIA deposit */
-  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_EUR = new GeneratorDepositON("EUR Deposit ON", Currency.EUR, TARGET, EONIA_INDEX.getDayCount());
+  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_EUR = new GeneratorDepositON("EUR Deposit ON", Currency.EUR, TARGET,
+      EONIA_INDEX.getDayCount());
   /** Generates 3m EURIBOR / 1Y fixed swaps */
-  private static final GeneratorSwapFixedIbor EUR1YEURIBOR3M = GeneratorSwapFixedIborMaster.getInstance().getGenerator("EUR1YEURIBOR3M", TARGET);
+  private static final GeneratorSwapFixedIbor EUR1YEURIBOR3M = GeneratorSwapFixedIborMaster.getInstance().getGenerator("EUR1YEURIBOR3M",
+      TARGET);
   /** Generates 6m EURIBOR / 1Y fixed swaps */
-  private static final GeneratorSwapFixedIbor EUR1YEURIBOR6M = GeneratorSwapFixedIborMaster.getInstance().getGenerator("EUR1YEURIBOR6M", TARGET);
+  private static final GeneratorSwapFixedIbor EUR1YEURIBOR6M = GeneratorSwapFixedIborMaster.getInstance().getGenerator("EUR1YEURIBOR6M",
+      TARGET);
   /** A 3m EURIBOR index */
   private static final IborIndex EUR_3M_EURIBOR_INDEX = EUR1YEURIBOR3M.getIborIndex();
   /** A 6m EURIBOR index */
@@ -100,31 +104,34 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   /** Generates 6m FRAs */
   private static final GeneratorFRA GENERATOR_FRA_6M = new GeneratorFRA("GENERATOR_FRA_6M", EUR_6M_EURIBOR_INDEX, TARGET);
   /** Generates the 3m EURIBOR index */
-  private static final GeneratorDepositIbor GENERATOR_EURIBOR3M = new GeneratorDepositIbor("GENERATOR_EURIBOR3M", EUR_3M_EURIBOR_INDEX, TARGET);
+  private static final GeneratorDepositIbor GENERATOR_EURIBOR3M = new GeneratorDepositIbor("GENERATOR_EURIBOR3M", EUR_3M_EURIBOR_INDEX,
+      TARGET);
   /** Generates the 6m EURIBOR index */
-  private static final GeneratorDepositIbor GENERATOR_EURIBOR6M = new GeneratorDepositIbor("GENERATOR_EURIBOR6M", EUR_6M_EURIBOR_INDEX, TARGET);
+  private static final GeneratorDepositIbor GENERATOR_EURIBOR6M = new GeneratorDepositIbor("GENERATOR_EURIBOR6M", EUR_6M_EURIBOR_INDEX,
+      TARGET);
   /** The curve construction date */
   private static final ZonedDateTime NOW = DateUtils.getUTCDate(2011, 9, 28);
   /** The previous week day */
   private static final ZonedDateTime PREVIOUS_DATE = NOW.minusDays(1);
   /** Fixing time series of overnight rates after today's fixing */
-  private static final ZonedDateTimeDoubleTimeSeries TS_ON_EUR_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
-      new ZonedDateTime[] {PREVIOUS_DATE, NOW}, new double[] {0.07, 0.08});
+  private static final ZonedDateTimeDoubleTimeSeries TS_ON_EUR_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { PREVIOUS_DATE, NOW }, new double[] { 0.07, 0.08 });
   /** Fixing time series of overnight rates after today's fixing */
-  private static final ZonedDateTimeDoubleTimeSeries TS_ON_EUR_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
-      new ZonedDateTime[] {PREVIOUS_DATE}, new double[] {0.07});
+  private static final ZonedDateTimeDoubleTimeSeries TS_ON_EUR_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { PREVIOUS_DATE }, new double[] { 0.07 });
   /** Fixing time series of 3m EURIBOR rates after today's fixing */
-  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_EUR3M_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
-      new ZonedDateTime[] {PREVIOUS_DATE, NOW}, new double[] {0.0035, 0.0036});
+  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_EUR3M_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { PREVIOUS_DATE, NOW }, new double[] { 0.0035, 0.0036 });
   /** Fixing time series of 3m EURIBOR rates before today's fixing */
-  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_EUR3M_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
-      new ZonedDateTime[] {PREVIOUS_DATE}, new double[] {0.0035});
+  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_EUR3M_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { PREVIOUS_DATE }, new double[] { 0.0035 });
   /** Fixing time series of 6m EURIBOR rates before today's fixing */
-  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_EUR6M_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
-      new ZonedDateTime[] {PREVIOUS_DATE, NOW}, new double[] {0.0036, 0.0037 });
+  private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_EUR6M_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
+      .ofUTC(new ZonedDateTime[] { PREVIOUS_DATE, NOW }, new double[] { 0.0036, 0.0037 });
   /** Fixing time series of 6m EURIBOR rates before today's fixing */
   private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_EUR6M_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
-      new ZonedDateTime[] {NOW}, new double[] {0.0036 });
+      new ZonedDateTime[] { NOW },
+      new double[] { 0.0036 });
   /** Fixing time series created before the valuation date fixing is available */
   private static final Map<Index, ZonedDateTimeDoubleTimeSeries> FIXING_TS_WITHOUT_TODAY = new HashMap<>();
   /** Fixing time series created after the valuation date fixing is available */
@@ -144,49 +151,55 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   /** The 6m EURIBOR curve name */
   private static final String CURVE_NAME_FWD6_EUR = "EUR Fwd 6M";
   /** Market values for the discounting curve */
-  private static final double[] DSC_EUR_MARKET_QUOTES =
-      new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
+  private static final double[] DSC_EUR_MARKET_QUOTES = new double[] { 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400,
+      0.0400, 0.0400, 0.0400,
+      0.0400 };
   /** Vanilla instrument generators for the discounting curve */
   private static final GeneratorInstrument[] DSC_EUR_GENERATORS = new GeneratorInstrument[] {
-    GENERATOR_DEPOSIT_ON_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
-    GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
-    GENERATOR_OIS_EUR, GENERATOR_OIS_EUR };
+      GENERATOR_DEPOSIT_ON_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
+      GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
+      GENERATOR_OIS_EUR, GENERATOR_OIS_EUR };
   /** Attributes for the discounting curve */
   private static final GeneratorAttributeIR[] DSC_EUR_ATTR;
   static {
-    final Period[] tenors = new Period[] {Period.ofDays(0), Period.ofMonths(1), Period.ofMonths(2), Period.ofMonths(3),
-        Period.ofMonths(6), Period.ofMonths(9), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4),
-        Period.ofYears(5), Period.ofYears(10) };
+    final Period[] tenors = new Period[] { Period.ofDays(0), Period.ofMonths(1), Period.ofMonths(2), Period.ofMonths(3), Period.ofMonths(6),
+        Period.ofMonths(9),
+        Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(10) };
     DSC_EUR_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       DSC_EUR_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
     }
   }
   /** Market values for the 3m EURIBOR curve */
-  private static final double[] FWD3_EUR_MARKET_QUOTES = new double[] {0.0420, 0.0420, 0.0420, 0.0420, 0.0430, 0.0470, 0.0540, 0.0570, 0.0600 };
+  private static final double[] FWD3_EUR_MARKET_QUOTES = new double[] { 0.0420, 0.0420, 0.0420, 0.0420, 0.0430, 0.0470, 0.0540, 0.0570,
+      0.0600 };
   /** Vanilla instrument generators for the 3m EURIBOR curve */
   private static final GeneratorInstrument[] FWD3_EUR_GENERATORS = new GeneratorInstrument[] {
-    GENERATOR_EURIBOR3M, GENERATOR_FRA_3M, GENERATOR_FRA_3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M };
+      GENERATOR_EURIBOR3M, GENERATOR_FRA_3M, GENERATOR_FRA_3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M,
+      EUR1YEURIBOR3M, EUR1YEURIBOR3M };
   /** Attributes for the 3m EURIBOR curve */
   private static final GeneratorAttributeIR[] FWD3_EUR_ATTR;
   static {
-    final Period[] tenors = new Period[] {Period.ofMonths(0), Period.ofMonths(6), Period.ofMonths(9), Period.ofYears(1),
-        Period.ofYears(2), Period.ofYears(3), Period.ofYears(5), Period.ofYears(7), Period.ofYears(10) };
+    final Period[] tenors = new Period[] { Period.ofMonths(0), Period.ofMonths(6), Period.ofMonths(9), Period.ofYears(1), Period.ofYears(2),
+        Period.ofYears(3),
+        Period.ofYears(5), Period.ofYears(7), Period.ofYears(10) };
     FWD3_EUR_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       FWD3_EUR_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
     }
   }
   /** Market values for the 6m EURIBOR curve */
-  private static final double[] FWD6_EUR_MARKET_QUOTES = new double[] {0.0440, 0.0440, 0.0440, 0.0445, 0.0485, 0.0555, 0.0580, 0.0610 };
+  private static final double[] FWD6_EUR_MARKET_QUOTES = new double[] { 0.0440, 0.0440, 0.0440, 0.0445, 0.0485, 0.0555, 0.0580, 0.0610 };
   /** Generators for the 6m EURIBOR curve */
   private static final GeneratorInstrument[] FWD6_EUR_GENERATORS = new GeneratorInstrument[] {
-    GENERATOR_EURIBOR6M, GENERATOR_FRA_6M, GENERATOR_FRA_6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M };
+      GENERATOR_EURIBOR6M, GENERATOR_FRA_6M, GENERATOR_FRA_6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M,
+      EUR1YEURIBOR6M };
   /** Attributes for the 6m EURIBOR curve */
   private static final GeneratorAttributeIR[] FWD6_EUR_ATTR;
   static {
-    final Period[] periods = new Period[] {Period.ofMonths(0), Period.ofMonths(9), Period.ofMonths(12), Period.ofYears(2),
-        Period.ofYears(3), Period.ofYears(5), Period.ofYears(7), Period.ofYears(10) };
+    final Period[] periods = new Period[] { Period.ofMonths(0), Period.ofMonths(9), Period.ofMonths(12), Period.ofYears(2),
+        Period.ofYears(3),
+        Period.ofYears(5), Period.ofYears(7), Period.ofYears(10) };
     FWD6_EUR_ATTR = new GeneratorAttributeIR[periods.length];
     for (int i = 0; i < periods.length; i++) {
       FWD6_EUR_ATTR[i] = new GeneratorAttributeIR(periods[i]);
@@ -210,16 +223,22 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
       .addFxMatrix(FX_MATRIX);
   static {
     for (int i = 0; i < DSC_EUR_MARKET_QUOTES.length; i++) {
-      CONSECUTIVE_BUILDER.addNode(CURVE_NAME_DSC_EUR, DSC_EUR_GENERATORS[i].generateInstrument(NOW, DSC_EUR_MARKET_QUOTES[i], 1, DSC_EUR_ATTR[i]));
-      SIMULTANEOUS_BUILDER.addNode(CURVE_NAME_DSC_EUR, DSC_EUR_GENERATORS[i].generateInstrument(NOW, DSC_EUR_MARKET_QUOTES[i], 1, DSC_EUR_ATTR[i]));
+      CONSECUTIVE_BUILDER.addNode(CURVE_NAME_DSC_EUR,
+          DSC_EUR_GENERATORS[i].generateInstrument(NOW, DSC_EUR_MARKET_QUOTES[i], 1, DSC_EUR_ATTR[i]));
+      SIMULTANEOUS_BUILDER.addNode(CURVE_NAME_DSC_EUR,
+          DSC_EUR_GENERATORS[i].generateInstrument(NOW, DSC_EUR_MARKET_QUOTES[i], 1, DSC_EUR_ATTR[i]));
     }
     for (int i = 0; i < FWD3_EUR_MARKET_QUOTES.length; i++) {
-      CONSECUTIVE_BUILDER.addNode(CURVE_NAME_FWD3_EUR, FWD3_EUR_GENERATORS[i].generateInstrument(NOW, FWD3_EUR_MARKET_QUOTES[i], 1, FWD3_EUR_ATTR[i]));
-      SIMULTANEOUS_BUILDER.addNode(CURVE_NAME_FWD3_EUR, FWD3_EUR_GENERATORS[i].generateInstrument(NOW, FWD3_EUR_MARKET_QUOTES[i], 1, FWD3_EUR_ATTR[i]));
+      CONSECUTIVE_BUILDER.addNode(CURVE_NAME_FWD3_EUR,
+          FWD3_EUR_GENERATORS[i].generateInstrument(NOW, FWD3_EUR_MARKET_QUOTES[i], 1, FWD3_EUR_ATTR[i]));
+      SIMULTANEOUS_BUILDER.addNode(CURVE_NAME_FWD3_EUR,
+          FWD3_EUR_GENERATORS[i].generateInstrument(NOW, FWD3_EUR_MARKET_QUOTES[i], 1, FWD3_EUR_ATTR[i]));
     }
     for (int i = 0; i < FWD6_EUR_MARKET_QUOTES.length; i++) {
-      CONSECUTIVE_BUILDER.addNode(CURVE_NAME_FWD6_EUR, FWD6_EUR_GENERATORS[i].generateInstrument(NOW, FWD6_EUR_MARKET_QUOTES[i], 1, FWD6_EUR_ATTR[i]));
-      SIMULTANEOUS_BUILDER.addNode(CURVE_NAME_FWD6_EUR, FWD6_EUR_GENERATORS[i].generateInstrument(NOW, FWD6_EUR_MARKET_QUOTES[i], 1, FWD6_EUR_ATTR[i]));
+      CONSECUTIVE_BUILDER.addNode(CURVE_NAME_FWD6_EUR,
+          FWD6_EUR_GENERATORS[i].generateInstrument(NOW, FWD6_EUR_MARKET_QUOTES[i], 1, FWD6_EUR_ATTR[i]));
+      SIMULTANEOUS_BUILDER.addNode(CURVE_NAME_FWD6_EUR,
+          FWD6_EUR_GENERATORS[i].generateInstrument(NOW, FWD6_EUR_MARKET_QUOTES[i], 1, FWD6_EUR_ATTR[i]));
     }
   }
   /** Simultaneous curves constructed before today's fixing */
@@ -280,36 +299,48 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
     // before fixing
     definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), CONSECUTIVE_BEFORE_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_EUR), CONSECUTIVE_BEFORE_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_EUR), CONSECUTIVE_BEFORE_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // after fixing
     definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), CONSECUTIVE_AFTER_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_EUR), CONSECUTIVE_AFTER_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_EUR), CONSECUTIVE_AFTER_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // discounting and euribors
     // before fixing
     definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), SIMULTANEOUS_BEFORE_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_EUR), SIMULTANEOUS_BEFORE_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_EUR), SIMULTANEOUS_BEFORE_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // after fixing
     definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), SIMULTANEOUS_AFTER_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_EUR), SIMULTANEOUS_AFTER_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_EUR), SIMULTANEOUS_AFTER_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
+        PresentValueDiscountingCalculator.getInstance(),
+        FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
   }
 
   @Override
@@ -330,18 +361,22 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the
-   * discounting curve. The sensitivities of the discounting curve to the EURIBOR curves are not calculated
-   * when the curves are constructed consecutively.
-   * @param fullInverseJacobian  analytic sensitivities
-   * @param fixingTs  the fixing time series
-   * @param builder  the builder
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve. The sensitivities
+   * of the discounting curve to the EURIBOR curves are not calculated when the curves are constructed consecutively.
+   *
+   * @param fullInverseJacobian
+   *          analytic sensitivities
+   * @param fixingTs
+   *          the fixing time series
+   * @param builder
+   *          the builder
    */
   private static void testDiscountingCurveSensitivities1(final CurveBuildingBlockBundle fullInverseJacobian,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final DiscountingMethodCurveSetUp builder) {
     // sensitivities to discounting
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_DSC_EUR,
-        CURVE_NAME_DSC_EUR, NOW, DSC_EUR_GENERATORS, DSC_EUR_ATTR, DSC_EUR_MARKET_QUOTES, false);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_DSC_EUR, CURVE_NAME_DSC_EUR, NOW,
+        DSC_EUR_GENERATORS, DSC_EUR_ATTR,
+        DSC_EUR_MARKET_QUOTES, false);
     // sensitivities to 3m EURIBOR should not have been calculated
     assertNoSensitivities(fullInverseJacobian, CURVE_NAME_DSC_EUR, CURVE_NAME_FWD3_EUR);
     // sensitivities to 6m EURIBOR should not have been calculated
@@ -349,82 +384,108 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the
-   * three curves. The sensitivities of the discounting curve to the EURIBOR curves should be zero.
-   * @param fullInverseJacobian  analytic sensitivities
-   * @param fixingTs  the fixing time series
-   * @param builder  the builder
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the three curves. The sensitivities of
+   * the discounting curve to the EURIBOR curves should be zero.
+   *
+   * @param fullInverseJacobian
+   *          analytic sensitivities
+   * @param fixingTs
+   *          the fixing time series
+   * @param builder
+   *          the builder
    */
   private static void testDiscountingCurveSensitivities2(final CurveBuildingBlockBundle fullInverseJacobian,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final DiscountingMethodCurveSetUp builder) {
     // sensitivities to discounting
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_DSC_EUR,
-        CURVE_NAME_DSC_EUR, NOW, DSC_EUR_GENERATORS, DSC_EUR_ATTR, DSC_EUR_MARKET_QUOTES, false);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_DSC_EUR, CURVE_NAME_DSC_EUR, NOW,
+        DSC_EUR_GENERATORS, DSC_EUR_ATTR,
+        DSC_EUR_MARKET_QUOTES, false);
     // sensitivities to 3m EURIBOR should be zero
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_DSC_EUR,
-        CURVE_NAME_FWD3_EUR, NOW, FWD3_EUR_GENERATORS, FWD3_EUR_ATTR, FWD3_EUR_MARKET_QUOTES, true);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_DSC_EUR, CURVE_NAME_FWD3_EUR, NOW,
+        FWD3_EUR_GENERATORS,
+        FWD3_EUR_ATTR, FWD3_EUR_MARKET_QUOTES, true);
     // sensitivities to 6m EURIBOR should be zero
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_DSC_EUR,
-        CURVE_NAME_FWD6_EUR, NOW, FWD6_EUR_GENERATORS, FWD6_EUR_ATTR, FWD6_EUR_MARKET_QUOTES, true);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_DSC_EUR, CURVE_NAME_FWD6_EUR, NOW,
+        FWD6_EUR_GENERATORS,
+        FWD6_EUR_ATTR, FWD6_EUR_MARKET_QUOTES, true);
   }
 
   /**
-   * Tests the sensitivities of the 3m EURIBOR curve to changes in the market data points used in the
-   * discounting curve and 3m EURIBOR curve.
-   * @param fullInverseJacobian  analytic sensitivities
-   * @param fixingTs  the fixing time series
-   * @param builder  the builder
+   * Tests the sensitivities of the 3m EURIBOR curve to changes in the market data points used in the discounting curve and 3m EURIBOR
+   * curve.
+   *
+   * @param fullInverseJacobian
+   *          analytic sensitivities
+   * @param fixingTs
+   *          the fixing time series
+   * @param builder
+   *          the builder
    */
   private static void test3mEuriborCurveSensitivities1(final CurveBuildingBlockBundle fullInverseJacobian,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final DiscountingMethodCurveSetUp builder) {
     // sensitivities to discounting
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD3_EUR,
-        CURVE_NAME_DSC_EUR, NOW, DSC_EUR_GENERATORS, DSC_EUR_ATTR, DSC_EUR_MARKET_QUOTES, false);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD3_EUR, CURVE_NAME_DSC_EUR, NOW,
+        DSC_EUR_GENERATORS, DSC_EUR_ATTR,
+        DSC_EUR_MARKET_QUOTES, false);
     // sensitivities to 3m EURIBOR
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD3_EUR,
-        CURVE_NAME_FWD3_EUR, NOW, FWD3_EUR_GENERATORS, FWD3_EUR_ATTR, FWD3_EUR_MARKET_QUOTES, false);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD3_EUR, CURVE_NAME_FWD3_EUR, NOW,
+        FWD3_EUR_GENERATORS,
+        FWD3_EUR_ATTR, FWD3_EUR_MARKET_QUOTES, false);
     // sensitivities to 6m EURIBOR should not have been calculated
     assertNoSensitivities(fullInverseJacobian, CURVE_NAME_FWD3_EUR, CURVE_NAME_FWD6_EUR);
   }
 
   /**
-   * Tests the sensitivities of the 3m EURIBOR curve to changes in the market data points used in the
-   * three curves. The sensitivities of the 3m curve to the 6m curve should be zero.
-   * @param fullInverseJacobian  analytic sensitivities
-   * @param fixingTs  the fixing time series
-   * @param builder  the builder
+   * Tests the sensitivities of the 3m EURIBOR curve to changes in the market data points used in the three curves. The sensitivities of the
+   * 3m curve to the 6m curve should be zero.
+   *
+   * @param fullInverseJacobian
+   *          analytic sensitivities
+   * @param fixingTs
+   *          the fixing time series
+   * @param builder
+   *          the builder
    */
   private static void test3mEuriborCurveSensitivities2(final CurveBuildingBlockBundle fullInverseJacobian,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final DiscountingMethodCurveSetUp builder) {
     // sensitivities to discounting
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD3_EUR,
-        CURVE_NAME_DSC_EUR, NOW, DSC_EUR_GENERATORS, DSC_EUR_ATTR, DSC_EUR_MARKET_QUOTES, false);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD3_EUR, CURVE_NAME_DSC_EUR, NOW,
+        DSC_EUR_GENERATORS, DSC_EUR_ATTR,
+        DSC_EUR_MARKET_QUOTES, false);
     // sensitivities to 3m EURIBOR
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD3_EUR,
-        CURVE_NAME_FWD3_EUR, NOW, FWD3_EUR_GENERATORS, FWD3_EUR_ATTR, FWD3_EUR_MARKET_QUOTES, false);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD3_EUR, CURVE_NAME_FWD3_EUR, NOW,
+        FWD3_EUR_GENERATORS,
+        FWD3_EUR_ATTR, FWD3_EUR_MARKET_QUOTES, false);
     // sensitivities to 6m EURIBOR, should be zero
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD3_EUR,
-        CURVE_NAME_FWD6_EUR, NOW, FWD6_EUR_GENERATORS, FWD6_EUR_ATTR, FWD6_EUR_MARKET_QUOTES, true);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD3_EUR, CURVE_NAME_FWD6_EUR, NOW,
+        FWD6_EUR_GENERATORS,
+        FWD6_EUR_ATTR, FWD6_EUR_MARKET_QUOTES, true);
   }
 
   /**
-   * Tests the sensitivities of the 6m EURIBOR curve to changes in the market data points used in the
-   * discounting curve and EURIBOR curves.
-   * @param fullInverseJacobian  analytic sensitivities
-   * @param fixingTs  the fixing time series
-   * @param builder  the builder
+   * Tests the sensitivities of the 6m EURIBOR curve to changes in the market data points used in the discounting curve and EURIBOR curves.
+   *
+   * @param fullInverseJacobian
+   *          analytic sensitivities
+   * @param fixingTs
+   *          the fixing time series
+   * @param builder
+   *          the builder
    */
   private static void test6mEuriborCurveSensitivities(final CurveBuildingBlockBundle fullInverseJacobian,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final DiscountingMethodCurveSetUp builder) {
     // sensitivities to discounting
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD6_EUR,
-        CURVE_NAME_DSC_EUR, NOW, DSC_EUR_GENERATORS, DSC_EUR_ATTR, DSC_EUR_MARKET_QUOTES, false);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD6_EUR, CURVE_NAME_DSC_EUR, NOW,
+        DSC_EUR_GENERATORS, DSC_EUR_ATTR,
+        DSC_EUR_MARKET_QUOTES, false);
     // sensitivities to 3m EURIBOR, should be zero
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD6_EUR,
-        CURVE_NAME_FWD3_EUR, NOW, FWD3_EUR_GENERATORS, FWD3_EUR_ATTR, FWD3_EUR_MARKET_QUOTES, true);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD6_EUR, CURVE_NAME_FWD3_EUR, NOW,
+        FWD3_EUR_GENERATORS,
+        FWD3_EUR_ATTR, FWD3_EUR_MARKET_QUOTES, true);
     // sensitivities to 6m EURIBOR
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD6_EUR,
-        CURVE_NAME_FWD6_EUR, NOW, FWD6_EUR_GENERATORS, FWD6_EUR_ATTR, FWD6_EUR_MARKET_QUOTES, false);
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_FWD6_EUR, CURVE_NAME_FWD6_EUR, NOW,
+        FWD6_EUR_GENERATORS,
+        FWD6_EUR_ATTR, FWD6_EUR_MARKET_QUOTES, false);
   }
 
   @Override

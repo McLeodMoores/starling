@@ -9,9 +9,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Maps;
 import com.opengamma.core.security.Security;
 import com.opengamma.engine.ComputationTarget;
@@ -30,15 +27,13 @@ import com.opengamma.util.ArgumentChecker;
  * Populates {@link CommodityFutureOptionFunction} with defaults appropriate for pricing using an interpolated Black lognormal volatility surface.
  */
 public class EquityFutureOptionSurfaceCalculationMethodDefaults extends StaticDefaultPropertyFunction {
-  /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityFutureOptionSurfaceCalculationMethodDefaults.class);
   /** Map of currency name to surface calculation method */
   private final Map<String, Set<String>> _currencyToSurfaceCalculationMethod;
   /** The priority of this set of defaults */
   private final PriorityClass _priority;
 
   /** The value requirement names for which these defaults apply */
-  private static final String[] s_valueNames = new String[] {
+  private static final String[] VALUE_NAMES = new String[] {
       ValueRequirementNames.PRESENT_VALUE,
       ValueRequirementNames.VEGA_QUOTE_MATRIX,
       ValueRequirementNames.VALUE_VEGA,
@@ -70,7 +65,7 @@ public class EquityFutureOptionSurfaceCalculationMethodDefaults extends StaticDe
    * @param perCurrencyConfig Default values of surface calculation method per currency, not null
    */
   public EquityFutureOptionSurfaceCalculationMethodDefaults(final String priority, final String... perCurrencyConfig) {
-    super(FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY, ValuePropertyNames.SURFACE_CALCULATION_METHOD, true, s_valueNames);
+    super(FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY, ValuePropertyNames.SURFACE_CALCULATION_METHOD, true, VALUE_NAMES);
     ArgumentChecker.notNull(priority, "priority");
     ArgumentChecker.notNull(perCurrencyConfig, "per currency configuration");
     _priority = PriorityClass.valueOf(priority);
@@ -94,9 +89,8 @@ public class EquityFutureOptionSurfaceCalculationMethodDefaults extends StaticDe
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     if (desiredValue.getConstraints().isDefined(ValuePropertyNames.CALCULATION_METHOD)) {
       return super.getRequirements(context, target, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override

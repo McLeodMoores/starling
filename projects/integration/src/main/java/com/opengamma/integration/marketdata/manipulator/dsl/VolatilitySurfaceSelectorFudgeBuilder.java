@@ -37,8 +37,8 @@ public class VolatilitySurfaceSelectorFudgeBuilder implements FudgeBuilder<Volat
   private static final String NAME_LIKE_PATTERN = "nameLikePattern";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, VolatilitySurfaceSelector selector) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final VolatilitySurfaceSelector selector) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     addSetToMessage(serializer, msg, CALC_CONFIG_NAMES, selector.getCalcConfigNames());
     addSetToMessage(serializer, msg, NAMES, selector.getNames());
     addSetToMessage(serializer, msg, INSTRUMENT_TYPES, selector.getInstrumentTypes());
@@ -54,16 +54,16 @@ public class VolatilitySurfaceSelectorFudgeBuilder implements FudgeBuilder<Volat
   }
 
   @Override
-  public VolatilitySurfaceSelector buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    Set<String> calcConfigNames = buildStringSet(deserializer, msg.getMessage(CALC_CONFIG_NAMES));
-    Set<String> names = buildStringSet(deserializer, msg.getMessage(NAMES));
-    Set<String> instrumentTypes = buildStringSet(deserializer, msg.getMessage(INSTRUMENT_TYPES));
-    Set<String> quoteTypes = buildStringSet(deserializer, msg.getMessage(QUOTE_TYPES));
-    Set<String> quoteUnits = buildStringSet(deserializer, msg.getMessage(QUOTE_UNITS));
+  public VolatilitySurfaceSelector buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final Set<String> calcConfigNames = buildStringSet(deserializer, msg.getMessage(CALC_CONFIG_NAMES));
+    final Set<String> names = buildStringSet(deserializer, msg.getMessage(NAMES));
+    final Set<String> instrumentTypes = buildStringSet(deserializer, msg.getMessage(INSTRUMENT_TYPES));
+    final Set<String> quoteTypes = buildStringSet(deserializer, msg.getMessage(QUOTE_TYPES));
+    final Set<String> quoteUnits = buildStringSet(deserializer, msg.getMessage(QUOTE_UNITS));
 
     Pattern nameMatchPattern;
     if (msg.hasField(NAME_MATCH_PATTERN)) {
-      String nameMatchStr = deserializer.fieldValueToObject(String.class, msg.getByName(NAME_MATCH_PATTERN));
+      final String nameMatchStr = deserializer.fieldValueToObject(String.class, msg.getByName(NAME_MATCH_PATTERN));
       nameMatchPattern = Pattern.compile(nameMatchStr);
     } else {
       nameMatchPattern = null;
@@ -71,7 +71,7 @@ public class VolatilitySurfaceSelectorFudgeBuilder implements FudgeBuilder<Volat
 
     Pattern nameLikePattern;
     if (msg.hasField(NAME_LIKE_PATTERN)) {
-      String nameLikeStr = deserializer.fieldValueToObject(String.class, msg.getByName(NAME_LIKE_PATTERN));
+      final String nameLikeStr = deserializer.fieldValueToObject(String.class, msg.getByName(NAME_LIKE_PATTERN));
       nameLikePattern = Pattern.compile(nameLikeStr);
     } else {
       nameLikePattern = null;
@@ -79,23 +79,23 @@ public class VolatilitySurfaceSelectorFudgeBuilder implements FudgeBuilder<Volat
     return new VolatilitySurfaceSelector(calcConfigNames, names, nameMatchPattern, nameLikePattern, instrumentTypes, quoteTypes, quoteUnits);
   }
 
-  private void addSetToMessage(FudgeSerializer serializer, MutableFudgeMsg msg, String fieldName, Set<String> strs) {
+  private void addSetToMessage(final FudgeSerializer serializer, final MutableFudgeMsg msg, final String fieldName, final Set<String> strs) {
     if (strs == null) {
       return;
     }
-    MutableFudgeMsg setMsg = serializer.newMessage();
-    for (String str : strs) {
+    final MutableFudgeMsg setMsg = serializer.newMessage();
+    for (final String str : strs) {
       serializer.addToMessage(setMsg, null, null, str);
     }
     serializer.addToMessage(msg, fieldName, null, setMsg);
   }
 
-  private Set<String> buildStringSet(FudgeDeserializer deserializer, FudgeMsg msg) {
+  private Set<String> buildStringSet(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg == null) {
       return null;
     }
-    Set<String> strs = Sets.newHashSet();
-    for (FudgeField field : msg) {
+    final Set<String> strs = Sets.newHashSet();
+    for (final FudgeField field : msg) {
       strs.add(deserializer.fieldValueToObject(String.class, field));
     }
     return strs;

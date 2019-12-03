@@ -14,6 +14,7 @@ import com.opengamma.engine.function.config.FunctionConfigurationSource;
 /**
  * Function repository configuration source for the functions contained in this package.
  */
+@Deprecated
 public class CDSFunctions extends AbstractFunctionConfigurationBean {
 
   /**

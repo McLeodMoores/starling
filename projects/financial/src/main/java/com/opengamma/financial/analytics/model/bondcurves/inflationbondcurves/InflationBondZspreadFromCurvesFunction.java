@@ -35,7 +35,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.curve.ConfigDBCurveConstructionConfigurationSource;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
@@ -46,11 +45,11 @@ import com.opengamma.financial.analytics.curve.exposure.InstrumentExposuresProvi
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCleanPriceAndCurvesFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InflationBondZspreadFromCurvesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InflationBondZspreadFromCurvesFunction.class);
   /** The z-spread calculator */
   private static final BondCapitalIndexedSecurityDiscountingMethod CALCULATOR = BondCapitalIndexedSecurityDiscountingMethod.getInstance();
   /** The curve construction configuration source */
@@ -59,7 +58,7 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
   private InstrumentExposuresProvider _instrumentExposuresProvider;
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#Z_SPREAD}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#Z_SPREAD}.
    */
   public InflationBondZspreadFromCurvesFunction() {
     super(Z_SPREAD);
@@ -73,7 +72,8 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
   }
 
   @Override
-  protected Set<ComputedValue> getResult(final FunctionInputs inputs, final BondCapitalIndexedTransaction<?> bond, final InflationIssuerProviderInterface issuerCurves,
+  protected Set<ComputedValue> getResult(final FunctionInputs inputs, final BondCapitalIndexedTransaction<?> bond,
+      final InflationIssuerProviderInterface issuerCurves,
       final double cleanPrice, final ValueSpecification spec) {
     final YieldAndDiscountCurve curve = (YieldAndDiscountCurve) inputs.getValue(YIELD_CURVE);
     final LegalEntity legalEntity = bond.getBondTransaction().getIssuerEntity();
@@ -106,10 +106,12 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
     }
     final String curveExposureConfig = desiredValue.getConstraint(CURVE_EXPOSURES);
     final String curve = Iterables.getOnlyElement(curves);
-    final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
+    final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig,
+        target.getTrade());
     boolean curveNameFound = false;
     for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
-      final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationName);
+      final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource
+          .getCurveConstructionConfiguration(curveConstructionConfigurationName);
       final List<CurveGroupConfiguration> groups = curveConstructionConfiguration.getCurveGroups();
       for (final CurveGroupConfiguration group : groups) {
         for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
@@ -119,10 +121,10 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
           }
         }
       }
-      List<String> exoConfigs = curveConstructionConfiguration.getExogenousConfigurations();
-      for (String curveConstructionConfigurationExogenousName : exoConfigs) {
-        final CurveConstructionConfiguration curveConstructionConfigurationExogenous =
-            _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationExogenousName);
+      final List<String> exoConfigs = curveConstructionConfiguration.getExogenousConfigurations();
+      for (final String curveConstructionConfigurationExogenousName : exoConfigs) {
+        final CurveConstructionConfiguration curveConstructionConfigurationExogenous = _curveConstructionConfigurationSource
+            .getCurveConstructionConfiguration(curveConstructionConfigurationExogenousName);
         final List<CurveGroupConfiguration> groupsExogenous = curveConstructionConfigurationExogenous.getCurveGroups();
         for (final CurveGroupConfiguration group : groupsExogenous) {
           for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
@@ -146,7 +148,8 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String curveName = null;
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       if (entry.getKey().getValueName().equals(YIELD_CURVE)) {
@@ -155,7 +158,7 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
       }
     }
     if (curveName == null) {
-      s_logger.error("Could not get curve name from inputs; missing yield curve");
+      LOGGER.error("Could not get curve name from inputs; missing yield curve");
       return null;
     }
     final ValueProperties properties = getResultProperties(target)

@@ -63,17 +63,17 @@ public class BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProviderTe
 
   @Test
   public void testSoybeanFutureOptionExpiryCalculator_getExpiryDate() {
-    assertEquals(LocalDate.of(2012,11,23), EXPIRY_CALC.getExpiryDate(1, DATE, WEEKEND_CALENDAR));
-    assertEquals(LocalDate.of(2012,12,21), EXPIRY_CALC.getExpiryDate(2, DATE, WEEKEND_CALENDAR));
-    assertEquals(LocalDate.of(2013,1,25), EXPIRY_CALC.getExpiryDate(3, DATE, WEEKEND_CALENDAR));
-    assertEquals(LocalDate.of(2013,2,22), EXPIRY_CALC.getExpiryDate(4, DATE, WEEKEND_CALENDAR));
-    assertEquals(LocalDate.of(2013,4,26), EXPIRY_CALC.getExpiryDate(5, DATE, WEEKEND_CALENDAR));
-    assertEquals(LocalDate.of(2013,6,21), EXPIRY_CALC.getExpiryDate(6, DATE, WEEKEND_CALENDAR));
-    assertEquals(LocalDate.of(2013,7,26), EXPIRY_CALC.getExpiryDate(7, DATE, WEEKEND_CALENDAR));
-    assertEquals(LocalDate.of(2013,8,23), EXPIRY_CALC.getExpiryDate(8, DATE, WEEKEND_CALENDAR));
-    assertEquals(LocalDate.of(2013,10,25), EXPIRY_CALC.getExpiryDate(9, DATE, WEEKEND_CALENDAR));
-    assertEquals(LocalDate.of(2013,12,27), EXPIRY_CALC.getExpiryDate(10, DATE, WEEKEND_CALENDAR));
-    assertEquals(LocalDate.of(2014,2,21), EXPIRY_CALC.getExpiryDate(11, DATE, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2012, 11, 23), EXPIRY_CALC.getExpiryDate(1, DATE, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2012, 12, 21), EXPIRY_CALC.getExpiryDate(2, DATE, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2013, 1, 25), EXPIRY_CALC.getExpiryDate(3, DATE, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2013, 2, 22), EXPIRY_CALC.getExpiryDate(4, DATE, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2013, 4, 26), EXPIRY_CALC.getExpiryDate(5, DATE, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2013, 6, 21), EXPIRY_CALC.getExpiryDate(6, DATE, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2013, 7, 26), EXPIRY_CALC.getExpiryDate(7, DATE, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2013, 8, 23), EXPIRY_CALC.getExpiryDate(8, DATE, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2013, 10, 25), EXPIRY_CALC.getExpiryDate(9, DATE, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2013, 12, 27), EXPIRY_CALC.getExpiryDate(10, DATE, WEEKEND_CALENDAR));
+    assertEquals(LocalDate.of(2014, 2, 21), EXPIRY_CALC.getExpiryDate(11, DATE, WEEKEND_CALENDAR));
   }
 
   @Test

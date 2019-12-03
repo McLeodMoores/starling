@@ -26,7 +26,7 @@ public abstract class ConventionLink<T extends Convention> implements Link<T> {
    */
   /* package */ ConventionLink() {
   }
-  
+
   /**
    * Creates a link that will use a service context accessed via a thread local to
    * access a pre-configured service context containing the ConventionSource and
@@ -38,11 +38,11 @@ public abstract class ConventionLink<T extends Convention> implements Link<T> {
    * @param type the type of object being linked to, not null
    * @return a convention link, not null
    */
-  public static <C extends Convention> ConventionLink<C> resolvable(ExternalIdBundle bundle,
-                                                                    Class<C> type) {
+  public static <C extends Convention> ConventionLink<C> resolvable(final ExternalIdBundle bundle,
+                                                                    final Class<C> type) {
     return new ResolvableConventionLink<>(bundle, type, new ServiceContextConventionLinkResolver<C>());
   }
-  
+
   /**
    * Creates a link that will use a service context accessed via a thread local
    * to access a pre-configured service context containing the ConventionSource
@@ -55,7 +55,7 @@ public abstract class ConventionLink<T extends Convention> implements Link<T> {
    * @param type the type of object being linked to, not null
    * @return a convention link, not null
    */
-  public static <C extends Convention> ConventionLink<C> resolvable(ExternalId externalId, Class<C> type) {
+  public static <C extends Convention> ConventionLink<C> resolvable(final ExternalId externalId, final Class<C> type) {
     return resolvable(externalId.toBundle(), type);
   }
 
@@ -71,7 +71,7 @@ public abstract class ConventionLink<T extends Convention> implements Link<T> {
    * @return a convention link, not null
    */
   @SuppressWarnings("unchecked")
-  public static <C extends Convention> ConventionLink<C> resolvable(ExternalIdBundle bundle) {
+  public static <C extends Convention> ConventionLink<C> resolvable(final ExternalIdBundle bundle) {
     return (ConventionLink<C>) resolvable(bundle, Convention.class);
   }
 
@@ -88,10 +88,10 @@ public abstract class ConventionLink<T extends Convention> implements Link<T> {
    * @return a convention link, not null
    */
   @SuppressWarnings("unchecked")
-  public static <C extends Convention> ConventionLink<C> resolvable(ExternalId externalId) {
+  public static <C extends Convention> ConventionLink<C> resolvable(final ExternalId externalId) {
     return (ConventionLink<C>) resolvable(externalId, Convention.class);
   }
-  
+
   /**
    * Creates a link that will use the provided service context to resolve the link
    * rather than use one available via a thread local environment.  Use of this
@@ -105,9 +105,9 @@ public abstract class ConventionLink<T extends Convention> implements Link<T> {
    * VersionCorrectionProvider necessary to resolve, not null
    * @return the convention link, not null
    */
-  public static <C extends Convention> ConventionLink<C> resolvable(ExternalIdBundle bundle,
-                                                                    Class<C> type,
-                                                                    ServiceContext serviceContext) {
+  public static <C extends Convention> ConventionLink<C> resolvable(final ExternalIdBundle bundle,
+                                                                    final Class<C> type,
+                                                                    final ServiceContext serviceContext) {
     return new ResolvableConventionLink<>(bundle, type, new ServiceContextConventionLinkResolver<C>(serviceContext));
   }
 
@@ -125,8 +125,8 @@ public abstract class ConventionLink<T extends Convention> implements Link<T> {
    * VersionCorrectionProvider necessary to resolve, not null
    * @return the convention link, not null
    */
-  public static <C extends Convention> ConventionLink<C> resolvable(ExternalId externalId, Class<C> type,
-                                                                    ServiceContext serviceContext) {
+  public static <C extends Convention> ConventionLink<C> resolvable(final ExternalId externalId, final Class<C> type,
+                                                                    final ServiceContext serviceContext) {
     return resolvable(externalId.toBundle(), type, serviceContext);
   }
 
@@ -139,7 +139,7 @@ public abstract class ConventionLink<T extends Convention> implements Link<T> {
    * @param convention the convention to embed in the link, not null
    * @return the convention link, not null
    */
-  public static <C extends Convention> ConventionLink<C> resolved(C convention) {
+  public static <C extends Convention> ConventionLink<C> resolved(final C convention) {
     return new ResolvedConventionLink<>(convention);
   }
 }

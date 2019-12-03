@@ -116,11 +116,14 @@ public abstract class Interpolator1D implements Interpolator<Interpolator1DDataB
   public abstract Interpolator1DDataBundle getDataBundle(double[] x, double[] y);
 
   /**
-   * Construct an {@link Interpolator1DDataBundle} from sorted arrays, i.e, x[0] < x[1] < x[2]. The bundle may contain information such as the derivatives
+   * Construct an {@link Interpolator1DDataBundle} from sorted arrays, i.e, x[0] &lt; x[1] &lt; x[2]. The bundle may contain information such as the derivatives
    * at each data point.
-   * @param x  x values of data, not null
-   * @param y  y values of data, not null
-   * @return  the data bundle
+   * 
+   * @param x
+   *          x values of data, not null
+   * @param y
+   *          y values of data, not null
+   * @return the data bundle
    */
   public abstract Interpolator1DDataBundle getDataBundleFromSortedArrays(double[] x, double[] y);
 

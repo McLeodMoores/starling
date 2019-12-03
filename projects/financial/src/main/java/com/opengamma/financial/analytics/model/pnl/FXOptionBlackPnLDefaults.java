@@ -48,11 +48,11 @@ public class FXOptionBlackPnLDefaults extends DefaultPropertyFunction {
       return false;
     }
     final FinancialSecurity security = (FinancialSecurity) target.getPosition().getSecurity();
-    final boolean isFXOption = (security instanceof FXOptionSecurity
+    final boolean isFXOption = security instanceof FXOptionSecurity
         || security instanceof FXBarrierOptionSecurity
         || security instanceof FXDigitalOptionSecurity
         || security instanceof NonDeliverableFXOptionSecurity
-        || security instanceof NonDeliverableFXDigitalOptionSecurity);
+        || security instanceof NonDeliverableFXDigitalOptionSecurity;
     return isFXOption;
   }
 
@@ -64,7 +64,8 @@ public class FXOptionBlackPnLDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.SAMPLING_PERIOD.equals(propertyName)) {
       return Collections.singleton(_samplingPeriod);
     }

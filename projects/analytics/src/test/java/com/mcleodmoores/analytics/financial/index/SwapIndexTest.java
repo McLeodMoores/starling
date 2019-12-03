@@ -99,7 +99,7 @@ public class SwapIndexTest {
     assertEquals(index.getSwapTenor(), SWAP_TENOR);
     assertEquals(index.toString(), "SwapIndex[USD 5Y Swap, currency=USD, swap tenor=P5Y, ibor index=IborIndex[USD 3M LIBOR, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Modified Following, spot lag=2]]");
     assertEquals(index, index);
-    assertNotEquals(new IndexSwap(FIXED_LEG_TENOR.getPeriod(), FIXED_LEG_DAYCOUNT, new IborIndex(CURRENCY, Tenor.THREE_MONTHS.getPeriod(), 2, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, false, "USD 3M LIBOR"), SWAP_TENOR.getPeriod(), new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)), index);
+    assertNotEquals(new IndexSwap(FIXED_LEG_TENOR.getPeriod(), FIXED_LEG_DAYCOUNT, new IborIndex(CURRENCY, Tenor.THREE_MONTHS.getPeriod(), 2, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, false, "USD 3M LIBOR"), SWAP_TENOR.getPeriod(), CalendarAdapter.of(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)), index);
     SwapIndex other = new SwapIndex(NAME, CURRENCY, FIXED_LEG_TENOR, FIXED_LEG_DAYCOUNT, IBOR_INDEX, SWAP_TENOR);
     assertEquals(index, other);
     assertEquals(index.hashCode(), other.hashCode());

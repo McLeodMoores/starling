@@ -5,7 +5,6 @@
  */
 package com.opengamma.financial.analytics.volatility.surface;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -166,9 +165,9 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       FuturePriceCurveDefinition<?> other = (FuturePriceCurveDefinition<?>) obj;
-      return JodaBeanUtils.equal(getName(), other.getName()) &&
-          JodaBeanUtils.equal(getTarget(), other.getTarget()) &&
-          JodaBeanUtils.equal(getXs(), other.getXs());
+      return JodaBeanUtils.equal(_name, other._name) &&
+          JodaBeanUtils.equal(_target, other._target) &&
+          JodaBeanUtils.equal(_xs, other._xs);
     }
     return false;
   }
@@ -176,9 +175,9 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTarget());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getXs());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_name);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_target);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_xs);
     return hash;
   }
 
@@ -186,9 +185,9 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("FuturePriceCurveDefinition{");
-    buf.append("name").append('=').append(getName()).append(',').append(' ');
-    buf.append("target").append('=').append(getTarget()).append(',').append(' ');
-    buf.append("xs").append('=').append(JodaBeanUtils.toString(getXs()));
+    buf.append("name").append('=').append(_name).append(',').append(' ');
+    buf.append("target").append('=').append(_target).append(',').append(' ');
+    buf.append("xs").append('=').append(JodaBeanUtils.toString(_xs));
     buf.append('}');
     return buf.toString();
   }
@@ -382,19 +381,31 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<X> setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<X> setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder<X> setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

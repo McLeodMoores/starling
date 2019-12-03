@@ -55,15 +55,15 @@ public class SecuritySourceComponentFactory extends AbstractComponentFactory {
   /**
    * Initializes the security source, setting up component information and REST.
    * Override using {@link #createSecuritySource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    SecuritySource source = createSecuritySource(repo);
-    
-    ComponentInfo info = new ComponentInfo(SecuritySource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final SecuritySource source = createSecuritySource(repo);
+
+    final ComponentInfo info = new ComponentInfo(SecuritySource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteSecuritySource.class);
@@ -76,11 +76,11 @@ public class SecuritySourceComponentFactory extends AbstractComponentFactory {
 
   /**
    * Creates the security source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the security source, not null
    */
-  protected SecuritySource createSecuritySource(ComponentRepository repo) {
+  protected SecuritySource createSecuritySource(final ComponentRepository repo) {
     return new MasterSecuritySource(getSecurityMaster());
   }
 

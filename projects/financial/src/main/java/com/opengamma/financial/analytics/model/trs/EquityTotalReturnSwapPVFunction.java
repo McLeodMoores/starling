@@ -28,7 +28,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
@@ -42,7 +41,8 @@ public class EquityTotalReturnSwapPVFunction extends EquityTotalReturnSwapFuncti
       PresentValueEquityDiscountingCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#PRESENT_VALUE}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public EquityTotalReturnSwapPVFunction() {
     super(PRESENT_VALUE);
@@ -54,21 +54,21 @@ public class EquityTotalReturnSwapPVFunction extends EquityTotalReturnSwapFuncti
 
       @SuppressWarnings("synthetic-access")
       @Override
-      protected Set<ComputedValue> getValues(FunctionExecutionContext executionContext,
-                                             FunctionInputs inputs,
-                                             ComputationTarget target,
-                                             Set<ValueRequirement> desiredValues,
-                                             InstrumentDerivative derivative,
-                                             FXMatrix fxMatrix) {
-        ValueProperties properties = Iterables.getOnlyElement(desiredValues).getConstraints().copy().get();
-        ValueSpecification spec = new ValueSpecification(PRESENT_VALUE, target.toSpecification(), properties);
-        EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
-        MultipleCurrencyAmount pv = derivative.accept(CALCULATOR, data);
-        String expectedCurrency = spec.getProperty(CURRENCY);
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext,
+          final FunctionInputs inputs,
+          final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues,
+          final InstrumentDerivative derivative,
+          final FXMatrix fxMatrix) {
+        final ValueProperties properties = Iterables.getOnlyElement(desiredValues).getConstraints().copy().get();
+        final ValueSpecification spec = new ValueSpecification(PRESENT_VALUE, target.toSpecification(), properties);
+        final EquityTrsDataBundle data = getDataBundle(inputs, fxMatrix);
+        final MultipleCurrencyAmount pv = derivative.accept(CALCULATOR, data);
+        final String expectedCurrency = spec.getProperty(CURRENCY);
         if (expectedCurrency == null) {
           throw new OpenGammaRuntimeException("Expected currency is null");
         }
-        double pvConverted = fxMatrix.convert(pv, Currency.of(expectedCurrency)).getAmount();
+        final double pvConverted = fxMatrix.convert(pv, Currency.of(expectedCurrency)).getAmount();
         return Collections.singleton(new ComputedValue(spec, pvConverted));
       }
     };

@@ -47,12 +47,33 @@ public class FXFutureSecurity extends FutureSecurity {
   @PropertyDefinition
   private double _multiplicationFactor = 1.0;
 
-  FXFutureSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  FXFutureSecurity() {
     super();
   }
 
-  public FXFutureSecurity(Expiry expiry, String tradingExchange, String settlementExchange, Currency currency, double unitAmount,
-      Currency numerator, Currency denominator, String category) {
+  /**
+   * @param expiry
+   *          the expiry date, not null
+   * @param tradingExchange
+   *          the name of the trading exchange, not null
+   * @param settlementExchange
+   *          the name of the settlement exchange, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param numerator
+   *          the numerator currency, not null
+   * @param denominator
+   *          the denominator currency, not null
+   * @param category
+   *          the future category, not null
+   */
+  public FXFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency, final double unitAmount,
+      final Currency numerator, final Currency denominator, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
     setNumerator(numerator);
     setDenominator(denominator);
@@ -60,7 +81,7 @@ public class FXFutureSecurity extends FutureSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitFXFutureSecurity(this);
   }
 

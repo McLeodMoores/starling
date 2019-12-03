@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -24,8 +24,8 @@ public class ValuePropertiesBuilderTest extends AbstractFudgeBuilderTestCase {
   public void testAllProperties() {
     assertEncodeDecodeCycle(ValueProperties.class, ValueProperties.all());
   }
-  
-  public void testNearlyAllProperties() {//PLAT-1126
+
+  public void testNearlyAllProperties() { //PLAT-1126
     assertEncodeDecodeCycle(ValueProperties.class, ValueProperties.all().withoutAny("SomeProp"));
   }
 

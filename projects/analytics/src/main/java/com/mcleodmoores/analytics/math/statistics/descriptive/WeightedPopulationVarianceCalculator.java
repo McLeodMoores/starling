@@ -7,16 +7,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.result.Function2;
 
 /**
- * Calculates the weighted variance of a series of numbers, where the weights are reliability weights:
- * $$
- * begin{align*}
- * \text{var} &= \frac{\sum_{i=1}^n w_i(x_i - \mu^*)^2}{V_1 - \frac{V_2}{V_1}}\\
- * \text{where}
- * V_1 &= \sum_{i=1}{n} w_i\\
- * V_2 &= \sum_{i=1}{n} w_i^2
- * \end{align*}
- * $$
- * and $$\mu^*$$ is the weighted mean of the series.
+ * Calculates the weighted variance of a series of numbers, where the weights are reliability weights.
  */
 public class WeightedPopulationVarianceCalculator implements Function2<WeightFunction<Double>, double[], Double> {
 

@@ -30,6 +30,7 @@ public class ConvexityAdjustmentHullWhiteCalculator extends InstrumentDerivative
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static ConvexityAdjustmentHullWhiteCalculator getInstance() {
@@ -42,7 +43,7 @@ public class ConvexityAdjustmentHullWhiteCalculator extends InstrumentDerivative
   private static final SwapFuturesPriceDeliverableSecurityHullWhiteMethod METHOD_SWAPFUT = SwapFuturesPriceDeliverableSecurityHullWhiteMethod.getInstance();
   private static final InterestRateFutureSecurityHullWhiteMethod METHOD_STIRFUT = InterestRateFutureSecurityHullWhiteMethod.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public Double visitInterestRateFutureSecurity(final InterestRateFutureSecurity futures, final HullWhiteOneFactorProviderInterface hullWhite) {
@@ -50,7 +51,8 @@ public class ConvexityAdjustmentHullWhiteCalculator extends InstrumentDerivative
   }
 
   @Override
-  public Double visitSwapFuturesPriceDeliverableSecurity(final SwapFuturesPriceDeliverableSecurity futures, final HullWhiteOneFactorProviderInterface hullWhite) {
+  public Double visitSwapFuturesPriceDeliverableSecurity(final SwapFuturesPriceDeliverableSecurity futures,
+      final HullWhiteOneFactorProviderInterface hullWhite) {
     return METHOD_SWAPFUT.convexityAdjustment(futures, hullWhite);
   }
 

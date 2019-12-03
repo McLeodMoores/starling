@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 
+ *
  *
  * @author kirk
  */
@@ -24,18 +24,18 @@ public class CollectingByteArrayMessageReceiver implements
   public List<byte[]> getMessages() {
     return _messages;
   }
-  
+
   public void clearMessages() {
     _messages.clear();
   }
 
   @Override
-  public void messageReceived(byte[] message) {
+  public void messageReceived(final byte[] message) {
     getMessages().add(message);
   }
 
   @Override
-  public void messagesReceived(List<byte[]> messages) {
+  public void messagesReceived(final List<byte[]> messages) {
     getMessages().addAll(messages);
   }
 

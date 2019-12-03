@@ -10,12 +10,12 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * energy future option commodity derivative
+ * energy future option commodity derivative.
  */
 public class EnergyFutureOption extends CommodityFutureOption<EnergyFuture> {
 
   /**
-   * Constructor for future options
+   * Constructor for future options.
    *
    * @param expiry Time (in years as a double) until the date-time at which the future expires
    * @param underlying Underlying future
@@ -23,7 +23,8 @@ public class EnergyFutureOption extends CommodityFutureOption<EnergyFuture> {
    * @param exerciseType Exercise type - European or American
    * @param isCall Call if true, Put if false
    */
-  public EnergyFutureOption(final double expiry, final EnergyFuture underlying, final double strike, final ExerciseDecisionType exerciseType, final boolean isCall) {
+  public EnergyFutureOption(final double expiry, final EnergyFuture underlying, final double strike, final ExerciseDecisionType exerciseType,
+      final boolean isCall) {
     super(expiry, underlying, strike, exerciseType, isCall);
   }
 

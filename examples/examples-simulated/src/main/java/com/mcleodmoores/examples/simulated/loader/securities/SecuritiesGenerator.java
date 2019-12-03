@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.examples.simulated.loader.securities;
 
 import java.util.ArrayList;
@@ -9,6 +12,9 @@ import com.opengamma.financial.generator.SecurityGenerator;
 import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.util.ArgumentChecker;
 
+/**
+ * Generates securities.
+ */
 public class SecuritiesGenerator {
   /** The security generator */
   private final SecurityGenerator<? extends ManageableSecurity> _securityGenerator;
@@ -16,8 +22,10 @@ public class SecuritiesGenerator {
   private final int _numberOfSecurities;
 
   /**
-   * @param securityGenerator The security generator, not null
-   * @param numberOfSecurities The number of securities to generate
+   * @param securityGenerator
+   *          The security generator, not null
+   * @param numberOfSecurities
+   *          The number of securities to generate
    */
   public SecuritiesGenerator(final SecurityGenerator<? extends ManageableSecurity> securityGenerator, final int numberOfSecurities) {
     ArgumentChecker.notNull(securityGenerator, "securityGenerator");
@@ -26,9 +34,9 @@ public class SecuritiesGenerator {
   }
 
   /**
-   * Generates a list of securities. This method attempts to generate the number of {{@link #_numberOfSecurities}
-   * without checking that this is possible. It is the responsibility of the underlying security generator to
-   * perform this check.
+   * Generates a list of securities. This method attempts to generate the number of securities without checking that this is possible. It is the responsibility
+   * of the underlying security generator to perform this check.
+   * 
    * @return A list of manageable securities
    */
   public List<ManageableSecurity> createManageableSecurities() {
@@ -41,6 +49,7 @@ public class SecuritiesGenerator {
 
   /**
    * Gets the security generator.
+   * 
    * @return The security generator
    */
   protected SecurityGenerator<? extends ManageableSecurity> getSecurityGenerator() {

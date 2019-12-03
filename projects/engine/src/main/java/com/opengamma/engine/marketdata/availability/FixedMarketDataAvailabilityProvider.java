@@ -31,19 +31,19 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvailabilityProvider {
 
-  private static final AtomicInteger s_nextIdentifier = new AtomicInteger();
+  private static final AtomicInteger NEXT_IDENTIFIER = new AtomicInteger();
 
   private static class TargetData extends ConcurrentHashMap<String, Set<ValueSpecification>> {
-    
+
     private static final long serialVersionUID = 1L;
 
-    public TargetData(final ValueSpecification initialValue) {
-      final Set<ValueSpecification> values = new CopyOnWriteArraySet<ValueSpecification>();
+    TargetData(final ValueSpecification initialValue) {
+      final Set<ValueSpecification> values = new CopyOnWriteArraySet<>();
       values.add(initialValue);
       put(initialValue.getValueName(), values);
     }
 
-    public TargetData() {
+    TargetData() {
     }
 
     public ValueSpecification getAvailability(final ValueRequirement desiredValue) {
@@ -62,7 +62,7 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
     public void addValue(final ValueSpecification specification) {
       Set<ValueSpecification> values = get(specification.getValueName());
       if (values == null) {
-        values = new CopyOnWriteArraySet<ValueSpecification>();
+        values = new CopyOnWriteArraySet<>();
         values.add(specification);
         final Set<ValueSpecification> existing = putIfAbsent(specification.getValueName(), values);
         if (existing != null) {
@@ -82,11 +82,12 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
 
   }
 
-  private final String _syntheticScheme = "InMemoryLKV" + s_nextIdentifier.getAndIncrement();
+  private final String _syntheticScheme = "InMemoryLKV" + NEXT_IDENTIFIER.getAndIncrement();
   private final AtomicInteger _nextSyntheticIdentifier = new AtomicInteger();
   private final ConcurrentMap<ExternalId, ComputationTargetSpecification> _weakIndex;
   private final ConcurrentMap<ComputationTargetSpecification, TargetData> _strictIndex;
-  private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification = new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
+  private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification =
+      new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
 
     @Override
     public ComputationTargetSpecification visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
@@ -133,7 +134,8 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
     this(new ConcurrentHashMap<ExternalId, ComputationTargetSpecification>(), new ConcurrentHashMap<ComputationTargetSpecification, TargetData>());
   }
 
-  private FixedMarketDataAvailabilityProvider(final ConcurrentMap<ExternalId, ComputationTargetSpecification> weakIndex, final ConcurrentMap<ComputationTargetSpecification, TargetData> strictIndex) {
+  private FixedMarketDataAvailabilityProvider(final ConcurrentMap<ExternalId, ComputationTargetSpecification> weakIndex,
+      final ConcurrentMap<ComputationTargetSpecification, TargetData> strictIndex) {
     _weakIndex = weakIndex;
     _strictIndex = strictIndex;
   }
@@ -152,13 +154,13 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
     final ComputationTargetSpecification target = _weakIndex.get(key);
     if (target != null) {
       return getAvailabilityImpl(target, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier, final ValueRequirement desiredValue) {
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier,
+      final ValueRequirement desiredValue) {
     ValueSpecification available = getAvailabilityImpl(targetSpec, desiredValue);
     if (available == null) {
       available = getAvailabilityImpl(identifier, desiredValue);
@@ -167,7 +169,8 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
   }
 
   @Override
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue) {
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers,
+      final ValueRequirement desiredValue) {
     ValueSpecification available = getAvailabilityImpl(targetSpec, desiredValue);
     if (available == null) {
       for (final ExternalId identifier : identifiers) {
@@ -181,7 +184,8 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
   }
 
   @Override
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier, final ValueRequirement desiredValue) {
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier,
+      final ValueRequirement desiredValue) {
     return getAvailabilityImpl(targetSpec, desiredValue);
   }
 
@@ -191,10 +195,11 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
   }
 
   /**
-   * Returns the {@link ValueSpecification} that is a possible resolution of the value requirement. This will be the specification used by {@link #addValue(ValueRequirement,Object)} or
-   * {@link #removeValue(ValueRequirement)}.
-   * 
-   * @param requirement the requirement to resolve, not null
+   * Returns the {@link ValueSpecification} that is a possible resolution of the value requirement. This will be the specification used by
+   * {@link #addAvailableData(ValueSpecification)} or {@link #removeAvailableData(ValueSpecification)}.
+   *
+   * @param requirement
+   *          the requirement to resolve, not null
    * @return the resolved {@code ValueSpecification}, not null
    */
   public ValueSpecification resolveRequirement(final ValueRequirement requirement) {
@@ -250,11 +255,10 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
     ArgumentChecker.notNull(valueSpecification, "valueSpecification");
     removeAvailableData(valueSpecification.getTargetSpecification(), valueSpecification);
   }
-  
-  
+
   @Override
   public Serializable getAvailabilityHintKey() {
-    final ArrayList<Serializable> key = new ArrayList<Serializable>(2);
+    final ArrayList<Serializable> key = new ArrayList<>(2);
     key.add(getClass().getName());
     key.add(_syntheticScheme);
     return key;

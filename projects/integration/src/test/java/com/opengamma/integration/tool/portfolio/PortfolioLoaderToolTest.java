@@ -40,7 +40,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class PortfolioLoaderToolTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioLoaderToolTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioLoaderToolTest.class);
 
   private ToolContext _toolContext;
   private PortfolioMaster _portfolioMaster;
@@ -52,14 +52,14 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public PortfolioLoaderToolTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
   @Override
   public void doSetUp() throws Exception {
     _tempFile = File.createTempFile("portfolio-", ".csv");
-    s_logger.info("Created temp file: " + _tempFile.getAbsolutePath());
+    LOGGER.info("Created temp file: " + _tempFile.getAbsolutePath());
 
     _portfolioMaster = new DbPortfolioMaster(getDbConnector());
     _positionMaster = new DbPositionMaster(getDbConnector());
@@ -79,7 +79,7 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
 
     // Clean up the file we were using
     if (_tempFile != null && _tempFile.exists()) {
-      s_logger.info("Removing file: " + _tempFile.getAbsolutePath());
+      LOGGER.info("Removing file: " + _tempFile.getAbsolutePath());
       _tempFile.delete();
     }
   }
@@ -212,7 +212,7 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
 
   private void populateFileWithData(final String data) {
 
-    try(BufferedWriter writer = new BufferedWriter(new FileWriter(_tempFile))) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(_tempFile))) {
       writer.write(data);
       writer.flush();
     } catch (final IOException e) {

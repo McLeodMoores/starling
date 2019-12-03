@@ -18,18 +18,16 @@ import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectBeanBuilder;
-import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.core.config.Config;
 import com.opengamma.core.config.ConfigGroups;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNode;
-import com.opengamma.id.UniqueId;
 
 /**
- * Basic curve definition class containing only a name and curve nodes. Some curve definitions (e.g. {@link InterpolatedCurveDefinition}) will descend from this class,
- * but this can be used as a nodal curve definition.
+ * Basic curve definition class containing only a name and curve nodes. Some curve definitions (e.g. {@link InterpolatedCurveDefinition}) will descend from this
+ * class, but this can be used as a nodal curve definition.
  */
 @BeanDefinition
 @Config(description = "Curve definition", group = ConfigGroups.CURVES)
@@ -45,15 +43,17 @@ public class CurveDefinition extends AbstractCurveDefinition {
   private SortedSet<CurveNode> _nodes = new TreeSet<>();
 
   /**
-   * For the builder
+   * For the builder.
    */
   public CurveDefinition() {
     super();
   }
 
   /**
-   * @param name The name of the curve definition, not null
-   * @param nodes The curve nodes, not null
+   * @param name
+   *          The name of the curve definition, not null
+   * @param nodes
+   *          The curve nodes, not null
    */
   public CurveDefinition(final String name, final Set<CurveNode> nodes) {
     super(name);

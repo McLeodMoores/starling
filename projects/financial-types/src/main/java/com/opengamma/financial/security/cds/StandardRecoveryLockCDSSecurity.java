@@ -31,17 +31,18 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.master.security.SecurityDescription;
 
 /**
- *
+ * @deprecated Use {@link com.opengamma.financial.security.credit.StandardCDSSecurity}.
  */
+@Deprecated
 @BeanDefinition
 @SecurityDescription(type = StandardRecoveryLockCDSSecurity.SECURITY_TYPE, description = "Standard recovery lock cds")
-public class StandardRecoveryLockCDSSecurity  extends StandardCDSSecurity {
+public class StandardRecoveryLockCDSSecurity extends StandardCDSSecurity {
 
   /** Serialization version */
   private static final long serialVersionUID = 1L;
 
   /**
-   * The security type
+   * The security type.
    */
   public static final String SECURITY_TYPE = "STANDARD_RECOVERY_LOCK_CDS";
 
@@ -55,15 +56,16 @@ public class StandardRecoveryLockCDSSecurity  extends StandardCDSSecurity {
     super(SECURITY_TYPE);
   }
 
-  public StandardRecoveryLockCDSSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer, final ExternalId referenceEntity, //CSIGNORE
+  public StandardRecoveryLockCDSSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer,
+      final ExternalId referenceEntity, // CSIGNORE
       final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final ExternalId regionId, final ZonedDateTime startDate,
       final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final StubType stubType, final Frequency couponFrequency, final DayCount dayCount,
       final BusinessDayConvention businessDayConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate,
       final boolean adjustMaturityDate, final InterestRateNotional notional, final double recoveryRate, final boolean includeAccruedPremium,
       final boolean protectionStart, final double quotedSpread, final InterestRateNotional upfrontAmount) {
-    super(isBuy, protectionSeller, protectionBuyer, referenceEntity, debtSeniority, restructuringClause, regionId, startDate, effectiveDate, maturityDate, stubType,
-        couponFrequency, dayCount, businessDayConvention, immAdjustMaturityDate, adjustEffectiveDate, adjustMaturityDate, notional, includeAccruedPremium,
-        protectionStart, quotedSpread, upfrontAmount, SECURITY_TYPE);
+    super(isBuy, protectionSeller, protectionBuyer, referenceEntity, debtSeniority, restructuringClause, regionId, startDate, effectiveDate, maturityDate,
+        stubType, couponFrequency, dayCount, businessDayConvention, immAdjustMaturityDate, adjustEffectiveDate, adjustMaturityDate, notional,
+        includeAccruedPremium, protectionStart, quotedSpread, upfrontAmount, SECURITY_TYPE);
     _recoveryRate = recoveryRate;
   }
 

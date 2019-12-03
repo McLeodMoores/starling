@@ -41,6 +41,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.financial.util.AssertSensitivityObjects;
+import com.opengamma.analytics.math.matrix.OGMatrixAlgebra;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -75,29 +76,33 @@ public class ForexNonDeliverableOptionBlackSmileMethodTest {
   /** The EUR notional - the deliverable amount */
   private static final double EUR_NOTIONAL = 123;
   /** The KRWEUR strike */
-  private static final double STRIKE = 1.600;
+  private static final double STRIKE = 1600;
   /** The underlying non-deliverable forward definition */
-  private static final ForexNonDeliverableForwardDefinition NDF_DEFINITION = new ForexNonDeliverableForwardDefinition(KRW, Currency.EUR, EUR_NOTIONAL, STRIKE, FX_FIXING_DATE,
-      PAYMENT_DATE);
+  private static final ForexNonDeliverableForwardDefinition NDF_DEFINITION = new ForexNonDeliverableForwardDefinition(KRW, Currency.EUR,
+      EUR_NOTIONAL, STRIKE, FX_FIXING_DATE, PAYMENT_DATE);
   /** The underlying deliverable forward equivalent */
-  private static final ForexDefinition DELIVERABLE_EQUIVALENT_DEFINITION = new ForexDefinition(KRW, Currency.EUR, PAYMENT_DATE, -EUR_NOTIONAL * STRIKE, 1.0 / STRIKE);
+  private static final ForexDefinition DELIVERABLE_EQUIVALENT_DEFINITION = new ForexDefinition(KRW, Currency.EUR, PAYMENT_DATE,
+      -EUR_NOTIONAL * STRIKE, 1.0 / STRIKE);
   /** Is the option a call */
   private static final boolean IS_CALL = true;
   /** Is the option long */
   private static final boolean IS_LONG = true;
   /** The non-deliverable option definition */
-  private static final ForexNonDeliverableOptionDefinition NDO_DEFINITION = new ForexNonDeliverableOptionDefinition(NDF_DEFINITION, IS_CALL, IS_LONG);
+  private static final ForexNonDeliverableOptionDefinition NDO_DEFINITION = new ForexNonDeliverableOptionDefinition(NDF_DEFINITION, IS_CALL,
+      IS_LONG);
   /** The equivalent deliverable option definition */
-  private static final ForexOptionVanillaDefinition DELIVERABLE_EQUIVALENT_OPTION_DEFINITION = new ForexOptionVanillaDefinition(DELIVERABLE_EQUIVALENT_DEFINITION, FX_FIXING_DATE, IS_CALL, IS_LONG);
+  private static final ForexOptionVanillaDefinition DELIVERABLE_EQUIVALENT_OPTION_DEFINITION = new ForexOptionVanillaDefinition(
+      DELIVERABLE_EQUIVALENT_DEFINITION, FX_FIXING_DATE, IS_CALL, IS_LONG);
   /** The reference date */
   private static final ZonedDateTime VALUATION_DATE = DateUtils.getUTCDate(2011, 11, 10);
   /** The non-deliverable option derivative */
   private static final ForexNonDeliverableOption NDO = NDO_DEFINITION.toDerivative(VALUATION_DATE);
   /** The equivalent deliverable option derivative */
-  private static final ForexOptionVanilla DELIVERABLE_EQUIVALENT_OPTION = DELIVERABLE_EQUIVALENT_OPTION_DEFINITION.toDerivative(VALUATION_DATE);
+  private static final ForexOptionVanilla DELIVERABLE_EQUIVALENT_OPTION = DELIVERABLE_EQUIVALENT_OPTION_DEFINITION
+      .toDerivative(VALUATION_DATE);
   /** FX volatility expiry periods */
-  private static final Period[] EXPIRY_PERIOD = new Period[] {Period.ofMonths(3), Period.ofMonths(6), Period.ofYears(1),
-    Period.ofYears(2), Period.ofYears(5)};
+  private static final Period[] EXPIRY_PERIOD = new Period[] { Period.ofMonths(3), Period.ofMonths(6), Period.ofYears(1),
+      Period.ofYears(2), Period.ofYears(5) };
   /** The expiry times for the volatility surface */
   private static final double[] TIME_TO_EXPIRY = new double[EXPIRY_PERIOD.length + 1];
   static {
@@ -112,19 +117,22 @@ public class ForexNonDeliverableOptionBlackSmileMethodTest {
     }
   }
   /** The ATM volatilities */
-  private static final double[] ATM = {0.175, 0.185, 0.18, 0.17, 0.16, 0.16};
+  private static final double[] ATM = { 0.175, 0.185, 0.18, 0.17, 0.16, 0.16 };
   /** The delta */
-  private static final double[] DELTA = new double[] {0.10, 0.25};
+  private static final double[] DELTA = new double[] { 0.10, 0.25 };
   /** Risk reversals */
-  private static final double[][] RISK_REVERSAL = new double[][] { {-0.010, -0.0050}, {-0.011, -0.0060}, {-0.012, -0.0070}, {-0.013, -0.0080}, {-0.014, -0.0090},
-    {-0.014, -0.0090}};
+  private static final double[][] RISK_REVERSAL = new double[][] { { -0.010, -0.0050 }, { -0.011, -0.0060 }, { -0.012, -0.0070 },
+      { -0.013, -0.0080 }, { -0.014, -0.0090 },
+      { -0.014, -0.0090 } };
   /** Strangles */
-  private static final double[][] STRANGLE = new double[][] { {0.0300, 0.0100}, {0.0310, 0.0110}, {0.0320, 0.0120}, {0.0330, 0.0130}, {0.0340, 0.0140}, {0.0340, 0.0140}};
+  private static final double[][] STRANGLE = new double[][] { { 0.0300, 0.0100 }, { 0.0310, 0.0110 }, { 0.0320, 0.0120 },
+      { 0.0330, 0.0130 }, { 0.0340, 0.0140 }, { 0.0340, 0.0140 } };
   /** The volatility surface */
-  private static final SmileDeltaTermStructureParametersStrikeInterpolation SMILE_TERM = new SmileDeltaTermStructureParametersStrikeInterpolation(TIME_TO_EXPIRY, DELTA,
-      ATM, RISK_REVERSAL, STRANGLE);
+  private static final SmileDeltaTermStructureParametersStrikeInterpolation SMILE_TERM = new SmileDeltaTermStructureParametersStrikeInterpolation(
+      TIME_TO_EXPIRY, DELTA, ATM, RISK_REVERSAL, STRANGLE);
   /** All market data */
-  private static final BlackForexSmileProviderDiscount MARKET_DATA = new BlackForexSmileProviderDiscount(CURVES, SMILE_TERM, Pairs.of(Currency.EUR, KRW));
+  private static final BlackForexSmileProviderDiscount MARKET_DATA = new BlackForexSmileProviderDiscount(CURVES, SMILE_TERM,
+      Pairs.of(Currency.EUR, KRW));
   /** The calculation tolerance */
   private static final double EPS = 1e-9;
 
@@ -134,7 +142,8 @@ public class ForexNonDeliverableOptionBlackSmileMethodTest {
   @Test
   public void presentValue() {
     final MultipleCurrencyAmount pvNDO = CALCULATOR.presentValue(NDO, MARKET_DATA);
-    final MultipleCurrencyAmount pvFXO = ForexOptionVanillaBlackSmileMethod.getInstance().presentValue(DELIVERABLE_EQUIVALENT_OPTION, MARKET_DATA);
+    final MultipleCurrencyAmount pvFXO = ForexOptionVanillaBlackSmileMethod.getInstance().presentValue(DELIVERABLE_EQUIVALENT_OPTION,
+        MARKET_DATA);
     assertEquals(pvFXO, pvNDO, "Forex non-deliverable option: present value");
   }
 
@@ -156,7 +165,8 @@ public class ForexNonDeliverableOptionBlackSmileMethodTest {
     final MultipleCurrencyAmount pv = CALCULATOR.presentValue(NDO, MARKET_DATA);
     final MultipleCurrencyAmount ce = CALCULATOR.currencyExposure(NDO, MARKET_DATA);
     final double usdKrw = CURVES.getFxRate(Currency.EUR, KRW);
-    assertEquals(ce.getAmount(Currency.EUR) + ce.getAmount(KRW) / usdKrw, pv.getAmount(Currency.EUR), EPS, "Forex vanilla option: currency exposure vs present value");
+    assertEquals(ce.getAmount(Currency.EUR) + ce.getAmount(KRW) / usdKrw, pv.getAmount(Currency.EUR), EPS,
+        "Forex vanilla option: currency exposure vs present value");
   }
 
   /**
@@ -176,7 +186,8 @@ public class ForexNonDeliverableOptionBlackSmileMethodTest {
   public void presentValueCurveSensitivity() {
     final double tolerance = 1.0e-2;
     final MultipleCurrencyMulticurveSensitivity pvcsNDO = CALCULATOR.presentValueCurveSensitivity(NDO, MARKET_DATA).cleaned();
-    final MultipleCurrencyMulticurveSensitivity pvcsFXO = ForexOptionVanillaBlackSmileMethod.getInstance().presentValueCurveSensitivity(DELIVERABLE_EQUIVALENT_OPTION, MARKET_DATA).cleaned();
+    final MultipleCurrencyMulticurveSensitivity pvcsFXO = ForexOptionVanillaBlackSmileMethod.getInstance()
+        .presentValueCurveSensitivity(DELIVERABLE_EQUIVALENT_OPTION, MARKET_DATA).cleaned();
     AssertSensitivityObjects.assertEquals("Forex non-deliverable option: present value curve sensitivity", pvcsFXO, pvcsNDO, tolerance);
   }
 
@@ -196,9 +207,11 @@ public class ForexNonDeliverableOptionBlackSmileMethodTest {
   @Test
   public void presentValueVolatilitySensitivity() {
     final PresentValueForexBlackVolatilitySensitivity pvvsNDO = CALCULATOR.presentValueBlackVolatilitySensitivity(NDO, MARKET_DATA);
-    final PresentValueForexBlackVolatilitySensitivity pvvsFXO = ForexOptionVanillaBlackSmileMethod.getInstance().presentValueBlackVolatilitySensitivity(DELIVERABLE_EQUIVALENT_OPTION, MARKET_DATA);
+    final PresentValueForexBlackVolatilitySensitivity pvvsFXO = ForexOptionVanillaBlackSmileMethod.getInstance()
+        .presentValueBlackVolatilitySensitivity(DELIVERABLE_EQUIVALENT_OPTION, MARKET_DATA);
     final DoublesPair point = DoublesPair.of(NDO.getExpiryTime(), NDO.getStrike());
-    assertEquals(pvvsFXO.getVega().getMap().get(point), pvvsNDO.getVega().getMap().get(point), EPS, "Forex non-deliverable option: present value curve sensitivity");
+    assertEquals(pvvsFXO.getVega().getMap().get(point), pvvsNDO.getVega().getMap().get(point), EPS,
+        "Forex non-deliverable option: present value curve sensitivity");
   }
 
   /**
@@ -206,8 +219,10 @@ public class ForexNonDeliverableOptionBlackSmileMethodTest {
    */
   @Test
   public void presentValueVolatilityNodeSensitivity() {
-    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle nsNDO = CALCULATOR.presentValueVolatilityNodeSensitivity(NDO, MARKET_DATA);
-    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle nsFXO = ForexOptionVanillaBlackSmileMethod.getInstance().presentValueBlackVolatilityNodeSensitivity(DELIVERABLE_EQUIVALENT_OPTION, MARKET_DATA);
+    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle nsNDO = CALCULATOR.presentValueVolatilityNodeSensitivity(NDO,
+        MARKET_DATA);
+    final PresentValueForexBlackVolatilityNodeSensitivityDataBundle nsFXO = ForexOptionVanillaBlackSmileMethod.getInstance()
+        .presentValueBlackVolatilityNodeSensitivity(DELIVERABLE_EQUIVALENT_OPTION, MARKET_DATA);
     for (int i = 0; i < EXPIRY_PERIOD.length; i++) {
       for (int j = 0; j < nsNDO.getDelta().getNumberOfElements(); j++) {
         assertEquals(nsFXO.getVega().getEntry(i, j), nsNDO.getVega().getEntry(i, j), EPS, "Forex non-deliverable option: vega node");
@@ -216,53 +231,71 @@ public class ForexNonDeliverableOptionBlackSmileMethodTest {
   }
 
   /**
-   * Tests the spot delta calculation against an approximation calculated using central finite difference.
+   * Tests the delta calculations against an approximation calculated using central finite difference.
    */
   @Test
-  public void testSpotDelta() {
-    final double eps = 1e-4;
+  public void testDelta() {
+    final SmileDeltaTermStructureParametersStrikeInterpolation flatVols = new SmileDeltaTermStructureParametersStrikeInterpolation(
+        new double[] { 1, 2 }, new double[] { 0.1, 0.25 }, new double[][] { { 0.2, 0.2, 0.2, 0.2, 0.2 }, { 0.2, 0.2, 0.2, 0.2, 0.2 } });
+    final MulticurveProviderDiscount spotCurves = new MulticurveProviderDiscount(CURVES.getDiscountingCurves(),
+        Collections.<IborIndex, YieldAndDiscountCurve> emptyMap(),
+        Collections.<IndexON, YieldAndDiscountCurve> emptyMap(), CURVES.getFxRates());
+    final BlackForexSmileProviderInterface spot = new BlackForexSmileProviderDiscount(spotCurves, flatVols,
+        Pairs.of(KRW, Currency.EUR));
+    final double eurDf = CURVES.getDiscountFactor(Currency.EUR, NDO.getUnderlyingNDF().getPaymentTime());
+    final double krwDf = CURVES.getDiscountFactor(KRW, NDO.getUnderlyingNDF().getPaymentTime());
+    final double eps = 1e-8; // small because 1 KRW = 0.000625 EUR
     final double spotFx = CURVES.getFxRate(KRW, Currency.EUR);
     final UncheckedMutableFxMatrix fxUp = UncheckedMutableFxMatrix.of();
-    fxUp.addCurrency(KRW, Currency.EUR, spotFx + eps);
-    final MulticurveProviderDiscount spotUpCurves = new MulticurveProviderDiscount(CURVES.getDiscountingCurves(), Collections.<IborIndex, YieldAndDiscountCurve>emptyMap(),
-        Collections.<IndexON, YieldAndDiscountCurve>emptyMap(), ImmutableFxMatrix.of(fxUp));
-    final BlackForexSmileProviderInterface spotUp = new BlackForexSmileProviderDiscount(spotUpCurves, MARKET_DATA.getVolatility(), Pairs.of(KRW, Currency.EUR));
+    fxUp.addCurrency(KRW, Currency.EUR, spotFx + eps * eurDf / krwDf); // to give 1 eps change in forward
+    final MulticurveProviderDiscount spotUpCurves = new MulticurveProviderDiscount(CURVES.getDiscountingCurves(),
+        Collections.<IborIndex, YieldAndDiscountCurve> emptyMap(),
+        Collections.<IndexON, YieldAndDiscountCurve> emptyMap(), ImmutableFxMatrix.of(fxUp));
+    final BlackForexSmileProviderInterface spotUp = new BlackForexSmileProviderDiscount(spotUpCurves, flatVols,
+        Pairs.of(KRW, Currency.EUR));
     final UncheckedMutableFxMatrix fxDown = UncheckedMutableFxMatrix.of();
-    fxDown.addCurrency(KRW, Currency.EUR, spotFx - eps);
-    final MulticurveProviderDiscount spotDownCurves = new MulticurveProviderDiscount(CURVES.getDiscountingCurves(), Collections.<IborIndex, YieldAndDiscountCurve>emptyMap(),
-        Collections.<IndexON, YieldAndDiscountCurve>emptyMap(), ImmutableFxMatrix.of(fxDown));
-    final BlackForexSmileProviderInterface spotDown = new BlackForexSmileProviderDiscount(spotDownCurves, MARKET_DATA.getVolatility(), Pairs.of(KRW, Currency.EUR));
-    final double spotDelta = CALCULATOR.theoreticalSpotDelta(NDO, MARKET_DATA);
-    //final double delta = CALCULATOR.delta(NDO, MARKET_DATA, true).getAmount();
-    final double pvUp = CALCULATOR.presentValue(NDO, spotUp).getAmount(Currency.EUR);
-    final double pvDown = CALCULATOR.presentValue(NDO, spotDown).getAmount(Currency.EUR);
-    final double pv = CALCULATOR.presentValue(NDO, MARKET_DATA).getAmount(Currency.EUR);
-    final double temp = (pvUp - pvDown) / 2 / eps / EUR_NOTIONAL;
-    final double temp1 = temp / spotDelta;
-    final double temp2 = temp * spotDelta;
-    final double temp3 = spotDelta / temp;
-//    assertEquals(spotDelta, (pvUp - pvDown) / 2 / eps / EUR_NOTIONAL, eps * eps * 10);
-    //assertEquals(delta, spotDelta * EUR_NOTIONAL, eps);
+    fxDown.addCurrency(KRW, Currency.EUR, spotFx - eps * eurDf / krwDf); // to give 1 eps change in forward
+    final MulticurveProviderDiscount spotDownCurves = new MulticurveProviderDiscount(CURVES.getDiscountingCurves(),
+        Collections.<IborIndex, YieldAndDiscountCurve> emptyMap(),
+        Collections.<IndexON, YieldAndDiscountCurve> emptyMap(), ImmutableFxMatrix.of(fxDown));
+    final BlackForexSmileProviderInterface spotDown = new BlackForexSmileProviderDiscount(spotDownCurves, flatVols,
+        Pairs.of(KRW, Currency.EUR));
+    final double spotDelta = CALCULATOR.theoreticalSpotDelta(NDO, spot);
+    final double forwardDelta = CALCULATOR.theoreticalForwardDelta(NDO, spot);
+    final double directTheoreticalRelativeDelta = CALCULATOR.theoreticalRelativeDelta(NDO, spot, true);
+    final double priceUp = CALCULATOR.presentValue(NDO, spotUp).getAmount(Currency.EUR) / EUR_NOTIONAL / STRIKE;
+    final double priceDown = CALCULATOR.presentValue(NDO, spotDown).getAmount(Currency.EUR) / EUR_NOTIONAL / STRIKE;
+    final double delta = CALCULATOR.delta(NDO, spot, true).getAmount() / EUR_NOTIONAL / STRIKE;
+    final double relativeDelta = CALCULATOR.relativeDelta(NDO, spot, true);
+    assertEquals(spotDelta, (priceUp - priceDown) / 2 / eps, 1e-6);
+    assertEquals(forwardDelta, (priceUp - priceDown) / 2 / eps / eurDf, 1e-6);
+    assertEquals(directTheoreticalRelativeDelta, spotDelta, 1e-12);
+    assertEquals(delta, spotDelta, 1e-12);
+    assertEquals(relativeDelta, spotDelta * krwDf, 1e-12);
   }
 
+  /**
+   * Tests that signs are changed for short trades.
+   */
   @Test
-  public void temp() {
-    final double eps = 1e-6;
-    final double spotFx = CURVES.getFxRate(KRW, Currency.EUR);
-    final UncheckedMutableFxMatrix fxUp = UncheckedMutableFxMatrix.of();
-    fxUp.addCurrency(KRW, Currency.EUR, spotFx + eps);
-    final MulticurveProviderDiscount spotUpCurves = new MulticurveProviderDiscount(CURVES.getDiscountingCurves(), Collections.<IborIndex, YieldAndDiscountCurve>emptyMap(),
-        Collections.<IndexON, YieldAndDiscountCurve>emptyMap(), ImmutableFxMatrix.of(fxUp));
-    final BlackForexSmileProviderInterface spotUp = new BlackForexSmileProviderDiscount(spotUpCurves, MARKET_DATA.getVolatility(), Pairs.of(KRW, Currency.EUR));
-    final UncheckedMutableFxMatrix fxDown = UncheckedMutableFxMatrix.of();
-    fxDown.addCurrency(KRW, Currency.EUR, spotFx - eps);
-    final MulticurveProviderDiscount spotDownCurves = new MulticurveProviderDiscount(CURVES.getDiscountingCurves(), Collections.<IborIndex, YieldAndDiscountCurve>emptyMap(),
-        Collections.<IndexON, YieldAndDiscountCurve>emptyMap(), ImmutableFxMatrix.of(fxDown));
-    final BlackForexSmileProviderInterface spotDown = new BlackForexSmileProviderDiscount(spotDownCurves, MARKET_DATA.getVolatility(), Pairs.of(KRW, Currency.EUR));
-    final double spotDelta = ForexOptionVanillaBlackSmileMethod.getInstance().spotDeltaTheoretical(DELIVERABLE_EQUIVALENT_OPTION, MARKET_DATA);
-    final double pvUp = ForexOptionVanillaBlackSmileMethod.getInstance().presentValue(DELIVERABLE_EQUIVALENT_OPTION, spotUp).getAmount(Currency.EUR);
-    final double pvDown = ForexOptionVanillaBlackSmileMethod.getInstance().presentValue(DELIVERABLE_EQUIVALENT_OPTION, spotDown).getAmount(Currency.EUR);
-    final double delta = (pvUp - pvDown) / 2 / eps / STRIKE / EUR_NOTIONAL;
+  public void testLongShort() {
+    final ForexNonDeliverableOption otherSide = new ForexNonDeliverableOptionDefinition(NDF_DEFINITION, IS_CALL,
+        !IS_LONG).toDerivative(VALUATION_DATE);
+    assertEquals(CALCULATOR.presentValue(otherSide, MARKET_DATA), CALCULATOR.presentValue(NDO, MARKET_DATA).multipliedBy(-1));
+    assertEquals(CALCULATOR.currencyExposure(otherSide, MARKET_DATA), CALCULATOR.currencyExposure(NDO, MARKET_DATA).multipliedBy(-1));
+    assertEquals(CALCULATOR.theoreticalRelativeDelta(otherSide, MARKET_DATA, true),
+        -CALCULATOR.theoreticalRelativeDelta(NDO, MARKET_DATA, true));
+    assertEquals(CALCULATOR.delta(otherSide, MARKET_DATA, true), CALCULATOR.delta(NDO, MARKET_DATA, true).multipliedBy(-1));
+    assertEquals(CALCULATOR.relativeDelta(otherSide, MARKET_DATA, true), -CALCULATOR.relativeDelta(NDO, MARKET_DATA, true));
+    assertEquals(CALCULATOR.presentValueCurveSensitivity(otherSide, MARKET_DATA),
+        CALCULATOR.presentValueCurveSensitivity(NDO, MARKET_DATA).multipliedBy(-1));
+    assertEquals(CALCULATOR.presentValueBlackVolatilitySensitivity(otherSide, MARKET_DATA),
+        CALCULATOR.presentValueBlackVolatilitySensitivity(NDO, MARKET_DATA).multipliedBy(-1));
+    assertEquals(CALCULATOR.presentValueVolatilityNodeSensitivity(otherSide, MARKET_DATA).getVega(),
+        new OGMatrixAlgebra().scale(CALCULATOR.presentValueVolatilityNodeSensitivity(NDO, MARKET_DATA).getVega(), -1));
+    // shouldn't change
+    assertEquals(CALCULATOR.theoreticalSpotDelta(otherSide, MARKET_DATA), CALCULATOR.theoreticalSpotDelta(NDO, MARKET_DATA));
+    assertEquals(CALCULATOR.theoreticalForwardDelta(otherSide, MARKET_DATA), CALCULATOR.theoreticalForwardDelta(NDO, MARKET_DATA));
   }
 
 }

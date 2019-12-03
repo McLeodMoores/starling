@@ -27,15 +27,12 @@ import com.opengamma.analytics.math.function.Function;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class defining a spread curve, i.e. a curve that is the result of a mathematical operation
- * (see {@link CurveSpreadFunction}) on two or more curves.
- * For example, a simple spread curve could be <i>C = A - B</i>. As this curve is in the same
- * hierarchy as the other curves, a spread curve can be defined on another spread curve,
- * e.g. <i>E = C * D = D * (A - B)</i>.
+ * Class defining a spread curve, i.e. a curve that is the result of a mathematical operation (see {@link CurveSpreadFunction}) on two or more curves. For
+ * example, a simple spread curve could be <i>C = A - B</i>. As this curve is in the same hierarchy as the other curves, a spread curve can be defined on
+ * another spread curve, e.g. <i>E = C * D = D * (A - B)</i>.
  */
 @BeanDefinition
-public class SpreadDoublesCurve
-    extends DoublesCurve {
+public class SpreadDoublesCurve extends DoublesCurve {
 
   /**
    * The spread function.
@@ -53,13 +50,14 @@ public class SpreadDoublesCurve
   @PropertyDefinition(get = "private", set = "private")
   private DoublesCurve[] _curves;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Takes an array of curves that are to be operated on by the spread function.
-   * The name of the spread curve is automatically generated.
+   * Takes an array of curves that are to be operated on by the spread function. The name of the spread curve is automatically generated.
    *
-   * @param spreadFunction  the spread function, not null
-   * @param curves  the curves, not null
+   * @param spreadFunction
+   *          the spread function, not null
+   * @param curves
+   *          the curves, not null
    * @return the spread curve, not null
    */
   public static SpreadDoublesCurve from(final CurveSpreadFunction spreadFunction, final DoublesCurve... curves) {
@@ -69,16 +67,19 @@ public class SpreadDoublesCurve
   /**
    * Takes an array of curves that are to be operated on by the spread function.
    *
-   * @param spreadFunction  the spread function, not null
-   * @param name  the name of the curve, not null
-   * @param curves  the curves, not null
+   * @param spreadFunction
+   *          the spread function, not null
+   * @param name
+   *          the name of the curve, not null
+   * @param curves
+   *          the curves, not null
    * @return the spread curve, not null
    */
   public static SpreadDoublesCurve from(final CurveSpreadFunction spreadFunction, final String name, final DoublesCurve... curves) {
     return new SpreadDoublesCurve(spreadFunction, name, curves);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructor for Joda-Beans.
    */
@@ -88,8 +89,10 @@ public class SpreadDoublesCurve
   /**
    * Creates a spread curve.
    *
-   * @param spreadFunction  the spread function, not null
-   * @param curves  the curves, not null, contains more than one curve, not null
+   * @param spreadFunction
+   *          the spread function, not null
+   * @param curves
+   *          the curves, not null, contains more than one curve, not null
    */
   public SpreadDoublesCurve(final CurveSpreadFunction spreadFunction, final DoublesCurve... curves) {
     super();
@@ -104,9 +107,12 @@ public class SpreadDoublesCurve
   /**
    * Creates a spread curve.
    *
-   * @param spreadFunction  the spread function, not null
-   * @param name  the name of the curve, not null
-   * @param curves  the curves, not null, contains more than one curve, not null
+   * @param spreadFunction
+   *          the spread function, not null
+   * @param name
+   *          the name of the curve, not null
+   * @param curves
+   *          the curves, not null, contains more than one curve, not null
    */
   public SpreadDoublesCurve(final CurveSpreadFunction spreadFunction, final String name, final DoublesCurve... curves) {
     super(name);
@@ -118,10 +124,10 @@ public class SpreadDoublesCurve
     _f = spreadFunction.evaluate(curves);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Returns a set of the <b>unique</b> names of the curves that were used to construct this curve.
-   * If a constituent curve is a spread curve, then all of its underlyings are included.
+   * Returns a set of the <b>unique</b> names of the curves that were used to construct this curve. If a constituent curve is a spread curve, then all of its
+   * underlyings are included.
    *
    * @return the set of underlying names, not null
    */
@@ -138,11 +144,11 @@ public class SpreadDoublesCurve
   }
 
   /**
-   * Returns a string that represents the mathematical form of this curve.
-   * For example, <i>D = (A + (B / C))</i>.
+   * Returns a string that represents the mathematical form of this curve. For example, <i>D = (A + (B / C))</i>.
    *
    * @return the long name of this curve, not null
    */
+  @SuppressWarnings("deprecation")
   public String getLongName() {
     final StringBuilder buf = new StringBuilder(getName());
     buf.append("=");
@@ -176,7 +182,8 @@ public class SpreadDoublesCurve
    * Throws an exception as there is no <i>x</i> data.
    *
    * @return throws UnsupportedOperationException
-   * @throws UnsupportedOperationException always
+   * @throws UnsupportedOperationException
+   *           always
    */
   @Override
   public Double[] getXData() {
@@ -187,7 +194,8 @@ public class SpreadDoublesCurve
    * Throws an exception as there is no <i>y</i> data.
    *
    * @return throws UnsupportedOperationException
-   * @throws UnsupportedOperationException always
+   * @throws UnsupportedOperationException
+   *           always
    */
   @Override
   public Double[] getYData() {
@@ -221,7 +229,8 @@ public class SpreadDoublesCurve
    * Throws an exception as there is no <i>x</i> or <i>y</i> data.
    *
    * @return throws UnsupportedOperationException
-   * @throws UnsupportedOperationException always
+   * @throws UnsupportedOperationException
+   *           always
    */
   @Override
   public int size() {
@@ -237,7 +246,7 @@ public class SpreadDoublesCurve
     throw new UnsupportedOperationException("Size not supported for SpreadDoublesCurve " + getLongName());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {

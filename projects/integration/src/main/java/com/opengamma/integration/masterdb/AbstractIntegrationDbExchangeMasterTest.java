@@ -40,13 +40,13 @@ public abstract class AbstractIntegrationDbExchangeMasterTest extends AbstractLo
     return _exgMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(enabled = false, description = "Queries the entire database")
-  public void test_queryAll() throws Exception {
+  public void testQueryAll() throws Exception {
     final ExchangeSearchRequest request = new ExchangeSearchRequest();
     request.setPagingRequest(PagingRequest.NONE);
     final int total = getExchangeMaster().search(request).getPaging().getTotalItems();
-    final int pages = (total / PAGE_SIZE) + 1;
+    final int pages = total / PAGE_SIZE + 1;
     for (int page = 1; page <= pages; page++) {
       request.setPagingRequest(PagingRequest.ofPage(page, PAGE_SIZE));
       System.out.println("Checking exchange master, page " + request.getPagingRequest());

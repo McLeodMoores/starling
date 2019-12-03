@@ -11,8 +11,7 @@ import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 
 /**
- * Function for producing the "bottom" N slice outputs for all positions underneath a node. The results are sorted in ascending
- * order.
+ * Function for producing the "bottom" N slice outputs for all positions underneath a node. The results are sorted in ascending order.
  */
 public class BottomPositionValues extends SlicedPositionValues {
 
@@ -31,7 +30,7 @@ public class BottomPositionValues extends SlicedPositionValues {
   @Override
   protected boolean validateConstraints(final ValueProperties constraints) {
     final Integer count = getIntegerConstraint(constraints, COUNT_PROPERTY);
-    if ((count == null) || (count <= 0)) {
+    if (count == null || count <= 0) {
       return false;
     }
     return true;
@@ -43,7 +42,8 @@ public class BottomPositionValues extends SlicedPositionValues {
   }
 
   @Override
-  protected List<ComputedValue> sliceResults(final List<ComputedValue> ascendingOrder, final ValueProperties constraints, final ValueProperties.Builder properties) {
+  protected List<ComputedValue> sliceResults(final List<ComputedValue> ascendingOrder, final ValueProperties constraints,
+      final ValueProperties.Builder properties) {
     final int count = getIntegerConstraint(constraints, COUNT_PROPERTY);
     properties.with(COUNT_PROPERTY, Integer.toString(count));
     return ascendingOrder.subList(0, Math.min(count, ascendingOrder.size()));

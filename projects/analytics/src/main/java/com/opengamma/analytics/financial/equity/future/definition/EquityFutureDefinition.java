@@ -1,12 +1,11 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.future.definition;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.Validate;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.financial.equity.future.derivative.EquityFuture;
@@ -17,7 +16,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public class EquityFutureDefinition implements InstrumentDefinitionWithData<EquityFuture, Double> {
 
@@ -29,63 +28,67 @@ public class EquityFutureDefinition implements InstrumentDefinitionWithData<Equi
 
   /**
    * Basic setup for an Equity Future. TODO resolve conventions; complete param set
-   * @param expiryDate The date-time at which the reference rate is fixed and the future is cash settled
-   * @param settlementDate The date on which exchange is made, whether physical asset or cash equivalent
-   * @param strikePrice The reference price at which the future will be settled
-   * @param currency The reporting currency of the future
-   * @param unitValue The currency value that the price of one contract will move by when the asset's price moves by one point
+   * 
+   * @param expiryDate
+   *          The date-time at which the reference rate is fixed and the future is cash settled
+   * @param settlementDate
+   *          The date on which exchange is made, whether physical asset or cash equivalent
+   * @param strikePrice
+   *          The reference price at which the future will be settled
+   * @param currency
+   *          The reporting currency of the future
+   * @param unitValue
+   *          The currency value that the price of one contract will move by when the asset's price moves by one point
    */
-  public EquityFutureDefinition(
-      final ZonedDateTime expiryDate,
-      final ZonedDateTime settlementDate,
-      final double strikePrice,
-      final Currency currency,
+  public EquityFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double strikePrice, final Currency currency,
       final double unitValue) {
-    Validate.notNull(expiryDate, "expiry");
-    Validate.notNull(settlementDate, "settlement date");
-    Validate.notNull(currency, "currency");
-    _expiryDate = expiryDate;
-    _settlementDate = settlementDate;
+    _expiryDate = ArgumentChecker.notNull(expiryDate, "expiry");
+    _settlementDate = ArgumentChecker.notNull(settlementDate, "settlement date");
+    _currency = ArgumentChecker.notNull(currency, "currency");
     _strikePrice = strikePrice;
-    _currency = currency;
     _unitAmount = unitValue;
   }
 
   /**
-   * Gets the _expiryDate.
-   * @return the _expiryDate
+   * Gets the expiry date: the date on which the reference index level is fixed and the future is cash settled.
+   *
+   * @return the expiry date
    */
   public ZonedDateTime getExpiryDate() {
     return _expiryDate;
   }
 
   /**
-   * Gets the _settlementDate.
-   * @return the _settlementDate
+   * Gets the settlement date: the date on which the cash exchange is made.
+   *
+   * @return the settlement date
    */
   public ZonedDateTime getSettlementDate() {
     return _settlementDate;
   }
 
   /**
-   * Gets the _strikePrice.
-   * @return the _strikePrice
+   * Gets the strike price.
+   *
+   * @return the strike price
    */
   public double getStrikePrice() {
     return _strikePrice;
   }
 
   /**
-   * Gets the _currency.
-   * @return the _currency
+   * Gets the currency.
+   *
+   * @return the currency
    */
   public Currency getCurrency() {
     return _currency;
   }
 
   /**
-   * Gets the _unitAmount. This represents the PNL of a single long contract if its price increases by 1.0. Also known as the 'Point Value'. 
-   * @return the _unitAmount
+   * Gets the unit amount. This represents the PNL of a single long contract if its price increases by 1.0. Also known as the 'Point Value'.
+   * 
+   * @return the unit amount
    */
   public double getUnitAmount() {
     return _unitAmount;
@@ -104,6 +107,7 @@ public class EquityFutureDefinition implements InstrumentDefinitionWithData<Equi
   @Override
   public EquityFuture toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.isTrue(!date.isAfter(_expiryDate), "Valuation date is after expiry date");
     final double timeToFixing = TimeCalculator.getTimeBetween(date, _expiryDate);
     final double timeToDelivery = TimeCalculator.getTimeBetween(date, _settlementDate);
     final EquityFuture newDeriv = new EquityFuture(timeToFixing, timeToDelivery, _strikePrice, _currency, _unitAmount);
@@ -113,6 +117,7 @@ public class EquityFutureDefinition implements InstrumentDefinitionWithData<Equi
   @Override
   public EquityFuture toDerivative(final ZonedDateTime date, final Double referencePrice) {
     ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.isTrue(!date.isAfter(_expiryDate), "Valuation date is after expiry date");
     if (referencePrice == null) {
       return toDerivative(date);
     }
@@ -131,9 +136,9 @@ public class EquityFutureDefinition implements InstrumentDefinitionWithData<Equi
     result = prime * result + _settlementDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_strikePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_unitAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

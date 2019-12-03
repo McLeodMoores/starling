@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -32,6 +30,8 @@ import com.opengamma.core.marketdatasnapshot.impl.DelegatingSnapshotSource;
 import com.opengamma.core.marketdatasnapshot.impl.RemoteMarketDataSnapshotSource;
 import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotMaster;
 import com.opengamma.master.marketdatasnapshot.impl.MasterSnapshotSource;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the snapshot source.
@@ -80,20 +80,20 @@ public class UserFinancialMarketDataSnapshotSourceComponentFactory extends Abstr
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     MarketDataSnapshotSource source = initUnderlying(repo, configuration);
-    
+
     // add user level if requested
-    MarketDataSnapshotSource userSource = initUser(repo, configuration);
-    Map<String, MarketDataSnapshotSource> map = new HashMap<String, MarketDataSnapshotSource>();
+    final MarketDataSnapshotSource userSource = initUser(repo, configuration);
+    final Map<String, MarketDataSnapshotSource> map = new HashMap<>();
     if (userSource != null) {
-      String scheme = repo.getInfo(getUserMarketDataSnapshotMaster()).getAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME);
+      final String scheme = repo.getInfo(getUserMarketDataSnapshotMaster()).getAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME);
       map.put(scheme, userSource);
       source = new DelegatingSnapshotSource(source, map);
     }
-    
+
     // register
-    ComponentInfo info = new ComponentInfo(MarketDataSnapshotSource.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(MarketDataSnapshotSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteMarketDataSnapshotSource.class);
@@ -104,10 +104,10 @@ public class UserFinancialMarketDataSnapshotSourceComponentFactory extends Abstr
     }
   }
 
-  protected MarketDataSnapshotSource initUnderlying(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    MarketDataSnapshotSource source = new MasterSnapshotSource(getUnderlyingMarketDataSnapshotMaster());
+  protected MarketDataSnapshotSource initUnderlying(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final MarketDataSnapshotSource source = new MasterSnapshotSource(getUnderlyingMarketDataSnapshotMaster());
     if (getUnderlyingClassifier() != null) {
-      ComponentInfo info = new ComponentInfo(MarketDataSnapshotSource.class, getUnderlyingClassifier());
+      final ComponentInfo info = new ComponentInfo(MarketDataSnapshotSource.class, getUnderlyingClassifier());
       info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
       if (isPublishRest()) {
         info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteMarketDataSnapshotSource.class);
@@ -120,13 +120,13 @@ public class UserFinancialMarketDataSnapshotSourceComponentFactory extends Abstr
     return source;
   }
 
-  protected MarketDataSnapshotSource initUser(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  protected MarketDataSnapshotSource initUser(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     if (getUserMarketDataSnapshotMaster() == null) {
       return null;
     }
-    MarketDataSnapshotSource source = new MasterSnapshotSource(getUserMarketDataSnapshotMaster());
+    final MarketDataSnapshotSource source = new MasterSnapshotSource(getUserMarketDataSnapshotMaster());
     if (getUserClassifier() != null) {
-      ComponentInfo info = new ComponentInfo(MarketDataSnapshotSource.class, getUserClassifier());
+      final ComponentInfo info = new ComponentInfo(MarketDataSnapshotSource.class, getUserClassifier());
       info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
       if (isPublishRest()) {
         info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteMarketDataSnapshotSource.class);

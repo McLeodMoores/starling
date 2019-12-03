@@ -25,13 +25,13 @@ import com.opengamma.master.AbstractDocument;
 @BeanDefinition
 class CacheTestDocument extends AbstractDocument {
 
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
 
   CacheTestDocument() {
   }
 
-  CacheTestDocument(UniqueId uniqueId) {
+  CacheTestDocument(final UniqueId uniqueId) {
     _uniqueId = uniqueId;
   }
 
@@ -64,6 +64,7 @@ class CacheTestDocument extends AbstractDocument {
    * Gets the uniqueId.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -72,6 +73,7 @@ class CacheTestDocument extends AbstractDocument {
    * Sets the uniqueId.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -133,7 +135,7 @@ class CacheTestDocument extends AbstractDocument {
   /**
    * The meta-bean for {@code CacheTestDocument}.
    */
-  public static class Meta extends AbstractDocument.Meta {
+  static class Meta extends AbstractDocument.Meta {
     /**
      * The singleton instance of the meta-bean.
      */

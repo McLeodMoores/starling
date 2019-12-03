@@ -23,23 +23,39 @@ import com.opengamma.util.test.TestGroup;
 @SuppressWarnings("deprecation")
 public class ExternalIdOrderConfigTest {
 
-  public void testGetPreferred_empty() {
+  /**
+   *
+   */
+  public void testGetPreferredEmpty() {
     assertEquals(ExternalIdOrderConfig.DEFAULT_CONFIG.getPreferred(ExternalIdBundle.EMPTY), null);
   }
 
-  public void testGetPreferred_single() {
+  /**
+   *
+   */
+  public void testGetPreferredSingle() {
     assertEquals(ExternalIdOrderConfig.DEFAULT_CONFIG.getPreferred(ExternalId.of("Foo", "Bar").toBundle()), ExternalId.of("Foo", "Bar"));
   }
 
-  public void testGetPreferred_notListed() {
-    assertEquals(ExternalIdOrderConfig.DEFAULT_CONFIG.getPreferred(ExternalIdBundle.of(ExternalId.of("Foo", "Bar"), ExternalId.of("Bar", "Foo"))), ExternalId.of("Bar", "Foo"));
+  /**
+   *
+   */
+  public void testGetPreferredNotListed() {
+    assertEquals(ExternalIdOrderConfig.DEFAULT_CONFIG.getPreferred(ExternalIdBundle.of(ExternalId.of("Foo", "Bar"), ExternalId.of("Bar", "Foo"))),
+        ExternalId.of("Bar", "Foo"));
   }
 
-  public void testGetPreferred_default() {
-    assertEquals(ExternalIdOrderConfig.DEFAULT_CONFIG.getPreferred(ExternalIdBundle.of(ExternalId.of(ExternalSchemes.BLOOMBERG_TCM, "tcm"), ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "ticker"),
-        ExternalId.of("Foo", "Bar"))), ExternalId.of(ExternalSchemes.BLOOMBERG_TCM, "tcm"));
+  /**
+   *
+   */
+  public void testGetPreferredDefault() {
+    assertEquals(ExternalIdOrderConfig.DEFAULT_CONFIG.getPreferred(ExternalIdBundle.of(ExternalId.of(ExternalSchemes.BLOOMBERG_TCM, "tcm"),
+        ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "ticker"), ExternalId.of("Foo", "Bar"))), ExternalId.of(ExternalSchemes.BLOOMBERG_TCM, "tcm"));
   }
 
+  /**
+   *
+   */
   public void testSort() {
     final ExternalId a = ExternalId.of(ExternalSchemes.BLOOMBERG_TCM, "bbg_tcm");
     final ExternalId b = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "bbg_ticker");

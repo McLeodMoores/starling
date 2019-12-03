@@ -28,13 +28,13 @@ public class RestMasterSubscriptionTest {
 
   private Server _server;
   private TestChangeManager _positionChangeManager;
-  private WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
+  private final WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
 
   @BeforeClass
   public void createServer() throws Exception {
-    Pair<Server,WebApplicationContext> serverAndContext = _webPushTestUtils.createJettyServer("classpath:/com/opengamma/web/analytics/push/rest-subscription-test.xml");
+    final Pair<Server, WebApplicationContext> serverAndContext = _webPushTestUtils.createJettyServer("classpath:/com/opengamma/web/analytics/push/rest-subscription-test.xml");
     _server = serverAndContext.getFirst();
-    WebApplicationContext context = serverAndContext.getSecond();
+    final WebApplicationContext context = serverAndContext.getSecond();
     _positionChangeManager = context.getBean("positionChangeManager", TestChangeManager.class);
   }
 
@@ -45,15 +45,15 @@ public class RestMasterSubscriptionTest {
 
   @Test
   public void masterSubscription() throws IOException, JSONException {
-    String clientId = _webPushTestUtils.handshake();
-    String restUrl = "/jax/test/positions";
+    final String clientId = _webPushTestUtils.handshake();
+    final String restUrl = "/jax/test/positions";
     // this REST request should set up a subscription for any changes in the position master
     _webPushTestUtils.readFromPath(restUrl, clientId);
     // send a change event
-    UniqueId uid = UniqueId.of("Tst", "101");
+    final UniqueId uid = UniqueId.of("Tst", "101");
     _positionChangeManager.entityChanged(ChangeType.CHANGED, uid.getObjectId(), null, null, Instant.now());
     // connect to the long-polling URL to receive notification of the change
-    String json = _webPushTestUtils.readFromPath("/updates/" + clientId);
+    final String json = _webPushTestUtils.readFromPath("/updates/" + clientId);
     WebPushTestUtils.checkJsonResults(json, restUrl);
   }
 }

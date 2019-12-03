@@ -189,12 +189,19 @@ public class DependencyGraphImplTest {
       r[i] = new ValueRequirement(Integer.toString(i), ComputationTargetSpecification.NULL);
     }
     final DependencyNodeFunction function = DependencyNodeFunctionImpl.of("Test", EmptyFunctionParameters.INSTANCE);
-    final DependencyNode a = DependencyNodeImpl.of(function, ComputationTargetSpecification.NULL, new ValueSpecification[] {v[0], v[1], v[2] }, new ValueSpecification[0], new DependencyNode[0]);
-    final DependencyNode b = DependencyNodeImpl.of(function, ComputationTargetSpecification.NULL, new ValueSpecification[] {v[3] }, new ValueSpecification[] {v[2] }, new DependencyNode[] {a });
-    final DependencyNode c = DependencyNodeImpl.of(function, ComputationTargetSpecification.NULL, new ValueSpecification[] {v[4] }, new ValueSpecification[] {v[1], v[3] },
-        new DependencyNode[] {a, b });
-    final DependencyGraph graphA = new DependencyGraphImpl("Test", Collections.singleton(c), 3, ImmutableMap.of(v[0], Collections.singleton(r[0]), v[4], Collections.singleton(r[4])));
-    final DependencyGraph graphB = DependencyGraphImpl.removeUnnecessaryValues(graphA);
+    final DependencyNode a =
+        DependencyNodeImpl.of(function, ComputationTargetSpecification.NULL, new ValueSpecification[] {v[0], v[1], v[2] }, new ValueSpecification[0],
+            new DependencyNode[0]);
+    final DependencyNode b =
+        DependencyNodeImpl.of(function, ComputationTargetSpecification.NULL, new ValueSpecification[] {v[3] }, new ValueSpecification[] {v[2] },
+            new DependencyNode[] {a });
+    final DependencyNode c =
+        DependencyNodeImpl.of(function, ComputationTargetSpecification.NULL, new ValueSpecification[] {v[4] }, new ValueSpecification[] {v[1], v[3] },
+            new DependencyNode[] {a, b });
+    final DependencyGraph graphA =
+        new DependencyGraphImpl("Test", Collections.singleton(c), 3, ImmutableMap.of(v[0], Collections.singleton(r[0]), v[4], Collections.singleton(r[4])));
+    final DependencyGraph graphB =
+        DependencyGraphImpl.removeUnnecessaryValues(graphA);
     assertEquals(graphB, graphA);
   }
 

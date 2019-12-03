@@ -6,28 +6,26 @@
 
 package com.opengamma.financial.analytics.model.fixedincome;
 
-import org.joda.beans.BeanDefinition;
-import org.joda.beans.ImmutableBean;
-import org.joda.beans.PropertyDefinition;
-
-import com.google.common.collect.ImmutableMap;
-import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
-import com.opengamma.util.money.Currency;
-import com.opengamma.util.tuple.Pair;
-
-import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanDefinition;
+import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
+import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+
+import com.google.common.collect.ImmutableMap;
+import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
+import com.opengamma.util.money.Currency;
+import com.opengamma.util.tuple.Pair;
 
 /**
  * The sensitivities of an instrument to a set of curves.
@@ -36,7 +34,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 public final class BucketedCurveSensitivities implements ImmutableBean {
 
   /**
-   * Sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities
+   * Sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities.
    */
   @PropertyDefinition(validate = "notNull")
   private final Map<Pair<String, Currency>, DoubleLabelledMatrix1D> _sensitivities;
@@ -44,11 +42,11 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
   /**
    * Create curve sensitivities from an input map.
    *
-   * @param sensitivities the sensitivities as a map keyed by a {@link Pair} of curve name and currency,
-   * and holding the curve sensitivities
+   * @param sensitivities
+   *          the sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities
    * @return the sensitivities object
    */
-  public static BucketedCurveSensitivities of(Map<Pair<String, Currency>, DoubleLabelledMatrix1D> sensitivities) {
+  public static BucketedCurveSensitivities of(final Map<Pair<String, Currency>, DoubleLabelledMatrix1D> sensitivities) {
     return builder().sensitivities(sensitivities).build();
   }
 
@@ -97,7 +95,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities
+   * Gets sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities.
    * @return the value of the property, not null
    */
   public Map<Pair<String, Currency>, DoubleLabelledMatrix1D> getSensitivities() {
@@ -120,7 +118,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       BucketedCurveSensitivities other = (BucketedCurveSensitivities) obj;
-      return JodaBeanUtils.equal(getSensitivities(), other.getSensitivities());
+      return JodaBeanUtils.equal(_sensitivities, other._sensitivities);
     }
     return false;
   }
@@ -128,7 +126,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSensitivities());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_sensitivities);
     return hash;
   }
 
@@ -136,7 +134,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("BucketedCurveSensitivities{");
-    buf.append("sensitivities").append('=').append(JodaBeanUtils.toString(getSensitivities()));
+    buf.append("sensitivities").append('=').append(JodaBeanUtils.toString(_sensitivities));
     buf.append('}');
     return buf.toString();
   }
@@ -276,19 +274,31 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;
@@ -302,7 +312,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities
+     * Sets sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities.
      * @param sensitivities  the new value, not null
      * @return this, for chaining, not null
      */

@@ -27,7 +27,7 @@ public final class PagingRequestFudgeBuilder extends AbstractFudgeBuilder implem
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, PagingRequest object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final PagingRequest object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;

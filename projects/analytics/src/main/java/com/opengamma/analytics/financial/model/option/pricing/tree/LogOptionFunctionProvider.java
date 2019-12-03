@@ -1,19 +1,22 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
 /**
- * Log option pays Max( log(S/K), 0 ) at maturity
+ * Log option pays Max( log(S/K), 0 ) at maturity.
  */
 public class LogOptionFunctionProvider extends OptionFunctionProvider1D {
 
   /**
-   * @param strike The strike
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
+   * @param strike
+   *          The strike
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
    */
   public LogOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps) {
     super(strike, timeToExpiry, steps, true);
@@ -60,7 +63,7 @@ public class LogOptionFunctionProvider extends OptionFunctionProvider1D {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

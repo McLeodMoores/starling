@@ -11,14 +11,15 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
 
 /**
- * 
+ *
  */
 public class SkewKurtosisOptionDataBundle extends StandardOptionDataBundle {
   private final double _annualizedSkew;
   private final double _annualizedPearsonKurtosis;
   private final double _annualizedFisherKurtosis;
 
-  public SkewKurtosisOptionDataBundle(final YieldAndDiscountCurve discountCurve, final double b, final VolatilitySurface volatilitySurface, final double spot, final ZonedDateTime date,
+  public SkewKurtosisOptionDataBundle(final YieldAndDiscountCurve discountCurve, final double b, final VolatilitySurface volatilitySurface, final double spot,
+      final ZonedDateTime date,
       final double annualizedSkew, final double annualizedPearsonKurtosis) {
     super(discountCurve, b, volatilitySurface, spot, date);
     _annualizedSkew = annualizedSkew;
@@ -54,35 +55,42 @@ public class SkewKurtosisOptionDataBundle extends StandardOptionDataBundle {
 
   @Override
   public SkewKurtosisOptionDataBundle withInterestRateCurve(final YieldAndDiscountCurve curve) {
-    return new SkewKurtosisOptionDataBundle(curve, getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), getAnnualizedSkew(), getAnnualizedPearsonKurtosis());
+    return new SkewKurtosisOptionDataBundle(curve, getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), getAnnualizedSkew(),
+        getAnnualizedPearsonKurtosis());
   }
 
   @Override
   public SkewKurtosisOptionDataBundle withCostOfCarry(final double costOfCarry) {
-    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), costOfCarry, getVolatilitySurface(), getSpot(), getDate(), getAnnualizedSkew(), getAnnualizedPearsonKurtosis());
+    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), costOfCarry, getVolatilitySurface(), getSpot(), getDate(), getAnnualizedSkew(),
+        getAnnualizedPearsonKurtosis());
   }
 
   @Override
   public SkewKurtosisOptionDataBundle withVolatilitySurface(final VolatilitySurface surface) {
-    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), getCostOfCarry(), surface, getSpot(), getDate(), getAnnualizedSkew(), getAnnualizedPearsonKurtosis());
+    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), getCostOfCarry(), surface, getSpot(), getDate(), getAnnualizedSkew(),
+        getAnnualizedPearsonKurtosis());
   }
 
   @Override
   public SkewKurtosisOptionDataBundle withDate(final ZonedDateTime date) {
-    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), date, getAnnualizedSkew(), getAnnualizedPearsonKurtosis());
+    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), date, getAnnualizedSkew(),
+        getAnnualizedPearsonKurtosis());
   }
 
   @Override
   public SkewKurtosisOptionDataBundle withSpot(final double spot) {
-    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), spot, getDate(), getAnnualizedSkew(), getAnnualizedPearsonKurtosis());
+    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), spot, getDate(), getAnnualizedSkew(),
+        getAnnualizedPearsonKurtosis());
   }
 
   public SkewKurtosisOptionDataBundle withSkew(final double skew) {
-    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), skew, getAnnualizedPearsonKurtosis());
+    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), skew,
+        getAnnualizedPearsonKurtosis());
   }
 
   public SkewKurtosisOptionDataBundle withKurtosis(final double kurtosis) {
-    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), getAnnualizedSkew(), kurtosis);
+    return new SkewKurtosisOptionDataBundle(getInterestRateCurve(), getCostOfCarry(), getVolatilitySurface(), getSpot(), getDate(), getAnnualizedSkew(),
+        kurtosis);
   }
 
   @Override
@@ -91,9 +99,9 @@ public class SkewKurtosisOptionDataBundle extends StandardOptionDataBundle {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_annualizedPearsonKurtosis);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_annualizedSkew);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

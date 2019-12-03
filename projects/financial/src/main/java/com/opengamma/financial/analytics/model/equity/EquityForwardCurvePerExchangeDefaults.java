@@ -32,11 +32,11 @@ import com.opengamma.util.tuple.Triple;
  */
 public class EquityForwardCurvePerExchangeDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityForwardCurvePerExchangeDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardCurvePerExchangeDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.FORWARD_CURVE,
-    ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA
+      ValueRequirementNames.FORWARD_CURVE,
+      ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA
   };
   /** The priority of this set of defaults */
   private final PriorityClass _priority;
@@ -56,7 +56,7 @@ public class EquityForwardCurvePerExchangeDefaults extends DefaultPropertyFuncti
     _priority = PriorityClass.valueOf(priority);
     _perExchangeConfig = new HashMap<>();
     for (int i = 0; i < perExchangeConfig.length; i += 4) {
-      final Triple<String, String, String> config = new Triple<>(perExchangeConfig[i + 1], perExchangeConfig[i + 2], perExchangeConfig[i + 3]);
+      final Triple<String, String, String> config = Triple.of(perExchangeConfig[i + 1], perExchangeConfig[i + 2], perExchangeConfig[i + 3]);
       _perExchangeConfig.put(perExchangeConfig[i].toUpperCase(), config);
     }
   }
@@ -89,7 +89,7 @@ public class EquityForwardCurvePerExchangeDefaults extends DefaultPropertyFuncti
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final String exchange = EquitySecurityUtils.getExchange(securitySource, target.getUniqueId());
     if (exchange == null) {
-      s_logger.error("Could not get exchange for {}; should never happen", target.getUniqueId());
+      LOGGER.error("Could not get exchange for {}; should never happen", target.getUniqueId());
       return null;
     }
     final Triple<String, String, String> config = _perExchangeConfig.get(exchange);

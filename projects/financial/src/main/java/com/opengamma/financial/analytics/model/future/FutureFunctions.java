@@ -15,9 +15,10 @@ import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
+import com.opengamma.financial.analytics.model.bondcurves.future.BondFutureGrossBasisFromCurvesFunction;
+import com.opengamma.financial.analytics.model.bondcurves.future.BondFutureNetBasisFromCurvesFunction;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesRatingFieldNames;
 import com.opengamma.util.ArgumentChecker;
-
 
 /**
  * Function repository configuration source for the functions contained in this package.
@@ -98,9 +99,6 @@ public class FutureFunctions extends AbstractFunctionConfigurationBean {
       if (!getPerCurrencyInfo().isEmpty()) {
         addInterestRateFutureDefaults(functions);
       }
-      functions.add(functionConfiguration(InterestRateFuturePresentValueFunction.class));
-      functions.add(functionConfiguration(InterestRateFuturePV01Function.class));
-      functions.add(functionConfiguration(InterestRateFutureYieldCurveNodeSensitivitiesFunction.class));
     }
   }
 

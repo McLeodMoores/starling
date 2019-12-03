@@ -21,18 +21,18 @@ import com.opengamma.util.test.TestGroup;
 public class SecuritiesJodaBeanBinTest extends SecurityTestCase {
 
   @Override
-  protected <T extends ManageableSecurity> void assertSecurity(Class<T> securityClass, T security) {
-    byte[] bytes = JodaBeanSerialization.serializer(false).binWriter().write(security, false);
+  protected <T extends ManageableSecurity> void assertSecurity(final Class<T> securityClass, final T security) {
+    final byte[] bytes = JodaBeanSerialization.serializer(false).binWriter().write(security, false);
 //    System.out.println(bytes);
-    
+
     try {
-      T readIn = securityClass.cast(JodaBeanSerialization.deserializer().binReader().read(bytes, securityClass));
+      final T readIn = securityClass.cast(JodaBeanSerialization.deserializer().binReader().read(bytes, securityClass));
       assertEquals(security, readIn);
-    } catch (Throwable ex) {
+    } catch (final Throwable ex) {
       new MsgPackVisualizer(bytes).visualize();
       throw ex;
     }
-    
+
     // fudge equivalent
 //    FudgeContext fc = OpenGammaFudgeContext.getInstance();
 //    FudgeSerializer serializer = new FudgeSerializer(fc);
@@ -59,15 +59,15 @@ public class SecuritiesJodaBeanBinTest extends SecurityTestCase {
 //    }
   }
 
-  void dump(byte[] bytes) {
-    for (byte b : bytes) {
+  void dump(final byte[] bytes) {
+    for (final byte b : bytes) {
       System.out.print(String.format("%02X ", b));
     }
     System.out.println();
-    for (byte b : bytes) {
-      int unsigned = ((int) b) & 0xFF;
+    for (final byte b : bytes) {
+      final int unsigned = b & 0xFF;
       if (unsigned >= 32 && unsigned <= 127) {
-        System.out.print(" " + ((char) unsigned) + " ");
+        System.out.print(" " + (char) unsigned + " ");
       } else {
         System.out.print(String.format("%02X ", b));
       }

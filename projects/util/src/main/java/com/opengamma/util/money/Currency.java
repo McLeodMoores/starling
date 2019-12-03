@@ -39,7 +39,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
   /**
    * A cache of instances.
    */
-  private static final ConcurrentMap<String, Currency> s_instanceMap = new ConcurrentHashMap<String, Currency>();
+  private static final ConcurrentMap<String, Currency> INSTANCE_MAP = new ConcurrentHashMap<>();
   /**
    * The scheme to use in object identifiers.
    */
@@ -81,63 +81,63 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
    */
   public static final Currency NZD = of("NZD");
   /**
-   * The currency 'DKK' - Danish Krone
+   * The currency 'DKK' - Danish Krone.
    */
   public static final Currency DKK = of("DKK");
   /**
-   * The currency 'DEM' - Deutsche Mark
+   * The currency 'DEM' - Deutsche Mark.
    */
   public static final Currency DEM = of("DEM");
   /**
-   * The currency 'CZK' - Czeck Krona
+   * The currency 'CZK' - Czeck Krona.
    */
   public static final Currency CZK = of("CZK");
   /**
-   * The currency 'SEK' - Swedish Krona
+   * The currency 'SEK' - Swedish Krona.
    */
   public static final Currency SEK = of("SEK");
   /**
-   * The currency 'SKK' - Slovak Korona
+   * The currency 'SKK' - Slovak Korona.
    */
   public static final Currency SKK = of("SKK");
   /**
-   * The currency 'ITL' - Italian Lira
+   * The currency 'ITL' - Italian Lira.
    */
   public static final Currency ITL = of("ITL");
   /**
-   * The currency 'HUF' = Hugarian Forint
+   * The currency 'HUF' = Hugarian Forint.
    */
   public static final Currency HUF = of("HUF");
   /**
-   * The currency 'FRF' - French Franc
+   * The currency 'FRF' - French Franc.
    */
   public static final Currency FRF = of("FRF");
   /**
-   * The currency 'NOK' - Norwegian Krone 
+   * The currency 'NOK' - Norwegian Krone.
    */
   public static final Currency NOK = of("NOK");
   /**
-   * The currency 'HKD' - Hong Kong Dollar
+   * The currency 'HKD' - Hong Kong Dollar.
    */
   public static final Currency HKD = of("HKD");
   /**
-   * The currency 'BRL' - Brazil Dollar
+   * The currency 'BRL' - Brazil Dollar.
    */
   public static final Currency BRL = of("BRL");
   /**
-   * The currency 'ZAR' - South African Rand
+   * The currency 'ZAR' - South African Rand.
    */
   public static final Currency ZAR = of("ZAR");
   /**
-   * The currency 'PLN' - Polish Zloty
+   * The currency 'PLN' - Polish Zloty.
    */
   public static final Currency PLN = of("PLN");
   /**
-   * The currency 'SGD' - Singapore Dollar
+   * The currency 'SGD' - Singapore Dollar.
    */
   public static final Currency SGD = of("SGD");
   /**
-   * The currency 'MXN' - Mexican Peso
+   * The currency 'MXN' - Mexican Peso.
    */
   public static final Currency MXN = of("MXN");
 
@@ -149,11 +149,11 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
   //-----------------------------------------------------------------------
   /**
    * Lists the available currencies.
-   * 
+   *
    * @return an immutable set containing all registered currencies, not null
    */
   public static Set<Currency> getAvailableCurrencies() {
-    return ImmutableSet.copyOf(s_instanceMap.values());
+    return ImmutableSet.copyOf(INSTANCE_MAP.values());
   }
 
   //-----------------------------------------------------------------------
@@ -165,7 +165,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
    * @param currency  the currency, not null
    * @return the singleton instance, not null
    */
-  public static Currency of(java.util.Currency currency) {
+  public static Currency of(final java.util.Currency currency) {
     ArgumentChecker.notNull(currency, "currency");
     return of(currency.getCurrencyCode());
   }
@@ -182,18 +182,18 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
    * @throws IllegalArgumentException if the currency code is not three letters
    */
   @FromString
-  public static Currency of(String currencyCode) {
+  public static Currency of(final String currencyCode) {
     ArgumentChecker.notNull(currencyCode, "currencyCode");
     // check cache before matching
-    Currency previous = s_instanceMap.get(currencyCode);
+    final Currency previous = INSTANCE_MAP.get(currencyCode);
     if (previous != null) {
       return previous;
     }
-    if (currencyCode.matches("[A-Z][A-Z][A-Z]") == false) {
+    if (!currencyCode.matches("[A-Z][A-Z][A-Z]")) {
       throw new IllegalArgumentException("Invalid currency code: " + currencyCode);
     }
-    s_instanceMap.putIfAbsent(currencyCode, new Currency(currencyCode));
-    return s_instanceMap.get(currencyCode);
+    INSTANCE_MAP.putIfAbsent(currencyCode, new Currency(currencyCode));
+    return INSTANCE_MAP.get(currencyCode);
   }
 
   /**
@@ -206,7 +206,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
    * @return the singleton instance, not null
    * @throws IllegalArgumentException if the currency code is not three letters
    */
-  public static Currency parse(String currencyCode) {
+  public static Currency parse(final String currencyCode) {
     ArgumentChecker.notNull(currencyCode, "currencyCode");
     return of(currencyCode.toUpperCase(Locale.ENGLISH));
   }
@@ -214,16 +214,16 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
   //-------------------------------------------------------------------------
   /**
    * Restricted constructor.
-   * 
+   *
    * @param currencyCode  the three letter currency code, not null
    */
-  private Currency(String currencyCode) {
+  private Currency(final String currencyCode) {
     _code = currencyCode;
   }
 
   /**
    * Ensure singleton on deserialization.
-   * 
+   *
    * @return the singleton, not null
    */
   private Object readResolve() {
@@ -233,7 +233,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
   //-------------------------------------------------------------------------
   /**
    * Gets the three letter ISO code.
-   * 
+   *
    * @return the three letter ISO code, not null
    */
   @ToString
@@ -246,7 +246,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
    * Gets the object identifier for the currency.
    * <p>
    * This uses the scheme {@link #OBJECT_SCHEME CurrencyISO}.
-   * 
+   *
    * @return the object identifier, not null
    */
   @Override
@@ -258,7 +258,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
    * Gets the unique identifier for the currency.
    * <p>
    * This uses the scheme {@link #OBJECT_SCHEME CurrencyISO}.
-   * 
+   *
    * @return the unique identifier, not null
    */
   @Override
@@ -271,7 +271,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
    * Gets the JDK currency instance equivalent to this currency.
    * <p>
    * This attempts to convert a {@code Currency} to a JDK {@code Currency}.
-   * 
+   *
    * @return the JDK currency instance, not null
    * @throws IllegalArgumentException if no matching currency exists in the JDK
    */
@@ -282,12 +282,12 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
   //-----------------------------------------------------------------------
   /**
    * Compares this currency to another by alphabetical comparison of the code.
-   * 
+   *
    * @param other  the other currency, not null
    * @return negative if earlier alphabetically, 0 if equal, positive if greater alphabetically
    */
   @Override
-  public int compareTo(Currency other) {
+  public int compareTo(final Currency other) {
     return _code.compareTo(other._code);
   }
 
@@ -295,12 +295,12 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
    * Checks if this currency equals another currency.
    * <p>
    * The comparison checks the three letter currency code.
-   * 
+   *
    * @param obj  the other currency, null returns false
    * @return true if equal
    */
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
@@ -312,7 +312,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
 
   /**
    * Returns a suitable hash code for the currency.
-   * 
+   *
    * @return the hash code
    */
   @Override
@@ -323,7 +323,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
   //-----------------------------------------------------------------------
   /**
    * Gets the three letter currency code as a string.
-   * 
+   *
    * @return the three letter currency code, not null
    */
   @Override

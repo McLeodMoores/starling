@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- *  Generator of MarketDiscountBundle from the parameters.
+ * Generator of MarketDiscountBundle from the parameters.
  */
 public class GeneratorInflationProviderDiscount extends Function1D<DoubleMatrix1D, InflationProviderInterface> {
 
@@ -55,9 +55,13 @@ public class GeneratorInflationProviderDiscount extends Function1D<DoubleMatrix1
 
   /**
    * Constructor without the discount curve.
-   * @param knownData The yield curve bundle with known data (curves).
-   * @param inflationMap The discounting curves names map.
-   * @param generatorsInflationMap The inflation generators map.
+   *
+   * @param knownData
+   *          The yield curve bundle with known data (curves).
+   * @param inflationMap
+   *          The discounting curves names map.
+   * @param generatorsInflationMap
+   *          The inflation generators map.
    */
   public GeneratorInflationProviderDiscount(final InflationProviderDiscount knownData, final LinkedHashMap<String, IndexPrice[]> inflationMap,
       final LinkedHashMap<String, GeneratorPriceIndexCurve> generatorsInflationMap) {
@@ -72,13 +76,20 @@ public class GeneratorInflationProviderDiscount extends Function1D<DoubleMatrix1
 
   /**
    * Constructor with the discount curve.
-   * @param knownData The yield curve bundle with known data (curves).
-   * @param discountingMap The discounting curves names map.
-   * @param forwardONMap The ON curves names map.
-   * @param inflationMap The inflation curves names map.
-   * @param generatorsMap The inflation generators map.
+   *
+   * @param knownData
+   *          The yield curve bundle with known data (curves).
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardONMap
+   *          The ON curves names map.
+   * @param inflationMap
+   *          The inflation curves names map.
+   * @param generatorsMap
+   *          The inflation generators map.
    */
-  public GeneratorInflationProviderDiscount(final InflationProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IndexON[]> forwardONMap,
+  public GeneratorInflationProviderDiscount(final InflationProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap,
+      final LinkedHashMap<String, IndexON[]> forwardONMap,
       final LinkedHashMap<String, IndexPrice[]> inflationMap, final LinkedHashMap<String, GeneratorCurve> generatorsMap) {
     ArgumentChecker.notNull(inflationMap, "Inflation curves names map");
     ArgumentChecker.notNull(discountingMap, "Discount curves names map");
@@ -91,6 +102,7 @@ public class GeneratorInflationProviderDiscount extends Function1D<DoubleMatrix1
 
   /**
    * Gets the know data.
+   *
    * @return The known data.
    */
   public InflationProviderDiscount getKnownData() {
@@ -99,6 +111,7 @@ public class GeneratorInflationProviderDiscount extends Function1D<DoubleMatrix1
 
   /**
    * Gets the set of generators of curves . The set order is the order in which they are build.
+   *
    * @return The set.
    */
   public Set<String> getInflationCurvesList() {

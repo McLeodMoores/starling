@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.regression;
@@ -13,7 +13,7 @@ import org.apache.commons.lang.Validate;
  * Contains the result of a least squares regression.
  */
 public class LeastSquaresRegressionResult {
-  //TODO the predicted value calculation should be separated out from this class.
+  // TODO the predicted value calculation should be separated out from this class.
   private final double[] _residuals;
   private final double[] _betas;
   private final double _meanSquareError;
@@ -37,7 +37,8 @@ public class LeastSquaresRegressionResult {
     _hasIntercept = result.hasIntercept();
   }
 
-  public LeastSquaresRegressionResult(final double[] betas, final double[] residuals, final double meanSquareError, final double[] standardErrorOfBeta, final double rSquared,
+  public LeastSquaresRegressionResult(final double[] betas, final double[] residuals, final double meanSquareError, final double[] standardErrorOfBeta,
+      final double rSquared,
       final double rSquaredAdjusted, final double[] tStats, final double[] pValues, final boolean hasIntercept) {
     _betas = betas;
     _residuals = residuals;
@@ -121,12 +122,12 @@ public class LeastSquaresRegressionResult {
     result = prime * result + (_hasIntercept ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_meanSquareError);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_pValues);
     temp = Double.doubleToLongBits(_rSquared);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_rSquaredAdjusted);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_residuals);
     result = prime * result + Arrays.hashCode(_standardErrorOfBeta);
     result = prime * result + Arrays.hashCode(_tStats);

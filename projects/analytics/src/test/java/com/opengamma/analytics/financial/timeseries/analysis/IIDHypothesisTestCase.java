@@ -43,7 +43,7 @@ public abstract class IIDHypothesisTestCase {
     INCREASING = ImmutableInstantDoubleTimeSeries.of(dates, increasing);
   }
 
-  void assertNullTS(final IIDHypothesis h) {
+  static void assertNullTS(final IIDHypothesis h) {
     try {
       h.evaluate((DoubleTimeSeries<Long>) null);
       Assert.fail();
@@ -52,7 +52,7 @@ public abstract class IIDHypothesisTestCase {
     }
   }
 
-  void assertEmptyTS(final IIDHypothesis h) {
+  static void assertEmptyTS(final IIDHypothesis h) {
     try {
       h.evaluate(ImmutableInstantDoubleTimeSeries.EMPTY_SERIES);
       Assert.fail();

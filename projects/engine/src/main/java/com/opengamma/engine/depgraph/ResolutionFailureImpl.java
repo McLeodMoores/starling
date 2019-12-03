@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -21,12 +21,13 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Describes a resolution failure. The implementation is intended to provide low-cost construction of failure information, at the cost of a more complex querying/inspection algorithm.
+ * Describes a resolution failure. The implementation is intended to provide low-cost construction of failure information, at the cost of
+ * a more complex querying/inspection algorithm.
  */
 public final class ResolutionFailureImpl extends ResolutionFailure {
 
   private final ValueRequirement _valueRequirement;
-  private final List<Object> _events = new LinkedList<Object>();
+  private final List<Object> _events = new LinkedList<>();
 
   // Construction
 
@@ -38,11 +39,13 @@ public final class ResolutionFailureImpl extends ResolutionFailure {
     return new ResolutionFailureImpl(valueRequirement).appendEvent(Status.RECURSIVE_REQUIREMENT);
   }
 
-  protected static ResolutionFailure functionApplication(final ValueRequirement valueRequirement, final ParameterizedFunction function, final ValueSpecification outputSpecification) {
+  protected static ResolutionFailure functionApplication(final ValueRequirement valueRequirement, final ParameterizedFunction function,
+      final ValueSpecification outputSpecification) {
     return functionApplication(valueRequirement, function.getFunction().getFunctionDefinition().getUniqueId(), outputSpecification);
   }
 
-  protected static ResolutionFailure functionApplication(final ValueRequirement valueRequirement, final String function, final ValueSpecification outputSpecification) {
+  protected static ResolutionFailure functionApplication(final ValueRequirement valueRequirement, final String function,
+      final ValueSpecification outputSpecification) {
     return new ResolutionFailureImpl(valueRequirement).appendEvent(function).appendEvent(outputSpecification);
   }
 
@@ -69,7 +72,7 @@ public final class ResolutionFailureImpl extends ResolutionFailure {
 
   @Override
   protected ResolutionFailure requirement(final ValueRequirement valueRequirement, final ResolutionFailure failure) {
-    return appendEvent((failure != null) ? failure : valueRequirement);
+    return appendEvent(failure != null ? failure : valueRequirement);
   }
 
   @Override
@@ -126,13 +129,13 @@ public final class ResolutionFailureImpl extends ResolutionFailure {
   @SuppressWarnings("unchecked")
   @Override
   public synchronized <T> Collection<T> accept(final ResolutionFailureVisitor<T> visitor) {
-    final LinkedList<T> result = new LinkedList<T>();
+    final LinkedList<T> result = new LinkedList<>();
     final Iterator<?> itr = _events.iterator();
     String function = null;
     ValueSpecification outputSpecification = null;
-    final Map<ValueSpecification, ValueRequirement> satisfied = new HashMap<ValueSpecification, ValueRequirement>();
-    final Set<ResolutionFailure> unsatisfied = new HashSet<ResolutionFailure>();
-    final Set<ResolutionFailure> unsatisfiedAdditional = new HashSet<ResolutionFailure>();
+    final Map<ValueSpecification, ValueRequirement> satisfied = new HashMap<>();
+    final Set<ResolutionFailure> unsatisfied = new HashSet<>();
+    final Set<ResolutionFailure> unsatisfiedAdditional = new HashSet<>();
     while (itr.hasNext()) {
       final Object event = itr.next();
       if (event instanceof String) {
@@ -242,7 +245,7 @@ public final class ResolutionFailureImpl extends ResolutionFailure {
 
   /**
    * Merge the causes of failure from the other into this.
-   * 
+   *
    * @param failureRef cause of failure
    */
   @Override
@@ -256,7 +259,7 @@ public final class ResolutionFailureImpl extends ResolutionFailure {
           final String function = (String) eventNew;
           final ValueSpecification outputSpecification = (ValueSpecification) itrNew.next();
           // Extract the events that correspond to this function application
-          final List<Object> newEvents = new LinkedList<Object>();
+          final List<Object> newEvents = new LinkedList<>();
           //CSOFF
           scan:
           // CSON
@@ -352,7 +355,7 @@ public final class ResolutionFailureImpl extends ResolutionFailure {
                   }
                 }
                 // Iterator is now positioned just before the next "start" event
-                for (Object newEvent : newEvents) {
+                for (final Object newEvent : newEvents) {
                   itrThis.add(newEvent);
                 }
                 matched = true;
@@ -399,8 +402,9 @@ public final class ResolutionFailureImpl extends ResolutionFailure {
   }
 
   /**
-   * Tests this resolution failure object with another for equality. Note that the caller must ensure that the monitor for both is held, or a suitable exclusion lock is held at an outer level.
-   * 
+   * Tests this resolution failure object with another for equality. Note that the caller must ensure that the monitor for both is held,
+   * or a suitable exclusion lock is held at an outer level.
+   *
    * @param obj object to compare to
    * @return true if the objects are equal
    */

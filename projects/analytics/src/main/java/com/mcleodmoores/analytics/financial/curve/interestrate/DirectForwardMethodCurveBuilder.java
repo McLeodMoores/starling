@@ -32,10 +32,9 @@ import com.opengamma.util.tuple.Pair;
  *
  */
 public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProviderForward> {
-  private static final ParSpreadMarketQuoteDiscountingCalculator CALCULATOR =
-      ParSpreadMarketQuoteDiscountingCalculator.getInstance();
-  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator SENSITIVITY_CALCULATOR =
-      ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteDiscountingCalculator CALCULATOR = ParSpreadMarketQuoteDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator SENSITIVITY_CALCULATOR = ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator
+      .getInstance();
   private final MulticurveProviderForwardBuildingRepository _curveBuildingRepository;
 
   public static DirectForwardMethodCurveSetUp setUp() {
@@ -94,11 +93,12 @@ public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProv
     }
     final Map<IborIndex, DoublesCurve> temp = new HashMap<>();
     for (final Map.Entry<IborIndex, YieldAndDiscountCurve> entry : knownIborCurves.entrySet()) {
-      temp.put(entry.getKey(), ((YieldCurve) entry.getValue()).getCurve()); //TODO unchecked cast
+      temp.put(entry.getKey(), ((YieldCurve) entry.getValue()).getCurve()); // TODO unchecked cast
     }
     final MulticurveProviderForward knownData = new MulticurveProviderForward(knownDiscountingCurves, temp, knownOvernightCurves, fxMatrix);
     if (knownBundle != null) {
-      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, convertedDiscountingCurves, singleIborIndices,
+      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, convertedDiscountingCurves,
+          singleIborIndices,
           singleOvernightIndices, CALCULATOR, SENSITIVITY_CALCULATOR);
     }
     return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, convertedDiscountingCurves, singleIborIndices,

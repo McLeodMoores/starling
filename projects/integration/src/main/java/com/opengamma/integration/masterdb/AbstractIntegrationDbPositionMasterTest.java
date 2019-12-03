@@ -41,13 +41,13 @@ public abstract class AbstractIntegrationDbPositionMasterTest extends AbstractLo
     return _posMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(enabled = false, description = "Queries the entire database")
-  public void test_queryAll() throws Exception {
+  public void testQueryAll() throws Exception {
     final PositionSearchRequest request = new PositionSearchRequest();
     request.setPagingRequest(PagingRequest.NONE);
     final int total = getPositionMaster().search(request).getPaging().getTotalItems();
-    final int pages = (total / PAGE_SIZE) + 1;
+    final int pages = total / PAGE_SIZE + 1;
     for (int page = 1; page <= pages; page++) {
       request.setPagingRequest(PagingRequest.ofPage(page, PAGE_SIZE));
       System.out.println("Checking position master, page " + request.getPagingRequest());

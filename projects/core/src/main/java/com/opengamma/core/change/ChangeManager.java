@@ -24,7 +24,7 @@ public interface ChangeManager {
    * Adds a listener to the manager.
    * <p>
    * The listener will receive all events from the manager.
-   * 
+   *
    * @param listener  the listener to add, not null
    */
   void addChangeListener(ChangeListener listener);
@@ -33,7 +33,7 @@ public interface ChangeManager {
    * Removes a listener from the manager.
    * <p>
    * The listener will cease receiving events from the manager.
-   * 
+   *
    * @param listener  the listener to remove, not null
    */
   void removeChangeListener(ChangeListener listener);
@@ -43,13 +43,13 @@ public interface ChangeManager {
    * <p>
    * This method should only be called by the owner of the change manager.
    * It is invoked whenever an entity has been successfully changed.
-   * 
+   *
    * @param type  the type of change, not null
    * @param oid  the object id of the entity, not null
-   * @param versionFrom  the begining of a timespan of the change of the entity, not null
+   * @param versionFrom  the beginning of a timespan of the change of the entity, not null
    * @param versionTo  the end of a timespan of the change of the entity, may be null
    * @param versionInstant  the instant at which the change is recorded as happening, not null
    */
-  void entityChanged(final ChangeType type, final ObjectId oid, final Instant versionFrom, final Instant versionTo, final Instant versionInstant);
+  void entityChanged(ChangeType type, ObjectId oid, Instant versionFrom, Instant versionTo, Instant versionInstant);
 
 }

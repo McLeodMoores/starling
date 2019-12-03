@@ -45,12 +45,12 @@ import com.opengamma.util.ArgumentChecker;
  * Exposure function that returns the security type and region for a given trade.
  */
 public class SecurityAndRegionExposureFunction implements ExposureFunction {
-  
+
   /**
    * The name of the exposure function.
    */
   public static final String NAME = "Security / Region";
-  
+
   private final SecurityAndRegionVisitor _visitor;
 
   public SecurityAndRegionExposureFunction(final SecuritySource securitySource) {
@@ -61,25 +61,25 @@ public class SecurityAndRegionExposureFunction implements ExposureFunction {
   public String getName() {
     return NAME;
   }
-  
+
   @Override
-  public List<ExternalId> getIds(Trade trade) {
-    Security security = trade.getSecurity();
+  public List<ExternalId> getIds(final Trade trade) {
+    final Security security = trade.getSecurity();
     if (security instanceof FinancialSecurity) {
       return ((FinancialSecurity) security).accept(_visitor);
     }
     return null;
   }
-  
+
   private static final class SecurityAndRegionVisitor extends FinancialSecurityVisitorSameValueAdapter<List<ExternalId>> {
-    
+
     private final SecuritySource _securitySource;
-    
-    public SecurityAndRegionVisitor(SecuritySource securitySource) {
+
+    SecurityAndRegionVisitor(final SecuritySource securitySource) {
       super(null);
       _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     }
-    
+
     @Override
     public List<ExternalId> visitCashSecurity(final CashSecurity security) {
       final ExternalId regionId = security.getRegionId();
@@ -167,7 +167,7 @@ public class SecurityAndRegionExposureFunction implements ExposureFunction {
     @Override
     public List<ExternalId> visitSwaptionSecurity(final SwaptionSecurity security) {
       final List<ExternalId> result = new ArrayList<>();
-      final SwapSecurity underlyingSwap = (SwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); //TODO version
+      final SwapSecurity underlyingSwap = (SwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); // TODO version
       final SwapLeg payLeg = underlyingSwap.getPayLeg();
       final SwapLeg receiveLeg = underlyingSwap.getReceiveLeg();
       final String securityType = security.getSecurityType();
@@ -223,7 +223,7 @@ public class SecurityAndRegionExposureFunction implements ExposureFunction {
 
     @Override
     public List<ExternalId> visitCreditDefaultSwapOptionSecurity(final CreditDefaultSwapOptionSecurity security) {
-      final CreditDefaultSwapSecurity underlyingCDS = (CreditDefaultSwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); //TODO version
+      final CreditDefaultSwapSecurity underlyingCDS = (CreditDefaultSwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
       final ExternalId regionId = underlyingCDS.getRegionId();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + regionId.getValue()));

@@ -17,44 +17,52 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Autogenerates Bloomberg FX option volatility surface codes given a tenor, quote type (ATM, butterfly, risk reversal) and distance from
- * ATM.
+ * Autogenerates Bloomberg FX option volatility surface codes given a tenor, quote type (ATM, butterfly, risk reversal) and distance from ATM.
  */
 public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements SurfaceInstrumentProvider<Tenor, Pair<Number, FXVolQuoteType>> {
-  /** Type of the volatility quote */
+  /** Type of the volatility quote. */
   public enum FXVolQuoteType {
-    /** ATM */
+    /** ATM. */
     ATM,
-    /** Risk-reversal */
+    /** Risk-reversal. */
     RISK_REVERSAL,
-    /** Butterfly */
+    /** Butterfly. */
     BUTTERFLY;
   }
+
   /** The FX prefix */
-  private final String _fxPrefix; //expecting something like USDJPY
+  private final String _fxPrefix; // expecting something like USDJPY
   /** The postfix */
-  private final String _postfix; //expecting Curncy
+  private final String _postfix; // expecting Curncy
   /** The data field name */
-  private final String _dataFieldName; //expecting MarketDataRequirementNames.MARKET_VALUE
+  private final String _dataFieldName; // expecting MarketDataRequirementNames.MARKET_VALUE
   /** The Bloomberg scheme name */
   private final ExternalScheme _scheme; // e.g. BLOOMBERG_TICKER_WEAK
 
   /**
    * Sets the scheme to weak tickers.
-   * @param fxPrefix The FX prefix, not null
-   * @param postfix The postfix, not null
-   * @param dataFieldName The data field name, not null
+   *
+   * @param fxPrefix
+   *          The FX prefix, not null
+   * @param postfix
+   *          The postfix, not null
+   * @param dataFieldName
+   *          The data field name, not null
    */
   public BloombergFXOptionVolatilitySurfaceInstrumentProvider(final String fxPrefix, final String postfix, final String dataFieldName) {
     this(fxPrefix, postfix, dataFieldName, ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
   }
 
   /**
-   * @param fxPrefix The FX prefix, not null
-   * @param postfix The code postfix, not null
-   * @param dataFieldName The data field name, not null
-   * @param schemeName The scheme name, not null. Must be one of {@link ExternalSchemes#BLOOMBERG_BUID}, {@link ExternalSchemes#BLOOMBERG_BUID_WEAK},
-   * {@link ExternalSchemes#BLOOMBERG_TCM}, {@link ExternalSchemes#BLOOMBERG_TICKER} or {@link ExternalSchemes#BLOOMBERG_TICKER_WEAK}
+   * @param fxPrefix
+   *          The FX prefix, not null
+   * @param postfix
+   *          The code postfix, not null
+   * @param dataFieldName
+   *          The data field name, not null
+   * @param schemeName
+   *          The scheme name, not null. Must be one of {@link ExternalSchemes#BLOOMBERG_BUID}, {@link ExternalSchemes#BLOOMBERG_BUID_WEAK},
+   *          {@link ExternalSchemes#BLOOMBERG_TCM}, {@link ExternalSchemes#BLOOMBERG_TICKER} or {@link ExternalSchemes#BLOOMBERG_TICKER_WEAK}
    */
   public BloombergFXOptionVolatilitySurfaceInstrumentProvider(final String fxPrefix, final String postfix, final String dataFieldName,
       final String schemeName) {
@@ -62,11 +70,11 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
     ArgumentChecker.notNull(postfix, "postfix");
     ArgumentChecker.notNull(dataFieldName, "data field name");
     ArgumentChecker.notNull(schemeName, "scheme name");
-    final boolean schemeTest = schemeName.equals(ExternalSchemes.BLOOMBERG_BUID.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_BUID_WEAK.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_TCM.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER.getName()) ||
-        schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
+    final boolean schemeTest = schemeName.equals(ExternalSchemes.BLOOMBERG_BUID.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_BUID_WEAK.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_TCM.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER.getName())
+        || schemeName.equals(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName());
     ArgumentChecker.isTrue(schemeTest, "scheme name {} was not appropriate for Bloomberg data");
     _fxPrefix = fxPrefix;
     _postfix = postfix;
@@ -76,6 +84,7 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the FX prefix.
+   *
    * @return The FX prefix
    */
   public String getFXPrefix() {
@@ -84,6 +93,7 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the code postfix.
+   *
    * @return The code postfix
    */
   public String getPostfix() {
@@ -97,6 +107,7 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
 
   /**
    * Gets the scheme name.
+   *
    * @return The scheme name
    */
   public String getSchemeName() {
@@ -139,7 +150,7 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
           throw new OpenGammaRuntimeException("Should never happen - have all quote types in enum");
       }
     }
-    //TODO I'm sure this isn't the best way to do this
+    // TODO I'm sure this isn't the best way to do this
     if (tenor.getPeriod().getYears() != 0) {
       bbgCode += tenor.getPeriod().getYears() + "Y";
     } else if (tenor.getPeriod().getMonths() != 0) {
@@ -169,9 +180,9 @@ public class BloombergFXOptionVolatilitySurfaceInstrumentProvider implements Sur
       return false;
     }
     final BloombergFXOptionVolatilitySurfaceInstrumentProvider other = (BloombergFXOptionVolatilitySurfaceInstrumentProvider) obj;
-    return getFXPrefix().equals(other.getFXPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName()) &&
-        getSchemeName().equals(other.getSchemeName());
+    return getFXPrefix().equals(other.getFXPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName())
+        && getSchemeName().equals(other.getSchemeName());
   }
 }

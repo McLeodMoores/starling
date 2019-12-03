@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -10,21 +10,21 @@ import java.util.Arrays;
 
 import org.apache.commons.lang.NotImplementedException;
 
-import com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
- * Monotone Convex Interpolation based on 
- * P. S. Hagan, G. West, "interpolation Methods for Curve Construction"
- * Applied Mathematical Finance, Vol. 13, No. 2, 89–129, June 2006
- * 
- * Given a data set (time) and (spot rates)*(time), {t_i, r_i*t_i}, derive forward rate curve, f(t)=\frac{\partial r(t) t}{\partial t}, by "interpolateFwds" method 
- * or derive a curve of (spot rates) * (time), r(t) * t, by "interpolate" method by applying the interpolation to forward rates f_i estimated from spot rates r_i
- * When we apply this spline to interest rates, DO INCLUDE THE TRIVIAL POINT (t_0,r_0*t_0) = (0,0). In this case r_0 = 0 is automatically assumed. 
- * Note that f(t_i) = (original) f_i does NOT necessarily hold due to forward modification for ensuring positivity of the curve
+ * Monotone Convex Interpolation based on P. S. Hagan, G. West, "interpolation Methods for Curve Construction" Applied Mathematical Finance, Vol. 13, No. 2,
+ * 89–129, June 2006
+ *
+ * Given a data set (time) and (spot rates)*(time), {t_i, r_i*t_i}, derive forward rate curve, f(t)=\frac{\partial r(t) t}{\partial t}, by "interpolateFwds"
+ * method or derive a curve of (spot rates) * (time), r(t) * t, by "interpolate" method by applying the interpolation to forward rates f_i estimated from spot
+ * rates r_i.
+ * <p>
+ * When we apply this spline to interest rates, DO INCLUDE THE TRIVIAL POINT (t_0,r_0*t_0) = (0,0). In this case r_0 = 0 is automatically assumed. Note that
+ * f(t_i) = (original) f_i does NOT necessarily hold due to forward modification for ensuring positivity of the curve
  */
 public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpolator {
 
@@ -32,7 +32,7 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   private double[] _spotRates;
 
   /**
-   * 
+   *
    */
   public MonotoneConvexSplineInterpolator() {
     _time = null;
@@ -40,10 +40,13 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Determine r(t)t = \int _{xValues_0}^{x} f(s) ds  for t >= min{xValues}
-   * Extrapolation by a linear function in the region t > max{xValues}. To employ this extrapolation, use interpolate methods in this class. 
-   * @param xValues Data t_i
-   * @param yValues Data r_i*t_i
+   * Determine r(t)t = \int _{xValues_0}^{x} f(s) ds for t &ge; min{xValues} Extrapolation by a linear function in the region t &gt; max{xValues}. To employ
+   * this extrapolation, use interpolate methods in this class.
+   *
+   * @param xValues
+   *          Data t_i
+   * @param yValues
+   *          Data r_i*t_i
    * @return PiecewisePolynomialResult for r(t)t
    */
   @Override
@@ -76,7 +79,7 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
       }
     }
 
-    double[] spotTmp = new double[nDataPts];
+    final double[] spotTmp = new double[nDataPts];
     for (int i = 0; i < nDataPts; ++i) {
       spotTmp[i] = xValues[i] == 0. ? 0. : yValues[i] / xValues[i];
     }
@@ -99,11 +102,14 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Since Monotone Convex spline method introduces extra knots in some cases and the number of knots depends on yValues, 
-   * this multidimensional method can not be supported 
-   * @param xValues 
-   * @param yValuesMatrix Multidimensional y values
-   * @return Error is returned 
+   * Since Monotone Convex spline method introduces extra knots in some cases and the number of knots depends on yValues, this multidimensional method can not
+   * be supported.
+   *
+   * @param xValues
+   *          the x values
+   * @param yValuesMatrix
+   *          Multidimensional y values
+   * @return Error is returned
    */
   @Override
   public PiecewisePolynomialResult interpolate(final double[] xValues, final double[][] yValuesMatrix) {
@@ -143,7 +149,7 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
     ArgumentChecker.notNull(x, "x");
 
     final int keyLength = x.length;
-    double[] res = new double[keyLength];
+    final double[] res = new double[keyLength];
 
     final PiecewisePolynomialResult result = interpolate(xValues, yValues);
     final DoubleMatrix2D coefsMatrixIntegrate = result.getCoefMatrix();
@@ -177,7 +183,7 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
 
     final int keyLength = xMatrix[0].length;
     final int keyDim = xMatrix.length;
-    double[][] res = new double[keyDim][keyLength];
+    final double[][] res = new double[keyDim][keyLength];
 
     final PiecewisePolynomialResult result = interpolate(xValues, yValues);
     final DoubleMatrix2D coefsMatrixIntegrate = result.getCoefMatrix();
@@ -208,10 +214,14 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Since this interpolation method introduces new breakpoints in certain cases, {@link PiecewisePolynomialResultsWithSensitivity} is not well-defined
-   * Instead the node sensitivity is computed in {@link MonotoneConvexSplineInterpolator1D} via {@link Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle}
-   * @param xValues 
-   * @param yValues 
+   * Since this interpolation method introduces new breakpoints in certain cases, {@link PiecewisePolynomialResultsWithSensitivity} is not well-defined Instead
+   * the node sensitivity is computed in {@link MonotoneConvexSplineInterpolator1D} via
+   * {@link com.opengamma.analytics.math.interpolation.data.Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle}.
+   *
+   * @param xValues
+   *          the x values
+   * @param yValues
+   *          the y values
    * @return NotImplementedException
    */
   @Override
@@ -220,9 +230,12 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Determine f(t) = \frac{\partial r(t) t}{\partial t}
-   * @param xValues Data t_i
-   * @param yValues Data r(t_i)
+   * Determine f(t) = \frac{\partial r(t) t}{\partial t}.
+   *
+   * @param xValues
+   *          Data t_i
+   * @param yValues
+   *          Data r(t_i)
    * @return PiecewisePolynomialResult for f(t)
    */
   public PiecewisePolynomialResult interpolateFwds(final double[] xValues, final double[] yValues) {
@@ -254,7 +267,7 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
       }
     }
 
-    double[] spotTmp = new double[nDataPts];
+    final double[] spotTmp = new double[nDataPts];
     for (int i = 0; i < nDataPts; ++i) {
       spotTmp[i] = xValues[i] == 0. ? 0. : yValues[i] / xValues[i];
     }
@@ -276,11 +289,15 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Compute the value of f(t) = \frac{\partial r(t) t}{\partial t} at t=x
-   * @param xValues Data r_i
-   * @param yValues Data r(t_i)
-   * @param x Key larger than min{r_i}
-   * @return  f(x)
+   * Compute the value of f(t) = \frac{\partial r(t) t}{\partial t} at t=x.
+   *
+   * @param xValues
+   *          Data r_i
+   * @param yValues
+   *          Data r(t_i)
+   * @param x
+   *          Key larger than min{r_i}
+   * @return f(x)
    */
   public double interpolateFwds(final double[] xValues, final double[] yValues, final double x) {
     final PiecewisePolynomialResult result = interpolateFwds(xValues, yValues);
@@ -309,10 +326,14 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Compute the values of f(t) 
-   * @param xValues Data t_i
-   * @param yValues Data r(t_i)
-   * @param x Set of xKey 
+   * Compute the values of f(t).
+   *
+   * @param xValues
+   *          Data t_i
+   * @param yValues
+   *          Data r(t_i)
+   * @param x
+   *          Set of xKey
    * @return r(x)
    */
   public DoubleMatrix1D interpolateFwds(final double[] xValues, final double[] yValues, final double[] x) {
@@ -324,7 +345,7 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
     final double[] knots = result.getKnots().getData();
 
     final int keyLength = x.length;
-    double[] res = new double[keyLength];
+    final double[] res = new double[keyLength];
 
     for (int j = 0; j < keyLength; ++j) {
       int indicator = 0;
@@ -346,10 +367,14 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Compute the values of f(t) 
-   * @param xValues Data t_i
-   * @param yValues Data r(t_i)
-   * @param xMatrix Set of xKey 
+   * Compute the values of f(t).
+   *
+   * @param xValues
+   *          Data t_i
+   * @param yValues
+   *          Data r(t_i)
+   * @param xMatrix
+   *          Set of xKey
    * @return r(x)
    */
   public DoubleMatrix2D interpolateFwds(final double[] xValues, final double[] yValues, final double[][] xMatrix) {
@@ -357,7 +382,7 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
 
     final int keyLength = xMatrix[0].length;
     final int keyDim = xMatrix.length;
-    double[][] res = new double[keyDim][keyLength];
+    final double[][] res = new double[keyDim][keyLength];
 
     for (int i = 0; i < keyDim; ++i) {
       res[i] = interpolateFwds(xValues, yValues, xMatrix[i]).getData();
@@ -367,16 +392,17 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * Derive r(t) * t from f(t)
-   * @param knots 
-   * @param coefMatrix 
+   * Derive r(t) * t from f(t).
+   *
+   * @param knots
+   * @param coefMatrix
    * @return coefmatrix of r(t) * t
    */
   private DoubleMatrix2D integration(final double[] knots, final double[][] coefMatrix) {
     final int nCoefs = coefMatrix[0].length + 1;
     final int nKnots = knots.length;
 
-    double[][] res = new double[nKnots][nCoefs];
+    final double[][] res = new double[nKnots][nCoefs];
     double sum = _spotRates[0] * _time[0];
 
     for (int i = 0; i < nKnots - 1; ++i) {
@@ -395,17 +421,19 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
   }
 
   /**
-   * @param xValues X values of data
-   * @param yValues Y values of data
+   * @param xValues
+   *          X values of data
+   * @param yValues
+   *          Y values of data
    * @return Coefficient matrix whose i-th row vector is {a3, a2, a1, a0} of f(x) = a3 * (x-x_i)^3 + a2 * (x-x_i)^2 +... for the i-th interval
    */
   private DoubleMatrix2D solve(final double[] time, final double[] spotRates) {
 
     final int nDataPts = time.length;
     final double[] discFwds = discFwdsFinder(time, spotRates);
-    double[] fwds = fwdsFinder(time, discFwds);
-    ArrayList<double[]> coefsList = new ArrayList<>();
-    ArrayList<Double> knots = new ArrayList<>();
+    final double[] fwds = fwdsFinder(time, discFwds);
+    final ArrayList<double[]> coefsList = new ArrayList<>();
+    final ArrayList<Double> knots = new ArrayList<>();
 
     for (int i = 0; i < nDataPts - 1; ++i) {
       final double gValue0 = fwds[i] - discFwds[i];
@@ -416,12 +444,12 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
       final double shift = discFwds[i];
 
       if (Math.abs(gValue0) <= 1e-13) {
-        final double[] coefs = new double[] {0., 0., shift, };
+        final double[] coefs = new double[] { 0., 0., shift, };
         knots.add(time[i]);
         coefsList.add(coefs);
       } else {
         if (Math.abs(gValue1) <= 1e-13) {
-          final double[] coefs = new double[] {0., 0., shift, };
+          final double[] coefs = new double[] { 0., 0., shift, };
           knots.add(time[i]);
           coefsList.add(coefs);
         } else {
@@ -430,15 +458,17 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
             final double cst0 = (gValue0 + 2. * gValue1) * gValue0 / gValue1;
             final double cst1 = (gValue1 + 2. * gValue0) * gValue1 / gValue0;
             final double newKnot = time[i] + interval * eta;
-            final double[] coefs1 = new double[] {cst0 / gValue1 * (gValue0 + gValue1) / interval / interval, -2. * cst0 / interval, gValue0 + shift };
-            final double[] coefs2 = new double[] {cst1 * (gValue0 + gValue1) / gValue0 / interval / interval, 0., -gValue0 * gValue1 / (gValue1 + gValue0) + shift };
+            final double[] coefs1 = new double[] { cst0 / gValue1 * (gValue0 + gValue1) / interval / interval, -2. * cst0 / interval, gValue0 + shift };
+            final double[] coefs2 = new double[] { cst1 * (gValue0 + gValue1) / gValue0 / interval / interval, 0.,
+                          -gValue0 * gValue1 / (gValue1 + gValue0) + shift };
             knots.add(time[i]);
             knots.add(newKnot);
             coefsList.add(coefs1);
             coefsList.add(coefs2);
           } else {
             if ((gDiff0 >= 0. && gDiff1 >= 0.) | (gDiff0 <= 0. && gDiff1 <= 0.)) {
-              final double[] coefs = new double[] {(3. * gValue0 + 3. * gValue1) / interval / interval, (-4. * gValue0 - 2. * gValue1) / interval, gValue0 + shift };
+              final double[] coefs = new double[] { (3. * gValue0 + 3. * gValue1) / interval / interval, (-4. * gValue0 - 2. * gValue1) / interval,
+                            gValue0 + shift };
               knots.add(time[i]);
               coefsList.add(coefs);
             } else {
@@ -446,8 +476,8 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
                 final double eta = (gValue1 + 2. * gValue0) / (gValue1 - gValue0);
                 final double newKnot = time[i] + interval * eta;
                 final double cst = (gValue1 - gValue0) / 3. / gValue0;
-                final double[] coefs1 = new double[] {0., 0., gValue0 + shift };
-                final double[] coefs2 = new double[] {cst * cst * (gValue1 - gValue0) / interval / interval, 0., gValue0 + shift };
+                final double[] coefs1 = new double[] { 0., 0., gValue0 + shift };
+                final double[] coefs2 = new double[] { cst * cst * (gValue1 - gValue0) / interval / interval, 0., gValue0 + shift };
                 knots.add(time[i]);
                 knots.add(newKnot);
                 coefsList.add(coefs1);
@@ -456,8 +486,9 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
                 final double eta = 3. * gValue1 / (gValue1 - gValue0);
                 final double newKnot = time[i] + interval * eta;
                 final double cst = (gValue0 - gValue1) / 3. / gValue1;
-                final double[] coefs1 = new double[] {cst * cst * (gValue0 - gValue1) / interval / interval, 2. * cst * (gValue0 - gValue1) / interval, gValue0 + shift };
-                final double[] coefs2 = {0, 0, gValue1 + shift };
+                final double[] coefs1 = new double[] { cst * cst * (gValue0 - gValue1) / interval / interval, 2. * cst * (gValue0 - gValue1) / interval,
+                              gValue0 + shift };
+                final double[] coefs2 = { 0, 0, gValue1 + shift };
                 knots.add(time[i]);
                 knots.add(newKnot);
                 coefsList.add(coefs1);
@@ -476,7 +507,7 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
       _time[i] = knots.get(i);
     }
 
-    double[][] res = new double[nKnots - 1][3];
+    final double[][] res = new double[nKnots - 1][3];
     for (int i = 0; i < nKnots - 1; ++i) {
       res[i] = coefsList.get(i);
     }
@@ -484,14 +515,14 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
     return new DoubleMatrix2D(res);
   }
 
-  /**  
-   * @param time 
-   * @param spotRates 
+  /**
+   * @param time
+   * @param spotRates
    * @return Discrete forwards
    */
   private double[] discFwdsFinder(final double[] time, final double[] spotRates) {
     final int nDataPts = time.length;
-    double[] res = new double[nDataPts - 1];
+    final double[] res = new double[nDataPts - 1];
 
     for (int i = 0; i < nDataPts - 1; ++i) {
       res[i] = (spotRates[i + 1] * time[i + 1] - spotRates[i] * time[i]) / (time[i + 1] - time[i]);
@@ -502,12 +533,13 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
 
   /**
    * @param time
-   * @param discFwds Discrete forwards 
+   * @param discFwds
+   *          Discrete forwards
    * @return Forwards
    */
   private double[] fwdsFinder(final double[] time, final double[] discFwds) {
     final int nDataPts = time.length;
-    double[] res = new double[nDataPts];
+    final double[] res = new double[nDataPts];
 
     for (int i = 1; i < nDataPts - 1; ++i) {
       res[i] = (time[i] - time[i - 1]) * discFwds[i] / (time[i + 1] - time[i - 1]) + (time[i + 1] - time[i]) * discFwds[i - 1] / (time[i + 1] - time[i - 1]);
@@ -520,13 +552,16 @@ public class MonotoneConvexSplineInterpolator extends PiecewisePolynomialInterpo
 
   /**
    * Modify forwards such that positivity holds
-   * @param discFwds Discrete forwards
-   * @param fwds  Forwards 
+   *
+   * @param discFwds
+   *          Discrete forwards
+   * @param fwds
+   *          Forwards
    * @return Modified forwards
    */
   private double[] fwdsModifier(final double[] discFwds, final double[] fwds) {
     final int length = fwds.length;
-    double[] res = new double[length];
+    final double[] res = new double[length];
 
     res[0] = boundFunc(0., fwds[0], 2. * discFwds[0]);
     for (int i = 1; i < length - 1; ++i) {

@@ -40,7 +40,7 @@ import com.opengamma.id.ExternalId;
  * Exposure function that returns the security type and exchange for a given trade.
  */
 public class SecurityAndTradingExchangeExposureFunction implements ExposureFunction {
-  
+
   /**
    * The name of the exposure function.
    */
@@ -50,23 +50,23 @@ public class SecurityAndTradingExchangeExposureFunction implements ExposureFunct
   public String getName() {
     return NAME;
   }
-  
+
   @Override
-  public List<ExternalId> getIds(Trade trade) {
-    Security security = trade.getSecurity();
+  public List<ExternalId> getIds(final Trade trade) {
+    final Security security = trade.getSecurity();
     if (security instanceof FinancialSecurity) {
       return ((FinancialSecurity) security).accept(SecurityAndTradingExchangeVisitor.getInstance());
     }
     return null;
   }
-  
+
   private static final class SecurityAndTradingExchangeVisitor extends FinancialSecurityVisitorSameValueAdapter<List<ExternalId>> {
-    
+
     /**
      * The singleton.
      */
     private static final SecurityAndTradingExchangeVisitor INSTANCE = new SecurityAndTradingExchangeVisitor();
-    
+
     /**
      * Returns the singleton.
      * @return the singleton.
@@ -74,7 +74,7 @@ public class SecurityAndTradingExchangeExposureFunction implements ExposureFunct
     public static SecurityAndTradingExchangeVisitor getInstance() {
       return INSTANCE;
     }
-    
+
     /**
      * Singleton constructor that sets the default return value to null.
      */
@@ -88,147 +88,147 @@ public class SecurityAndTradingExchangeExposureFunction implements ExposureFunct
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitBondFutureSecurity(final BondFutureSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitEquityIndexDividendFutureSecurity(final EquityIndexDividendFutureSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitFXFutureSecurity(final FXFutureSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitStockFutureSecurity(final StockFutureSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitEquityFutureSecurity(final EquityFutureSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitEnergyFutureSecurity(final EnergyFutureSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitIndexFutureSecurity(final IndexFutureSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitInterestRateFutureSecurity(final InterestRateFutureSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitFederalFundsFutureSecurity(final FederalFundsFutureSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitMetalFutureSecurity(final MetalFutureSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitCommodityFutureOptionSecurity(final CommodityFutureOptionSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitFxFutureOptionSecurity(final FxFutureOptionSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitBondFutureOptionSecurity(final BondFutureOptionSecurity security) {
       final String exchange = security.getTradingExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitEquityBarrierOptionSecurity(final EquityBarrierOptionSecurity security) {
       final String exchange = security.getExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitEquityIndexDividendFutureOptionSecurity(final EquityIndexDividendFutureOptionSecurity security) {
       final String exchange = security.getExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitEquityIndexFutureOptionSecurity(final EquityIndexFutureOptionSecurity security) {
       final String exchange = security.getExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitEquityIndexOptionSecurity(final EquityIndexOptionSecurity security) {
       final String exchange = security.getExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitEquityOptionSecurity(final EquityOptionSecurity security) {
       final String exchange = security.getExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitEquitySecurity(final EquitySecurity security) {
       final String exchange = security.getExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitIRFutureOptionSecurity(final IRFutureOptionSecurity security) {
       final String exchange = security.getExchange();
       final String securityType = security.getSecurityType();
       return Arrays.asList(ExternalId.of(SECURITY_IDENTIFIER, securityType + SEPARATOR + exchange));
     }
-  
+
     @Override
     public List<ExternalId> visitDeliverableSwapFutureSecurity(final DeliverableSwapFutureSecurity security) {
       final String exchange = security.getTradingExchange();

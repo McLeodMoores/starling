@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.equity.portfoliotheory;
@@ -18,28 +18,28 @@ import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class CAPMFromRegressionDefaultPropertiesFunction extends DefaultPropertyFunction {
   private static final String[] VALUE_NAMES = new String[] {ValueRequirementNames.CAPM_REGRESSION_ADJUSTED_R_SQUARED,
-                                                            ValueRequirementNames.CAPM_REGRESSION_ALPHA,
-                                                            ValueRequirementNames.CAPM_REGRESSION_BETA,
-                                                            ValueRequirementNames.CAPM_REGRESSION_MEAN_SQUARE_ERROR,
-                                                            ValueRequirementNames.CAPM_REGRESSION_ALPHA_PVALUES,
-                                                            ValueRequirementNames.CAPM_REGRESSION_BETA_PVALUES,
-                                                            ValueRequirementNames.CAPM_REGRESSION_R_SQUARED,
-                                                            ValueRequirementNames.CAPM_REGRESSION_ALPHA_RESIDUALS,
-                                                            ValueRequirementNames.CAPM_REGRESSION_BETA_RESIDUALS,
-                                                            ValueRequirementNames.CAPM_REGRESSION_STANDARD_ERROR_OF_ALPHA,
-                                                            ValueRequirementNames.CAPM_REGRESSION_STANDARD_ERROR_OF_BETA,
-                                                            ValueRequirementNames.CAPM_REGRESSION_ALPHA_TSTATS,
-                                                            ValueRequirementNames.CAPM_REGRESSION_BETA_TSTATS
+                ValueRequirementNames.CAPM_REGRESSION_ALPHA,
+                ValueRequirementNames.CAPM_REGRESSION_BETA,
+                ValueRequirementNames.CAPM_REGRESSION_MEAN_SQUARE_ERROR,
+                ValueRequirementNames.CAPM_REGRESSION_ALPHA_PVALUES,
+                ValueRequirementNames.CAPM_REGRESSION_BETA_PVALUES,
+                ValueRequirementNames.CAPM_REGRESSION_R_SQUARED,
+                ValueRequirementNames.CAPM_REGRESSION_ALPHA_RESIDUALS,
+                ValueRequirementNames.CAPM_REGRESSION_BETA_RESIDUALS,
+                ValueRequirementNames.CAPM_REGRESSION_STANDARD_ERROR_OF_ALPHA,
+                ValueRequirementNames.CAPM_REGRESSION_STANDARD_ERROR_OF_BETA,
+                ValueRequirementNames.CAPM_REGRESSION_ALPHA_TSTATS,
+                ValueRequirementNames.CAPM_REGRESSION_BETA_TSTATS
   };
   private final String _samplingPeriodName;
   private final String _scheduleCalculatorName;
   private final String _samplingFunctionName;
   private final String _returnCalculatorName;
-  
+
   public CAPMFromRegressionDefaultPropertiesFunction(final String samplingPeriodName, final String scheduleCalculatorName, final String samplingFunctionName,
       final String returnCalculatorName, final ComputationTargetType target) {
     super(target, true);
@@ -52,7 +52,7 @@ public class CAPMFromRegressionDefaultPropertiesFunction extends DefaultProperty
     _samplingFunctionName = samplingFunctionName;
     _returnCalculatorName = returnCalculatorName;
   }
-  
+
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
     for (final String valueName : VALUE_NAMES) {
@@ -62,9 +62,10 @@ public class CAPMFromRegressionDefaultPropertiesFunction extends DefaultProperty
       defaults.addValuePropertyName(valueName, ValuePropertyNames.RETURN_CALCULATOR);
     }
   }
-  
+
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.SAMPLING_PERIOD.equals(propertyName)) {
       return Collections.singleton(_samplingPeriodName);
     }

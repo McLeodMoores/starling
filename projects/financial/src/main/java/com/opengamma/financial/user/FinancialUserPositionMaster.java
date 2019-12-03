@@ -41,74 +41,74 @@ public class FinancialUserPositionMaster extends AbstractFinancialUserMaster<Pos
    * @param client  the client, not null
    * @param underlying  the underlying master, not null
    */
-  public FinancialUserPositionMaster(FinancialClient client, PositionMaster underlying) {
+  public FinancialUserPositionMaster(final FinancialClient client, final PositionMaster underlying) {
     super(client, FinancialUserDataType.POSITION);
     _underlying = underlying;
-    _changeProvidingMaster = ChangeProvidingDecorator.wrap(underlying); 
+    _changeProvidingMaster = ChangeProvidingDecorator.wrap(underlying);
   }
 
   @Override
-  public PositionDocument add(PositionDocument document) {
+  public PositionDocument add(final PositionDocument document) {
     return _changeProvidingMaster.add(document);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, PositionDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final PositionDocument documentToAdd) {
     return _changeProvidingMaster.addVersion(objectId, documentToAdd);
   }
 
   @Override
-  public PositionDocument correct(PositionDocument document) {
+  public PositionDocument correct(final PositionDocument document) {
     return _changeProvidingMaster.correct(document);
   }
 
   @Override
-  public PositionDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public PositionDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     return _changeProvidingMaster.get(objectId, versionCorrection);
   }
 
   @Override
-  public PositionDocument get(UniqueId uniqueId) {
+  public PositionDocument get(final UniqueId uniqueId) {
     return _changeProvidingMaster.get(uniqueId);
   }
 
   @Override
-  public Map<UniqueId, PositionDocument> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, PositionDocument> get(final Collection<UniqueId> uniqueIds) {
     return _changeProvidingMaster.get(uniqueIds);
   }
 
   @Override
-  public void remove(ObjectIdentifiable oid) {
+  public void remove(final ObjectIdentifiable oid) {
     _changeProvidingMaster.remove(oid);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     _changeProvidingMaster.removeVersion(uniqueId);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<PositionDocument> replacementDocuments) {
     return _changeProvidingMaster.replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(PositionDocument replacementDocument) {
+  public UniqueId replaceVersion(final PositionDocument replacementDocument) {
     return _changeProvidingMaster.replaceVersion(replacementDocument);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<PositionDocument> replacementDocuments) {
     return _changeProvidingMaster.replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<PositionDocument> replacementDocuments) {
     return _changeProvidingMaster.replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public PositionDocument update(PositionDocument document) {
+  public PositionDocument update(final PositionDocument document) {
     return _changeProvidingMaster.update(document);
   }
 
@@ -118,17 +118,17 @@ public class FinancialUserPositionMaster extends AbstractFinancialUserMaster<Pos
   }
 
   @Override
-  public ManageableTrade getTrade(UniqueId tradeId) {
+  public ManageableTrade getTrade(final UniqueId tradeId) {
     return _underlying.getTrade(tradeId);
   }
 
   @Override
-  public PositionHistoryResult history(PositionHistoryRequest request) {
+  public PositionHistoryResult history(final PositionHistoryRequest request) {
     return _underlying.history(request);
   }
 
   @Override
-  public PositionSearchResult search(PositionSearchRequest request) {
+  public PositionSearchResult search(final PositionSearchRequest request) {
     return _underlying.search(request);
   }
 }

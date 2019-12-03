@@ -27,20 +27,28 @@ public class ThrowableExceptionMapper
 
   //-------------------------------------------------------------------------
   @Override
-  protected String buildHtmlErrorPage(Throwable exception) {
-    Map<String, String> data = new HashMap<>();
+  protected String buildHtmlErrorPage(final Throwable exception) {
+    final Map<String, String> data = getMessage();
     buildOutputMessage(exception, data);
     return createHtmlErrorPage("error-servererror.html", data);
   }
 
   @Override
-  protected void logHtmlException(Throwable exception, String htmlPage) {
-    s_logger.error("RESTful website exception caught", exception);
+  protected void logHtmlException(final Throwable exception, final String htmlPage) {
+    LOGGER.error("RESTful website exception caught", exception);
   }
 
   @Override
-  protected void logRestfulError(Throwable exception) {
-    s_logger.error("RESTful web-service exception caught and tunnelled to client:", exception);
+  protected void logRestfulError(final Throwable exception) {
+    LOGGER.error("RESTful web-service exception caught and tunnelled to client:", exception);
   }
 
+  /**
+   * Gets the error message.
+   *
+   * @return  the message
+   */
+  Map<String, String> getMessage() {
+    return new HashMap<>();
+  }
 }

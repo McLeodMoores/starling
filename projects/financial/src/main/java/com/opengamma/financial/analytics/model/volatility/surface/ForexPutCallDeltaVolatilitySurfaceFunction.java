@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.volatility.surface;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.option.definition.SmileDeltaParameters;
 import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.marketdatasnapshot.VolatilitySurfaceData;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.FunctionExecutionContext;
@@ -34,15 +32,18 @@ import com.opengamma.financial.analytics.model.InterpolatedDataProperties;
 import com.opengamma.financial.analytics.volatility.surface.VolatilitySurfaceShiftFunction;
 import com.opengamma.util.time.Tenor;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
- * 
+ *
  */
 public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVolatilitySurfaceFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ForexPutCallDeltaVolatilitySurfaceFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForexPutCallDeltaVolatilitySurfaceFunction.class);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String surfaceName = desiredValue.getConstraint(ValuePropertyNames.SURFACE);
     final String interpolatorName = desiredValue.getConstraint(InterpolatedDataProperties.X_INTERPOLATOR_NAME);
@@ -69,7 +70,7 @@ public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVo
     final int nSmileValues = deltaValues.length;
     final Set<String> shifts = desiredValues.iterator().next().getConstraints().getValues(VolatilitySurfaceShiftFunction.SHIFT);
     final double shiftMultiplier;
-    if ((shifts != null) && (shifts.size() == 1)) {
+    if (shifts != null && shifts.size() == 1) {
       final String shift = shifts.iterator().next();
       shiftMultiplier = 1 + Double.parseDouble(shift);
     } else {
@@ -83,7 +84,7 @@ public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVo
       for (int j = 0; j < nSmileValues; j++) {
         final Double delta = deltaValues[j];
         if (delta != null) {
-          Double volatility = fxVolatilitySurface.getVolatility((Object) tenor, (Object) delta);
+          Double volatility = fxVolatilitySurface.getVolatility(tenor, delta);
           if (volatility != null) {
             volatility *= shiftMultiplier;
             if (delta < 50) {
@@ -92,12 +93,12 @@ public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVo
             volatilities.add(volatility);
           }
         } else {
-          s_logger.info("Had a null value for tenor number " + j);
+          LOGGER.info("Had a null value for tenor number " + j);
         }
       }
       smile[i] = new SmileDeltaParameters(t, deltas.toDoubleArray(), volatilities.toDoubleArray());
     }
-    final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
     final SmileDeltaTermStructureParametersStrikeInterpolation smiles = new SmileDeltaTermStructureParametersStrikeInterpolation(smile, interpolator);
     final ValueProperties.Builder resultProperties = createValueProperties()
         .with(ValuePropertyNames.SURFACE, surfaceName)
@@ -114,7 +115,9 @@ public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVo
 
   /**
    * Transforms the delta for this surface type into that expected by the analytics library.
-   * @param delta The delta
+   *
+   * @param delta
+   *          The delta
    * @return The transformed delta.
    */
   protected abstract double getTransformedDelta(double delta);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.inflation.derivative;
@@ -12,9 +12,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing an Year on Year inflation coupon.
- * The index for a given month is given in the yield curve and in the time series on the first of the month.
- * The pay-off is paymentYearFraction*((final index / start index - 1)+ Margin) * notional if the notional is not paid and final index / start index * notional if the notional is paid.
+ * Class describing an Year on Year inflation coupon. The index for a given month is given in the yield curve and in the time series on the first of the month.
+ * The pay-off is paymentYearFraction*((final index / start index - 1)+ Margin) * notional if the notional is not paid and final index / start index * notional
+ * if the notional is paid.
  */
 public class CouponInflationYearOnYearMonthlyWithMargin extends CouponInflation implements CouponInflationWithMargin {
 
@@ -30,9 +30,9 @@ public class CouponInflationYearOnYearMonthlyWithMargin extends CouponInflation 
   private final double _referenceStartTime;
 
   /**
-   * The time for which the index at the coupon start is paid by the standard corresponding  zero coupon. 
-   * There is usually a difference of two or three month between the reference date and the natural payment date.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The time for which the index at the coupon start is paid by the standard corresponding zero coupon. There is usually a difference of two or three month
+   * between the reference date and the natural payment date. The time can be negative (when the price index for the current and last month is not yet
+   * published).
    */
   private final double _naturalPaymentStartTime;
 
@@ -43,10 +43,9 @@ public class CouponInflationYearOnYearMonthlyWithMargin extends CouponInflation 
   private final double _referenceEndTime;
 
   /**
-   * The time for which the index at the coupon end is paid by the standard corresponding  zero coupon. 
-   * There is usually a difference of two or three month between the reference date and the natural payment date.
-   * the natural payment date is equal to the payment date when the lag is the conventional one.
-   * The time can be negative (when the price index for the current and last month is not yet published).
+   * The time for which the index at the coupon end is paid by the standard corresponding zero coupon. There is usually a difference of two or three month
+   * between the reference date and the natural payment date. the natural payment date is equal to the payment date when the lag is the conventional one. The
+   * time can be negative (when the price index for the current and last month is not yet published).
    */
   private final double _naturalPaymentEndTime;
 
@@ -57,21 +56,35 @@ public class CouponInflationYearOnYearMonthlyWithMargin extends CouponInflation 
 
   /**
    * Inflation year on year coupon constructor.
-   * @param factor The additive factor (margin). 
-   * @param currency The coupon currency.
-   * @param paymentTime The time to payment.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
-   * @param referenceStartTime The reference time for the index at the coupon start.
-   * @param naturalPaymentStartTime The time for which the index at the coupon start is paid by the standard corresponding  zero coupon. 
-   * @param referenceEndTime The reference time for the index at the coupon end.
-   * @param naturalPaymentEndTime The time for which the index at the coupon end is paid by the standard corresponding  zero coupon.
-   * @param payNotional Flag indicating if the notional is paid (true) or not (false).
+   * 
+   * @param factor
+   *          The additive factor (margin).
+   * @param currency
+   *          The coupon currency.
+   * @param paymentTime
+   *          The time to payment.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
+   * @param referenceStartTime
+   *          The reference time for the index at the coupon start.
+   * @param naturalPaymentStartTime
+   *          The time for which the index at the coupon start is paid by the standard corresponding zero coupon.
+   * @param referenceEndTime
+   *          The reference time for the index at the coupon end.
+   * @param naturalPaymentEndTime
+   *          The time for which the index at the coupon end is paid by the standard corresponding zero coupon.
+   * @param payNotional
+   *          Flag indicating if the notional is paid (true) or not (false).
    */
-  public CouponInflationYearOnYearMonthlyWithMargin(final double factor, final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional,
+  public CouponInflationYearOnYearMonthlyWithMargin(final double factor, final Currency currency, final double paymentTime, final double paymentYearFraction,
+      final double notional,
       final IndexPrice priceIndex,
-      final double referenceStartTime, double naturalPaymentStartTime, final double referenceEndTime, double naturalPaymentEndTime, final boolean payNotional) {
+      final double referenceStartTime, final double naturalPaymentStartTime, final double referenceEndTime, final double naturalPaymentEndTime,
+      final boolean payNotional) {
     super(currency, paymentTime, paymentYearFraction, notional, priceIndex);
     _factor = factor;
     _referenceStartTime = referenceStartTime;
@@ -84,6 +97,7 @@ public class CouponInflationYearOnYearMonthlyWithMargin extends CouponInflation 
 
   /**
    * Gets the additive facor (margin).
+   * 
    * @return The facor.
    */
   @Override
@@ -93,6 +107,7 @@ public class CouponInflationYearOnYearMonthlyWithMargin extends CouponInflation 
 
   /**
    * Gets the reference time for the index at the coupon start.
+   * 
    * @return The reference time.
    */
   public double getReferenceStartTime() {
@@ -105,6 +120,7 @@ public class CouponInflationYearOnYearMonthlyWithMargin extends CouponInflation 
 
   /**
    * Gets the reference time for the index at the coupon end.
+   * 
    * @return The reference time.
    */
   public double getReferenceEndTime() {
@@ -117,6 +133,7 @@ public class CouponInflationYearOnYearMonthlyWithMargin extends CouponInflation 
 
   /**
    * Gets the pay notional flag.
+   * 
    * @return The flag.
    */
   public boolean payNotional() {
@@ -125,18 +142,19 @@ public class CouponInflationYearOnYearMonthlyWithMargin extends CouponInflation 
 
   @Override
   public CouponInflationYearOnYearMonthlyWithMargin withNotional(final double notional) {
-    return new CouponInflationYearOnYearMonthlyWithMargin(_factor, getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(), _referenceStartTime, _naturalPaymentStartTime,
+    return new CouponInflationYearOnYearMonthlyWithMargin(_factor, getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getPriceIndex(),
+        _referenceStartTime, _naturalPaymentStartTime,
         _referenceEndTime, _naturalPaymentEndTime, _payNotional);
   }
 
   @Override
-  public <S, T> T accept(InstrumentDerivativeVisitor<S, T> visitor, S data) {
+  public <S, T> T accept(final InstrumentDerivativeVisitor<S, T> visitor, final S data) {
     ArgumentChecker.notNull(visitor, "visitor");
     return visitor.visitCouponInflationYearOnYearMonthlyWithMargin(this, data);
   }
 
   @Override
-  public <T> T accept(InstrumentDerivativeVisitor<?, T> visitor) {
+  public <T> T accept(final InstrumentDerivativeVisitor<?, T> visitor) {
     ArgumentChecker.notNull(visitor, "visitor");
     return visitor.visitCouponInflationYearOnYearMonthlyWithMargin(this);
   }
@@ -152,21 +170,21 @@ public class CouponInflationYearOnYearMonthlyWithMargin extends CouponInflation 
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_factor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_naturalPaymentEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_naturalPaymentStartTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_payNotional ? 1231 : 1237);
     temp = Double.doubleToLongBits(_referenceEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referenceStartTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -176,7 +194,7 @@ public class CouponInflationYearOnYearMonthlyWithMargin extends CouponInflation 
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CouponInflationYearOnYearMonthlyWithMargin other = (CouponInflationYearOnYearMonthlyWithMargin) obj;
+    final CouponInflationYearOnYearMonthlyWithMargin other = (CouponInflationYearOnYearMonthlyWithMargin) obj;
     if (Double.doubleToLongBits(_factor) != Double.doubleToLongBits(other._factor)) {
       return false;
     }

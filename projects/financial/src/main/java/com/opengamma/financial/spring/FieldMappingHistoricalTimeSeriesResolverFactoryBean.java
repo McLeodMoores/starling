@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.spring;
@@ -29,11 +29,11 @@ import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldA
 import com.opengamma.util.spring.SpringFactoryBean;
 
 /**
- * Spring factory bean for {@link FieldMappingHistoricalTimeSeriesResolver} 
+ * Spring factory bean for {@link FieldMappingHistoricalTimeSeriesResolver}.
  */
 @BeanDefinition
 public class FieldMappingHistoricalTimeSeriesResolverFactoryBean extends SpringFactoryBean<HistoricalTimeSeriesResolver> {
-  
+
   /**
    * The field adjustment maps.
    */
@@ -49,7 +49,7 @@ public class FieldMappingHistoricalTimeSeriesResolverFactoryBean extends SpringF
    */
   @PropertyDefinition
   private ConfigSource _configSource;
-  
+
   /**
    * Creates an instance.
    */
@@ -57,10 +57,10 @@ public class FieldMappingHistoricalTimeSeriesResolverFactoryBean extends SpringF
     super(HistoricalTimeSeriesResolver.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected HistoricalTimeSeriesResolver createObject() {
-    HistoricalTimeSeriesSelector selector = new DefaultHistoricalTimeSeriesSelector(getConfigSource());
+    final HistoricalTimeSeriesSelector selector = new DefaultHistoricalTimeSeriesSelector(getConfigSource());
     return new FieldMappingHistoricalTimeSeriesResolver(getFieldAdjustmentMaps(), selector, getHistoricalTimeSeriesMaster());
   }
 

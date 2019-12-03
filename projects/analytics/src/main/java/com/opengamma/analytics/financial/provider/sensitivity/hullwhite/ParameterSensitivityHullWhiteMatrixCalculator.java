@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.sensitivity.hullwhite;
@@ -20,22 +20,25 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * For an instrument, computes the sensitivity of double value (often par spread) to the parameters used in the curve.
- * The meaning of "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.).
- * The return format is DoubleMatrix1D object.
+ * For an instrument, computes the sensitivity of double value (often par spread) to the parameters used in the curve. The meaning of "parameters" will depend
+ * of the way the curve is stored (interpolated yield, function parameters, etc.). The return format is DoubleMatrix1D object.
  */
 public class ParameterSensitivityHullWhiteMatrixCalculator extends ParameterSensitivityHullWhiteMatrixAbstractCalculator {
 
   /**
-   * Constructor
-   * @param curveSensitivityCalculator The curve sensitivity calculator.
+   * Constructor.
+   *
+   * @param curveSensitivityCalculator
+   *          The curve sensitivity calculator.
    */
-  public ParameterSensitivityHullWhiteMatrixCalculator(final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, MulticurveSensitivity> curveSensitivityCalculator) {
+  public ParameterSensitivityHullWhiteMatrixCalculator(
+      final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, MulticurveSensitivity> curveSensitivityCalculator) {
     super(curveSensitivityCalculator);
   }
 
   @Override
-  public DoubleMatrix1D pointToParameterSensitivity(final MulticurveSensitivity sensitivity, final HullWhiteOneFactorProviderInterface hullWhite, final Set<String> curvesSet) {
+  public DoubleMatrix1D pointToParameterSensitivity(final MulticurveSensitivity sensitivity, final HullWhiteOneFactorProviderInterface hullWhite,
+      final Set<String> curvesSet) {
     SimpleParameterSensitivity ps = new SimpleParameterSensitivity();
     // YieldAndDiscount
     final Map<String, List<DoublesPair>> sensitivityDsc = sensitivity.getYieldDiscountingSensitivities();

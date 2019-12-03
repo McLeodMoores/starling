@@ -43,7 +43,7 @@ public class WebHistoricalTimeSeriesData extends WebPerRequestData {
   @PropertyDefinition
   private HistoricalTimeSeriesLoader _historicalTimeSeriesLoader;
   /**
-   * The config source
+   * The config source.
    */
   @PropertyDefinition
   private ConfigSource _configSource;
@@ -65,7 +65,9 @@ public class WebHistoricalTimeSeriesData extends WebPerRequestData {
 
   /**
    * Gets the best available id.
-   * @param overrideId  the override id, null derives the result from the data
+   * 
+   * @param overrideId
+   *          the override id, null derives the result from the data
    * @return the id, may be null
    */
   public String getBestHistoricalTimeSeriesUriId(final UniqueId overrideId) {
@@ -146,7 +148,7 @@ public class WebHistoricalTimeSeriesData extends WebPerRequestData {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the config source
+   * Gets the config source.
    * @return the value of the property
    */
   public ConfigSource getConfigSource() {
@@ -154,7 +156,7 @@ public class WebHistoricalTimeSeriesData extends WebPerRequestData {
   }
 
   /**
-   * Sets the config source
+   * Sets the config source.
    * @param configSource  the new value of the property
    */
   public void setConfigSource(ConfigSource configSource) {

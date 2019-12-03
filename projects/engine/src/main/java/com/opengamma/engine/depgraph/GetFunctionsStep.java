@@ -34,7 +34,7 @@ import com.opengamma.util.tuple.Triple;
 
 /* package */final class GetFunctionsStep extends ResolveTask.State {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(GetFunctionsStep.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetFunctionsStep.class);
 
   private static final ParameterizedFunction MARKET_DATA_SOURCING_FUNCTION = createParameterizedFunction(MarketDataSourcingFunction.INSTANCE);
   private static final ParameterizedFunction RELABELLING_FUNCTION = createParameterizedFunction(MarketDataAliasingFunction.INSTANCE);
@@ -43,11 +43,11 @@ import com.opengamma.util.tuple.Triple;
     return new ParameterizedFunction(function, function.getFunctionDefinition().getDefaultParameters());
   }
 
-  public GetFunctionsStep(final ResolveTask task) {
+  GetFunctionsStep(final ResolveTask task) {
     super(task);
   }
 
-  private static final ComputationTargetReferenceVisitor<Object> s_getTargetValue = new ComputationTargetReferenceVisitor<Object>() {
+  private static final ComputationTargetReferenceVisitor<Object> GET_TARGET_VALUE = new ComputationTargetReferenceVisitor<Object>() {
 
     @Override
     public Object visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
@@ -63,17 +63,20 @@ import com.opengamma.util.tuple.Triple;
   };
 
   /**
-   * Removes any optional flags on constraints. If the constraint is optional and the provider produced no value, then the constraint is removed. If the provider produced values for the constraint,
-   * and an intersection exists, then the intersection is used. Otherwise the maximal value set is used to satisfy the original constraint.
-   * 
-   * @param constraints the requested constraints, not null
-   * @param properties the provider's value specification properties, not null
+   * Removes any optional flags on constraints. If the constraint is optional and the provider produced no value, then the constraint is removed. If the
+   * provider produced values for the constraint, and an intersection exists, then the intersection is used. Otherwise the maximal value set is used to satisfy
+   * the original constraint.
+   *
+   * @param constraints
+   *          the requested constraints, not null
+   * @param properties
+   *          the provider's value specification properties, not null
    * @return the builder for constraints
    */
   private static ValueProperties.Builder intersectOptional(final ValueProperties constraints, final ValueProperties properties) {
-    ValueProperties.Builder builder = constraints.copy();
+    final ValueProperties.Builder builder = constraints.copy();
     // TODO: [PLAT-3446] Return the builder immediately to recreate the observed fault
-    for (String property : constraints.getProperties()) {
+    for (final String property : constraints.getProperties()) {
       final Set<String> providerValues = properties.getValues(property);
       if (providerValues != null) {
         // Remove optional flag and take intersection if there is one
@@ -115,10 +118,10 @@ import com.opengamma.util.tuple.Triple;
         if (target != null) {
           targetValue = target.getValue();
         } else {
-          targetValue = requirement.getTargetReference().accept(s_getTargetValue);
+          targetValue = requirement.getTargetReference().accept(GET_TARGET_VALUE);
         }
       } else {
-        targetValue = requirement.getTargetReference().accept(s_getTargetValue);
+        targetValue = requirement.getTargetReference().accept(GET_TARGET_VALUE);
       }
       marketDataSpec = context.getMarketDataAvailabilityProvider().getAvailability(targetSpec, targetValue, requirement);
     } catch (final BlockingOperation e) {
@@ -129,16 +132,18 @@ import com.opengamma.util.tuple.Triple;
       BlockingOperation.on();
     }
     if (marketDataSpec != null) {
-      s_logger.info("Found live data for {}", requirement);
+      LOGGER.info("Found live data for {}", requirement);
       marketDataSpec = context.simplifyType(marketDataSpec);
       if (targetSpec == null) {
         // The system resolver did not produce a target that we can monitor, so use the MDAP supplied value
         targetSpec = marketDataSpec.getTargetSpecification();
       }
-      ResolvedValue resolvedValue = createResult(marketDataSpec, MARKET_DATA_SOURCING_FUNCTION, Collections.<ValueSpecification>emptySet(), Collections.singleton(marketDataSpec));
+      ResolvedValue resolvedValue = createResult(marketDataSpec, MARKET_DATA_SOURCING_FUNCTION,
+          Collections.<ValueSpecification> emptySet(), Collections.singleton(marketDataSpec));
       final ValueProperties constraints = requirement.getConstraints();
-      boolean constraintsSatisfied = constraints.isSatisfiedBy(marketDataSpec.getProperties());
-      if ((requirement.getValueName() != marketDataSpec.getValueName()) || !targetSpec.equals(marketDataSpec.getTargetSpecification()) || !constraintsSatisfied) {
+      final boolean constraintsSatisfied = constraints.isSatisfiedBy(marketDataSpec.getProperties());
+      if (requirement.getValueName() != marketDataSpec.getValueName() || !targetSpec.equals(marketDataSpec.getTargetSpecification())
+          || !constraintsSatisfied) {
         // The specification returned by market data provision does not match the logical target; publish a substitute node
         context.declareProduction(resolvedValue);
         final ValueProperties properties;
@@ -154,7 +159,8 @@ import com.opengamma.util.tuple.Triple;
               properties = ValueProperties.with(ValuePropertyNames.FUNCTION, MarketDataAliasingFunction.UNIQUE_ID).get();
             } else if (!allProperties.isEmpty()) {
               // Requirement made no constraint on function identifier
-              properties = intersectOptional(constraints, marketDataSpec.getProperties()).with(ValuePropertyNames.FUNCTION, MarketDataAliasingFunction.UNIQUE_ID).get();
+              properties = intersectOptional(constraints, marketDataSpec.getProperties())
+                  .with(ValuePropertyNames.FUNCTION, MarketDataAliasingFunction.UNIQUE_ID).get();
             } else {
               // Requirement used a nearly infinite property bundle that omitted a function identifier
               properties = constraints.copy().withAny(ValuePropertyNames.FUNCTION).get();
@@ -195,7 +201,8 @@ import com.opengamma.util.tuple.Triple;
         existing.addCallback(context, new ResolvedValueCallback() {
 
           @Override
-          public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
+          public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
+              final ResolutionPump pump) {
             if (pump != null) {
               pump.close(context);
             }
@@ -222,7 +229,7 @@ import com.opengamma.util.tuple.Triple;
       // Leave in current state; will go to finished after being pumped
     } else {
       if (missing) {
-        s_logger.info("Missing market data for {}", requirement);
+        LOGGER.info("Missing market data for {}", requirement);
         storeFailure(context.marketDataMissing(requirement));
         setTaskStateFinished(context);
       } else {
@@ -234,7 +241,7 @@ import com.opengamma.util.tuple.Triple;
             getFunctions(target, context, this);
           }
         } else {
-          s_logger.info("No functions for unresolved target {}", requirement);
+          LOGGER.info("No functions for unresolved target {}", requirement);
           storeFailure(context.couldNotResolve(requirement));
           setTaskStateFinished(context);
         }
@@ -247,20 +254,23 @@ import com.opengamma.util.tuple.Triple;
    * Fetches all of the functions that can apply to the target, changing the state to then process that collection.
    * <p>
    * The collection returned from the function resolver must include normalized value specifications.
-   * 
-   * @param target the target to apply the functions to, not null
-   * @param context the graph building context, not null
-   * @param state the current task execution state, not null
+   *
+   * @param target
+   *          the target to apply the functions to, not null
+   * @param context
+   *          the graph building context, not null
+   * @param state
+   *          the current task execution state, not null
    */
   protected static void getFunctions(final ComputationTarget target, final GraphBuildingContext context, final ResolveTask.State state) {
     final ValueRequirement requirement = state.getValueRequirement();
-    final Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> itr = context.getFunctionResolver().resolveFunction(requirement.getValueName(), target,
-        requirement.getConstraints());
+    final Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> itr = context.getFunctionResolver()
+        .resolveFunction(requirement.getValueName(), target, requirement.getConstraints());
     if (itr.hasNext()) {
-      s_logger.debug("Found functions for {}", requirement);
+      LOGGER.debug("Found functions for {}", requirement);
       state.setRunnableTaskState(new ResolvedFunctionStep(state.getTask(), itr), context);
     } else {
-      s_logger.info("No functions for {}", requirement);
+      LOGGER.info("No functions for {}", requirement);
       state.storeFailure(context.noFunctions(requirement));
       state.setTaskStateFinished(context);
     }

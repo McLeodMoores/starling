@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.management;
@@ -8,8 +8,6 @@ package com.opengamma.engine.management;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Duration;
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
@@ -35,11 +33,9 @@ import net.sf.ehcache.CacheException;
 
 /**
  * An MBean implementation for attributes and operations on a view process.
- * 
  */
 public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewProcessMXBeanImpl.class);
   /**
    * The backing view process instance
    */
@@ -72,15 +68,18 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   private volatile Instant _lastSuccessfulCycleTimeStamp;
 
   /**
-   * Create a management View
+   * Create a management View.
    *
-   * @param viewProcess the underlying view process
-   * @param viewProcessor the view processor responsible for the view process
+   * @param viewProcess
+   *          the underlying view process
+   * @param viewProcessor
+   *          the view processor responsible for the view process
    * @param splitByViewProcessor
+   *          true to split by view processor
    */
-  public ViewProcessMXBeanImpl(ViewProcessInternal viewProcess,
-                               ViewProcessor viewProcessor,
-                               boolean splitByViewProcessor) {
+  public ViewProcessMXBeanImpl(final ViewProcessInternal viewProcess,
+      final ViewProcessor viewProcessor,
+      final boolean splitByViewProcessor) {
     ArgumentChecker.notNull(viewProcess, "viewProcess");
     ArgumentChecker.notNull(viewProcessor, "ViewProcessor");
     _viewProcess = viewProcess;
@@ -88,7 +87,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
     _objectName = createObjectName(viewProcessor.getName(), viewProcess.getUniqueId(), splitByViewProcessor);
 
     if (_viewProcess instanceof ViewProcessImpl) {
-      ViewProcessImpl viewProcessImpl = (ViewProcessImpl) viewProcess;
+      final ViewProcessImpl viewProcessImpl = (ViewProcessImpl) viewProcess;
       viewProcessImpl.attachListener(new InternalViewResultListener() {
         @Override
         public UserPrincipal getUser() {
@@ -96,7 +95,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
         }
 
         @Override
-        public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
+        public void viewDefinitionCompiled(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
           _compiled = PhaseState.SUCCESSFUL;
           synchronized (ViewProcessMXBeanImpl.this) {
             _lastCompiledViewDefinition = compiledViewDefinition;
@@ -106,23 +105,23 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
         }
 
         @Override
-        public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
+        public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
           _compiled = PhaseState.FAILED;
           _compilationFailedException = exception;
           _compilationFailedValuationTime = valuationTime;
         }
 
         @Override
-        public void cycleStarted(ViewCycleMetadata cycleMetadata) {
+        public void cycleStarted(final ViewCycleMetadata cycleMetadata) {
           _lastCycle = CycleState.STARTED;
         }
 
         @Override
-        public void cycleFragmentCompleted(ViewComputationResultModel fullFragment, ViewDeltaResultModel deltaFragment) {
+        public void cycleFragmentCompleted(final ViewComputationResultModel fullFragment, final ViewDeltaResultModel deltaFragment) {
         }
 
         @Override
-        public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
+        public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
           synchronized (ViewProcessMXBeanImpl.this) {
             _lastViewComputationResultModel = fullResult;
           }
@@ -132,7 +131,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
         }
 
         @Override
-        public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
+        public void cycleExecutionFailed(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
           _lastCycle = CycleState.FAILED;
         }
 
@@ -141,45 +140,53 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
         }
 
         @Override
-        public void processTerminated(boolean executionInterrupted) {
+        public void processTerminated(final boolean executionInterrupted) {
         }
 
         @Override
-        public void clientShutdown(Exception e) {
+        public void clientShutdown(final Exception e) {
         }
-        
+
       }, ViewResultMode.FULL_ONLY, ViewResultMode.NONE);
     }
   }
 
   /**
-   * Creates an object name using the scheme "com.opengamma:type=View,ViewProcessor=<viewProcessorName>,name=<viewProcessId>"
+   * Creates an object name using the scheme "com.opengamma:type=View,ViewProcessor=<viewProcessorName>,name=<viewProcessId>".
+   *
+   * @param viewProcessorName
+   *          the view processor name
+   * @param viewProcessId
+   *          the underlying view process identifier
+   * @param splitByViewProcessor
+   *          should the MBean name differentiate beans by view processor
+   * @return the object name
    */
-  static ObjectName createObjectName(String viewProcessorName, UniqueId viewProcessId, boolean splitByViewProcessor) {
+  static ObjectName createObjectName(final String viewProcessorName, final UniqueId viewProcessId, final boolean splitByViewProcessor) {
     try {
-      String beanNamePrefix = splitByViewProcessor ?
-          "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessorName :
-          "com.opengamma:type=ViewProcessor";
+      final String beanNamePrefix = splitByViewProcessor
+          ? "com.opengamma:type=ViewProcessors,ViewProcessor=ViewProcessor " + viewProcessorName
+          : "com.opengamma:type=ViewProcessor";
       return new ObjectName(beanNamePrefix + ",ViewProcesses=ViewProcesses,name=ViewProcess " + viewProcessId.getValue());
-    } catch (MalformedObjectNameException e) {
+    } catch (final MalformedObjectNameException e) {
       throw new CacheException(e);
     }
   }
-  
+
   @Override
   public String getUniqueId() {
     return _viewProcess.getUniqueId().toString();
   }
-  
+
   @Override
   public String getPortfolioId() {
     return _viewProcess.getLatestViewDefinition().getPortfolioId().toString();
   }
-  
+
   @Override
   public String getViewName() {
     @SuppressWarnings("unchecked")
-    ConfigItem<ViewDefinition> configItem = (ConfigItem<ViewDefinition>) _viewProcessor.getConfigSource().get(_viewProcess.getDefinitionId());
+    final ConfigItem<ViewDefinition> configItem = (ConfigItem<ViewDefinition>) _viewProcessor.getConfigSource().get(_viewProcess.getDefinitionId());
     return configItem.getName();
   }
 
@@ -187,7 +194,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   public String getDefinitionId() {
     return _viewProcess.getDefinitionId().toString();
   }
-  
+
   @Override
   public boolean isPersistent() {
     return _viewProcess.getLatestViewDefinition().isPersistent();
@@ -197,12 +204,12 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   public String getState() {
     return _viewProcess.getState().name();
   }
-  
+
   @Override
   public String getCompilationState() {
     return _compiled.name();
   }
-  
+
   @Override
   public String getMarketDataPermissionsState() {
     return _hasMarketDataPermissions.name();
@@ -213,7 +220,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
     return convertInstant(_compilationFailedValuationTime);
   }
 
-  private String convertInstant(Instant instant) {
+  private String convertInstant(final Instant instant) {
     return instant != null ? ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()).toString() : null;
   }
 
@@ -221,7 +228,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   public String getCompilationFailedException() {
     return _compilationFailedException != null ? _compilationFailedException.getMessage() : null;
   }
-  
+
   @Override
   public String getLastComputeCycleState() {
     return _lastCycle.name();
@@ -234,9 +241,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
 
   @Override
   public Long getTimeSinceLastSuccessfulCycle() {
-    return _lastSuccessfulCycleTimeStamp != null ?
-        _lastSuccessfulCycleTimeStamp.until(Instant.now(), ChronoUnit.MILLIS) :
-        null;
+    return _lastSuccessfulCycleTimeStamp != null ? _lastSuccessfulCycleTimeStamp.until(Instant.now(), ChronoUnit.MILLIS) : null;
   }
 
   @Override
@@ -248,7 +253,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   public void shutdown() {
     _viewProcess.shutdown();
   }
-  
+
   @Override
   public void suspend() {
     _viewProcess.suspend();
@@ -261,7 +266,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
 
   /**
    * Gets the objectName field.
-   * 
+   *
    * @return the object name for this MBean
    */
   public ObjectName getObjectName() {
@@ -280,9 +285,8 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
     if (compiledViewDef == null || viewComputationResultModel == null) {
       return null;
     }
-    ViewProcessStatsProcessor statsProcessor = new ViewProcessStatsProcessor(compiledViewDef, viewComputationResultModel);
+    final ViewProcessStatsProcessor statsProcessor = new ViewProcessStatsProcessor(compiledViewDef, viewComputationResultModel);
     statsProcessor.processResult();
     return statsProcessor;
   }
 }
-

@@ -28,10 +28,10 @@ public class MappingsFudgeBuilder implements FudgeBuilder<Mappings> {
   private static final String MAPPING = "mapping";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, Mappings mappings) {
-    MutableFudgeMsg msg = serializer.newMessage();
-    for (Map.Entry<String, String> entry : mappings.getMappings().entrySet()) {
-      MutableFudgeMsg itemMsg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Mappings mappings) {
+    final MutableFudgeMsg msg = serializer.newMessage();
+    for (final Map.Entry<String, String> entry : mappings.getMappings().entrySet()) {
+      final MutableFudgeMsg itemMsg = serializer.newMessage();
       itemMsg.add(VALUE, entry.getKey());
       itemMsg.add(MAPPING, entry.getValue());
       serializer.addToMessage(msg, ITEM, null, itemMsg);
@@ -40,12 +40,12 @@ public class MappingsFudgeBuilder implements FudgeBuilder<Mappings> {
   }
 
   @Override
-  public Mappings buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    Map<String, String> mappings = Maps.newHashMap();
-    for (FudgeField itemField : msg.getAllByName(ITEM)) {
-      FudgeMsg itemMsg = (FudgeMsg) itemField.getValue();
-      String value = deserializer.fieldValueToObject(String.class, itemMsg.getByName(VALUE));
-      String mapping = deserializer.fieldValueToObject(String.class, itemMsg.getByName(MAPPING));
+  public Mappings buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final Map<String, String> mappings = Maps.newHashMap();
+    for (final FudgeField itemField : msg.getAllByName(ITEM)) {
+      final FudgeMsg itemMsg = (FudgeMsg) itemField.getValue();
+      final String value = deserializer.fieldValueToObject(String.class, itemMsg.getByName(VALUE));
+      final String mapping = deserializer.fieldValueToObject(String.class, itemMsg.getByName(MAPPING));
       mappings.put(value, mapping);
     }
     return new Mappings(mappings);

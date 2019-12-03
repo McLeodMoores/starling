@@ -31,44 +31,42 @@ public class UnderlyingAggregationFunction implements AggregationFunction<String
   private static final String NOT_APPLICABLE = "N/A";
 
   /* to make dep injection easier */
-  public UnderlyingAggregationFunction(SecuritySource secSource, String preferredSchemeString) {
+  public UnderlyingAggregationFunction(final SecuritySource secSource, final String preferredSchemeString) {
     this(secSource, ExternalScheme.of(preferredSchemeString));
   }
-  
-  public UnderlyingAggregationFunction(SecuritySource secSource, String preferredSchemeString, boolean useAttributes) {
+
+  public UnderlyingAggregationFunction(final SecuritySource secSource, final String preferredSchemeString, final boolean useAttributes) {
     this(secSource, ExternalScheme.of(preferredSchemeString), useAttributes);
   }
-  
-  public UnderlyingAggregationFunction(SecuritySource secSource, ExternalScheme preferredScheme) {
+
+  public UnderlyingAggregationFunction(final SecuritySource secSource, final ExternalScheme preferredScheme) {
     this(secSource, preferredScheme, false);
   }
-  
-  public UnderlyingAggregationFunction(SecuritySource secSource, ExternalScheme preferredScheme, boolean useAttributes) {
+
+  public UnderlyingAggregationFunction(final SecuritySource secSource, final ExternalScheme preferredScheme, final boolean useAttributes) {
     _secSource = secSource;
     _useAttributes = useAttributes;
     _underlyingVisitor = new UnderlyingIdVisitor(preferredScheme, secSource);
   }
 
   @Override
-  public String classifyPosition(Position position) {
+  public String classifyPosition(final Position position) {
     if (_useAttributes) {
-      Map<String, String> attributes = position.getAttributes();
+      final Map<String, String> attributes = position.getAttributes();
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
-      } else {
-        return NOT_APPLICABLE;
-      } 
-    } else {
-      if (position.getSecurityLink().getTarget() == null) {
-        position.getSecurityLink().resolve(_secSource);
       }
-      FinancialSecurity security = (FinancialSecurity) position.getSecurityLink().getTarget();
-      try {
-        String classification = security.accept(_underlyingVisitor);
-        return classification == null ? NOT_APPLICABLE : classification;
-      } catch (UnsupportedOperationException uoe) {
-        return NOT_APPLICABLE;
-      }
+      return NOT_APPLICABLE;
+    }
+    if (position.getSecurityLink().getTarget() == null) {
+      position.getSecurityLink().resolve(_secSource);
+    }
+    final FinancialSecurity security = (FinancialSecurity) position.getSecurityLink().getTarget();
+    try {
+      final String classification = security.accept(_underlyingVisitor);
+      return classification == null ? NOT_APPLICABLE : classification;
+    } catch (final UnsupportedOperationException uoe) {
+      return NOT_APPLICABLE;
     }
   }
 
@@ -83,7 +81,7 @@ public class UnderlyingAggregationFunction implements AggregationFunction<String
   }
 
   @Override
-  public int compare(String o1, String o2) {
+  public int compare(final String o1, final String o2) {
     if (o1.equals(NOT_APPLICABLE)) {
       if (o2.equals(NOT_APPLICABLE)) {
         return 0;

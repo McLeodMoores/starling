@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.regression;
@@ -17,16 +17,16 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 
 /**
- * 
+ *
  */
 public class OrdinaryLeastSquaresRegression extends LeastSquaresRegression {
-  private static final Logger s_logger = LoggerFactory.getLogger(OrdinaryLeastSquaresRegression.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OrdinaryLeastSquaresRegression.class);
   private final Algebra _algebra = new Algebra();
 
   @Override
   public LeastSquaresRegressionResult regress(final double[][] x, final double[][] weights, final double[] y, final boolean useIntercept) {
     if (weights != null) {
-      s_logger.info("Weights were provided for OLS regression: they will be ignored");
+      LOGGER.info("Weights were provided for OLS regression: they will be ignored");
     }
     return regress(x, y, useIntercept);
   }
@@ -47,7 +47,8 @@ public class OrdinaryLeastSquaresRegression extends LeastSquaresRegression {
     return getResultWithStatistics(x, y, betas, yModel, transpose, matrix, useIntercept);
   }
 
-  private LeastSquaresRegressionResult getResultWithStatistics(final double[][] x, final double[] y, final double[] betas, final double[] yModel, final DoubleMatrix2D transpose,
+  private LeastSquaresRegressionResult getResultWithStatistics(final double[][] x, final double[] y, final double[] betas, final double[] yModel,
+      final DoubleMatrix2D transpose,
       final DoubleMatrix2D matrix, final boolean useIntercept) {
     double yMean = 0.;
     for (final double y1 : y) {

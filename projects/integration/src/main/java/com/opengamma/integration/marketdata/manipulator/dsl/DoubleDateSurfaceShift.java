@@ -5,10 +5,8 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanDefinition;
@@ -35,22 +33,22 @@ public final class DoubleDateSurfaceShift extends VolatilitySurfaceShiftManipula
   @PropertyDefinition(validate = "notNull")
   private final List<Period> _yValues;
 
-  /* package */ DoubleDateSurfaceShift(ScenarioShiftType shiftType,
-                                       double[] shiftValues,
-                                       double[] xValues,
-                                       List<Period> yValues) {
+  /* package */ DoubleDateSurfaceShift(final ScenarioShiftType shiftType,
+                                       final double[] shiftValues,
+                                       final double[] xValues,
+                                       final List<Period> yValues) {
     super(shiftType, shiftValues);
     _xValues = ArgumentChecker.notEmpty(xValues, "xValues");
     _yValues = ArgumentChecker.notEmpty(yValues, "yValues");
   }
 
   @Override
-  protected double[] getXValues(ZonedDateTime valuationTime) {
+  protected double[] getXValues(final ZonedDateTime valuationTime) {
     return _xValues;
   }
 
   @Override
-  protected double[] getYValues(ZonedDateTime valuationTime) {
+  protected double[] getYValues(final ZonedDateTime valuationTime) {
     return yearFractions(_yValues, valuationTime);
   }
 
@@ -99,7 +97,7 @@ public final class DoubleDateSurfaceShift extends VolatilitySurfaceShiftManipula
    * @return the value of the property, not null
    */
   public double[] getXValues() {
-    return (_xValues != null ? _xValues.clone() : null);
+    return _xValues.clone();
   }
 
   //-----------------------------------------------------------------------
@@ -128,8 +126,8 @@ public final class DoubleDateSurfaceShift extends VolatilitySurfaceShiftManipula
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       DoubleDateSurfaceShift other = (DoubleDateSurfaceShift) obj;
-      return JodaBeanUtils.equal(getXValues(), other.getXValues()) &&
-          JodaBeanUtils.equal(getYValues(), other.getYValues()) &&
+      return JodaBeanUtils.equal(_xValues, other._xValues) &&
+          JodaBeanUtils.equal(_yValues, other._yValues) &&
           super.equals(obj);
     }
     return false;
@@ -138,8 +136,8 @@ public final class DoubleDateSurfaceShift extends VolatilitySurfaceShiftManipula
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = hash * 31 + JodaBeanUtils.hashCode(getXValues());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getYValues());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_xValues);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_yValues);
     return hash ^ super.hashCode();
   }
 
@@ -159,8 +157,8 @@ public final class DoubleDateSurfaceShift extends VolatilitySurfaceShiftManipula
   @Override
   protected void toString(StringBuilder buf) {
     super.toString(buf);
-    buf.append("xValues").append('=').append(JodaBeanUtils.toString(getXValues())).append(',').append(' ');
-    buf.append("yValues").append('=').append(JodaBeanUtils.toString(getYValues())).append(',').append(' ');
+    buf.append("xValues").append('=').append(JodaBeanUtils.toString(_xValues)).append(',').append(' ');
+    buf.append("yValues").append('=').append(JodaBeanUtils.toString(_yValues)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -284,6 +282,7 @@ public final class DoubleDateSurfaceShift extends VolatilitySurfaceShiftManipula
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(DoubleDateSurfaceShift beanToCopy) {
+      super(beanToCopy);
       this._xValues = beanToCopy.getXValues().clone();
       this._yValues = ImmutableList.copyOf(beanToCopy.getYValues());
     }
@@ -324,19 +323,31 @@ public final class DoubleDateSurfaceShift extends VolatilitySurfaceShiftManipula
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

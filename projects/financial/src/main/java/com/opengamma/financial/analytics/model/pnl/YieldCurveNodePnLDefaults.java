@@ -36,13 +36,14 @@ import com.opengamma.util.money.Currency;
  *
  */
 public class YieldCurveNodePnLDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveNodePnLDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveNodePnLDefaults.class);
   private final String _samplingPeriod;
   private final String _scheduleCalculator;
   private final String _samplingFunction;
   private final Map<String, String> _currencyAndCurveConfigNames;
 
-  public YieldCurveNodePnLDefaults(final String samplingPeriod, final String scheduleCalculator, final String samplingFunction, final String... currencyAndCurveConfigNames) {
+  public YieldCurveNodePnLDefaults(final String samplingPeriod, final String scheduleCalculator, final String samplingFunction,
+      final String... currencyAndCurveConfigNames) {
     super(ComputationTargetType.POSITION, true);
     ArgumentChecker.notNull(samplingPeriod, "sampling period");
     ArgumentChecker.notNull(scheduleCalculator, "schedule calculator");
@@ -73,7 +74,7 @@ public class YieldCurveNodePnLDefaults extends DefaultPropertyFunction {
     }
     final Currency currency = FinancialSecurityUtils.getCurrency(security);
     if (currency == null) {
-      s_logger.info("Could not get currency for security {}", security);
+      LOGGER.info("Could not get currency for security {}", security);
       return false;
     }
     final String currencyName = currency.getCode();
@@ -83,7 +84,8 @@ public class YieldCurveNodePnLDefaults extends DefaultPropertyFunction {
     if (security instanceof SwapSecurity) {
       try {
         final InterestRateInstrumentType type = InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security);
-        if (type != InterestRateInstrumentType.SWAP_FIXED_IBOR && type != InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD && type != InterestRateInstrumentType.SWAP_IBOR_IBOR
+        if (type != InterestRateInstrumentType.SWAP_FIXED_IBOR && type != InterestRateInstrumentType.SWAP_FIXED_IBOR_WITH_SPREAD
+            && type != InterestRateInstrumentType.SWAP_IBOR_IBOR
             && type != InterestRateInstrumentType.SWAP_FIXED_OIS) {
           return false;
         }
@@ -109,7 +111,7 @@ public class YieldCurveNodePnLDefaults extends DefaultPropertyFunction {
       final String currencyName = FinancialSecurityUtils.getCurrency(target.getPositionOrTrade().getSecurity()).getCode();
       final String configName = _currencyAndCurveConfigNames.get(currencyName);
       if (configName == null) {
-        s_logger.error("Could not get config for currency " + currencyName + "; should never happen");
+        LOGGER.error("Could not get config for currency " + currencyName + "; should never happen");
         return null;
       }
       return Collections.singleton(configName);

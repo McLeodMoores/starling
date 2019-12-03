@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -45,7 +45,7 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
 
     private final FudgeSerializer _serializer;
 
-    public VisitorImpl(final FudgeSerializer serializer) {
+    VisitorImpl(final FudgeSerializer serializer) {
       _serializer = serializer;
     }
 
@@ -85,23 +85,24 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
 
     @Override
     protected MutableFudgeMsg visitFunction(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
-        final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied, final Set<ResolutionFailure> unsatisfiedAdditional) {
+        final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied,
+        final Set<ResolutionFailure> unsatisfiedAdditional) {
       final MutableFudgeMsg msg = message(null, valueRequirement);
       _serializer.addToMessage(msg, FUNCTION_KEY, null, function);
       _serializer.addToMessage(msg, DESIRED_OUTPUT_KEY, null, desiredOutput);
-      for (Map.Entry<ValueSpecification, ValueRequirement> input : satisfied.entrySet()) {
+      for (final Map.Entry<ValueSpecification, ValueRequirement> input : satisfied.entrySet()) {
         final MutableFudgeMsg submessage = _serializer.newMessage();
         _serializer.addToMessage(submessage, VALUE_SPECIFICATION_KEY, null, input.getKey());
         _serializer.addToMessage(submessage, VALUE_REQUIREMENT_KEY, null, input.getValue());
         msg.add(SATISFIED_KEY, null, submessage);
       }
-      for (ResolutionFailure failure : unsatisfied) {
-        for (MutableFudgeMsg submessage : failure.accept(this)) {
+      for (final ResolutionFailure failure : unsatisfied) {
+        for (final MutableFudgeMsg submessage : failure.accept(this)) {
           msg.add(UNSATISFIED_KEY, null, submessage);
         }
       }
-      for (ResolutionFailure failure : unsatisfiedAdditional) {
-        for (MutableFudgeMsg submessage : failure.accept(this)) {
+      for (final ResolutionFailure failure : unsatisfiedAdditional) {
+        for (final MutableFudgeMsg submessage : failure.accept(this)) {
           msg.add(ADDITIONAL_REQUIREMENT_KEY, null, submessage);
         }
       }
@@ -109,12 +110,12 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
     }
 
     @Override
-    protected MutableFudgeMsg visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
-        final Map<ValueSpecification, ValueRequirement> requirements) {
+    protected MutableFudgeMsg visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function,
+        final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> requirements) {
       final MutableFudgeMsg msg = message(ResolutionFailure.Status.GET_ADDITIONAL_REQUIREMENTS_FAILED, valueRequirement);
       _serializer.addToMessage(msg, FUNCTION_KEY, null, function);
       _serializer.addToMessage(msg, DESIRED_OUTPUT_KEY, null, desiredOutput);
-      for (Map.Entry<ValueSpecification, ValueRequirement> input : requirements.entrySet()) {
+      for (final Map.Entry<ValueSpecification, ValueRequirement> input : requirements.entrySet()) {
         final MutableFudgeMsg submessage = _serializer.newMessage();
         _serializer.addToMessage(submessage, VALUE_SPECIFICATION_KEY, null, input.getKey());
         _serializer.addToMessage(submessage, VALUE_REQUIREMENT_KEY, null, input.getValue());
@@ -129,7 +130,7 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
       final MutableFudgeMsg msg = message(ResolutionFailure.Status.GET_RESULTS_FAILED, valueRequirement);
       _serializer.addToMessage(msg, FUNCTION_KEY, null, function);
       _serializer.addToMessage(msg, DESIRED_OUTPUT_KEY, null, desiredOutput);
-      for (Map.Entry<ValueSpecification, ValueRequirement> input : requirements.entrySet()) {
+      for (final Map.Entry<ValueSpecification, ValueRequirement> input : requirements.entrySet()) {
         final MutableFudgeMsg submessage = _serializer.newMessage();
         _serializer.addToMessage(submessage, VALUE_SPECIFICATION_KEY, null, input.getKey());
         _serializer.addToMessage(submessage, VALUE_REQUIREMENT_KEY, null, input.getValue());
@@ -139,7 +140,8 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
     }
 
     @Override
-    protected MutableFudgeMsg visitGetRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput) {
+    protected MutableFudgeMsg visitGetRequirementsFailed(final ValueRequirement valueRequirement, final String function,
+        final ValueSpecification desiredOutput) {
       final MutableFudgeMsg msg = message(ResolutionFailure.Status.GET_REQUIREMENTS_FAILED, valueRequirement);
       _serializer.addToMessage(msg, FUNCTION_KEY, null, function);
       _serializer.addToMessage(msg, DESIRED_OUTPUT_KEY, null, desiredOutput);
@@ -152,7 +154,7 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
       final MutableFudgeMsg msg = message(ResolutionFailure.Status.LATE_RESOLUTION_FAILURE, valueRequirement);
       _serializer.addToMessage(msg, FUNCTION_KEY, null, function);
       _serializer.addToMessage(msg, DESIRED_OUTPUT_KEY, null, desiredOutput);
-      for (Map.Entry<ValueSpecification, ValueRequirement> input : requirements.entrySet()) {
+      for (final Map.Entry<ValueSpecification, ValueRequirement> input : requirements.entrySet()) {
         final MutableFudgeMsg submessage = _serializer.newMessage();
         _serializer.addToMessage(submessage, VALUE_SPECIFICATION_KEY, null, input.getKey());
         _serializer.addToMessage(submessage, VALUE_REQUIREMENT_KEY, null, input.getValue());
@@ -167,7 +169,7 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
       final MutableFudgeMsg msg = message(ResolutionFailure.Status.SUPPRESSED, valueRequirement);
       _serializer.addToMessage(msg, FUNCTION_KEY, null, function);
       _serializer.addToMessage(msg, DESIRED_OUTPUT_KEY, null, desiredOutput);
-      for (Map.Entry<ValueSpecification, ValueRequirement> input : requirements.entrySet()) {
+      for (final Map.Entry<ValueSpecification, ValueRequirement> input : requirements.entrySet()) {
         final MutableFudgeMsg submessage = _serializer.newMessage();
         _serializer.addToMessage(submessage, VALUE_SPECIFICATION_KEY, null, input.getKey());
         _serializer.addToMessage(submessage, VALUE_REQUIREMENT_KEY, null, input.getValue());
@@ -220,13 +222,14 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
 
     @Override
     protected MutableFudgeMsg visitFunction(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
-        final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied, final Set<ResolutionFailure> unsatisfiedAdditional) {
+        final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied,
+        final Set<ResolutionFailure> unsatisfiedAdditional) {
       return getUnderlying().visitFunction(valueRequirement, function, desiredOutput, satisfied, unsatisfied, unsatisfiedAdditional);
     }
 
     @Override
-    protected MutableFudgeMsg visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
-        final Map<ValueSpecification, ValueRequirement> requirements) {
+    protected MutableFudgeMsg visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function,
+        final ValueSpecification desiredOutput, final Map<ValueSpecification, ValueRequirement> requirements) {
       return getUnderlying().visitGetAdditionalRequirementsFailed(valueRequirement, function, desiredOutput, requirements);
     }
 
@@ -237,7 +240,8 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
     }
 
     @Override
-    protected MutableFudgeMsg visitGetRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput) {
+    protected MutableFudgeMsg visitGetRequirementsFailed(final ValueRequirement valueRequirement, final String function,
+        final ValueSpecification desiredOutput) {
       return getUnderlying().visitGetRequirementsFailed(valueRequirement, function, desiredOutput);
     }
 
@@ -260,13 +264,12 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
     final Collection<MutableFudgeMsg> failures = failure.accept(new VisitorImpl(serializer));
     if (failures.size() == 1) {
       return failures.iterator().next();
-    } else {
-      final MutableFudgeMsg msg = serializer.newMessage();
-      for (MutableFudgeMsg submessage : failures) {
-        msg.add(null, null, submessage);
-      }
-      return msg;
     }
+    final MutableFudgeMsg msg = serializer.newMessage();
+    for (final MutableFudgeMsg submessage : failures) {
+      msg.add(null, null, submessage);
+    }
+    return msg;
   }
 
   private ResolutionFailure functionApplication(final FudgeDeserializer deserializer, final FudgeMsg message, final ValueRequirement valueRequirement) {
@@ -274,9 +277,9 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
     final ValueSpecification desiredOutput = deserializer.fieldValueToObject(ValueSpecification.class, message.getByName(DESIRED_OUTPUT_KEY));
     ResolutionFailure failure = ResolutionFailureImpl.functionApplication(valueRequirement, functionId, desiredOutput);
     List<FudgeField> fields = message.getAllByName(SATISFIED_KEY);
-    if ((fields != null) && !fields.isEmpty()) {
-      final Map<ValueSpecification, ValueRequirement> requirements = new HashMap<ValueSpecification, ValueRequirement>();
-      for (FudgeField requirement : fields) {
+    if (fields != null && !fields.isEmpty()) {
+      final Map<ValueSpecification, ValueRequirement> requirements = new HashMap<>();
+      for (final FudgeField requirement : fields) {
         final FudgeMsg requirementMsg = (FudgeMsg) requirement.getValue();
         requirements.put(deserializer.fieldValueToObject(ValueSpecification.class, requirementMsg.getByName(VALUE_SPECIFICATION_KEY)),
             deserializer.fieldValueToObject(ValueRequirement.class, requirementMsg.getByName(VALUE_REQUIREMENT_KEY)));
@@ -284,15 +287,15 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
       failure = failure.requirements(requirements);
     }
     fields = message.getAllByName(UNSATISFIED_KEY);
-    if ((fields != null) && !fields.isEmpty()) {
-      for (FudgeField requirement : fields) {
+    if (fields != null && !fields.isEmpty()) {
+      for (final FudgeField requirement : fields) {
         final ResolutionFailure requirementFailure = deserializer.fieldValueToObject(ResolutionFailure.class, requirement);
         failure = failure.requirement(requirementFailure.getValueRequirement(), requirementFailure);
       }
     }
     fields = message.getAllByName(ADDITIONAL_REQUIREMENT_KEY);
-    if ((fields != null) && !fields.isEmpty()) {
-      for (FudgeField requirement : fields) {
+    if (fields != null && !fields.isEmpty()) {
+      for (final FudgeField requirement : fields) {
         final ResolutionFailure requirementFailure = deserializer.fieldValueToObject(ResolutionFailure.class, requirement);
         failure = failure.additionalRequirement(requirementFailure.getValueRequirement(), requirementFailure);
       }
@@ -302,11 +305,11 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
 
   @Override
   public ResolutionFailure buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-    FudgeField valueRequirementField = message.getByName(VALUE_REQUIREMENT_KEY);
+    final FudgeField valueRequirementField = message.getByName(VALUE_REQUIREMENT_KEY);
     if (valueRequirementField == null) {
       ResolutionFailure failure = null;
-      for (FudgeField field : message) {
-        if ((field.getName() == null) && (field.getOrdinal() == null)) {
+      for (final FudgeField field : message) {
+        if (field.getName() == null && field.getOrdinal() == null) {
           final ResolutionFailure newFailure = buildObject(deserializer, (FudgeMsg) field.getValue());
           if (failure == null) {
             failure = newFailure;
@@ -316,37 +319,35 @@ public class ResolutionFailureFudgeBuilder implements FudgeBuilder<ResolutionFai
         }
       }
       return failure;
-    } else {
-      final String error = message.getString(ERROR_KEY);
-      final ValueRequirement valueRequirement = deserializer.fieldValueToObject(ValueRequirement.class, valueRequirementField);
-      if (error != null) {
-        switch (ResolutionFailure.Status.valueOf(error)) {
-          case COULD_NOT_RESOLVE:
-            return ResolutionFailureImpl.couldNotResolve(valueRequirement);
-          case GET_ADDITIONAL_REQUIREMENTS_FAILED:
-            return functionApplication(deserializer, message, valueRequirement).getAdditionalRequirementsFailed();
-          case GET_REQUIREMENTS_FAILED:
-            return functionApplication(deserializer, message, valueRequirement).getRequirementsFailed();
-          case GET_RESULTS_FAILED:
-            return functionApplication(deserializer, message, valueRequirement).getResultsFailed();
-          case LATE_RESOLUTION_FAILURE:
-            return functionApplication(deserializer, message, valueRequirement).lateResolutionFailure();
-          case MARKET_DATA_MISSING:
-            return ResolutionFailureImpl.marketDataMissing(valueRequirement);
-          case NO_FUNCTIONS:
-            return ResolutionFailureImpl.noFunctions(valueRequirement);
-          case RECURSIVE_REQUIREMENT:
-            return ResolutionFailureImpl.recursiveRequirement(valueRequirement);
-          case SUPPRESSED:
-            return functionApplication(deserializer, message, valueRequirement).suppressed();
-          case UNSATISFIED:
-            return ResolutionFailureImpl.unsatisfied(valueRequirement);
-        }
-        throw new IllegalStateException(error);
-      } else {
-        return functionApplication(deserializer, message, valueRequirement);
-      }
     }
+    final String error = message.getString(ERROR_KEY);
+    final ValueRequirement valueRequirement = deserializer.fieldValueToObject(ValueRequirement.class, valueRequirementField);
+    if (error != null) {
+      switch (ResolutionFailure.Status.valueOf(error)) {
+        case COULD_NOT_RESOLVE:
+          return ResolutionFailureImpl.couldNotResolve(valueRequirement);
+        case GET_ADDITIONAL_REQUIREMENTS_FAILED:
+          return functionApplication(deserializer, message, valueRequirement).getAdditionalRequirementsFailed();
+        case GET_REQUIREMENTS_FAILED:
+          return functionApplication(deserializer, message, valueRequirement).getRequirementsFailed();
+        case GET_RESULTS_FAILED:
+          return functionApplication(deserializer, message, valueRequirement).getResultsFailed();
+        case LATE_RESOLUTION_FAILURE:
+          return functionApplication(deserializer, message, valueRequirement).lateResolutionFailure();
+        case MARKET_DATA_MISSING:
+          return ResolutionFailureImpl.marketDataMissing(valueRequirement);
+        case NO_FUNCTIONS:
+          return ResolutionFailureImpl.noFunctions(valueRequirement);
+        case RECURSIVE_REQUIREMENT:
+          return ResolutionFailureImpl.recursiveRequirement(valueRequirement);
+        case SUPPRESSED:
+          return functionApplication(deserializer, message, valueRequirement).suppressed();
+        case UNSATISFIED:
+          return ResolutionFailureImpl.unsatisfied(valueRequirement);
+      }
+      throw new IllegalStateException(error);
+    }
+    return functionApplication(deserializer, message, valueRequirement);
   }
 
 }

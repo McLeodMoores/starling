@@ -31,7 +31,8 @@ public class FixedMarketDataAvailabilityProviderTest {
     final FixedMarketDataAvailabilityProvider available = new FixedMarketDataAvailabilityProvider();
     final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.PRIMITIVE, UniqueId.of("X", "1"));
     assertNull(available.getAvailability(targetSpec, ExternalId.of("A", "1"), new ValueRequirement("Foo", targetSpec)));
-    assertNull(available.getAvailability(targetSpec, ExternalIdBundle.of(ExternalId.of("A", "1"), ExternalId.of("C", "1")), new ValueRequirement("Foo", targetSpec)));
+    assertNull(available.getAvailability(targetSpec, ExternalIdBundle.of(ExternalId.of("A", "1"), ExternalId.of("C", "1")),
+        new ValueRequirement("Foo", targetSpec)));
     assertNull(available.getAvailability(targetSpec, UniqueId.of("X", "1"), new ValueRequirement("Foo", targetSpec)));
   }
 
@@ -41,7 +42,8 @@ public class FixedMarketDataAvailabilityProviderTest {
     final ValueSpecification fooSpec = new ValueSpecification("Foo", ComputationTargetSpecification.NULL, properties);
     available.addAvailableData(ExternalId.of("A", "1"), fooSpec);
     available.addAvailableData(ExternalId.of("A", "1"), new ValueSpecification("Bar", ComputationTargetSpecification.NULL, properties));
-    assertEquals(available.getAvailability(ComputationTargetSpecification.NULL, ExternalId.of("A", "1"), new ValueRequirement("Foo", ComputationTargetSpecification.NULL)), fooSpec);
+    assertEquals(available.getAvailability(ComputationTargetSpecification.NULL, ExternalId.of("A", "1"),
+        new ValueRequirement("Foo", ComputationTargetSpecification.NULL)), fooSpec);
   }
 
   public void testAddAvailable_byExternalIdBundle() {
@@ -49,9 +51,10 @@ public class FixedMarketDataAvailabilityProviderTest {
     final ValueProperties properties = ValueProperties.with(ValuePropertyNames.FUNCTION, "Mock").get();
     final ValueSpecification fooSpec = new ValueSpecification("Foo", ComputationTargetSpecification.NULL, properties);
     available.addAvailableData(ExternalIdBundle.of(ExternalId.of("A", "1"), ExternalId.of("B", "1")), fooSpec);
-    available.addAvailableData(ExternalIdBundle.of(ExternalId.of("A", "1"), ExternalId.of("B", "1")), new ValueSpecification("Bar", ComputationTargetSpecification.NULL, properties));
-    assertEquals(available.getAvailability(ComputationTargetSpecification.NULL, ExternalIdBundle.of(ExternalId.of("A", "1"), ExternalId.of("C", "1")), new ValueRequirement("Foo",
-        ComputationTargetSpecification.NULL)), fooSpec);
+    available.addAvailableData(ExternalIdBundle.of(ExternalId.of("A", "1"), ExternalId.of("B", "1")),
+        new ValueSpecification("Bar", ComputationTargetSpecification.NULL, properties));
+    assertEquals(available.getAvailability(ComputationTargetSpecification.NULL, ExternalIdBundle.of(ExternalId.of("A", "1"), ExternalId.of("C", "1")),
+        new ValueRequirement("Foo", ComputationTargetSpecification.NULL)), fooSpec);
   }
 
   public void testAddAvailable_byUniqueId() {

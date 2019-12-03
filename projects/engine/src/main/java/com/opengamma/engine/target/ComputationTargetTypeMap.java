@@ -18,17 +18,18 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.lambdava.functions.Function2;
 
 /**
- * A map of {@link ComputationTargetType} instances to other values based on the target class (or classes). Instances are thread-safe for multiple readers, but only one may update the map at any one
- * time. Due to the caching behavior of class lookups, it is best not to read from the map until all of the required class entries have been written. Not doing so can give a collision between a cached
+ * A map of {@link ComputationTargetType} instances to other values based on the target class (or classes). Instances are thread-safe for
+ * multiple readers, but only one may update the map at any one time. Due to the caching behavior of class lookups, it is best not to read
+ * from the map until all of the required class entries have been written. Not doing so can give a collision between a cached
  * class entry and one that is intended to be added.
- * 
+ *
  * @param <V> the value type
  */
 public class ComputationTargetTypeMap<V> {
 
   private static final Object NULL = new Object();
 
-  private final ConcurrentMap<Class<? extends UniqueIdentifiable>, V> _underlying = new ConcurrentHashMap<Class<? extends UniqueIdentifiable>, V>();
+  private final ConcurrentMap<Class<? extends UniqueIdentifiable>, V> _underlying = new ConcurrentHashMap<>();
 
   private volatile V _nullTypeValue;
 
@@ -42,9 +43,9 @@ public class ComputationTargetTypeMap<V> {
   }
 
   /**
-   * Creates a new instance with a folding operation to handle union types in the map giving multiple matches on {@link #get} or {@link #put}. If there is no folding operation then the value returned
-   * by {@link #get} is an arbitrary choice and {@link #put} will fail if multiple matches occur.
-   * 
+   * Creates a new instance with a folding operation to handle union types in the map giving multiple matches on {@link #get} or {@link #put}.
+   * If there is no folding operation then the value returned by {@link #get} is an arbitrary choice and {@link #put} will fail if multiple matches occur.
+   *
    * @param fold the folding operation, null for none
    */
   public ComputationTargetTypeMap(final Function2<V, V, V> fold) {
@@ -67,14 +68,13 @@ public class ComputationTargetTypeMap<V> {
     if (_nullTypeValue == oldValue) {
       _nullTypeValue = newValue;
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**
    * Performs the target class lookup. Subclasses may override this to hook into the lookup operation and return a specific value.
-   * 
+   *
    * @param queryType the tail class to query, not null
    * @return the value, or null for none
    */
@@ -84,7 +84,7 @@ public class ComputationTargetTypeMap<V> {
     if (value != null) {
       return value;
     }
-    for (Class<?> iface : queryType.getInterfaces()) {
+    for (final Class<?> iface : queryType.getInterfaces()) {
       if (UniqueIdentifiable.class.isAssignableFrom(iface)) {
         final V newValue = getUnderlying().get(iface);
         if (newValue != null) {
@@ -104,7 +104,7 @@ public class ComputationTargetTypeMap<V> {
       }
     }
     final Class<?> superclazz = queryType.getSuperclass();
-    if ((superclazz != null) && UniqueIdentifiable.class.isAssignableFrom(superclazz)) {
+    if (superclazz != null && UniqueIdentifiable.class.isAssignableFrom(superclazz)) {
       final V newValue = getImpl((Class<? extends UniqueIdentifiable>) superclazz);
       if (newValue != null) {
         if (value == null) {
@@ -133,21 +133,20 @@ public class ComputationTargetTypeMap<V> {
   }
 
   @SuppressWarnings("rawtypes")
-  private static final ComputationTargetTypeVisitor s_get = new ComputationTargetTypeVisitor<ComputationTargetTypeMap<Object>, Object>() {
+  private static final ComputationTargetTypeVisitor GET = new ComputationTargetTypeVisitor<ComputationTargetTypeMap<Object>, Object>() {
 
     @Override
     public Object visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ComputationTargetTypeMap<Object> data) {
       Object result = null;
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         final Object v = type.accept(this, data);
         if (v != null) {
           if (result == null) {
             if (data.getFoldFunction() == null) {
               // No folding operation, so return the first match found
               return v;
-            } else {
-              result = v;
             }
+            result = v;
           } else {
             result = data.getFoldFunction().execute(result, v);
           }
@@ -174,20 +173,21 @@ public class ComputationTargetTypeMap<V> {
   };
 
   /**
-   * Queries a value based on the supplied target type, matching the closest superclass found. This operation can update the map as lookups based on the class hierarchy are cached.
-   * 
+   * Queries a value based on the supplied target type, matching the closest superclass found. This operation can update the map as
+   * lookups based on the class hierarchy are cached.
+   *
    * @param key the target type to query, not null
    * @return the value, or null if there is no match
    */
-  @SuppressWarnings("unchecked")
   public V get(final ComputationTargetType key) {
-    return key.accept((ComputationTargetTypeVisitor<ComputationTargetTypeMap<V>, V>) s_get, this);
+    return key.accept((ComputationTargetTypeVisitor<ComputationTargetTypeMap<V>, V>) GET, this);
   }
 
   /**
-   * Queries a value based on the supplied target type, matching the closest superclass found. This operation can update the map as lookups based on the class hierarchy are cached. This is the same as
-   * calling {@link #get(ComputationTargetType)} with {@code ComputationTargetType.of(key)}.
-   * 
+   * Queries a value based on the supplied target type, matching the closest superclass found. This operation can update the map
+   * as lookups based on the class hierarchy are cached. This is the same as calling {@link #get(ComputationTargetType)} with
+   * {@code ComputationTargetType.of(key)}.
+   *
    * @param key the class to query, not null
    * @return the value, or null if there is no match
    */
@@ -195,27 +195,25 @@ public class ComputationTargetTypeMap<V> {
     final V found = getImpl(key);
     if (found != NULL) {
       return found;
-    } else {
-      return null;
     }
+    return null;
   }
 
   @SuppressWarnings("rawtypes")
-  private static final ComputationTargetTypeVisitor s_getDirect = new ComputationTargetTypeVisitor<ComputationTargetTypeMap<Object>, Object>() {
+  private static final ComputationTargetTypeVisitor GET_DIRECT = new ComputationTargetTypeVisitor<ComputationTargetTypeMap<Object>, Object>() {
 
     @Override
     public Object visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ComputationTargetTypeMap<Object> data) {
       Object result = null;
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         final Object v = type.accept(this, data);
         if (v != null) {
           if (result == null) {
             if (data.getFoldFunction() == null) {
               // No folding operation, so return the first match found
               return v;
-            } else {
-              result = v;
             }
+            result = v;
           } else {
             result = data.getFoldFunction().execute(result, v);
           }
@@ -239,29 +237,27 @@ public class ComputationTargetTypeMap<V> {
       final Object found = data.getDirectImpl(type);
       if (found != NULL) {
         return found;
-      } else {
-        return null;
       }
+      return null;
     }
 
   };
 
   /**
-   * Queries a value based on the supplied target type, matching the leaf class exactly. Unlike {@link #get} This operation will not update the map and will not return any matches based on
-   * superclasses.
-   * 
+   * Queries a value based on the supplied target type, matching the leaf class exactly. Unlike {@link #get} This operation will
+   * not update the map and will not return any matches based on superclasses.
+   *
    * @param key the target type to query, not null
    * @return the value, or null if there is no match
    */
-  @SuppressWarnings("unchecked")
   public V getDirect(final ComputationTargetType key) {
-    return key.accept((ComputationTargetTypeVisitor<ComputationTargetTypeMap<V>, V>) s_getDirect, this);
+    return key.accept((ComputationTargetTypeVisitor<ComputationTargetTypeMap<V>, V>) GET_DIRECT, this);
   }
 
   /**
-   * Stores a value in the map. If the map already contains an entry for the value the folding operation (if specified) will be used. This can occur if a lookup has been performed and the result was
-   * cached, or union types have been added to the map.
-   * 
+   * Stores a value in the map. If the map already contains an entry for the value the folding operation (if specified) will be used.
+   * This can occur if a lookup has been performed and the result was cached, or union types have been added to the map.
+   *
    * @param key the target type key, not null
    * @param value the value to store, not null
    */
@@ -270,7 +266,7 @@ public class ComputationTargetTypeMap<V> {
 
       @Override
       public Void visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
-        for (ComputationTargetType type : types) {
+        for (final ComputationTargetType type : types) {
           type.accept(this, data);
         }
         return null;
@@ -287,61 +283,54 @@ public class ComputationTargetTypeMap<V> {
         if (nullValue == null) {
           if (replaceNullValue(null, value)) {
             return null;
-          } else {
-            throw new ConcurrentModificationException();
           }
-        } else {
-          if (getFoldFunction() != null) {
-            final V newValue = getFoldFunction().execute(nullValue, value);
-            if (replaceNullValue(nullValue, newValue)) {
-              return null;
-            } else {
-              throw new ConcurrentModificationException();
-            }
-          } else {
-            throw new IllegalStateException("Already held " + nullValue + " for NULL");
-          }
+          throw new ConcurrentModificationException();
         }
+        if (getFoldFunction() != null) {
+          final V newValue = getFoldFunction().execute(nullValue, value);
+          if (replaceNullValue(nullValue, newValue)) {
+            return null;
+          }
+          throw new ConcurrentModificationException();
+        }
+        throw new IllegalStateException("Already held " + nullValue + " for NULL");
       }
 
       @SuppressWarnings("unchecked")
       @Override
       public Void visitClassComputationTargetType(final Class<? extends UniqueIdentifiable> type, final Void data) {
-        V newValue = (value != null) ? value : (V) NULL;
+        V newValue = value != null ? value : (V) NULL;
         final V previous = getUnderlying().putIfAbsent(type, newValue);
         if (previous == null) {
           return null;
-        } else {
-          if (previous == NULL) {
-            if (getUnderlying().replace(type, previous, newValue)) {
-              return null;
-            } else {
-              throw new ConcurrentModificationException();
-            }
-          }
-          if (getFoldFunction() != null) {
-            newValue = getFoldFunction().execute(previous, value);
-            if (newValue == null) {
-              newValue = (V) NULL;
-            }
-            if (getUnderlying().replace(type, previous, newValue)) {
-              return null;
-            } else {
-              throw new ConcurrentModificationException();
-            }
-          } else {
-            throw new IllegalStateException("Already held " + previous + " for " + key);
-          }
         }
+        if (previous == NULL) {
+          if (getUnderlying().replace(type, previous, newValue)) {
+            return null;
+          }
+          throw new ConcurrentModificationException();
+        }
+        if (getFoldFunction() != null) {
+          newValue = getFoldFunction().execute(previous, value);
+          if (newValue == null) {
+            newValue = (V) NULL;
+          }
+          if (getUnderlying().replace(type, previous, newValue)) {
+            return null;
+          }
+          throw new ConcurrentModificationException();
+        }
+        throw new IllegalStateException("Already held " + previous + " for " + key);
       }
 
     }, null);
   }
 
   /**
-   * Stores a value in the map. If the map already contains a value for a super-class entry the replacement callback function will be used to compose the two values. The first parameter to the
-   * callback will be the existing value, the second parameter will be the new value to be added, the returned value will be used.
-   * 
+   * Stores a value in the map. If the map already contains a value for a super-class entry the replacement callback function
+   * will be used to compose the two values. The first parameter to the callback will be the existing value, the second
+   * parameter will be the new value to be added, the returned value will be used.
+   *
    * @param key the target type key, not null
    * @param value the value to store, not null
    * @param replace the callback function to handle values that are already present or null to just use the new value
@@ -351,7 +340,7 @@ public class ComputationTargetTypeMap<V> {
 
       @Override
       public Void visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
-        for (ComputationTargetType type : types) {
+        for (final ComputationTargetType type : types) {
           type.accept(this, data);
         }
         return null;
@@ -365,27 +354,25 @@ public class ComputationTargetTypeMap<V> {
       @Override
       public Void visitNullComputationTargetType(final Void data) {
         final V oldValue = getNullValue();
-        final V newValue = ((replace != null) && (oldValue != null)) ? replace.execute(oldValue, value) : value;
+        final V newValue = replace != null && oldValue != null ? replace.execute(oldValue, value) : value;
         if (replaceNullValue(oldValue, newValue)) {
           return null;
-        } else {
-          throw new ConcurrentModificationException();
         }
+        throw new ConcurrentModificationException();
       }
 
       @SuppressWarnings("unchecked")
       @Override
       public Void visitClassComputationTargetType(final Class<? extends UniqueIdentifiable> type, final Void data) {
         final V oldValue = getImpl(type);
-        V newValue = ((replace != null) && (oldValue != NULL)) ? replace.execute(oldValue, value) : value;
+        V newValue = replace != null && oldValue != NULL ? replace.execute(oldValue, value) : value;
         if (newValue == null) {
           newValue = (V) NULL;
         }
         if (getUnderlying().replace(type, oldValue, newValue)) {
           return null;
-        } else {
-          throw new ConcurrentModificationException();
         }
+        throw new ConcurrentModificationException();
       }
 
     }, null);
@@ -417,20 +404,18 @@ public class ComputationTargetTypeMap<V> {
             if (_nextValue == null) {
               _nextValue = nextValue();
               return _nextValue != null;
-            } else {
-              return true;
             }
+            return true;
           }
 
           @Override
           public V next() {
             if (_nextValue == null) {
               return nextValue();
-            } else {
-              final V value = _nextValue;
-              _nextValue = null;
-              return value;
             }
+            final V value = _nextValue;
+            _nextValue = null;
+            return value;
           }
 
           @Override
@@ -481,9 +466,8 @@ public class ComputationTargetTypeMap<V> {
               public V setValue(final V value) {
                 if (replaceNullValue(nullValue, value)) {
                   return nullValue;
-                } else {
-                  throw new ConcurrentModificationException();
                 }
+                throw new ConcurrentModificationException();
               }
 
             };
@@ -506,14 +490,13 @@ public class ComputationTargetTypeMap<V> {
                   }
 
                   @Override
-                  public V setValue(V value) {
+                  public V setValue(final V value) {
                     if (value == null) {
                       final V previous = entry.getValue();
                       _itr.remove();
                       return previous;
-                    } else {
-                      return entry.setValue(value);
                     }
+                    return entry.setValue(value);
                   }
 
                 };
@@ -527,9 +510,8 @@ public class ComputationTargetTypeMap<V> {
             if (_nextEntry == null) {
               _nextEntry = nextEntry();
               return _nextEntry != null;
-            } else {
-              return true;
             }
+            return true;
           }
 
           @Override
@@ -537,11 +519,10 @@ public class ComputationTargetTypeMap<V> {
             if (_nextEntry == null) {
               _currentEntry = nextEntry();
               return _currentEntry;
-            } else {
-              _currentEntry = _nextEntry;
-              _nextEntry = null;
-              return _currentEntry;
             }
+            _currentEntry = _nextEntry;
+            _nextEntry = null;
+            return _currentEntry;
           }
 
           @Override

@@ -23,11 +23,11 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Provides ExternalIds for equity future options used to build a volatility surface
+ * Provides ExternalIds for equity future options used to build a volatility surface.
  */
 public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider extends BloombergFutureOptionVolatilitySurfaceInstrumentProvider {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider.class);
   /** The date-time formatter */
   private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("MM/dd/yy");
   /** The expiry rules */
@@ -37,8 +37,8 @@ public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider exte
   static {
     EXPIRY_RULES = new HashMap<>();
     EXPIRY_RULES.put("NKY", FutureOptionExpiries.of(new NextExpiryAdjuster(2, DayOfWeek.FRIDAY)));
-    EXPIRY_RULES.put("NDX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.FRIDAY, 1))); //TODO
-    EXPIRY_RULES.put("RUT", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.FRIDAY, 1))); //TODO
+    EXPIRY_RULES.put("NDX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.FRIDAY, 1))); // TODO
+    EXPIRY_RULES.put("RUT", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.FRIDAY, 1))); // TODO
     EXPIRY_RULES.put("DJX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.FRIDAY, 1)));
     EXPIRY_RULES.put("SPX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.FRIDAY, 1)));
     EXPIRY_RULES.put("VIX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.FRIDAY, -30)));
@@ -49,44 +49,63 @@ public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider exte
     EXPIRY_RULES.put("HSCEI", new DaysFromEndOfMonthExpiryAdjuster(1));
     EXPIRY_RULES.put("RDXUSD", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY, 1)));
     EXPIRY_RULES.put("DEFAULT", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.FRIDAY, 1)));
-    //TODO DAX, EUROSTOXX 50 (SX5E)
+    // TODO DAX, EUROSTOXX 50 (SX5E)
   }
 
   /**
-   * Uses the default ticker scheme (BLOOMBERG_TICKER_WEAK)
-   * @param futureOptionPrefix the prefix to the resulting code (e.g. DJX), not null
-   * @param postfix the postfix to the resulting code (e.g. Index), not null
-   * @param dataFieldName the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
-   * @param useCallAboveStrike the strike above which to use calls rather than puts, not null
-   * @param exchangeIdName the exchange id, not null
+   * Uses the default ticker scheme (BLOOMBERG_TICKER_WEAK).
+   * 
+   * @param futureOptionPrefix
+   *          the prefix to the resulting code (e.g. DJX), not null
+   * @param postfix
+   *          the postfix to the resulting code (e.g. Index), not null
+   * @param dataFieldName
+   *          the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
+   * @param useCallAboveStrike
+   *          the strike above which to use calls rather than puts, not null
+   * @param exchangeIdName
+   *          the exchange id, not null
    */
-  public BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName, final Double useCallAboveStrike,
+  public BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName,
+      final Double useCallAboveStrike,
       final String exchangeIdName) {
     super(futureOptionPrefix, postfix, dataFieldName, useCallAboveStrike, exchangeIdName);
   }
 
   /**
-   * @param futureOptionPrefix the prefix to the resulting code (e.g. DJX), not null
-   * @param postfix the postfix to the resulting code (e.g. Index), not null
-   * @param dataFieldName the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
-   * @param useCallAboveStrike the strike above which to use calls rather than puts, not null
-   * @param exchangeIdName the exchange id, not null
-   * @param schemeName the ticker scheme name, not null
+   * @param futureOptionPrefix
+   *          the prefix to the resulting code (e.g. DJX), not null
+   * @param postfix
+   *          the postfix to the resulting code (e.g. Index), not null
+   * @param dataFieldName
+   *          the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
+   * @param useCallAboveStrike
+   *          the strike above which to use calls rather than puts, not null
+   * @param exchangeIdName
+   *          the exchange id, not null
+   * @param schemeName
+   *          the ticker scheme name, not null
    */
-  public BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName, final Double useCallAboveStrike,
+  public BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName,
+      final Double useCallAboveStrike,
       final String exchangeIdName, final String schemeName) {
     super(futureOptionPrefix, postfix, dataFieldName, useCallAboveStrike, exchangeIdName, schemeName);
   }
 
   /**
-   * Provides an ExternalID for Bloomberg ticker,
-   * given a reference date and an integer offset, the n'th subsequent option <p>
-   * The format is prefix + date + callPutFlag + strike + postfix <p>
+   * Provides an ExternalID for Bloomberg ticker, given a reference date and an integer offset, the n'th subsequent option
+   * <p>
+   * The format is prefix + date + callPutFlag + strike + postfix
+   * <p>
    * e.g. DJX 12/21/13 C145.0 Index
    * <p>
-   * @param futureOptionNumber n'th future following curve date, not null
-   * @param strike option's strike, expressed as price in %, e.g. 98.750, not null
-   * @param surfaceDate date of curve validity; valuation date, not null
+   * 
+   * @param futureOptionNumber
+   *          n'th future following curve date, not null
+   * @param strike
+   *          option's strike, expressed as price in %, e.g. 98.750, not null
+   * @param surfaceDate
+   *          date of curve validity; valuation date, not null
    * @return the id of the Bloomberg ticker
    */
   @Override
@@ -111,6 +130,7 @@ public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider exte
 
   /**
    * Gets the expiryRules.
+   * 
    * @return the expiryRules
    */
   public static HashMap<String, ExchangeTradedInstrumentExpiryCalculator> getExpiryRules() {
@@ -122,7 +142,7 @@ public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider exte
     final String prefix = getFutureOptionPrefix();
     ExchangeTradedInstrumentExpiryCalculator expiryRule = EXPIRY_RULES.get(prefix);
     if (expiryRule == null) {
-      s_logger.info("No expiry rule has been setup for " + prefix + ". Using Default of 3rd Friday.");
+      LOGGER.info("No expiry rule has been setup for " + prefix + ". Using Default of 3rd Friday.");
       expiryRule = EXPIRY_RULES.get("DEFAULT");
     }
     return expiryRule;

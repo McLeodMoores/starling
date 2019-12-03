@@ -18,7 +18,7 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * 
+ *
  */
 public class ComplexChooserOptionModel extends AnalyticOptionModel<ComplexChooserOptionDefinition, StandardOptionDataBundle> {
   private static final RealSingleRootFinder ROOT_FINDER = new BisectionSingleRootFinder();
@@ -46,7 +46,8 @@ public class ComplexChooserOptionModel extends AnalyticOptionModel<ComplexChoose
         final double b = data.getCostOfCarry();
         final double deltaTCall = tCall - tChoose;
         final double deltaTPut = tPut - tChoose;
-        final double criticalValue = getCriticalValue(Math.exp(deltaTCall * (b - r)), Math.exp(-deltaTCall * r), Math.exp(deltaTPut * (b - r)), Math.exp(-deltaTPut * r), sigma, b, kCall, kPut,
+        final double criticalValue = getCriticalValue(Math.exp(deltaTCall * (b - r)), Math.exp(-deltaTCall * r), Math.exp(deltaTPut * (b - r)),
+            Math.exp(-deltaTPut * r), sigma, b, kCall, kPut,
             deltaTCall, deltaTPut);
         final double d1 = getD1(s, criticalValue, tChoose, sigma, b);
         final double d2 = getD2(d1, sigma, tChoose);
@@ -56,14 +57,17 @@ public class ComplexChooserOptionModel extends AnalyticOptionModel<ComplexChoose
         final double d6 = getD2(d5, sigma, tPut);
         final double rho1 = Math.sqrt(tChoose / tCall);
         final double rho2 = Math.sqrt(tChoose / tPut);
-        return s * Math.exp(tCall * (b - r)) * BIVARIATE_NORMAL.getCDF(new double[] {d1, d3, rho1}) - kCall * Math.exp(-r * tCall) * BIVARIATE_NORMAL.getCDF(new double[] {d2, d4, rho1}) - s
-            * Math.exp(tPut * (b - r)) * BIVARIATE_NORMAL.getCDF(new double[] {-d1, -d5, rho2}) + kPut * Math.exp(-r * tPut) * BIVARIATE_NORMAL.getCDF(new double[] {-d2, -d6, rho2});
+        return s * Math.exp(tCall * (b - r)) * BIVARIATE_NORMAL.getCDF(new double[] { d1, d3, rho1 })
+            - kCall * Math.exp(-r * tCall) * BIVARIATE_NORMAL.getCDF(new double[] { d2, d4, rho1 }) - s
+                * Math.exp(tPut * (b - r)) * BIVARIATE_NORMAL.getCDF(new double[] { -d1, -d5, rho2 })
+            + kPut * Math.exp(-r * tPut) * BIVARIATE_NORMAL.getCDF(new double[] { -d2, -d6, rho2 });
       }
 
     };
   }
 
-  private Double getCriticalValue(final double dfCall1, final double dfCall2, final double dfPut1, final double dfPut2, final double sigma, final double b, final double kCall, final double kPut,
+  private Double getCriticalValue(final double dfCall1, final double dfCall2, final double dfPut1, final double dfPut2, final double sigma, final double b,
+      final double kCall, final double kPut,
       final double deltaTCall, final double deltaTPut) {
     final Function1D<Double, Double> function = new Function1D<Double, Double>() {
 
@@ -74,7 +78,8 @@ public class ComplexChooserOptionModel extends AnalyticOptionModel<ComplexChoose
         final double d2Call = getD2(d1Call, sigma, deltaTCall);
         final double d1Put = getD1(criticalValue, kPut, deltaTPut, sigma, b);
         final double d2Put = getD2(d1Put, sigma, deltaTPut);
-        return criticalValue * dfCall1 * NORMAL.getCDF(d1Call) - kCall * dfCall2 * NORMAL.getCDF(d2Call) + criticalValue * dfPut1 * NORMAL.getCDF(-d1Put) - kPut * dfPut2 * NORMAL.getCDF(-d2Put);
+        return criticalValue * dfCall1 * NORMAL.getCDF(d1Call) - kCall * dfCall2 * NORMAL.getCDF(d2Call) + criticalValue * dfPut1 * NORMAL.getCDF(-d1Put)
+            - kPut * dfPut2 * NORMAL.getCDF(-d2Put);
       }
 
     };

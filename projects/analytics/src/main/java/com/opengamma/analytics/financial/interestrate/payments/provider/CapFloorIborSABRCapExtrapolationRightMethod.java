@@ -29,8 +29,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- *  Class used to compute the price and sensitivity of a Ibor cap/floor with SABR model and extrapolation for high strikes.
- *  No convexity adjustment is done for payment at non-standard dates.
+ * Class used to compute the price and sensitivity of a Ibor cap/floor with SABR model and extrapolation for high strikes. No convexity adjustment is done for
+ * payment at non-standard dates.
  */
 public class CapFloorIborSABRCapExtrapolationRightMethod implements CapFloorIborSABRCapMethodInterface {
 
@@ -49,8 +49,11 @@ public class CapFloorIborSABRCapExtrapolationRightMethod implements CapFloorIbor
 
   /**
    * Constructor from cut-off strike and tail parameter.
-   * @param cutOffStrike The cut-off strike.
-   * @param mu The tail thickness parameter.
+   * 
+   * @param cutOffStrike
+   *          The cut-off strike.
+   * @param mu
+   *          The tail thickness parameter.
    */
   public CapFloorIborSABRCapExtrapolationRightMethod(final double cutOffStrike, final double mu) {
     _cutOffStrike = cutOffStrike;
@@ -59,8 +62,11 @@ public class CapFloorIborSABRCapExtrapolationRightMethod implements CapFloorIbor
 
   /**
    * Computes the present value of a cash-settled European swaption in the SABR model with extrapolation to the right.
-   * @param cap The cap/floor.
-   * @param sabr The SABR cap and multi-curves provider. The SABR function need to be the Hagan function.
+   * 
+   * @param cap
+   *          The cap/floor.
+   * @param sabr
+   *          The SABR cap and multi-curves provider. The SABR function need to be the Hagan function.
    * @return The present value.
    */
   @Override
@@ -68,7 +74,8 @@ public class CapFloorIborSABRCapExtrapolationRightMethod implements CapFloorIbor
     ArgumentChecker.notNull(cap, "The cap/floor shoud not be null");
     ArgumentChecker.notNull(sabr, "SABR cap provider");
     final EuropeanVanillaOption option = new EuropeanVanillaOption(cap.getStrike(), cap.getFixingTime(), cap.isCap());
-    final double forward = sabr.getMulticurveProvider().getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
+    final double forward = sabr.getMulticurveProvider().getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(),
+        cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
     final double df = sabr.getMulticurveProvider().getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     final double maturity = cap.getFixingPeriodEndTime() - cap.getFixingPeriodStartTime();
     double price;
@@ -93,8 +100,11 @@ public class CapFloorIborSABRCapExtrapolationRightMethod implements CapFloorIbor
 
   /**
    * Computes the present value sensitivity to the yield curves of a Ibor cap/floor in the SABR framework with extrapolation on the right.
-   * @param cap The cap/floor.
-   * @param sabr The SABR cap and multi-curves provider. The SABR function need to be the Hagan function.
+   * 
+   * @param cap
+   *          The cap/floor.
+   * @param sabr
+   *          The SABR cap and multi-curves provider. The SABR function need to be the Hagan function.
    * @return The present value sensitivity to curves.
    */
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CapFloorIbor cap, final SABRCapProviderInterface sabr) {
@@ -102,7 +112,8 @@ public class CapFloorIborSABRCapExtrapolationRightMethod implements CapFloorIbor
     ArgumentChecker.notNull(sabr, "SABR cap provider");
     final MulticurveProviderInterface multicurve = sabr.getMulticurveProvider();
     final EuropeanVanillaOption option = new EuropeanVanillaOption(cap.getStrike(), cap.getFixingTime(), cap.isCap());
-    final double forward = multicurve.getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
+    final double forward = multicurve.getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(),
+        cap.getFixingAccrualFactor());
     final double df = multicurve.getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     final MulticurveSensitivity forwardDr = MulticurveSensitivity.ofForward(sabr.getMulticurveProvider().getName(cap.getIndex()),
         new SimplyCompoundedForwardSensitivity(cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor(), 1.0));
@@ -140,15 +151,19 @@ public class CapFloorIborSABRCapExtrapolationRightMethod implements CapFloorIbor
 
   /**
    * Computes the present value SABR sensitivity of a cap/floor in the SABR framework with extrapolation on the right.
-   * @param cap The cap/floor.
-   * @param sabr The SABR cap and multi-curves provider. The SABR function need to be the Hagan function.
+   * 
+   * @param cap
+   *          The cap/floor.
+   * @param sabr
+   *          The SABR cap and multi-curves provider. The SABR function need to be the Hagan function.
    * @return The present value SABR sensitivity.
    */
   public PresentValueSABRSensitivityDataBundle presentValueSABRSensitivity(final CapFloorIbor cap, final SABRCapProviderInterface sabr) {
     ArgumentChecker.notNull(cap, "The cap/floor shoud not be null");
     ArgumentChecker.notNull(sabr, "SABR cap provider");
     final EuropeanVanillaOption option = new EuropeanVanillaOption(cap.getStrike(), cap.getFixingTime(), cap.isCap());
-    final double forward = sabr.getMulticurveProvider().getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
+    final double forward = sabr.getMulticurveProvider().getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(),
+        cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
     final double df = sabr.getMulticurveProvider().getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     final double maturity = cap.getFixingPeriodEndTime() - cap.getFixingPeriodStartTime();
     final double[] bsDsabr = new double[4];

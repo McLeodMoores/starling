@@ -54,10 +54,7 @@ public class WorkingDayCalendarUtilsTest {
   /** A holiday source */
   private static final HolidaySource HOLIDAY_SOURCE = new MasterHolidaySource(HOLIDAY_MASTER);
   /** US holiday dates */
-  private static final List<LocalDate> HOLIDAY_DATES = Arrays.asList(
-      LocalDate.of(2015, 3, 3),
-      LocalDate.of(2015, 3, 10),
-      LocalDate.of(2015, 3, 17));
+  private static final List<LocalDate> HOLIDAY_DATES = Arrays.asList(LocalDate.of(2015, 3, 3), LocalDate.of(2015, 3, 10), LocalDate.of(2015, 3, 17));
   /** US region with country and currency identifier */
   private static final SimpleRegion US = new SimpleRegion();
   /** GB region with currency identifier */
@@ -70,16 +67,22 @@ public class WorkingDayCalendarUtilsTest {
     REGION_MASTER.add(new RegionDocument(US));
     REGION_MASTER.add(new RegionDocument(GB));
     final SimpleHoliday usHoliday = new SimpleHolidayWithWeekend(HOLIDAY_DATES, WeekendType.SATURDAY_SUNDAY);
-    final SimpleHoliday gbHoliday = new SimpleHolidayWithWeekend(Collections.<LocalDate>emptyList(), WeekendType.SATURDAY_SUNDAY);
+    final SimpleHoliday euHoliday = new SimpleHolidayWithWeekend(HOLIDAY_DATES, WeekendType.SATURDAY_SUNDAY);
+    final SimpleHoliday gbHoliday = new SimpleHolidayWithWeekend(Collections.<LocalDate> emptyList(), WeekendType.SATURDAY_SUNDAY);
     usHoliday.setRegionExternalId(ExternalSchemes.countryRegionId(Country.US));
     usHoliday.setType(HolidayType.BANK);
+    euHoliday.setCurrency(Currency.EUR);
+    euHoliday.setType(HolidayType.CURRENCY);
     gbHoliday.setCurrency(Currency.GBP);
     gbHoliday.setType(HolidayType.CURRENCY);
     final HolidayDocument usDocument = new HolidayDocument(usHoliday);
     usDocument.setName("US");
+    final HolidayDocument euDocument = new HolidayDocument(euHoliday);
+    euDocument.setName("EU");
     final HolidayDocument gbDocument = new HolidayDocument(gbHoliday);
     gbDocument.setName("GB");
     HOLIDAY_MASTER.add(usDocument);
+    HOLIDAY_MASTER.add(euDocument);
     HOLIDAY_MASTER.add(gbDocument);
   }
 
@@ -99,8 +102,8 @@ public class WorkingDayCalendarUtilsTest {
         return VersionCorrection.LATEST;
       }
     };
-    final ServiceContext serviceContext = ServiceContext.of(VersionCorrectionProvider.class, versionCorrectionProvider)
-        .with(HolidaySource.class, HOLIDAY_SOURCE);
+    final ServiceContext serviceContext = ServiceContext.of(VersionCorrectionProvider.class, versionCorrectionProvider).with(HolidaySource.class,
+        HOLIDAY_SOURCE);
     ThreadLocalServiceContext.init(serviceContext);
   }
 
@@ -161,6 +164,14 @@ public class WorkingDayCalendarUtilsTest {
   }
 
   /**
+   * Tests the behaviour when the holiday source is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullHolidaySource3() {
+    WorkingDayCalendarUtils.getCalendarForCurrency(null, Currency.GBP);
+  }
+
+  /**
    * Tests the behaviour when the region id is null.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -172,8 +183,16 @@ public class WorkingDayCalendarUtilsTest {
    * Tests the behaviour when the currency is null.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testNullCurrency() {
+  public void testNullCurrency1() {
     WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(REGION_SOURCE, HOLIDAY_SOURCE, ExternalSchemes.countryRegionId(Country.US), null);
+  }
+
+  /**
+   * Tests the behaviour when the currency is null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullCurrency2() {
+    WorkingDayCalendarUtils.getCalendarForCurrency(HOLIDAY_SOURCE, null);
   }
 
   /**
@@ -189,7 +208,7 @@ public class WorkingDayCalendarUtilsTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoRegionOrCurrencyHoliday() {
-    WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(REGION_SOURCE, HOLIDAY_SOURCE, ExternalSchemes.countryRegionId(Country.EU), Currency.EUR);
+    WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(REGION_SOURCE, HOLIDAY_SOURCE, ExternalSchemes.countryRegionId(Country.AU), Currency.AUD);
   }
 
   /**
@@ -208,8 +227,27 @@ public class WorkingDayCalendarUtilsTest {
    */
   @Test
   public void testCalendarForRegion() {
-    final WorkingDayCalendar calendar =
-        WorkingDayCalendarUtils.getCalendarForRegion(REGION_SOURCE, HOLIDAY_SOURCE, ExternalSchemes.countryRegionId(Country.US));
+    final WorkingDayCalendar calendar = WorkingDayCalendarUtils.getCalendarForRegion(REGION_SOURCE, HOLIDAY_SOURCE,
+        ExternalSchemes.countryRegionId(Country.US));
+    LocalDate date = LocalDate.of(2015, 1, 1);
+    while (date.isBefore(LocalDate.of(2016, 1, 1))) {
+      if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+        assertTrue(calendar.isWeekend(date));
+        assertFalse(calendar.isWorkingDay(date));
+      } else if (HOLIDAY_DATES.contains(date)) {
+        assertTrue(calendar.isHoliday(date));
+        assertFalse(calendar.isWorkingDay(date));
+      }
+      date = date.plusDays(1);
+    }
+  }
+
+  /**
+   * Tests that the correct calendar is returned for a currency.
+   */
+  @Test
+  public void testCalendarForCurrency() {
+    final WorkingDayCalendar calendar = WorkingDayCalendarUtils.getCalendarForCurrency(HOLIDAY_SOURCE, Currency.EUR);
     LocalDate date = LocalDate.of(2015, 1, 1);
     while (date.isBefore(LocalDate.of(2016, 1, 1))) {
       if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
@@ -228,8 +266,8 @@ public class WorkingDayCalendarUtilsTest {
    */
   @Test
   public void testCalendarForRegionOrCurrency() {
-    WorkingDayCalendar calendar =
-        WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(REGION_SOURCE, HOLIDAY_SOURCE, ExternalSchemes.countryRegionId(Country.US), Currency.USD);
+    WorkingDayCalendar calendar = WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(REGION_SOURCE, HOLIDAY_SOURCE,
+        ExternalSchemes.countryRegionId(Country.US), Currency.USD);
     LocalDate date = LocalDate.of(2015, 1, 1);
     while (date.isBefore(LocalDate.of(2016, 1, 1))) {
       if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {

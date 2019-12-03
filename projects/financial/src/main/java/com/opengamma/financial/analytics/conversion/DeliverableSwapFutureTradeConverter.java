@@ -18,8 +18,6 @@ import com.opengamma.core.position.Trade;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.security.future.DeliverableSwapFutureSecurity;
-import com.opengamma.financial.security.irs.InterestRateSwapSecurity;
-import com.opengamma.financial.security.swap.SwapSecurity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -31,27 +29,34 @@ public class DeliverableSwapFutureTradeConverter implements TradeConverter {
    * Deliverable swap future security converter.
    */
   private final DeliverableSwapFutureSecurityConverter _securityConverter;
-  
+
   /**
    * Construct a deliverable swap future trade.
-   * @param securitySource the security source used to load the underlying swap.
-   * @param swapConverter the swap converter, only used if the underlying is a {@link SwapSecurity}.
-   * @param interestRateSwapConverter the swap converter, only used if the underlying is a {@link InterestRateSwapSecurity}.
+   *
+   * @param securitySource
+   *          the security source used to load the underlying swap.
+   * @param swapConverter
+   *          the swap converter, only used if the underlying is a {@link com.opengamma.financial.security.swap.SwapSecurity}.
+   * @param interestRateSwapConverter
+   *          the swap converter, only used if the underlying is a {@link com.opengamma.financial.security.irs.InterestRateSwapSecurity}.
    */
-  public DeliverableSwapFutureTradeConverter(SecuritySource securitySource,
-                                             SwapSecurityConverter swapConverter,
-                                             InterestRateSwapSecurityConverter interestRateSwapConverter) {
+  public DeliverableSwapFutureTradeConverter(final SecuritySource securitySource,
+      final SwapSecurityConverter swapConverter,
+      final InterestRateSwapSecurityConverter interestRateSwapConverter) {
     ArgumentChecker.notNull(securitySource, "securitySource");
     ArgumentChecker.notNull(interestRateSwapConverter, "interestRateSwapSecurityConverter");
     _securityConverter = new DeliverableSwapFutureSecurityConverter(securitySource, swapConverter, interestRateSwapConverter);
   }
-  
-  public InstrumentDefinitionWithData<?, Double> convert(Trade trade) {
+
+  @Override
+  public InstrumentDefinitionWithData<?, Double> convert(final Trade trade) {
     ArgumentChecker.notNull(trade, "trade");
     final Security security = trade.getSecurity();
     if (security instanceof DeliverableSwapFutureSecurity) {
-      final SwapFuturesPriceDeliverableSecurityDefinition securityDefinition = (SwapFuturesPriceDeliverableSecurityDefinition) ((DeliverableSwapFutureSecurity) security).accept(_securityConverter);
-      Double tradePrice = trade.getPremium(); // TODO: [PLAT-1958] The trade price is stored in the trade premium. 
+      final SwapFuturesPriceDeliverableSecurityDefinition securityDefinition =
+          (SwapFuturesPriceDeliverableSecurityDefinition) ((DeliverableSwapFutureSecurity) security)
+          .accept(_securityConverter);
+      final Double tradePrice = trade.getPremium(); // TODO: [PLAT-1958] The trade price is stored in the trade premium.
       if (tradePrice == null) {
         throw new OpenGammaRuntimeException("Trade premium should not be null.");
       }

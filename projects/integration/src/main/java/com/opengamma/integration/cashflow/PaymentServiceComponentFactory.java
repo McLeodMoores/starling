@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.cashflow;
@@ -28,45 +28,45 @@ import com.opengamma.engine.view.ViewProcessor;
 import com.opengamma.master.config.ConfigMaster;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class PaymentServiceComponentFactory extends AbstractComponentFactory {
 
   /**
-   * The classifier under which to publish
+   * The classifier under which to publish.
    */
   @PropertyDefinition
   private String _classifier;
   /**
-   * The view processor
+   * The view processor.
    */
   @PropertyDefinition
   private ViewProcessor _viewProcessor;
   /**
-   * The user config master
+   * The user config master.
    */
   @PropertyDefinition
   private ConfigMaster _userConfigMaster;
   /**
-   * The position source
+   * The position source.
    */
   @PropertyDefinition
   private PositionSource _positionSource;
   /**
-   * The security source
+   * The security source.
    */
   @PropertyDefinition
   private SecuritySource _securitySource;
-  
+
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     initPaymentService(repo);
   }
-  
-  protected PaymentService initPaymentService(ComponentRepository repo) {
-    PaymentService paymentService = new PaymentService(getViewProcessor(), getUserConfigMaster(), getPositionSource(), getSecuritySource());
-    ComponentInfo info = new ComponentInfo(PaymentService.class, getClassifier());
+
+  protected PaymentService initPaymentService(final ComponentRepository repo) {
+    final PaymentService paymentService = new PaymentService(getViewProcessor(), getUserConfigMaster(), getPositionSource(), getSecuritySource());
+    final ComponentInfo info = new ComponentInfo(PaymentService.class, getClassifier());
     repo.registerComponent(info, paymentService);
     return paymentService;
   }
@@ -92,7 +92,7 @@ public class PaymentServiceComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the classifier under which to publish
+   * Gets the classifier under which to publish.
    * @return the value of the property
    */
   public String getClassifier() {
@@ -100,7 +100,7 @@ public class PaymentServiceComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the classifier under which to publish
+   * Sets the classifier under which to publish.
    * @param classifier  the new value of the property
    */
   public void setClassifier(String classifier) {
@@ -117,7 +117,7 @@ public class PaymentServiceComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the view processor
+   * Gets the view processor.
    * @return the value of the property
    */
   public ViewProcessor getViewProcessor() {
@@ -125,7 +125,7 @@ public class PaymentServiceComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the view processor
+   * Sets the view processor.
    * @param viewProcessor  the new value of the property
    */
   public void setViewProcessor(ViewProcessor viewProcessor) {
@@ -142,7 +142,7 @@ public class PaymentServiceComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the user config master
+   * Gets the user config master.
    * @return the value of the property
    */
   public ConfigMaster getUserConfigMaster() {
@@ -150,7 +150,7 @@ public class PaymentServiceComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the user config master
+   * Sets the user config master.
    * @param userConfigMaster  the new value of the property
    */
   public void setUserConfigMaster(ConfigMaster userConfigMaster) {
@@ -167,7 +167,7 @@ public class PaymentServiceComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the position source
+   * Gets the position source.
    * @return the value of the property
    */
   public PositionSource getPositionSource() {
@@ -175,7 +175,7 @@ public class PaymentServiceComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the position source
+   * Sets the position source.
    * @param positionSource  the new value of the property
    */
   public void setPositionSource(PositionSource positionSource) {
@@ -192,7 +192,7 @@ public class PaymentServiceComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the security source
+   * Gets the security source.
    * @return the value of the property
    */
   public SecuritySource getSecuritySource() {
@@ -200,7 +200,7 @@ public class PaymentServiceComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the security source
+   * Sets the security source.
    * @param securitySource  the new value of the property
    */
   public void setSecuritySource(SecuritySource securitySource) {

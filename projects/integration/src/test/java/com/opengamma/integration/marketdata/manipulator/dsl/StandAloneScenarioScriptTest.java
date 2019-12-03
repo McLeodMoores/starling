@@ -5,7 +5,10 @@
  */
 package com.opengamma.integration.marketdata.manipulator.dsl;
 
-import static com.opengamma.integration.marketdata.manipulator.dsl.MarketDataDelegate.MarketDataType.*;
+import static com.opengamma.integration.marketdata.manipulator.dsl.MarketDataDelegate.MarketDataType.FIXED_HISTORICAL;
+import static com.opengamma.integration.marketdata.manipulator.dsl.MarketDataDelegate.MarketDataType.LATEST_HISTORICAL;
+import static com.opengamma.integration.marketdata.manipulator.dsl.MarketDataDelegate.MarketDataType.LIVE;
+import static com.opengamma.integration.marketdata.manipulator.dsl.MarketDataDelegate.MarketDataType.SNAPSHOT;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 
@@ -38,27 +41,27 @@ import groovy.lang.GroovyShell;
 @Test(groups = TestGroup.UNIT)
 public class StandAloneScenarioScriptTest {
 
-  private static final DateTimeFormatter s_dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+  private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
   private static final String FOO = "foo";
   private static final String BAR = "bar";
 
   @Test
   public void view() {
-    String scriptText =
+    final String scriptText =
         "view {\n" +
         "  name 'an example view'\n" +
         "  server 'svr:8080'\n" +
         "}";
-    StandAloneScenarioScript script = createScript(scriptText);
-    ViewDelegate viewDelegate = script.getViewDelegate();
+    final StandAloneScenarioScript script = createScript(scriptText);
+    final ViewDelegate viewDelegate = script.getViewDelegate();
     assertEquals("an example view", viewDelegate.getName());
     assertEquals("svr:8080", viewDelegate.getServer());
   }
 
   @Test
   public void marketData() {
-    String scriptText =
+    final String scriptText =
         "view {\n" +
         "  marketData {\n" +
         "    live 'Bloomberg'\n" +
@@ -69,27 +72,27 @@ public class StandAloneScenarioScriptTest {
         "    fixedHistorical '2012-03-10 12:30'\n" +
         "  }\n" +
         "}";
-    StandAloneScenarioScript script = createScript(scriptText);
-    ImmutableList<MarketDataDelegate.MarketDataSpec> expectedSpecs =
+    final StandAloneScenarioScript script = createScript(scriptText);
+    final ImmutableList<MarketDataDelegate.MarketDataSpec> expectedSpecs =
         ImmutableList.of(spec(LIVE, "Bloomberg"),
                          spec(LIVE, "Activ"),
                          spec(SNAPSHOT, "the snapshot name"),
                          spec(FIXED_HISTORICAL, "2011-03-08 11:30"),
                          spec(LATEST_HISTORICAL, null),
                          spec(FIXED_HISTORICAL, "2012-03-10 12:30"));
-    MarketDataDelegate marketDataDelegate = script.getViewDelegate().getMarketDataDelegate();
+    final MarketDataDelegate marketDataDelegate = script.getViewDelegate().getMarketDataDelegate();
     assertEquals(expectedSpecs, marketDataDelegate.getSpecifications());
   }
 
   @Test
   public void shockList() {
-    String scriptText =
+    final String scriptText =
         "shockList {\n" +
         "  foo = [1, 2, 3]\n" +
         "  bar = ['a', 'b', 'c']\n" +
         "}";
-    StandAloneScenarioScript script = createScript(scriptText);
-    List<Map<String,Object>> params = script.getScenarioParameterList();
+    final StandAloneScenarioScript script = createScript(scriptText);
+    final List<Map<String, Object>> params = script.getScenarioParameterList();
     assertEquals(3, params.size());
 
     assertEquals(1, params.get(0).get(FOO));
@@ -104,13 +107,13 @@ public class StandAloneScenarioScriptTest {
 
   @Test
   public void shockGrid() {
-    String scriptText =
+    final String scriptText =
         "shockGrid {\n" +
         "  foo = [1, 2]\n" +
         "  bar = ['a', 'b']\n" +
         "}";
-    StandAloneScenarioScript script = createScript(scriptText);
-    List<Map<String,Object>> params = script.getScenarioParameterList();
+    final StandAloneScenarioScript script = createScript(scriptText);
+    final List<Map<String, Object>> params = script.getScenarioParameterList();
     assertEquals(4, params.size());
 
     assertEquals(1, params.get(0).get(FOO));
@@ -128,7 +131,7 @@ public class StandAloneScenarioScriptTest {
 
   @Test
   public void scenarioList() {
-    String scriptText =
+    final String scriptText =
         "shockList {\n" +
         "  foo = [1, 2]\n" +
         "  bar = ['a', 'b']\n" +
@@ -143,10 +146,10 @@ public class StandAloneScenarioScriptTest {
         "    }\n" +
         "  }\n" +
         "}";
-    StandAloneScenarioScript script = createScript(scriptText);
+    final StandAloneScenarioScript script = createScript(scriptText);
 
-    Simulation simulation = script.getSimulation();
-    Map<String, Scenario> scenarios = simulation.getScenarios();
+    final Simulation simulation = script.getSimulation();
+    final Map<String, Scenario> scenarios = simulation.getScenarios();
     assertEquals(2, scenarios.size());
 
     checkScenario(scenarios, "a", 1, "2014-01-14 12:03");
@@ -155,7 +158,7 @@ public class StandAloneScenarioScriptTest {
 
   @Test
   public void scenarioGrid() {
-    String scriptText =
+    final String scriptText =
         "shockGrid {\n" +
         "  foo = [1, 2]\n" +
         "  bar = ['a', 'b']\n" +
@@ -168,10 +171,10 @@ public class StandAloneScenarioScriptTest {
         "    }\n" +
         "  }\n" +
         "}";
-    StandAloneScenarioScript script = createScript(scriptText);
+    final StandAloneScenarioScript script = createScript(scriptText);
 
-    Simulation simulation = script.getSimulation();
-    Map<String, Scenario> scenarios = simulation.getScenarios();
+    final Simulation simulation = script.getSimulation();
+    final Map<String, Scenario> scenarios = simulation.getScenarios();
     assertEquals(4, scenarios.size());
     checkScenario(scenarios, "a", 1, null);
     checkScenario(scenarios, "a", 2, null);
@@ -181,12 +184,12 @@ public class StandAloneScenarioScriptTest {
 
   @Test
   public void initialize() {
-    String scriptText =
+    final String scriptText =
         "shockList {\n" +
         "  foo = [100.bp, 20.pc, 1.y]\n" +
         "}";
-    StandAloneScenarioScript script = createScript(scriptText);
-    List<Map<String,Object>> params = script.getScenarioParameterList();
+    final StandAloneScenarioScript script = createScript(scriptText);
+    final List<Map<String, Object>> params = script.getScenarioParameterList();
     assertEquals(3, params.size());
 
     assertEquals(new BigDecimal("0.01"), params.get(0).get(FOO));
@@ -194,47 +197,47 @@ public class StandAloneScenarioScriptTest {
     assertEquals(Period.ofYears(1), params.get(2).get(FOO));
   }
 
-  private static void checkScenario(Map<String, Scenario> scenarios, String id, double shiftAmount, String valuationTime) {
+  private static void checkScenario(final Map<String, Scenario> scenarios, final String id, final double shiftAmount, final String valuationTime) {
     String scenarioName;
     if (valuationTime != null) {
       scenarioName = "foo=" + (int) shiftAmount + " bar='" + id + "' valTime='" + valuationTime + "'";
     } else {
       scenarioName = "foo=" + (int) shiftAmount + " bar='" + id + "'";
     }
-    Scenario scenario = scenarios.get(scenarioName);
+    final Scenario scenario = scenarios.get(scenarioName);
     assertNotNull(scenario);
-    ScenarioDefinition definition = scenario.createDefinition();
+    final ScenarioDefinition definition = scenario.createDefinition();
     Instant valuationInstant;
     if (valuationTime != null) {
-      LocalDateTime localTime = LocalDateTime.parse(valuationTime, s_dateFormatter);
+      final LocalDateTime localTime = LocalDateTime.parse(valuationTime, DATE_FORMATTER);
       valuationInstant = ZonedDateTime.of(localTime, OpenGammaClock.getZone()).toInstant();
     } else {
       valuationInstant = null;
     }
     assertEquals(valuationInstant, scenario.getValuationTime());
-    Map<DistinctMarketDataSelector, FunctionParameters> definitionMap = definition.getDefinitionMap();
-    PointSelector selector =
+    final Map<DistinctMarketDataSelector, FunctionParameters> definitionMap = definition.getDefinitionMap();
+    final PointSelector selector =
         new PointSelector(null, ImmutableSet.of(ExternalId.of("SCHEME", id)), null, null, null, null, null);
-    FunctionParameters parameters = definitionMap.get(selector);
-    CompositeStructureManipulator compositeManipulator =
+    final FunctionParameters parameters = definitionMap.get(selector);
+    final CompositeStructureManipulator<?> compositeManipulator =
         ((SimpleFunctionParameters) parameters).getValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME);
-    MarketDataShift shift = (MarketDataShift) compositeManipulator.getManipulators().get(0);
+    final MarketDataShift shift = (MarketDataShift) compositeManipulator.getManipulators().get(0);
     assertEquals(1 + shiftAmount, shift.execute(1.0, null, null));
   }
 
-  private static StandAloneScenarioScript createScript(String scriptText) {
-    CompilerConfiguration config = new CompilerConfiguration();
+  private static StandAloneScenarioScript createScript(final String scriptText) {
+    final CompilerConfiguration config = new CompilerConfiguration();
     config.setScriptBaseClass(StandAloneScenarioScript.class.getName());
-    GroovyShell shell = new GroovyShell(config);
-    StandAloneScenarioScript script = (StandAloneScenarioScript) shell.parse(scriptText);
-    Binding binding = new Binding();
+    final GroovyShell shell = new GroovyShell(config);
+    final StandAloneScenarioScript script = (StandAloneScenarioScript) shell.parse(scriptText);
+    final Binding binding = new Binding();
     SimulationUtils.registerAliases(binding);
     script.setBinding(binding);
     script.run();
     return script;
   }
 
-  private static MarketDataDelegate.MarketDataSpec spec(MarketDataDelegate.MarketDataType type, String spec) {
+  private static MarketDataDelegate.MarketDataSpec spec(final MarketDataDelegate.MarketDataType type, final String spec) {
     return new MarketDataDelegate.MarketDataSpec(type, spec);
   }
 }

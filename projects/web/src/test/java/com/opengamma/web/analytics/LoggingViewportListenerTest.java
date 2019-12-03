@@ -64,7 +64,6 @@ public class LoggingViewportListenerTest {
    * creates a deletes a viewport with no logging enabled
    */
   @Test
-  @SuppressWarnings("unchecked")
   public void createDeleteNoLogging() {
     final ViewClient viewClient = mock(ViewClient.class);
     final LoggingViewportListener listener = new LoggingViewportListener(viewClient);
@@ -92,7 +91,6 @@ public class LoggingViewportListenerTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void createUpdateDeleteNoLogging() {
     final ViewClient viewClient = mock(ViewClient.class);
     final LoggingViewportListener listener = new LoggingViewportListener(viewClient);
@@ -141,16 +139,16 @@ public class LoggingViewportListenerTest {
     final int row = cell.getRow();
     final int col = cell.getColumn();
     final ComputationTargetSpecification target = new ComputationTargetSpecification(ComputationTargetType.POSITION,
-                                                                               UniqueId.of("Cell", row + "," + col));
+        UniqueId.of("Cell", row + "," + col));
     final ValueProperties properties = ValueProperties.with(ValuePropertyNames.FUNCTION, "fnName").get();
     return Pairs.of("Default", new ValueSpecification("valueName(" + row + "," + col + ")", target, properties));
   }
 
-  private Set<Pair<String, ValueSpecification>> resultSpecs(final GridCell... cells) {
+  private static Set<Pair<String, ValueSpecification>> resultSpecs(final GridCell... cells) {
     return resultSpecs(Arrays.asList(cells));
   }
 
-  private Set<Pair<String, ValueSpecification>> resultSpecs(final List<GridCell> cells) {
+  private static Set<Pair<String, ValueSpecification>> resultSpecs(final List<GridCell> cells) {
     final Set<Pair<String, ValueSpecification>> specs = Sets.newHashSet();
     for (final GridCell cell : cells) {
       specs.add(target(cell));

@@ -38,9 +38,9 @@ public class PatchableReferenceDataProviderComponentFactory extends AbstractComp
   private ReferenceDataProvider _referenceDataProvider;
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    ReferenceDataProvider wrappedRefData = new PatchableReferenceDataProvider(getReferenceDataProvider());
-    ComponentInfo info = new ComponentInfo(ReferenceDataProvider.class, "bloomberg");
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final ReferenceDataProvider wrappedRefData = new PatchableReferenceDataProvider(getReferenceDataProvider());
+    final ComponentInfo info = new ComponentInfo(ReferenceDataProvider.class, "bloomberg");
     repo.registerComponent(info, wrappedRefData);
   }
 

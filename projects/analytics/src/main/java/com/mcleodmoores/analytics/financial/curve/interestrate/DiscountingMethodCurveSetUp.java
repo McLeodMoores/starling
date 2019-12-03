@@ -23,7 +23,7 @@ import com.opengamma.util.tuple.Pairs;
 /**
  *
  */
-//PerCurveSetUp?
+// PerCurveSetUp?
 public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
   private final List<List<String>> _curveNames;
   private final Map<String, DiscountingMethodCurveTypeSetUp> _curveTypes;
@@ -48,9 +48,10 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
   }
 
   /**
-   * Constructor that takes an existing builder. Note that this is not a copy constructor,
-   * i.e. any object references are shared.
-   * @param builder  the builder, not null
+   * Constructor that takes an existing builder. Note that this is not a copy constructor, i.e. any object references are shared.
+   *
+   * @param builder
+   *          the builder, not null
    */
   DiscountingMethodCurveSetUp(final DiscountingMethodCurveSetUp builder) {
     ArgumentChecker.notNull(builder, "builder");
@@ -67,15 +68,25 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   /**
    * Constructor that copies the supplied data into new objects.
-   * @param curveNames  the curve names, can be null
-   * @param nodes  the nodes for each curve, can be null
-   * @param curveTypes  the types for each curve, can be null
-   * @param preConstructedCurves  any pre-constructed curves, can be null
-   * @param fxMatrix  the FX rates, can be null
-   * @param knownBundle  any known sensitivities, can be null
-   * @param absoluteTolerance  the absolute tolerance used in root-finding
-   * @param relativeTolerance  the relative tolerance used in root-finding
-   * @param maxSteps  the maximum number of steps used in root-finding
+   *
+   * @param curveNames
+   *          the curve names, can be null
+   * @param nodes
+   *          the nodes for each curve, can be null
+   * @param curveTypes
+   *          the types for each curve, can be null
+   * @param preConstructedCurves
+   *          any pre-constructed curves, can be null
+   * @param fxMatrix
+   *          the FX rates, can be null
+   * @param knownBundle
+   *          any known sensitivities, can be null
+   * @param absoluteTolerance
+   *          the absolute tolerance used in root-finding
+   * @param relativeTolerance
+   *          the relative tolerance used in root-finding
+   * @param maxSteps
+   *          the maximum number of steps used in root-finding
    */
   private DiscountingMethodCurveSetUp(
       final List<List<String>> curveNames,
@@ -87,11 +98,12 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
       final double absoluteTolerance,
       final double relativeTolerance,
       final int maxSteps) {
-    _curveNames = curveNames == null ? new ArrayList<List<String>>() : new ArrayList<>(curveNames);
-    _nodes = nodes == null ? new HashMap<String, List<InstrumentDefinition<?>>>() : new HashMap<>(nodes);
-    _curveTypes = curveTypes == null ? new HashMap<String, DiscountingMethodCurveTypeSetUp>() : new HashMap<>(curveTypes);
+    _curveNames = curveNames == null ? new ArrayList<>() : new ArrayList<>(curveNames);
+    _nodes = nodes == null ? new HashMap<>() : new HashMap<>(nodes);
+    _curveTypes = curveTypes == null ? new HashMap<>() : new HashMap<>(curveTypes);
     _preConstructedCurves = preConstructedCurves == null
-        ? new HashMap<DiscountingMethodPreConstructedCurveTypeSetUp, YieldAndDiscountCurve>() : new HashMap<>(preConstructedCurves);
+        ? new HashMap<>()
+        : new HashMap<>(preConstructedCurves);
     _fxMatrix = fxMatrix == null ? new FXMatrix() : new FXMatrix(fxMatrix);
     if (knownBundle == null) {
       _knownBundle = null;
@@ -164,7 +176,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
         _knownBundle, _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
-  //TODO test that curve names don't already exist
+  // TODO test that curve names don't already exist
   @Override
   public DiscountingMethodCurveSetUp building(final String... curveNames) {
     ArgumentChecker.notEmpty(curveNames, "curveNames");
@@ -175,7 +187,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
     throw new IllegalStateException("Have already set curves to construct");
   }
 
-  //TODO next two methods should be step builders and thenBuilding()
+  // TODO next two methods should be step builders and thenBuilding()
   @Override
   public DiscountingMethodCurveSetUp buildingFirst(final String... curveNames) {
     ArgumentChecker.notEmpty(curveNames, "curveNames");

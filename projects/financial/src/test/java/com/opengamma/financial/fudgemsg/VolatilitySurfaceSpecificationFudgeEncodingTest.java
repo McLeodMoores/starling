@@ -23,7 +23,10 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Test.
+ * 
+ * @deprecated Deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class VolatilitySurfaceSpecificationFudgeEncodingTest extends FinancialTestBase {
 

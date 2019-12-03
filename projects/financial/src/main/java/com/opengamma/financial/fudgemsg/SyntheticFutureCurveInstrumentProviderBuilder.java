@@ -15,7 +15,7 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.financial.analytics.ircurve.SyntheticFutureCurveInstrumentProvider;
 
 /**
- * Fudge builder for {@link SyntheticFutureCurveInstrumentProvider}
+ * Fudge builder for {@link SyntheticFutureCurveInstrumentProvider}.
  */
 @FudgeBuilderFor(SyntheticFutureCurveInstrumentProvider.class)
 public class SyntheticFutureCurveInstrumentProviderBuilder implements FudgeBuilder<SyntheticFutureCurveInstrumentProvider> {

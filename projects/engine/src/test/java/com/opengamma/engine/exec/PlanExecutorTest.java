@@ -17,11 +17,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,7 +35,6 @@ import com.opengamma.engine.calcnode.CalculationJobResult;
 import com.opengamma.engine.calcnode.CalculationJobResultItem;
 import com.opengamma.engine.calcnode.JobDispatcher;
 import com.opengamma.engine.calcnode.JobResultReceiver;
-import com.opengamma.engine.exec.DependencyGraphExecutionFuture.Listener;
 import com.opengamma.engine.exec.plan.GraphExecutionPlan;
 import com.opengamma.engine.exec.plan.PlannedJob;
 import com.opengamma.engine.exec.stats.GraphExecutionStatistics;
@@ -65,7 +60,7 @@ import com.opengamma.util.tuple.Pairs;
 @Test(groups = TestGroup.UNIT)
 public class PlanExecutorTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PlanExecutorTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PlanExecutorTest.class);
 
   private ViewProcessContext createViewProcessContext(final JobDispatcher jobDispatcher) {
     final ViewProcessContext context = Mockito.mock(ViewProcessContext.class);
@@ -74,7 +69,7 @@ public class PlanExecutorTest {
     return context;
   }
 
-  private SingleComputationCycle createCycle(final JobDispatcher jobDispatcher) {
+  SingleComputationCycle createCycle(final JobDispatcher jobDispatcher) {
     final Instant now = Instant.now();
     final SingleComputationCycle cycle = Mockito.mock(SingleComputationCycle.class);
     Mockito.when(cycle.getUniqueId()).thenReturn(UniqueId.of("Cycle", "Test"));
@@ -88,19 +83,20 @@ public class PlanExecutorTest {
   }
 
   private List<CalculationJobItem> createJobItems(final int count) {
-    final List<CalculationJobItem> result = new ArrayList<CalculationJobItem>(count);
+    final List<CalculationJobItem> result = new ArrayList<>(count);
     for (int i = 0; i < count; i++) {
-      result.add(new CalculationJobItem("Func", new EmptyFunctionParameters(), ComputationTargetSpecification.NULL, Collections.<ValueSpecification>emptySet(), Collections
-          .<ValueSpecification>emptySet(),
-          ExecutionLogMode.INDICATORS));
+      result.add(new CalculationJobItem("Func", new EmptyFunctionParameters(), ComputationTargetSpecification.NULL,
+          Collections.<ValueSpecification> emptySet(),
+          Collections.<ValueSpecification> emptySet(), ExecutionLogMode.INDICATORS));
     }
     return result;
   }
 
   private List<CalculationJobResultItem> createResultItems(final List<CalculationJobItem> items) {
-    final List<CalculationJobResultItem> result = new ArrayList<CalculationJobResultItem>(items.size());
+    final List<CalculationJobResultItem> result = new ArrayList<>(items.size());
     for (int i = 0; i < items.size(); i++) {
-      result.add(new CalculationJobResultItem(Collections.<ValueSpecification>emptySet(), Collections.<ValueSpecification>emptySet(), ExecutionLog.EMPTY));
+      result.add(new CalculationJobResultItem(Collections.<ValueSpecification> emptySet(), Collections.<ValueSpecification> emptySet(),
+          ExecutionLog.EMPTY));
     }
     return result;
   }
@@ -109,25 +105,25 @@ public class PlanExecutorTest {
     return new CalculationJobResult(job.getSpecification(), 10L, createResultItems(job.getJobItems()), "Test");
   }
 
-  private GraphExecutionPlan createPlan() {
+  GraphExecutionPlan createPlan() {
     final PlannedJob job1 = new PlannedJob(1, createJobItems(1), CacheSelectHint.allShared(), null, null);
-    final PlannedJob job2 = new PlannedJob(1, createJobItems(2), CacheSelectHint.allShared(), null, new PlannedJob[] {job1 });
-    final PlannedJob job3 = new PlannedJob(0, createJobItems(3), CacheSelectHint.allShared(), new PlannedJob[] {job2 }, null);
+    final PlannedJob job2 = new PlannedJob(1, createJobItems(2), CacheSelectHint.allShared(), null, new PlannedJob[] { job1 });
+    final PlannedJob job3 = new PlannedJob(0, createJobItems(3), CacheSelectHint.allShared(), new PlannedJob[] { job2 }, null);
     return new GraphExecutionPlan("Default", 0, Arrays.asList(job3), 3, 2d, 10d, 20d);
   }
 
-  private class NormalExecutionJobDispatcher extends JobDispatcher {
+  class NormalExecutionJobDispatcher extends JobDispatcher {
 
-    private final Queue<Pair<CalculationJob, JobResultReceiver>> _jobs = new LinkedList<Pair<CalculationJob, JobResultReceiver>>();
+    private final Queue<Pair<CalculationJob, JobResultReceiver>> _jobs = new LinkedList<>();
 
-    private final Queue<Pair<CalculationJob, CalculationJobResult>> _results = new LinkedList<Pair<CalculationJob, CalculationJobResult>>();
+    private final Queue<Pair<CalculationJob, CalculationJobResult>> _results = new LinkedList<>();
 
     @Override
     public Cancelable dispatchJob(final CalculationJob job, final JobResultReceiver receiver) {
-      s_logger.debug("Dispatching {}", job);
+      LOGGER.debug("Dispatching {}", job);
       _jobs.add(Pairs.of(job, receiver));
       if (job.getTail() != null) {
-        for (CalculationJob tail : job.getTail()) {
+        for (final CalculationJob tail : job.getTail()) {
           dispatchJob(tail, receiver);
         }
       }
@@ -135,7 +131,7 @@ public class PlanExecutorTest {
     }
 
     protected void notify(final CalculationJob job, final JobResultReceiver receiver) {
-      s_logger.debug("Notifying {}", job);
+      LOGGER.debug("Notifying {}", job);
       final CalculationJobResult result = createJobResult(job);
       _results.add(Pairs.of(job, result));
       receiver.resultReceived(result);
@@ -143,12 +139,12 @@ public class PlanExecutorTest {
 
     public void completeJobs() {
       do {
-        Pair<CalculationJob, JobResultReceiver> job = _jobs.poll();
+        final Pair<CalculationJob, JobResultReceiver> job = _jobs.poll();
         if (job == null) {
-          s_logger.debug("No more jobs");
+          LOGGER.debug("No more jobs");
           return;
         }
-        s_logger.debug("Completing {}", job.getFirst());
+        LOGGER.debug("Completing {}", job.getFirst());
         notify(job.getFirst(), job.getSecond());
       } while (true);
     }
@@ -167,7 +163,8 @@ public class PlanExecutorTest {
   public void testStatisticsReporting() {
     final NormalExecutionJobDispatcher dispatcher = new NormalExecutionJobDispatcher();
     final PlanExecutor executor = new PlanExecutor(createCycle(dispatcher), createPlan());
-    final GraphExecutorStatisticsGatherer statsGatherer = executor.getCycle().getViewProcessContext().getGraphExecutorStatisticsGathererProvider().getStatisticsGatherer(UniqueId.of("View", "Test"));
+    final GraphExecutorStatisticsGatherer statsGatherer = executor.getCycle().getViewProcessContext()
+        .getGraphExecutorStatisticsGathererProvider().getStatisticsGatherer(UniqueId.of("View", "Test"));
     final GraphExecutionStatistics stats = ((Statistics) statsGatherer).getExecutionStatistics().get(0);
     assertEquals(stats.getCalcConfigName(), "Default");
     assertEquals(stats.getProcessedGraphs(), 1L);
@@ -235,13 +232,10 @@ public class PlanExecutorTest {
     final JobDispatcher dispatcher = new JobDispatcher() {
       @Override
       public Cancelable dispatchJob(final CalculationJob job, final JobResultReceiver receiver) {
-        return new Cancelable() {
-          @Override
-          public boolean cancel(final boolean mayInterruptIfRunning) {
-            assertTrue(mayInterruptIfRunning);
-            canceled.set(true);
-            return true;
-          }
+        return mayInterruptIfRunning -> {
+          assertTrue(mayInterruptIfRunning);
+          canceled.set(true);
+          return true;
         };
       }
     };
@@ -274,7 +268,7 @@ public class PlanExecutorTest {
 
   public void testCancelDuringDispatch() {
     final Cancelable handle = Mockito.mock(Cancelable.class);
-    final AtomicReference<PlanExecutor> executor = new AtomicReference<PlanExecutor>();
+    final AtomicReference<PlanExecutor> executor = new AtomicReference<>();
     final JobDispatcher dispatcher = new JobDispatcher() {
       @Override
       public Cancelable dispatchJob(final CalculationJob job, final JobResultReceiver receiver) {
@@ -316,13 +310,8 @@ public class PlanExecutorTest {
   public void testAddListenerBeforeCompletion() throws Throwable {
     final NormalExecutionJobDispatcher dispatcher = new NormalExecutionJobDispatcher();
     final PlanExecutor executor = new PlanExecutor(createCycle(dispatcher), createPlan());
-    final AtomicReference<String> result = new AtomicReference<String>();
-    executor.setListener(new Listener() {
-      @Override
-      public void graphCompleted(final String calculationConfiguration) {
-        assertEquals(result.getAndSet(calculationConfiguration), null);
-      }
-    });
+    final AtomicReference<String> result = new AtomicReference<>();
+    executor.setListener(calculationConfiguration -> assertEquals(result.getAndSet(calculationConfiguration), null));
     dispatcher.execute(executor);
     assertEquals(result.get(), "Default");
   }
@@ -331,108 +320,9 @@ public class PlanExecutorTest {
     final NormalExecutionJobDispatcher dispatcher = new NormalExecutionJobDispatcher();
     final PlanExecutor executor = new PlanExecutor(createCycle(dispatcher), createPlan());
     dispatcher.execute(executor);
-    final AtomicReference<String> result = new AtomicReference<String>();
-    executor.setListener(new Listener() {
-      @Override
-      public void graphCompleted(final String calculationConfiguration) {
-        assertEquals(result.getAndSet(calculationConfiguration), null);
-      }
-    });
+    final AtomicReference<String> result = new AtomicReference<>();
+    executor.setListener(calculationConfiguration -> assertEquals(result.getAndSet(calculationConfiguration), null));
     assertEquals(result.get(), "Default");
-  }
-
-  // Timeout is set just in case "get" decides to block
-  @Test(timeOut = 5000, expectedExceptions = CancellationException.class)
-  public void testCancelDuringGet() throws Throwable {
-    final ExecutorService threads = Executors.newSingleThreadExecutor();
-    try {
-      final PlanExecutor executor = new PlanExecutor(createCycle(new JobDispatcher()), createPlan());
-      executor.start();
-      threads.submit(new Runnable() {
-        @Override
-        public void run() {
-          executor.cancel(true);
-        }
-      });
-      executor.get();
-    } finally {
-      threads.shutdownNow();
-      threads.awaitTermination(3, TimeUnit.SECONDS);
-    }
-  }
-
-  // Timeout is set just in case "get" decides to block
-  @Test(timeOut = 5000, expectedExceptions = CancellationException.class)
-  public void testCancelDuringGetWithTimeout() throws Throwable {
-    final ExecutorService threads = Executors.newSingleThreadExecutor();
-    try {
-      final PlanExecutor executor = new PlanExecutor(createCycle(new JobDispatcher()), createPlan());
-      executor.start();
-      threads.submit(new Runnable() {
-        @Override
-        public void run() {
-          executor.cancel(true);
-        }
-      });
-      executor.get(5, TimeUnit.SECONDS);
-    } finally {
-      threads.shutdownNow();
-      threads.awaitTermination(3, TimeUnit.SECONDS);
-    }
-  }
-
-  // Timeout is set just in case "get" decides to block
-  @Test(timeOut = 5000)
-  public void testGet() throws Throwable {
-    final ExecutorService threads = Executors.newSingleThreadExecutor();
-    try {
-      final NormalExecutionJobDispatcher dispatcher = new NormalExecutionJobDispatcher();
-      final PlanExecutor executor = new PlanExecutor(createCycle(dispatcher), createPlan());
-      threads.submit(new Runnable() {
-        @Override
-        public void run() {
-          dispatcher.execute(executor);
-        }
-      });
-      assertEquals(executor.get(), "Default");
-    } finally {
-      threads.shutdownNow();
-      threads.awaitTermination(3, TimeUnit.SECONDS);
-    }
-  }
-
-  // Timeout is set just in case "get" decides to block
-  @Test(timeOut = 5000)
-  public void testGetWithTimeout() throws Throwable {
-    final ExecutorService threads = Executors.newSingleThreadExecutor();
-    try {
-      final NormalExecutionJobDispatcher dispatcher = new NormalExecutionJobDispatcher();
-      final PlanExecutor executor = new PlanExecutor(createCycle(dispatcher), createPlan());
-      threads.submit(new Runnable() {
-        @Override
-        public void run() {
-          dispatcher.execute(executor);
-        }
-      });
-      assertEquals(executor.get(5, TimeUnit.SECONDS), "Default");
-    } finally {
-      threads.shutdownNow();
-      threads.awaitTermination(3, TimeUnit.SECONDS);
-    }
-  }
-
-  // Timeout is set just in case "get" decides to block
-  @Test(timeOut = 5000, expectedExceptions = TimeoutException.class)
-  public void testGetWithElapsedTimeout() throws Throwable {
-    final ExecutorService threads = Executors.newSingleThreadExecutor();
-    try {
-      final NormalExecutionJobDispatcher dispatcher = new NormalExecutionJobDispatcher();
-      final PlanExecutor executor = new PlanExecutor(createCycle(dispatcher), createPlan());
-      executor.get(1, TimeUnit.SECONDS);
-    } finally {
-      threads.shutdownNow();
-      threads.awaitTermination(3, TimeUnit.SECONDS);
-    }
   }
 
   public void testToString() {

@@ -24,14 +24,14 @@ import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Function to compute barrier distance for equity options
+ * Function to compute barrier distance for equity options.
  *
  * Defined as absolute difference (optionally expressed as a percentage) between barrier level and market price
  */
 public abstract class BarrierOptionDistanceFunction extends NonCompiledInvoker {
-  /** absolute difference */
+  /** Absolute difference. */
   public static final String BARRIER_ABS = "abs";
-  /** percentage difference from barrier level */
+  /** Percentage difference from barrier level. */
   public static final String BARRIER_PERCENTAGE = "percentage";
 
   /**
@@ -41,9 +41,9 @@ public abstract class BarrierOptionDistanceFunction extends NonCompiledInvoker {
     super();
   }
 
-  protected abstract double getBarrierLevel(final FinancialSecurity security);
+  protected abstract double getBarrierLevel(FinancialSecurity security);
 
-  protected abstract ValueRequirement getMarketDataRequirement(final FinancialSecurity security);
+  protected abstract ValueRequirement getMarketDataRequirement(FinancialSecurity security);
 
   protected abstract Double getSpot(FunctionInputs inputs);
 
@@ -94,7 +94,8 @@ public abstract class BarrierOptionDistanceFunction extends NonCompiledInvoker {
         throw new OpenGammaRuntimeException("Unknown barrier output display type " + outputFormat);
     }
 
-    final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.BARRIER_DISTANCE, target.toSpecification(), desiredValue.getConstraints().copy().get());
+    final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.BARRIER_DISTANCE, target.toSpecification(),
+        desiredValue.getConstraints().copy().get());
     return Collections.singleton(new ComputedValue(resultSpec, distance));
   }
 

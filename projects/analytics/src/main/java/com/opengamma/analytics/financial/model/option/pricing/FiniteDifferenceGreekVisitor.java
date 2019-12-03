@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing;
@@ -20,8 +20,10 @@ import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 import com.opengamma.util.time.DateUtils;
 
 /**
- * @param <S> Type of the option data bundle
- * @param <T> Type of the option definition
+ * @param <S>
+ *          Type of the option data bundle
+ * @param <T>
+ *          Type of the option definition
  */
 public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T extends OptionDefinition> extends AbstractGreekVisitor<Double> {
   private static final double EPS = 1e-4; // TODO make this so it can be set
@@ -38,6 +40,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     _definition = definition;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitDelta() {
     final Double s = _data.getSpot();
@@ -46,6 +49,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return getFirstDerivative(dataUp, dataDown);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitGamma() {
     final Double s = _data.getSpot();
@@ -54,6 +58,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return getSecondDerivative(dataUp, dataDown, _data);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitVega() {
     final VolatilitySurface upSurface = _data.getVolatilitySurface().withParallelShift(EPS);
@@ -68,6 +73,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return _pricingFunction.evaluate(_data);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitRho() {
     final ZonedDateTime date = _data.getDate();
@@ -81,6 +87,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return getFirstDerivative(dataUp, dataDown);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitTheta() {
     final ZonedDateTime date = _data.getDate();
@@ -89,6 +96,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return getForwardFirstDerivative(dataUp, _data);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitCarryRho() {
     final double b = _data.getCostOfCarry();
@@ -103,6 +111,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
   }
 
   // TODO need to use forward differencing for dt?
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitDeltaBleed() {
     final double s = _data.getSpot();
@@ -129,6 +138,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return _data.getSpot() * delta / price;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitGammaBleed() {
     final double s = _data.getSpot();
@@ -162,6 +172,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return -visitCarryRho();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitSpeed() {
     final double s = _data.getSpot();
@@ -188,6 +199,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return null;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitUltima() {
     final VolatilitySurface upUpSurface = _data.getVolatilitySurface().withParallelShift(2 * EPS);
@@ -199,6 +211,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return getThirdDerivative(dataUpUp, dataUp, _data, dataDown);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitVanna() {
     final double s = _data.getSpot();
@@ -213,6 +226,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return getMixedSecondDerivative(dataUp1Up2, dataUp1Down2, dataDown1Up2, dataDown1Down2);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitVarianceUltima() {
     final double t = _definition.getTimeToExpiry(_data.getDate());
@@ -227,6 +241,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return getThirdDerivative(dataUpUp, dataUp, _data, dataDown);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitVarianceVanna() {
     final double t = _definition.getTimeToExpiry(_data.getDate());
@@ -244,6 +259,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return _data.getSpot() * getMixedSecondDerivative(dataUp1Up2, dataUp1Down2, dataDown1Up2, dataDown1Down2);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitVarianceVega() {
     final double t = _definition.getTimeToExpiry(_data.getDate());
@@ -256,6 +272,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return getFirstDerivative(dataUp, dataDown);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitVarianceVomma() {
     final double t = _definition.getTimeToExpiry(_data.getDate());
@@ -268,6 +285,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return getSecondDerivative(dataUp, dataDown, _data);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitVegaBleed() {
     final ZonedDateTime upDate = DateUtils.getDateOffsetWithYearFraction(_data.getDate(), EPS);
@@ -288,6 +306,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return visitVega() * sigma / 10;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitVomma() {
     final VolatilitySurface upSurface = _data.getVolatilitySurface().withParallelShift(EPS);
@@ -314,6 +333,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return null;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitZomma() {
     final double s = _data.getSpot();
@@ -335,6 +355,7 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
     return visitZomma() * _data.getSpot() / 100;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double visitDVannaDVol() {
     final double s = _data.getSpot();
@@ -364,19 +385,23 @@ public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T 
   }
 
   private double getMixedSecondDerivative(final S dataUp1Up2, final S dataUp1Down2, final S dataDown1Up2, final S dataDown1Down2) {
-    return (_pricingFunction.evaluate(dataUp1Up2) - _pricingFunction.evaluate(dataUp1Down2) - _pricingFunction.evaluate(dataDown1Up2) + _pricingFunction.evaluate(dataDown1Down2)) / (4 * EPS * EPS);
+    return (_pricingFunction.evaluate(dataUp1Up2) - _pricingFunction.evaluate(dataUp1Down2) - _pricingFunction.evaluate(dataDown1Up2)
+        + _pricingFunction.evaluate(dataDown1Down2)) / (4 * EPS * EPS);
   }
 
   private double getThirdDerivative(final S dataUpUp, final S dataUp, final S data, final S dataDown) {
-    return (_pricingFunction.evaluate(dataUpUp) + 3 * _pricingFunction.evaluate(data) - 3 * _pricingFunction.evaluate(dataUp) - _pricingFunction.evaluate(dataDown)) / (EPS * EPS * EPS);
+    return (_pricingFunction.evaluate(dataUpUp) + 3 * _pricingFunction.evaluate(data) - 3 * _pricingFunction.evaluate(dataUp)
+        - _pricingFunction.evaluate(dataDown)) / (EPS * EPS * EPS);
   }
 
-  private double getMixedThirdDerivative(final S dataUp1Up1, final S dataUp2, final S dataDown1Up2, final S dataUp1Down2, final S dataDown2, final S dataDown1Down2) {
-    return (_pricingFunction.evaluate(dataUp1Up1) - 2 * _pricingFunction.evaluate(dataUp2) + _pricingFunction.evaluate(dataDown1Up2) - _pricingFunction.evaluate(dataUp1Down2) + 2
-        * _pricingFunction.evaluate(dataDown2) - _pricingFunction.evaluate(dataDown1Down2))
+  private double getMixedThirdDerivative(final S dataUp1Up1, final S dataUp2, final S dataDown1Up2, final S dataUp1Down2, final S dataDown2,
+      final S dataDown1Down2) {
+    return (_pricingFunction.evaluate(dataUp1Up1) - 2 * _pricingFunction.evaluate(dataUp2) + _pricingFunction.evaluate(dataDown1Up2)
+        - _pricingFunction.evaluate(dataUp1Down2) + 2 * _pricingFunction.evaluate(dataDown2) - _pricingFunction.evaluate(dataDown1Down2))
         / (2 * EPS * EPS * EPS);
   }
 
+  @SuppressWarnings("unchecked")
   private double getGammaP(final double spotOffset, final double tOffset) {
     final double spot = _data.getSpot() + spotOffset;
     final ZonedDateTime date = DateUtils.getDateOffsetWithYearFraction(_data.getDate(), tOffset);

@@ -32,7 +32,7 @@ import com.opengamma.util.ArgumentChecker;
 public class EntitlementServer implements FudgeRequestReceiver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EntitlementServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EntitlementServer.class);
 
   /**
    * The underlying implementation.
@@ -41,10 +41,10 @@ public class EntitlementServer implements FudgeRequestReceiver {
 
   /**
    * Creates an instance wrapping an underlying checker.
-   * 
+   *
    * @param underlying  the underlying checker, not null
    */
-  public EntitlementServer(LiveDataEntitlementChecker underlying) {
+  public EntitlementServer(final LiveDataEntitlementChecker underlying) {
     ArgumentChecker.notNull(underlying, "underlying");
     _delegate = underlying;
   }
@@ -52,22 +52,23 @@ public class EntitlementServer implements FudgeRequestReceiver {
   //-------------------------------------------------------------------------
   @Override
   @Transactional
-  public FudgeMsg requestReceived(FudgeDeserializer deserializer, FudgeMsgEnvelope requestEnvelope) {
-    FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
-    EntitlementRequest entitlementRequest = EntitlementRequest.fromFudgeMsg(deserializer, requestFudgeMsg);
-    s_logger.debug("Received entitlement request {}", entitlementRequest);
-    
-    Map<LiveDataSpecification, Boolean> isEntitledMap = _delegate.isEntitled(entitlementRequest.getUser(), entitlementRequest.getLiveDataSpecifications());
-    
-    ArrayList<EntitlementResponse> responses = new ArrayList<EntitlementResponse>();
-    for (LiveDataSpecification spec : entitlementRequest.getLiveDataSpecifications()) {
-      boolean isEntitled = isEntitledMap.get(spec);
-      EntitlementResponse response = isEntitled ?
-          new EntitlementResponse(spec, true) :
-          new EntitlementResponse(spec, false, entitlementRequest.getUser() + " is not entitled to " + spec);
+  public FudgeMsg requestReceived(final FudgeDeserializer deserializer, final FudgeMsgEnvelope requestEnvelope) {
+    final FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
+    final EntitlementRequest entitlementRequest = EntitlementRequest.fromFudgeMsg(deserializer, requestFudgeMsg);
+    LOGGER.debug("Received entitlement request {}", entitlementRequest);
+
+    final Map<LiveDataSpecification, Boolean> isEntitledMap = _delegate.isEntitled(entitlementRequest.getUser(),
+        entitlementRequest.getLiveDataSpecifications());
+
+    final ArrayList<EntitlementResponse> responses = new ArrayList<>();
+    for (final LiveDataSpecification spec : entitlementRequest.getLiveDataSpecifications()) {
+      final boolean isEntitled = isEntitledMap.get(spec);
+      final EntitlementResponse response = isEntitled
+          ? new EntitlementResponse(spec, true)
+          : new EntitlementResponse(spec, false, entitlementRequest.getUser() + " is not entitled to " + spec);
       responses.add(response);
     }
-    EntitlementResponseMsg response = new EntitlementResponseMsg(responses);
+    final EntitlementResponseMsg response = new EntitlementResponseMsg(responses);
     return response.toFudgeMsg(new FudgeSerializer(deserializer.getFudgeContext()));
   }
 

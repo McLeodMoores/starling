@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.currency.rest;
@@ -34,7 +34,7 @@ public class DataCurrencyPairsSourceResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param source  the underlying source, not null
    */
   public DataCurrencyPairsSourceResource(final CurrencyPairsSource source) {
@@ -45,7 +45,7 @@ public class DataCurrencyPairsSourceResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the source.
-   * 
+   *
    * @return the source, not null
    */
   public CurrencyPairsSource getCurrencyPairsSource() {
@@ -54,23 +54,24 @@ public class DataCurrencyPairsSourceResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @GET
   @Path("currencyPairs/{name}")
-  public Response getPairs(@PathParam("name") String name) {
-    CurrencyPairs result = getCurrencyPairsSource().getCurrencyPairs(name);
+  public Response getPairs(@PathParam("name") final String name) {
+    final CurrencyPairs result = getCurrencyPairsSource().getCurrencyPairs(name);
     return responseOkObject(result);
   }
 
   @GET
   @Path("currencyPairs/{name}/{currency1}/{currency2}")
-  public Response getPair(@PathParam("name") String name, @PathParam("currency1") String currency1Str, @PathParam("currency2") String currency2Str) {
-    Currency currency1 = Currency.parse(currency1Str);
-    Currency currency2 = Currency.parse(currency2Str);
-    CurrencyPair result = getCurrencyPairsSource().getCurrencyPair(name, currency1, currency2);
+  public Response getPair(@PathParam("name") final String name, @PathParam("currency1") final String currency1Str,
+      @PathParam("currency2") final String currency2Str) {
+    final Currency currency1 = Currency.parse(currency1Str);
+    final Currency currency2 = Currency.parse(currency2Str);
+    final CurrencyPair result = getCurrencyPairsSource().getCurrencyPair(name, currency1, currency2);
     return responseOkObject(result);
   }
 }

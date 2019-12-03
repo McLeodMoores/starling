@@ -56,15 +56,23 @@ public class GeneratorIssuerProviderDiscount extends Function1D<DoubleMatrix1D, 
   private final IssuerProviderDiscount _knownData;
 
   /**
-   * Constructor
-   * @param knownData The yield curve bundle with known data (curves).
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param issuerMap The issuer curve names map.
-   * @param generatorsMap The generators map.
+   * Constructor.
+   *
+   * @param knownData
+   *          The yield curve bundle with known data (curves).
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param issuerMap
+   *          The issuer curve names map.
+   * @param generatorsMap
+   *          The generators map.
    */
-  public GeneratorIssuerProviderDiscount(final IssuerProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IborIndex[]> forwardIborMap,
+  public GeneratorIssuerProviderDiscount(final IssuerProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap,
+      final LinkedHashMap<String, IborIndex[]> forwardIborMap,
       final LinkedHashMap<String, IndexON[]> forwardONMap, final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerMap,
       final LinkedHashMap<String, GeneratorYDCurve> generatorsMap) {
     ArgumentChecker.notNull(discountingMap, "Discounting curves names map");
@@ -80,6 +88,7 @@ public class GeneratorIssuerProviderDiscount extends Function1D<DoubleMatrix1D, 
 
   /**
    * Gets the know data.
+   *
    * @return The known data.
    */
   public IssuerProviderDiscount getKnownData() {
@@ -88,6 +97,7 @@ public class GeneratorIssuerProviderDiscount extends Function1D<DoubleMatrix1D, 
 
   /**
    * Gets the set of curves. The set order is the order in which they are build.
+   *
    * @return The set.
    */
   public Set<String> getCurvesList() {

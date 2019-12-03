@@ -20,11 +20,15 @@ public @interface InterpolationType {
 
   /**
    * The name of the interpolator.
+   * 
+   * @return the name of the interpolator
    */
   String name();
 
   /**
    * Any aliases of the interpolator.
+   * 
+   * @return any aliases
    */
   String[] aliases() default { };
 

@@ -50,7 +50,7 @@ public class Bundle extends DirectBean implements BundleNode {
    * The ordered list of nodes, consisting of bundles and fragments.
    */
   @PropertyDefinition
-  private final List<BundleNode> _childNodes = new ArrayList<BundleNode>();
+  private final List<BundleNode> _childNodes = new ArrayList<>();
 
   /**
    * Creates a bundle.
@@ -62,7 +62,7 @@ public class Bundle extends DirectBean implements BundleNode {
    * Creates a bundle with an ID.
    * <p>
    * If the ID has a file suffix, then the type will be set.
-   * 
+   *
    * @param id the bundle name, not null
    */
   public Bundle(final String id) {
@@ -74,9 +74,9 @@ public class Bundle extends DirectBean implements BundleNode {
   //-------------------------------------------------------------------------
   @Override
   public List<Bundle> getAllBundles() {
-    List<Bundle> result = new ArrayList<Bundle>();
+    final List<Bundle> result = new ArrayList<>();
     result.add(this);
-    for (BundleNode node : getChildNodes()) {
+    for (final BundleNode node : getChildNodes()) {
       result.addAll(node.getAllBundles());
     }
     return result;
@@ -84,8 +84,8 @@ public class Bundle extends DirectBean implements BundleNode {
 
   @Override
   public List<Fragment> getAllFragments() {
-    List<Fragment> result = new ArrayList<Fragment>();
-    for (BundleNode node : getChildNodes()) {
+    final List<Fragment> result = new ArrayList<>();
+    for (final BundleNode node : getChildNodes()) {
       result.addAll(node.getAllFragments());
     }
     return result;
@@ -93,7 +93,7 @@ public class Bundle extends DirectBean implements BundleNode {
 
   /**
    * Adds a child node to this node.
-   * 
+   *
    * @param childNode  the child node, not null
    */
   public void addChildNode(final BundleNode childNode) {

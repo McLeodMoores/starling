@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.montecarlo;
@@ -24,7 +24,7 @@ public class MonteCarloDiscountFactorDataBundle {
    * @param pathDiscountingFactor The paths discount factors.
    * @param impactAmount The reference amounts at the impact dates.
    */
-  public MonteCarloDiscountFactorDataBundle(Double[][][] pathDiscountingFactor, double[][] impactAmount) {
+  public MonteCarloDiscountFactorDataBundle(final Double[][][] pathDiscountingFactor, final double[][] impactAmount) {
     super();
     _pathDiscountingFactor = pathDiscountingFactor;
     _impactAmount = impactAmount;

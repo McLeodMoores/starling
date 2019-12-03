@@ -5,11 +5,13 @@
  *
  * Modified by McLeod Moores Software Limited.
  *
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.holiday;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -29,11 +31,17 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.impl.flexi.FlexiBean;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.Year;
 
+import com.opengamma.core.holiday.WeekendType;
+import com.opengamma.core.holiday.WeekendTypeProvider;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.holiday.HolidayDocument;
 import com.opengamma.master.holiday.ManageableHoliday;
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.tuple.Pair;
+import com.opengamma.util.tuple.Pairs;
 
 /**
  * RESTful resource for a holiday.
@@ -176,7 +184,7 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
    * Deletes a holiday from the master.
    * @return  the response
    */
-    @DELETE
+  @DELETE
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteJSON() {
     final HolidayDocument doc = data().getHoliday();
@@ -198,7 +206,40 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
     out.put("holiday", doc.getHoliday());
     out.put("holidayDescriptionMap", getHolidayTypesProvider().getDescription(doc.getHoliday().getType().name()));
     out.put("deleted", !doc.isLatest());
+    out.put("holidayDatesByYear", getHolidayDatesByYear(doc));
+    final String weekendType;
+    // not all holidays have the weekend explicitly set
+    if (doc.getHoliday() instanceof WeekendTypeProvider) {
+      weekendType = ((WeekendTypeProvider) doc.getHoliday()).getWeekendType().name();
+    } else {
+      weekendType = WeekendType.SATURDAY_SUNDAY.name();
+    }
+    out.put("weekendType", weekendType);
+    out.put("holidayType", doc.getHoliday().getType());
     return out;
+  }
+
+  private static List<Pair<Year, List<LocalDate>>> getHolidayDatesByYear(final HolidayDocument doc) {
+    final List<LocalDate> holidayDates = doc.getHoliday().getHolidayDates();
+    final List<Pair<Year, List<LocalDate>>> datesByYear = new ArrayList<>();
+    if (holidayDates.isEmpty()) {
+      datesByYear.add(Pairs.of(Year.of(LocalDate.now().getYear()), holidayDates));
+    }
+    if (holidayDates.size() > 0) {
+      int year = holidayDates.get(0).getYear();
+      int start = 0;
+      int pos = 0;
+      for ( ; pos < holidayDates.size(); pos++) {
+        if (holidayDates.get(pos).getYear() == year) {
+          continue;
+        }
+        datesByYear.add(Pairs.of(Year.of(year), holidayDates.subList(start, pos)));
+        year = holidayDates.get(pos).getYear();
+        start = pos;
+      }
+      datesByYear.add(Pairs.of(Year.of(year), holidayDates.subList(start, pos)));
+    }
+    return datesByYear;
   }
 
   //-------------------------------------------------------------------------

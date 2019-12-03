@@ -32,26 +32,26 @@ public class YieldCurveDataSelectorFudgeBuilder implements FudgeBuilder<YieldCur
   private static final String NAME_LIKE_PATTERN = "nameLikePattern";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, YieldCurveDataSelector selector) {
-    MutableFudgeMsg msg = serializer.newMessage();
-    Set<String> calcConfigNames = selector.getCalcConfigNames();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final YieldCurveDataSelector selector) {
+    final MutableFudgeMsg msg = serializer.newMessage();
+    final Set<String> calcConfigNames = selector.getCalcConfigNames();
     if (calcConfigNames != null) {
-      MutableFudgeMsg calcConfigsMsg = serializer.newMessage();
-      for (String calcConfigName : calcConfigNames) {
+      final MutableFudgeMsg calcConfigsMsg = serializer.newMessage();
+      for (final String calcConfigName : calcConfigNames) {
         serializer.addToMessage(calcConfigsMsg, null, null, calcConfigName);
       }
       serializer.addToMessage(msg, CALC_CONFIGS, null, calcConfigsMsg);
     }
     if (selector.getNames() != null && !selector.getNames().isEmpty()) {
-      MutableFudgeMsg namesMsg = serializer.newMessage();
-      for (String name : selector.getNames()) {
+      final MutableFudgeMsg namesMsg = serializer.newMessage();
+      for (final String name : selector.getNames()) {
         serializer.addToMessage(namesMsg, null, null, name);
       }
       serializer.addToMessage(msg, NAMES, null, namesMsg);
     }
     if (selector.getCurrencies() != null && !selector.getCurrencies().isEmpty()) {
-      MutableFudgeMsg currenciesMsg = serializer.newMessage();
-      for (Currency currency : selector.getCurrencies()) {
+      final MutableFudgeMsg currenciesMsg = serializer.newMessage();
+      for (final Currency currency : selector.getCurrencies()) {
         serializer.addToMessage(currenciesMsg, null, null, currency.getCode());
       }
       serializer.addToMessage(msg, CURRENCIES, null, currenciesMsg);
@@ -66,35 +66,35 @@ public class YieldCurveDataSelectorFudgeBuilder implements FudgeBuilder<YieldCur
   }
 
   @Override
-  public YieldCurveDataSelector buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public YieldCurveDataSelector buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     Set<String> calcConfigNames;
     if (msg.hasField(CALC_CONFIGS)) {
       calcConfigNames = Sets.newHashSet();
-      FudgeMsg calcConfigsMsg = msg.getMessage(CALC_CONFIGS);
-      for (FudgeField field : calcConfigsMsg) {
+      final FudgeMsg calcConfigsMsg = msg.getMessage(CALC_CONFIGS);
+      for (final FudgeField field : calcConfigsMsg) {
         calcConfigNames.add(deserializer.fieldValueToObject(String.class, field));
       }
     } else {
       calcConfigNames = null;
     }
-    FudgeField namesField = msg.getByName(NAMES);
+    final FudgeField namesField = msg.getByName(NAMES);
     Set<String> names;
     if (namesField != null) {
-      FudgeMsg namesMsg = (FudgeMsg) namesField.getValue();
+      final FudgeMsg namesMsg = (FudgeMsg) namesField.getValue();
       names = Sets.newHashSet();
-      for (FudgeField field : namesMsg) {
+      for (final FudgeField field : namesMsg) {
         names.add(deserializer.fieldValueToObject(String.class, field));
       }
     } else {
       names = null;
     }
 
-    FudgeField currenciesField = msg.getByName(CURRENCIES);
+    final FudgeField currenciesField = msg.getByName(CURRENCIES);
     Set<Currency> currencies;
     if (currenciesField != null) {
-      FudgeMsg currenciesMsg = (FudgeMsg) currenciesField.getValue();
+      final FudgeMsg currenciesMsg = (FudgeMsg) currenciesField.getValue();
       currencies = Sets.newHashSet();
-      for (FudgeField field : currenciesMsg) {
+      for (final FudgeField field : currenciesMsg) {
         currencies.add(Currency.of(deserializer.fieldValueToObject(String.class, field)));
       }
     } else {
@@ -102,18 +102,18 @@ public class YieldCurveDataSelectorFudgeBuilder implements FudgeBuilder<YieldCur
     }
 
     Pattern nameMatchPattern;
-    FudgeField namePatternField = msg.getByName(NAME_MATCH_PATTERN);
+    final FudgeField namePatternField = msg.getByName(NAME_MATCH_PATTERN);
     if (namePatternField != null) {
-      String regex = deserializer.fieldValueToObject(String.class, namePatternField);
+      final String regex = deserializer.fieldValueToObject(String.class, namePatternField);
       nameMatchPattern = Pattern.compile(regex);
     } else {
       nameMatchPattern = null;
     }
 
     Pattern nameLikePattern;
-    FudgeField nameLikeField = msg.getByName(NAME_LIKE_PATTERN);
+    final FudgeField nameLikeField = msg.getByName(NAME_LIKE_PATTERN);
     if (nameLikeField != null) {
-      String regex = deserializer.fieldValueToObject(String.class, nameLikeField);
+      final String regex = deserializer.fieldValueToObject(String.class, nameLikeField);
       nameLikePattern = Pattern.compile(regex);
     } else {
       nameLikePattern = null;

@@ -33,29 +33,25 @@ import com.opengamma.util.PublicSPI;
 public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResult {
 
   /**
-   * The list if valid data fields.
-   * This is only populated if requested.
+   * The list of valid data fields. This is only populated if requested.
    */
   @PropertyDefinition
-  private final List<String> _dataFields = new ArrayList<String>();
+  private final List<String> _dataFields = new ArrayList<>();
   /**
-   * The list if valid data sources.
-   * This is only populated if requested.
+   * The list of valid data sources. This is only populated if requested.
    */
   @PropertyDefinition
-  private final List<String> _dataSources = new ArrayList<String>();
+  private final List<String> _dataSources = new ArrayList<>();
   /**
-   * The list if valid data providers.
-   * This is only populated if requested.
+   * The list of valid data providers. This is only populated if requested.
    */
   @PropertyDefinition
-  private final List<String> _dataProviders = new ArrayList<String>();
+  private final List<String> _dataProviders = new ArrayList<>();
   /**
-   * The list if valid observation times.
-   * This is only populated if requested.
+   * The list of valid observation times. This is only populated if requested.
    */
   @PropertyDefinition
-  private final List<String> _observationTimes = new ArrayList<String>();
+  private final List<String> _observationTimes = new ArrayList<>();
 
   /**
    * Creates an instance.
@@ -84,8 +80,7 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the list if valid data fields.
-   * This is only populated if requested.
+   * Gets the list of valid data fields. This is only populated if requested.
    * @return the value of the property, not null
    */
   public List<String> getDataFields() {
@@ -93,8 +88,7 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
   }
 
   /**
-   * Sets the list if valid data fields.
-   * This is only populated if requested.
+   * Sets the list of valid data fields. This is only populated if requested.
    * @param dataFields  the new value of the property, not null
    */
   public void setDataFields(List<String> dataFields) {
@@ -105,7 +99,6 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
 
   /**
    * Gets the the {@code dataFields} property.
-   * This is only populated if requested.
    * @return the property, not null
    */
   public final Property<List<String>> dataFields() {
@@ -114,8 +107,7 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the list if valid data sources.
-   * This is only populated if requested.
+   * Gets the list of valid data sources. This is only populated if requested.
    * @return the value of the property, not null
    */
   public List<String> getDataSources() {
@@ -123,8 +115,7 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
   }
 
   /**
-   * Sets the list if valid data sources.
-   * This is only populated if requested.
+   * Sets the list of valid data sources. This is only populated if requested.
    * @param dataSources  the new value of the property, not null
    */
   public void setDataSources(List<String> dataSources) {
@@ -135,7 +126,6 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
 
   /**
    * Gets the the {@code dataSources} property.
-   * This is only populated if requested.
    * @return the property, not null
    */
   public final Property<List<String>> dataSources() {
@@ -144,8 +134,7 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the list if valid data providers.
-   * This is only populated if requested.
+   * Gets the list of valid data providers. This is only populated if requested.
    * @return the value of the property, not null
    */
   public List<String> getDataProviders() {
@@ -153,8 +142,7 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
   }
 
   /**
-   * Sets the list if valid data providers.
-   * This is only populated if requested.
+   * Sets the list of valid data providers. This is only populated if requested.
    * @param dataProviders  the new value of the property, not null
    */
   public void setDataProviders(List<String> dataProviders) {
@@ -165,7 +153,6 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
 
   /**
    * Gets the the {@code dataProviders} property.
-   * This is only populated if requested.
    * @return the property, not null
    */
   public final Property<List<String>> dataProviders() {
@@ -174,8 +161,7 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the list if valid observation times.
-   * This is only populated if requested.
+   * Gets the list of valid observation times. This is only populated if requested.
    * @return the value of the property, not null
    */
   public List<String> getObservationTimes() {
@@ -183,8 +169,7 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
   }
 
   /**
-   * Sets the list if valid observation times.
-   * This is only populated if requested.
+   * Sets the list of valid observation times. This is only populated if requested.
    * @param observationTimes  the new value of the property, not null
    */
   public void setObservationTimes(List<String> observationTimes) {
@@ -195,7 +180,6 @@ public class HistoricalTimeSeriesInfoMetaDataResult extends AbstractMetaDataResu
 
   /**
    * Gets the the {@code observationTimes} property.
-   * This is only populated if requested.
    * @return the property, not null
    */
   public final Property<List<String>> observationTimes() {

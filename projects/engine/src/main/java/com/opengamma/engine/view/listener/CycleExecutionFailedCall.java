@@ -15,8 +15,8 @@ public class CycleExecutionFailedCall implements Function<ViewResultListener, Ob
 
   private final ViewCycleExecutionOptions _executionOptions;
   private final Exception _exception;
-  
-  public CycleExecutionFailedCall(ViewCycleExecutionOptions executionOptions, Exception exception) {
+
+  public CycleExecutionFailedCall(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
     _executionOptions = executionOptions;
     _exception = exception;
   }
@@ -30,7 +30,7 @@ public class CycleExecutionFailedCall implements Function<ViewResultListener, Ob
   }
 
   @Override
-  public Object apply(ViewResultListener listener) {
+  public Object apply(final ViewResultListener listener) {
     listener.cycleExecutionFailed(getExecutionOptions(), getException());
     return null;
   }

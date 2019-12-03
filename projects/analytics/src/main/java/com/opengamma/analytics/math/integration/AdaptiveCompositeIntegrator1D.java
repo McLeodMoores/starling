@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.integration;
@@ -13,18 +13,19 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * Adaptive composite integrator: step size is set to be small if functional variation of integrand is large
- * The integrator in individual intervals (base integrator) should be specified by constructor
+ * Adaptive composite integrator: step size is set to be small if functional variation of integrand is large The integrator in individual intervals (base
+ * integrator) should be specified by constructor.
  */
 public class AdaptiveCompositeIntegrator1D extends Integrator1D<Double, Double> {
-  private static final Logger s_logger = LoggerFactory.getLogger(AdaptiveCompositeIntegrator1D.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveCompositeIntegrator1D.class);
   private final Integrator1D<Double, Double> _integrator;
   private static final int MAX_IT = 15;
   private final double _gain;
   private final double _tol;
 
   /**
-   * @param integrator The base integrator 
+   * @param integrator
+   *          The base integrator
    */
   public AdaptiveCompositeIntegrator1D(final Integrator1D<Double, Double> integrator) {
     Validate.notNull(integrator, "integrator");
@@ -34,9 +35,12 @@ public class AdaptiveCompositeIntegrator1D extends Integrator1D<Double, Double> 
   }
 
   /**
-   * @param integrator The base integrator
-   * @param gain The gain ratio
-   * @param tol The tolerance
+   * @param integrator
+   *          The base integrator
+   * @param gain
+   *          The gain ratio
+   * @param tol
+   *          The tolerance
    */
   public AdaptiveCompositeIntegrator1D(final Integrator1D<Double, Double> integrator, final double gain, final double tol) {
     Validate.notNull(integrator, "integrator");
@@ -54,7 +58,7 @@ public class AdaptiveCompositeIntegrator1D extends Integrator1D<Double, Double> 
       if (lower < upper) {
         return integration(f, lower, upper);
       }
-      s_logger.info("Upper bound was less than lower bound; swapping bounds and negating result");
+      LOGGER.info("Upper bound was less than lower bound; swapping bounds and negating result");
       return -integration(f, upper, lower);
     } catch (final Exception e) {
       throw new OpenGammaRuntimeException("function evaluation returned NaN or Inf");
@@ -73,7 +77,7 @@ public class AdaptiveCompositeIntegrator1D extends Integrator1D<Double, Double> 
     final double newResUp = _integrator.integrate(f, half, upper);
     final double newRes = newResUp + newResDw;
 
-    if (Math.abs(res - newRes) < localTol || counter == 0 || (Math.abs(res) < 1.e-14 && Math.abs(newResUp) < 1.e-14 && Math.abs(newResDw) < 1.e-14)) {
+    if (Math.abs(res - newRes) < localTol || counter == 0 || Math.abs(res) < 1.e-14 && Math.abs(newResUp) < 1.e-14 && Math.abs(newResDw) < 1.e-14) {
       return newRes + (newRes - res) / _gain;
     }
 
@@ -86,15 +90,15 @@ public class AdaptiveCompositeIntegrator1D extends Integrator1D<Double, Double> 
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_gain);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _integrator.hashCode();
     temp = Double.doubleToLongBits(_tol);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -104,7 +108,7 @@ public class AdaptiveCompositeIntegrator1D extends Integrator1D<Double, Double> 
     if (!(obj instanceof AdaptiveCompositeIntegrator1D)) {
       return false;
     }
-    AdaptiveCompositeIntegrator1D other = (AdaptiveCompositeIntegrator1D) obj;
+    final AdaptiveCompositeIntegrator1D other = (AdaptiveCompositeIntegrator1D) obj;
     if (Double.doubleToLongBits(_gain) != Double.doubleToLongBits(other._gain)) {
       return false;
     }

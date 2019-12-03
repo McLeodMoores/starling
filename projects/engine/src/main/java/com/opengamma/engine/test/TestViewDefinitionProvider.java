@@ -18,10 +18,9 @@ import com.opengamma.livedata.UserPrincipal;
 import com.opengamma.util.money.Currency;
 
 /**
- * Provides shared Test View Definition used across projects
+ * Provides shared Test View Definition used across projects.
  */
 public final class TestViewDefinitionProvider {
-  
 
   private static final UserPrincipal TEST_USER = UserPrincipal.getLocalUser();
 
@@ -41,10 +40,10 @@ public final class TestViewDefinitionProvider {
 
   public static ViewDefinition getTestViewDefinition() {
 
-    ValueProperties constraints = ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID.toString()).withAny(ValuePropertyNames.CURVE).get();
-    ValueProperties allConstraints = ValueProperties.all();
-    ValueProperties noConstraints = ValueProperties.none();
-    ValueProperties nearlyAllConstraints = ValueProperties.all().withoutAny("SomePropName");
+    final ValueProperties constraints = ValueProperties.with(ValuePropertyNames.FUNCTION, FUNCTION_ID.toString()).withAny(ValuePropertyNames.CURVE).get();
+    final ValueProperties allConstraints = ValueProperties.all();
+    final ValueProperties noConstraints = ValueProperties.none();
+    final ValueProperties nearlyAllConstraints = ValueProperties.all().withoutAny("SomePropName");
 
     final ViewDefinition viewDefinition = new ViewDefinition(TEST_VIEW_DEFINITION_NAME, TEST_PORTFOLIO_ID, TEST_USER, new ResultModelDefinition());
     final ViewCalculationConfiguration calcConfig1 = new ViewCalculationConfiguration(viewDefinition, "1");

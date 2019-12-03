@@ -35,41 +35,41 @@ public class ValueRequirementMessageBodyWriter implements MessageBodyWriter<Valu
 
 
   @Override
-  public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
+  public boolean isWriteable(final Class<?> aClass, final Type type, final Annotation[] annotations, final MediaType mediaType) {
     return type.equals(ValueRequirementTargetForCell.class);
   }
 
   @Override
-  public long getSize(ValueRequirementTargetForCell stringValueRequirementPair,
-                      Class<?> aClass,
-                      Type type,
-                      Annotation[] annotations,
-                      MediaType mediaType) {
+  public long getSize(final ValueRequirementTargetForCell stringValueRequirementPair,
+      final Class<?> aClass,
+      final Type type,
+      final Annotation[] annotations,
+      final MediaType mediaType) {
     // TODO this means unknown size. is it worth encoding it twice to find out the size?
     return -1;
   }
 
   @Override
-  public void writeTo(ValueRequirementTargetForCell valueReq,
-                      Class<?> aClass,
-                      Type type,
-                      Annotation[] annotations,
-                      MediaType mediaType,
-                      MultivaluedMap<String, Object> stringObjectMultivaluedMap,
-                      OutputStream outputStream) throws IOException, WebApplicationException {
-    ValueRequirementJSONBuilder jsonBuilder = new ValueRequirementJSONBuilder();
-    String valueSpecStr = jsonBuilder.toJSON(valueReq.getValueRequirement());
+  public void writeTo(final ValueRequirementTargetForCell valueReq,
+      final Class<?> aClass,
+      final Type type,
+      final Annotation[] annotations,
+      final MediaType mediaType,
+      final MultivaluedMap<String, Object> stringObjectMultivaluedMap,
+      final OutputStream outputStream) throws IOException, WebApplicationException {
+    final ValueRequirementJSONBuilder jsonBuilder = new ValueRequirementJSONBuilder();
+    final String valueSpecStr = jsonBuilder.toJSON(valueReq.getValueRequirement());
 
     JSONObject valueReqJson;
     try {
       // need to convert it to a JSON object instead of a string otherwise it will be inserted into the outer object
       // as an escaped string instead of a child object
       valueReqJson = new JSONObject(valueSpecStr);
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       throw new OpenGammaRuntimeException("Failed to convert ValueRequirement to JSON", e);
     }
-    ImmutableMap<String, Object> jsonMap = ImmutableMap.of("columnSet", valueReq.getColumnSet(),
-                                                           "valueRequirement", valueReqJson);
+    final ImmutableMap<String, Object> jsonMap = ImmutableMap.of("columnSet", valueReq.getColumnSet(),
+        "valueRequirement", valueReqJson);
     outputStream.write(new JSONObject(jsonMap).toString().getBytes());
   }
 

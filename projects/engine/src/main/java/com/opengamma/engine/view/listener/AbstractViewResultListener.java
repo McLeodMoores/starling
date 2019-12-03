@@ -19,27 +19,27 @@ import com.opengamma.engine.view.execution.ViewCycleExecutionOptions;
 public abstract class AbstractViewResultListener implements ViewResultListener {
 
   @Override
-  public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
+  public void viewDefinitionCompiled(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
   }
 
   @Override
-  public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
+  public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
   }
 
   @Override
-  public void cycleStarted(ViewCycleMetadata cycleInfo) {
+  public void cycleStarted(final ViewCycleMetadata cycleInfo) {
   }
 
   @Override
-  public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
-  }
-  
-  @Override
-  public void cycleFragmentCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
+  public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
   }
 
   @Override
-  public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
+  public void cycleFragmentCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
+  }
+
+  @Override
+  public void cycleExecutionFailed(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
   }
 
   @Override
@@ -47,11 +47,11 @@ public abstract class AbstractViewResultListener implements ViewResultListener {
   }
 
   @Override
-  public void processTerminated(boolean executionInterrupted) {
+  public void processTerminated(final boolean executionInterrupted) {
   }
-  
+
   @Override
-  public void clientShutdown(Exception e) {
+  public void clientShutdown(final Exception e) {
   }
 
 }

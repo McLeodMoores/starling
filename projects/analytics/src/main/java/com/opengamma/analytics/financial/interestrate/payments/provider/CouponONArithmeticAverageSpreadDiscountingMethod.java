@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
 
 import java.util.ArrayList;
@@ -15,7 +20,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
-public class CouponONArithmeticAverageSpreadDiscountingMethod {
+public final class CouponONArithmeticAverageSpreadDiscountingMethod {
   // FIXME: Class under construction, don't use yet.
 
   /**
@@ -25,6 +30,7 @@ public class CouponONArithmeticAverageSpreadDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static CouponONArithmeticAverageSpreadDiscountingMethod getInstance() {
@@ -39,8 +45,11 @@ public class CouponONArithmeticAverageSpreadDiscountingMethod {
 
   /**
    * Computes the present value.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponONArithmeticAverageSpread coupon, final MulticurveProviderInterface multicurve) {
@@ -62,11 +71,15 @@ public class CouponONArithmeticAverageSpreadDiscountingMethod {
 
   /**
    * Computes the present value.
-   * @param coupon The coupon.
-   * @param multicurve The multi-curve provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param multicurve
+   *          The multi-curve provider.
    * @return The present value curve sensitivities.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponONArithmeticAverageSpread coupon, final MulticurveProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CouponONArithmeticAverageSpread coupon,
+      final MulticurveProviderInterface multicurve) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(multicurve, "Multi-curve provider");
     // Forward sweep
@@ -98,7 +111,8 @@ public class CouponONArithmeticAverageSpreadDiscountingMethod {
       listForward.add(new SimplyCompoundedForwardSensitivity(times[loopfwd], times[loopfwd + 1], delta[loopfwd], forwardONBar[loopfwd]));
     }
     mapFwd.put(multicurve.getName(coupon.getIndex()), listForward);
-    final MultipleCurrencyMulticurveSensitivity result = MultipleCurrencyMulticurveSensitivity.of(coupon.getCurrency(), MulticurveSensitivity.of(mapDsc, mapFwd));
+    final MultipleCurrencyMulticurveSensitivity result = MultipleCurrencyMulticurveSensitivity.of(coupon.getCurrency(),
+        MulticurveSensitivity.of(mapDsc, mapFwd));
     return result;
   }
 }

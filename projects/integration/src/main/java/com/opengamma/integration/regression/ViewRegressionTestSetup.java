@@ -28,13 +28,13 @@ import com.opengamma.util.ArgumentChecker;
   private final Properties _dbProps = new Properties();
   private final String _dbPropertiesFile;
 
-  /* package */ ViewRegressionTestSetup(String dbDumpDir,
-                                        String serverConfigFile,
-                                        String dbPropertiesFile,
-                                        String logbackConfig,
-                                        String projectName,
-                                        String version,
-                                        String workingDirName) {
+  /* package */ ViewRegressionTestSetup(final String dbDumpDir,
+                                        final String serverConfigFile,
+                                        final String dbPropertiesFile,
+                                        final String logbackConfig,
+                                        final String projectName,
+                                        final String version,
+                                        final String workingDirName) {
     _dbPropertiesFile = ArgumentChecker.notEmpty(dbPropertiesFile, "dbPropertiesFile");
     _dbDumpDir = ArgumentChecker.notEmpty(dbDumpDir, "dbDumpDir");
     _workingDirName = ArgumentChecker.notEmpty(workingDirName, "workingDirName");
@@ -44,7 +44,7 @@ import com.opengamma.util.ArgumentChecker;
     _classpath = "config:lib/" + projectName + "-" + version + ".jar";
     try {
       _dbProps.load(new BufferedInputStream(new FileInputStream(dbPropertiesFile)));
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Failed to load properties", e);
     }
   }

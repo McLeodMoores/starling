@@ -23,22 +23,22 @@ public class MarketDataRequirementNamesHelper {
 
   /**
    * Constructs a list of all valid {@link MarketDataRequirementNames}.
-   * 
+   *
    * @return a list of all valid {@link MarketDataRequirementNames}.
    */
   public static Set<String> constructValidRequirementNames() {
-    Set<String> result = new HashSet<String>();
-    
+    final Set<String> result = new HashSet<>();
+
     // All fields are implicitly public static final
     assert MarketDataRequirementNames.class.isInterface();
-    
+
     try {
-      for (Field field : MarketDataRequirementNames.class.getFields()) {
+      for (final Field field : MarketDataRequirementNames.class.getFields()) {
         if (String.class.equals(field.getType())) {
           result.add((String) field.get(null));
         }
       }
-    } catch (Exception e) { 
+    } catch (final Exception e) {
       throw new OpenGammaRuntimeException("Error querying fields of " + MarketDataRequirementNames.class);
     }
     return result;

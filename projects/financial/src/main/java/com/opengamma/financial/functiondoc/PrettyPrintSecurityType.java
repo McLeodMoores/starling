@@ -43,37 +43,37 @@ import com.opengamma.financial.security.swap.SwapSecurity;
  */
 public final class PrettyPrintSecurityType {
 
-  private static final Map<String, String> s_data;
+  private static final Map<String, String> DATA;
 
   static {
-    s_data = new HashMap<String, String>();
-    s_data.put(BondSecurity.SECURITY_TYPE, "Bond");
-    s_data.put(BondFutureOptionSecurity.SECURITY_TYPE, "Bond Future Option");
-    s_data.put(CapFloorSecurity.SECURITY_TYPE, "Cap/Floor");
-    s_data.put(CapFloorCMSSpreadSecurity.SECURITY_TYPE, "Cap/Floor CMS Spread");
-    s_data.put(CashSecurity.SECURITY_TYPE, "Cash");
-    s_data.put(CommodityForwardSecurity.SECURITY_TYPE, "Commodity Forward");
-    s_data.put(CommodityFutureOptionSecurity.SECURITY_TYPE, "Commodity Future Option");
-    s_data.put(EquitySecurity.SECURITY_TYPE, "Equity");
-    s_data.put(EquityBarrierOptionSecurity.SECURITY_TYPE, "Equity Barrier Option");
-    s_data.put(EquityIndexOptionSecurity.SECURITY_TYPE, "Equity Index Option");
-    s_data.put(EquityIndexDividendFutureOptionSecurity.SECURITY_TYPE, "Equity Index Future Option");
-    s_data.put(EquityVarianceSwapSecurity.SECURITY_TYPE, "Equity Variance Swap");
-    s_data.put(EquityOptionSecurity.SECURITY_TYPE, "Equity Option");
-    s_data.put("EXTERNAL_SENSITIVITIES_SECURITY", "Externally Calculated Sensitivities");
-    s_data.put(FRASecurity.SECURITY_TYPE, "FRA");
-    s_data.put(FutureSecurity.SECURITY_TYPE, "Future");
-    s_data.put(FXBarrierOptionSecurity.SECURITY_TYPE, "FX Barrier Option");
-    s_data.put(FXDigitalOptionSecurity.SECURITY_TYPE, "FX Digital Option");
-    s_data.put(FXForwardSecurity.SECURITY_TYPE, "FX Forward");
-    s_data.put(FXOptionSecurity.SECURITY_TYPE, "FX Option");
-    s_data.put(IRFutureOptionSecurity.SECURITY_TYPE, "IR Future Option");
-    s_data.put(NonDeliverableFXDigitalOptionSecurity.SECURITY_TYPE, "Non-deliverable FX Digital Option");
-    s_data.put(NonDeliverableFXOptionSecurity.SECURITY_TYPE, "Non-deliverable FX Option");
-    s_data.put(NonDeliverableFXForwardSecurity.SECURITY_TYPE, "Non-deliverable FX Forward");
-    s_data.put(PeriodicZeroDepositSecurity.SECURITY_TYPE, "Periodic Zero Deposit");
-    s_data.put(SwapSecurity.SECURITY_TYPE, "Swap");
-    s_data.put(SwaptionSecurity.SECURITY_TYPE, "Swaption");
+    DATA = new HashMap<>();
+    DATA.put(BondSecurity.SECURITY_TYPE, "Bond");
+    DATA.put(BondFutureOptionSecurity.SECURITY_TYPE, "Bond Future Option");
+    DATA.put(CapFloorSecurity.SECURITY_TYPE, "Cap/Floor");
+    DATA.put(CapFloorCMSSpreadSecurity.SECURITY_TYPE, "Cap/Floor CMS Spread");
+    DATA.put(CashSecurity.SECURITY_TYPE, "Cash");
+    DATA.put(CommodityForwardSecurity.SECURITY_TYPE, "Commodity Forward");
+    DATA.put(CommodityFutureOptionSecurity.SECURITY_TYPE, "Commodity Future Option");
+    DATA.put(EquitySecurity.SECURITY_TYPE, "Equity");
+    DATA.put(EquityBarrierOptionSecurity.SECURITY_TYPE, "Equity Barrier Option");
+    DATA.put(EquityIndexOptionSecurity.SECURITY_TYPE, "Equity Index Option");
+    DATA.put(EquityIndexDividendFutureOptionSecurity.SECURITY_TYPE, "Equity Index Future Option");
+    DATA.put(EquityVarianceSwapSecurity.SECURITY_TYPE, "Equity Variance Swap");
+    DATA.put(EquityOptionSecurity.SECURITY_TYPE, "Equity Option");
+    DATA.put("EXTERNAL_SENSITIVITIES_SECURITY", "Externally Calculated Sensitivities");
+    DATA.put(FRASecurity.SECURITY_TYPE, "FRA");
+    DATA.put(FutureSecurity.SECURITY_TYPE, "Future");
+    DATA.put(FXBarrierOptionSecurity.SECURITY_TYPE, "FX Barrier Option");
+    DATA.put(FXDigitalOptionSecurity.SECURITY_TYPE, "FX Digital Option");
+    DATA.put(FXForwardSecurity.SECURITY_TYPE, "FX Forward");
+    DATA.put(FXOptionSecurity.SECURITY_TYPE, "FX Option");
+    DATA.put(IRFutureOptionSecurity.SECURITY_TYPE, "IR Future Option");
+    DATA.put(NonDeliverableFXDigitalOptionSecurity.SECURITY_TYPE, "Non-deliverable FX Digital Option");
+    DATA.put(NonDeliverableFXOptionSecurity.SECURITY_TYPE, "Non-deliverable FX Option");
+    DATA.put(NonDeliverableFXForwardSecurity.SECURITY_TYPE, "Non-deliverable FX Forward");
+    DATA.put(PeriodicZeroDepositSecurity.SECURITY_TYPE, "Periodic Zero Deposit");
+    DATA.put(SwapSecurity.SECURITY_TYPE, "Swap");
+    DATA.put(SwaptionSecurity.SECURITY_TYPE, "Swaption");
   }
 
   private PrettyPrintSecurityType() {
@@ -81,7 +81,7 @@ public final class PrettyPrintSecurityType {
   }
 
   public static String getTypeString(final String type) {
-    final String value = s_data.get(type);
+    final String value = DATA.get(type);
     if (value != null) {
       return value;
     }

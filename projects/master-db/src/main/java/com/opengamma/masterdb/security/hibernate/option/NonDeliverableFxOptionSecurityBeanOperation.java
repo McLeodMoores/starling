@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -22,12 +22,13 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * NonDeliverableFXOptionSecurityBeanOperation
+ * NonDeliverableFXOptionSecurityBeanOperation.
  */
-public final class NonDeliverableFxOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<NonDeliverableFXOptionSecurity, NonDeliverableFXOptionSecurityBean> {
-  
+public final class NonDeliverableFxOptionSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<NonDeliverableFXOptionSecurity, NonDeliverableFXOptionSecurityBean> {
+
   /**
-   * Singleton
+   * Singleton.
    */
   public static final NonDeliverableFxOptionSecurityBeanOperation INSTANCE = new NonDeliverableFxOptionSecurityBeanOperation();
 
@@ -36,7 +37,8 @@ public final class NonDeliverableFxOptionSecurityBeanOperation extends AbstractS
   }
 
   @Override
-  public NonDeliverableFXOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final NonDeliverableFXOptionSecurity security) {
+  public NonDeliverableFXOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final NonDeliverableFXOptionSecurity security) {
     final NonDeliverableFXOptionSecurityBean bean = new NonDeliverableFXOptionSecurityBean();
     bean.setCallAmount(security.getCallAmount());
     bean.setPutAmount(security.getPutAmount());
@@ -51,15 +53,15 @@ public final class NonDeliverableFxOptionSecurityBeanOperation extends AbstractS
   }
 
   @Override
-  public NonDeliverableFXOptionSecurity createSecurity(OperationContext context, NonDeliverableFXOptionSecurityBean bean) {
+  public NonDeliverableFXOptionSecurity createSecurity(final OperationContext context, final NonDeliverableFXOptionSecurityBean bean) {
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
-    Currency putCurrency = currencyBeanToCurrency(bean.getPutCurrency());
-    Currency callCurrency = currencyBeanToCurrency(bean.getCallCurrency());
-    Expiry expiry = expiryBeanToExpiry(bean.getExpiry());
-    ZonedDateTime settlementDate = Converters.zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate());
-    boolean isDeliveryInCallCurrency = bean.getIsDeliveryInCallCurrency();
-    NonDeliverableFXOptionSecurity sec = 
-      new NonDeliverableFXOptionSecurity(putCurrency, callCurrency, bean.getPutAmount(), bean.getCallAmount(), expiry, settlementDate, bean.getIsLong(), exerciseType, isDeliveryInCallCurrency);
+    final Currency putCurrency = currencyBeanToCurrency(bean.getPutCurrency());
+    final Currency callCurrency = currencyBeanToCurrency(bean.getCallCurrency());
+    final Expiry expiry = expiryBeanToExpiry(bean.getExpiry());
+    final ZonedDateTime settlementDate = Converters.zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate());
+    final boolean isDeliveryInCallCurrency = bean.getIsDeliveryInCallCurrency();
+    final NonDeliverableFXOptionSecurity sec = new NonDeliverableFXOptionSecurity(putCurrency, callCurrency, bean.getPutAmount(), bean.getCallAmount(), expiry,
+        settlementDate, bean.getIsLong(), exerciseType, isDeliveryInCallCurrency);
     return sec;
   }
 

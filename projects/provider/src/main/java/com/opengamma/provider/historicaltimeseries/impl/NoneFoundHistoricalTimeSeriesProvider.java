@@ -21,7 +21,7 @@ public class NoneFoundHistoricalTimeSeriesProvider extends AbstractHistoricalTim
 
   //-------------------------------------------------------------------------
   @Override
-  protected HistoricalTimeSeriesProviderGetResult doBulkGet(HistoricalTimeSeriesProviderGetRequest request) {
+  protected HistoricalTimeSeriesProviderGetResult doBulkGet(final HistoricalTimeSeriesProviderGetRequest request) {
     return new HistoricalTimeSeriesProviderGetResult();
   }
 

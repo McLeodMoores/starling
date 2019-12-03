@@ -12,10 +12,10 @@ import com.opengamma.util.ArgumentChecker;
  */
 // TODO this belongs with interpolators
 public final class SineWeightingFunction extends WeightingFunction {
-  private static final SineWeightingFunction s_instance = new SineWeightingFunction();
+  private static final SineWeightingFunction INSTANCE = new SineWeightingFunction();
 
   public static SineWeightingFunction getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   private SineWeightingFunction() {

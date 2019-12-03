@@ -17,7 +17,7 @@ import com.opengamma.engine.view.ExecutionLog;
 
 /**
  * Fudge message builder for {@code CalculationJobResultItem}.
- * 
+ *
  * <pre>
  * message CalculationJobResultItem {
  *   optional string exceptionClass;         // error/failure class
@@ -36,7 +36,7 @@ public class CalculationJobResultItemFudgeBuilder implements FudgeBuilder<Calcul
   private static final String EXECUTION_LOG_FIELD_NAME = "executionLog";
 
   public static MutableFudgeMsg buildMessageImpl(final FudgeSerializer serializer, final CalculationJobResultItem object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     if (object.getMissingInputIdentifiers() != null) {
       msg.add(MISSING_INPUTS_FIELD_NAME, object.getMissingInputIdentifiers());
     }
@@ -48,19 +48,19 @@ public class CalculationJobResultItemFudgeBuilder implements FudgeBuilder<Calcul
   }
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CalculationJobResultItem object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CalculationJobResultItem object) {
     return buildMessageImpl(serializer, object);
   }
 
   public static CalculationJobResultItem buildObjectImpl(final FudgeDeserializer deserializer, final FudgeMsg message) {
-    long[] missingInputs = message.getValue(long[].class, MISSING_INPUTS_FIELD_NAME);
-    long[] missingOutputs = message.getValue(long[].class, MISSING_OUTPUTS_FIELD_NAME);
-    ExecutionLog executionLog = deserializer.fieldValueToObject(ExecutionLog.class, message.getByName(EXECUTION_LOG_FIELD_NAME));
+    final long[] missingInputs = message.getValue(long[].class, MISSING_INPUTS_FIELD_NAME);
+    final long[] missingOutputs = message.getValue(long[].class, MISSING_OUTPUTS_FIELD_NAME);
+    final ExecutionLog executionLog = deserializer.fieldValueToObject(ExecutionLog.class, message.getByName(EXECUTION_LOG_FIELD_NAME));
     return new CalculationJobResultItem(missingInputs, missingOutputs, executionLog);
   }
 
   @Override
-  public CalculationJobResultItem buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public CalculationJobResultItem buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     return buildObjectImpl(deserializer, message);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -36,7 +36,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
   /**
    * The storage of the statistics not yet sent to the server.
    */
-  private final ConcurrentMap<String, ConcurrentMap<String, PerFunction>> _data = new ConcurrentHashMap<String, ConcurrentMap<String, PerFunction>>();
+  private final ConcurrentMap<String, ConcurrentMap<String, PerFunction>> _data = new ConcurrentHashMap<>();
   private final AtomicLong _lastSent = new AtomicLong();
   private FudgeMessageSender _messageSender;
   private ExecutorService _executorService;
@@ -54,7 +54,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
   // -------------------------------------------------------------------------
   /**
    * Gets the Fudge message sender.
-   * 
+   *
    * @return the sender
    */
   protected FudgeMessageSender getFudgeMessageSender() {
@@ -63,7 +63,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
 
   /**
    * Sets the Fudge message sender.
-   * 
+   *
    * @param messageSender  the sender
    */
   public void setFudgeMessageSender(final FudgeMessageSender messageSender) {
@@ -72,7 +72,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
 
   /**
    * Gets the executor service.
-   * 
+   *
    * @return the executor service
    */
   protected ExecutorService getExecutorService() {
@@ -81,7 +81,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
 
   /**
    * Sets the executor service.
-   * 
+   *
    * @param executorService  the executor service
    */
   public void setExecutorService(final ExecutorService executorService) {
@@ -90,7 +90,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
 
   /**
    * Gets the update period for sending statistics.
-   * 
+   *
    * @return the duration of the update period, not null
    */
   public Duration getUpdatePeriod() {
@@ -99,7 +99,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
 
   /**
    * Sets the update period for sending statistics.
-   * 
+   *
    * @param duration  the duration of the update period, not null
    */
   public void setUpdatePeriod(final Duration duration) {
@@ -116,7 +116,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
    * <p>
    * If a manual value is set (other than {@code 1.0}) and hints from the server are disabled,
    * convergence should also be disabled to prevent it being shifted towards {@code 1.0}.</p>
-   * 
+   *
    * @param invocationTimeScale  the scaling factor, must be positive and non-zero
    */
   public void setInvocationTimeScale(final double invocationTimeScale) {
@@ -131,7 +131,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
    * {@code 1.0}. This is useful if there are no local nodes to act as reference point - a set of purely
    * remote (and identical) notes all automatically tuning their parameters will converge on similar
    * scales but the exact value may drift if there is no fixed reference. The default value is {@code 0.8}.
-   * 
+   *
    * @param convergenceFactor power, must be in the range {@code (0..1]}.
    */
   public void setConvergenceFactor(final double convergenceFactor) {
@@ -144,7 +144,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
    * <p>
    * This is set to {@code 1.0} to use the hints from the server, or {@code 0.0} to completely ignore
    * the hints from the server. Values in between will have a partial effect. The default value is {@code 1.0}.
-   * 
+   *
    * @param serverScalingHint power, must be in the range {@code [0,1]}.
    */
   public void setServerScalingHint(final double serverScalingHint) {
@@ -154,7 +154,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
 
   /**
    * Sets the scaling from a single value using the server hint and convergence.
-   * 
+   *
    * @param invocationTimeScale  the scaling value
    */
   public void setScaling(final double invocationTimeScale) {
@@ -172,7 +172,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
     PerFunction stats = statsMap.get(functionId);
     if (stats == null) {
       stats = new PerFunction(functionId, invocationCount, executionNanos, dataInputBytes, dataOutputBytes);
-      PerFunction newStats = statsMap.putIfAbsent(functionId, stats);
+      final PerFunction newStats = statsMap.putIfAbsent(functionId, stats);
       if (newStats == null) {
         return; // data stored in constructor of PerFunction above
       }
@@ -184,7 +184,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
 
   /**
    * Gets the configuration data.
-   * 
+   *
    * @param calculationConfiguration  the configuration key, not null
    * @return the configuration map, not null
    */
@@ -199,14 +199,15 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
 
   /**
    * Updates the statistics after a successful function invocation.
-   * 
+   *
    * @param stats  the statistics to update, not null
    * @param invocationCount  the number of invocations the data is for
    * @param executionNanos  the execution time, in nanoseconds, of the invocation(s)
    * @param dataInputBytes  the mean data input, bytes per input node, or {@code NaN} if unavailable
    * @param dataOutputBytes  the mean data output, bytes per output node, or {@code NaN} if unavailable
    */
-  protected void updateStatistics(final PerFunction stats, final int invocationCount, final double executionNanos, final double dataInputBytes, final double dataOutputBytes) {
+  protected void updateStatistics(final PerFunction stats, final int invocationCount, final double executionNanos,
+      final double dataInputBytes, final double dataOutputBytes) {
     synchronized (stats) {
       stats.setInvocation(stats.getInvocation() + executionNanos * _invocationTimeScale);
       if (Double.isNaN(dataInputBytes)) {
@@ -229,8 +230,8 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
    * Checks if it is time to send the statistics, if so then send them.
    */
   protected void checkAndSendStatistics() {
-    long timeNow = System.nanoTime();
-    long lastSent = _lastSent.get();
+    final long timeNow = System.nanoTime();
+    final long lastSent = _lastSent.get();
     if (lastSent + _frequencyNanos < timeNow) {
       if (_lastSent.compareAndSet(lastSent, timeNow)) {
         getExecutorService().execute(new Runnable() {
@@ -247,7 +248,7 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
    * Sends the statistics to the central location.
    */
   protected void sendStatistics() {
-    final List<PerConfiguration> configurations = new ArrayList<PerConfiguration>(_data.size());
+    final List<PerConfiguration> configurations = new ArrayList<>(_data.size());
     final Iterator<Map.Entry<String, ConcurrentMap<String, PerFunction>>> configurationIterator = _data.entrySet().iterator();
     while (configurationIterator.hasNext()) {
       final Map.Entry<String, ConcurrentMap<String, PerFunction>> configuration = configurationIterator.next();
@@ -256,8 +257,8 @@ public class FunctionInvocationStatisticsSender implements FunctionInvocationSta
       // We're only gathering heuristics so as long as it isn't a rarely executing function that always gets missed we'll be okay!
       configurationIterator.remove();
       if (!configuration.getValue().isEmpty()) {
-        final List<PerFunction> functionData = new ArrayList<PerFunction>(configuration.getValue().size());
-        for (PerFunction function : configuration.getValue().values()) {
+        final List<PerFunction> functionData = new ArrayList<>(configuration.getValue().size());
+        for (final PerFunction function : configuration.getValue().values()) {
           synchronized (function) {
             functionData.add(function.clone());
           }

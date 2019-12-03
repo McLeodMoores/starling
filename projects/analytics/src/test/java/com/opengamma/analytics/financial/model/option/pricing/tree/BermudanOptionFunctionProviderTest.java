@@ -22,8 +22,8 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class BermudanOptionFunctionProviderTest {
-  private static final TreeOptionPricingModel _model = new BinomialTreeOptionPricingModel();
-  private static final TrinomialTreeOptionPricingModel _modelTrinomial = new TrinomialTreeOptionPricingModel();
+  private static final TreeOptionPricingModel MODEL = new BinomialTreeOptionPricingModel();
+  private static final TrinomialTreeOptionPricingModel TRINOMIAL = new TrinomialTreeOptionPricingModel();
 
   private static final double SPOT = 105.;
   private static final double[] STRIKES = new double[] {97., 105., 114., };
@@ -52,9 +52,9 @@ public class BermudanOptionFunctionProviderTest {
           for (final double vol : VOLS) {
             for (final double dividend : DIVIDENDS) {
               final OptionFunctionProvider1D function = new BermudanOptionFunctionProvider(strike, time, steps, isCall, exerciseTimes);
-              final double res = _model.getPrice(new LeisenReimerLatticeSpecification(), function, SPOT, vol, interest, dividend);
+              final double res = MODEL.getPrice(new LeisenReimerLatticeSpecification(), function, SPOT, vol, interest, dividend);
               for (final LatticeSpecification lattice : lattices) {
-                final double resTri = _modelTrinomial.getPrice(lattice, function, SPOT, vol, interest, dividend);
+                final double resTri = TRINOMIAL.getPrice(lattice, function, SPOT, vol, interest, dividend);
                 assertEquals(resTri, res, Math.max(Math.abs(res), 1.) * 1.e-1);
               }
             }
@@ -83,9 +83,9 @@ public class BermudanOptionFunctionProviderTest {
           for (final double vol : VOLS) {
             for (final double dividend : DIVIDENDS) {
               final OptionFunctionProvider1D function = new BermudanOptionFunctionProvider(strike, time, steps, isCall, exerciseTimes);
-              final GreekResultCollection res = _model.getGreeks(new LeisenReimerLatticeSpecification(), function, SPOT, vol, interest, dividend);
+              final GreekResultCollection res = MODEL.getGreeks(new LeisenReimerLatticeSpecification(), function, SPOT, vol, interest, dividend);
               for (final LatticeSpecification lattice : lattices) {
-                final GreekResultCollection resTri = _modelTrinomial.getGreeks(lattice, function, SPOT, vol, interest, dividend);
+                final GreekResultCollection resTri = TRINOMIAL.getGreeks(lattice, function, SPOT, vol, interest, dividend);
                 assertEquals(resTri.get(Greek.FAIR_PRICE), res.get(Greek.FAIR_PRICE), Math.max(Math.abs(res.get(Greek.FAIR_PRICE)), 1.) * 1.e-1);
                 assertEquals(resTri.get(Greek.DELTA), res.get(Greek.DELTA), Math.max(Math.abs(res.get(Greek.DELTA)), 1.) * 1.e-1);
                 assertEquals(resTri.get(Greek.GAMMA), res.get(Greek.GAMMA), Math.max(Math.abs(res.get(Greek.GAMMA)), 1.) * 1.e-1);
@@ -119,8 +119,8 @@ public class BermudanOptionFunctionProviderTest {
             for (final double dividend : DIVIDENDS) {
               final OptionFunctionProvider1D function = new BermudanOptionFunctionProvider(strike, time, steps, isCall, exerciseTimes);
               final OptionFunctionProvider1D functionAm = new AmericanVanillaOptionFunctionProvider(strike, time, steps, isCall);
-              final double res = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
-              final double resAm = _model.getPrice(lattice, functionAm, SPOT, vol, interest, dividend);
+              final double res = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
+              final double resAm = MODEL.getPrice(lattice, functionAm, SPOT, vol, interest, dividend);
               assertEquals(res, resAm, 1.e-14);
             }
           }
@@ -151,9 +151,9 @@ public class BermudanOptionFunctionProviderTest {
                 final OptionFunctionProvider1D function = new BermudanOptionFunctionProvider(strike, time, steps, isCall, exerciseTimes);
                 final OptionFunctionProvider1D functionEu = new EuropeanVanillaOptionFunctionProvider(strike, time, steps, isCall);
                 final OptionFunctionProvider1D functionAm = new AmericanVanillaOptionFunctionProvider(strike, time, steps, isCall);
-                final double res = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
-                final double resAm = _model.getPrice(lattice, functionAm, SPOT, vol, interest, dividend);
-                final double resEu = _model.getPrice(lattice, functionEu, SPOT, vol, interest, dividend);
+                final double res = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
+                final double resAm = MODEL.getPrice(lattice, functionAm, SPOT, vol, interest, dividend);
+                final double resEu = MODEL.getPrice(lattice, functionEu, SPOT, vol, interest, dividend);
                 assertTrue(res <= resAm && res >= resEu);
               }
             }
@@ -184,8 +184,8 @@ public class BermudanOptionFunctionProviderTest {
             for (final double dividend : DIVIDENDS) {
               final OptionFunctionProvider1D function = new BermudanOptionFunctionProvider(strike, time, steps, isCall, exerciseTimes);
               final OptionFunctionProvider1D functionAm = new AmericanVanillaOptionFunctionProvider(strike, time, steps, isCall);
-              final GreekResultCollection res = _model.getGreeks(lattice, function, SPOT, vol, interest, dividend);
-              final GreekResultCollection resAm = _model.getGreeks(lattice, functionAm, SPOT, vol, interest, dividend);
+              final GreekResultCollection res = MODEL.getGreeks(lattice, function, SPOT, vol, interest, dividend);
+              final GreekResultCollection resAm = MODEL.getGreeks(lattice, functionAm, SPOT, vol, interest, dividend);
               assertEquals(res.get(Greek.FAIR_PRICE), resAm.get(Greek.FAIR_PRICE), 1.e-14);
               assertEquals(res.get(Greek.DELTA), resAm.get(Greek.DELTA), 1.e-14);
               assertEquals(res.get(Greek.GAMMA), resAm.get(Greek.GAMMA), 1.e-14);
@@ -217,8 +217,8 @@ public class BermudanOptionFunctionProviderTest {
               for (final double dividend : DIVIDENDS) {
                 final OptionFunctionProvider1D function = new BermudanOptionFunctionProvider(strike, TIME, steps, isCall, exerciseTimes);
                 final OptionFunctionProvider1D functionEu = new EuropeanVanillaOptionFunctionProvider(strike, TIME, steps, isCall);
-                final GreekResultCollection res = _model.getGreeks(lattice, function, SPOT, vol, interest, dividend);
-                final GreekResultCollection resEu = _model.getGreeks(lattice, functionEu, SPOT, vol, interest, dividend);
+                final GreekResultCollection res = MODEL.getGreeks(lattice, function, SPOT, vol, interest, dividend);
+                final GreekResultCollection resEu = MODEL.getGreeks(lattice, functionEu, SPOT, vol, interest, dividend);
                 assertEquals(res.get(Greek.FAIR_PRICE), resEu.get(Greek.FAIR_PRICE), 1.e-14);
                 assertEquals(res.get(Greek.DELTA), resEu.get(Greek.DELTA), 1.e-14);
                 assertEquals(res.get(Greek.GAMMA), resEu.get(Greek.GAMMA), 1.e-14);
@@ -256,11 +256,11 @@ public class BermudanOptionFunctionProviderTest {
           for (final double interest : INTERESTS) {
             for (final double vol : VOLS) {
               final OptionFunctionProvider1D function = new BermudanOptionFunctionProvider(strike, time, steps, isCall, exerciseTimes);
-              final GreekResultCollection resCash = _model.getGreeks(lattice, function, SPOT, vol, interest, cashDividend);
-              final GreekResultCollection resProp = _model.getGreeks(lattice, function, SPOT, vol, interest, propDividend);
+              final GreekResultCollection resCash = MODEL.getGreeks(lattice, function, SPOT, vol, interest, cashDividend);
+              final GreekResultCollection resProp = MODEL.getGreeks(lattice, function, SPOT, vol, interest, propDividend);
               final OptionFunctionProvider1D functionTri = new BermudanOptionFunctionProvider(strike, time, stepsTri, isCall, exerciseTimes);
-              final GreekResultCollection resCashTrinomial = _modelTrinomial.getGreeks(lattice, functionTri, SPOT, vol, interest, cashDividend);
-              final GreekResultCollection resPropTrinomial = _modelTrinomial.getGreeks(lattice, functionTri, SPOT, vol, interest, propDividend);
+              final GreekResultCollection resCashTrinomial = TRINOMIAL.getGreeks(lattice, functionTri, SPOT, vol, interest, cashDividend);
+              final GreekResultCollection resPropTrinomial = TRINOMIAL.getGreeks(lattice, functionTri, SPOT, vol, interest, propDividend);
               assertEquals(resCash.get(Greek.FAIR_PRICE), resCashTrinomial.get(Greek.FAIR_PRICE), Math.max(Math.abs(resCashTrinomial.get(Greek.FAIR_PRICE)), 1.) * 1.e-1);
               assertEquals(resCash.get(Greek.DELTA), resCashTrinomial.get(Greek.DELTA), Math.max(Math.abs(resCashTrinomial.get(Greek.DELTA)), 1.) * 1.e-1);
               assertEquals(resCash.get(Greek.GAMMA), resCashTrinomial.get(Greek.GAMMA), Math.max(Math.abs(resCashTrinomial.get(Greek.GAMMA)), 1.) * 1.e-1);
@@ -317,11 +317,11 @@ public class BermudanOptionFunctionProviderTest {
           final double volRef = Math.sqrt(constC * constC + 0.5 * constD * constD + 2. * constC * constD / time * (1. - Math.cos(time)) - constD * constD * 0.25 / time * Math.sin(2. * time));
 
           final OptionFunctionProvider1D function = new BermudanOptionFunctionProvider(strike, time, steps, isCall, exerciseTimes);
-          final double resPrice = _model.getPrice(function, SPOT, vol, rate, dividend);
-          final GreekResultCollection resGreeks = _model.getGreeks(function, SPOT, vol, rate, dividend);
+          final double resPrice = MODEL.getPrice(function, SPOT, vol, rate, dividend);
+          final GreekResultCollection resGreeks = MODEL.getGreeks(function, SPOT, vol, rate, dividend);
 
-          final double resPriceConst = _model.getPrice(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
-          final GreekResultCollection resGreeksConst = _model.getGreeks(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
+          final double resPriceConst = MODEL.getPrice(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
+          final GreekResultCollection resGreeksConst = MODEL.getGreeks(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
           assertEquals(resPrice, resPriceConst, Math.max(Math.abs(resPriceConst), 0.1) * 0.1);
           assertEquals(resGreeks.get(Greek.FAIR_PRICE), resGreeksConst.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConst.get(Greek.FAIR_PRICE)), 0.1) * 0.1);
           assertEquals(resGreeks.get(Greek.DELTA), resGreeksConst.get(Greek.DELTA), Math.max(Math.abs(resGreeksConst.get(Greek.DELTA)), 0.1) * 0.1);
@@ -329,9 +329,9 @@ public class BermudanOptionFunctionProviderTest {
           assertEquals(resGreeks.get(Greek.THETA), resGreeksConst.get(Greek.THETA), Math.max(Math.abs(resGreeksConst.get(Greek.THETA)), 0.1));
 
           final OptionFunctionProvider1D functionTri = new BermudanOptionFunctionProvider(strike, time, stepsTri, isCall, exerciseTimes);
-          final double resPriceTrinomial = _modelTrinomial.getPrice(functionTri, SPOT, volTri, rateTri, dividendTri);
+          final double resPriceTrinomial = TRINOMIAL.getPrice(functionTri, SPOT, volTri, rateTri, dividendTri);
           assertEquals(resPriceTrinomial, resPriceConst, Math.max(Math.abs(resPriceConst), .1) * 1.e-1);
-          final GreekResultCollection resGreeksTrinomial = _modelTrinomial.getGreeks(functionTri, SPOT, volTri, rateTri, dividendTri);
+          final GreekResultCollection resGreeksTrinomial = TRINOMIAL.getGreeks(functionTri, SPOT, volTri, rateTri, dividendTri);
           assertEquals(resGreeksTrinomial.get(Greek.FAIR_PRICE), resGreeksConst.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConst.get(Greek.FAIR_PRICE)), 0.1) * 0.1);
           assertEquals(resGreeksTrinomial.get(Greek.DELTA), resGreeksConst.get(Greek.DELTA), Math.max(Math.abs(resGreeksConst.get(Greek.DELTA)), 0.1) * 0.1);
           assertEquals(resGreeksTrinomial.get(Greek.GAMMA), resGreeksConst.get(Greek.GAMMA), Math.max(Math.abs(resGreeksConst.get(Greek.GAMMA)), 0.1) * 0.1);
@@ -455,8 +455,8 @@ public class BermudanOptionFunctionProviderTest {
         for (final boolean isCall : tfSet) {
           final OptionFunctionProvider1D function = new BermudanOptionFunctionProvider(strike, time, steps, isCall, exerciseTimes);
           final OptionFunctionProvider1D functionAm = new AmericanVanillaOptionFunctionProvider(strike, time, steps, isCall);
-          final double res = _model.getPrice(lattice, function, spot, vol, interest, dividend);
-          final double resAm = _model.getPrice(lattice, functionAm, spot, vol, interest, dividend);
+          final double res = MODEL.getPrice(lattice, function, spot, vol, interest, dividend);
+          final double resAm = MODEL.getPrice(lattice, functionAm, spot, vol, interest, dividend);
           System.out.println(res + "\t" + resAm);
         }
       }

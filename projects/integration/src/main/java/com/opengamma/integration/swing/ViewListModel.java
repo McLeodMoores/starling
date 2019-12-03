@@ -30,17 +30,17 @@ public class ViewListModel extends AbstractListModel<ViewEntry> implements Combo
    * Version UID
    */
   private static final long serialVersionUID = 1L;
-  private Object _viewsLock = new Object();
+  private final Object _viewsLock = new Object();
   private volatile List<ViewEntry> _views = new ArrayList<>();
   private volatile List<ViewEntry> _filteredViews = new ArrayList<>();
   private ConfigMaster _configMaster;
   private ViewEntry _selectedItem;
   private String _filter;
 
-  public ViewListModel(ConfigMaster configMaster) {
+  public ViewListModel(final ConfigMaster configMaster) {
     _configMaster = configMaster;
     registerListener();
-    SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+    final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
       @Override
       protected Void doInBackground() throws Exception {
         pullItems();
@@ -50,10 +50,10 @@ public class ViewListModel extends AbstractListModel<ViewEntry> implements Combo
     };
     worker.execute();
   }
-  
-  public void setFilter(String filter) {
+
+  public void setFilter(final String filter) {
     _filter = filter;
-    SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+    final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
       @Override
       protected Void doInBackground() throws Exception {
         runFilter();
@@ -62,11 +62,11 @@ public class ViewListModel extends AbstractListModel<ViewEntry> implements Combo
     };
     worker.execute();
   }
-  
+
   private void runFilter() {
     synchronized (_viewsLock) {
-      List<ViewEntry> filtered = new ArrayList<>();
-      for (ViewEntry entry : _views) {
+      final List<ViewEntry> filtered = new ArrayList<>();
+      for (final ViewEntry entry : _views) {
         if (_filter == null || entry.getName().contains(_filter)) {
           filtered.add(entry);
         }
@@ -80,25 +80,25 @@ public class ViewListModel extends AbstractListModel<ViewEntry> implements Combo
       }
     });
   }
-  
+
   private void pullItems() {
-    ConfigSearchRequest<ViewDefinition> searchReq = new ConfigSearchRequest<ViewDefinition>();
+    final ConfigSearchRequest<ViewDefinition> searchReq = new ConfigSearchRequest<>();
     searchReq.setType(ViewDefinition.class);
-    ConfigSearchResult<ViewDefinition> search = _configMaster.search(searchReq);
+    final ConfigSearchResult<ViewDefinition> search = _configMaster.search(searchReq);
     synchronized (_viewsLock) {
       _views.clear();
-      for (ConfigDocument document : search.getDocuments()) {
+      for (final ConfigDocument document : search.getDocuments()) {
         _views.add(ViewEntry.of(document.getUniqueId(), document.getName()));
       }
       Collections.sort(_views, ViewEntryComparator.getInstance());
     }
   }
-  
+
   private void registerListener() {
     _configMaster.changeManager().addChangeListener(new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
-        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+      public void entityChanged(final ChangeEvent event) {
+        final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
           @Override
           protected Void doInBackground() throws Exception {
             pullItems();
@@ -110,19 +110,19 @@ public class ViewListModel extends AbstractListModel<ViewEntry> implements Combo
       }
     });
   }
-  
+
   @Override
   public int getSize() {
     return _filteredViews.size();
   }
 
   @Override
-  public ViewEntry getElementAt(int index) {
+  public ViewEntry getElementAt(final int index) {
     return _filteredViews.get(index);
   }
 
   @Override
-  public void setSelectedItem(Object anItem) {
+  public void setSelectedItem(final Object anItem) {
     _selectedItem = (ViewEntry) anItem;
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata;
@@ -15,16 +15,16 @@ import com.opengamma.util.ArgumentChecker;
 public class SingletonMarketDataProviderFactory implements MarketDataProviderFactory {
 
   private final MarketDataProvider _instance;
-  
-  public SingletonMarketDataProviderFactory(MarketDataProvider instance) {
+
+  public SingletonMarketDataProviderFactory(final MarketDataProvider instance) {
     ArgumentChecker.notNull(instance, "instance");
     _instance = instance;
   }
 
   @Override
-  public MarketDataProvider create(UserPrincipal marketDataUser,
-                                   MarketDataSpecification marketDataSpec) {
+  public MarketDataProvider create(final UserPrincipal marketDataUser,
+                                   final MarketDataSpecification marketDataSpec) {
     return _instance;
   }
-  
+
 }

@@ -52,7 +52,7 @@ import com.opengamma.util.money.Currency;
 public final class EquityLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -72,10 +72,10 @@ public final class EquityLoader extends SecurityLoader {
       FIELD_MIC_LOCAL_EXCH,
       FIELD_MIC_PRIM_EXCH,
       FIELD_MIC_1);
-  
+
   /**
    * The valid Bloomberg security types for Equity.
-   */  
+   */
   public static final Set<String> VALID_SECURITY_TYPES = new ImmutableSet.Builder<String>().addAll(VALID_EQUITY_TYPES).build();
 
   /**
@@ -88,23 +88,23 @@ public final class EquityLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    * @param exchangeDataProvider  the exchange data provider, not null
    */
-  public EquityLoader(ReferenceDataProvider referenceDataProvider, ExchangeDataProvider exchangeDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.EQUITY);
+  public EquityLoader(final ReferenceDataProvider referenceDataProvider, final ExchangeDataProvider exchangeDataProvider) {
+    super(LOGGER, referenceDataProvider, SecurityType.EQUITY);
     ArgumentChecker.notNull(exchangeDataProvider, "exchangeDataProvider");
     _exchangeDataProvider = exchangeDataProvider;
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
     final String bbgUniqueIdString = fieldData.getString(FIELD_ID_BBG_UNIQUE);
     final String name = fieldData.getString(FIELD_NAME);
     final String ticker = fieldData.getString(FIELD_TICKER);
     final String bbgExchangeCode = fieldData.getString(FIELD_EXCH_CODE);
     final String gicsCodeString = fieldData.getString(FIELD_GICS_SUB_INDUSTRY);
     final String currencyCode = fieldData.getString(FIELD_CRNCY);
-    
-    String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
+
+    final String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
     String micExchangeCode;
     boolean isPreferred;
     if (MARKET_SECTOR_PREFERRED.equals(marketSector)) {
@@ -138,18 +138,18 @@ public final class EquityLoader extends SecurityLoader {
       logMissingData("equity currency", name);
       return null;
     }
-    
+
     final Exchange exchangeData = _exchangeDataProvider.getExchange(micExchangeCode);
     if (exchangeData == null) {
       logMissingData("equity exchange data (common stock)", name);
       return null;
     }
-    
-    UniqueId bbgUniqueId = BloombergSecurityProvider.createUniqueId(bbgUniqueIdString);
-    Currency currency = Currency.of(currencyCode.toUpperCase());
-    GICSCode gicsCode = gicsCodeString != null ? GICSCode.of(gicsCodeString) : null;
-    
-    EquitySecurity security = new EquitySecurity(exchangeData.getDescription(), exchangeData.getMic(), name, currency);
+
+    final UniqueId bbgUniqueId = BloombergSecurityProvider.createUniqueId(bbgUniqueIdString);
+    final Currency currency = Currency.of(currencyCode.toUpperCase());
+    final GICSCode gicsCode = gicsCodeString != null ? GICSCode.of(gicsCodeString) : null;
+
+    final EquitySecurity security = new EquitySecurity(exchangeData.getDescription(), exchangeData.getMic(), name, currency);
     security.setUniqueId(bbgUniqueId);
     security.setName(name);
     security.setShortName(ticker);
@@ -157,15 +157,15 @@ public final class EquityLoader extends SecurityLoader {
       security.setGicsCode(gicsCode);
     }
     security.setPreferred(isPreferred);
-    
+
     //set identifiers
     parseIdentifiers(fieldData, security);
-    
+
     return security;
   }
 
-  private void logMissingData(String fieldName, String securityName) {
-    s_logger.warn("Cannot construct equity security " + securityName + " as " + fieldName + " is missing");
+  private void logMissingData(final String fieldName, final String securityName) {
+    LOGGER.warn("Cannot construct equity security " + securityName + " as " + fieldName + " is missing");
   }
 
   @Override
@@ -176,8 +176,8 @@ public final class EquityLoader extends SecurityLoader {
   @Override
   protected void parseIdentifiers(final FudgeMsg fieldData, final ManageableSecurity security) {
     super.parseIdentifiers(fieldData, security);
-    
-    String marketSector = StringUtils.trimToEmpty(fieldData.getString(FIELD_MARKET_SECTOR_DES));
+
+    final String marketSector = StringUtils.trimToEmpty(fieldData.getString(FIELD_MARKET_SECTOR_DES));
     if (!BloombergDataUtils.isValidField(marketSector)) {
       return;
     }
@@ -191,11 +191,11 @@ public final class EquityLoader extends SecurityLoader {
       }
     }
 
-    String securityShortDes = StringUtils.trimToEmpty(fieldData.getString(FIELD_SECURITY_SHORT_DES));
+    final String securityShortDes = StringUtils.trimToEmpty(fieldData.getString(FIELD_SECURITY_SHORT_DES));
     if (BloombergDataUtils.isValidField(securityShortDes)) {
       security.addExternalId(getTicker(securityShortDes, bbgExchangeCode, marketSector));
     } else {
-      String securityDes = StringUtils.trimToEmpty(fieldData.getString(FIELD_SECURITY_DES));
+      final String securityDes = StringUtils.trimToEmpty(fieldData.getString(FIELD_SECURITY_DES));
       if (BloombergDataUtils.isValidField(securityDes)) {
         security.addExternalId(getTicker(securityDes, bbgExchangeCode, marketSector));
       }

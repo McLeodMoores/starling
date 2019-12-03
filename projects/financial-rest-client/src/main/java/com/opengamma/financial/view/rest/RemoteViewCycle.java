@@ -31,74 +31,74 @@ public class RemoteViewCycle implements ViewCycle {
   private final URI _baseUri;
   private final FudgeRestClient _client;
 
-  public RemoteViewCycle(URI baseUri) {
+  public RemoteViewCycle(final URI baseUri) {
     this(baseUri, FudgeRestClient.create());
   }
 
-  public RemoteViewCycle(URI baseUri, FudgeRestClient client) {
+  public RemoteViewCycle(final URI baseUri, final FudgeRestClient client) {
     _baseUri = baseUri;
     _client = client;
   }
 
   @Override
   public String getName() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_NAME).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_NAME).build();
     return _client.accessFudge(uri).get(String.class);
   }
 
   @Override
   public UniqueId getUniqueId() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_UNIQUE_ID).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_UNIQUE_ID).build();
     return _client.accessFudge(uri).get(UniqueId.class);
   }
 
   @Override
   public UniqueId getViewProcessId() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_VIEW_PROCESS_ID).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_VIEW_PROCESS_ID).build();
     return _client.accessFudge(uri).get(UniqueId.class);
   }
 
   @Override
   public ViewCycleState getState() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_STATE).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_STATE).build();
     return _client.accessFudge(uri).get(ViewCycleState.class);
   }
 
   @Override
   public Duration getDuration() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_DURATION).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_DURATION).build();
     return _client.accessFudge(uri).get(Duration.class);
   }
 
   @Override
   public ViewCycleExecutionOptions getExecutionOptions() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_EXECUTION_OPTIONS).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_EXECUTION_OPTIONS).build();
     return _client.accessFudge(uri).get(ViewCycleExecutionOptions.class);
   }
 
   @Override
   public CompiledViewDefinitionWithGraphs getCompiledViewDefinition() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_COMPILED_VIEW_DEFINITION).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_COMPILED_VIEW_DEFINITION).build();
     return new RemoteCompiledViewDefinitionWithGraphs(uri);
   }
 
   @Override
   public ViewComputationResultModel getResultModel() {
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_RESULT).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_RESULT).build();
     return _client.accessFudge(uri).get(ViewComputationResultModel.class);
   }
 
   @Override
-  public ComputationCacheResponse queryComputationCaches(ComputationCycleQuery query) {
+  public ComputationCacheResponse queryComputationCaches(final ComputationCycleQuery query) {
     ArgumentChecker.notNull(query, "query");
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_QUERY_CACHES).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_QUERY_CACHES).build();
     return _client.accessFudge(uri).post(ComputationCacheResponse.class, query);
   }
 
   @Override
-  public ComputationResultsResponse queryResults(ComputationCycleQuery query) {
+  public ComputationResultsResponse queryResults(final ComputationCycleQuery query) {
     ArgumentChecker.notNull(query, "query");
-    URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_QUERY_RESULTS).build();
+    final URI uri = UriBuilder.fromUri(_baseUri).path(DataViewCycleUris.PATH_QUERY_RESULTS).build();
     return _client.accessFudge(uri).post(ComputationResultsResponse.class, query);
   }
 

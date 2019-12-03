@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.var.parametric;
@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.matrix.Matrix;
 import com.opengamma.analytics.math.matrix.MatrixAlgebra;
 
 /**
- * 
+ *
  */
 public class DeltaGammaCovarianceMatrixSkewnessCalculator extends Function1D<Map<Integer, ParametricVaRDataBundle>, Double> {
   private final MatrixAlgebra _algebra;
@@ -47,8 +47,10 @@ public class DeltaGammaCovarianceMatrixSkewnessCalculator extends Function1D<Map
       throw new IllegalArgumentException("Gamma matrix and covariance matrix were incompatible sizes");
     }
     final Matrix<?> product = _algebra.multiply(gammaMatrix, deltaCovariance);
-    final double numerator = _algebra.getTrace(_algebra.getPower(product, 3)) + 3 * _algebra.getInnerProduct(delta, _algebra.multiply(_algebra.multiply(deltaCovariance, product), delta));
-    final double denominator = Math.pow(0.5 * _algebra.getTrace(_algebra.getPower(product, 2)) + _algebra.getInnerProduct(delta, _algebra.multiply(deltaCovariance, delta)), 1.5);
+    final double numerator = _algebra.getTrace(_algebra.getPower(product, 3))
+        + 3 * _algebra.getInnerProduct(delta, _algebra.multiply(_algebra.multiply(deltaCovariance, product), delta));
+    final double denominator = Math
+        .pow(0.5 * _algebra.getTrace(_algebra.getPower(product, 2)) + _algebra.getInnerProduct(delta, _algebra.multiply(deltaCovariance, delta)), 1.5);
     return numerator / denominator;
   }
 

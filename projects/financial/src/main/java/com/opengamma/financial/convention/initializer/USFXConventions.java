@@ -6,7 +6,6 @@
 package com.opengamma.financial.convention.initializer;
 
 
-import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.FXForwardAndSwapConvention;
 import com.opengamma.financial.convention.FXSpotConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -24,7 +23,6 @@ public class USFXConventions extends ConventionMasterInitializer {
   public static final ConventionMasterInitializer INSTANCE = new USFXConventions();
 
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
-  private static final ExternalId US = ExternalSchemes.financialRegionId("US");
 
   /**
    * Restricted constructor.

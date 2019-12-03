@@ -21,17 +21,17 @@ public class EquityVarianceSwapTradeSecurityExtractor extends TradeSecurityExtra
    *
    * @param trade the trade to perform extraction on
    */
-  public EquityVarianceSwapTradeSecurityExtractor(EquityVarianceSwapTrade trade) {
+  public EquityVarianceSwapTradeSecurityExtractor(final EquityVarianceSwapTrade trade) {
     super(trade);
   }
 
   //-------------------------------------------------------------------------
   @Override
   public ManageableSecurity[] extractSecurities() {
-    ExternalId region = null;
-    boolean parameterizedAsVariance = false; // distinguishes vega or variance strike/notional
-    EquityVarianceSwapTrade trade = getTrade();
-    EquityVarianceSwapSecurity security = new EquityVarianceSwapSecurity(
+    final ExternalId region = null;
+    final boolean parameterizedAsVariance = false; // distinguishes vega or variance strike/notional
+    final EquityVarianceSwapTrade trade = getTrade();
+    final EquityVarianceSwapSecurity security = new EquityVarianceSwapSecurity(
         trade.getUnderlying().toExternalId(),
         trade.getCurrency(),
         trade.getStrike().doubleValue(),

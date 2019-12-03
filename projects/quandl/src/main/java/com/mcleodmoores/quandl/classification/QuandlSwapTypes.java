@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.classification;
 
@@ -24,5 +24,5 @@ public final class QuandlSwapTypes {
    */
   public static final Set<Pattern> VALID_SWAP_PATTERNS = ImmutableSet.of(
       Pattern.compile("(^FRED/DSWP)[0-9]+") // USD swap rates
-      );
+  );
 }

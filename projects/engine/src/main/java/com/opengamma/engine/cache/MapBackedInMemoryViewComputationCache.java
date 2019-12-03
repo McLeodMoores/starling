@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -27,14 +27,14 @@ import com.opengamma.util.ArgumentChecker;
  * penalty) of {@link DefaultViewComputationCache}. Therefore it does not need to be
  * wrapped in a {@link WriteThroughViewComputationCache} for efficient calculation node
  * performance.
- * <p/>
+ * <p>
  * Because there is no ability to overflow to off-heap storage in this implementation,
  * it should <strong>only</strong> be used in a case where testing has established
  * that the <em>entire</em> value cache can fit in RAM. Otherwise, an {@code OutOfMemoryException}
  * will be thrown and the JVM will exit.
- * <p/>
+ * <p>
  * In addition, this implementation cannot support remote calculation nodes.
- * <p/>
+ * <p>
  * This class was originally requested in <a href="http://jira.opengamma.com/browse/PLAT-4786">PLAT-4786</a>.
  */
 public class MapBackedInMemoryViewComputationCache extends AbstractViewComputationCache {
@@ -46,7 +46,7 @@ public class MapBackedInMemoryViewComputationCache extends AbstractViewComputati
   private static final int INITIAL_CAPACITY = 100000;
   /**
    * The load factor for the underlying ConcurrentHashMap. This
-   * is the same (0.75) as the default load factor. 
+   * is the same (0.75) as the default load factor.
    */
   private static final float LOAD_FACTOR = 0.75f;
   /**
@@ -58,22 +58,22 @@ public class MapBackedInMemoryViewComputationCache extends AbstractViewComputati
    * The underlying map for shared values.
    */
   private final ConcurrentMap<ValueSpecification, Object> _sharedValues =
-      new ConcurrentHashMap<ValueSpecification, Object>(INITIAL_CAPACITY, LOAD_FACTOR, CONCURRENCY_LEVEL);
+      new ConcurrentHashMap<>(INITIAL_CAPACITY, LOAD_FACTOR, CONCURRENCY_LEVEL);
   /**
    * The underlying map for private values.
    */
   private final ConcurrentMap<ValueSpecification, Object> _privateValues =
-      new ConcurrentHashMap<ValueSpecification, Object>(INITIAL_CAPACITY, LOAD_FACTOR, CONCURRENCY_LEVEL);
-  
+      new ConcurrentHashMap<>(INITIAL_CAPACITY, LOAD_FACTOR, CONCURRENCY_LEVEL);
+
   public MapBackedInMemoryViewComputationCache() {
   }
-  
-  public MapBackedInMemoryViewComputationCache(MapBackedInMemoryViewComputationCache existing) {
+
+  public MapBackedInMemoryViewComputationCache(final MapBackedInMemoryViewComputationCache existing) {
     ArgumentChecker.notNull(existing, "existing to be cloned");
     _sharedValues.putAll(existing._sharedValues);
     _privateValues.putAll(existing._privateValues);
   }
-  
+
   /**
    * Remove all current elements in the underlying maps.
    */
@@ -83,7 +83,7 @@ public class MapBackedInMemoryViewComputationCache extends AbstractViewComputati
   }
 
   @Override
-  public Object getValue(ValueSpecification specification) {
+  public Object getValue(final ValueSpecification specification) {
     ArgumentChecker.notNull(specification, "specification");
     Object result = _sharedValues.get(specification);
     if (result == null) {
@@ -93,19 +93,19 @@ public class MapBackedInMemoryViewComputationCache extends AbstractViewComputati
   }
 
   @Override
-  public void putSharedValue(ComputedValue value) {
+  public void putSharedValue(final ComputedValue value) {
     ArgumentChecker.notNull(value, "value");
     _sharedValues.put(value.getSpecification(), value.getValue());
   }
 
   @Override
-  public void putPrivateValue(ComputedValue value) {
+  public void putPrivateValue(final ComputedValue value) {
     ArgumentChecker.notNull(value, "value");
     _privateValues.put(value.getSpecification(), value.getValue());
   }
 
   @Override
-  public Integer estimateValueSize(ComputedValue value) {
+  public Integer estimateValueSize(final ComputedValue value) {
     return null;
   }
 

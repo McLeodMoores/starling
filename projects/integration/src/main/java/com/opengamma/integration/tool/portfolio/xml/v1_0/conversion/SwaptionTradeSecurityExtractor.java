@@ -31,20 +31,20 @@ public class SwaptionTradeSecurityExtractor extends TradeSecurityExtractor<Swapt
    *
    * @param trade the trade to perform extraction on
    */
-  public SwaptionTradeSecurityExtractor(SwaptionTrade trade) {
+  public SwaptionTradeSecurityExtractor(final SwaptionTrade trade) {
     super(trade);
   }
 
   //-------------------------------------------------------------------------
   @Override
   public ManageableSecurity[] extractSecurities() {
-    SwaptionTrade trade = getTrade();
-    SwapTrade swapTrade = trade.getUnderlyingSwapTrade();
-    ManageableSecurity underlying = swapTrade.getSecurityExtractor().extractSecurities()[0];
+    final SwaptionTrade trade = getTrade();
+    final SwapTrade swapTrade = trade.getUnderlyingSwapTrade();
+    final ManageableSecurity underlying = swapTrade.getSecurityExtractor().extractSecurities()[0];
 
-    ExternalId underlyingId = underlying.getExternalIdBundle().getExternalId(ExternalScheme.of("XML_LOADER"));
+    final ExternalId underlyingId = underlying.getExternalIdBundle().getExternalId(ExternalScheme.of("XML_LOADER"));
 
-    List<FixedLeg> fixedLegs = Lists.newArrayList(swapTrade.getFixedLegs());
+    final List<FixedLeg> fixedLegs = Lists.newArrayList(swapTrade.getFixedLegs());
 
     //note - these fields are resolved on a best effort basis
     //since they aren't actually used by the analytics.
@@ -57,9 +57,9 @@ public class SwaptionTradeSecurityExtractor extends TradeSecurityExtractor<Swapt
       isPayer = fixedLegs.get(0).getDirection() == Direction.PAY;
     }
 
-    Expiry expiry = new Expiry(convertLocalDate(trade.getExpirationDate()));
+    final Expiry expiry = new Expiry(convertLocalDate(trade.getExpirationDate()));
 
-    ManageableSecurity security = new SwaptionSecurity(
+    final ManageableSecurity security = new SwaptionSecurity(
         isPayer, underlyingId, trade.getBuySell() == BuySell.BUY,
         expiry, trade.getSettlementType() == SettlementType.CASH_SETTLED,
         currency,

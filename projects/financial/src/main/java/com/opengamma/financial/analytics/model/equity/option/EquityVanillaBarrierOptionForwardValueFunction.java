@@ -20,13 +20,12 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * The <b>forward</b> value of the index, i.e. the fair strike of a forward agreement paying the index value at maturity,
- * as seen from the selected market data. <p>
+ * The <b>forward</b> value of the index, i.e. the fair strike of a forward agreement paying the index value at maturity, as seen from the selected market data.
  */
 public class EquityVanillaBarrierOptionForwardValueFunction extends EquityVanillaBarrierOptionBlackFunction {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityVanillaBarrierOptionForwardValueFunction() {
     super(ValueRequirementNames.FORWARD);
@@ -38,9 +37,10 @@ public class EquityVanillaBarrierOptionForwardValueFunction extends EquityVanill
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
     final EquityIndexOptionBlackMethod model = EquityIndexOptionBlackMethod.getInstance();
     final EquityIndexOption firstDerivative = vanillaOptions.iterator().next();
-    return Collections.singleton(new ComputedValue(resultSpec, model.forwardIndexValue(firstDerivative, market))); // All derivatives in the set share their forward
+    return Collections.singleton(new ComputedValue(resultSpec, model.forwardIndexValue(firstDerivative, market))); // All derivatives in the set share their
+                                                                                                                   // forward
   }
 
-  //TODO this function return values unnecessary properties - the surface name, currency, interpolator and calculation method, which are used
+  // TODO this function return values unnecessary properties - the surface name, currency, interpolator and calculation method, which are used
   // to construct the market data bundle.
 }

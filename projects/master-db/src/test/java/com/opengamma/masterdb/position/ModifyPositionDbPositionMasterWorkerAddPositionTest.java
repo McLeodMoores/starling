@@ -37,12 +37,12 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends AbstractDbPositionMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyPositionDbPositionMasterWorkerAddPositionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyPositionDbPositionMasterWorkerAddPositionTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyPositionDbPositionMasterWorkerAddPositionTest(String databaseType, String databaseVersion) {
+  public ModifyPositionDbPositionMasterWorkerAddPositionTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -53,20 +53,20 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_noPosition() {
-    PositionDocument doc = new PositionDocument();
+    final PositionDocument doc = new PositionDocument();
     _posMaster.add(doc);
   }
 
   @Test
   public void test_add_add() {
-    Instant now = Instant.now(_posMaster.getClock());
-    
-    ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
-    PositionDocument doc = new PositionDocument();
+    final Instant now = Instant.now(_posMaster.getClock());
+
+    final ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
+    final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
-    PositionDocument test = _posMaster.add(doc);
-    
-    UniqueId uniqueId = test.getUniqueId();
+    final PositionDocument test = _posMaster.add(doc);
+
+    final UniqueId uniqueId = test.getUniqueId();
     assertNotNull(uniqueId);
     assertEquals("DbPos", uniqueId.getScheme());
     assertTrue(uniqueId.isVersioned());
@@ -76,29 +76,29 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
     assertEquals(null, test.getVersionToInstant());
     assertEquals(now, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePosition testPosition = test.getPosition();
+    final ManageablePosition testPosition = test.getPosition();
     assertNotNull(testPosition);
     assertEquals(uniqueId, testPosition.getUniqueId());
     assertEquals(BigDecimal.TEN, testPosition.getQuantity());
-    ExternalIdBundle secKey = testPosition.getSecurityLink().getExternalId();
+    final ExternalIdBundle secKey = testPosition.getSecurityLink().getExternalId();
     assertEquals(1, secKey.size());
     assertTrue(secKey.getExternalIds().contains(ExternalId.of("A", "B")));
   }
 
   @Test
   public void test_addWithOneTrade_add() {
-    LocalDate tradeDate = _now.toLocalDate();
-    OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
-    
-    ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
+    final LocalDate tradeDate = _now.toLocalDate();
+    final OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
+
+    final ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
     position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV")));
-    
-    PositionDocument doc = new PositionDocument();
+
+    final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
-    PositionDocument test = _posMaster.add(doc);
-    
-    Instant now = Instant.now(_posMaster.getClock());
-    UniqueId uniqueId = test.getUniqueId();
+    final PositionDocument test = _posMaster.add(doc);
+
+    final Instant now = Instant.now(_posMaster.getClock());
+    final UniqueId uniqueId = test.getUniqueId();
     assertNotNull(uniqueId);
     assertEquals("DbPos", uniqueId.getScheme());
     assertTrue(uniqueId.isVersioned());
@@ -108,17 +108,17 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
     assertEquals(null, test.getVersionToInstant());
     assertEquals(now, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePosition testPosition = test.getPosition();
+    final ManageablePosition testPosition = test.getPosition();
     assertNotNull(testPosition);
     assertEquals(uniqueId, testPosition.getUniqueId());
     assertEquals(BigDecimal.TEN, testPosition.getQuantity());
-    ExternalIdBundle secKey = testPosition.getSecurityLink().getExternalId();
+    final ExternalIdBundle secKey = testPosition.getSecurityLink().getExternalId();
     assertEquals(1, secKey.size());
     assertTrue(secKey.getExternalIds().contains(ExternalId.of("A", "B")));
-    
+
     assertNotNull(testPosition.getTrades());
     assertEquals(1, testPosition.getTrades().size());
-    ManageableTrade testTrade = testPosition.getTrades().get(0);
+    final ManageableTrade testTrade = testPosition.getTrades().get(0);
     assertNotNull(testTrade);
     assertEquals(BigDecimal.TEN, testTrade.getQuantity());
     assertEquals(tradeDate, testTrade.getTradeDate());
@@ -129,24 +129,24 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
 
   @Test
   public void test_addWithOnePremiumTrade_add() {
-    
-    LocalDate tradeDate = _now.toLocalDate();
-    OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
-    
-    ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
-    ManageableTrade trade = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
+
+    final LocalDate tradeDate = _now.toLocalDate();
+    final OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
+
+    final ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
+    final ManageableTrade trade = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
     trade.setPremium(1000000.00);
     trade.setPremiumCurrency(Currency.USD);
     trade.setPremiumDate(tradeDate.plusDays(1));
     trade.setPremiumTime(tradeTime);
     position.getTrades().add(trade);
-    
-    PositionDocument doc = new PositionDocument();
+
+    final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
-    PositionDocument test = _posMaster.add(doc);
-    
-    Instant now = Instant.now(_posMaster.getClock());
-    UniqueId uniqueId = test.getUniqueId();
+    final PositionDocument test = _posMaster.add(doc);
+
+    final Instant now = Instant.now(_posMaster.getClock());
+    final UniqueId uniqueId = test.getUniqueId();
     assertNotNull(uniqueId);
     assertEquals("DbPos", uniqueId.getScheme());
     assertTrue(uniqueId.isVersioned());
@@ -156,17 +156,17 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
     assertEquals(null, test.getVersionToInstant());
     assertEquals(now, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePosition testPosition = test.getPosition();
+    final ManageablePosition testPosition = test.getPosition();
     assertNotNull(testPosition);
     assertEquals(uniqueId, testPosition.getUniqueId());
     assertEquals(BigDecimal.TEN, testPosition.getQuantity());
-    ExternalIdBundle secKey = testPosition.getSecurityLink().getExternalId();
+    final ExternalIdBundle secKey = testPosition.getSecurityLink().getExternalId();
     assertEquals(1, secKey.size());
     assertTrue(secKey.getExternalIds().contains(ExternalId.of("A", "B")));
-    
+
     assertNotNull(testPosition.getTrades());
     assertEquals(1, testPosition.getTrades().size());
-    ManageableTrade testTrade = testPosition.getTrades().get(0);
+    final ManageableTrade testTrade = testPosition.getTrades().get(0);
     assertNotNull(testTrade);
     assertEquals(BigDecimal.TEN, testTrade.getQuantity());
     assertEquals(tradeDate, testTrade.getTradeDate());
@@ -181,47 +181,47 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
 
   @Test
   public void test_addWithOnePremiumTrade_addThenGet() {
-    ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
-    
-    LocalDate tradeDate = _now.toLocalDate();
-    OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
-    
-    ManageableTrade trade = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
+    final ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
+
+    final LocalDate tradeDate = _now.toLocalDate();
+    final OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
+
+    final ManageableTrade trade = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
     trade.setPremium(1000000.00);
     trade.setPremiumCurrency(Currency.USD);
     trade.setPremiumDate(tradeDate.plusDays(1));
     trade.setPremiumTime(tradeTime);
-    
+
     position.getTrades().add(trade);
-    
-    PositionDocument doc = new PositionDocument();
+
+    final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
-    PositionDocument added = _posMaster.add(doc);
+    final PositionDocument added = _posMaster.add(doc);
     assertNotNull(added);
     assertNotNull(added.getUniqueId());
-    
-    PositionDocument fromDb = _posMaster.get(added.getUniqueId());
+
+    final PositionDocument fromDb = _posMaster.get(added.getUniqueId());
     assertNotNull(fromDb);
     assertNotNull(fromDb.getUniqueId());
-        
+
     assertEquals(added, fromDb);
   }
 
   @Test
   public void test_addWithTwoTrades_add() {
-    Instant now = Instant.now(_posMaster.getClock());
-    
-    OffsetDateTime offsetDateTime = OffsetDateTime.now();
-    
-    ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
+    final Instant now = Instant.now(_posMaster.getClock());
+
+    final OffsetDateTime offsetDateTime = OffsetDateTime.now();
+
+    final ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
     position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "C"), offsetDateTime.toLocalDate(), offsetDateTime.minusSeconds(600).toOffsetTime(), ExternalId.of("CPS", "CPV")));
     position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "D"), offsetDateTime.toLocalDate(), offsetDateTime.minusSeconds(500).toOffsetTime(), ExternalId.of("CPS", "CPV")));
-    
-    PositionDocument doc = new PositionDocument();
+
+    final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
-    PositionDocument test = _posMaster.add(doc);
-    
-    UniqueId portfolioId = test.getUniqueId();
+    final PositionDocument test = _posMaster.add(doc);
+
+    final UniqueId portfolioId = test.getUniqueId();
     assertNotNull(portfolioId);
     assertEquals("DbPos", portfolioId.getScheme());
     assertTrue(portfolioId.isVersioned());
@@ -231,19 +231,19 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
     assertEquals(null, test.getVersionToInstant());
     assertEquals(now, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePosition testPosition = test.getPosition();
+    final ManageablePosition testPosition = test.getPosition();
     assertNotNull(testPosition);
     assertEquals(portfolioId, testPosition.getUniqueId());
     assertEquals(BigDecimal.TEN, testPosition.getQuantity());
-    ExternalIdBundle secKey = testPosition.getSecurityLink().getExternalId();
+    final ExternalIdBundle secKey = testPosition.getSecurityLink().getExternalId();
     assertEquals(1, secKey.size());
     assertTrue(secKey.getExternalIds().contains(ExternalId.of("A", "B")));
-    
+
     assertNotNull(testPosition.getTrades());
     assertTrue(testPosition.getTrades().size() == 2);
-    for (ManageableTrade testTrade : testPosition.getTrades()) {
+    for (final ManageableTrade testTrade : testPosition.getTrades()) {
       assertNotNull(testTrade);
-      UniqueId tradeId = testTrade.getUniqueId();
+      final UniqueId tradeId = testTrade.getUniqueId();
       assertNotNull(tradeId);
       assertEquals("DbPos", portfolioId.getScheme());
       assertTrue(portfolioId.isVersioned());
@@ -254,119 +254,119 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
 
   @Test
   public void test_add_addThenGet() {
-    ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
-    PositionDocument doc = new PositionDocument();
+    final ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
+    final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
-    PositionDocument added = _posMaster.add(doc);
+    final PositionDocument added = _posMaster.add(doc);
     assertNotNull(added);
     assertNotNull(added.getUniqueId());
-    
-    PositionDocument fromDb = _posMaster.get(added.getUniqueId());
+
+    final PositionDocument fromDb = _posMaster.get(added.getUniqueId());
     assertNotNull(fromDb);
     assertNotNull(fromDb.getUniqueId());
-    
+
     assertEquals(added, fromDb);
   }
 
   @Test
   public void test_addWithTradesAndAttributes_addThenGet() {
-    ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
+    final ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
     position.addAttribute("PA1", "A");
     position.addAttribute("PA2", "B");
-    
-    LocalDate tradeDate = _now.toLocalDate();
-    OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
-    ManageableTrade trade1 = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
+
+    final LocalDate tradeDate = _now.toLocalDate();
+    final OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
+    final ManageableTrade trade1 = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
     trade1.addAttribute("TA11", "C");
     trade1.addAttribute("TA12", "D");
     trade1.addAttribute("TA13", "E");
     position.getTrades().add(trade1);
-    
-    ManageableTrade trade2 = new ManageableTrade(BigDecimal.ONE, ExternalId.of("C", "D"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
+
+    final ManageableTrade trade2 = new ManageableTrade(BigDecimal.ONE, ExternalId.of("C", "D"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
     trade2.addAttribute("TA21", "F");
     trade2.addAttribute("TA22", "G");
     trade2.addAttribute("TA23", "H");
     trade2.addAttribute("TA24", "I");
     position.getTrades().add(trade2);
-    
-    PositionDocument doc = new PositionDocument();
+
+    final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
-    PositionDocument added = _posMaster.add(doc);
+    final PositionDocument added = _posMaster.add(doc);
     assertNotNull(added);
     assertNotNull(added.getUniqueId());
-    
-    PositionDocument fromDb = _posMaster.get(added.getUniqueId());
+
+    final PositionDocument fromDb = _posMaster.get(added.getUniqueId());
     assertNotNull(fromDb);
     assertNotNull(fromDb.getUniqueId());
-    
+
     assertEquals(added, fromDb);
   }
 
   @Test
   public void test_addWithOneTrade_addThenGet() {
-    ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
-    
-    LocalDate tradeDate = _now.toLocalDate();
-    OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
-    
-    ManageableTrade trade = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
+    final ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
+
+    final LocalDate tradeDate = _now.toLocalDate();
+    final OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
+
+    final ManageableTrade trade = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
     trade.setProviderId(ExternalId.of("TRD", "123"));
     position.getTrades().add(trade);
-    
-    PositionDocument doc = new PositionDocument();
+
+    final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
-    PositionDocument added = _posMaster.add(doc);
+    final PositionDocument added = _posMaster.add(doc);
     assertNotNull(added);
     assertNotNull(added.getUniqueId());
-    
-    PositionDocument fromDb = _posMaster.get(added.getUniqueId());
+
+    final PositionDocument fromDb = _posMaster.get(added.getUniqueId());
     assertNotNull(fromDb);
     assertNotNull(fromDb.getUniqueId());
-    
+
     assertEquals(added, fromDb);
   }
 
   @Test
   public void test_addWithTwoTrades_addThenGet() {
-    ManageablePosition position = new ManageablePosition(BigDecimal.valueOf(20), ExternalId.of("A", "B"));
-    
-    OffsetDateTime offsetDateTime = OffsetDateTime.now();
-    
+    final ManageablePosition position = new ManageablePosition(BigDecimal.valueOf(20), ExternalId.of("A", "B"));
+
+    final OffsetDateTime offsetDateTime = OffsetDateTime.now();
+
     position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), offsetDateTime.toLocalDate(), offsetDateTime.minusSeconds(600).toOffsetTime(), ExternalId.of("CPS", "CPV")));
     position.getTrades().add(new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "C"), offsetDateTime.toLocalDate(), offsetDateTime.minusSeconds(500).toOffsetTime(), ExternalId.of("CPS", "CPV")));
-    
-    PositionDocument doc = new PositionDocument();
+
+    final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
-    PositionDocument added = _posMaster.add(doc);
+    final PositionDocument added = _posMaster.add(doc);
     assertNotNull(added);
     assertNotNull(added.getUniqueId());
-    
-    PositionDocument fromDb = _posMaster.get(added.getUniqueId());
+
+    final PositionDocument fromDb = _posMaster.get(added.getUniqueId());
     assertNotNull(fromDb);
     assertNotNull(fromDb.getUniqueId());
-    
+
     assertEquals(added, fromDb);
   }
 
   @Test
   public void test_addTradeDeal_add() {
-    Instant now = Instant.now(_posMaster.getClock());
-    
-    ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
-        
-    LocalDate tradeDate = _now.toLocalDate();
-    OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
-    ManageableTrade trade = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
+    final Instant now = Instant.now(_posMaster.getClock());
+
+    final ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
+
+    final LocalDate tradeDate = _now.toLocalDate();
+    final OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
+    final ManageableTrade trade = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
     trade.addAttribute("TA1", "C");
     trade.addAttribute("TA2", "D");
     trade.setDeal(new MockDeal("propOne", "propTwo"));
     position.getTrades().add(trade);
-    
-    PositionDocument doc = new PositionDocument();
+
+    final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
-    PositionDocument test = _posMaster.add(doc);
-    
-    UniqueId uniqueId = test.getUniqueId();
+    final PositionDocument test = _posMaster.add(doc);
+
+    final UniqueId uniqueId = test.getUniqueId();
     assertNotNull(uniqueId);
     assertEquals("DbPos", uniqueId.getScheme());
     assertTrue(uniqueId.isVersioned());
@@ -376,17 +376,17 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
     assertEquals(null, test.getVersionToInstant());
     assertEquals(now, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageablePosition testPosition = test.getPosition();
+    final ManageablePosition testPosition = test.getPosition();
     assertNotNull(testPosition);
     assertEquals(uniqueId, testPosition.getUniqueId());
     assertEquals(BigDecimal.TEN, testPosition.getQuantity());
-    ExternalIdBundle secKey = testPosition.getSecurityLink().getExternalId();
+    final ExternalIdBundle secKey = testPosition.getSecurityLink().getExternalId();
     assertEquals(1, secKey.size());
     assertTrue(secKey.getExternalIds().contains(ExternalId.of("A", "B")));
-    
+
     assertNotNull(testPosition.getTrades());
     assertEquals(1, testPosition.getTrades().size());
-    ManageableTrade testTrade = testPosition.getTrades().get(0);
+    final ManageableTrade testTrade = testPosition.getTrades().get(0);
     assertNotNull(testTrade);
     assertEquals(BigDecimal.TEN, testTrade.getQuantity());
     assertEquals(tradeDate, testTrade.getTradeDate());
@@ -397,90 +397,90 @@ public class ModifyPositionDbPositionMasterWorkerAddPositionTest extends Abstrac
 
   @Test
   public void test_addTradeDeal_addThenGet() {
-    ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
-    
-    LocalDate tradeDate = _now.toLocalDate();
-    OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
-    ManageableTrade trade = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
+    final ManageablePosition position = new ManageablePosition(BigDecimal.TEN, ExternalId.of("A", "B"));
+
+    final LocalDate tradeDate = _now.toLocalDate();
+    final OffsetTime tradeTime = _now.toOffsetTime().minusSeconds(500);
+    final ManageableTrade trade = new ManageableTrade(BigDecimal.TEN, ExternalId.of("A", "B"), tradeDate, tradeTime, ExternalId.of("CPS", "CPV"));
     trade.addAttribute("TA1", "C");
     trade.addAttribute("TA2", "D");
 //    trade.setDeal(new MockDeal("propOne", "propTwo"));  // TODO: test deal persistence
     position.getTrades().add(trade);
-    
-    PositionDocument doc = new PositionDocument();
+
+    final PositionDocument doc = new PositionDocument();
     doc.setPosition(position);
-    PositionDocument added = _posMaster.add(doc);
+    final PositionDocument added = _posMaster.add(doc);
     assertNotNull(added);
     assertNotNull(added.getUniqueId());
-    
-    PositionDocument fromDb = _posMaster.get(added.getUniqueId());
+
+    final PositionDocument fromDb = _posMaster.get(added.getUniqueId());
     assertNotNull(fromDb);
     assertNotNull(fromDb.getUniqueId());
-    
+
     assertEquals(added, fromDb);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addWithMissingQuantityProperty() {
-    ManageablePosition position = new ManageablePosition();
-    PositionDocument doc = new PositionDocument(position);
+    final ManageablePosition position = new ManageablePosition();
+    final PositionDocument doc = new PositionDocument(position);
     _posMaster.add(doc);
   }
 
   @Test
   public void test_add_addWithMinimalProperties() {
-    ManageablePosition position = new ManageablePosition();
+    final ManageablePosition position = new ManageablePosition();
     position.setQuantity(BigDecimal.ONE);
-    PositionDocument doc = new PositionDocument(position);
+    final PositionDocument doc = new PositionDocument(position);
     _posMaster.add(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addTradeWithMissingTradeDateProperty() {
-    ManageablePosition position = new ManageablePosition();
+    final ManageablePosition position = new ManageablePosition();
     position.setQuantity(BigDecimal.ONE);
-    ManageableTrade trade = new ManageableTrade();
+    final ManageableTrade trade = new ManageableTrade();
     trade.setCounterpartyExternalId(ExternalId.of("ABC", "DEF"));
     trade.setQuantity(BigDecimal.ONE);
     position.addTrade(trade);
-    PositionDocument doc = new PositionDocument(position);
+    final PositionDocument doc = new PositionDocument(position);
     _posMaster.add(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addTradeWithMissingCounterpartyExternalIdProperty() {
-    ManageablePosition position = new ManageablePosition();
+    final ManageablePosition position = new ManageablePosition();
     position.setQuantity(BigDecimal.ONE);
-    ManageableTrade trade = new ManageableTrade();
+    final ManageableTrade trade = new ManageableTrade();
     trade.setTradeDate(_now.toLocalDate());
     trade.setQuantity(BigDecimal.ONE);
     position.addTrade(trade);
-    PositionDocument doc = new PositionDocument(position);
+    final PositionDocument doc = new PositionDocument(position);
     _posMaster.add(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addTradeWithMissingQuantityProperty() {
-    ManageablePosition position = new ManageablePosition();
+    final ManageablePosition position = new ManageablePosition();
     position.setQuantity(BigDecimal.ONE);
-    ManageableTrade trade = new ManageableTrade();
+    final ManageableTrade trade = new ManageableTrade();
     trade.setTradeDate(_now.toLocalDate());
     trade.setCounterpartyExternalId(ExternalId.of("ABC", "DEF"));
     position.addTrade(trade);
-    PositionDocument doc = new PositionDocument(position);
+    final PositionDocument doc = new PositionDocument(position);
     _posMaster.add(doc);
   }
 
   @Test
   public void test_add_addTradeWithMinimalProperties() {
-    ManageablePosition position = new ManageablePosition();
+    final ManageablePosition position = new ManageablePosition();
     position.setQuantity(BigDecimal.ONE);
-    ManageableTrade trade = new ManageableTrade();
+    final ManageableTrade trade = new ManageableTrade();
     trade.setTradeDate(_now.toLocalDate());
     trade.setCounterpartyExternalId(ExternalId.of("ABC", "DEF"));
     trade.setQuantity(BigDecimal.ONE);
     position.addTrade(trade);
-    PositionDocument doc = new PositionDocument(position);
+    final PositionDocument doc = new PositionDocument(position);
     _posMaster.add(doc);
   }
 

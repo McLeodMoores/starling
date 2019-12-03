@@ -5,8 +5,6 @@
  */
 package com.opengamma.engine.depgraph;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,7 +31,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.MemoryUtils;
-import com.opengamma.engine.depgraph.impl.DependencyNodeFunctionImpl;
 import com.opengamma.engine.depgraph.impl.DependencyNodeImpl;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.MarketDataAliasingFunction;
@@ -46,31 +43,36 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
+
 /**
  * Handles callback notifications of terminal values to populate a graph set.
  */
 /* package */class GetTerminalValuesCallback implements ResolvedValueCallback {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(GetTerminalValuesCallback.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetTerminalValuesCallback.class);
 
   private static final int MAX_DATA_PER_DIGEST = 4;
 
-  private static final Set<String> INTRINSICS = ImmutableSet.of(MarketDataAliasingFunction.UNIQUE_ID, MarketDataSourcingFunction.UNIQUE_ID, StructureManipulationFunction.UNIQUE_ID);
+  private static final Set<String> INTRINSICS = ImmutableSet.of(MarketDataAliasingFunction.UNIQUE_ID, MarketDataSourcingFunction.UNIQUE_ID,
+      StructureManipulationFunction.UNIQUE_ID);
 
   private static class PerFunctionNodeInfo {
 
     /**
      * All nodes using this function, indexed by target specification.
      */
-    private final Map<ComputationTargetSpecification, Set<DependencyNode>> _target2nodes = new HashMap<ComputationTargetSpecification, Set<DependencyNode>>();
+    private final Map<ComputationTargetSpecification, Set<DependencyNode>> _target2nodes = new HashMap<>();
 
     /**
-     * All targets that a {@link ComputationTargetCollapser} can apply to, with its checking group. Any targets in the same group have already been mutually compared, and cannot be collapsed.
+     * All targets that a {@link ComputationTargetCollapser} can apply to, with its checking group. Any targets in the same group have already been mutually
+     * compared, and cannot be collapsed.
      */
     private Map<ComputationTargetSpecification, Object> _target2collapseGroup;
 
     /**
-     * All targets that a {@link ComputationTargetCollapser} can apply to, indexed by the checking group. Any targets in the same group have already been mutually compared, and cannot be collapsed.
+     * All targets that a {@link ComputationTargetCollapser} can apply to, indexed by the checking group. Any targets in the same group have already been
+     * mutually compared, and cannot be collapsed.
      */
     private Map<Object, Collection<ComputationTargetSpecification>> _collapseGroup2targets;
 
@@ -81,9 +83,9 @@ import com.opengamma.util.tuple.Pairs;
 
     public void storeForCollapse(final ComputationTargetSpecification targetSpecification) {
       if (_target2collapseGroup == null) {
-        _target2collapseGroup = new HashMap<ComputationTargetSpecification, Object>();
-        _collapseGroup2targets = new HashMap<Object, Collection<ComputationTargetSpecification>>();
-        _collapse = new LinkedTransferQueue<Pair<ComputationTargetSpecification, ComputationTargetSpecification>>();
+        _target2collapseGroup = new HashMap<>();
+        _collapseGroup2targets = new HashMap<>();
+        _collapse = new LinkedTransferQueue<>();
       }
       if (!_target2collapseGroup.containsKey(targetSpecification)) {
         final Object group = new Object();
@@ -95,55 +97,55 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Buffer of resolved value specifications. For any entries in here, all input values have been previously resolved and are in this buffer or the partially constructed graph. Information here gets
-   * used to construct dependency graph fragments whenever a terminal item can be resolved.
+   * Buffer of resolved value specifications. For any entries in here, all input values have been previously resolved and are in this buffer or the partially
+   * constructed graph. Information here gets used to construct dependency graph fragments whenever a terminal item can be resolved.
    */
-  private final ConcurrentMap<ValueSpecification, ResolvedValue> _resolvedBuffer = new ConcurrentHashMap<ValueSpecification, ResolvedValue>();
+  private final ConcurrentMap<ValueSpecification, ResolvedValue> _resolvedBuffer = new ConcurrentHashMap<>();
 
   /**
    * Index into the dependency graph nodes, keyed by their output specifications.
    */
-  private final Map<ValueSpecification, DependencyNode> _spec2Node = new ConcurrentHashMap<ValueSpecification, DependencyNode>();
+  private final Map<ValueSpecification, DependencyNode> _spec2Node = new ConcurrentHashMap<>();
 
   /**
-   * Index into collapsed nodes. Target collapses may be chained so it might be necessary for follow a number of steps through this structure to get from a resolved value specification to the one that
-   * should be used in the resulting graph.
+   * Index into collapsed nodes. Target collapses may be chained so it might be necessary for follow a number of steps through this structure to get from a
+   * resolved value specification to the one that should be used in the resulting graph.
    */
-  private final Map<ValueSpecification, ValueSpecification> _collapseChain = new HashMap<ValueSpecification, ValueSpecification>();
+  private final Map<ValueSpecification, ValueSpecification> _collapseChain = new HashMap<>();
 
   /**
-   * Value usage information, each value specification consumed by other nodes has an entry. Any value specifications not in this map or the terminal output set may be pruned prior to graph
-   * construction.
+   * Value usage information, each value specification consumed by other nodes has an entry. Any value specifications not in this map or the terminal output set
+   * may be pruned prior to graph construction.
    */
-  private final Map<ValueSpecification, Set<DependencyNode>> _spec2Usage = new HashMap<ValueSpecification, Set<DependencyNode>>();
+  private final Map<ValueSpecification, Set<DependencyNode>> _spec2Usage = new HashMap<>();
 
   /**
    * Index into the dependency graph nodes.
    */
-  private final Map<DependencyNodeFunction, PerFunctionNodeInfo> _func2nodeInfo = new Object2ObjectOpenCustomHashMap<DependencyNodeFunction, PerFunctionNodeInfo>(
-      DependencyNodeFunctionImpl.HASHING_STRATEGY);
+  private final Map<DependencyNodeFunction, PerFunctionNodeInfo> _func2nodeInfo = new Object2ObjectOpenCustomHashMap<>(
+      DependencyNodeFunction.HASHING_STRATEGY);
 
   /**
    * Terminal value resolutions, mapping the resolved value specifications back to the originally requested requested value requirements.
    */
-  private final Map<ValueSpecification, Collection<ValueRequirement>> _resolvedValues = new HashMap<ValueSpecification, Collection<ValueRequirement>>();
+  private final Map<ValueSpecification, Collection<ValueRequirement>> _resolvedValues = new HashMap<>();
 
   /**
-   * Queue of completed resolutions that have not been processed into the partial graph. Graph construction is single threaded, with this queue holding work items if other thread produce results while
-   * one is busy building the graph.
+   * Queue of completed resolutions that have not been processed into the partial graph. Graph construction is single threaded, with this queue holding work
+   * items if other thread produce results while one is busy building the graph.
    */
-  private final Queue<Pair<ValueRequirement, ResolvedValue>> _resolvedQueue = new LinkedTransferQueue<Pair<ValueRequirement, ResolvedValue>>();
+  private final Queue<Pair<ValueRequirement, ResolvedValue>> _resolvedQueue = new LinkedTransferQueue<>();
 
   /**
    * Index of functions which have an active collapse set.
    */
-  private final Set<DependencyNodeFunction> _collapsers = new HashSet<DependencyNodeFunction>();
+  private final Set<DependencyNodeFunction> _collapsers = new HashSet<>();
 
   /**
-   * Mutex for working on the resolved queue. Any thread can add to the queue, only the one that has claimed this mutex can process the elements from it and be sure of exclusive access to the other
-   * data structures.
+   * Mutex for working on the resolved queue. Any thread can add to the queue, only the one that has claimed this mutex can process the elements from it and be
+   * sure of exclusive access to the other data structures.
    */
-  private final AtomicReference<Thread> _singleton = new AtomicReference<Thread>();
+  private final AtomicReference<Thread> _singleton = new AtomicReference<>();
 
   /**
    * Optional listener to process failures.
@@ -161,7 +163,8 @@ import com.opengamma.util.tuple.Pairs;
   private TargetDigests _targetDigests;
 
   /**
-   * The current graph building context (the callback holds the write lock for the duration of other calls, so can set it here instead of passing it on the stack).
+   * The current graph building context (the callback holds the write lock for the duration of other calls, so can set it here instead of passing it on the
+   * stack).
    */
   private GraphBuildingContext _context;
 
@@ -171,19 +174,19 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * The target digest map which may be used to speed up selection choices instead of full back-tracking.
    * <p>
-   * The pair elements either contains the values, or arrays of the values. The first is either ValueProperties (or an array of them). The second is either DependencyNodeFunction (or an array of
-   * them).
+   * The pair elements either contains the values, or arrays of the values. The first is either ValueProperties (or an array of them). The second is either
+   * DependencyNodeFunction (or an array of them).
    */
-  private final ConcurrentMap<Object, ConcurrentMap<String, Pair<?, ?>>> _targetDigestInfo = new ConcurrentHashMap<Object, ConcurrentMap<String, Pair<?, ?>>>();
+  private final ConcurrentMap<Object, ConcurrentMap<String, Pair<?, ?>>> _targetDigestInfo = new ConcurrentHashMap<>();
 
-  public GetTerminalValuesCallback(final ResolutionFailureListener failureListener) {
+  GetTerminalValuesCallback(final ResolutionFailureListener failureListener) {
     _failureListener = failureListener;
     final ReadWriteLock rwl = new ReentrantReadWriteLock();
     _readLock = rwl.readLock();
     _writeLock = rwl.writeLock();
   }
 
-  public void setFailureListener(ResolutionFailureListener failureListener) {
+  public void setFailureListener(final ResolutionFailureListener failureListener) {
     _failureListener = failureListener;
   }
 
@@ -199,8 +202,10 @@ import com.opengamma.util.tuple.Pairs;
    * Looks up an existing production - for which all inputs are resolved - for a potential value specification.
    * <p>
    * The {@code specification} parameter must be normalized.
-   * 
-   * @param specification the potential specification, not null
+   *
+   * @param specification
+   *          the potential specification, not null
+   * @return the resolved value for the specification
    */
   public ResolvedValue getProduction(final ValueSpecification specification) {
     final ResolvedValue value = _resolvedBuffer.get(specification);
@@ -229,7 +234,7 @@ import com.opengamma.util.tuple.Pairs;
   private void storeResolution(final Object targetDigest, final ValueSpecification resolvedValue, final DependencyNodeFunction function) {
     ConcurrentMap<String, Pair<?, ?>> info = _targetDigestInfo.get(targetDigest);
     if (info == null) {
-      info = new ConcurrentHashMap<String, Pair<?, ?>>();
+      info = new ConcurrentHashMap<>();
       info.put(resolvedValue.getValueName(), Pairs.of(resolvedValue.getProperties(), function));
       final ConcurrentMap<String, Pair<?, ?>> existing = _targetDigestInfo.putIfAbsent(targetDigest, info);
       if (existing == null) {
@@ -264,7 +269,7 @@ import com.opengamma.util.tuple.Pairs;
         } else {
           // For small lengths, this is cheaper than set operations
           final ValueProperties[] oldProperties = (ValueProperties[]) propertiesObj;
-          for (ValueProperties properties : oldProperties) {
+          for (final ValueProperties properties : oldProperties) {
             // ValueProperties that are part of the ValueSpecifications that go into ResolvedValue are in a normalized form so we can do a cheap comparison
             if (resolvedProperties == properties) {
               return;
@@ -306,9 +311,8 @@ import com.opengamma.util.tuple.Pairs;
     final Map<String, Pair<?, ?>> info = _targetDigestInfo.get(targetDigest);
     if (info != null) {
       return info.get(valueName);
-    } else {
-      return null;
     }
+    return null;
   }
 
   public void declareProduction(final ResolvedValue resolvedValue) {
@@ -317,7 +321,7 @@ import com.opengamma.util.tuple.Pairs;
 
   @Override
   public void failed(final GraphBuildingContext context, final ValueRequirement value, final ResolutionFailure failure) {
-    s_logger.info("Couldn't resolve {}", value);
+    LOGGER.info("Couldn't resolve {}", value);
     if (failure != null) {
       final ResolutionFailure failureImpl = failure.checkFailure(value);
       if (_failureListener != null) {
@@ -325,7 +329,7 @@ import com.opengamma.util.tuple.Pairs;
       }
       context.exception(new UnsatisfiableDependencyGraphException(failureImpl));
     } else {
-      s_logger.warn("No failure state for {}", value);
+      LOGGER.warn("No failure state for {}", value);
       context.exception(new UnsatisfiableDependencyGraphException(value));
     }
   }
@@ -355,7 +359,7 @@ import com.opengamma.util.tuple.Pairs;
           final ValueSpecification input = node.getInputValue(i);
           Set<DependencyNode> usage = _spec2Usage.get(input);
           if (usage == null) {
-            usage = new HashSet<DependencyNode>();
+            usage = new HashSet<>();
             _spec2Usage.put(input, usage);
           }
           usage.add(node);
@@ -363,7 +367,7 @@ import com.opengamma.util.tuple.Pairs;
         getOrCreateNodes(node.getFunction(), node.getTarget()).add(node);
       }
       for (final Map.Entry<ValueSpecification, Set<ValueRequirement>> terminal : graph.getTerminalOutputs().entrySet()) {
-        _resolvedValues.put(terminal.getKey(), new ArrayList<ValueRequirement>(terminal.getValue()));
+        _resolvedValues.put(terminal.getKey(), new ArrayList<>(terminal.getValue()));
       }
     } finally {
       _writeLock.unlock();
@@ -373,8 +377,8 @@ import com.opengamma.util.tuple.Pairs;
   /**
    * Slave task for evaluating whether to collapse targets.
    * <p>
-   * Evaluating target collapses can be costly. Instances of this are posted to the worker threads to evaluate possible collapses outside of holding the main lock. The lock is then acquired in order
-   * to action the collapses found and possibly schedule any further ones.
+   * Evaluating target collapses can be costly. Instances of this are posted to the worker threads to evaluate possible collapses outside of holding the main
+   * lock. The lock is then acquired in order to action the collapses found and possibly schedule any further ones.
    */
   private class CollapseNodes implements ContextRunnable {
 
@@ -383,7 +387,7 @@ import com.opengamma.util.tuple.Pairs;
     private final ComputationTargetSpecification[] _a;
     private final ComputationTargetSpecification[] _b;
 
-    public CollapseNodes(DependencyNodeFunction function, final PerFunctionNodeInfo nodeInfo, final Collection<ComputationTargetSpecification> a,
+    CollapseNodes(final DependencyNodeFunction function, final PerFunctionNodeInfo nodeInfo, final Collection<ComputationTargetSpecification> a,
         final Collection<ComputationTargetSpecification> b) {
       _function = function;
       _nodeInfo = nodeInfo;
@@ -408,12 +412,12 @@ import com.opengamma.util.tuple.Pairs;
               // A and B merged into A
               _b[j--] = _b[--bLength];
               _nodeInfo._collapse.add(Pairs.of(b, a));
-              s_logger.debug("Merging {} into {}", b, a);
+              LOGGER.debug("Merging {} into {}", b, a);
             } else if (collapsed.equals(b)) {
               // A and B merged into B
               _a[i--] = _a[--aLength];
               _nodeInfo._collapse.add(Pairs.of(a, b));
-              s_logger.debug("Merging {} into {}", a, b);
+              LOGGER.debug("Merging {} into {}", a, b);
               break;
             } else {
               // A and B merged into new target
@@ -422,15 +426,15 @@ import com.opengamma.util.tuple.Pairs;
               // Note the new target will go into its own evaluation group when this is actioned; it will then be compared against the other targets
               _nodeInfo._collapse.add(Pairs.of(a, collapsed));
               _nodeInfo._collapse.add(Pairs.of(b, collapsed));
-              if (s_logger.isDebugEnabled()) {
-                s_logger.debug("Merging {} and {} into new node {}", new Object[] {a, b, collapsed });
+              if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Merging {} and {} into new node {}", new Object[] { a, b, collapsed });
               }
               break;
             }
           }
         }
       }
-      Collection<ComputationTargetSpecification> targets = new ArrayList<ComputationTargetSpecification>(aLength + bLength);
+      final Collection<ComputationTargetSpecification> targets = new ArrayList<>(aLength + bLength);
       for (int i = 0; i < aLength; i++) {
         targets.add(_a[i]);
       }
@@ -459,14 +463,15 @@ import com.opengamma.util.tuple.Pairs;
 
   // TODO: Multiple nodes for a single collapse applicable target should be collapsed, probably with a "collapse(function, a, a)" sanity check first
 
-  // Note: we're not adjusting the target digests during collapses; for the collapse to have made sense, the digests for each target should probably be the same.
+  // Note: we're not adjusting the target digests during collapses; for the collapse to have made sense, the digests for
+  // each target should probably be the same.
   // TODO: This might be a bad assumption
 
   private void scheduleCollapsers(final DependencyNodeFunction function, final PerFunctionNodeInfo nodeInfo) {
     // Action anything already found asynchronously
     Pair<ComputationTargetSpecification, ComputationTargetSpecification> collapse = nodeInfo._collapse.poll();
     while (collapse != null) {
-      s_logger.debug("Found collapse targets {}", collapse);
+      LOGGER.debug("Found collapse targets {}", collapse);
       nodeInfo._target2collapseGroup.remove(collapse.getFirst());
       final Set<DependencyNode> originalNodes = nodeInfo._target2nodes.remove(collapse.getFirst());
       final Set<DependencyNode> newNodes = getOrCreateNodes(function, collapse.getSecond());
@@ -474,8 +479,8 @@ import com.opengamma.util.tuple.Pairs;
       final Map<ValueSpecification, DependencyNode> newInputs;
       final Set<ValueSpecification> newOutputs;
       if (newNodes.isEmpty()) {
-        newInputs = new HashMap<ValueSpecification, DependencyNode>();
-        newOutputs = new HashSet<ValueSpecification>();
+        newInputs = new HashMap<>();
+        newOutputs = new HashSet<>();
       } else {
         // TODO: See comment above about whether multiple nodes for a single collapse applicable target should exist
         final DependencyNode oldCollapseNode = newNodes.iterator().next();
@@ -492,21 +497,21 @@ import com.opengamma.util.tuple.Pairs;
         newOutputs = DependencyNodeImpl.getOutputValues(oldCollapseNode);
         newNodes.remove(oldCollapseNode);
       }
-      final Map<ValueSpecification, ValueSpecification> replacementOutputs = new HashMap<ValueSpecification, ValueSpecification>();
-      for (DependencyNode originalNode : originalNodes) {
-        s_logger.debug("Applying collapse of {} into {}", originalNode, collapse.getSecond());
+      final Map<ValueSpecification, ValueSpecification> replacementOutputs = new HashMap<>();
+      for (final DependencyNode originalNode : originalNodes) {
+        LOGGER.debug("Applying collapse of {} into {}", originalNode, collapse.getSecond());
         int count = originalNode.getInputCount();
         for (int i = 0; i < count; i++) {
           final ValueSpecification input = originalNode.getInputValue(i);
-          s_logger.trace("Removing use of {} by {}", input, originalNode);
+          LOGGER.trace("Removing use of {} by {}", input, originalNode);
           newInputs.put(input, _spec2Node.get(input));
           final Set<DependencyNode> usage = _spec2Usage.get(input);
           if (usage == null) {
-            s_logger.error("Internal error: Input {} of {} not marked as in use", input, originalNode);
+            LOGGER.error("Internal error: Input {} of {} not marked as in use", input, originalNode);
           }
           usage.remove(originalNode);
           if (usage.isEmpty()) {
-            s_logger.trace("Removing last use of {}", input);
+            LOGGER.trace("Removing last use of {}", input);
             _spec2Usage.remove(input);
           }
         }
@@ -514,7 +519,8 @@ import com.opengamma.util.tuple.Pairs;
         for (int i = 0; i < count; i++) {
           final ValueSpecification originalOutput = originalNode.getOutputValue(i);
           _spec2Node.remove(originalOutput);
-          final ValueSpecification newOutput = MemoryUtils.instance(new ValueSpecification(originalOutput.getValueName(), collapse.getSecond(), originalOutput.getProperties()));
+          final ValueSpecification newOutput = MemoryUtils
+              .instance(new ValueSpecification(originalOutput.getValueName(), collapse.getSecond(), originalOutput.getProperties()));
           _collapseChain.put(originalOutput, newOutput);
           newOutputs.add(newOutput);
           replacementOutputs.put(originalOutput, newOutput);
@@ -527,7 +533,7 @@ import com.opengamma.util.tuple.Pairs;
         final ValueSpecification input = newCollapseNode.getInputValue(i);
         Set<DependencyNode> usage = _spec2Usage.get(input);
         if (usage == null) {
-          usage = new HashSet<DependencyNode>();
+          usage = new HashSet<>();
           _spec2Usage.put(input, usage);
         }
         usage.add(newCollapseNode);
@@ -548,19 +554,19 @@ import com.opengamma.util.tuple.Pairs;
         if (!nodeInfo._target2nodes.containsKey(target2collapseGroup.getKey())) {
           // Note: This happens because entries get written into the nodeInfo as soon as a target is requested. The target might not result in any
           // nodes being created because of an earlier substitution. This is a simple solution - an alternative and possible faster method is to not
-          // create the target2collapseGroup entry until a node is created. The alternative is harder to implement though! 
-          s_logger.debug("Found transient key {}", target2collapseGroup);
+          // create the target2collapseGroup entry until a node is created. The alternative is harder to implement though!
+          LOGGER.debug("Found transient key {}", target2collapseGroup);
           final Collection<ComputationTargetSpecification> targetSpecs = nodeInfo._collapseGroup2targets.get(target2collapseGroup.getValue());
           if (targetSpecs.size() == 1) {
             if (targetSpecs.contains(target2collapseGroup.getKey())) {
               nodeInfo._collapseGroup2targets.remove(target2collapseGroup.getValue());
               collapseGroups--;
             } else {
-              s_logger.error("Assertion error - transient singleton key {} not in reverse lookup table", target2collapseGroup.getKey());
+              LOGGER.error("Assertion error - transient singleton key {} not in reverse lookup table", target2collapseGroup.getKey());
             }
           } else {
             if (!targetSpecs.remove(target2collapseGroup.getKey())) {
-              s_logger.error("Assertion error - transient key {} not in reverse lookup table", target2collapseGroup.getKey());
+              LOGGER.error("Assertion error - transient key {} not in reverse lookup table", target2collapseGroup.getKey());
             }
           }
           itrTarget2CollapseGroup.remove();
@@ -594,12 +600,16 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Determines nodes for each of the resolved value's inputs and producing the resulting node to be used. If there is an existing node (already updated with respect to its outputs) that can be used
-   * by appending to its input set then is used as a reference.
-   * 
-   * @param resolvedValue the function application to create the node for, not null
-   * @param downstream the value specifications that will be generated by possible consumers of this node - used to detect loops in the resolved value structures. Null is treated as an empty set.
-   * @param existingNode an existing function application node that is correct with respect to its outputs - the result node should be this with additional inputs appended
+   * Determines nodes for each of the resolved value's inputs and producing the resulting node to be used. If there is an existing node (already updated with
+   * respect to its outputs) that can be used by appending to its input set then is used as a reference.
+   *
+   * @param resolvedValue
+   *          the function application to create the node for, not null
+   * @param downstream
+   *          the value specifications that will be generated by possible consumers of this node - used to detect loops in the resolved value structures. Null
+   *          is treated as an empty set.
+   * @param existingNode
+   *          an existing function application node that is correct with respect to its outputs - the result node should be this with additional inputs appended
    * @return the node for the graph, or null if there is a problem such as an unresolved input or loop
    */
   private DependencyNode updateOrCreateNode(final ResolvedValue resolvedValue, final Set<ValueSpecification> downstream, DependencyNode existingNode) {
@@ -615,24 +625,25 @@ import com.opengamma.util.tuple.Pairs;
         DependencyNode inputNode;
         inputNode = _spec2Node.get(input);
         if (inputNode != null) {
-          s_logger.debug("Found node {} for input {}", inputNode, input);
+          LOGGER.debug("Found node {} for input {}", inputNode, input);
           if (input.getTargetSpecification().equals(inputNode.getTarget())) {
             inputValues[i] = input;
           } else {
             // The node we connected to is a substitute following a target collapse; the original input value is now incorrect
-            final ValueSpecification substituteInput = MemoryUtils.instance(new ValueSpecification(input.getValueName(), inputNode.getTarget(), input.getProperties()));
+            final ValueSpecification substituteInput = MemoryUtils
+                .instance(new ValueSpecification(input.getValueName(), inputNode.getTarget(), input.getProperties()));
             assert inputNode.hasOutputValue(substituteInput);
             inputValues[i] = substituteInput;
           }
           inputNodes[i++] = inputNode;
         } else {
-          s_logger.debug("Finding node production for {}", input);
+          LOGGER.debug("Finding node production for {}", input);
           final ResolvedValue inputValue = _resolvedBuffer.get(input);
           if (inputValue != null) {
             if (downstreamCopy == null) {
-              downstreamCopy = new HashSet<ValueSpecification>(downstream);
+              downstreamCopy = new HashSet<>(downstream);
               downstreamCopy.add(resolvedValue.getValueSpecification());
-              s_logger.debug("Downstream = {}", downstreamCopy);
+              LOGGER.debug("Downstream = {}", downstreamCopy);
             }
             inputNode = getOrCreateNode(inputValue, downstreamCopy);
             if (inputNode != null) {
@@ -640,7 +651,7 @@ import com.opengamma.util.tuple.Pairs;
                 final ValueSpecification reducedInput = inputNode.getOutputValue(j);
                 if (reducedInput.getValueName() == input.getValueName()) {
                   if (input.getProperties().isSatisfiedBy(reducedInput.getProperties())) {
-                    s_logger.debug("Reducing {} to {}", input, reducedInput);
+                    LOGGER.debug("Reducing {} to {}", input, reducedInput);
                     input = reducedInput;
                     break;
                   }
@@ -649,23 +660,23 @@ import com.opengamma.util.tuple.Pairs;
               inputValues[i] = input;
               inputNodes[i++] = inputNode;
             } else {
-              s_logger.warn("No node production for {}", inputValue);
+              LOGGER.warn("No node production for {}", inputValue);
               return null;
             }
           } else {
             final ValueSpecification collapsed = _collapseChain.get(input);
             if (collapsed == null) {
-              s_logger.warn("No registered production for {}", input);
+              LOGGER.warn("No registered production for {}", input);
               return null;
             }
-            s_logger.debug("{} already collapsed into {}", input, collapsed);
+            LOGGER.debug("{} already collapsed into {}", input, collapsed);
             input = collapsed;
             if (primaryInputs.contains(input)) {
               // The collapsed value is already in the input set, skip
               break;
             }
             if (auxInputs == null) {
-              auxInputs = new HashSet<ValueSpecification>();
+              auxInputs = new HashSet<>();
             }
             if (!auxInputs.add(input)) {
               // We've already considered the collapsed value, skip
@@ -696,13 +707,14 @@ import com.opengamma.util.tuple.Pairs;
       if (i != outputValues.length) {
         outputValues = Arrays.copyOf(outputValues, i);
       }
-      final DependencyNode node = DependencyNodeImpl.of(resolvedValue.getFunction(), resolvedValue.getValueSpecification().getTargetSpecification(), outputValues, inputValues, inputNodes);
-      s_logger.debug("Adding {} to graph set", node);
+      final DependencyNode node = DependencyNodeImpl.of(resolvedValue.getFunction(), resolvedValue.getValueSpecification().getTargetSpecification(),
+          outputValues, inputValues, inputNodes);
+      LOGGER.debug("Adding {} to graph set", node);
       for (i = 0; i < inputCount; i++) {
         final ValueSpecification input = inputValues[i];
         Set<DependencyNode> usage = _spec2Usage.get(input);
         if (usage == null) {
-          usage = new HashSet<DependencyNode>();
+          usage = new HashSet<>();
           _spec2Usage.put(input, usage);
         }
         usage.add(node);
@@ -716,30 +728,32 @@ import com.opengamma.util.tuple.Pairs;
         }
       }
       return node;
-    } else {
-      // [PLAT-6321] The node passed in might no longer be valid. Resolution of the inputs might have caused outputs to be rewritten that will have
-      // 'updated' the logical node we're using as a reference point. The _spec2Node map will have been updated as part of that, and the reference
-      // outputs can't have changed, so the lookup below works.
-      existingNode = _spec2Node.get(existingNode.getOutputValue(0));
-      final DependencyNode newNode = DependencyNodeImpl.addInputs(existingNode, inputValues, inputNodes);
-      if (newNode != existingNode) {
-        inputCount = newNode.getInputCount();
-        for (i = 0; i < inputCount; i++) {
-          final ValueSpecification input = newNode.getInputValue(i);
-          Set<DependencyNode> usage = _spec2Usage.get(input);
-          if (usage == null) {
-            usage = new HashSet<DependencyNode>();
-            _spec2Usage.put(input, usage);
-          }
-          usage.remove(existingNode);
-          usage.add(newNode);
-        }
-      }
-      return newNode;
     }
+    // [PLAT-6321] The node passed in might no longer be valid. Resolution of
+    // the inputs might have caused outputs to be rewritten that will have
+    // 'updated' the logical node we're using as a reference point. The
+    // _spec2Node map will have been updated as part of that, and the reference
+    // outputs can't have changed, so the lookup below works.
+    existingNode = _spec2Node.get(existingNode.getOutputValue(0));
+    final DependencyNode newNode = DependencyNodeImpl.addInputs(existingNode, inputValues, inputNodes);
+    if (newNode != existingNode) {
+      inputCount = newNode.getInputCount();
+      for (i = 0; i < inputCount; i++) {
+        final ValueSpecification input = newNode.getInputValue(i);
+        Set<DependencyNode> usage = _spec2Usage.get(input);
+        if (usage == null) {
+          usage = new HashSet<>();
+          _spec2Usage.put(input, usage);
+        }
+        usage.remove(existingNode);
+        usage.add(newNode);
+      }
+    }
+    return newNode;
   }
 
-  private DependencyNode getOrCreateNode(final ResolvedValue resolvedValue, final Set<ValueSpecification> downstream, final DependencyNode existingNode, final Set<DependencyNode> nodes) {
+  private DependencyNode getOrCreateNode(final ResolvedValue resolvedValue, final Set<ValueSpecification> downstream,
+      final DependencyNode existingNode, final Set<DependencyNode> nodes) {
     final DependencyNode newNode = updateOrCreateNode(resolvedValue, downstream, existingNode);
     if (newNode == null) {
       return null;
@@ -756,12 +770,13 @@ import com.opengamma.util.tuple.Pairs;
     return newNode;
   }
 
-  private Set<DependencyNode> getOrCreateNodes(final DependencyNodeFunction function, final PerFunctionNodeInfo nodeInfo, final ComputationTargetSpecification targetSpecification) {
+  private Set<DependencyNode> getOrCreateNodes(final DependencyNodeFunction function, final PerFunctionNodeInfo nodeInfo,
+      final ComputationTargetSpecification targetSpecification) {
     Set<DependencyNode> nodes = nodeInfo._target2nodes.get(targetSpecification);
     if (nodes == null) {
-      nodes = new HashSet<DependencyNode>();
+      nodes = new HashSet<>();
       nodeInfo._target2nodes.put(targetSpecification, nodes);
-      if ((_computationTargetCollapser != null) && _computationTargetCollapser.canApplyTo(targetSpecification)) {
+      if (_computationTargetCollapser != null && _computationTargetCollapser.canApplyTo(targetSpecification)) {
         nodeInfo.storeForCollapse(targetSpecification);
         _collapsers.add(function);
       }
@@ -779,22 +794,22 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   private void applyReplacementOutputs(final Map<ValueSpecification, ValueSpecification> replacementOutputs, final DependencyNode newNode) {
-    for (Map.Entry<ValueSpecification, ValueSpecification> replacement : replacementOutputs.entrySet()) {
+    for (final Map.Entry<ValueSpecification, ValueSpecification> replacement : replacementOutputs.entrySet()) {
       final ValueSpecification oldValue = replacement.getKey();
       final ValueSpecification newValue = replacement.getValue();
-      Set<DependencyNode> oldUsage = _spec2Usage.remove(oldValue);
+      final Set<DependencyNode> oldUsage = _spec2Usage.remove(oldValue);
       if (oldUsage != null) {
         Set<DependencyNode> newUsage = _spec2Usage.get(newValue);
         if (newUsage == null) {
-          newUsage = new HashSet<DependencyNode>();
+          newUsage = new HashSet<>();
           _spec2Usage.put(newValue, newUsage);
         }
-        for (DependencyNode consumer : oldUsage) {
+        for (final DependencyNode consumer : oldUsage) {
           final DependencyNode newConsumer = DependencyNodeImpl.replaceInput(consumer, oldValue, newValue, newNode);
           int count = newConsumer.getInputCount();
           for (int i = 0; i < count; i++) {
             final ValueSpecification input = newConsumer.getInputValue(i);
-            Set<DependencyNode> consumerUsage = _spec2Usage.get(input);
+            final Set<DependencyNode> consumerUsage = _spec2Usage.get(input);
             consumerUsage.remove(consumer);
             consumerUsage.add(newConsumer);
           }
@@ -821,18 +836,18 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   private DependencyNode findExistingNode(final Set<DependencyNode> nodes, final ResolvedValue resolvedValue) {
-    nextNode: for (final DependencyNode node : nodes) { //CSIGNORE
+    nextNode: for (final DependencyNode node : nodes) { // CSIGNORE
       // TODO: Measure, and if necessary improve, the efficiency of this operation
       if (INTRINSICS.contains(node.getFunction().getFunctionId())) {
         continue;
       }
-      s_logger.debug("Considering {} for {}", node, resolvedValue);
+      LOGGER.debug("Considering {} for {}", node, resolvedValue);
       // Update the output values for the node with the union. The input values will be dealt with by the caller.
       Map<ValueSpecification, ValueSpecification> replacementOutputs = null;
       List<ValueSpecification> additionalOutputs = null;
       final ValueSpecification[] outputValues = DependencyNodeImpl.getOutputValueArray(node);
       int outputValuesLength = outputValues.length;
-      resolvedOutput: for (final ValueSpecification output : resolvedValue.getFunctionOutputs()) { //CSIGNORE
+      resolvedOutput: for (final ValueSpecification output : resolvedValue.getFunctionOutputs()) { // CSIGNORE
         final String outputName = output.getValueName();
         final ValueProperties outputProperties = output.getProperties();
         boolean mismatch = false;
@@ -843,7 +858,8 @@ import com.opengamma.util.tuple.Pairs;
               // Found suitable match; check whether it needs rewriting
               final ValueProperties composedProperties = outputValue.getProperties().compose(outputProperties);
               if (!composedProperties.equals(outputValue.getProperties())) {
-                final ValueSpecification newOutputValue = MemoryUtils.instance(new ValueSpecification(outputValue.getValueName(), outputValue.getTargetSpecification(), composedProperties));
+                final ValueSpecification newOutputValue = MemoryUtils
+                    .instance(new ValueSpecification(outputValue.getValueName(), outputValue.getTargetSpecification(), composedProperties));
                 if (replacementOutputs == null) {
                   replacementOutputs = Maps.newHashMapWithExpectedSize(outputValues.length);
                 }
@@ -853,10 +869,9 @@ import com.opengamma.util.tuple.Pairs;
                 outputValues[outputValuesLength] = outputValue;
               }
               continue resolvedOutput;
-            } else {
-              // Found a mismatching value that can't be composed; reject the whole lot unless there was an exact match
-              mismatch = true;
             }
+            // Found a mismatching value that can't be composed; reject the whole lot unless there was an exact match
+            mismatch = true;
           }
         }
         if (mismatch) {
@@ -867,16 +882,16 @@ import com.opengamma.util.tuple.Pairs;
         // previously producing and should be able to produce once its got any extra inputs it needs.
         if (_spec2Node.containsKey(output)) {
           // Another node already produces this; if this was the primary output we'd have found it in getOrCreateNode before this was called
-          s_logger.debug("Discarding output {} - already produced elsewhere in the graph", output);
+          LOGGER.debug("Discarding output {} - already produced elsewhere in the graph", output);
           // TODO: Would it be better to do this check at the start of the loop?
         } else {
           if (additionalOutputs == null) {
-            additionalOutputs = new ArrayList<ValueSpecification>();
+            additionalOutputs = new ArrayList<>();
           }
           additionalOutputs.add(output);
         }
       }
-      if ((additionalOutputs == null) && (replacementOutputs == null)) {
+      if (additionalOutputs == null && replacementOutputs == null) {
         // No change to the node's outputs
         return node;
       }
@@ -891,7 +906,7 @@ import com.opengamma.util.tuple.Pairs;
         // bother allocating a new array.
         newOutputs = outputValues;
       }
-      for (ValueSpecification originalOutput : outputValues) {
+      for (final ValueSpecification originalOutput : outputValues) {
         if (replacementOutputs != null) {
           final ValueSpecification replacement = replacementOutputs.get(originalOutput);
           if (replacement != null) {
@@ -911,10 +926,10 @@ import com.opengamma.util.tuple.Pairs;
         newOutputs = Arrays.copyOf(newOutputs, i);
       }
       final DependencyNode newNode = DependencyNodeImpl.withOutputs(node, newOutputs);
-      for (ValueSpecification output : newOutputs) {
+      for (final ValueSpecification output : newOutputs) {
         _spec2Node.put(output, newNode);
       }
-      int count = newNode.getInputCount();
+      final int count = newNode.getInputCount();
       for (i = 0; i < count; i++) {
         final ValueSpecification input = newNode.getInputValue(i);
         final Set<DependencyNode> usage = _spec2Usage.get(input);
@@ -932,14 +947,14 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   private DependencyNode getOrCreateNode(final ResolvedValue resolvedValue, final Set<ValueSpecification> downstream) {
-    s_logger.debug("Resolved {}", resolvedValue.getValueSpecification());
+    LOGGER.debug("Resolved {}", resolvedValue.getValueSpecification());
     if (downstream.contains(resolvedValue.getValueSpecification())) {
-      s_logger.debug("Already have downstream production of {} in {}", resolvedValue.getValueSpecification(), downstream);
+      LOGGER.debug("Already have downstream production of {} in {}", resolvedValue.getValueSpecification(), downstream);
       return null;
     }
     final DependencyNode existingNode = _spec2Node.get(resolvedValue.getValueSpecification());
     if (existingNode != null) {
-      s_logger.debug("Existing production of {} found in graph set", resolvedValue);
+      LOGGER.debug("Existing production of {} found in graph set", resolvedValue);
       return existingNode;
     }
     final Set<DependencyNode> nodes = getOrCreateNodes(resolvedValue.getFunction(), resolvedValue.getValueSpecification().getTargetSpecification());
@@ -947,13 +962,15 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Reports a successful resolution of a top level requirement. The production of linked {@link DependencyNode} instances to form the final graph is single threaded. The resolution is added to a
-   * queue of successful resolutions. If this is the only (or first) thread to report resolutions then this will work to drain the queue and produce nodes for the graph based on the resolved value
-   * cache in the building context. If other threads report resolutions while this is happening they are added to the queue and those threads return immediately.
+   * Reports a successful resolution of a top level requirement. The production of linked {@link DependencyNode} instances to form the final graph is single
+   * threaded. The resolution is added to a queue of successful resolutions. If this is the only (or first) thread to report resolutions then this will work to
+   * drain the queue and produce nodes for the graph based on the resolved value cache in the building context. If other threads report resolutions while this
+   * is happening they are added to the queue and those threads return immediately.
    */
   @Override
-  public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
-    s_logger.info("Resolved {} to {}", valueRequirement, resolvedValue.getValueSpecification());
+  public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
+      final ResolutionPump pump) {
+    LOGGER.info("Resolved {} to {}", valueRequirement, resolvedValue.getValueSpecification());
     if (pump != null) {
       context.close(pump);
     }
@@ -964,7 +981,7 @@ import com.opengamma.util.tuple.Pairs;
         _context = context;
         Pair<ValueRequirement, ResolvedValue> resolved = _resolvedQueue.poll();
         while (resolved != null) {
-          final DependencyNode node = getOrCreateNode(resolved.getSecond(), Collections.<ValueSpecification>emptySet());
+          final DependencyNode node = getOrCreateNode(resolved.getSecond(), Collections.<ValueSpecification> emptySet());
           if (node != null) {
             ValueSpecification outputValue = resolved.getSecond().getValueSpecification();
             if (!outputValue.getTargetSpecification().equals(node.getTarget())) {
@@ -973,12 +990,13 @@ import com.opengamma.util.tuple.Pairs;
             assert node.hasOutputValue(outputValue);
             Collection<ValueRequirement> requirements = _resolvedValues.get(outputValue);
             if (requirements == null) {
-              requirements = new ArrayList<ValueRequirement>();
+              requirements = new ArrayList<>();
               _resolvedValues.put(outputValue, requirements);
             }
             requirements.add(resolved.getFirst());
           } else {
-            s_logger.error("Resolved {} to {} but couldn't create one or more dependency node", resolved.getFirst(), resolved.getSecond().getValueSpecification());
+            LOGGER.error("Resolved {} to {} but couldn't create one or more dependency node", resolved.getFirst(),
+                resolved.getSecond().getValueSpecification());
           }
           resolved = _resolvedQueue.poll();
         }
@@ -1034,17 +1052,18 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Returns the root nodes that form the dependency graph build by calls to {@link #resolved}. It is only valid to call this when there are no pending resolutions - that is all calls to
-   * {@link #resolved} have returned. A copy of the internal structure is used so that it may be modified by the caller and this callback instance be used to process subsequent resolutions.
-   * 
+   * Returns the root nodes that form the dependency graph build by calls to {@link #resolved}. It is only valid to call this when there are no pending
+   * resolutions - that is all calls to {@link #resolved} have returned. A copy of the internal structure is used so that it may be modified by the caller and
+   * this callback instance be used to process subsequent resolutions.
+   *
    * @return the dependency graph root nodes and total number of nodes in the graph they imply, not null
    */
   public Pair<Collection<DependencyNode>, Integer> getGraphRootNodes() {
     _readLock.lock();
     try {
-      final Set<DependencyNode> roots = new HashSet<DependencyNode>();
-      Set<DependencyNode> nonRoots = new HashSet<DependencyNode>();
-      for (Map.Entry<ValueSpecification, DependencyNode> node : _spec2Node.entrySet()) {
+      final Set<DependencyNode> roots = new HashSet<>();
+      Set<DependencyNode> nonRoots = new HashSet<>();
+      for (final Map.Entry<ValueSpecification, DependencyNode> node : _spec2Node.entrySet()) {
         if (_spec2Usage.containsKey(node.getKey())) {
           if (nonRoots.add(node.getValue())) {
             roots.remove(node.getValue());
@@ -1055,11 +1074,11 @@ import com.opengamma.util.tuple.Pairs;
           }
         }
       }
-      int size = roots.size() + nonRoots.size();
+      final int size = roots.size() + nonRoots.size();
       nonRoots = null;
-      final Collection<DependencyNode> rootsFixed = new ArrayList<DependencyNode>(roots.size());
+      final Collection<DependencyNode> rootsFixed = new ArrayList<>(roots.size());
       final Map<ValueSpecification, DependencyNode> fixed = Maps.newHashMapWithExpectedSize(_spec2Node.size());
-      for (DependencyNode root : roots) {
+      for (final DependencyNode root : roots) {
         rootsFixed.add(getFixedNode(fixed, root));
       }
       return Pairs.of(rootsFixed, size);
@@ -1069,10 +1088,11 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   /**
-   * Returns the map of top level requirements requested of the graph builder to the specifications it produced that are in the dependency graph. Failed resolutions are not reported here. It is only
-   * valid to call this when there are no pending resolutions - that is all calls to {@link #resolved} have returned. A copy of the internal structure is used so that it may be modified by the caller
-   * and this callback instance be used to process subsequent resolutions.
-   * 
+   * Returns the map of top level requirements requested of the graph builder to the specifications it produced that are in the dependency graph. Failed
+   * resolutions are not reported here. It is only valid to call this when there are no pending resolutions - that is all calls to {@link #resolved} have
+   * returned. A copy of the internal structure is used so that it may be modified by the caller and this callback instance be used to process subsequent
+   * resolutions.
+   *
    * @return the map of resolutions, not null
    */
   public Map<ValueRequirement, ValueSpecification> getTerminalValues() {
@@ -1092,7 +1112,7 @@ import com.opengamma.util.tuple.Pairs;
 
   /**
    * Returns the inverse of the {@link #getTerminalValues} map, mapping the specifications to the value requirements that they satisfy.
-   * 
+   *
    * @return the map of resolutions, not null
    */
   public Map<ValueSpecification, Set<ValueRequirement>> getTerminalValuesBySpecification() {
@@ -1100,7 +1120,7 @@ import com.opengamma.util.tuple.Pairs;
     try {
       final Map<ValueSpecification, Set<ValueRequirement>> result = Maps.newHashMapWithExpectedSize(_resolvedValues.size());
       for (final Map.Entry<ValueSpecification, Collection<ValueRequirement>> resolvedValues : _resolvedValues.entrySet()) {
-        result.put(resolvedValues.getKey(), new HashSet<ValueRequirement>(resolvedValues.getValue()));
+        result.put(resolvedValues.getKey(), new HashSet<>(resolvedValues.getValue()));
       }
       return result;
     } finally {
@@ -1109,11 +1129,11 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   public void reportStateSize() {
-    if (!s_logger.isInfoEnabled()) {
+    if (!LOGGER.isInfoEnabled()) {
       return;
     }
-    s_logger.info("Graph = {} nodes for {} terminal outputs", _spec2Node.size(), _resolvedValues.size());
-    s_logger.info("Resolved buffer = {}, resolved queue = {}", _resolvedBuffer.size(), _resolvedQueue.size());
+    LOGGER.info("Graph = {} nodes for {} terminal outputs", _spec2Node.size(), _resolvedValues.size());
+    LOGGER.info("Resolved buffer = {}, resolved queue = {}", _resolvedBuffer.size(), _resolvedQueue.size());
   }
 
 }

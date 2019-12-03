@@ -22,7 +22,9 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Specific calibration engine for the Hull-White one factor model with cap/floor.
- * @param <DATA_TYPE>  The type of the data for the base calculator.
+ *
+ * @param <DATA_TYPE>
+ *          The type of the data for the base calculator.
  */
 public class SuccessiveRootFinderG2ppCalibrationEngine<DATA_TYPE extends ParameterProviderInterface> extends CalibrationEngineWithCalculators<DATA_TYPE> {
 
@@ -38,7 +40,9 @@ public class SuccessiveRootFinderG2ppCalibrationEngine<DATA_TYPE extends Paramet
 
   /**
    * Constructor of the calibration engine.
-   * @param calibrationObjective The calibration objective.
+   *
+   * @param calibrationObjective
+   *          The calibration objective.
    */
   public SuccessiveRootFinderG2ppCalibrationEngine(final SuccessiveRootFinderCalibrationObjectiveWithMultiCurves calibrationObjective) {
     super(calibrationObjective.getFXMatrix(), calibrationObjective.getCcy());
@@ -47,12 +51,15 @@ public class SuccessiveRootFinderG2ppCalibrationEngine<DATA_TYPE extends Paramet
 
   /**
    * Add an instrument to the basket and the associated calculator.
-   * @param instrument An interest rate derivative.
-   * @param calculator The calculator.
+   *
+   * @param instrument
+   *          An interest rate derivative.
+   * @param calculator
+   *          The calculator.
    */
   @Override
   public void addInstrument(final InstrumentDerivative instrument, final InstrumentDerivativeVisitor<DATA_TYPE, MultipleCurrencyAmount> calculator) {
-    ArgumentChecker.isTrue((instrument instanceof CapFloorIbor) || (instrument instanceof SwaptionPhysicalFixedIbor), "Instrument should be cap or swaption.");
+    ArgumentChecker.isTrue(instrument instanceof CapFloorIbor || instrument instanceof SwaptionPhysicalFixedIbor, "Instrument should be cap or swaption.");
     getBasket().add(instrument);
     getMethod().add(calculator);
     getCalibrationPrices().add(0.0);
@@ -67,8 +74,11 @@ public class SuccessiveRootFinderG2ppCalibrationEngine<DATA_TYPE extends Paramet
 
   /**
    * Add an array of instruments to the basket and the associated calculator. The same method is used for all the instruments.
-   * @param instrument An interest rate derivative array.
-   * @param calculator The calculator.
+   *
+   * @param instrument
+   *          An interest rate derivative array.
+   * @param calculator
+   *          The calculator.
    */
   @Override
   public void addInstrument(final InstrumentDerivative[] instrument, final InstrumentDerivativeVisitor<DATA_TYPE, MultipleCurrencyAmount> calculator) {
@@ -86,13 +96,15 @@ public class SuccessiveRootFinderG2ppCalibrationEngine<DATA_TYPE extends Paramet
     computeCalibrationPrice(data);
     _calibrationObjective.setMulticurves(data.getMulticurveProvider());
     final int nbInstruments = getBasket().size();
-    final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(_calibrationObjective.getFunctionValueAccuracy(), _calibrationObjective.getVariableAbsoluteAccuracy());
+    final RidderSingleRootFinder rootFinder = new RidderSingleRootFinder(_calibrationObjective.getFunctionValueAccuracy(),
+        _calibrationObjective.getVariableAbsoluteAccuracy());
     final BracketRoot bracketer = new BracketRoot();
     for (int loopins = 0; loopins < nbInstruments; loopins++) {
       final InstrumentDerivative instrument = getBasket().get(loopins);
       _calibrationObjective.setInstrument(instrument);
       _calibrationObjective.setPrice(getCalibrationPrices().get(loopins));
-      final double[] range = bracketer.getBracketedPoints(_calibrationObjective, _calibrationObjective.getMinimumParameter(), _calibrationObjective.getMaximumParameter());
+      final double[] range = bracketer.getBracketedPoints(_calibrationObjective, _calibrationObjective.getMinimumParameter(),
+          _calibrationObjective.getMaximumParameter());
       rootFinder.getRoot(_calibrationObjective, range[0], range[1]);
       if (loopins < nbInstruments - 1) {
         ((SuccessiveRootFinderG2ppCalibrationObjective) _calibrationObjective).setNextCalibrationTime(_calibrationTimes.get(loopins));

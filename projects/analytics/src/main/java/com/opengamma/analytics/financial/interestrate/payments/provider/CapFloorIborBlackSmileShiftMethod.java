@@ -25,8 +25,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- *  Class used to compute the price and sensitivity of a Ibor cap/floor with Black model.
- *  No convexity adjustment is done for payment at non-standard dates.
+ * Class used to compute the price and sensitivity of a Ibor cap/floor with Black model. No convexity adjustment is done for payment at non-standard dates.
  */
 public final class CapFloorIborBlackSmileShiftMethod {
 
@@ -43,6 +42,7 @@ public final class CapFloorIborBlackSmileShiftMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CapFloorIborBlackSmileShiftMethod getInstance() {
@@ -56,14 +56,18 @@ public final class CapFloorIborBlackSmileShiftMethod {
 
   /**
    * Computes the present value.
-   * @param cap The caplet/floorlet.
-   * @param black The Black implied volatility and multi-curve provider.
+   *
+   * @param cap
+   *          The caplet/floorlet.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CapFloorIbor cap, final BlackSmileShiftCapProviderInterface black) {
     ArgumentChecker.notNull(cap, "The cap/floor shoud not be null");
     ArgumentChecker.notNull(black, "Black provider");
-    final double forward = black.getMulticurveProvider().getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
+    final double forward = black.getMulticurveProvider().getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(),
+        cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
     final double df = black.getMulticurveProvider().getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     final double volatility = black.getBlackShiftParameters().getVolatility(cap.getFixingTime(), cap.getStrike());
     final double shift = black.getBlackShiftParameters().getShift(cap.getFixingTime());
@@ -75,17 +79,21 @@ public final class CapFloorIborBlackSmileShiftMethod {
   }
 
   /**
-   * Computes the present value rate sensitivity to rates of a cap/floor in the Black model.
-   * No smile impact is taken into account; equivalent to a sticky strike smile description.
-   * @param cap The caplet/floorlet.
-   * @param black The Black implied volatility and multi-curve provider.
+   * Computes the present value rate sensitivity to rates of a cap/floor in the Black model. No smile impact is taken into account; equivalent to a sticky
+   * strike smile description.
+   *
+   * @param cap
+   *          The caplet/floorlet.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value curve sensitivity.
    */
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final CapFloorIbor cap, final BlackSmileShiftCapProviderInterface black) {
     ArgumentChecker.notNull(cap, "The cap/floor shoud not be null");
     ArgumentChecker.notNull(black, "Black provider");
     final MulticurveProviderInterface multicurve = black.getMulticurveProvider();
-    final double forward = multicurve.getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor());
+    final double forward = multicurve.getSimplyCompoundForwardRate(cap.getIndex(), cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(),
+        cap.getFixingAccrualFactor());
     final double df = multicurve.getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     final MulticurveSensitivity forwardDr = MulticurveSensitivity.ofForward(multicurve.getName(cap.getIndex()),
         new SimplyCompoundedForwardSensitivity(cap.getFixingPeriodStartTime(), cap.getFixingPeriodEndTime(), cap.getFixingAccrualFactor(), 1.0));

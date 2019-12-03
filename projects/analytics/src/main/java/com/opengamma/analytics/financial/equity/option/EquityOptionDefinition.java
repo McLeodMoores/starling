@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.option;
@@ -22,50 +22,57 @@ import com.opengamma.util.money.Currency;
  * The definition is responsible for constructing the 'Derivative' for pricing visitors.
  */
 public class EquityOptionDefinition implements InstrumentDefinition<EquityOption> {
-  /** 
-   * Call if true, Put if false 
+  /**
+   * Call if true, Put if false
    */
   private final boolean _isCall;
-  /** 
+  /**
    * Strike
    */
   private final double _strike;
-  /** 
-   * Currency 
+  /**
+   * Currency
    */
   private final Currency _currency;
-  /** 
-   * Exercise type, European or American 
+  /**
+   * Exercise type, European or American
    */
   private final ExerciseDecisionType _exerciseType;
-  /** 
+  /**
    * Expiry, date and time of last, or only, exercise decision
    */
   private final ZonedDateTime _expiryDT;
-  /** 
-   * Cash settlement occurs on this LocalDate 
+  /**
+   * Cash settlement occurs on this LocalDate
    */
   private final LocalDate _settlementDate;
-  /** 
-   * Point value, scaling of standard contract. 
-   * Unit notional. A unit move in price is multiplied by this to give P&L of a single contract 
+  /**
+   * Point value, scaling of standard contract. Unit notional. A unit move in price is multiplied by this to give P&amp;L of a single contract
    */
   private final double _pointValue;
-  /** 
-   * The settlement type of the option - cash or physical 
+  /**
+   * The settlement type of the option - cash or physical
    */
   private final SettlementType _settlementType;
 
   /**
-   * @param isCall Call if true, Put if false 
-   * @param strike Strike, not negative or zero.
-   * @param currency Settlement amount currency, not null
-   * @param exerciseType Exercise type, not null
-   * @param expiryDate Expiry of last, or only, exercise decision, not null
-   * @param settlementDate Date for settlement, not null
-   * @param pointValue Unit notional. A unit move in price is multiplied by this to give P&L of a single contract. A negative amount
-   * represents a short position. Not zero.
-   * @param settlementType Whether the option is physically or cash-settled, not null
+   * @param isCall
+   *          Call if true, Put if false
+   * @param strike
+   *          Strike, not negative or zero.
+   * @param currency
+   *          Settlement amount currency, not null
+   * @param exerciseType
+   *          Exercise type, not null
+   * @param expiryDate
+   *          Expiry of last, or only, exercise decision, not null
+   * @param settlementDate
+   *          Date for settlement, not null
+   * @param pointValue
+   *          Unit notional. A unit move in price is multiplied by this to give P&amp;L of a single contract. A negative amount represents a short position. Not
+   *          zero.
+   * @param settlementType
+   *          Whether the option is physically or cash-settled, not null
    */
   public EquityOptionDefinition(final boolean isCall, final double strike, final Currency currency, final ExerciseDecisionType exerciseType,
       final ZonedDateTime expiryDate, final LocalDate settlementDate, final double pointValue, final SettlementType settlementType) {
@@ -87,7 +94,7 @@ public class EquityOptionDefinition implements InstrumentDefinition<EquityOption
   }
 
   /**
-   * Is the option a call
+   * Is the option a call.
    * @return true if the option is a call
    */
   public boolean isCall() {
@@ -151,7 +158,7 @@ public class EquityOptionDefinition implements InstrumentDefinition<EquityOption
   }
 
   @Override
-  public EquityOption toDerivative(ZonedDateTime date, final String... yieldCurveNames) {
+  public EquityOption toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     return toDerivative(date);
   }
 
@@ -193,11 +200,11 @@ public class EquityOptionDefinition implements InstrumentDefinition<EquityOption
     result = prime * result + (_isCall ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_pointValue);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _settlementDate.hashCode();
     result = prime * result + _settlementType.hashCode();
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

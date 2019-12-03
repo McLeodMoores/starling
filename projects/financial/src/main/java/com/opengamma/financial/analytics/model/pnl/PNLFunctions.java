@@ -14,7 +14,8 @@ import org.springframework.beans.factory.InitializingBean;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculatorFactory;
 import com.opengamma.analytics.financial.schedule.TimeSeriesSamplingFunctionFactory;
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculatorFactory;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -38,22 +39,6 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
    */
   public static FunctionConfigurationSource instance() {
     return new PNLFunctions().getObjectCreating();
-  }
-
-  public static FunctionConfigurationSource deprecated() {
-    return new DeprecatedFunctions().getObjectCreating();
-  }
-
-  /**
-   * Function repository configuration source for the deprecated functions contained in this package.
-   */
-  public static class DeprecatedFunctions extends AbstractFunctionConfigurationBean {
-
-    @Override
-    protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-      functions.add(functionConfiguration(YieldCurveNodePnLFunctionDeprecated.class));
-    }
-
   }
 
   /**
@@ -191,8 +176,8 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
     }
 
-    private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<String, CurrencyInfo>();
-    private final Map<Pair<String, String>, CurrencyPairInfo> _perCurrencyPairInfo = new HashMap<Pair<String, String>, CurrencyPairInfo>();
+    private final Map<String, CurrencyInfo> _perCurrencyInfo = new HashMap<>();
+    private final Map<Pair<String, String>, CurrencyPairInfo> _perCurrencyPairInfo = new HashMap<>();
     private String _curveName;
     private String _payCurveName;
     private String _receiveCurveName;
@@ -206,9 +191,9 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
     private String _scheduleName = ScheduleCalculatorFactory.DAILY;
     private String _samplingCalculatorName = TimeSeriesSamplingFunctionFactory.PREVIOUS_AND_FIRST_VALUE_PADDING;
-    private String _interpolator = Interpolator1DFactory.DOUBLE_QUADRATIC;
-    private String _leftExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-    private String _rightExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+    private String _interpolator = DoubleQuadraticInterpolator1dAdapter.NAME;
+    private String _leftExtrapolator = LinearExtrapolator1dAdapter.NAME;
+    private String _rightExtrapolator = LinearExtrapolator1dAdapter.NAME;
 
     public void setPerCurrencyInfo(final Map<String, CurrencyInfo> perCurrencyInfo) {
       _perCurrencyInfo.clear();
@@ -278,7 +263,8 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      *
-     * @param samplingPeriodName  the sampling period name
+     * @param samplingPeriodName
+     *          the sampling period name
      * @deprecated use start and end instead
      */
     @Deprecated
@@ -289,7 +275,7 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     /**
      *
      * @return the sampling period name
-     * @deprecated  use start and end instead
+     * @deprecated use start and end instead
      */
     @Deprecated
     public String getSamplingPeriodName() {
@@ -366,28 +352,6 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
       super.afterPropertiesSet();
     }
 
-    protected void addBondFutureOptionBlackYieldCurveNodePnLDefaults(final List<FunctionConfiguration> functions) {
-      int i = 0;
-      for (final CurrencyInfo e : getPerCurrencyInfo().values()) {
-        if (e.getSurfaceName() != null) {
-          i++;
-        }
-      }
-      final String[] args = new String[3 + i * 3];
-      i = 0;
-      args[i++] = getSamplingPeriodName();
-      args[i++] = getScheduleName();
-      args[i++] = getSamplingCalculatorName();
-      for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-        if (e.getValue().getSurfaceName() != null) {
-          args[i++] = e.getKey();
-          args[i++] = e.getValue().getCurveConfiguration();
-          args[i++] = e.getValue().getSurfaceName();
-        }
-      }
-      functions.add(functionConfiguration(BondFutureOptionBlackYieldCurveNodePnLDefaults.class, args));
-    }
-
     protected void addCreditInstrumetCS01PnLDefaults(final List<FunctionConfiguration> functions) {
       final String[] args = new String[3];
       args[0] = getSamplingPeriodName();
@@ -411,17 +375,6 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
       functions.add(functionConfiguration(FXForwardPnLDefaults.class, args));
     }
 
-    protected void addFXOptionBlackPnLCurveDefaults(final List<FunctionConfiguration> functions) {
-      final String[] args = new String[getPerCurrencyInfo().size() * 3];
-      int i = 0;
-      for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-        args[i++] = e.getKey();
-        args[i++] = e.getValue().getCurveConfiguration();
-        args[i++] = e.getValue().getDiscountingCurve();
-      }
-      functions.add(functionConfiguration(FXOptionBlackPnLCurveDefaults.class, args));
-    }
-
     protected void addFXOptionBlackPnLSurfaceDefaults(final List<FunctionConfiguration> functions) {
       final String[] args = new String[3 + getPerCurrencyPairInfo().size() * 3];
       int i = 0;
@@ -434,28 +387,6 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
         args[i++] = e.getValue().getSurfaceName();
       }
       functions.add(functionConfiguration(FXOptionBlackPnLSurfaceDefaults.class, args));
-    }
-
-    protected void addInterestRateFutureOptionBlackYieldCurveNodePnLDefaults(final List<FunctionConfiguration> functions) {
-      int i = 0;
-      for (final CurrencyInfo e : getPerCurrencyInfo().values()) {
-        if (e.getSurfaceName() != null) {
-          i++;
-        }
-      }
-      final String[] args = new String[3 + i * 3];
-      i = 0;
-      args[i++] = getSamplingPeriodName();
-      args[i++] = getScheduleName();
-      args[i++] = getSamplingCalculatorName();
-      for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
-        if (e.getValue().getSurfaceName() != null) {
-          args[i++] = e.getKey();
-          args[i++] = e.getValue().getCurveConfiguration();
-          args[i++] = e.getValue().getSurfaceName();
-        }
-      }
-      functions.add(functionConfiguration(InterestRateFutureOptionBlackYieldCurveNodePnLDefaults.class, args));
     }
 
     protected void addInterestRateFutureYieldCurveNodePnLDefaults(final List<FunctionConfiguration> functions) {
@@ -510,25 +441,24 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       functions.add(functionConfiguration(EquityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName(),
           getReturnCalculatorName()));
+      functions.add(functionConfiguration(EquitySecurityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(),
+          getSamplingCalculatorName(), getReturnCalculatorName()));
       functions.add(functionConfiguration(FXOptionBlackPnLDefaults.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName()));
       functions.add(functionConfiguration(PositionPnLDefaults.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName()));
-      functions.add(functionConfiguration(SecurityPriceSeriesDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(),
-          getSamplingCalculatorName()));
+      functions.add(
+          functionConfiguration(SecurityPriceSeriesDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName()));
       if (getCurveName() != null) {
         functions.add(functionConfiguration(SimpleFuturePnLDefaultPropertiesFunction.class, getCurveName(), getSamplingPeriodName(), getScheduleName(),
             getSamplingCalculatorName()));
       }
-      if ((getPayCurveName() != null) && (getReceiveCurveName() != null)) {
-        functions.add(functionConfiguration(SimpleFXFuturePnLDefaultPropertiesFunction.class, getPayCurveName(), getReceiveCurveName(), getSamplingPeriodName(), getScheduleName(),
-            getSamplingCalculatorName()));
+      if (getPayCurveName() != null && getReceiveCurveName() != null) {
+        functions.add(functionConfiguration(SimpleFXFuturePnLDefaultPropertiesFunction.class, getPayCurveName(), getReceiveCurveName(), getSamplingPeriodName(),
+            getScheduleName(), getSamplingCalculatorName()));
       }
       functions.add(functionConfiguration(ValueGreekSensitivityPnLDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(),
           getSamplingCalculatorName(), getReturnCalculatorName()));
       if (!getPerCurrencyInfo().isEmpty()) {
-        addBondFutureOptionBlackYieldCurveNodePnLDefaults(functions);
         addFXForwardPnLDefaults(functions);
-        addFXOptionBlackPnLCurveDefaults(functions);
-        addInterestRateFutureOptionBlackYieldCurveNodePnLDefaults(functions);
         addInterestRateFutureYieldCurveNodePnLDefaults(functions);
         addSwaptionBlackYieldCurveNodePnLDefaults(functions);
         addYieldCurveNodePnLDefaults(functions);
@@ -543,26 +473,19 @@ public class PNLFunctions extends AbstractFunctionConfigurationBean {
 
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-    functions.add(functionConfiguration(BondFutureOptionBlackYieldCurveNodePnLFunction.class));
     functions.add(functionConfiguration(CreditDefaultSwapIndexCS01PnLFunction.class));
     functions.add(functionConfiguration(CreditDefaultSwapOptionCS01PnLFunction.class));
     functions.add(functionConfiguration(CreditInstrumentCS01PnLFunction.class));
     functions.add(functionConfiguration(EquityPnLFunction.class));
+    functions.add(functionConfiguration(EquitySecurityPnLFunction.class));
     functions.add(functionConfiguration(FXForwardCurrencyExposurePnLFunction.class));
     functions.add(functionConfiguration(FXForwardYieldCurvesPnLFunction.class));
-    functions.add(functionConfiguration(FXForwardYieldCurvePnLFunction.class));
-    functions.add(functionConfiguration(FXForwardYieldCurveNodePnLFunction.class));
-    functions.add(functionConfiguration(FXOptionBlackDeltaPnLFunction.class));
-    functions.add(functionConfiguration(FXOptionBlackVegaPnLFunction.class));
-    functions.add(functionConfiguration(InterestRateFutureOptionBlackYieldCurveNodePnLFunction.class));
-    functions.add(functionConfiguration(InterestRateFutureYieldCurveNodePnLFunction.class));
     functions.add(functionConfiguration(PortfolioExchangeTradedDailyPnLFunction.Impl.class));
     functions.add(functionConfiguration(PortfolioExchangeTradedPnLFunction.class));
     functions.add(functionConfiguration(PositionExchangeTradedPnLFunction.class));
     functions.add(functionConfiguration(PositionPnLFunction.class));
-    functions.add(functionConfiguration(SwaptionBlackYieldCurveNodePnLFunction.class));
-    functions.add(functionConfiguration(YieldCurveNodePnLFunction.class));
-    functions.add(functionConfiguration(AggregationDefaultPropertyFunction.class, ValueRequirementNames.DAILY_PNL, MissingInputsFunction.AGGREGATION_STYLE_FULL));
+    functions
+    .add(functionConfiguration(AggregationDefaultPropertyFunction.class, ValueRequirementNames.DAILY_PNL, MissingInputsFunction.AGGREGATION_STYLE_FULL));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.PNL_SERIES));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.YIELD_CURVE_PNL_SERIES));
     functions.add(functionConfiguration(PnLPeriodTranslationFunction.class, ValueRequirementNames.CURVE_PNL_SERIES));

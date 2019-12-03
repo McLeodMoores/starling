@@ -31,7 +31,7 @@ import com.opengamma.master.config.ConfigMasterUtils;
 import com.opengamma.scripts.Scriptable;
 
 /**
- * Example code to create the function configurations
+ * Example code to create the function configurations.
  * <p>
  */
 @Scriptable
@@ -49,17 +49,18 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
   private static final String CUBE = "CUBE_FUNCTIONS";
   private static final String TARGET = "TARGET_FUNCTIONS";
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
-   * @param args  the standard tool arguments, not null
+   * @param args
+   *          the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
     new ExampleFunctionConfigurationPopulator().invokeAndTerminate(args);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected void doRun() {
     storeFunctionDefinition(AGGREGATION, AggregationFunctions.instance());
@@ -72,23 +73,25 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
 
     final FunctionConfigurationDefinition financialFunc = new FunctionConfigurationDefinition(FINANCIAL,
         ImmutableList.of(AGGREGATION, ANALYTICS, CURRENCY, PROPERTY, TARGET, VALUE, VIEW),
-        Collections.<StaticFunctionConfiguration>emptyList(),
-        Collections.<ParameterizedFunctionConfiguration>emptyList());
+        Collections.<StaticFunctionConfiguration> emptyList(),
+        Collections.<ParameterizedFunctionConfiguration> emptyList());
     storeFunctionDefinition(financialFunc);
 
     storeFunctionDefinition(STANDARD, ExampleStandardFunctionConfiguration.instance());
 
     final FunctionConfigurationDefinition exampleFunc = new FunctionConfigurationDefinition(EXAMPLE,
         ImmutableList.of(FINANCIAL, STANDARD, CUBE),
-        Collections.<StaticFunctionConfiguration>emptyList(),
-        Collections.<ParameterizedFunctionConfiguration>emptyList());
+        Collections.<StaticFunctionConfiguration> emptyList(),
+        Collections.<ParameterizedFunctionConfiguration> emptyList());
     storeFunctionDefinition(exampleFunc);
 
   }
 
   /**
    * Stores a function configuration definition.
-   * @param definition The definition
+   * 
+   * @param definition
+   *          The definition
    */
   private void storeFunctionDefinition(final FunctionConfigurationDefinition definition) {
     final ConfigItem<FunctionConfigurationDefinition> config = ConfigItem.of(definition, definition.getName(), FunctionConfigurationDefinition.class);
@@ -97,8 +100,11 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
 
   /**
    * Stores a function definition by classifier name.
-   * @param name The classifier name
-   * @param funcConfigSource The function configuration source.
+   * 
+   * @param name
+   *          The classifier name
+   * @param funcConfigSource
+   *          The function configuration source.
    */
   private void storeFunctionDefinition(final String name, final FunctionConfigurationSource funcConfigSource) {
     final FunctionConfigurationDefinition definition = FunctionConfigurationDefinition.of(name, funcConfigSource);

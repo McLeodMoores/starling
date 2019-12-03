@@ -11,9 +11,10 @@ import com.opengamma.analytics.math.cube.Cube;
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- * Describes a partial differential for a function $V(t,x,y)$, with the initial condition $V(0,x,y) = g(x,y)$
- *  $\frac{\partial V}{\partial t} + a(t,x,y) \frac{\partial^2 V}{\partial x^2} + b(t,x,y) \frac{\partial V}{\partial x} + c(t,x,y)V 
- *  + d(t,x,y)\frac{\partial^2 V}{\partial y^2} + e(t,x,y) \frac{\partial^2 V}{\partial x \partial y} + f(t,x,y) \frac{\partial V}{\partial y}  = 0$
+ * Describes a partial differential for a function $V(t,x,y)$, with the initial condition $V(0,x,y) = g(x,y)$ $\frac{\partial V}{\partial t} + a(t,x,y)
+ * \frac{\partial^2 V}{\partial x^2} + b(t,x,y) \frac{\partial V}{\partial x} + c(t,x,y)V + d(t,x,y)\frac{\partial^2 V}{\partial y^2} + e(t,x,y)
+ * \frac{\partial^2 V}{\partial x \partial y} + f(t,x,y) \frac{\partial V}{\partial y} = 0$.
+ * 
  * @deprecated replace with a PDE2DDateBundle
  */
 @Deprecated

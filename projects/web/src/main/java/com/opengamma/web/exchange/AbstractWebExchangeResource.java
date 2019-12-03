@@ -18,18 +18,19 @@ public abstract class AbstractWebExchangeResource
     extends AbstractPerRequestWebResource<WebExchangeData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "exchanges/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "exchanges/json/";
 
   /**
    * Creates the resource.
-   * 
-   * @param exchangeMaster  the exchange master, not null
+   *
+   * @param exchangeMaster
+   *          the exchange master, not null
    */
   protected AbstractWebExchangeResource(final ExchangeMaster exchangeMaster) {
     super(new WebExchangeData());
@@ -39,22 +40,23 @@ public abstract class AbstractWebExchangeResource
 
   /**
    * Creates the resource.
-   * 
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractWebExchangeResource(final AbstractWebExchangeResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("uris", new WebExchangeUris(data()));
     return out;
   }

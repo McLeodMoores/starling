@@ -10,9 +10,11 @@ import com.opengamma.engine.value.ValueRequirementNames;
 
 /**
  *
+ * @deprecated Deprecated
  */
+@Deprecated
 public class FixedPayCashFlowFunction extends FixedCashFlowFunction {
-  
+
   public FixedPayCashFlowFunction() {
     super(ValueRequirementNames.FIXED_PAY_CASH_FLOWS, FixedPayCashFlowVisitor.getInstance());
   }

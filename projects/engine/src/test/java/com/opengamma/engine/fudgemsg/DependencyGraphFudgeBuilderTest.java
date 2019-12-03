@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -36,7 +36,7 @@ public class DependencyGraphFudgeBuilderTest extends AbstractFudgeBuilderTestCas
 
   ///
   // Creates a test graph:
-  // 
+  //
   //    N0 N1  N4
   //      \ | /  |
   //       N2   N3
@@ -46,8 +46,8 @@ public class DependencyGraphFudgeBuilderTest extends AbstractFudgeBuilderTestCas
     final NodeBuilder[] nodes = new NodeBuilder[5];
     for (int i = 0; i < nodes.length; i++) {
       final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(UniqueId.of("Test", Integer.toString(i)));
-      nodes[i] = builder.addNode(DependencyNodeFunctionImpl.of("Function" + (i % 2), (i == 3) ? new SimpleFunctionParameters(ImmutableMap.of("Foo", "Bar")) : EmptyFunctionParameters.INSTANCE),
-          targetSpec);
+      nodes[i] = builder.addNode(DependencyNodeFunctionImpl.of("Function" + i % 2, i == 3
+          ? new SimpleFunctionParameters(ImmutableMap.of("Foo", "Bar")) : EmptyFunctionParameters.INSTANCE), targetSpec);
     }
     nodes[0].addTerminalOutput("0x");
     nodes[1].addTerminalOutput("1x");

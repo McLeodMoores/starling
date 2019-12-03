@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -20,18 +20,18 @@ import com.opengamma.engine.value.ValueSpecification;
 
 /* package */final class FunctionApplicationWorker extends DirectResolvedValueProducer implements ResolvedValueCallback {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FunctionApplicationWorker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunctionApplicationWorker.class);
 
-  private Map<ValueRequirement, ValueSpecification> _inputs = new HashMap<ValueRequirement, ValueSpecification>();
-  private Map<ValueRequirement, Cancelable> _inputHandles = new HashMap<ValueRequirement, Cancelable>();
-  private Collection<ResolutionPump> _pumps = new ArrayList<ResolutionPump>();
+  private Map<ValueRequirement, ValueSpecification> _inputs = new HashMap<>();
+  private Map<ValueRequirement, Cancelable> _inputHandles = new HashMap<>();
+  private Collection<ResolutionPump> _pumps = new ArrayList<>();
   private int _pendingInputs;
   private int _validInputs;
   private boolean _invokingFunction;
   private boolean _deferredPump;
   private FunctionApplicationStep.PumpingState _taskState;
 
-  public FunctionApplicationWorker(final ValueRequirement valueRequirement) {
+  FunctionApplicationWorker(final ValueRequirement valueRequirement) {
     super(valueRequirement);
   }
 
@@ -42,13 +42,13 @@ import com.opengamma.engine.value.ValueSpecification;
     int refCount = 0;
     synchronized (this) {
       if (_invokingFunction) {
-        s_logger.debug("Deferring pump until after function invocation");
+        LOGGER.debug("Deferring pump until after function invocation");
         _deferredPump = true;
         return;
       }
       if (_pendingInputs < 1) {
-        if ((_pumps == null) || _pumps.isEmpty()) {
-          s_logger.debug("{} finished (state={})", this, _taskState);
+        if (_pumps == null || _pumps.isEmpty()) {
+          LOGGER.debug("{} finished (state={})", this, _taskState);
           finished = _taskState;
           _taskState = null;
           refCount = getRefCount();
@@ -65,17 +65,17 @@ import com.opengamma.engine.value.ValueSpecification;
       }
     }
     if (pumps != null) {
-      for (ResolutionPump pump : pumps) {
-        s_logger.debug("Pumping {} from {}", pump, this);
+      for (final ResolutionPump pump : pumps) {
+        LOGGER.debug("Pumping {} from {}", pump, this);
         context.pump(pump);
       }
     } else if (finished != null) {
-      s_logger.debug("Finished producing function applications from {}", this);
+      LOGGER.debug("Finished producing function applications from {}", this);
       // If the last result was already pushed then finished will have already been called
       if (!isFinished()) {
         finished(context);
       }
-      s_logger.debug("Calling finished on {} from {}", finished, this);
+      LOGGER.debug("Calling finished on {} from {}", finished, this);
       finished.finished(context, refCount);
     }
   }
@@ -101,14 +101,14 @@ import com.opengamma.engine.value.ValueSpecification;
       }
     }
     if (unsubscribes != null) {
-      for (Cancelable unsubscribe : unsubscribes) {
+      for (final Cancelable unsubscribe : unsubscribes) {
         if (unsubscribe != null) {
           unsubscribe.cancel(context);
         }
       }
     }
     if (pumps != null) {
-      for (ResolutionPump pump : pumps) {
+      for (final ResolutionPump pump : pumps) {
         context.close(pump);
       }
     }
@@ -116,15 +116,16 @@ import com.opengamma.engine.value.ValueSpecification;
 
   // Caller must hold the monitor
   private Map<ValueSpecification, ValueRequirement> createResolvedValuesMap() {
-    final Map<ValueSpecification, ValueRequirement> resolvedValues = Maps.<ValueSpecification, ValueRequirement>newHashMapWithExpectedSize(_inputs.size());
-    for (Map.Entry<ValueRequirement, ValueSpecification> input : _inputs.entrySet()) {
+    final Map<ValueSpecification, ValueRequirement> resolvedValues = Maps.<ValueSpecification, ValueRequirement> newHashMapWithExpectedSize(_inputs.size());
+    for (final Map.Entry<ValueRequirement, ValueSpecification> input : _inputs.entrySet()) {
       assert input.getValue() != null;
       resolvedValues.put(input.getValue(), input.getKey());
     }
     return resolvedValues;
   }
 
-  private void inputsAvailable(final GraphBuildingContext context, final FunctionApplicationStep.PumpingState state, final Map<ValueSpecification, ValueRequirement> resolvedValues) {
+  private void inputsAvailable(final GraphBuildingContext context, final FunctionApplicationStep.PumpingState state,
+      final Map<ValueSpecification, ValueRequirement> resolvedValues) {
     if (resolvedValues != null) {
       final boolean lastResult;
       synchronized (this) {
@@ -150,7 +151,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
   @Override
   public void failed(final GraphBuildingContext context, final ValueRequirement value, final ResolutionFailure failure) {
-    s_logger.debug("Resolution of {} failed at {}", value, this);
+    LOGGER.debug("Resolution of {} failed at {}", value, this);
     FunctionApplicationStep.PumpingState state = null;
     int refCount = 0;
     ResolutionFailure requirementFailure = null;
@@ -163,7 +164,7 @@ import com.opengamma.engine.value.ValueSpecification;
         if (_inputHandles != null) {
           _inputHandles.remove(value);
           if (_inputs.get(value) == null) {
-            s_logger.info("Resolution of {} failed", value);
+            LOGGER.info("Resolution of {} failed", value);
             if (_taskState != null) {
               if (_taskState.canHandleMissingInputs()) {
                 state = _taskState;
@@ -173,26 +174,25 @@ import com.opengamma.engine.value.ValueSpecification;
                   // Got as full a set of inputs as we're going to get; notify the task state
                   resolvedValues = createResolvedValuesMap();
                   _invokingFunction = true;
-                  s_logger.debug("Partial input set available");
+                  LOGGER.debug("Partial input set available");
                 } else {
                   resolvedValues = null;
-                  if (s_logger.isDebugEnabled()) {
-                    s_logger.debug("Waiting for {} other inputs in {}", _pendingInputs, _inputs);
+                  if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Waiting for {} other inputs in {}", _pendingInputs, _inputs);
                   }
                   // Fall through so that failure is logged
                 }
                 break;
-              } else {
-                requirementFailure = _taskState.functionApplication(context).requirement(value, failure);
               }
+              requirementFailure = _taskState.functionApplication(context).requirement(value, failure);
             }
           } else {
             if (_taskState != null) {
               // Might be okay - we've already had at least one value for this requirement
               if (_pendingInputs > 0) {
                 // Ok; still waiting on other inputs
-                if (s_logger.isDebugEnabled()) {
-                  s_logger.debug("{} other inputs still pending", _pendingInputs);
+                if (LOGGER.isDebugEnabled()) {
+                  LOGGER.debug("{} other inputs still pending", _pendingInputs);
                 }
                 return;
               }
@@ -201,8 +201,8 @@ import com.opengamma.engine.value.ValueSpecification;
                 state = _taskState;
                 resolvedValues = createResolvedValuesMap();
                 _invokingFunction = true;
-                if (s_logger.isDebugEnabled()) {
-                  s_logger.debug("Partial input set available on {} new inputs", _validInputs);
+                if (LOGGER.isDebugEnabled()) {
+                  LOGGER.debug("Partial input set available on {} new inputs", _validInputs);
                 }
                 break;
               }
@@ -224,17 +224,17 @@ import com.opengamma.engine.value.ValueSpecification;
         }
       }
       // Not ok; we either couldn't satisfy anything or the pumped enumeration is complete
-      s_logger.info("{} complete", this);
+      LOGGER.info("{} complete", this);
       if (state != null) {
         state.storeFailure(requirementFailure);
       }
       storeFailure(requirementFailure);
       // Unsubscribe from any inputs that are still valid
       if (unsubscribes != null) {
-        if (s_logger.isDebugEnabled()) {
-          s_logger.debug("Unsubscribing from {} handles", unsubscribes.size());
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("Unsubscribing from {} handles", unsubscribes.size());
         }
-        for (Cancelable handle : unsubscribes) {
+        for (final Cancelable handle : unsubscribes) {
           if (handle != null) {
             handle.cancel(context);
           }
@@ -243,7 +243,7 @@ import com.opengamma.engine.value.ValueSpecification;
       // Propagate the failure message to anything subscribing to us
       if (state != null) {
         finished(context);
-        s_logger.debug("Calling finished on {}", state);
+        LOGGER.debug("Calling finished on {}", state);
         state.finished(context, refCount);
       }
       return;
@@ -280,14 +280,14 @@ import com.opengamma.engine.value.ValueSpecification;
       _pumps = null;
     }
     if (unsubscribes != null) {
-      for (Cancelable unsubscribe : unsubscribes) {
+      for (final Cancelable unsubscribe : unsubscribes) {
         if (unsubscribe != null) {
           unsubscribe.cancel(context);
         }
       }
     }
     if (pumps != null) {
-      for (ResolutionPump pump : pumps) {
+      for (final ResolutionPump pump : pumps) {
         context.close(pump);
       }
     }
@@ -295,8 +295,8 @@ import com.opengamma.engine.value.ValueSpecification;
 
   @Override
   public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, ResolutionPump pump) {
-    s_logger.debug("Resolution complete at {}", this);
-    s_logger.info("Resolved {} to {}", valueRequirement, resolvedValue);
+    LOGGER.debug("Resolution complete at {}", this);
+    LOGGER.info("Resolved {} to {}", valueRequirement, resolvedValue);
     FunctionApplicationStep.PumpingState state = null;
     Map<ValueSpecification, ValueRequirement> resolvedValues = null;
     synchronized (this) {
@@ -307,10 +307,10 @@ import com.opengamma.engine.value.ValueSpecification;
           resolvedValues = createResolvedValuesMap();
           state = _taskState;
           _invokingFunction = true;
-          s_logger.debug("Full input set available");
+          LOGGER.debug("Full input set available");
         } else {
-          if (s_logger.isDebugEnabled()) {
-            s_logger.debug("Waiting for {} other inputs in {}", _pendingInputs, _inputs);
+          if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Waiting for {} other inputs in {}", _pendingInputs, _inputs);
           }
         }
         if (pump != null) {
@@ -318,7 +318,7 @@ import com.opengamma.engine.value.ValueSpecification;
           pump = null;
         }
       } else {
-        s_logger.debug("Already aborted resolution");
+        LOGGER.debug("Already aborted resolution");
       }
     }
     if (pump != null) {
@@ -345,9 +345,9 @@ import com.opengamma.engine.value.ValueSpecification;
 
   public void addInput(final GraphBuildingContext context, final ResolvedValueProducer inputProducer) {
     final ValueRequirement valueRequirement = inputProducer.getValueRequirement();
-    s_logger.debug("Adding input {} to {}", valueRequirement, this);
+    LOGGER.debug("Adding input {} to {}", valueRequirement, this);
     synchronized (this) {
-      if ((_inputs == null) || (_inputHandles == null)) {
+      if (_inputs == null || _inputHandles == null) {
         // Already aborted or something has already failed
         _validInputs--;
         return;
@@ -365,7 +365,7 @@ import com.opengamma.engine.value.ValueSpecification;
             _inputHandles.put(valueRequirement, handle);
           }
         } else {
-          // Remove the handle placeholder if the producer didn't give us a handle 
+          // Remove the handle placeholder if the producer didn't give us a handle
           _inputHandles.remove(valueRequirement);
         }
         return;
@@ -393,7 +393,7 @@ import com.opengamma.engine.value.ValueSpecification;
     synchronized (this) {
       _taskState = state;
       _validInputs = validInputs;
-      _pendingInputs = (validInputs > 0) ? 1 : 0;
+      _pendingInputs = validInputs > 0 ? 1 : 0;
       final int rc = getRefCount();
       for (int i = 0; i < rc; i++) {
         state.getTask().addRef();
@@ -402,7 +402,7 @@ import com.opengamma.engine.value.ValueSpecification;
   }
 
   public void start(final GraphBuildingContext context) {
-    s_logger.debug("Starting {}", this);
+    LOGGER.debug("Starting {}", this);
     FunctionApplicationStep.PumpingState state = null;
     Map<ValueSpecification, ValueRequirement> resolvedValues = null;
     FunctionApplicationStep.PumpingState finished = null;
@@ -417,7 +417,7 @@ import com.opengamma.engine.value.ValueSpecification;
             lastResult = _pumps.isEmpty();
             state = _taskState;
             _invokingFunction = true;
-            s_logger.debug("Full input set available at {}", this);
+            LOGGER.debug("Full input set available at {}", this);
           } else {
             // We've got no valid inputs
             assert _pumps.isEmpty();
@@ -427,9 +427,9 @@ import com.opengamma.engine.value.ValueSpecification;
               lastResult = true;
               state = _taskState;
               _invokingFunction = true;
-              s_logger.debug("Empty input set available at {}", this);
+              LOGGER.debug("Empty input set available at {}", this);
             } else {
-              s_logger.debug("No input set available, finished at {}", this);
+              LOGGER.debug("No input set available, finished at {}", this);
               finished = _taskState;
               _taskState = null;
               refCount = getRefCount();
@@ -437,7 +437,7 @@ import com.opengamma.engine.value.ValueSpecification;
           }
         }
       } else {
-        s_logger.debug("Already aborted resolution");
+        LOGGER.debug("Already aborted resolution");
       }
     }
     if (resolvedValues != null) {
@@ -453,7 +453,7 @@ import com.opengamma.engine.value.ValueSpecification;
         pumpImpl(context);
       }
     } else if (finished != null) {
-      s_logger.debug("Calling finished on {} from {}", finished, this);
+      LOGGER.debug("Calling finished on {} from {}", finished, this);
       finished(context);
       finished.finished(context, refCount);
     }
@@ -471,9 +471,8 @@ import com.opengamma.engine.value.ValueSpecification;
         _taskState.getTask().addRef();
       }
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override
@@ -485,7 +484,7 @@ import com.opengamma.engine.value.ValueSpecification;
     synchronized (this) {
       state = _taskState;
       if (state != null) {
-        // Hold an open reference 
+        // Hold an open reference
         state.getTask().addRef();
       }
       count = super.release(context);

@@ -10,10 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import com.google.common.collect.MapMaker;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.convention.Convention;
@@ -27,6 +23,10 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * A cache decorating a {@code ConventionSource}.
@@ -63,7 +63,7 @@ public class EHCachingConventionSource implements ConventionSource {
 
   /**
    * Creates the cache around an underlying convention source.
-   * 
+   *
    * @param underlying  the underlying data, not null
    * @param cacheManager  the cache manager, not null
    */
@@ -79,7 +79,7 @@ public class EHCachingConventionSource implements ConventionSource {
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying source of conventions.
-   * 
+   *
    * @return the underlying source of conventions, not null
    */
   protected ConventionSource getUnderlying() {
@@ -88,7 +88,7 @@ public class EHCachingConventionSource implements ConventionSource {
 
   /**
    * Gets the cache manager.
-   * 
+   *
    * @return the cache manager, not null
    */
   protected CacheManager getCacheManager() {
@@ -110,7 +110,14 @@ public class EHCachingConventionSource implements ConventionSource {
   }
 
   //-------------------------------------------------------------------------
-  protected Convention addToFrontCache(Convention convention, VersionCorrection versionCorrection) {
+  /**
+   * Adds an object to the front cache unless it is the latest version.
+   *
+   * @param convention  the convention
+   * @param versionCorrection  the version / correction
+   * @return  the legal entity
+   */
+  protected Convention addToFrontCache(final Convention convention, final VersionCorrection versionCorrection) {
     if (convention.getUniqueId().isLatest()) {
       return convention;
     }
@@ -125,23 +132,33 @@ public class EHCachingConventionSource implements ConventionSource {
     return convention;
   }
 
-  protected Convention addToCache(Convention convention, VersionCorrection versionCorrection) {
-    final Convention front = addToFrontCache(convention, null);
-    if (front == convention) {
-      if (convention.getUniqueId().isVersioned()) {
-        _conventionCache.put(new Element(convention.getUniqueId(), convention));
+  /**
+   * Adds an object to the EH cache unless it is the latest version.
+   *
+   * @param convention  the convention
+   * @param versionCorrection  the version / correction
+   * @return  the legal entity
+   */
+  protected Convention addToCache(final Convention convention, final VersionCorrection versionCorrection) {
+    if (convention != null) {
+      final Convention front = addToFrontCache(convention, null);
+      if (front == convention) {
+        if (convention.getUniqueId().isVersioned()) {
+          _conventionCache.put(new Element(convention.getUniqueId(), convention));
+        }
+        if (versionCorrection != null) {
+          _conventionCache.put(new Element(Pairs.of(convention.getExternalIdBundle(), versionCorrection), convention));
+          _conventionCache.put(new Element(Pairs.of(convention.getUniqueId().getObjectId(), versionCorrection), convention));
+        }
       }
-      if (versionCorrection != null) {
-        _conventionCache.put(new Element(Pairs.of(convention.getExternalIdBundle(), versionCorrection), convention));
-        _conventionCache.put(new Element(Pairs.of(convention.getUniqueId().getObjectId(), versionCorrection), convention));
-      }
+      return front;
     }
-    return front;
+    return null;
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public Convention get(UniqueId uniqueId) {
+  public Convention get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     // check cache, but not if latest
     if (uniqueId.isVersioned()) {
@@ -156,19 +173,19 @@ public class EHCachingConventionSource implements ConventionSource {
       }
     }
     // query underlying
-    Convention convention = getUnderlying().get(uniqueId);
+    final Convention convention = getUnderlying().get(uniqueId);
     return addToCache(convention, null);
   }
 
   @Override
-  public <T extends Convention> T get(UniqueId uniqueId, Class<T> type) {
+  public <T extends Convention> T get(final UniqueId uniqueId, final Class<T> type) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(type, "type");
     return type.cast(get(uniqueId));
   }
 
   @Override
-  public Convention get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Convention get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     // latest not in cache, can cache only by uniqueId
@@ -187,12 +204,12 @@ public class EHCachingConventionSource implements ConventionSource {
       return addToFrontCache(cached, versionCorrection);
     }
     // query underlying
-    Convention convention = getUnderlying().get(objectId, versionCorrection);
+    final Convention convention = getUnderlying().get(objectId, versionCorrection);
     return addToCache(convention, versionCorrection);
   }
 
   @Override
-  public <T extends Convention> T get(ObjectId objectId, VersionCorrection versionCorrection, Class<T> type) {
+  public <T extends Convention> T get(final ObjectId objectId, final VersionCorrection versionCorrection, final Class<T> type) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(type, "type");
@@ -201,33 +218,33 @@ public class EHCachingConventionSource implements ConventionSource {
 
   //-------------------------------------------------------------------------
   @Override
-  public Convention getSingle(ExternalId externalId) {
+  public Convention getSingle(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
     return getSingle(externalId.toBundle(), VersionCorrection.LATEST);
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalId externalId, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalId externalId, final Class<T> type) {
     ArgumentChecker.notNull(externalId, "externalId");
     ArgumentChecker.notNull(type, "type");
     return type.cast(getSingle(externalId.toBundle(), VersionCorrection.LATEST));
   }
 
   @Override
-  public Convention getSingle(ExternalIdBundle bundle) {
+  public Convention getSingle(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
     return getSingle(bundle, VersionCorrection.LATEST);
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalIdBundle bundle, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalIdBundle bundle, final Class<T> type) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(type, "type");
     return type.cast(getSingle(bundle));
   }
 
   @Override
-  public Convention getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Convention getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     // latest not in cache, can cache only by uniqueId
@@ -246,12 +263,12 @@ public class EHCachingConventionSource implements ConventionSource {
       return addToFrontCache(cached, versionCorrection);
     }
     // query underlying
-    Convention convention = getUnderlying().getSingle(bundle, versionCorrection);
+    final Convention convention = getUnderlying().getSingle(bundle, versionCorrection);
     return addToCache(convention, versionCorrection);
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection, final Class<T> type) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(type, "type");
@@ -261,43 +278,43 @@ public class EHCachingConventionSource implements ConventionSource {
   //-------------------------------------------------------------------------
   @Override
   @SuppressWarnings("deprecation")
-  public Collection<Convention> get(ExternalIdBundle bundle) {
+  public Collection<Convention> get(final ExternalIdBundle bundle) {
     return getUnderlying().get(bundle);
   }
 
   @Override
-  public Collection<Convention> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Convention> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return getUnderlying().get(bundle, versionCorrection);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public Map<UniqueId, Convention> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, Convention> map = getUnderlying().get(uniqueIds);
-    for (Entry<UniqueId, Convention> entry : map.entrySet()) {
+  public Map<UniqueId, Convention> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, Convention> map = getUnderlying().get(uniqueIds);
+    for (final Entry<UniqueId, Convention> entry : map.entrySet()) {
       entry.setValue(addToCache(entry.getValue(), null));
     }
     return map;
   }
 
   @Override
-  public Map<ObjectId, Convention> get(Collection<ObjectId> objectIds, VersionCorrection versionCorrection) {
-    Map<ObjectId, Convention> map = getUnderlying().get(objectIds, versionCorrection);
-    for (Entry<ObjectId, Convention> entry : map.entrySet()) {
+  public Map<ObjectId, Convention> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
+    final Map<ObjectId, Convention> map = getUnderlying().get(objectIds, versionCorrection);
+    for (final Entry<ObjectId, Convention> entry : map.entrySet()) {
       entry.setValue(addToCache(entry.getValue(), versionCorrection));
     }
     return map;
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<Convention>> getAll(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Collection<Convention>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return getUnderlying().getAll(bundles, versionCorrection);
   }
 
   @Override
-  public Map<ExternalIdBundle, Convention> getSingle(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
-    Map<ExternalIdBundle, Convention> map = getUnderlying().getSingle(bundles, versionCorrection);
-    for (Entry<ExternalIdBundle, Convention> entry : map.entrySet()) {
+  public Map<ExternalIdBundle, Convention> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
+    final Map<ExternalIdBundle, Convention> map = getUnderlying().getSingle(bundles, versionCorrection);
+    for (final Entry<ExternalIdBundle, Convention> entry : map.entrySet()) {
       entry.setValue(addToCache(entry.getValue(), versionCorrection));
     }
     return map;

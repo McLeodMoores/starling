@@ -49,7 +49,7 @@ import com.opengamma.util.time.Expiry;
 public final class EnergyFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EnergyFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EnergyFutureLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -69,83 +69,85 @@ public final class EnergyFutureLoader extends SecurityLoader {
       FIELD_ID_ISIN,
       FIELD_ID_SEDOL1,
       FIELD_FUT_VAL_PT);
-  
+
   /**
-   * The valid Bloomberg future categories for Energy Futures
+   * The valid Bloomberg future categories for Energy Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = ImmutableSet.of(BBG_REFINED_PRODUCTS, BBG_ELECTRICITY, BBG_COAL, BBG_CRUDE_OIL, BBG_NATURAL_GAS);
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   * 
+   * @param referenceDataProvider
+   *          the provider, not null
    */
-  public EnergyFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.ENERGY_FUTURE);
+  public EnergyFutureLoader(final ReferenceDataProvider referenceDataProvider) {
+    super(LOGGER, referenceDataProvider, SecurityType.ENERGY_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
-    String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
-    String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
-    String currencyStr = fieldData.getString(FIELD_CRNCY);    
-    String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
-    Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
-    String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
-    String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
+    final String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
+    final String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
+    final String currencyStr = fieldData.getString(FIELD_CRNCY);
+    final String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
+    final Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
+    final String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
+    final String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
 
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct energy future security");
+      LOGGER.warn("bbgUnique is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null, cannot construct energy future security");
+      LOGGER.warn("expiry date is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null, cannot construct energy future security");
+      LOGGER.warn("futures trading hours is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null, cannot construct energy future security");
+      LOGGER.warn("settlement exchange is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.info("currency is null, cannot construct energy future security");
+      LOGGER.info("currency is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(category)) {
-      s_logger.info("category is null, cannot construct energy future security");
+      LOGGER.info("category is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(unitName)) {
-      s_logger.info("unitName is null, cannot construct energy future security");
+      LOGGER.info("unitName is null, cannot construct energy future security");
       return null;
     }
     if (unitNumber == null) {
-      s_logger.info("unitNumber is null, cannot construct energy future security");
+      LOGGER.info("unitNumber is null, cannot construct energy future security");
       return null;
     }
     ExternalId underlying = null;
     if (underlyingTicker != null) {
-      //Blindly copied from EquityDividendFutureLoader, not sure if necessary here
+      // Blindly copied from EquityDividendFutureLoader, not sure if necessary here
       if (BloombergDataUtils.isValidBloombergTicker(underlyingTicker)) {
         underlying = ExternalSchemes.bloombergTickerSecurityId(underlyingTicker);
       } else {
         underlying = ExternalSchemes.bloombergTickerSecurityId(underlyingTicker + " " + "Comdty");
       }
     }
-    Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
+    final Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
     if (expiry == null) {
       return null;
     }
-    Currency currency = Currency.parse(currencyStr);
+    final Currency currency = Currency.parse(currencyStr);
 
-    EnergyFutureSecurity security = new EnergyFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, category);
+    final EnergyFutureSecurity security = new EnergyFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, category);
     security.setUnitNumber(unitNumber);
     security.setUnitName(unitName);
     security.setUnderlyingId(underlying);

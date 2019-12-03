@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.inflation;
@@ -14,15 +14,16 @@ import com.opengamma.analytics.financial.provider.description.inflation.BlackSmi
 import com.opengamma.analytics.financial.provider.sensitivity.inflation.MultipleCurrencyInflationSensitivity;
 
 /**
- *  Calculator of the present value curve sensitivity as a multiple currency amount for inflation zero coupon cap floor without convexity adjustment.
+ * Calculator of the present value curve sensitivity as a multiple currency amount for inflation zero coupon cap floor without convexity adjustment.
  */
 public final class PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalculator extends
-    InstrumentDerivativeVisitorAdapter<BlackSmileCapInflationZeroCouponProviderInterface, MultipleCurrencyInflationSensitivity> {
+InstrumentDerivativeVisitorAdapter<BlackSmileCapInflationZeroCouponProviderInterface, MultipleCurrencyInflationSensitivity> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalculator INSTANCE = new PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalculator();
+  private static final PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalculator INSTANCE =
+      new PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalculator();
 
   /**
    * Constructor.
@@ -32,6 +33,7 @@ public final class PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalc
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalculator getInstance() {
@@ -42,10 +44,12 @@ public final class PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalc
    * Pricing methods.
    */
 
-  private static final CapFloorInflationZeroCouponInterpolationBlackSmileMethod METHOD_CAPFLOOR_INTERPOLATION = CapFloorInflationZeroCouponInterpolationBlackSmileMethod.getInstance();
-  private static final CapFloorInflationZeroCouponMonthlyBlackSmileMethod METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY = CapFloorInflationZeroCouponMonthlyBlackSmileMethod.getInstance();
+  private static final CapFloorInflationZeroCouponInterpolationBlackSmileMethod METHOD_CAPFLOOR_INTERPOLATION =
+      CapFloorInflationZeroCouponInterpolationBlackSmileMethod.getInstance();
+  private static final CapFloorInflationZeroCouponMonthlyBlackSmileMethod METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY =
+      CapFloorInflationZeroCouponMonthlyBlackSmileMethod.getInstance();
 
-  //-----     Cap/Floor Zero Coupon     -----
+  // ----- Cap/Floor Zero Coupon -----
 
   @Override
   public MultipleCurrencyInflationSensitivity visitCapFloorInflationZeroCouponInterpolation(final CapFloorInflationZeroCouponInterpolation cap,
@@ -54,7 +58,8 @@ public final class PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalc
   }
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitCapFloorInflationZeroCouponMonthly(final CapFloorInflationZeroCouponMonthly cap, final BlackSmileCapInflationZeroCouponProviderInterface black) {
+  public MultipleCurrencyInflationSensitivity visitCapFloorInflationZeroCouponMonthly(final CapFloorInflationZeroCouponMonthly cap,
+      final BlackSmileCapInflationZeroCouponProviderInterface black) {
     return METHOD_CAPFLOOR_YEAR_ON_YEAR_MONTHLY.presentValueCurveSensitivity(cap, black);
   }
 }

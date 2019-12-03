@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -15,12 +15,13 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.Transaction;
 
 /**
- * A worker thread that will perform all Berkeley I/O operations. Berkeley DB doesn't like its threads getting interrupted so we have to isolate it from the OpenGamma calculation and worker threads
- * that use interrupts to cancel running jobs.
+ * A worker thread that will perform all Berkeley I/O operations. Berkeley DB doesn't like its threads getting
+ * interrupted so we have to isolate it from the OpenGamma calculation and worker threads that use interrupts to
+ * cancel running jobs.
  */
 public class AbstractBerkeleyDBWorker implements Runnable {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractBerkeleyDBWorker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBerkeleyDBWorker.class);
 
   /**
    * Requests that this worker will satisfy.
@@ -34,7 +35,7 @@ public class AbstractBerkeleyDBWorker implements Runnable {
         while (!_done) {
           wait();
         }
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
     }
@@ -54,7 +55,7 @@ public class AbstractBerkeleyDBWorker implements Runnable {
   public static final class PoisonRequest extends Request {
 
     @Override
-    protected void runInTransaction(AbstractBerkeleyDBWorker worker) {
+    protected void runInTransaction(final AbstractBerkeleyDBWorker worker) {
       worker.poison(this);
     }
 
@@ -80,18 +81,18 @@ public class AbstractBerkeleyDBWorker implements Runnable {
 
   @Override
   public void run() {
-    s_logger.info("Worker started");
+    LOGGER.info("Worker started");
     _poisoned = null;
     do {
       Request req = null;
       try {
         req = _requests.take();
         if (req == null) {
-          s_logger.info("Worker poisoned");
+          LOGGER.info("Worker poisoned");
           return;
         }
         boolean rollback = true;
-        _transaction = (_environment != null) ? _environment.beginTransaction(null, null) : null;
+        _transaction = _environment != null ? _environment.beginTransaction(null, null) : null;
         try {
           do {
             req.runInTransaction(this);
@@ -102,7 +103,7 @@ public class AbstractBerkeleyDBWorker implements Runnable {
         } finally {
           if (_transaction != null) {
             if (rollback) {
-              s_logger.error("Rolling back transaction");
+              LOGGER.error("Rolling back transaction");
               _transaction.abort();
             } else {
               _transaction.commit();
@@ -110,8 +111,8 @@ public class AbstractBerkeleyDBWorker implements Runnable {
             _transaction = null;
           }
         }
-      } catch (Throwable t) {
-        s_logger.error("Caught exception", t);
+      } catch (final Throwable t) {
+        LOGGER.error("Caught exception", t);
       } finally {
         if (req != null) {
           req.signal();

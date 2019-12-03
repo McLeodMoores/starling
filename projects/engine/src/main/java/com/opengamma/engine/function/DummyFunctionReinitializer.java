@@ -17,16 +17,16 @@ import com.opengamma.id.ObjectId;
  */
 public class DummyFunctionReinitializer implements FunctionReinitializer {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DummyFunctionReinitializer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DummyFunctionReinitializer.class);
 
   @Override
   public void reinitializeFunction(final FunctionDefinition function, final ObjectId identifier) {
-    s_logger.info("Reinitialize {} on changes to {}", function, identifier);
+    LOGGER.info("Reinitialize {} on changes to {}", function, identifier);
   }
 
   @Override
   public void reinitializeFunction(final FunctionDefinition function, final Collection<ObjectId> identifiers) {
-    s_logger.info("Reinitialize {} on changes to {}", function, identifiers);
+    LOGGER.info("Reinitialize {} on changes to {}", function, identifiers);
   }
 
 }

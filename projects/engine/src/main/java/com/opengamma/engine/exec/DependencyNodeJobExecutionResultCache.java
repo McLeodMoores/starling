@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec;
@@ -17,15 +17,15 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class DependencyNodeJobExecutionResultCache {
 
-  private final Map<ValueSpecification, DependencyNodeJobExecutionResult> _resultsBySpec = new ConcurrentHashMap<ValueSpecification, DependencyNodeJobExecutionResult>();
+  private final Map<ValueSpecification, DependencyNodeJobExecutionResult> _resultsBySpec = new ConcurrentHashMap<>();
 
-  public void put(final ValueSpecification valueSpec, DependencyNodeJobExecutionResult jobExecutionResult) {
+  public void put(final ValueSpecification valueSpec, final DependencyNodeJobExecutionResult jobExecutionResult) {
     _resultsBySpec.put(valueSpec, jobExecutionResult);
   }
 
   /**
    * Stores the execution result for a dependency graph node.
-   * 
+   *
    * @param node the dependency node to store, not null
    * @param jobExecutionResult the result to store, not null
    */
@@ -42,7 +42,7 @@ public class DependencyNodeJobExecutionResultCache {
 
   /**
    * Finds the execution result for a dependency graph node.
-   * 
+   *
    * @param node the dependency node to search for, not null
    * @return the execution result, null if no match
    */
@@ -59,7 +59,7 @@ public class DependencyNodeJobExecutionResultCache {
 
   /**
    * Returns the set of data produced by nodes that have already been executed.
-   * 
+   *
    * @return the executed values
    */
   public Set<ValueSpecification> getExecutedData() {

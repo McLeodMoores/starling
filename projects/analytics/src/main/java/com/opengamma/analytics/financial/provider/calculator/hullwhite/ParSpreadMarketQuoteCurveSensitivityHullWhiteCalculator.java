@@ -15,9 +15,10 @@ import com.opengamma.analytics.financial.provider.description.interestrate.HullW
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
-public final class ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator extends InstrumentDerivativeVisitorDelegate<HullWhiteOneFactorProviderInterface, MulticurveSensitivity> {
+public final class ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator
+    extends InstrumentDerivativeVisitorDelegate<HullWhiteOneFactorProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -26,6 +27,7 @@ public final class ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator exten
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator getInstance() {
@@ -45,21 +47,26 @@ public final class ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator exten
   private static final InterestRateFutureSecurityHullWhiteMethod METHOD_IRFUT_HW = InterestRateFutureSecurityHullWhiteMethod.getInstance();
   private static final SwapFuturesPriceDeliverableSecurityHullWhiteMethod METHOD_SWAP_FUT = SwapFuturesPriceDeliverableSecurityHullWhiteMethod.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   /**
    * For InterestRateFutures the ParSpread is the spread to be added to the reference price to obtain a present value of zero.
-   * @param futures The futures.
-   * @param multicurves The multi-curves and Hull-White provider.
+   * 
+   * @param futures
+   *          The futures.
+   * @param multicurves
+   *          The multi-curves and Hull-White provider.
    * @return The par spread.
    */
   @Override
-  public MulticurveSensitivity visitInterestRateFutureTransaction(final InterestRateFutureTransaction futures, final HullWhiteOneFactorProviderInterface multicurves) {
+  public MulticurveSensitivity visitInterestRateFutureTransaction(final InterestRateFutureTransaction futures,
+      final HullWhiteOneFactorProviderInterface multicurves) {
     return METHOD_IRFUT_HW.priceCurveSensitivity(futures.getUnderlyingSecurity(), multicurves);
   }
 
   @Override
-  public MulticurveSensitivity visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction futures, final HullWhiteOneFactorProviderInterface multicurves) {
+  public MulticurveSensitivity visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction futures,
+      final HullWhiteOneFactorProviderInterface multicurves) {
     return METHOD_SWAP_FUT.priceCurveSensitivity(futures.getUnderlyingSecurity(), multicurves);
   }
 

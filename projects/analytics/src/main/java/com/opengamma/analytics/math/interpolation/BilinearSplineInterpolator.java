@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -10,8 +10,9 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  Given a set of data (x0Values_i, x1Values_j, yValues_{ij}), derive the piecewise bicubic function, f(x0,x1) = sum_{i=0}^{3} sum_{j=0}^{3} coefMat_{ij} (x0-x0Values_i)^{3-i} (x1-x1Values_j)^{3-j},
- *  for the region x0Values_i < x0 < x0Values_{i+1}, x1Values_j < x1 < x1Values_{j+1}  such that f(x0Values_a, x1Values_b) = yValues_{ab} where a={i,i+1}, b={j,j+1}. 
+ * Given a set of data (x0Values_i, x1Values_j, yValues_{ij}), derive the piecewise bicubic function, f(x0,x1) = sum_{i=0}^{3} sum_{j=0}^{3} coefMat_{ij}
+ * (x0-x0Values_i)^{3-i} (x1-x1Values_j)^{3-j}, for the region x0Values_i &lt; x0 &lt; x0Values_{i+1}, x1Values_j &lt; x1 &lt; x1Values_{j+1} such that
+ * f(x0Values_a, x1Values_b) = yValues_{ab} where a={i,i+1}, b={j,j+1}.
  */
 public class BilinearSplineInterpolator extends PiecewisePolynomialInterpolator2D {
   private static final double ERROR = 1.e-13;
@@ -59,13 +60,13 @@ public class BilinearSplineInterpolator extends PiecewisePolynomialInterpolator2
 
     final int order = 2;
 
-    DoubleMatrix2D[][] coefMat = new DoubleMatrix2D[nData0 - 1][nData1 - 1];
+    final DoubleMatrix2D[][] coefMat = new DoubleMatrix2D[nData0 - 1][nData1 - 1];
     for (int i = 0; i < nData0 - 1; ++i) {
       for (int j = 0; j < nData1 - 1; ++j) {
         final double interval0 = x0Values[i + 1] - x0Values[i];
         final double interval1 = x1Values[j + 1] - x1Values[j];
         double ref = 0.;
-        double[][] coefMatTmp = new double[order][order];
+        final double[][] coefMatTmp = new double[order][order];
         coefMatTmp[1][1] = yValues[i][j];
         coefMatTmp[0][1] = (-yValues[i][j] + yValues[i + 1][j]) / interval0;
         coefMatTmp[1][0] = (-yValues[i][j] + yValues[i][j + 1]) / interval1;

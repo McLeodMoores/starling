@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.volatility.surface;
 
@@ -24,10 +24,9 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Generates tickers for a volatility surface relevant for a particular calculation date. The tickers
- * are time-dependent and use the nth option expiry (e.g. the second monthly option expiry from 1/1/2014,
- * which would be 21/2/2014 if the third Friday rule was in effect). The surface uses both puts and
- * calls, and there is a value set for the strike at which to switch between put and call quotes.
+ * Generates tickers for a volatility surface relevant for a particular calculation date. The tickers are time-dependent and use the nth option expiry (e.g. the
+ * second monthly option expiry from 1/1/2014, which would be 21/2/2014 if the third Friday rule was in effect). The surface uses both puts and calls, and there
+ * is a value set for the strike at which to switch between put and call quotes.
  * <p>
  * This instrument provider is intended to be used with OpenGamma integration functions.
  */
@@ -53,9 +52,12 @@ public class ExampleCallPutVolatilitySurfaceInstrumentProvider implements CallPu
   private final Double _useCallAboveStrike;
 
   /**
-   * @param optionPrefix the prefix to the resulting code (e.g. DJX), not null
-   * @param dataFieldName the name of the data field, not null.
-   * @param useCallAboveStrike the strike above which to use calls rather than puts, not null
+   * @param optionPrefix
+   *          the prefix to the resulting code (e.g. DJX), not null
+   * @param dataFieldName
+   *          the name of the data field, not null.
+   * @param useCallAboveStrike
+   *          the strike above which to use calls rather than puts, not null
    */
   public ExampleCallPutVolatilitySurfaceInstrumentProvider(final String optionPrefix, final String dataFieldName, final Double useCallAboveStrike) {
     ArgumentChecker.notNull(optionPrefix, "option prefix");
@@ -67,14 +69,19 @@ public class ExampleCallPutVolatilitySurfaceInstrumentProvider implements CallPu
   }
 
   /**
-   * Provides an ExternalID for an {@link ExternalSchemes#OG_SYNTHETIC_TICKER},
-   * given a reference date and an integer offset, the n'th subsequent option <p>
-   * The format is prefix + date(MM/dd/yy) + callPutFlag + strike <p>
+   * Provides an ExternalID for an {@link ExternalSchemes#OG_SYNTHETIC_TICKER}, given a reference date and an integer offset, the n'th subsequent option
+   * <p>
+   * The format is prefix + date(MM/dd/yy) + callPutFlag + strike
+   * <p>
    * e.g. AAA 12/21/13 C100.
    * <p>
-   * @param expiryNumber nth expiry following curve date, not null
-   * @param strike option's strike, expressed as price, e.g. 98.750, not null
-   * @param surfaceDate date of curve validity; valuation date, not null
+   * 
+   * @param expiryNumber
+   *          nth expiry following curve date, not null
+   * @param strike
+   *          option's strike, expressed as price, e.g. 98.750, not null
+   * @param surfaceDate
+   *          date of curve validity; valuation date, not null
    * @return the id of the Bloomberg ticker
    */
   @Override
@@ -100,6 +107,7 @@ public class ExampleCallPutVolatilitySurfaceInstrumentProvider implements CallPu
 
   /**
    * Gets the expiryRules.
+   * 
    * @return the expiryRules
    */
   public static HashMap<String, ExchangeTradedInstrumentExpiryCalculator> getExpiryRules() {
@@ -119,6 +127,7 @@ public class ExampleCallPutVolatilitySurfaceInstrumentProvider implements CallPu
 
   /**
    * Gets the option prefix.
+   * 
    * @return The option prefix
    */
   public String getOptionPrefix() {

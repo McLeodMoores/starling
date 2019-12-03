@@ -49,7 +49,7 @@ import com.opengamma.util.ArgumentChecker;
 @SuppressWarnings("deprecation")
 /* package */ class AnalyticsViewClientConnection {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AnalyticsViewClientConnection.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticsViewClientConnection.class);
 
   private final AnalyticsView _view;
   private final ViewClient _viewClient;
@@ -64,24 +64,34 @@ import com.opengamma.util.ArgumentChecker;
   private EngineResourceReference<? extends ViewCycle> _cycleReference = EmptyViewCycle.REFERENCE;
 
   /**
-   * @param viewRequest Defines the view that should be created
-   * @param aggregatedViewDef The view definition including any aggregation
-   * @param viewClient Connects this class to the calculation engine
-   * @param view The object that encapsulates the state of the view user interface
-   * @param parallelViewRecompilation Whether to recompile the view whilst running the current version
-   * @param marketDataSpecificationRepository For looking up market data specs
+   * @param viewRequest
+   *          Defines the view that should be created
+   * @param aggregatedViewDef
+   *          The view definition including any aggregation
+   * @param viewClient
+   *          Connects this class to the calculation engine
+   * @param view
+   *          The object that encapsulates the state of the view user interface
+   * @param listeners
+   *          the listeners
+   * @param parallelViewRecompilation
+   *          Whether to recompile the view whilst running the current version
+   * @param marketDataSpecificationRepository
+   *          For looking up market data specs
    * @param executor
+   *          the executor service
    * @param securitySource
+   *          the security source
    */
-  /* package */ AnalyticsViewClientConnection(ViewRequest viewRequest,
-                                              AggregatedViewDefinition aggregatedViewDef,
-                                              ViewClient viewClient,
-                                              AnalyticsView view,
-                                              List<AutoCloseable> listeners,
-                                              ExecutionFlags.ParallelRecompilationMode parallelViewRecompilation,
-                                              NamedMarketDataSpecificationRepository marketDataSpecificationRepository,
-                                              ExecutorService executor,
-                                              SecuritySource securitySource) {
+  /* package */ AnalyticsViewClientConnection(final ViewRequest viewRequest,
+      final AggregatedViewDefinition aggregatedViewDef,
+      final ViewClient viewClient,
+      final AnalyticsView view,
+      final List<AutoCloseable> listeners,
+      final ExecutionFlags.ParallelRecompilationMode parallelViewRecompilation,
+      final NamedMarketDataSpecificationRepository marketDataSpecificationRepository,
+      final ExecutorService executor,
+      final SecuritySource securitySource) {
     ArgumentChecker.notNull(viewRequest, "viewRequest");
     ArgumentChecker.notNull(viewClient, "viewClient");
     ArgumentChecker.notNull(view, "view");
@@ -112,15 +122,15 @@ import com.opengamma.util.ArgumentChecker;
    * @param requestedMarketDataSpecs The market data sources requested by the user
    * @return The specs needed to look up the sources the user requested
    */
-  private List<MarketDataSpecification> fixMarketDataSpecs(List<MarketDataSpecification> requestedMarketDataSpecs) {
+  private List<MarketDataSpecification> fixMarketDataSpecs(final List<MarketDataSpecification> requestedMarketDataSpecs) {
     if (_marketDataSpecRepo == null) {
       return requestedMarketDataSpecs;
     }
-    List<MarketDataSpecification> specs = Lists.newArrayListWithCapacity(requestedMarketDataSpecs.size());
-    for (MarketDataSpecification spec : requestedMarketDataSpecs) {
+    final List<MarketDataSpecification> specs = Lists.newArrayListWithCapacity(requestedMarketDataSpecs.size());
+    for (final MarketDataSpecification spec : requestedMarketDataSpecs) {
       if (spec instanceof LiveMarketDataSpecification) {
-        LiveMarketDataSpecification liveSpec = (LiveMarketDataSpecification) spec;
-        MarketDataSpecification oldSpec = _marketDataSpecRepo.getSpecification(liveSpec.getDataSource());
+        final LiveMarketDataSpecification liveSpec = (LiveMarketDataSpecification) spec;
+        final MarketDataSpecification oldSpec = _marketDataSpecRepo.getSpecification(liveSpec.getDataSource());
         if (oldSpec == null) {
           throw new IllegalArgumentException("No live data source found called " + liveSpec.getDataSource());
         }
@@ -136,34 +146,34 @@ import com.opengamma.util.ArgumentChecker;
    * Connects to the engine in order to start receiving results. This should only be called once.
    */
   /* package */ void start() {
-    s_logger.debug("Starting client connection");
+    LOGGER.debug("Starting client connection");
     _viewClient.setResultListener(new Listener());
     _viewClient.setViewCycleAccessSupported(true);
     _viewClient.setResultMode(ViewResultMode.FULL_THEN_DELTA);
     try {
       if (_viewRequest.getViewProcessId() == null) {
-        List<MarketDataSpecification> requestedMarketDataSpecs = _viewRequest.getMarketDataSpecs();
-        List<MarketDataSpecification> actualMarketDataSpecs = fixMarketDataSpecs(requestedMarketDataSpecs);
+        final List<MarketDataSpecification> requestedMarketDataSpecs = _viewRequest.getMarketDataSpecs();
+        final List<MarketDataSpecification> actualMarketDataSpecs = fixMarketDataSpecs(requestedMarketDataSpecs);
 
         // TODO - At this point we need to pick up a shift specification from the UI - for now we'll add the NoOp
-        MarketDataSelector marketDataSelector = NoOpMarketDataSelector.getInstance();
+        final MarketDataSelector marketDataSelector = NoOpMarketDataSelector.getInstance();
 
-        ViewCycleExecutionOptions defaultOptions =
+        final ViewCycleExecutionOptions defaultOptions =
             ViewCycleExecutionOptions
-                .builder()
-                .setValuationTime(_viewRequest.getValuationTime())
-                .setMarketDataSpecifications(actualMarketDataSpecs)
-                .setMarketDataSelector(marketDataSelector)
-                .setResolverVersionCorrection(_viewRequest.getPortfolioVersionCorrection())
-                .create();
-        EnumSet<ViewExecutionFlags> flags =
+            .builder()
+            .setValuationTime(_viewRequest.getValuationTime())
+            .setMarketDataSpecifications(actualMarketDataSpecs)
+            .setMarketDataSelector(marketDataSelector)
+            .setResolverVersionCorrection(_viewRequest.getPortfolioVersionCorrection())
+            .create();
+        final EnumSet<ViewExecutionFlags> flags =
             ExecutionFlags.triggersEnabled().parallelCompilation(_parallelViewRecompilation).get();
-        ViewExecutionOptions executionOptions = ExecutionOptions.of(new InfiniteViewCycleExecutionSequence(), defaultOptions, flags);
+        final ViewExecutionOptions executionOptions = ExecutionOptions.of(new InfiniteViewCycleExecutionSequence(), defaultOptions, flags);
         _viewClient.attachToViewProcess(_aggregatedViewDef.getUniqueId(), executionOptions);
       } else {
         _viewClient.attachToViewProcess(_viewRequest.getViewProcessId());
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       _aggregatedViewDef.close();
       throw new OpenGammaRuntimeException("Failed to attach view client to view process", e);
     }
@@ -179,11 +189,11 @@ import com.opengamma.util.ArgumentChecker;
     } finally {
       _cycleReference.release();
       _aggregatedViewDef.close();
-      for (AutoCloseable listener : _listeners) {
+      for (final AutoCloseable listener : _listeners) {
         try {
           listener.close();
-        } catch (Exception e) {
-          s_logger.warn("Failed to close listener " + listener, e);
+        } catch (final Exception e) {
+          LOGGER.warn("Failed to close listener " + listener, e);
         }
       }
     }
@@ -195,7 +205,7 @@ import com.opengamma.util.ArgumentChecker;
   /* package */ AnalyticsView getView() {
     return _view;
   }
-  
+
   /**
    * Gets the viewClient.
    * @return the viewClient
@@ -211,14 +221,14 @@ import com.opengamma.util.ArgumentChecker;
   private class Listener extends AbstractViewResultListener {
 
     @Override
-    public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
-      EngineResourceReference<? extends ViewCycle> oldReference = _cycleReference;
+    public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
+      final EngineResourceReference<? extends ViewCycle> oldReference = _cycleReference;
       try {
-        ViewResultModel results = deltaResult != null ? deltaResult : fullResult;
+        final ViewResultModel results = deltaResult != null ? deltaResult : fullResult;
         // always retain a reference to the most recent cycle so the dependency graphs are available at all times.
         // without this it would be necessary to wait at least one cycle before it would be possible to access the graphs.
         // this allows dependency graphs grids to be opened and populated without any delay
-        EngineResourceReference<? extends ViewCycle> cycleReference = _viewClient.createCycleReference(results.getViewCycleId());
+        final EngineResourceReference<? extends ViewCycle> cycleReference = _viewClient.createCycleReference(results.getViewCycleId());
         if (cycleReference == null) {
           // this shouldn't happen if everything in the engine is working as it should
           _cycleReference = EmptyViewCycle.REFERENCE;
@@ -239,11 +249,11 @@ import com.opengamma.util.ArgumentChecker;
     }
 
     @Override
-    public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
-      s_logger.debug("View definition compiled: '{}'", compiledViewDefinition.getViewDefinition().getName());
+    public void viewDefinitionCompiled(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
+      LOGGER.debug("View definition compiled: '{}'", compiledViewDefinition.getViewDefinition().getName());
       // resolve the portfolio, it won't be resolved if the engine is in a different VM from the web components
       // if it's in the same VM then resolution is fairly cheap and doesn't touch the DB
-      Portfolio portfolio = compiledViewDefinition.getPortfolio();
+      final Portfolio portfolio = compiledViewDefinition.getPortfolio();
       Portfolio resolvedPortfolio;
       if (portfolio != null) {
         resolvedPortfolio = PortfolioCompiler.resolvePortfolio(portfolio, _executor, _securitySource);
@@ -254,20 +264,20 @@ import com.opengamma.util.ArgumentChecker;
     }
 
     @Override
-    public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
-      s_logger.warn("Compilation of the view definition failed", exception);
+    public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
+      LOGGER.warn("Compilation of the view definition failed", exception);
       viewFailed(exception);
     }
 
     @Override
-    public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
-      s_logger.warn("Execution of the view failed", exception);
+    public void cycleExecutionFailed(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
+      LOGGER.warn("Execution of the view failed", exception);
       viewFailed(exception);
     }
 
-    private void viewFailed(Exception exception) {
+    private void viewFailed(final Exception exception) {
       // the underlying cause is likely more interesting when a view fails
-      Throwable cause = exception.getCause();
+      final Throwable cause = exception.getCause();
       _view.viewCompilationFailed(cause != null ? cause : exception);
     }
   }

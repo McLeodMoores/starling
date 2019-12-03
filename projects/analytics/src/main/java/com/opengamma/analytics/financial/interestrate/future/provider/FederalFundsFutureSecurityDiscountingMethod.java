@@ -5,7 +5,6 @@
  */
 package com.opengamma.analytics.financial.interestrate.future.provider;
 
-
 /**
  * Methods for the pricing of Federal Funds futures by discounting (using average of forward rates; not convexity adjustment).
  */
@@ -18,6 +17,7 @@ public final class FederalFundsFutureSecurityDiscountingMethod extends FuturesSe
 
   /**
    * Return the method unique instance.
+   * 
    * @return The instance.
    */
   public static FederalFundsFutureSecurityDiscountingMethod getInstance() {

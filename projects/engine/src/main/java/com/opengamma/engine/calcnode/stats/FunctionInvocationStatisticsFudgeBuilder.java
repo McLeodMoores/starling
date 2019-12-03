@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -36,7 +36,8 @@ public class FunctionInvocationStatisticsFudgeBuilder implements FudgeBuilder<Fu
   @Override
   public FunctionInvocationStatistics buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     final FunctionInvocationStatistics statistics = new FunctionInvocationStatistics(message.getString(FUNCTION_IDENTIFIER_FIELD_NAME));
-    statistics.recordInvocation(1, message.getDouble(INVOCATION_COST_FIELD_NAME), message.getDouble(DATA_INPUT_COST_FIELD_NAME), message.getDouble(DATA_OUTPUT_COST_FIELD_NAME));
+    statistics.recordInvocation(1, message.getDouble(INVOCATION_COST_FIELD_NAME), message.getDouble(DATA_INPUT_COST_FIELD_NAME),
+        message.getDouble(DATA_OUTPUT_COST_FIELD_NAME));
     return statistics;
   }
 

@@ -18,13 +18,14 @@ import com.opengamma.id.UniqueId;
  * with the results as the correlation identifier between the result and the job.
  */
 public final class CalculationJobSpecification {
-  
+
   /**
    * The cycle identifier.
    */
   private final UniqueId _viewCycleId;
   /**
-   * The calculation configuration name, unique within a given cycle identifier. This combined with the cycle identifier uniquely identifies the cache being used for the job.
+   * The calculation configuration name, unique within a given cycle identifier. This combined with the cycle identifier uniquely
+   * identifies the cache being used for the job.
    */
   private final String _calcConfigName;
   /**
@@ -35,7 +36,7 @@ public final class CalculationJobSpecification {
    * The unique job identifier within the system.
    */
   private final long _jobId;
-  
+
   public CalculationJobSpecification(final UniqueId viewCycleId, final String calcConfigName, final Instant valuationTime, final long jobId) {
     // TODO kirk 2009-09-25 -- Check Inputs
     _viewCycleId = viewCycleId;
@@ -43,7 +44,7 @@ public final class CalculationJobSpecification {
     _valuationTime = valuationTime;
     _jobId = jobId;
   }
-  
+
   public CalculationJobSpecification withJobId(final long jobId) {
     return new CalculationJobSpecification(getViewCycleId(), getCalcConfigName(), getValuationTime(), jobId);
   }
@@ -61,7 +62,7 @@ public final class CalculationJobSpecification {
   public String getCalcConfigName() {
     return _calcConfigName;
   }
-  
+
   /**
    * @return the cycle valuation time
    */
@@ -75,20 +76,20 @@ public final class CalculationJobSpecification {
   public long getJobId() {
     return _jobId;
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + _calcConfigName.hashCode();
-    result = prime * result + (int) (_jobId ^ (_jobId >>> 32));
+    result = prime * result + (int) (_jobId ^ _jobId >>> 32);
     result = prime * result + _viewCycleId.hashCode();
     result = prime * result + _valuationTime.hashCode();
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -98,7 +99,7 @@ public final class CalculationJobSpecification {
     if (!(obj instanceof CalculationJobSpecification)) {
       return false;
     }
-    CalculationJobSpecification other = (CalculationJobSpecification) obj;
+    final CalculationJobSpecification other = (CalculationJobSpecification) obj;
     if (_jobId != other._jobId) {
       return false;
     }
@@ -118,5 +119,5 @@ public final class CalculationJobSpecification {
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
-  
+
 }

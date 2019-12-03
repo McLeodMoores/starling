@@ -32,7 +32,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
   //-------------------------------------------------------------------------
   /**
    * Adds an instant to this source.
-   * 
+   *
    * @param name  the name, not null
    * @param instant  the instant, not null
    * @return this, for chaining, not null
@@ -45,7 +45,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
 
   /**
    * Adds an instant to this source treating null as far future.
-   * 
+   *
    * @param name  the name, not null
    * @param instant  the instant, null is far future
    * @return this, for chaining, not null
@@ -63,7 +63,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
   //-------------------------------------------------------------------------
   /**
    * Adds a date to this source.
-   * 
+   *
    * @param name  the name, not null
    * @param date  the date, not null
    * @return this, for chaining, not null
@@ -76,7 +76,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
 
   /**
    * Adds a time to this source.
-   * 
+   *
    * @param name  the name, not null
    * @param time  the time, not null
    * @return this, for chaining, not null
@@ -90,7 +90,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
   //-------------------------------------------------------------------------
   /**
    * Adds an object to this source.
-   * 
+   *
    * @param name  the name, not null
    * @param object  the object, not null
    * @return this, for chaining, not null
@@ -103,21 +103,21 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
 
   /**
    * Adds an object to this source, specifying the SQL type.
-   * 
+   *
    * @param name  the name, not null
    * @param object  the object, not null
    * @param sqlType  the SQL type
    * @return this, for chaining, not null
    */
   @Override
-  public DbMapSqlParameterSource addValue(final String name, final Object object, int sqlType) {
+  public DbMapSqlParameterSource addValue(final String name, final Object object, final int sqlType) {
     super.addValue(name, object, sqlType);
     return this;
   }
 
   /**
    * Adds an object to this source, specifying the SQL type and type name.
-   * 
+   *
    * @param name  the name, not null
    * @param object  the object, not null
    * @param sqlType  the SQL type
@@ -132,7 +132,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
 
   /**
    * Adds a map of parameters to this source.
-   * 
+   *
    * @param values  a map holding existing parameter values which may be null
    * @return this, for chaining, not null
    */
@@ -145,7 +145,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
   //-------------------------------------------------------------------------
   /**
    * Adds an instant to this source unless the object is null.
-   * 
+   *
    * @param name  the name, not null
    * @param instant  the instant, not null
    * @return this, for chaining, not null
@@ -161,7 +161,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
 
   /**
    * Adds an date to this source unless the object is null.
-   * 
+   *
    * @param name  the name, not null
    * @param date  the date, not null
    * @return this, for chaining, not null
@@ -177,7 +177,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
 
   /**
    * Adds an time to this source unless the object is null.
-   * 
+   *
    * @param name  the name, not null
    * @param time  the time, not null
    * @return this, for chaining, not null
@@ -194,7 +194,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
   //-------------------------------------------------------------------------
   /**
    * Adds an instant to this source unless the object is null.
-   * 
+   *
    * @param name  the name, not null
    * @param instant  the instant, not null
    * @return this, for chaining, not null
@@ -208,7 +208,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
 
   /**
    * Adds an date to this source unless the object is null.
-   * 
+   *
    * @param name  the name, not null
    * @param date  the date, not null
    * @return this, for chaining, not null
@@ -222,7 +222,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
 
   /**
    * Adds an time to this source unless the object is null.
-   * 
+   *
    * @param name  the name, not null
    * @param time  the time, not null
    * @return this, for chaining, not null
@@ -236,7 +236,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
 
   /**
    * Adds an object to this source unless the object is null.
-   * 
+   *
    * @param name  the name, not null
    * @param object  the object, not null
    * @return this, for chaining, not null
@@ -251,7 +251,7 @@ public class DbMapSqlParameterSource extends MapSqlParameterSource {
   //-------------------------------------------------------------------------
   /**
    * Returns a description of this object suitable for debugging.
-   * 
+   *
    * @return the description, not null
    */
   @Override

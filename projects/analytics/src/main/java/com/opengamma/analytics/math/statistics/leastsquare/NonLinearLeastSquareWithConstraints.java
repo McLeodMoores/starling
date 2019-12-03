@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.leastsquare;
@@ -10,7 +10,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * 
+ *
  */
 public class NonLinearLeastSquareWithConstraints extends NonLinearLeastSquare {
   //TODO this is temporary while I see if it works
@@ -24,7 +24,7 @@ public class NonLinearLeastSquareWithConstraints extends NonLinearLeastSquare {
   }
 
   @SuppressWarnings("unused")
-  private boolean violatesConstraints(DoubleMatrix1D x) {
+  private boolean violatesConstraints(final DoubleMatrix1D x) {
     return _constaints.evaluate(x);
   }
 }

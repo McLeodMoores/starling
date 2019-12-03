@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -11,23 +11,31 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * European type of double barrier option
+ * European type of double barrier option.
  */
 public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionProvider {
 
-  private double _upperBarrier;
+  private final double _upperBarrier;
   private CrossBarrierChecker _checkerDouble;
 
   /**
-   * @param strike Strike price
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param lowerBarrier Lower barrier price
-   * @param upperBarrier Upper barrier price
-   * @param typeName {@link BarrierTypes}, DownAndOut or UpAndOut
+   * @param strike
+   *          Strike price
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param lowerBarrier
+   *          Lower barrier price
+   * @param upperBarrier
+   *          Upper barrier price
+   * @param typeName
+   *          the barrier type
    */
-  public DoubleBarrierOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double lowerBarrier, final double upperBarrier,
+  public DoubleBarrierOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double lowerBarrier,
+      final double upperBarrier,
       final BarrierTypes typeName) {
     super(strike, timeToExpiry, steps, isCall, lowerBarrier, BarrierOptionFunctionProvider.BarrierTypes.DownAndOut);
     ArgumentChecker.isTrue(upperBarrier > 0., "upperBarrier should be positive");
@@ -62,7 +70,8 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
   }
 
   @Override
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values, final double baseAssetPrice, final double sumCashDiv,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double downProbability, final double[] values,
+      final double baseAssetPrice, final double sumCashDiv,
       final double downFactor, final double upOverDown, final int steps) {
     final int nStepsP = steps + 1;
 
@@ -92,14 +101,16 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
   }
 
   @Override
-  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability, final double[] values,
+  public double[] getNextOptionValues(final double discount, final double upProbability, final double middleProbability, final double downProbability,
+      final double[] values,
       final double baseAssetPrice, final double sumCashDiv, final double downFactor, final double middleOverDown, final int steps) {
     final int nNodes = 2 * steps + 1;
 
     final double[] res = new double[nNodes];
     double assetPrice = baseAssetPrice * Math.pow(downFactor, steps);
     for (int j = 0; j < nNodes; ++j) {
-      res[j] = _checkerDouble.checkOut(assetPrice + sumCashDiv) ? 0. : discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]);
+      res[j] = _checkerDouble.checkOut(assetPrice + sumCashDiv) ? 0.
+          : discount * (upProbability * values[j + 2] + middleProbability * values[j + 1] + downProbability * values[j]);
       assetPrice *= middleOverDown;
     }
     return res;
@@ -110,6 +121,7 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
     return this._checkerDouble;
   }
 
+  @Override
   public BarrierTypes getBarrierType() {
     return BarrierTypes.DoubleKnockOut;
   }
@@ -119,7 +131,8 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
   }
 
   /**
-   * Access lower barrier
+   * Access lower barrier.
+   *
    * @return _barrier in superclass
    */
   public double getLowerBarrier() {
@@ -127,7 +140,8 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
   }
 
   /**
-   * Access upper barrier
+   * Access upper barrier.
+   *
    * @return _upperBarrier
    */
   public double getUpperBarrier() {
@@ -140,7 +154,7 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
   }
 
   /**
-   * The inherited class checks barriers crossing for double knock-out option
+   * The inherited class checks barriers crossing for double knock-out option.
    */
   @SuppressWarnings("synthetic-access")
   protected class DoubleBarrier extends CrossBarrierChecker {
@@ -152,7 +166,7 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
 
     @Override
     public boolean checkStrikeBehindBarrier() {
-      return getSign() == 1. ? (_upperBarrier <= getStrike()) : false || getSuperclassChecker().checkStrikeBehindBarrier();
+      return getSign() == 1. ? _upperBarrier <= getStrike() : getSuperclassChecker().checkStrikeBehindBarrier();
     }
   }
 
@@ -162,12 +176,12 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_upperBarrier);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -177,7 +191,7 @@ public class DoubleBarrierOptionFunctionProvider extends BarrierOptionFunctionPr
     if (!(obj instanceof DoubleBarrierOptionFunctionProvider)) {
       return false;
     }
-    DoubleBarrierOptionFunctionProvider other = (DoubleBarrierOptionFunctionProvider) obj;
+    final DoubleBarrierOptionFunctionProvider other = (DoubleBarrierOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_upperBarrier) != Double.doubleToLongBits(other._upperBarrier)) {
       return false;
     }

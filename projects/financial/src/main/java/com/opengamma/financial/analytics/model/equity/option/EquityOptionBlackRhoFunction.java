@@ -31,7 +31,7 @@ public class EquityOptionBlackRhoFunction extends EquityOptionBlackFunction {
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackRhoCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackRhoFunction() {
     super(ValueRequirementNames.RHO);
@@ -46,7 +46,8 @@ public class EquityOptionBlackRhoFunction extends EquityOptionBlackFunction {
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> resultsWithCcy = super.getResults(context, target, inputs);
     return getResultsWithoutCurrency(resultsWithCcy);
   }

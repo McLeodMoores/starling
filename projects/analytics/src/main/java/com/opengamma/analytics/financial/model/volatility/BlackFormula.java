@@ -1,12 +1,14 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.rootfinding.NewtonRaphsonSingleRootFinder;
@@ -18,6 +20,7 @@ import com.opengamma.util.CompareUtils;
  * This permits us to disregard discounting, which is sufficient for purpose of implied volatility.
  */
 public class BlackFormula {
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlackFormula.class);
   private double _forward;
   private double _strike;
   private double _expiry;
@@ -69,11 +72,14 @@ public class BlackFormula {
   }
 
   /**
-   * Via the BlackFormula, this converts a Delta-parameterised strike into the actual strike value.
-   * fwdDelta, defined here, is always positive, in [0,1]. At 0.5, a straddle has zero delta, occurring at K == F*exp(0.5 sig^2 T). So deltas < 0.5 are out-of-the-money.
-   * Hence a 0.25 put and a 0.25 call will have a strike less and greater than the forward, respectively.
-   * @param fwdDelta the first order derivative of the price with respect to the forward
-   * @param forCall Choose whether you would like to see the strike of the call or put for the fwdDelta provided
+   * Via the BlackFormula, this converts a Delta-parameterised strike into the actual strike value. fwdDelta, defined here, is always positive, in [0,1]. At
+   * 0.5, a straddle has zero delta, occurring at K == F*exp(0.5 sig^2 T). So deltas &lt; 0.5 are out-of-the-money. Hence a 0.25 put and a 0.25 call will have a
+   * strike less and greater than the forward, respectively.
+   * 
+   * @param fwdDelta
+   *          the first order derivative of the price with respect to the forward
+   * @param forCall
+   *          Choose whether you would like to see the strike of the call or put for the fwdDelta provided
    * @return The true strike value
    */
   public final Double computeStrikeImpliedByForwardDelta(final double fwdDelta, final boolean forCall) {
@@ -115,7 +121,7 @@ public class BlackFormula {
       };
 
       final NewtonRaphsonSingleRootFinder rootFinder = new NewtonRaphsonSingleRootFinder();
-      if ((forCall && fwdDelta >= 0.5) || (!forCall && fwdDelta <= 0.5)) {
+      if (forCall && fwdDelta >= 0.5 || !forCall && fwdDelta <= 0.5) {
         // Strike is bounded below by 0 and above by the atmDelta
         final double atmDelta = _forward * Math.exp(0.5 * _lognormalVol * _lognormalVol * _expiry);
         return rootFinder.getRoot(difference, 0.0, atmDelta);
@@ -123,8 +129,7 @@ public class BlackFormula {
       return rootFinder.getRoot(difference, _strike);
 
     } catch (final com.opengamma.analytics.math.MathException e) {
-      System.err.println(e);
-      System.err.println("Failed to compute ImpliedVolatility");
+      LOGGER.error("Failed to compute ImpliedVolatility, {}", e);
       return null;
     }
   }
@@ -224,14 +229,14 @@ public class BlackFormula {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_expiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_forward);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_fwdMtm == null) ? 0 : _fwdMtm.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_fwdMtm == null ? 0 : _fwdMtm.hashCode());
     result = prime * result + (_isCall ? 1231 : 1237);
-    result = prime * result + ((_lognormalVol == null) ? 0 : _lognormalVol.hashCode());
+    result = prime * result + (_lognormalVol == null ? 0 : _lognormalVol.hashCode());
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

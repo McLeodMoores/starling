@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -32,9 +32,9 @@ public final class CashFlowSecurityBeanOperation extends AbstractSecurityBeanOpe
   }
 
   @Override
-  public CashFlowSecurityBean createBean(final OperationContext context, HibernateSecurityMasterDao secMasterSession, CashFlowSecurity security) {
-    CurrencyBean currencyBean = secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode());
-    ZonedDateTimeBean settlementBean = dateTimeWithZoneToZonedDateTimeBean(security.getSettlement());
+  public CashFlowSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final CashFlowSecurity security) {
+    final CurrencyBean currencyBean = secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode());
+    final ZonedDateTimeBean settlementBean = dateTimeWithZoneToZonedDateTimeBean(security.getSettlement());
     final CashFlowSecurityBean bean = new CashFlowSecurityBean();
     bean.setCurrency(currencyBean);
     bean.setSettlement(settlementBean);
@@ -43,7 +43,7 @@ public final class CashFlowSecurityBeanOperation extends AbstractSecurityBeanOpe
   }
 
   @Override
-  public CashFlowSecurity createSecurity(final OperationContext context, CashFlowSecurityBean bean) {
+  public CashFlowSecurity createSecurity(final OperationContext context, final CashFlowSecurityBean bean) {
     return new CashFlowSecurity(currencyBeanToCurrency(bean.getCurrency()),
                                  zonedDateTimeBeanToDateTimeWithZone(bean.getSettlement()),
                                  bean.getAmount());

@@ -57,7 +57,7 @@ import com.opengamma.util.ArgumentChecker;
 public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
   // TODO: reimplement this in a javalike way, transliterating LINQ is dirty.
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSnapshotterImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSnapshotterImpl.class);
 
   /** The computation target resolver */
   private final ComputationTargetResolver _resolver;
@@ -80,23 +80,28 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
   /**
    * Constructs a instance which produces structured market data snapshots.
    *
-   * @param resolver the target resolver, not null
-   * @param htsSource Must be specified if market data is inputted via HTS, may be null
+   * @param resolver
+   *          the target resolver, not null
+   * @param htsSource
+   *          Must be specified if market data is inputted via HTS, may be null
    */
   public MarketDataSnapshotterImpl(final ComputationTargetResolver resolver, final HistoricalTimeSeriesSource htsSource) {
     this(resolver, htsSource, Mode.STRUCTURED);
   }
 
   /**
-   * @param resolver the target resolver, not null
-   * @param htsSource Must be specified if market data is inputted via HTS, may be null
-   * @param mode whether to create a structured or flattened snapshot
+   * @param resolver
+   *          the target resolver, not null
+   * @param htsSource
+   *          Must be specified if market data is inputted via HTS, may be null
+   * @param mode
+   *          whether to create a structured or flattened snapshot
    */
   public MarketDataSnapshotterImpl(final ComputationTargetResolver resolver, final HistoricalTimeSeriesSource htsSource, final Mode mode) {
     ArgumentChecker.notNull(resolver, "resolver");
     _resolver = resolver;
     _htsSource = htsSource;
-    _structuredSnappers = new StructuredSnapper[] {_yieldCurveSnapper, _curveSnapper, _volatilitySurfaceSnapper, _volatilityCubeSnapper };
+    _structuredSnappers = new StructuredSnapper[] { _yieldCurveSnapper, _curveSnapper, _volatilitySurfaceSnapper, _volatilityCubeSnapper };
     _mode = mode;
   }
 
@@ -108,7 +113,7 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
   }
 
   private Map<String, DependencyGraph> getGraphs(final CompiledViewDefinitionWithGraphs defn) {
-    final HashMap<String, DependencyGraph> ret = new HashMap<String, DependencyGraph>();
+    final HashMap<String, DependencyGraph> ret = new HashMap<>();
     for (final CompiledViewCalculationConfiguration config : defn.getCompiledCalculationConfigurations()) {
       final String configName = config.getName();
       final DependencyGraph graph = defn.getDependencyGraphExplorer(configName).getWholeGraph();
@@ -134,15 +139,16 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
       ret.setVolatilitySurfaces(surfaces);
       ret.setVolatilityCubes(cubes);
     } else {
-      ret.setYieldCurves(Collections.<YieldCurveKey, YieldCurveSnapshot>emptyMap());
-      ret.setCurves(Collections.<CurveKey, CurveSnapshot>emptyMap());
-      ret.setVolatilitySurfaces(Collections.<VolatilitySurfaceKey, VolatilitySurfaceSnapshot>emptyMap());
-      ret.setVolatilityCubes(Collections.<VolatilityCubeKey, VolatilityCubeSnapshot>emptyMap());
+      ret.setYieldCurves(Collections.<YieldCurveKey, YieldCurveSnapshot> emptyMap());
+      ret.setCurves(Collections.<CurveKey, CurveSnapshot> emptyMap());
+      ret.setVolatilitySurfaces(Collections.<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> emptyMap());
+      ret.setVolatilityCubes(Collections.<VolatilityCubeKey, VolatilityCubeSnapshot> emptyMap());
     }
     return ret;
   }
 
-  private ManageableUnstructuredMarketDataSnapshot getGlobalAndUnresolvedValues(final ExternalIdBundleResolver resolver, final ViewComputationResultModel results,
+  private ManageableUnstructuredMarketDataSnapshot getGlobalAndUnresolvedValues(final ExternalIdBundleResolver resolver,
+      final ViewComputationResultModel results,
       final Map<String, DependencyGraph> graphs) {
     final ManageableUnstructuredMarketDataSnapshot snapshot = new ManageableUnstructuredMarketDataSnapshot();
     for (final Entry<String, DependencyGraph> graphEntry : graphs.entrySet()) {
@@ -162,7 +168,8 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
     return snapshot;
   }
 
-  private void extractTerminalUnstructuredOutput(final DependencyNode node, final Map<ValueSpecification, ComputedValue> resolvedValues, final ExternalIdBundleResolver resolver, boolean pathToRoot,
+  private void extractTerminalUnstructuredOutput(final DependencyNode node, final Map<ValueSpecification, ComputedValue> resolvedValues,
+      final ExternalIdBundleResolver resolver, boolean pathToRoot,
       final Map<ValueSpecification, ?> terminalOutputs, final ManageableUnstructuredMarketDataSnapshot snapshot) {
     final int inputs = node.getInputCount();
     if (inputs == 0) {
@@ -213,10 +220,10 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
     for (int i = 0; i < outputs; i++) {
       final ValueSpecification output = node.getOutputValue(i);
       for (final StructuredSnapper snapper : _structuredSnappers) {
-        if (output.getValueName() == snapper.getRequirementName()) {
+        if (output.getValueName().equals(snapper.getRequirementName())) {
           if (outputs != 1) {
-            //TODO this is a bit fragile, but if this isn't true all sorts of things are broken
-            s_logger.error("Structured market data node produced more than one output {} - {}", node, DependencyNodeImpl.getOutputValues(node));
+            // TODO this is a bit fragile, but if this isn't true all sorts of things are broken
+            LOGGER.error("Structured market data node produced more than one output {} - {}", node, DependencyNodeImpl.getOutputValues(node));
             throw new OpenGammaRuntimeException("Structured market data node produced more than one output");
           }
           return true;
@@ -233,7 +240,7 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
   public Map<YieldCurveKey, Map<String, ValueRequirement>> getYieldCurveSpecifications(final ViewClient client, final ViewCycle cycle) {
     final CompiledViewDefinitionWithGraphs defn = cycle.getCompiledViewDefinition();
     final Map<String, DependencyGraph> graphs = getGraphs(defn);
-    final Map<YieldCurveKey, Map<String, ValueRequirement>> ret = new HashMap<YieldCurveKey, Map<String, ValueRequirement>>();
+    final Map<YieldCurveKey, Map<String, ValueRequirement>> ret = new HashMap<>();
     for (final Entry<String, DependencyGraph> entry : graphs.entrySet()) {
       final DependencyGraph graph = entry.getValue();
       final Iterator<DependencyNode> nodes = graph.nodeIterator();
@@ -259,7 +266,7 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
 
     add(ret, key, yieldCurveSpec.toRequirementSpecification());
 
-    //We know how the properties of this relate
+    // We know how the properties of this relate
     final ValueRequirement interpolatedSpec = new ValueRequirement(
         ValueRequirementNames.YIELD_CURVE_INTERPOLATED, yieldCurveSpec.getTargetSpecification(),
         getCurveProperties(yieldCurveSpec));
@@ -269,7 +276,7 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
   private void add(final Map<YieldCurveKey, Map<String, ValueRequirement>> ret, final YieldCurveKey key, final ValueRequirement outputValue) {
     Map<String, ValueRequirement> ycMap = ret.get(key);
     if (ycMap == null) {
-      ycMap = new HashMap<String, ValueRequirement>();
+      ycMap = new HashMap<>();
       ret.put(key, ycMap);
     }
     ycMap.put(outputValue.getValueName(), outputValue);

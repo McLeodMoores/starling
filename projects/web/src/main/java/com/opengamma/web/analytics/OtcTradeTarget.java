@@ -24,7 +24,7 @@ public class OtcTradeTarget extends RowTarget {
    * @param positionId The position ID
    * @param tradeId the trade ID
    */
-  /* package */ OtcTradeTarget(String name, UniqueId nodeId, UniqueId positionId, UniqueId tradeId) {
+  /* package */ OtcTradeTarget(final String name, final UniqueId nodeId, final UniqueId positionId, final UniqueId tradeId) {
     super(name, nodeId);
     _tradeId = tradeId;
     _positionId = positionId;

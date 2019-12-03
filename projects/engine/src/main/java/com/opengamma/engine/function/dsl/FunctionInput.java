@@ -12,10 +12,10 @@ public class FunctionInput extends FunctionGate<FunctionInput> {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the name
    */
-  public FunctionInput(String name) {
+  public FunctionInput(final String name) {
     super(name);
   }
 

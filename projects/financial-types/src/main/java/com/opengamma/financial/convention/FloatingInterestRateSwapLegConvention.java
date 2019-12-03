@@ -83,7 +83,7 @@ public class FloatingInterestRateSwapLegConvention extends InterestRateSwapLegCo
   @PropertyDefinition
   private final Set<ExternalId> _resetCalendars = Sets.newHashSet();
   /**
-   * The reset business day convention
+   * The reset business day convention.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _resetBusinessDayConvention;
@@ -109,9 +109,11 @@ public class FloatingInterestRateSwapLegConvention extends InterestRateSwapLegCo
    * Creates an instance.
    * <p>
    * This instance will be incomplete with fields that are null that should not be.
-   * 
-   * @param name  the convention name, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
+   *
+   * @param name
+   *          the convention name, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
    */
   public FloatingInterestRateSwapLegConvention(final String name, final ExternalIdBundle externalIdBundle) {
     super(name, externalIdBundle);
@@ -119,57 +121,82 @@ public class FloatingInterestRateSwapLegConvention extends InterestRateSwapLegCo
 
   /**
    * Creates an instance.
-   * 
-   * @param name  the convention name, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
-   * @param paymentCalendars  the payment calendars, not null
-   * @param calculationCalendars  the calculation calendars, not null
-   * @param maturityCalendars  the maturity calendars, not null
-   * @param paymentDayConvention  the payment day convention, not null
-   * @param calculationBusinessDayConvention  the calculation day convention, not null
-   * @param maturityBusinessDayConvention  the maturity day convention, not null
-   * @param dayCountConvention  the day count frequency, not null
-   * @param paymentFrequency  the payment frequency, not null
-   * @param calculationFrequency  the calculation frequency, not null
-   * @param paymentRelativeTo  the payment is relative to the beginning or end of the period, not null
-   * @param adjustedAccrual  whether the accrual should be adjusted
-   * @param settlementDays  the number of settlement days
-   * @param rollConvention  the roll convention, not null
-   * @param compoundingMethod  the compounding, not null
-   * @param rateType  the rate type, not null
-   * @param fixingCalendars  the fixing calendars, not null
-   * @param fixingBusinessDayConvention  the fixing day convention, not null
-   * @param settlementDayType  the settlement date type, not null
-   * @param resetFrequency  the reset frequency, not null
-   * @param resetCalendars  the reset calendars, not null
-   * @param resetBusinessDayConvention  the reset day convention, not null
-   * @param resetRelativeTo  the reset relative to, not null
-   * @param paymentLag the payment lag in days
+   *
+   * @param name
+   *          the convention name, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
+   * @param paymentCalendars
+   *          the payment calendars, not null
+   * @param calculationCalendars
+   *          the calculation calendars, not null
+   * @param maturityCalendars
+   *          the maturity calendars, not null
+   * @param paymentDayConvention
+   *          the payment day convention, not null
+   * @param calculationBusinessDayConvention
+   *          the calculation day convention, not null
+   * @param maturityBusinessDayConvention
+   *          the maturity day convention, not null
+   * @param dayCountConvention
+   *          the day count frequency, not null
+   * @param paymentFrequency
+   *          the payment frequency, not null
+   * @param calculationFrequency
+   *          the calculation frequency, not null
+   * @param paymentRelativeTo
+   *          the payment is relative to the beginning or end of the period, not null
+   * @param adjustedAccrual
+   *          whether the accrual should be adjusted
+   * @param settlementDays
+   *          the number of settlement days
+   * @param rollConvention
+   *          the roll convention, not null
+   * @param compoundingMethod
+   *          the compounding, not null
+   * @param rateType
+   *          the rate type, not null
+   * @param fixingCalendars
+   *          the fixing calendars, not null
+   * @param fixingBusinessDayConvention
+   *          the fixing day convention, not null
+   * @param settlementDayType
+   *          the settlement date type, not null
+   * @param resetFrequency
+   *          the reset frequency, not null
+   * @param resetCalendars
+   *          the reset calendars, not null
+   * @param resetBusinessDayConvention
+   *          the reset day convention, not null
+   * @param resetRelativeTo
+   *          the reset relative to, not null
+   * @param paymentLag
+   *          the payment lag in days
    */
-  public FloatingInterestRateSwapLegConvention(final String name, final ExternalIdBundle externalIdBundle,  // CSIGNORE
-      Set<ExternalId> paymentCalendars,
-      Set<ExternalId> calculationCalendars,
-      Set<ExternalId> maturityCalendars,
-      BusinessDayConvention paymentDayConvention,
-      BusinessDayConvention calculationBusinessDayConvention,
-      BusinessDayConvention maturityBusinessDayConvention,
-      DayCount dayCountConvention,
-      Frequency paymentFrequency,
-      Frequency calculationFrequency,
-      DateRelativeTo paymentRelativeTo,
-      boolean adjustedAccrual,
-      int settlementDays,
-      RollConvention rollConvention,
-      CompoundingMethod compoundingMethod,
-      FloatingRateType rateType,
-      Set<ExternalId> fixingCalendars,
-      BusinessDayConvention fixingBusinessDayConvention,
-      OffsetType settlementDayType,
-      Frequency resetFrequency,
-      Set<ExternalId> resetCalendars,
-      BusinessDayConvention resetBusinessDayConvention,
-      DateRelativeTo resetRelativeTo,
-      int paymentLag) {
+  public FloatingInterestRateSwapLegConvention(final String name, final ExternalIdBundle externalIdBundle, // CSIGNORE
+      final Set<ExternalId> paymentCalendars,
+      final Set<ExternalId> calculationCalendars,
+      final Set<ExternalId> maturityCalendars,
+      final BusinessDayConvention paymentDayConvention,
+      final BusinessDayConvention calculationBusinessDayConvention,
+      final BusinessDayConvention maturityBusinessDayConvention,
+      final DayCount dayCountConvention,
+      final Frequency paymentFrequency,
+      final Frequency calculationFrequency,
+      final DateRelativeTo paymentRelativeTo,
+      final boolean adjustedAccrual,
+      final int settlementDays,
+      final RollConvention rollConvention,
+      final CompoundingMethod compoundingMethod,
+      final FloatingRateType rateType,
+      final Set<ExternalId> fixingCalendars,
+      final BusinessDayConvention fixingBusinessDayConvention,
+      final OffsetType settlementDayType,
+      final Frequency resetFrequency,
+      final Set<ExternalId> resetCalendars,
+      final BusinessDayConvention resetBusinessDayConvention,
+      final DateRelativeTo resetRelativeTo,
+      final int paymentLag) {
     super(name, externalIdBundle, paymentCalendars, calculationCalendars, maturityCalendars,
         paymentDayConvention, calculationBusinessDayConvention, maturityBusinessDayConvention,
         dayCountConvention, paymentFrequency, calculationFrequency, paymentRelativeTo,
@@ -188,54 +215,78 @@ public class FloatingInterestRateSwapLegConvention extends InterestRateSwapLegCo
   /**
    * Creates an instance.
    *
-   * @param name  the convention name, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
-   * @param paymentCalendars  the payment calendars, not null
-   * @param calculationCalendars  the calculation calendars, not null
-   * @param maturityCalendars  the maturity calendars, not null
-   * @param paymentDayConvention  the payment day convention, not null
-   * @param calculationBusinessDayConvention  the calculation day convention, not null
-   * @param maturityBusinessDayConvention  the maturity day convention, not null
-   * @param dayCountConvention  the day count frequency, not null
-   * @param paymentFrequency  the payment frequency, not null
-   * @param calculationFrequency  the calculation frequency, not null
-   * @param paymentRelativeTo  the payment is relative to the beginning or end of the period, not null
-   * @param adjustedAccrual  whether the accrual should be adjusted
-   * @param settlementDays  the number of settlement days
-   * @param rollConvention  the roll convention, not null
-   * @param compoundingMethod  the compounding, not null
-   * @param rateType  the rate type, not null
-   * @param fixingCalendars  the fixing calendars, not null
-   * @param fixingBusinessDayConvention  the fixing day convention, not null
-   * @param settlementDayType  the settlement date type, not null
-   * @param resetFrequency  the reset frequency, not null
-   * @param resetCalendars  the reset calendars, not null
-   * @param resetBusinessDayConvention  the reset day convention, not null
-   * @param resetRelativeTo  the reset relative to, not null
+   * @param name
+   *          the convention name, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
+   * @param paymentCalendars
+   *          the payment calendars, not null
+   * @param calculationCalendars
+   *          the calculation calendars, not null
+   * @param maturityCalendars
+   *          the maturity calendars, not null
+   * @param paymentDayConvention
+   *          the payment day convention, not null
+   * @param calculationBusinessDayConvention
+   *          the calculation day convention, not null
+   * @param maturityBusinessDayConvention
+   *          the maturity day convention, not null
+   * @param dayCountConvention
+   *          the day count frequency, not null
+   * @param paymentFrequency
+   *          the payment frequency, not null
+   * @param calculationFrequency
+   *          the calculation frequency, not null
+   * @param paymentRelativeTo
+   *          the payment is relative to the beginning or end of the period, not null
+   * @param adjustedAccrual
+   *          whether the accrual should be adjusted
+   * @param settlementDays
+   *          the number of settlement days
+   * @param rollConvention
+   *          the roll convention, not null
+   * @param compoundingMethod
+   *          the compounding, not null
+   * @param rateType
+   *          the rate type, not null
+   * @param fixingCalendars
+   *          the fixing calendars, not null
+   * @param fixingBusinessDayConvention
+   *          the fixing day convention, not null
+   * @param settlementDayType
+   *          the settlement date type, not null
+   * @param resetFrequency
+   *          the reset frequency, not null
+   * @param resetCalendars
+   *          the reset calendars, not null
+   * @param resetBusinessDayConvention
+   *          the reset day convention, not null
+   * @param resetRelativeTo
+   *          the reset relative to, not null
    */
-  public FloatingInterestRateSwapLegConvention(final String name, final ExternalIdBundle externalIdBundle,  // CSIGNORE
-      Set<ExternalId> paymentCalendars,
-      Set<ExternalId> calculationCalendars,
-      Set<ExternalId> maturityCalendars,
-      BusinessDayConvention paymentDayConvention,
-      BusinessDayConvention calculationBusinessDayConvention,
-      BusinessDayConvention maturityBusinessDayConvention,
-      DayCount dayCountConvention,
-      Frequency paymentFrequency,
-      Frequency calculationFrequency,
-      DateRelativeTo paymentRelativeTo,
-      boolean adjustedAccrual,
-      int settlementDays,
-      RollConvention rollConvention,
-      CompoundingMethod compoundingMethod,
-      FloatingRateType rateType,
-      Set<ExternalId> fixingCalendars,
-      BusinessDayConvention fixingBusinessDayConvention,
-      OffsetType settlementDayType,
-      Frequency resetFrequency,
-      Set<ExternalId> resetCalendars,
-      BusinessDayConvention resetBusinessDayConvention,
-      DateRelativeTo resetRelativeTo) {
+  public FloatingInterestRateSwapLegConvention(final String name, final ExternalIdBundle externalIdBundle, // CSIGNORE
+      final Set<ExternalId> paymentCalendars,
+      final Set<ExternalId> calculationCalendars,
+      final Set<ExternalId> maturityCalendars,
+      final BusinessDayConvention paymentDayConvention,
+      final BusinessDayConvention calculationBusinessDayConvention,
+      final BusinessDayConvention maturityBusinessDayConvention,
+      final DayCount dayCountConvention,
+      final Frequency paymentFrequency,
+      final Frequency calculationFrequency,
+      final DateRelativeTo paymentRelativeTo,
+      final boolean adjustedAccrual,
+      final int settlementDays,
+      final RollConvention rollConvention,
+      final CompoundingMethod compoundingMethod,
+      final FloatingRateType rateType,
+      final Set<ExternalId> fixingCalendars,
+      final BusinessDayConvention fixingBusinessDayConvention,
+      final OffsetType settlementDayType,
+      final Frequency resetFrequency,
+      final Set<ExternalId> resetCalendars,
+      final BusinessDayConvention resetBusinessDayConvention,
+      final DateRelativeTo resetRelativeTo) {
     super(name, externalIdBundle, paymentCalendars, calculationCalendars, maturityCalendars,
         paymentDayConvention, calculationBusinessDayConvention, maturityBusinessDayConvention,
         dayCountConvention, paymentFrequency, calculationFrequency, paymentRelativeTo,
@@ -250,10 +301,10 @@ public class FloatingInterestRateSwapLegConvention extends InterestRateSwapLegCo
     setResetRelativeTo(resetRelativeTo);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override
@@ -264,8 +315,10 @@ public class FloatingInterestRateSwapLegConvention extends InterestRateSwapLegCo
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T>  the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   @Override
@@ -274,17 +327,19 @@ public class FloatingInterestRateSwapLegConvention extends InterestRateSwapLegCo
     return visitor.visitFloatingInterestRateSwapLegConvention(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Create a leg from a convention.
    *
-   * @param notional  the notional (may be simple or complex)
-   * @param payOrReceive  is this a pay or receive leg?
+   * @param notional
+   *          the notional (may be simple or complex)
+   * @param payOrReceive
+   *          is this a pay or receive leg?
    * @return the leg, not null
    */
   public FloatingInterestRateSwapLeg toLeg(final InterestRateSwapNotional notional, final PayReceiveType payOrReceive) {
     ArgumentChecker.notNull(getDayCountConvention(), "Daycount");
-    FloatingInterestRateSwapLeg leg = new FloatingInterestRateSwapLeg();
+    final FloatingInterestRateSwapLeg leg = new FloatingInterestRateSwapLeg();
     leg.setPayReceiveType(payOrReceive);
     leg.setNotional(notional);
     leg.setDayCountConvention(getDayCountConvention());
@@ -322,13 +377,16 @@ public class FloatingInterestRateSwapLegConvention extends InterestRateSwapLegCo
   /**
    * Create a leg from a convention.
    *
-   * @param notional  the notional (may be simple or complex)
-   * @param payOrReceive  is this a pay or receive leg?
-   * @param spread  the spread. may be null
+   * @param notional
+   *          the notional (may be simple or complex)
+   * @param payOrReceive
+   *          is this a pay or receive leg?
+   * @param spread
+   *          the spread. may be null
    * @return the leg, not null
    */
-  public FloatingInterestRateSwapLeg toLeg(final InterestRateSwapNotional notional, final PayReceiveType payOrReceive, Rate spread) {
-    FloatingInterestRateSwapLeg leg = toLeg(notional, payOrReceive);
+  public FloatingInterestRateSwapLeg toLeg(final InterestRateSwapNotional notional, final PayReceiveType payOrReceive, final Rate spread) {
+    final FloatingInterestRateSwapLeg leg = toLeg(notional, payOrReceive);
     leg.setSpreadSchedule(spread);
     return leg;
   }
@@ -523,7 +581,7 @@ public class FloatingInterestRateSwapLegConvention extends InterestRateSwapLegCo
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the reset business day convention
+   * Gets the reset business day convention.
    * @return the value of the property, not null
    */
   public BusinessDayConvention getResetBusinessDayConvention() {
@@ -531,7 +589,7 @@ public class FloatingInterestRateSwapLegConvention extends InterestRateSwapLegCo
   }
 
   /**
-   * Sets the reset business day convention
+   * Sets the reset business day convention.
    * @param resetBusinessDayConvention  the new value of the property, not null
    */
   public void setResetBusinessDayConvention(BusinessDayConvention resetBusinessDayConvention) {

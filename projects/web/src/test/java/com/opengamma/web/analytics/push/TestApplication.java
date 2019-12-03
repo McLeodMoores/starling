@@ -17,7 +17,7 @@ public class TestApplication extends Application {
 
   @Override
   public Set<Class<?>> getClasses() {
-    HashSet<Class<?>> classes = new HashSet<Class<?>>();
+    final HashSet<Class<?>> classes = new HashSet<>();
     classes.add(TestResource.class);
     classes.add(TestSubResources.class);
     return classes;

@@ -42,8 +42,8 @@ import com.opengamma.util.paging.Paging;
  * As such, this implementation is currently most useful for testing scenarios.
  */
 public class InMemoryRegionMaster
-    extends SimpleAbstractInMemoryMaster<RegionDocument>
-    implements RegionMaster {
+extends SimpleAbstractInMemoryMaster<RegionDocument>
+implements RegionMaster {
 
   /**
    * The default scheme used for each {@link ObjectId}.
@@ -89,14 +89,14 @@ public class InMemoryRegionMaster
   @Override
   public RegionSearchResult search(final RegionSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    final List<RegionDocument> list = new ArrayList<RegionDocument>();
-    for (RegionDocument doc : _store.values()) {
+    final List<RegionDocument> list = new ArrayList<>();
+    for (final RegionDocument doc : _store.values()) {
       if (request.matches(doc)) {
         list.add(doc);
       }
     }
     Collections.sort(list, RegionDocumentComparator.ASC);
-    RegionSearchResult result = new RegionSearchResult();
+    final RegionSearchResult result = new RegionSearchResult();
     result.setPaging(Paging.of(request.getPagingRequest(), list));
     result.getDocuments().addAll(request.getPagingRequest().select(list));
     return result;
@@ -158,7 +158,7 @@ public class InMemoryRegionMaster
     document.setVersionToInstant(null);
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), storedDocument.getVersionFromInstant(), document.getVersionToInstant(), now);
@@ -197,7 +197,7 @@ public class InMemoryRegionMaster
   }
 
   @Override
-  protected void validateDocument(RegionDocument document) {
+  protected void validateDocument(final RegionDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getRegion(), "document.region");
   }

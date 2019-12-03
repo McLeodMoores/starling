@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -22,12 +22,12 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * FXOptionSecurityBeanOperation
+ * FXOptionSecurityBeanOperation.
  */
 public final class FxOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<FXOptionSecurity, FXOptionSecurityBean> {
-  
+
   /**
-   * Singleton
+   * Singleton.
    */
   public static final FxOptionSecurityBeanOperation INSTANCE = new FxOptionSecurityBeanOperation();
 
@@ -50,13 +50,14 @@ public final class FxOptionSecurityBeanOperation extends AbstractSecurityBeanOpe
   }
 
   @Override
-  public FXOptionSecurity createSecurity(OperationContext context, FXOptionSecurityBean bean) {
+  public FXOptionSecurity createSecurity(final OperationContext context, final FXOptionSecurityBean bean) {
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
-    Currency putCurrency = currencyBeanToCurrency(bean.getPutCurrency());
-    Currency callCurrency = currencyBeanToCurrency(bean.getCallCurrency());
-    Expiry expiry = expiryBeanToExpiry(bean.getExpiry());
-    ZonedDateTime settlementDate = Converters.zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate());
-    FXOptionSecurity sec = new FXOptionSecurity(putCurrency, callCurrency, bean.getPutAmount(), bean.getCallAmount(), expiry, settlementDate, bean.getIsLong(), exerciseType);
+    final Currency putCurrency = currencyBeanToCurrency(bean.getPutCurrency());
+    final Currency callCurrency = currencyBeanToCurrency(bean.getCallCurrency());
+    final Expiry expiry = expiryBeanToExpiry(bean.getExpiry());
+    final ZonedDateTime settlementDate = Converters.zonedDateTimeBeanToDateTimeWithZone(bean.getSettlementDate());
+    final FXOptionSecurity sec = new FXOptionSecurity(putCurrency, callCurrency, bean.getPutAmount(), bean.getCallAmount(), expiry, settlementDate,
+        bean.getIsLong(), exerciseType);
     return sec;
   }
 

@@ -29,7 +29,7 @@ import com.opengamma.util.jms.JmsTopicContainer;
 /* package */ abstract class AvailabilityNotificationListener implements Lifecycle {
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(LiveDataAvailabilityNotificationListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LiveDataAvailabilityNotificationListener.class);
 
   /** For receiving JMS messages. */
   private final JmsTopicContainer _jmsTopicContainer;
@@ -38,9 +38,9 @@ import com.opengamma.util.jms.JmsTopicContainer;
    * @param topic The topic for {@link MarketDataAvailabilityNotification} messages
    * @param jmsConnector For receiving JMS messages
    */
-  public AvailabilityNotificationListener(String topic, JmsConnector jmsConnector) {
-    ByteArrayFudgeMessageReceiver receiver = new ByteArrayFudgeMessageReceiver(new Receiver());
-    JmsByteArrayMessageDispatcher dispatcher = new JmsByteArrayMessageDispatcher(receiver);
+  AvailabilityNotificationListener(final String topic, final JmsConnector jmsConnector) {
+    final ByteArrayFudgeMessageReceiver receiver = new ByteArrayFudgeMessageReceiver(new Receiver());
+    final JmsByteArrayMessageDispatcher dispatcher = new JmsByteArrayMessageDispatcher(receiver);
     _jmsTopicContainer = jmsConnector.getTopicContainerFactory().create(topic, dispatcher);
   }
 
@@ -72,13 +72,13 @@ import com.opengamma.util.jms.JmsTopicContainer;
   private final class Receiver implements FudgeMessageReceiver {
 
     @Override
-    public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
-      FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);
-      FudgeMsg msg = msgEnvelope.getMessage();
-      MarketDataAvailabilityNotification notification =
+    public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
+      final FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);
+      final FudgeMsg msg = msgEnvelope.getMessage();
+      final MarketDataAvailabilityNotification notification =
           deserializer.fudgeMsgToObject(MarketDataAvailabilityNotification.class, msg);
-      s_logger.info("Received notification of market data availability: {}", notification);
-      Set<ExternalScheme> schemes = notification.getSchemes();
+      LOGGER.info("Received notification of market data availability: {}", notification);
+      final Set<ExternalScheme> schemes = notification.getSchemes();
       notificationReceived(schemes);
     }
   }

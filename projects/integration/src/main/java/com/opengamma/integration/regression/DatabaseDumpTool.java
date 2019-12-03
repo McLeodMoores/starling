@@ -25,7 +25,7 @@ public class DatabaseDumpTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
@@ -35,9 +35,9 @@ public class DatabaseDumpTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
-    String dataDir = getCommandLine().getOptionValue(DATA_DIRECTORY);
-    SubdirsRegressionIO io = new SubdirsRegressionIO(new File(dataDir), new FudgeXMLFormat(), true);
-    DatabaseDump databaseDump = new DatabaseDump(io,
+    final String dataDir = getCommandLine().getOptionValue(DATA_DIRECTORY);
+    final SubdirsRegressionIO io = new SubdirsRegressionIO(new File(dataDir), new FudgeXMLFormat(), true);
+    final DatabaseDump databaseDump = new DatabaseDump(io,
                                                  getToolContext().getSecurityMaster(),
                                                  getToolContext().getPositionMaster(),
                                                  getToolContext().getPortfolioMaster(),
@@ -58,10 +58,10 @@ public class DatabaseDumpTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected Options createOptions(boolean mandatoryConfigResource) {
-    Options options = super.createOptions(mandatoryConfigResource);
+  protected Options createOptions(final boolean mandatoryConfigResource) {
+    final Options options = super.createOptions(mandatoryConfigResource);
 
-    Option dataDirOption = new Option(DATA_DIRECTORY, true, "Directory where the database dump files should be saved");
+    final Option dataDirOption = new Option(DATA_DIRECTORY, true, "Directory where the database dump files should be saved");
     dataDirOption.setRequired(true);
     options.addOption(dataDirOption);
 

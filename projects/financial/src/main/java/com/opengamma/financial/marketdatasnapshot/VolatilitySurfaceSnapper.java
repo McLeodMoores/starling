@@ -23,7 +23,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 @SuppressWarnings("rawtypes")
 public class VolatilitySurfaceSnapper extends
@@ -33,29 +33,29 @@ public class VolatilitySurfaceSnapper extends
   }
 
   @Override
-  VolatilitySurfaceKey getKey(ValueSpecification spec) {
-    UniqueId uniqueId = spec.getTargetSpecification().getUniqueId();
-    String surface = getSingleProperty(spec, ValuePropertyNames.SURFACE);
-    String instrumentType = getSingleProperty(spec, SurfaceAndCubePropertyNames.INSTRUMENT_TYPE);
-    String quoteType = getSingleProperty(spec, SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE);
-    String quoteUnits = getSingleProperty(spec, SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS);
+  VolatilitySurfaceKey getKey(final ValueSpecification spec) {
+    final UniqueId uniqueId = spec.getTargetSpecification().getUniqueId();
+    final String surface = getSingleProperty(spec, ValuePropertyNames.SURFACE);
+    final String instrumentType = getSingleProperty(spec, SurfaceAndCubePropertyNames.INSTRUMENT_TYPE);
+    final String quoteType = getSingleProperty(spec, SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE);
+    final String quoteUnits = getSingleProperty(spec, SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS);
     return VolatilitySurfaceKey.of(uniqueId, surface, instrumentType, quoteType, quoteUnits);
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  ManageableVolatilitySurfaceSnapshot buildSnapshot(ViewComputationResultModel resultModel, VolatilitySurfaceKey key,
-      VolatilitySurfaceData volatilitySurfaceData) {
-    Map<Pair<Object, Object>, ValueSnapshot> dict = new HashMap<Pair<Object, Object>, ValueSnapshot>();
-    for (Object x : volatilitySurfaceData.getXs()) {
-      for (Object y : volatilitySurfaceData.getYs()) {
-        Double volatility = volatilitySurfaceData.getVolatility(x, y);
-        Pair<Object, Object> volKey = Pairs.of(x, y);
+  ManageableVolatilitySurfaceSnapshot buildSnapshot(final ViewComputationResultModel resultModel, final VolatilitySurfaceKey key,
+      final VolatilitySurfaceData volatilitySurfaceData) {
+    final Map<Pair<Object, Object>, ValueSnapshot> dict = new HashMap<>();
+    for (final Object x : volatilitySurfaceData.getXs()) {
+      for (final Object y : volatilitySurfaceData.getYs()) {
+        final Double volatility = volatilitySurfaceData.getVolatility(x, y);
+        final Pair<Object, Object> volKey = Pairs.of(x, y);
         dict.put(volKey, ValueSnapshot.of(volatility));
       }
     }
 
-    ManageableVolatilitySurfaceSnapshot ret = new ManageableVolatilitySurfaceSnapshot();
+    final ManageableVolatilitySurfaceSnapshot ret = new ManageableVolatilitySurfaceSnapshot();
     ret.setValues(dict);
     return ret;
   }

@@ -14,7 +14,7 @@ import com.opengamma.util.ArgumentChecker;
 public class PrimitivesGridViewport extends MainGridViewport {
 
   /** Row and column structure of the grid. */
-  private MainGridStructure _gridStructure;
+  private final MainGridStructure _gridStructure;
 
   /**
    * @param gridStructure Row and column structure of the grid
@@ -24,12 +24,12 @@ public class PrimitivesGridViewport extends MainGridViewport {
    * @param cycle The view cycle from the previous calculation cycle
    * @param cache The current results
    */
-  PrimitivesGridViewport(MainGridStructure gridStructure,
-                         String callbackId,
-                         String structureCallbackId,
-                         ViewportDefinition viewportDefinition,
-                         ViewCycle cycle,
-                         ResultsCache cache) {
+  PrimitivesGridViewport(final MainGridStructure gridStructure,
+                         final String callbackId,
+                         final String structureCallbackId,
+                         final ViewportDefinition viewportDefinition,
+                         final ViewCycle cycle,
+                         final ResultsCache cache) {
     super(callbackId, structureCallbackId, viewportDefinition);
     _gridStructure = gridStructure;
     update(viewportDefinition, cycle, cache);
@@ -41,7 +41,7 @@ public class PrimitivesGridViewport extends MainGridViewport {
   }
 
   @Override
-  public void update(ViewportDefinition viewportDefinition, ViewCycle viewCycle, ResultsCache cache) {
+  public void update(final ViewportDefinition viewportDefinition, final ViewCycle viewCycle, final ResultsCache cache) {
     ArgumentChecker.notNull(viewportDefinition, "viewportDefinition");
     ArgumentChecker.notNull(cache, "cache");
     setViewportDefinition(viewportDefinition);

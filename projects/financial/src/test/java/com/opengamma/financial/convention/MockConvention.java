@@ -19,7 +19,6 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.core.convention.ConventionType;
-import com.opengamma.financial.convention.FinancialConvention;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.money.Currency;
@@ -47,25 +46,25 @@ public class MockConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the name, not null
    * @param bundle  the bundle, not null
    * @param currency  the currency, not null
    */
-  public MockConvention(String name, ExternalIdBundle bundle, Currency currency) {
+  public MockConvention(final String name, final ExternalIdBundle bundle, final Currency currency) {
     super(name, bundle);
     setCurrency(currency);
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @param name  the name, not null
    * @param bundle  the bundle, not null
    * @param currency  the currency, not null
    */
-  public MockConvention(UniqueId uniqueId, String name, ExternalIdBundle bundle, Currency currency) {
+  public MockConvention(final UniqueId uniqueId, final String name, final ExternalIdBundle bundle, final Currency currency) {
     super(name, bundle);
     setUniqueId(uniqueId);
     setCurrency(currency);

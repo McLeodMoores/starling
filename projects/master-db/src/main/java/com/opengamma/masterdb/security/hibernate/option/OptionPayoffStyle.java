@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
- 
+
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.financial.security.option.PayoffStyleVisitor;
 
@@ -13,33 +13,33 @@ import com.opengamma.financial.security.option.PayoffStyleVisitor;
  */
 public enum OptionPayoffStyle {
 
-  /** Asset or Nothing */
+  /** Asset or Nothing. */
   ASSET_OR_NOTHING,
-  /** Asymmetric powered */
+  /** Asymmetric powered. */
   ASYMMETRIC_POWERED,
-  /** Barrier */
+  /** Barrier. */
   BARRIER,
-  /** Capped Powered*/
+  /** Capped Powered. */
   CAPPED_POWERED,
-  /** Cash-or-Nothing*/
+  /** Cash-or-Nothing. */
   CASH_OR_NOTHING,
-  /** Extreme spread*/
+  /** Extreme spread. */
   EXTREME_SPREAD,
-  /** Fade-in */
+  /** Fade-in. */
   FADE_IN,
-  /** Fixed-strike lookback*/
+  /** Fixed-strike lookback. */
   FIXED_STRIKE_LOOKBACK,
-  /** Floating-strike lookback*/
+  /** Floating-strike lookback. */
   FLOATING_STRIKE_LOOKBACK,
-  /** Gap */
+  /** Gap. */
   GAP,
-  /** Powered */
+  /** Powered. */
   POWERED,
-  /** Simple chooser */
+  /** Simple chooser. */
   SIMPLE_CHOOSER,
-  /** Supershare */
+  /** Supershare. */
   SUPERSHARE,
-  /** Vanilla */
+  /** Vanilla. */
   VANILLA;
 
   public <T> T accept(final PayoffStyleVisitor<T> visitor) {

@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.ImmutableConstructor;
@@ -18,13 +19,12 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.opengamma.util.ArgumentChecker;
-import org.joda.beans.BeanBuilder;
 
 /**
  * Simple immutable description of a range of results.
@@ -51,7 +51,7 @@ public final class Paging implements ImmutableBean {
   //-------------------------------------------------------------------------
   /**
    * Creates an instance from a paging request and total number of items.
-   * 
+   *
    * @param pagingRequest  the paging request to base the result on, not null
    * @param totalItems  the total number of items
    * @return the created paging, not null
@@ -64,7 +64,7 @@ public final class Paging implements ImmutableBean {
    * Creates an instance based on the specified collection setting the total count of items.
    * <p>
    * This combines {@link PagingRequest#ALL} with the collection size.
-   * 
+   *
    * @param coll  the collection to base the paging on, not null
    * @return the created paging, not null
    */
@@ -77,12 +77,12 @@ public final class Paging implements ImmutableBean {
    * Creates an instance based on the specified collection setting the total count of items.
    * <p>
    * This combines the specified paging request with the collection size.
-   * 
+   *
    * @param pagingRequest  the paging request to base the result on, not null
    * @param coll  the collection to base the paging on, not null
    * @return the created paging, not null
    */
-  public static Paging of(PagingRequest pagingRequest, Collection<?> coll) {
+  public static Paging of(final PagingRequest pagingRequest, final Collection<?> coll) {
     ArgumentChecker.notNull(pagingRequest, "pagingRequest");
     ArgumentChecker.notNull(coll, "coll");
     if (pagingRequest.getFirstItem() >= coll.size()) {
@@ -94,7 +94,7 @@ public final class Paging implements ImmutableBean {
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param pagingRequest  the request, not null
    * @param totalItems  the total number of items, zero or greater
    */
@@ -112,7 +112,7 @@ public final class Paging implements ImmutableBean {
    * <p>
    * This request represents that request that matches the results.
    * This is not necessarily the same as the request actually used.
-   * 
+   *
    * @return the request, not null
    */
   public PagingRequest getRequest() {
@@ -123,7 +123,7 @@ public final class Paging implements ImmutableBean {
    * Gets the total number of items in the complete result set.
    * <p>
    * This is the number of results that would be returned if  {@link PagingRequest#ALL} was used.
-   * 
+   *
    * @return the number of items, zero or greater
    */
   public int getTotalItems() {
@@ -133,7 +133,7 @@ public final class Paging implements ImmutableBean {
   //-------------------------------------------------------------------------
   /**
    * Gets the first item, using a zero-based index.
-   * 
+   *
    * @return the first item index, zero-based
    */
   public int getFirstItem() {
@@ -142,7 +142,7 @@ public final class Paging implements ImmutableBean {
 
   /**
    * Gets the first item, using a one-based index.
-   * 
+   *
    * @return the first item number, one-based
    */
   public int getFirstItemOneBased() {
@@ -151,7 +151,7 @@ public final class Paging implements ImmutableBean {
 
   /**
    * Gets the last item exclusive, using a zero-based index.
-   * 
+   *
    * @return the last item index, exclusive, zero-based
    */
   public int getLastItem() {
@@ -160,7 +160,7 @@ public final class Paging implements ImmutableBean {
 
   /**
    * Gets the last item inclusive, using a one-based index.
-   * 
+   *
    * @return the last item number, inclusive, one-based
    */
   public int getLastItemOneBased() {
@@ -173,18 +173,18 @@ public final class Paging implements ImmutableBean {
    * <p>
    * If the request was for index-based paging rather than traditional paging
    * then the result of this method will be the effective page of the first item.
-   * 
+   *
    * @return the current page, one or greater
    */
   public int getPageNumber() {
-    return (getFirstItem() / getPagingSize()) + 1;
+    return getFirstItem() / getPagingSize() + 1;
   }
 
   /**
    * Gets the page size, which is the number of items requested.
    * <p>
    * This is zero if no data was requested.
-   * 
+   *
    * @return the number of items in the page, zero or greater
    */
   public int getPagingSize() {
@@ -193,7 +193,7 @@ public final class Paging implements ImmutableBean {
 
   /**
    * Gets the total number of pages, one-based, when viewed as traditional paging.
-   * 
+   *
    * @return the number of pages, one or greater
    * @throws ArithmeticException if a paging request of NONE was used
    */
@@ -204,7 +204,7 @@ public final class Paging implements ImmutableBean {
   /**
    * Checks whether a paging request of NONE was used, returning only the
    * total item count.
-   * 
+   *
    * @return true if unable to use paging
    */
   public boolean isSizeOnly() {
@@ -214,7 +214,7 @@ public final class Paging implements ImmutableBean {
   /**
    * Checks whether there is a next page available.
    * This is the opposite of {@link #isLastPage()}.
-   * 
+   *
    * @return true if there is another page
    * @throws IllegalStateException if insufficient information was requested - PagingRequest.NONE
    */
@@ -226,7 +226,7 @@ public final class Paging implements ImmutableBean {
   /**
    * Checks whether this is the last page.
    * This is the opposite of {@link #isNextPage()}.
-   * 
+   *
    * @return true if this is the last page
    * @throws IllegalStateException if insufficient information was requested - PagingRequest.NONE
    */
@@ -238,7 +238,7 @@ public final class Paging implements ImmutableBean {
   /**
    * Checks whether there is a previous page available.
    * This is the opposite of {@link #isFirstPage()}.
-   * 
+   *
    * @return true if there is a previous page
    * @throws IllegalStateException if insufficient information was requested - PagingRequest.NONE
    */
@@ -250,7 +250,7 @@ public final class Paging implements ImmutableBean {
   /**
    * Checks whether this is the first page.
    * This is the opposite of {@link #isPreviousPage()}.
-   * 
+   *
    * @return true if this is the last page
    * @throws IllegalStateException if insufficient information was requested - PagingRequest.NONE
    */
@@ -264,7 +264,7 @@ public final class Paging implements ImmutableBean {
    * Converts this object to a {@code PagingRequest} for the same page.
    * <p>
    * This can convert an index-based original request into a page-based one.
-   * 
+   *
    * @return the request for the same page, not null
    */
   public PagingRequest toPagingRequest() {
@@ -276,7 +276,7 @@ public final class Paging implements ImmutableBean {
 
   /**
    * Gets the {@code PagingRequest} for the next page.
-   * 
+   *
    * @return the request for the next page, not null
    * @throws IllegalStateException if insufficient information was requested - PagingRequest.NONE
    * @throws NoSuchElementException if there are no more pages
@@ -291,7 +291,7 @@ public final class Paging implements ImmutableBean {
 
   /**
    * Gets the {@code PagingRequest} for the next page.
-   * 
+   *
    * @return the request for the previous page, not null
    * @throws IllegalStateException if insufficient information was requested - PagingRequest.NONE
    * @throws NoSuchElementException if there are no more pages
@@ -306,7 +306,7 @@ public final class Paging implements ImmutableBean {
 
   /**
    * Checks if this represents a valid paging request for paging.
-   * 
+   *
    * @throws IllegalStateException if insufficient information was requested - PagingRequest.NONE
    */
   private void checkPaging() {
@@ -358,8 +358,8 @@ public final class Paging implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       Paging other = (Paging) obj;
-      return JodaBeanUtils.equal(getRequest(), other.getRequest()) &&
-          (getTotalItems() == other.getTotalItems());
+      return JodaBeanUtils.equal(_request, other._request) &&
+          (_totalItems == other._totalItems);
     }
     return false;
   }
@@ -367,8 +367,8 @@ public final class Paging implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getRequest());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTotalItems());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_request);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_totalItems);
     return hash;
   }
 
@@ -476,7 +476,7 @@ public final class Paging implements ImmutableBean {
   /**
    * The bean-builder for {@code Paging}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<Paging> {
+  private static final class Builder extends DirectPrivateBeanBuilder<Paging> {
 
     private PagingRequest _request;
     private int _totalItems;
@@ -485,6 +485,7 @@ public final class Paging implements ImmutableBean {
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -512,30 +513,6 @@ public final class Paging implements ImmutableBean {
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

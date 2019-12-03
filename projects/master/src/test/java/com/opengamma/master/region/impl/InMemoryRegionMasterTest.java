@@ -7,10 +7,9 @@ package com.opengamma.master.region.impl;
 
 import static org.testng.AssertJUnit.assertEquals;
 
-import org.threeten.bp.ZoneId;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.threeten.bp.ZoneId;
 
 import com.opengamma.DataNotFoundException;
 import com.opengamma.core.id.ExternalSchemes;
@@ -33,145 +32,193 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class InMemoryRegionMasterTest {
 
-  private static String NAME = "France";
-  private static ExternalId ID_COUNTRY = ExternalSchemes.countryRegionId(Country.FR);
-  private static ExternalId ID_CURENCY = ExternalSchemes.currencyRegionId(Currency.EUR);
-  private static ExternalId ID_TIME_ZONE = ExternalSchemes.timeZoneRegionId(ZoneId.of("Europe/Paris"));
-  private static ExternalId ID_OTHER1 = ExternalId.of("TEST_SCHEME", "The French");
-  private static ExternalId ID_OTHER2 = ExternalId.of("TEST_SCHEME", "France");
-  private static ExternalIdBundle BUNDLE_FULL = ExternalIdBundle.of(ID_COUNTRY, ID_TIME_ZONE, ID_CURENCY);
-  private static ExternalIdBundle BUNDLE_PART = ExternalIdBundle.of(ID_COUNTRY, ID_CURENCY);
-  private static ExternalIdBundle BUNDLE_OTHER = ExternalIdBundle.of(ID_COUNTRY, ID_TIME_ZONE, ID_OTHER1);
+  private static final String NAME = "France";
+  private static final ExternalId ID_COUNTRY = ExternalSchemes.countryRegionId(Country.FR);
+  private static final ExternalId ID_CURENCY = ExternalSchemes.currencyRegionId(Currency.EUR);
+  private static final ExternalId ID_TIME_ZONE = ExternalSchemes.timeZoneRegionId(ZoneId.of("Europe/Paris"));
+  private static final ExternalId ID_OTHER1 = ExternalId.of("TEST_SCHEME", "The French");
+  private static final ExternalId ID_OTHER2 = ExternalId.of("TEST_SCHEME", "France");
+  private static final ExternalIdBundle BUNDLE_FULL = ExternalIdBundle.of(ID_COUNTRY, ID_TIME_ZONE, ID_CURENCY);
+  private static final ExternalIdBundle BUNDLE_PART = ExternalIdBundle.of(ID_COUNTRY, ID_CURENCY);
+  private static final ExternalIdBundle BUNDLE_OTHER = ExternalIdBundle.of(ID_COUNTRY, ID_TIME_ZONE, ID_OTHER1);
 
-  private InMemoryRegionMaster master;
-  private RegionDocument addedDoc;
+  private InMemoryRegionMaster _master;
+  private RegionDocument _addedDoc;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
-    master = new InMemoryRegionMaster();
-    ManageableRegion inputRegion = new ManageableRegion();
+    _master = new InMemoryRegionMaster();
+    final ManageableRegion inputRegion = new ManageableRegion();
     inputRegion.setName(NAME);
     inputRegion.setFullName(NAME);
     inputRegion.setClassification(RegionClassification.INDEPENDENT_STATE);
     inputRegion.setCountry(Country.FR);
     inputRegion.setCurrency(Currency.EUR);
     inputRegion.setTimeZone(ZoneId.of("Europe/Paris"));
-    RegionDocument inputDoc = new RegionDocument(inputRegion);
-    addedDoc = master.add(inputDoc);
+    final RegionDocument inputDoc = new RegionDocument(inputRegion);
+    _addedDoc = _master.add(inputDoc);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_get_noMatch() {
-    master.get(UniqueId.of("A", "B"));
+  public void testGetNoMatch() {
+    _master.get(UniqueId.of("A", "B"));
   }
 
-  public void test_get_match() {
-    RegionDocument result = master.get(addedDoc.getUniqueId());
+  /**
+   *
+   */
+  public void testGetMatch() {
+    final RegionDocument result = _master.get(_addedDoc.getUniqueId());
     assertEquals(UniqueId.of("MemReg", "1"), result.getUniqueId());
-    assertEquals(addedDoc, result);
+    assertEquals(_addedDoc, result);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_oneId_noMatch() {
-    RegionSearchRequest request = new RegionSearchRequest(ID_OTHER1);
-    RegionSearchResult result = master.search(request);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchOneIdNoMatch() {
+    final RegionSearchRequest request = new RegionSearchRequest(ID_OTHER1);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_oneId_mic() {
-    RegionSearchRequest request = new RegionSearchRequest(ID_COUNTRY);
-    RegionSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneIdMic() {
+    final RegionSearchRequest request = new RegionSearchRequest(ID_COUNTRY);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  public void test_search_oneId_ccid() {
-    RegionSearchRequest request = new RegionSearchRequest(ID_COUNTRY);
-    RegionSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneIdCcid() {
+    final RegionSearchRequest request = new RegionSearchRequest(ID_COUNTRY);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_oneBundle_noMatch() {
-    RegionSearchRequest request = new RegionSearchRequest(BUNDLE_OTHER);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchOneBundleNoMatch() {
+    final RegionSearchRequest request = new RegionSearchRequest(BUNDLE_OTHER);
     request.setExternalIdSearch(request.getExternalIdSearch().withSearchType(ExternalIdSearchType.ALL));
-    RegionSearchResult result = master.search(request);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_oneBundle_full() {
-    RegionSearchRequest request = new RegionSearchRequest(BUNDLE_FULL);
-    RegionSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneBundleFull() {
+    final RegionSearchRequest request = new RegionSearchRequest(BUNDLE_FULL);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  public void test_search_oneBundle_part() {
-    RegionSearchRequest request = new RegionSearchRequest(BUNDLE_PART);
-    RegionSearchResult result = master.search(request);
+  /**
+   *
+   */
+  public void testSearchOneBundlePart() {
+    final RegionSearchRequest request = new RegionSearchRequest(BUNDLE_PART);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_twoBundles_noMatch() {
-    RegionSearchRequest request = new RegionSearchRequest();
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchTwoBundlesNoMatch() {
+    final RegionSearchRequest request = new RegionSearchRequest();
     request.addExternalId(ID_OTHER1);
     request.addExternalId(ID_OTHER2);
-    RegionSearchResult result = master.search(request);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_twoBundles_oneMatch() {
-    RegionSearchRequest request = new RegionSearchRequest();
+  /**
+   *
+   */
+  public void testSearchTwoBundlesOneMatch() {
+    final RegionSearchRequest request = new RegionSearchRequest();
     request.addExternalId(ID_COUNTRY);
     request.addExternalId(ID_OTHER1);
-    RegionSearchResult result = master.search(request);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  public void test_search_twoBundles_bothMatch() {
-    RegionSearchRequest request = new RegionSearchRequest();
+  /**
+   *
+   */
+  public void testSearchTwoBundlesBothMatch() {
+    final RegionSearchRequest request = new RegionSearchRequest();
     request.addExternalId(ID_COUNTRY);
     request.addExternalId(ID_CURENCY);
-    RegionSearchResult result = master.search(request);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_name_noMatch() {
-    RegionSearchRequest request = new RegionSearchRequest();
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchNameNoMatch() {
+    final RegionSearchRequest request = new RegionSearchRequest();
     request.setName("No match");
-    RegionSearchResult result = master.search(request);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_name_match() {
-    RegionSearchRequest request = new RegionSearchRequest();
+  /**
+   *
+   */
+  public void testSearchNameMatch() {
+    final RegionSearchRequest request = new RegionSearchRequest();
     request.setName(NAME);
-    RegionSearchResult result = master.search(request);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_classification_noMatch() {
-    RegionSearchRequest request = new RegionSearchRequest();
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchClassificationNoMatch() {
+    final RegionSearchRequest request = new RegionSearchRequest();
     request.setClassification(RegionClassification.DEPENDENCY);
-    RegionSearchResult result = master.search(request);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_classification_match() {
-    RegionSearchRequest request = new RegionSearchRequest();
+  /**
+   *
+   */
+  public void testSearchClassificationMatch() {
+    final RegionSearchRequest request = new RegionSearchRequest();
     request.setClassification(RegionClassification.INDEPENDENT_STATE);
-    RegionSearchResult result = master.search(request);
+    final RegionSearchResult result = _master.search(request);
     assertEquals(1, result.getDocuments().size());
-    assertEquals(addedDoc, result.getFirstDocument());
+    assertEquals(_addedDoc, result.getFirstDocument());
   }
 
 }

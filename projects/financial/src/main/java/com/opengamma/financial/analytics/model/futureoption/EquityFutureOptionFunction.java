@@ -38,7 +38,8 @@ import com.opengamma.id.ExternalIdBundle;
 public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
 
   /**
-   * @param valueRequirementNames The value requirement names
+   * @param valueRequirementNames
+   *          The value requirement names
    */
   public EquityFutureOptionFunction(final String... valueRequirementNames) {
     super(valueRequirementNames);
@@ -56,7 +57,7 @@ public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
     if (calculationMethod == null || calculationMethod.isEmpty()) {
       return null;
     }
-    if (calculationMethod != null && calculationMethod.size() == 1) {
+    if (calculationMethod.size() == 1) {
       if (!getCalculationMethod().equals(Iterables.getOnlyElement(calculationMethod))) {
         return null;
       }
@@ -82,7 +83,6 @@ public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
     if (surfaceCalculationMethods == null || surfaceCalculationMethods.size() != 1) {
       return null;
     }
-    final String surfaceCalculationMethod = Iterables.getOnlyElement(surfaceCalculationMethods);
     final Set<String> forwardCurveNames = constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_NAME);
     if (forwardCurveNames == null || forwardCurveNames.size() != 1) {
       return null;
@@ -93,24 +93,24 @@ public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
     }
     final ExternalIdBundle underlyingFutureId = ExternalIdBundle.of(security.getUnderlyingId());
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    
+
     final ExternalId underlyingIndexId;
-    Security underlyingFuture = securitySource.getSingle(underlyingFutureId);
+    final Security underlyingFuture = securitySource.getSingle(underlyingFutureId);
     if (underlyingFuture == null) {
-      throw new OpenGammaRuntimeException("The underlying (" + underlyingFutureId.toString() + ") of EquityIndexFutureOption (" + security.getName() + 
-          ") was not found in security source. Please try to reload.");
+      throw new OpenGammaRuntimeException("The underlying (" + underlyingFutureId.toString() + ") of EquityIndexFutureOption (" + security.getName()
+          + ") was not found in security source. Please try to reload.");
     } else if (underlyingFuture instanceof EquityFutureSecurity) {
       underlyingIndexId = ((EquityFutureSecurity) underlyingFuture).getUnderlyingId();
     } else if (underlyingFuture instanceof IndexFutureSecurity) {
       underlyingIndexId = ((IndexFutureSecurity) underlyingFuture).getUnderlyingId();
     } else {
-      throw new OpenGammaRuntimeException("The Security type of the future underlying the Index Future Option must be added to this function: " 
-              + underlyingFuture.getClass());
+      throw new OpenGammaRuntimeException("The Security type of the future underlying the Index Future Option must be added to this function: "
+          + underlyingFuture.getClass());
     }
-    
+
     final String forwardCurveCalculationMethod = Iterables.getOnlyElement(forwardCurveCalculationMethods);
     final String forwardCurveName = Iterables.getOnlyElement(forwardCurveNames);
-    final ValueRequirement volReq = getVolatilitySurfaceRequirement(desiredValue, volSurfaceName, forwardCurveName, surfaceCalculationMethod, underlyingIndexId);
+    final ValueRequirement volReq = getVolatilitySurfaceRequirement(desiredValue, volSurfaceName, forwardCurveName, underlyingIndexId);
     final ValueRequirement forwardCurveReq = getForwardCurveRequirement(forwardCurveName, forwardCurveCalculationMethod, underlyingIndexId);
     return Sets.newHashSet(discountingReq, forwardCurveReq, volReq);
   }
@@ -122,25 +122,28 @@ public abstract class EquityFutureOptionFunction extends FutureOptionFunction {
   }
 
   private ValueRequirement getVolatilitySurfaceRequirement(final ValueRequirement desiredValue, final String surfaceName, final String forwardCurveName,
-      final String surfaceCalculationMethod, final ExternalId underlyingBuid) {
-    // REVIEW Andrew 2012-01-17 -- Could we pass a CTRef to the getSurfaceRequirement and use the underlyingBuid external identifier directly with a target type of SECURITY
+      final ExternalId underlyingBuid) {
+    // REVIEW Andrew 2012-01-17 -- Could we pass a CTRef to the getSurfaceRequirement and use the underlyingBuid external identifier
+    // directly with a target type of SECURITY
     // TODO Casey - Replace desiredValue with smileInterpolatorName in BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement
     return BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement(desiredValue, ValueProperties.none(), surfaceName, forwardCurveName,
         InstrumentTypeProperties.EQUITY_FUTURE_OPTION, ComputationTargetType.PRIMITIVE, underlyingBuid);
   }
 
-
   @Override
-  protected ValueRequirement getForwardCurveRequirement(final FinancialSecurity security, final String forwardCurveName, final String forwardCurveCalculationMethod) {
+  protected ValueRequirement getForwardCurveRequirement(final FinancialSecurity security, final String forwardCurveName,
+      final String forwardCurveCalculationMethod) {
     throw new UnsupportedOperationException();
   }
 
-  private ValueRequirement getForwardCurveRequirement(final String forwardCurveName, final String forwardCurveCalculationMethod, final ExternalId underlyingIndexId) {
+  private ValueRequirement getForwardCurveRequirement(final String forwardCurveName, final String forwardCurveCalculationMethod,
+      final ExternalId underlyingIndexId) {
     final ValueProperties properties = ValueProperties.builder()
         .with(ValuePropertyNames.CURVE, forwardCurveName)
         .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, forwardCurveCalculationMethod)
         .get();
-    // REVIEW Andrew 2012-01-17 -- Why can't we just use the underlyingBuid external identifier directly here, with a target type of SECURITY, and shift the logic into the reference resolver?
+    // REVIEW Andrew 2012-01-17 -- Why can't we just use the underlyingBuid external identifier directly here, with a target type of SECURITY, and shift the
+    // logic into the reference resolver?
     return new ValueRequirement(ValueRequirementNames.FORWARD_CURVE, ComputationTargetType.PRIMITIVE, underlyingIndexId, properties);
   }
 

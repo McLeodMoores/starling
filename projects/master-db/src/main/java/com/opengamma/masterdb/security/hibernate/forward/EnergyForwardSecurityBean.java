@@ -5,15 +5,14 @@
  */
 package com.opengamma.masterdb.security.hibernate.forward;
 
-import com.opengamma.financial.security.forward.EnergyForwardSecurity;
-
 /**
- * A Hibernate bean representation of {@link EnergyForwardSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.forward.EnergyForwardSecurity}.
  */
 public class EnergyForwardSecurityBean extends CommodityForwardSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitEnergyForwardType(this);
   }
 

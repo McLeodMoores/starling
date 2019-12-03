@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -23,17 +23,18 @@ import com.opengamma.engine.value.ValueProperties;
  * Fudge message builder for {@link ValueProperties}. Messages can take the form:
  * <ul>
  * <li>The empty property set is an empty message.
- * <li>A simple property set has a field named {@code with} that contains a sub-message. This in turn contains a field per property - the name of the field is the name of the property. This is either
- * a:
+ * <li>A simple property set has a field named {@code with} that contains a sub-message. This in turn contains a field per property - the name of
+ * the field is the name of the property. This is either a:
  * <ul>
  * <li>Simple string value
  * <li>An indicator indicating a wild-card property value
  * <li>A sub-message containing un-named fields with each possible value of the property.
  * </ul>
- * If the property is optional, the sub-message form is used with a field named {@code optional}. If the field is an optional wild-card the sub-message form is used which contains only the
- * {@code optional} field.
+ * If the property is optional, the sub-message form is used with a field named {@code optional}. If the field is an optional wild-card the sub-message
+ * form is used which contains only the {@code optional} field.
  * <li>The infinite property set ({@link ValueProperties#all}) has a field named {@code without} that contains an empty sub-message.
- * <li>The near-infinite property set has a field named {@code without} that contains a field for each of absent entries, the string value of each field is the property name.
+ * <li>The near-infinite property set has a field named {@code without} that contains a field for each of absent entries, the string value of each field
+ * is the property name.
  * </ul>
  */
 @GenericFudgeBuilderFor(ValueProperties.class)
@@ -73,23 +74,22 @@ public class ValuePropertiesFudgeBuilder implements FudgeBuilder<ValueProperties
       if (subMsg.isEmpty()) {
         // Infinite
         return ValueProperties.all();
-      } else {
-        // Near-infinite
-        final ValueProperties.Builder builder = ValueProperties.all().copy();
-        for (FudgeField field : subMsg) {
-          if (field.getType().getTypeId() == FudgeWireType.STRING_TYPE_ID) {
-            builder.withoutAny((String) field.getValue());
-          }
-        }
-        return builder.get();
       }
+      // Near-infinite
+      final ValueProperties.Builder builder = ValueProperties.all().copy();
+      for (final FudgeField field : subMsg) {
+        if (field.getType().getTypeId() == FudgeWireType.STRING_TYPE_ID) {
+          builder.withoutAny((String) field.getValue());
+        }
+      }
+      return builder.get();
     }
     subMsg = message.getMessage(WITH_FIELD);
     if (subMsg == null) {
       return ValueProperties.none();
     }
     final ValueProperties.Builder builder = ValueProperties.builder();
-    for (FudgeField field : subMsg) {
+    for (final FudgeField field : subMsg) {
       final String propertyName = field.getName();
       switch (field.getType().getTypeId()) {
         case FudgeWireType.INDICATOR_TYPE_ID:
@@ -100,8 +100,8 @@ public class ValuePropertiesFudgeBuilder implements FudgeBuilder<ValueProperties
           break;
         case FudgeWireType.SUB_MESSAGE_TYPE_ID: {
           final FudgeMsg subMsg2 = (FudgeMsg) field.getValue();
-          final List<String> values = new ArrayList<String>(subMsg2.getNumFields());
-          for (FudgeField field2 : subMsg2) {
+          final List<String> values = new ArrayList<>(subMsg2.getNumFields());
+          for (final FudgeField field2 : subMsg2) {
             switch (field2.getType().getTypeId()) {
               case FudgeWireType.INDICATOR_TYPE_ID:
                 builder.withOptional(propertyName);

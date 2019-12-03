@@ -32,7 +32,7 @@ public class RiskValueRequirement extends RiskValueProperties {
   public RiskValueRequirement() {
   }
 
-  public RiskValueRequirement(ValueProperties requirement) {
+  public RiskValueRequirement(final ValueProperties requirement) {
     super(requirement);
   }
 

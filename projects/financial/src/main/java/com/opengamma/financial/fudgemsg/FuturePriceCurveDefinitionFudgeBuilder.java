@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.fudgemsg;
@@ -20,7 +20,7 @@ import com.opengamma.financial.analytics.volatility.surface.FuturePriceCurveDefi
 import com.opengamma.id.UniqueIdentifiable;
 
 /**
- * 
+ *
  */
 @FudgeBuilderFor(FuturePriceCurveDefinition.class)
 public class FuturePriceCurveDefinitionFudgeBuilder implements FudgeBuilder<FuturePriceCurveDefinition<?>> {
@@ -45,7 +45,7 @@ public class FuturePriceCurveDefinitionFudgeBuilder implements FudgeBuilder<Futu
     final UniqueIdentifiable target = deserializer.fieldValueToObject(UniqueIdentifiable.class, message.getByName("target"));
     final String name = message.getString("name");
     final List<FudgeField> xsFields = message.getAllByName("xs");
-    final List<Object> xs = new ArrayList<Object>();
+    final List<Object> xs = new ArrayList<>();
     for (final FudgeField xField : xsFields) {
       final Object x = deserializer.fieldValueToObject(xField);
       xs.add(x);

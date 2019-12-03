@@ -33,7 +33,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class CreateGoldenCopyForRegressionTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CreateGoldenCopyForRegressionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CreateGoldenCopyForRegressionTest.class);
 
   private final String _dbDumpDir;
   private final Instant _valuationTime;
@@ -47,14 +47,14 @@ public class CreateGoldenCopyForRegressionTest {
 
 
 
-  public CreateGoldenCopyForRegressionTest(String projectName,
-                                           String serverConfigFile,
-                                            String dbDumpDir,
-                                           String logbackConfigFile,
-                                           Instant valuationTime,
-                                           String baseWorkingDir,
-                                           String baseVersion,
-                                           String baseDbConfigFile) {
+  public CreateGoldenCopyForRegressionTest(final String projectName,
+                                           final String serverConfigFile,
+                                            final String dbDumpDir,
+                                           final String logbackConfigFile,
+                                           final Instant valuationTime,
+                                           final String baseWorkingDir,
+                                           final String baseVersion,
+                                           final String baseDbConfigFile) {
     _dbDumpDir = dbDumpDir;
     _baseWorkingDir = baseWorkingDir;
     _baseVersion = baseVersion;
@@ -71,12 +71,12 @@ public class CreateGoldenCopyForRegressionTest {
     return runTest(_baseWorkingDir, _baseClasspath, _baseVersion, _baseDbConfigFile);
   }
 
-  private Map<Pair<String, String>, CalculationResults> runTest(String workingDir,
-                                                                String classpath,
-                                                                String version,
-                                                                String dbPropsFile) {
+  private Map<Pair<String, String>, CalculationResults> runTest(final String workingDir,
+                                                                final String classpath,
+                                                                final String version,
+                                                                final String dbPropsFile) {
     // don't use the config file to be sure we don't accidentally clobber a real database
-    Properties dbProps = RegressionUtils.loadProperties(dbPropsFile);
+    final Properties dbProps = RegressionUtils.loadProperties(dbPropsFile);
     if (_dbDumpDir != null) {
       RegressionUtils.createEmptyDatabase(dbPropsFile, workingDir, classpath, _logbackConfig);
       RegressionUtils.restoreDatabase(workingDir, classpath, dbProps, _serverConfigFile, _logbackConfig, _dbDumpDir);
@@ -84,54 +84,54 @@ public class CreateGoldenCopyForRegressionTest {
     return runViews(workingDir, classpath, version, _valuationTime, dbProps);
   }
 
-  private Map<Pair<String, String>, CalculationResults> runViews(String workingDir,
-                                                                 String classpath,
-                                                                 String version,
-                                                                 Instant valuationTime,
-                                                                 Properties dbProps) {
+  private Map<Pair<String, String>, CalculationResults> runViews(final String workingDir,
+                                                                 final String classpath,
+                                                                 final String version,
+                                                                 final Instant valuationTime,
+                                                                 final Properties dbProps) {
     // TODO don't hard-code the port
-    int port = 8080;
-    String serverUrl = "http://localhost:" + port;
+    final int port = 8080;
+    final String serverUrl = "http://localhost:" + port;
 
     // start the server again to run the tests
     try (ServerProcess ignored = ServerProcess.start(workingDir, classpath, _serverConfigFile, dbProps, _logbackConfig);
          RemoteServer server = RemoteServer.create(serverUrl)) {
-      Map<Pair<String, String>, CalculationResults> allResults = Maps.newHashMap();
-      Collection<Pair<String, String>> viewAndSnapshotNames = getViewAndSnapshotNames(server.getConfigMaster(),
+      final Map<Pair<String, String>, CalculationResults> allResults = Maps.newHashMap();
+      final Collection<Pair<String, String>> viewAndSnapshotNames = getViewAndSnapshotNames(server.getConfigMaster(),
                                                                                       server.getMarketDataSnapshotMaster());
-      ViewRunner viewRunner = new ViewRunner(server.getConfigMaster(),
+      final ViewRunner viewRunner = new ViewRunner(server.getConfigMaster(),
                                              server.getViewProcessor(),
                                              server.getPositionSource(),
                                              server.getSecuritySource(),
                                              server.getMarketDataSnapshotMaster());
-      for (Pair<String, String> names : viewAndSnapshotNames) {
-        String viewName = names.getFirst();
-        String snapshotName = names.getSecond();
-        CalculationResults results = viewRunner.run(version, viewName, snapshotName, valuationTime);
+      for (final Pair<String, String> names : viewAndSnapshotNames) {
+        final String viewName = names.getFirst();
+        final String snapshotName = names.getSecond();
+        final CalculationResults results = viewRunner.run(version, viewName, snapshotName, valuationTime);
         allResults.put(names, results);
       }
       return allResults;
     }
   }
 
-  private static Collection<Pair<String, String>> getViewAndSnapshotNames(ConfigMaster configMaster,
-                                                                          MarketDataSnapshotMaster snapshotMaster) {
-    List<Pair<String, String>> viewAndSnapshotNames = Lists.newArrayList();
-    MarketDataSnapshotSearchRequest snapshotRequest = new MarketDataSnapshotSearchRequest();
+  private static Collection<Pair<String, String>> getViewAndSnapshotNames(final ConfigMaster configMaster,
+                                                                          final MarketDataSnapshotMaster snapshotMaster) {
+    final List<Pair<String, String>> viewAndSnapshotNames = Lists.newArrayList();
+    final MarketDataSnapshotSearchRequest snapshotRequest = new MarketDataSnapshotSearchRequest();
     // TODO this isn't great but is necessary because of PLAT-4793
     snapshotRequest.setIncludeData(true);
-    MarketDataSnapshotSearchResult snapshotResult = snapshotMaster.search(snapshotRequest);
-    for (ManageableMarketDataSnapshot snapshot : snapshotResult.getSnapshots()) {
-      String basisViewName = snapshot.getBasisViewName();
+    final MarketDataSnapshotSearchResult snapshotResult = snapshotMaster.search(snapshotRequest);
+    for (final ManageableMarketDataSnapshot snapshot : snapshotResult.getSnapshots()) {
+      final String basisViewName = snapshot.getBasisViewName();
       if (basisViewName != null) {
-        ConfigSearchRequest<ViewDefinition> configRequest = new ConfigSearchRequest<>(ViewDefinition.class);
+        final ConfigSearchRequest<ViewDefinition> configRequest = new ConfigSearchRequest<>(ViewDefinition.class);
         configRequest.setName(basisViewName);
-        ConfigSearchResult<ViewDefinition> configResult = configMaster.search(configRequest);
+        final ConfigSearchResult<ViewDefinition> configResult = configMaster.search(configRequest);
         if (configResult.getValues().size() > 1) {
-          s_logger.warn("Multiple view definitions found with the same name '{}'", basisViewName);
+          LOGGER.warn("Multiple view definitions found with the same name '{}'", basisViewName);
           continue;
         }
-        String viewDefName = configResult.getSingleValue().getName();
+        final String viewDefName = configResult.getSingleValue().getName();
         viewAndSnapshotNames.add(Pairs.of(viewDefName, snapshot.getName()));
       }
     }

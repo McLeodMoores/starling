@@ -5,7 +5,6 @@
  */
 package com.opengamma.component.factory.source;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -25,7 +24,6 @@ import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 import com.opengamma.component.factory.ComponentInfoAttributes;
 import com.opengamma.core.config.ConfigSource;
-import com.opengamma.financial.analytics.volatility.cube.AggregatingVolatilityCubeDefinitionSource;
 import com.opengamma.financial.analytics.volatility.cube.ConfigDBVolatilityCubeDefinitionSource;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
 import com.opengamma.financial.analytics.volatility.cube.rest.DataVolatilityCubeDefinitionSourceResource;
@@ -56,14 +54,14 @@ public class VolatilityCubeDefinitionSourceComponentFactory extends AbstractComp
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    ComponentInfo info = new ComponentInfo(VolatilityCubeDefinitionSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final ComponentInfo info = new ComponentInfo(VolatilityCubeDefinitionSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteVolatilityCubeDefinitionSource.class);
     }
-    
-    VolatilityCubeDefinitionSource base = new ConfigDBVolatilityCubeDefinitionSource(getConfigSource());
+
+    final VolatilityCubeDefinitionSource base = new ConfigDBVolatilityCubeDefinitionSource(getConfigSource());
 
     repo.registerComponent(info, base);
     if (isPublishRest()) {

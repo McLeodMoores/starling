@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.classification;
 
@@ -11,7 +11,7 @@ import com.google.common.collect.ImmutableSet;
 /**
  * Hard-coded lists of valid Quandl cash code patterns.
  */
-//TODO #16 not good to have as hard-coded lists
+// TODO #16 not good to have as hard-coded lists
 public final class QuandlCashTypes {
 
   /**

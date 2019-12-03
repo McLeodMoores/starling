@@ -41,7 +41,7 @@ import com.opengamma.util.auth.Permissionable;
 @PublicSPI
 @BeanDefinition
 public class ManageableHistoricalTimeSeriesInfo extends DirectBean
-    implements HistoricalTimeSeriesInfo, MutableUniqueIdentifiable, Serializable, Permissionable {
+implements HistoricalTimeSeriesInfo, MutableUniqueIdentifiable, Serializable, Permissionable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -49,48 +49,48 @@ public class ManageableHistoricalTimeSeriesInfo extends DirectBean
   /**
    * The historical time-series unique identifier. This field is managed by the master but must be set for updates.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The external identifier bundle with valid dates if available. The key of the specific series, such as the equity identifiers.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalIdBundleWithDates _externalIdBundle;
   /**
    * The name of the historical time-series intended for display purposes. This field must not be null for the object to be valid.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _name;
   /**
    * The data field. This defines the type of data that the series represents.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _dataField;
   /**
    * The data source. The source of the data, typically a major financial data supplier.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _dataSource;
   /**
    * The data provider. The underlying data provider, such as an individual exchange.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _dataProvider;
   /**
    * The descriptive observation time key. This defines, textually, the time of day, such as LONDON_CLOSE.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _observationTime;
   /**
    * The object identifier of the historical time-series data points. This must be separately looked up using the master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ObjectId _timeSeriesObjectId;
   /**
    * The set of required permissions.
    * This is a set of permissions that a user needs to be able to view a time-series.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final Set<String> _requiredPermissions = new TreeSet<>();
 
   /**
@@ -123,6 +123,7 @@ public class ManageableHistoricalTimeSeriesInfo extends DirectBean
    * Gets the historical time-series unique identifier. This field is managed by the master but must be set for updates.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -131,6 +132,7 @@ public class ManageableHistoricalTimeSeriesInfo extends DirectBean
    * Sets the historical time-series unique identifier. This field is managed by the master but must be set for updates.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -148,6 +150,7 @@ public class ManageableHistoricalTimeSeriesInfo extends DirectBean
    * Gets the external identifier bundle with valid dates if available. The key of the specific series, such as the equity identifiers.
    * @return the value of the property
    */
+  @Override
   public ExternalIdBundleWithDates getExternalIdBundle() {
     return _externalIdBundle;
   }
@@ -173,6 +176,7 @@ public class ManageableHistoricalTimeSeriesInfo extends DirectBean
    * Gets the name of the historical time-series intended for display purposes. This field must not be null for the object to be valid.
    * @return the value of the property
    */
+  @Override
   public String getName() {
     return _name;
   }
@@ -198,6 +202,7 @@ public class ManageableHistoricalTimeSeriesInfo extends DirectBean
    * Gets the data field. This defines the type of data that the series represents.
    * @return the value of the property
    */
+  @Override
   public String getDataField() {
     return _dataField;
   }
@@ -223,6 +228,7 @@ public class ManageableHistoricalTimeSeriesInfo extends DirectBean
    * Gets the data source. The source of the data, typically a major financial data supplier.
    * @return the value of the property
    */
+  @Override
   public String getDataSource() {
     return _dataSource;
   }
@@ -248,6 +254,7 @@ public class ManageableHistoricalTimeSeriesInfo extends DirectBean
    * Gets the data provider. The underlying data provider, such as an individual exchange.
    * @return the value of the property
    */
+  @Override
   public String getDataProvider() {
     return _dataProvider;
   }
@@ -273,6 +280,7 @@ public class ManageableHistoricalTimeSeriesInfo extends DirectBean
    * Gets the descriptive observation time key. This defines, textually, the time of day, such as LONDON_CLOSE.
    * @return the value of the property
    */
+  @Override
   public String getObservationTime() {
     return _observationTime;
   }
@@ -298,6 +306,7 @@ public class ManageableHistoricalTimeSeriesInfo extends DirectBean
    * Gets the object identifier of the historical time-series data points. This must be separately looked up using the master.
    * @return the value of the property
    */
+  @Override
   public ObjectId getTimeSeriesObjectId() {
     return _timeSeriesObjectId;
   }
@@ -324,6 +333,7 @@ public class ManageableHistoricalTimeSeriesInfo extends DirectBean
    * This is a set of permissions that a user needs to be able to view a time-series.
    * @return the value of the property, not null
    */
+  @Override
   public Set<String> getRequiredPermissions() {
     return _requiredPermissions;
   }

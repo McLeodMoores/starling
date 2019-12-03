@@ -35,10 +35,11 @@ public final class ExternalScheme implements Serializable, Comparable<ExternalSc
   /**
    * Computing cache for the schemes.
    */
-  private static final LoadingCache<String, ExternalScheme> s_cache =
+  private static final LoadingCache<String, ExternalScheme> CACHE =
       CacheBuilder.newBuilder().initialCapacity(256).concurrencyLevel(4).build(
           new CacheLoader<String, ExternalScheme>() {
-            public ExternalScheme load(String key) {
+            @Override
+            public ExternalScheme load(final String key) {
               return new ExternalScheme(key);
             }
           });
@@ -50,19 +51,19 @@ public final class ExternalScheme implements Serializable, Comparable<ExternalSc
 
   /**
    * Obtains an {@code ExternalScheme} scheme using the specified name.
-   * 
+   *
    * @param name  the scheme name, not empty, not null
    * @return the scheme, not null
    */
   @FromString
   public static ExternalScheme of(final String name) {
     ArgumentChecker.notEmpty(name, "name");
-    return s_cache.getUnchecked(name);
+    return CACHE.getUnchecked(name);
   }
 
   /**
    * Constructs a scheme using the specified name.
-   * 
+   *
    * @param name  the scheme name, not empty, not null
    */
   private ExternalScheme(final String name) {
@@ -72,7 +73,7 @@ public final class ExternalScheme implements Serializable, Comparable<ExternalSc
   //-------------------------------------------------------------------------
   /**
    * Gets the scheme name.
-   * 
+   *
    * @return the scheme name, not null
    */
   public String getName() {
@@ -82,7 +83,7 @@ public final class ExternalScheme implements Serializable, Comparable<ExternalSc
   //-------------------------------------------------------------------------
   /**
    * Compares this scheme to another sorting alphabetically.
-   * 
+   *
    * @param other  the other scheme, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
@@ -97,7 +98,7 @@ public final class ExternalScheme implements Serializable, Comparable<ExternalSc
       return true;
     }
     if (obj instanceof ExternalScheme) {
-      ExternalScheme other = (ExternalScheme) obj;
+      final ExternalScheme other = (ExternalScheme) obj;
       return _name.equals(other._name);
     }
     return false;
@@ -110,7 +111,7 @@ public final class ExternalScheme implements Serializable, Comparable<ExternalSc
 
   /**
    * Returns the name of the scheme.
-   * 
+   *
    * @return the scheme name, not null
    */
   @Override

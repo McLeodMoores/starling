@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.impl;
@@ -29,15 +29,18 @@ import com.opengamma.util.test.TestGroup;
  * Tests the {@link AbstractQuerySplittingMaster} class.
  */
 @Test(groups = TestGroup.UNIT)
-@SuppressWarnings({"rawtypes", "unchecked" })
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class QuerySplittingMasterTest {
 
-  private AbstractQuerySplittingMaster instance(final AbstractChangeProvidingMaster underlying) {
+  private static AbstractQuerySplittingMaster instance(final AbstractChangeProvidingMaster underlying) {
     return new AbstractQuerySplittingMaster(underlying) {
     };
   }
 
-  public void testGet_uid() {
+  /**
+   *
+   */
+  public void testGetUid() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
     final AbstractDocument doc = Mockito.mock(AbstractDocument.class);
@@ -45,7 +48,10 @@ public class QuerySplittingMasterTest {
     assertSame(instance.get(UniqueId.of("Foo", "Bar")), doc);
   }
 
-  public void testGet_oid() {
+  /**
+   *
+   */
+  public void testGetOid() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
     final AbstractDocument doc = Mockito.mock(AbstractDocument.class);
@@ -53,7 +59,10 @@ public class QuerySplittingMasterTest {
     assertSame(instance.get(ObjectId.of("Foo", "Bar"), VersionCorrection.LATEST), doc);
   }
 
-  public void testGet_multiple_uid_disabled() {
+  /**
+   *
+   */
+  public void testGetMultipleUidDisabled() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
     final Map<UniqueId, AbstractDocument> docs = Collections.singletonMap(UniqueId.of("Foo", "Bar"), Mockito.mock(AbstractDocument.class));
@@ -62,7 +71,10 @@ public class QuerySplittingMasterTest {
     assertSame(instance.get(Collections.singleton(UniqueId.of("Foo", "Bar"))), docs);
   }
 
-  public void testGet_multiple_uid_small() {
+  /**
+   *
+   */
+  public void testGetMultipleUidSmall() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
     final Map<UniqueId, AbstractDocument> docs = Collections.singletonMap(UniqueId.of("Foo", "Bar"), Mockito.mock(AbstractDocument.class));
@@ -71,23 +83,34 @@ public class QuerySplittingMasterTest {
     assertSame(instance.get(Collections.singleton(UniqueId.of("Foo", "Bar"))), docs);
   }
 
-  public void testGet_multiple_uid_large() {
+  /**
+   *
+   */
+  public void testGetMultipleUidLarge() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
     final Map<UniqueId, AbstractDocument> docs1 = ImmutableMap.of(UniqueId.of("Test", "1"), Mockito.mock(AbstractDocument.class));
-    final Map<UniqueId, AbstractDocument> docs2 = ImmutableMap.of(UniqueId.of("Test", "2"), Mockito.mock(AbstractDocument.class), UniqueId.of("Test", "3"), Mockito.mock(AbstractDocument.class));
-    final Map<UniqueId, AbstractDocument> docs3 = ImmutableMap.of(UniqueId.of("Test", "4"), Mockito.mock(AbstractDocument.class), UniqueId.of("Test", "5"), Mockito.mock(AbstractDocument.class));
+    final Map<UniqueId, AbstractDocument> docs2 = ImmutableMap.of(UniqueId.of("Test", "2"), Mockito.mock(AbstractDocument.class), UniqueId.of("Test", "3"),
+        Mockito.mock(AbstractDocument.class));
+    final Map<UniqueId, AbstractDocument> docs3 = ImmutableMap.of(UniqueId.of("Test", "4"), Mockito.mock(AbstractDocument.class), UniqueId.of("Test", "5"),
+        Mockito.mock(AbstractDocument.class));
     Mockito.when(mock.get(Arrays.asList(UniqueId.of("Test", "1")))).thenReturn(docs1);
     Mockito.when(mock.get(Arrays.asList(UniqueId.of("Test", "2"), UniqueId.of("Test", "3")))).thenReturn(docs2);
     Mockito.when(mock.get(Arrays.asList(UniqueId.of("Test", "4"), UniqueId.of("Test", "5")))).thenReturn(docs3);
     instance.setMaxGetRequest(2);
-    final Map<UniqueId, AbstractDocument> docs = new HashMap<UniqueId, AbstractDocument>();
+    final Map<UniqueId, AbstractDocument> docs = new HashMap<>();
     docs.putAll(docs1);
     docs.putAll(docs2);
     docs.putAll(docs3);
-    assertEquals(instance.get(Arrays.asList(UniqueId.of("Test", "1"), UniqueId.of("Test", "2"), UniqueId.of("Test", "3"), UniqueId.of("Test", "4"), UniqueId.of("Test", "5"))), docs);
+    assertEquals(
+        instance.get(
+            Arrays.asList(UniqueId.of("Test", "1"), UniqueId.of("Test", "2"), UniqueId.of("Test", "3"), UniqueId.of("Test", "4"), UniqueId.of("Test", "5"))),
+        docs);
   }
 
+  /**
+   *
+   */
   public void testAdd() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
@@ -97,6 +120,9 @@ public class QuerySplittingMasterTest {
     assertSame(instance.add(doc1), doc2);
   }
 
+  /**
+   *
+   */
   public void testUpdate() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
@@ -106,6 +132,9 @@ public class QuerySplittingMasterTest {
     assertSame(instance.update(doc1), doc2);
   }
 
+  /**
+   *
+   */
   public void testRemove() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
@@ -113,6 +142,9 @@ public class QuerySplittingMasterTest {
     Mockito.verify(mock, Mockito.only()).remove(ObjectId.of("Foo", "Bar"));
   }
 
+  /**
+   *
+   */
   public void testCorrect() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
@@ -122,13 +154,19 @@ public class QuerySplittingMasterTest {
     assertSame(instance.correct(doc1), doc2);
   }
 
-  public void testReplaceVersion_uid() {
+  /**
+   *
+   */
+  public void testReplaceVersionUid() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
     Mockito.when(mock.replaceVersion(UniqueId.of("Foo", "Bar"), Collections.emptyList())).thenReturn(Collections.emptyList());
     assertEquals(instance.replaceVersion(UniqueId.of("Foo", "Bar"), Collections.emptyList()), Collections.emptyList());
   }
 
+  /**
+   *
+   */
   public void testReplaceAllVersions() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
@@ -136,6 +174,9 @@ public class QuerySplittingMasterTest {
     assertEquals(instance.replaceAllVersions(ObjectId.of("Foo", "Bar"), Collections.emptyList()), Collections.emptyList());
   }
 
+  /**
+   *
+   */
   public void testReplaceVersions() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
@@ -143,7 +184,10 @@ public class QuerySplittingMasterTest {
     assertEquals(instance.replaceVersions(ObjectId.of("Foo", "Bar"), Collections.emptyList()), Collections.emptyList());
   }
 
-  public void testReplaceVersion_doc() {
+  /**
+   *
+   */
+  public void testReplaceVersionDoc() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
     final AbstractDocument doc = Mockito.mock(AbstractDocument.class);
@@ -151,6 +195,9 @@ public class QuerySplittingMasterTest {
     assertEquals(instance.replaceVersion(doc), UniqueId.of("Foo", "Bar"));
   }
 
+  /**
+   *
+   */
   public void testRemoveVersion() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
@@ -158,6 +205,9 @@ public class QuerySplittingMasterTest {
     Mockito.verify(mock, Mockito.only()).removeVersion(UniqueId.of("Foo", "Bar"));
   }
 
+  /**
+   *
+   */
   public void testAddVersion() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);
@@ -166,6 +216,9 @@ public class QuerySplittingMasterTest {
     assertEquals(instance.addVersion(ObjectId.of("Foo", "Bar"), doc), UniqueId.of("Foo", "Bar", "1"));
   }
 
+  /**
+   *
+   */
   public void testChangeManager() {
     final AbstractChangeProvidingMaster mock = Mockito.mock(AbstractChangeProvidingMaster.class);
     final AbstractQuerySplittingMaster instance = instance(mock);

@@ -6,7 +6,6 @@
 package com.opengamma.analytics.financial.forex.derivative;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
@@ -34,11 +33,12 @@ public class Forex implements InstrumentDerivative {
    * @param paymentCurrency2 The second currency payment.
    */
   public Forex(final PaymentFixed paymentCurrency1, final PaymentFixed paymentCurrency2) {
-    Validate.notNull(paymentCurrency1, "Payment 1");
-    Validate.notNull(paymentCurrency2, "Payment 2");
-    Validate.isTrue(Double.doubleToLongBits(paymentCurrency1.getPaymentTime()) == Double.doubleToLongBits(paymentCurrency2.getPaymentTime()), "Payments on different time");
-    Validate.isTrue((paymentCurrency1.getAmount() * paymentCurrency2.getAmount()) <= 0, "Payments with same sign");
-    Validate.isTrue(!paymentCurrency1.getCurrency().equals(paymentCurrency2.getCurrency()), "same currency");
+    ArgumentChecker.notNull(paymentCurrency1, "Payment 1");
+    ArgumentChecker.notNull(paymentCurrency2, "Payment 2");
+    ArgumentChecker.isTrue(
+        Double.doubleToLongBits(paymentCurrency1.getPaymentTime()) == Double.doubleToLongBits(paymentCurrency2.getPaymentTime()), "Payments on different time");
+    ArgumentChecker.isTrue(paymentCurrency1.getAmount() * paymentCurrency2.getAmount() <= 0, "Payments with same sign");
+    ArgumentChecker.isTrue(!paymentCurrency1.getCurrency().equals(paymentCurrency2.getCurrency()), "same currency");
     this._paymentCurrency1 = paymentCurrency1;
     this._paymentCurrency2 = paymentCurrency2;
   }

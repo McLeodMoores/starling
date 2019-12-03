@@ -48,23 +48,23 @@ public class ReferenceDataProviderGetResult extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param results  the results, not null
    */
-  public ReferenceDataProviderGetResult(List<ReferenceData> results) {
+  public ReferenceDataProviderGetResult(final List<ReferenceData> results) {
     setReferenceData(results);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the reference data for the specified identifier.
-   * 
+   *
    * @param identifier  the identifier to find, not null
    * @return the reference data for the identifier, not null
    * @throws IllegalArgumentException if the identifier is not stored
    */
-  public ReferenceData getReferenceData(String identifier) {
-    ReferenceData referenceData = getReferenceDataOrNull(identifier);
+  public ReferenceData getReferenceData(final String identifier) {
+    final ReferenceData referenceData = getReferenceDataOrNull(identifier);
     if (referenceData == null) {
       throw new IllegalArgumentException("Reference data not found: " + identifier);
     }
@@ -73,12 +73,12 @@ public class ReferenceDataProviderGetResult extends DirectBean {
 
   /**
    * Gets the reference data for the specified identifier, null if not found.
-   * 
+   *
    * @param identifier  the identifier to find, not null
    * @return the reference data for the identifier, null if not found
    */
-  public ReferenceData getReferenceDataOrNull(String identifier) {
-    for (ReferenceData rd : getReferenceData()) {
+  public ReferenceData getReferenceDataOrNull(final String identifier) {
+    for (final ReferenceData rd : getReferenceData()) {
       if (rd.getIdentifier().equals(identifier)) {
         return rd;
       }
@@ -88,11 +88,11 @@ public class ReferenceDataProviderGetResult extends DirectBean {
 
   /**
    * Adds reference data to the list contained.
-   * 
+   *
    * @param referenceData  the reference data to add, not null
    * @throws IllegalArgumentException if the identifier is already stored
    */
-  public void addReferenceData(ReferenceData referenceData) {
+  public void addReferenceData(final ReferenceData referenceData) {
     ArgumentChecker.notNull(referenceData, "referenceData");
     if (getReferenceDataOrNull(referenceData.getIdentifier()) != null) {
       throw new IllegalArgumentException("Reference data already added for identifier: " + referenceData.getIdentifier());

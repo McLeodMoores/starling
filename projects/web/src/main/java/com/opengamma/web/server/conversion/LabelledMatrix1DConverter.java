@@ -18,37 +18,38 @@ import com.opengamma.id.ExternalId;
  */
 @SuppressWarnings("rawtypes")
 public class LabelledMatrix1DConverter implements ResultConverter<LabelledMatrix1D> {
-  
+
   @Override
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, LabelledMatrix1D value, ConversionMode mode) {
-    Map<String, Object> result = new HashMap<String, Object>();
-    int length = value.getKeys().length;
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix1D value,
+      final ConversionMode mode) {
+    final Map<String, Object> result = new HashMap<>();
+    final int length = value.getKeys().length;
     result.put("summary", length);
-    
+
     if (mode == ConversionMode.FULL) {
       // Only interested in labels and values
-      Map<Object, Object> labelledValues = new LinkedHashMap<Object, Object>();
+      final Map<Object, Object> labelledValues = new LinkedHashMap<>();
       for (int i = 0; i < length; i++) {
-        Object labelObject = value.getLabels()[i];        
-        String label = labelObject instanceof ExternalId ? ((ExternalId) labelObject).getValue() : labelObject.toString(); 
-        Object currentLabel = context.convert(label, ConversionMode.SUMMARY);
-        Object currentValue = context.getDoubleConverter().convertForDisplay(context, valueSpec, value.getValues()[i], ConversionMode.SUMMARY);
+        final Object labelObject = value.getLabels()[i];
+        final String label = labelObject instanceof ExternalId ? ((ExternalId) labelObject).getValue() : labelObject.toString();
+        final Object currentLabel = context.convert(label, ConversionMode.SUMMARY);
+        final Object currentValue = context.getDoubleConverter().convertForDisplay(context, valueSpec, value.getValues()[i], ConversionMode.SUMMARY);
         labelledValues.put(currentLabel, currentValue);
       }
       result.put("full", labelledValues);
     }
-    
+
     return result;
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, LabelledMatrix1D value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix1D value) {
     return null;
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, LabelledMatrix1D value) {
-    StringBuilder sb = new StringBuilder();
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final LabelledMatrix1D value) {
+    final StringBuilder sb = new StringBuilder();
     boolean isFirst = true;
     for (int i = 0; i < value.getKeys().length; i++) {
       if (isFirst) {
@@ -56,13 +57,13 @@ public class LabelledMatrix1DConverter implements ResultConverter<LabelledMatrix
       } else {
         sb.append("; ").append(value.getValues()[i]);
       }
-      Object label = value.getLabels()[i];
-      Object currentLabel = context.convert(label, ConversionMode.SUMMARY);
+      final Object label = value.getLabels()[i];
+      final Object currentLabel = context.convert(label, ConversionMode.SUMMARY);
       sb.append(currentLabel).append("=").append(value.getValues()[i]);
     }
     return sb.length() > 0 ? sb.toString() : null;
   }
-  
+
   @Override
   public String getFormatterName() {
     return "LABELLED_MATRIX_1D";

@@ -22,54 +22,57 @@ import com.opengamma.master.security.ManageableSecurity;
  */
 public class FraTradeSecurityExtractor extends TradeSecurityExtractor<FraTrade> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FraTradeSecurityExtractor.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(FraTradeSecurityExtractor.class);
+
   /**
    * Create an extractor for the given trade.
-   * @param trade the trade to 
+   * 
+   * @param trade
+   *          the trade to
    */
-  public FraTradeSecurityExtractor(FraTrade trade) {
+  public FraTradeSecurityExtractor(final FraTrade trade) {
     super(trade);
   }
 
   @Override
   public ManageableSecurity[] extractSecurities() {
-    FraTrade fraTrade = getTrade();
-    
+    final FraTrade fraTrade = getTrade();
+
     validate(fraTrade);
-    
-    boolean payFixed = fraTrade.isPayFixed();
-    
-    double specifiedNotional = fraTrade.getNotional().doubleValue();
-    
-    //sign of notional determines the sides of the trade. 
-    //pay fixed => positive; pay floating => negative
-    double absoluteNotional = payFixed ? specifiedNotional : -specifiedNotional;
-    
-    ExternalId underlyingIdentifier = fraTrade.getFixingIndex().getIndex().toExternalId();
-    
-    
-    FRASecurity fraSecurity = new FRASecurity(fraTrade.getCurrency(), 
-                  fraTrade.getRegionId().toExternalId(), //region id not used.
-                  convertLocalDate(fraTrade.getEffectiveDate()),
-                  convertLocalDate(fraTrade.getTerminationDate()), 
-                  fraTrade.getRate().doubleValue(), 
-                  absoluteNotional, 
-                  underlyingIdentifier, 
-                  convertLocalDate(fraTrade.getFixingDate()));
-    
+
+    final boolean payFixed = fraTrade.isPayFixed();
+
+    final double specifiedNotional = fraTrade.getNotional().doubleValue();
+
+    // sign of notional determines the sides of the trade.
+    // pay fixed => positive; pay floating => negative
+    final double absoluteNotional = payFixed ? specifiedNotional : -specifiedNotional;
+
+    final ExternalId underlyingIdentifier = fraTrade.getFixingIndex().getIndex().toExternalId();
+
+    final FRASecurity fraSecurity = new FRASecurity(fraTrade.getCurrency(),
+        fraTrade.getRegionId().toExternalId(), // region id not used.
+        convertLocalDate(fraTrade.getEffectiveDate()),
+        convertLocalDate(fraTrade.getTerminationDate()),
+        fraTrade.getRate().doubleValue(),
+        absoluteNotional,
+        underlyingIdentifier,
+        convertLocalDate(fraTrade.getFixingDate()));
+
     return securityArray(addIdentifier(fraSecurity));
   }
 
   /**
    * Checks all is as expected.
-   * @param fraTrade fraTrade to validate
+   * 
+   * @param fraTrade
+   *          fraTrade to validate
    */
-  private void validate(FraTrade fraTrade) {
-    String tradeId = fraTrade.getExternalSystemId().getExternalId().getId();
-    
-    LocalDate effectiveDate = fraTrade.getEffectiveDate();
-    LocalDate paymentDate = fraTrade.getPaymentDate();
+  private void validate(final FraTrade fraTrade) {
+    final String tradeId = fraTrade.getExternalSystemId().getExternalId().getId();
+
+    final LocalDate effectiveDate = fraTrade.getEffectiveDate();
+    final LocalDate paymentDate = fraTrade.getPaymentDate();
     if (!effectiveDate.equals(paymentDate)) {
       throw new OpenGammaRuntimeException(
           format("Effective date (%s) not equal to payment date (%s) on trade '%s'. "
@@ -78,13 +81,13 @@ public class FraTradeSecurityExtractor extends TradeSecurityExtractor<FraTrade> 
               paymentDate.toString(),
               tradeId));
     }
-    
-    //TODO would be better to check values against conventions here.
-    //this will require a refactor to get access to the ToolContext.
+
+    // TODO would be better to check values against conventions here.
+    // this will require a refactor to get access to the ToolContext.
     if (fraTrade.getBusinessDayConvention() != null || fraTrade.getDayCount() != null) {
-      s_logger.warn("businessDayConvention and/or dayCount specified for trade %s. " +
-          "Note: this is currently ignored in favour of index defaults.", tradeId);
+      LOGGER.warn("businessDayConvention and/or dayCount specified for trade %s. "
+          + "Note: this is currently ignored in favour of index defaults.", tradeId);
     }
-    
+
   }
 }

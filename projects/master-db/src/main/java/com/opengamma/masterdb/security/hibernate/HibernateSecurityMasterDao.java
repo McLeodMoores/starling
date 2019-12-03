@@ -34,7 +34,7 @@ public interface HibernateSecurityMasterDao {
   <S extends ManageableSecurity, SBean extends SecurityBean> SBean createSecurityBean(
       OperationContext context, SecurityBeanOperation<S, SBean> beanOperation, Date effectiveDateTime, S security);
 
-  SecurityBean persistSecurityBean(OperationContext context, final SecurityBean bean);
+  SecurityBean persistSecurityBean(OperationContext context, SecurityBean bean);
 
   // SESSION LEVEL METHODS
   // Exchanges
@@ -48,52 +48,52 @@ public interface HibernateSecurityMasterDao {
   List<CurrencyBean> getCurrencyBeans();
 
   // GICS codes
-  GICSCodeBean getOrCreateGICSCodeBean(final String name, final String description);
+  GICSCodeBean getOrCreateGICSCodeBean(String name, String description);
 
   List<GICSCodeBean> getGICSCodeBeans();
 
   // Daycount conventions
-  DayCountBean getOrCreateDayCountBean(final String convention);
+  DayCountBean getOrCreateDayCountBean(String convention);
 
   List<DayCountBean> getDayCountBeans();
 
   // Business day conventions
-  BusinessDayConventionBean getOrCreateBusinessDayConventionBean(final String convention);
+  BusinessDayConventionBean getOrCreateBusinessDayConventionBean(String convention);
 
   List<BusinessDayConventionBean> getBusinessDayConventionBeans();
 
   // Frequencies
-  FrequencyBean getOrCreateFrequencyBean(final String convention);
+  FrequencyBean getOrCreateFrequencyBean(String convention);
 
   List<FrequencyBean> getFrequencyBeans();
 
   // UnitName
-  UnitBean getOrCreateUnitNameBean(final String unitName);
+  UnitBean getOrCreateUnitNameBean(String unitName);
 
   List<UnitBean> getUnitNameBeans();
 
   // IssuerTypeBean
-  IssuerTypeBean getOrCreateIssuerTypeBean(final String type);
+  IssuerTypeBean getOrCreateIssuerTypeBean(String type);
 
   List<IssuerTypeBean> getIssuerTypeBeans();
 
   // MarketBean
-  MarketBean getOrCreateMarketBean(final String market);
+  MarketBean getOrCreateMarketBean(String market);
 
   List<MarketBean> getMarketBeans();
 
   // YieldConventionBean
-  YieldConventionBean getOrCreateYieldConventionBean(final String convention);
+  YieldConventionBean getOrCreateYieldConventionBean(String convention);
 
   List<YieldConventionBean> getYieldConventionBeans();
 
   // GuaranteeTypeBean
-  GuaranteeTypeBean getOrCreateGuaranteeTypeBean(final String type);
+  GuaranteeTypeBean getOrCreateGuaranteeTypeBean(String type);
 
   List<GuaranteeTypeBean> getGuaranteeTypeBeans();
 
   // CouponTypeBean
-  CouponTypeBean getOrCreateCouponTypeBean(final String type);
+  CouponTypeBean getOrCreateCouponTypeBean(String type);
 
   List<CouponTypeBean> getCouponTypeBeans();
 
@@ -111,7 +111,7 @@ public interface HibernateSecurityMasterDao {
 
   FutureBundleBean nextFutureBundleBean(Date now, FutureSecurityBean future);
 
-  void persistFutureBundleBeans(final Date now, final FutureSecurityBean future);
+  void persistFutureBundleBeans(Date now, FutureSecurityBean future);
 
   ContractCategoryBean getOrCreateContractCategoryBean(String name);
 
@@ -123,12 +123,12 @@ public interface HibernateSecurityMasterDao {
 
   // CDSI family
   CDSIndexFamilyBean getOrCreateCDSIFamilyBean(String family);
-  
+
   List<CDSIndexFamilyBean> getCDSIFamilyBeans();
-  
-  //Tenors
+
+  // Tenors
   TenorBean getOrCreateTenorBean(String tenor);
-  
+
   List<TenorBean> getTenorBeans();
 
   IndexWeightingTypeBean getOrCreateIndexWeightingTypeBean(String name);
@@ -142,5 +142,5 @@ public interface HibernateSecurityMasterDao {
   void persistBondIndexComponentBeans(BondIndexBean bondIndex);
 
   void persistEquityIndexComponentBeans(EquityIndexBean equityIndex);
-  
+
 }

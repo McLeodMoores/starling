@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -13,17 +13,21 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class PolynomialsLeastSquaresFitterResult {
 
-  private double[] _coefficients;
-  private DoubleMatrix2D _rMatrix;
-  private int _dof;
-  private double _diffNorm;
-  private double[] _meanAndStd;
+  private final double[] _coefficients;
+  private final DoubleMatrix2D _rMatrix;
+  private final int _dof;
+  private final double _diffNorm;
+  private final double[] _meanAndStd;
 
   /**
-   * @param coefficients Coefficients of the polynomial
-   * @param rMatrix R-matrix of the QR decomposition used in PolynomialsLeastSquaresRegression
-   * @param dof Degrees of freedom = Number of data points - (degrees of Polynomial + 1) 
-   * @param diffNorm Square norm of the vector, "residuals," whose components are yData_i - f(xData_i)
+   * @param coefficients
+   *          Coefficients of the polynomial
+   * @param rMatrix
+   *          R-matrix of the QR decomposition used in PolynomialsLeastSquaresRegression
+   * @param dof
+   *          Degrees of freedom = Number of data points - (degrees of Polynomial + 1)
+   * @param diffNorm
+   *          Square norm of the vector, "residuals," whose components are yData_i - f(xData_i)
    */
   public PolynomialsLeastSquaresFitterResult(final double[] coefficients, final DoubleMatrix2D rMatrix, final int dof, final double diffNorm) {
 
@@ -36,13 +40,19 @@ public class PolynomialsLeastSquaresFitterResult {
   }
 
   /**
-   * @param coefficients Coefficients {a_0, a_1, a_2 ...} of the polynomial a_0 + a_1 x^1 + a_2 x^2 + ....
-   * @param rMatrix R-matrix of the QR decomposition used in PolynomialsLeastSquaresRegression
-   * @param dof Degrees of freedom = Number of data points - (degrees of Polynomial + 1) 
-   * @param diffNorm Norm of the vector, "residuals," whose components are yData_i - f(xData_i)
-   * @param meanAndStd Vector (mean , standard deviation) used in normalization 
+   * @param coefficients
+   *          Coefficients {a_0, a_1, a_2 ...} of the polynomial a_0 + a_1 x^1 + a_2 x^2 + ....
+   * @param rMatrix
+   *          R-matrix of the QR decomposition used in PolynomialsLeastSquaresRegression
+   * @param dof
+   *          Degrees of freedom = Number of data points - (degrees of Polynomial + 1)
+   * @param diffNorm
+   *          Norm of the vector, "residuals," whose components are yData_i - f(xData_i)
+   * @param meanAndStd
+   *          Vector (mean , standard deviation) used in normalization
    */
-  public PolynomialsLeastSquaresFitterResult(final double[] coefficients, final DoubleMatrix2D rMatrix, final int dof, final double diffNorm, final double[] meanAndStd) {
+  public PolynomialsLeastSquaresFitterResult(final double[] coefficients, final DoubleMatrix2D rMatrix, final int dof, final double diffNorm,
+      final double[] meanAndStd) {
 
     _coefficients = coefficients;
     _rMatrix = rMatrix;
@@ -67,7 +77,7 @@ public class PolynomialsLeastSquaresFitterResult {
   }
 
   /**
-   * @return Degrees of freedom = Number of data points - (degrees of Polynomial + 1) 
+   * @return Degrees of freedom = Number of data points - (degrees of Polynomial + 1)
    */
   public int getDof() {
     return _dof;
@@ -81,7 +91,7 @@ public class PolynomialsLeastSquaresFitterResult {
   }
 
   /**
-   * @return Vector (mean , standard deviation) used in normalization 
+   * @return Vector (mean , standard deviation) used in normalization
    */
   public double[] getMeanAndStd() {
     ArgumentChecker.notNull(_meanAndStd, "xData are not normalized");

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.util;
@@ -53,13 +53,13 @@ public class PoolExecutorComponentFactory extends AbstractComponentFactory {
   private Integer _maxThreads;
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    PoolExecutor executor = new PoolExecutor(determineMaxThreads(), getPoolName());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final PoolExecutor executor = new PoolExecutor(determineMaxThreads(), getPoolName());
     repo.registerComponent(PoolExecutor.class, getClassifier(), executor);
   }
-  
+
   protected int determineMaxThreads() {
-    if ((getLoadFactor() != null) && (getMaxThreads() != null)) {
+    if (getLoadFactor() != null && getMaxThreads() != null) {
       throw new IllegalStateException("Cannot specify both loadFactor and maxThreads properties.");
     }
     if (getMaxThreads() != null) {
@@ -70,7 +70,7 @@ public class PoolExecutorComponentFactory extends AbstractComponentFactory {
       if (getLoadFactor() <= 0.0) {
         throw new IllegalArgumentException("loadFactor cannot be 0 or negative.");
       }
-      double scaledCores = Math.ceil(getLoadFactor() * physicalCores);
+      final double scaledCores = Math.ceil(getLoadFactor() * physicalCores);
       physicalCores = (int) scaledCores;
     }
     physicalCores = Math.max(physicalCores, 1);

@@ -35,7 +35,7 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
   }
 
   /**
-   * Fudge builder for {@link YieldCurve}
+   * Fudge builder for {@link YieldCurve}.
    */
   @FudgeBuilderFor(YieldCurve.class)
   public static final class YieldCurveBuilder extends AbstractFudgeBuilder<YieldCurve> {
@@ -65,7 +65,7 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
   }
 
   /**
-   * Fudge builder for {@link DiscountCurve}
+   * Fudge builder for {@link DiscountCurve}.
    */
   @FudgeBuilderFor(DiscountCurve.class)
   public static final class DiscountCurveBuilder extends AbstractFudgeBuilder<DiscountCurve> {
@@ -94,7 +94,7 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
   }
 
   /**
-   * Fudge builder for {@link DayPeriodPreCalculatedDiscountCurve}
+   * Fudge builder for {@link DayPeriodPreCalculatedDiscountCurve}.
    */
   @FudgeBuilderFor(DayPeriodPreCalculatedDiscountCurve.class)
   public static final class DayPeriodPreCalculatedDiscountCurveBuilder extends AbstractFudgeBuilder<DayPeriodPreCalculatedDiscountCurve> {
@@ -104,7 +104,7 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
     private static final String NAME_FIELD_NAME = "name";
 
     @Override
-    public DayPeriodPreCalculatedDiscountCurve buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+    public DayPeriodPreCalculatedDiscountCurve buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final DoublesCurve curve = deserializer.fieldValueToObject(DoublesCurve.class, message.getByName(CURVE_FIELD_NAME));
       final String name;
       if (message.hasField(NAME_FIELD_NAME)) {
@@ -114,16 +114,16 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
       }
       return new DayPeriodPreCalculatedDiscountCurve(name, curve);
     }
-    
+
     @Override
-    protected void buildMessage(FudgeSerializer serializer, MutableFudgeMsg message, DayPeriodPreCalculatedDiscountCurve object) {
+    protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final DayPeriodPreCalculatedDiscountCurve object) {
       serializer.addToMessageWithClassHeaders(message, CURVE_FIELD_NAME, null, object.getCurve(), DoublesCurve.class);
       serializer.addToMessage(message, NAME_FIELD_NAME, null, object.getName());
     }
   }
 
   /**
-   * Fudge builder for {@link PriceIndexCurve}
+   * Fudge builder for {@link PriceIndexCurve}.
    */
   @FudgeBuilderFor(PriceIndexCurve.class)
   public static final class PriceIndexCurveBuilder extends AbstractFudgeBuilder<PriceIndexCurve> {
@@ -144,8 +144,7 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
   }
 
   /**
-   * Fudge builder for {@link YieldAndDiscountAddZeroSpreadCurve}. This will work as long as there are Fudge builders
-   * available for the delegate curve types.
+   * Fudge builder for {@link YieldAndDiscountAddZeroSpreadCurve}. This will work as long as there are Fudge builders available for the delegate curve types.
    */
   @FudgeBuilderFor(YieldAndDiscountAddZeroSpreadCurve.class)
   public static final class YieldAndDiscountAddZeroSpreadCurveFudgeBuilder extends AbstractFudgeBuilder<YieldAndDiscountAddZeroSpreadCurve> {
@@ -158,28 +157,28 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
     private static final String SUBTRACT_FIELD = "subtract";
 
     @Override
-    protected void buildMessage(FudgeSerializer serializer,
-                                MutableFudgeMsg message,
-                                YieldAndDiscountAddZeroSpreadCurve curve) {
+    protected void buildMessage(final FudgeSerializer serializer,
+        final MutableFudgeMsg message,
+        final YieldAndDiscountAddZeroSpreadCurve curve) {
       serializer.addToMessage(message, NAME_FIELD, null, curve.getName());
       serializer.addToMessage(message, SUBTRACT_FIELD, null, curve.getSign() < 0);
-      MutableFudgeMsg curvesMessage = serializer.newMessage();
-      for (YieldAndDiscountCurve yieldAndDiscountCurve : curve.getCurves()) {
+      final MutableFudgeMsg curvesMessage = serializer.newMessage();
+      for (final YieldAndDiscountCurve yieldAndDiscountCurve : curve.getCurves()) {
         serializer.addToMessage(curvesMessage, null, null, yieldAndDiscountCurve);
       }
       serializer.addToMessage(message, CURVES_FIELD, null, curvesMessage);
     }
 
     @Override
-    public YieldAndDiscountAddZeroSpreadCurve buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-      String name = deserializer.fieldValueToObject(String.class, message.getByName(NAME_FIELD));
-      FudgeMsg curvesMessage = message.getMessage(CURVES_FIELD);
-      List<YieldAndDiscountCurve> curves = Lists.newArrayList();
-      for (FudgeField field : curvesMessage) {
+    public YieldAndDiscountAddZeroSpreadCurve buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+      final String name = deserializer.fieldValueToObject(String.class, message.getByName(NAME_FIELD));
+      final FudgeMsg curvesMessage = message.getMessage(CURVES_FIELD);
+      final List<YieldAndDiscountCurve> curves = Lists.newArrayList();
+      for (final FudgeField field : curvesMessage) {
         curves.add(deserializer.fieldValueToObject(YieldAndDiscountCurve.class, field));
       }
-      boolean subtract = deserializer.fieldValueToObject(Boolean.class, message.getByName(SUBTRACT_FIELD));
-      YieldAndDiscountCurve[] curveArray = curves.toArray(new YieldAndDiscountCurve[curves.size()]);
+      final boolean subtract = deserializer.fieldValueToObject(Boolean.class, message.getByName(SUBTRACT_FIELD));
+      final YieldAndDiscountCurve[] curveArray = curves.toArray(new YieldAndDiscountCurve[curves.size()]);
       return new YieldAndDiscountAddZeroSpreadCurve(name, subtract, curveArray);
     }
   }

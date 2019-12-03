@@ -9,7 +9,8 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.surface.Surface;
 
 /**
- * Not part of the new hierarchy
+ * Not part of the new hierarchy.
+ *
  * @deprecated Use {@link PDE1DDataBundle}
  */
 @Deprecated
@@ -24,16 +25,24 @@ public class ExtendedCoupledPDEDataBundle {
   private final double _lambda;
 
   /**
-   * @param a a
-   * @param b b
-   * @param c c
-   * @param alpha alpha
-   * @param beta beta
-   * @param lambda lambda
-   * @param initialCondition initial condition
+   * @param a
+   *          a
+   * @param b
+   *          b
+   * @param c
+   *          c
+   * @param alpha
+   *          alpha
+   * @param beta
+   *          beta
+   * @param lambda
+   *          lambda
+   * @param initialCondition
+   *          initial condition
    */
   public ExtendedCoupledPDEDataBundle(final Surface<Double, Double, Double> a, final Surface<Double, Double, Double> b, final Surface<Double, Double, Double> c,
-      final Surface<Double, Double, Double> alpha, final Surface<Double, Double, Double> beta, final double lambda, final Function1D<Double, Double> initialCondition) {
+      final Surface<Double, Double, Double> alpha, final Surface<Double, Double, Double> beta, final double lambda,
+      final Function1D<Double, Double> initialCondition) {
 
     _a = a;
     _b = b;
@@ -50,8 +59,11 @@ public class ExtendedCoupledPDEDataBundle {
 
   /**
    * Gets the a.
-   * @param t time
-   * @param x x
+   *
+   * @param t
+   *          time
+   * @param x
+   *          x
    * @return the a
    */
   public double getA(final double t, final double x) {
@@ -60,8 +72,11 @@ public class ExtendedCoupledPDEDataBundle {
 
   /**
    * Gets the b.
-   * @param t time
-   * @param x x
+   *
+   * @param t
+   *          time
+   * @param x
+   *          x
    * @return the b
    */
   public double getB(final double t, final double x) {
@@ -70,8 +85,11 @@ public class ExtendedCoupledPDEDataBundle {
 
   /**
    * Gets the c.
-   * @param t time
-   * @param x x
+   *
+   * @param t
+   *          time
+   * @param x
+   *          x
    * @return the c
    */
   public double getC(final double t, final double x) {
@@ -80,8 +98,11 @@ public class ExtendedCoupledPDEDataBundle {
 
   /**
    * Gets the alpha.
-   * @param t time
-   * @param x x
+   *
+   * @param t
+   *          time
+   * @param x
+   *          x
    * @return the alpha
    */
   public double getAlpha(final double t, final double x) {
@@ -90,8 +111,11 @@ public class ExtendedCoupledPDEDataBundle {
 
   /**
    * Gets the beta.
-   * @param t time
-   * @param x x
+   *
+   * @param t
+   *          time
+   * @param x
+   *          x
    * @return the beta
    */
   public double getBeta(final double t, final double x) {
@@ -100,7 +124,9 @@ public class ExtendedCoupledPDEDataBundle {
 
   /**
    * Gets the initialCondition.
-   * @param x x
+   *
+   * @param x
+   *          x
    * @return the initialCondition
    */
   public double getInitialCondition(final double x) {

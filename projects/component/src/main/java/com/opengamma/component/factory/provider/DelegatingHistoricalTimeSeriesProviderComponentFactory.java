@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.provider;
@@ -79,10 +79,10 @@ public class DelegatingHistoricalTimeSeriesProviderComponentFactory extends Abst
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    Map<String, HistoricalTimeSeriesProvider> map = Maps.newHashMap();
-    List<String> acceptedTypes = Lists.newArrayList();
-    
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final Map<String, HistoricalTimeSeriesProvider> map = Maps.newHashMap();
+    final List<String> acceptedTypes = Lists.newArrayList();
+
     int maxLevel = buildProviders(repo, getProvider1(), map, acceptedTypes, 1);
     if (getProvider2() != null) {
       maxLevel = buildProviders(repo, getProvider2(), map, acceptedTypes, maxLevel);
@@ -96,10 +96,10 @@ public class DelegatingHistoricalTimeSeriesProviderComponentFactory extends Abst
     if (getProvider5() != null) {
       maxLevel = buildProviders(repo, getProvider5(), map, acceptedTypes, maxLevel);
     }
-    
+
     final HistoricalTimeSeriesProvider provider = new DelegatingHistoricalTimeSeriesProvider(map);
     final ComponentInfo info = new ComponentInfo(HistoricalTimeSeriesProvider.class, getClassifier());
-    info.addAttribute(ComponentInfoAttributes.LEVEL, (maxLevel + 1));
+    info.addAttribute(ComponentInfoAttributes.LEVEL, maxLevel + 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteHistoricalTimeSeriesProvider.class);
     }
@@ -110,21 +110,22 @@ public class DelegatingHistoricalTimeSeriesProviderComponentFactory extends Abst
     }
   }
 
-  private int buildProviders(ComponentRepository repo, ComponentInfo info, Map<String, HistoricalTimeSeriesProvider> map, List<String> acceptedTypes, int maxLevel) {
+  private int buildProviders(final ComponentRepository repo, final ComponentInfo info, final Map<String, HistoricalTimeSeriesProvider> map,
+      final List<String> acceptedTypes, final int maxLevel) {
     if (info.getType() != HistoricalTimeSeriesProvider.class) {
       throw new IllegalArgumentException("Component info must be a HistoricalTimeSeriesProvider");
     }
     if (info.getAttribute(ComponentInfoAttributes.ACCEPTED_TYPES) == null) {
       throw new IllegalArgumentException("Component info must specify acceptedTypes: " + info.getClassifier());
     }
-    List<String> accepteds = Arrays.asList(StringUtils.split(info.getAttribute(ComponentInfoAttributes.ACCEPTED_TYPES), ","));
-    for (String accepted : accepteds) {
-      if (map.containsKey(accepted) == false) {
+    final List<String> accepteds = Arrays.asList(StringUtils.split(info.getAttribute(ComponentInfoAttributes.ACCEPTED_TYPES), ","));
+    for (final String accepted : accepteds) {
+      if (!map.containsKey(accepted)) {
         map.put(accepted, (HistoricalTimeSeriesProvider) repo.getInstance(info));
         acceptedTypes.add(accepted);
       }
     }
-    String level = info.getAttribute(ComponentInfoAttributes.LEVEL);
+    final String level = info.getAttribute(ComponentInfoAttributes.LEVEL);
     return Math.max(maxLevel, NumberUtils.toInt(level, 1));
   }
 

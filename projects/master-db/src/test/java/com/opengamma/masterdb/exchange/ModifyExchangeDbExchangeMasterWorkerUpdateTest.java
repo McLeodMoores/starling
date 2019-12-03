@@ -34,14 +34,14 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyExchangeDbExchangeMasterWorkerUpdateTest extends AbstractDbExchangeMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyExchangeDbExchangeMasterWorkerUpdateTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyExchangeDbExchangeMasterWorkerUpdateTest.class);
   private static final ExternalIdBundle BUNDLE = ExternalIdBundle.of("A", "B");
   private static final ExternalIdBundle REGION = ExternalIdBundle.of("C", "D");
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyExchangeDbExchangeMasterWorkerUpdateTest(String databaseType, String databaseVersion) {
+  public ModifyExchangeDbExchangeMasterWorkerUpdateTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -52,87 +52,87 @@ public class ModifyExchangeDbExchangeMasterWorkerUpdateTest extends AbstractDbEx
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_noExchangeId() {
-    UniqueId uniqueId = UniqueId.of("DbExg", "101");
-    ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
+    final UniqueId uniqueId = UniqueId.of("DbExg", "101");
+    final ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
     exchange.setUniqueId(uniqueId);
-    ExchangeDocument doc = new ExchangeDocument();
+    final ExchangeDocument doc = new ExchangeDocument();
     doc.setExchange(exchange);
     _exgMaster.update(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_noExchange() {
-    ExchangeDocument doc = new ExchangeDocument();
+    final ExchangeDocument doc = new ExchangeDocument();
     doc.setUniqueId(UniqueId.of("DbExg", "101", "0"));
     _exgMaster.update(doc);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_update_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbExg", "0", "0");
-    ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
+    final UniqueId uniqueId = UniqueId.of("DbExg", "0", "0");
+    final ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
     exchange.setUniqueId(uniqueId);
-    ExchangeDocument doc = new ExchangeDocument(exchange);
+    final ExchangeDocument doc = new ExchangeDocument(exchange);
     _exgMaster.update(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_notLatestVersion() {
-    UniqueId uniqueId = UniqueId.of("DbExg", "201", "0");
-    ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
+    final UniqueId uniqueId = UniqueId.of("DbExg", "201", "0");
+    final ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
     exchange.setUniqueId(uniqueId);
-    ExchangeDocument doc = new ExchangeDocument(exchange);
+    final ExchangeDocument doc = new ExchangeDocument(exchange);
     _exgMaster.update(doc);
   }
 
   @Test
   public void test_update_getUpdateGet() {
-    Instant now = Instant.now(_exgMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbExg", "101", "0");
-    ExchangeDocument base = _exgMaster.get(uniqueId);
-    ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
+    final Instant now = Instant.now(_exgMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbExg", "101", "0");
+    final ExchangeDocument base = _exgMaster.get(uniqueId);
+    final ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
     exchange.setUniqueId(uniqueId);
-    ExchangeDocument input = new ExchangeDocument(exchange);
-    
-    ExchangeDocument updated = _exgMaster.update(input);
+    final ExchangeDocument input = new ExchangeDocument(exchange);
+
+    final ExchangeDocument updated = _exgMaster.update(input);
     assertEquals(false, base.getUniqueId().equals(updated.getUniqueId()));
     assertEquals(now, updated.getVersionFromInstant());
     assertEquals(null, updated.getVersionToInstant());
     assertEquals(now, updated.getCorrectionFromInstant());
     assertEquals(null, updated.getCorrectionToInstant());
     assertEquals(input.getExchange(), updated.getExchange());
-    
-    ExchangeDocument old = _exgMaster.get(uniqueId);
+
+    final ExchangeDocument old = _exgMaster.get(uniqueId);
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(now, old.getVersionToInstant());  // old version ended
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(base.getCorrectionToInstant(), old.getCorrectionToInstant());
     assertEquals(base.getExchange(), old.getExchange());
-    
-    ExchangeHistoryRequest search = new ExchangeHistoryRequest(base.getUniqueId(), null, now);
-    ExchangeHistoryResult searchResult = _exgMaster.history(search);
+
+    final ExchangeHistoryRequest search = new ExchangeHistoryRequest(base.getUniqueId(), null, now);
+    final ExchangeHistoryResult searchResult = _exgMaster.history(search);
     assertEquals(2, searchResult.getDocuments().size());
   }
 
   @Test
   public void test_update_rollback() {
-    DbExchangeMaster w = new DbExchangeMaster(_exgMaster.getDbConnector());
+    final DbExchangeMaster w = new DbExchangeMaster(_exgMaster.getDbConnector());
     w.setElSqlBundle(ElSqlBundle.of(new ElSqlConfig("TestRollback"), DbExchangeMaster.class));
     final ExchangeDocument base = _exgMaster.get(UniqueId.of("DbExg", "101", "0"));
-    UniqueId uniqueId = UniqueId.of("DbExg", "101", "0");
-    ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
+    final UniqueId uniqueId = UniqueId.of("DbExg", "101", "0");
+    final ManageableExchange exchange = new ManageableExchange(BUNDLE, "Test", REGION, null);
     exchange.setUniqueId(uniqueId);
-    ExchangeDocument input = new ExchangeDocument(exchange);
+    final ExchangeDocument input = new ExchangeDocument(exchange);
     try {
       w.update(input);
       Assert.fail();
-    } catch (BadSqlGrammarException ex) {
+    } catch (final BadSqlGrammarException ex) {
       // expected
     }
     final ExchangeDocument test = _exgMaster.get(UniqueId.of("DbExg", "101", "0"));
-    
+
     assertEquals(base, test);
   }
 

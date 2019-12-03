@@ -23,7 +23,8 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Tests the {@link OrderedRunQueue} implementations. Basic add/remove will have been tested as part of {@link RunQueueTest} - this is specifically targeting the sorting algorithm.
+ * Tests the {@link OrderedRunQueue} implementations. Basic add/remove will have been tested as part of {@link RunQueueTest} - this is specifically
+ * targeting the sorting algorithm.
  */
 @Test(groups = TestGroup.UNIT)
 public class OrderedRunQueueTest {
@@ -70,10 +71,10 @@ public class OrderedRunQueueTest {
 
   private void assertOrder(final OrderedRunQueue queue, final ContextRunnable[] tasks, final int... expected) {
     final Iterator<ContextRunnable> itr = queue.iterator();
-    for (int i = 0; i < expected.length; i++) {
+    for (final int element : expected) {
       assertTrue(itr.hasNext());
       final ContextRunnable actual = itr.next();
-      final ContextRunnable expect = tasks[expected[i]];
+      final ContextRunnable expect = tasks[element];
       assertSame(actual, expect);
     }
     assertFalse(itr.hasNext());

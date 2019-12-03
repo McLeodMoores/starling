@@ -45,7 +45,7 @@ public class BatchError {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param calculationConfiguration  the configuration
    * @param computationTarget  the computation target
    * @param valueName  the value name
@@ -54,13 +54,13 @@ public class BatchError {
    * @param exceptionMsg  the exception message
    * @param stackTrace  the stack trace
    */
-  public BatchError(String calculationConfiguration,
-      ComputationTargetSpecification computationTarget,
-      String valueName,
-      String functionUniqueId,
-      String exceptionClass,
-      String exceptionMsg,
-      String stackTrace) {
+  public BatchError(final String calculationConfiguration,
+      final ComputationTargetSpecification computationTarget,
+      final String valueName,
+      final String functionUniqueId,
+      final String exceptionClass,
+      final String exceptionMsg,
+      final String stackTrace) {
     _calculationConfiguration = calculationConfiguration;
     _computationTarget = computationTarget;
     _valueName = valueName;

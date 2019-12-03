@@ -22,7 +22,7 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
     private final ComputationTargetCollapser _first;
     private final ComputationTargetCollapser _second;
 
-    public ChainedCollapser(final ComputationTargetCollapser first, final ComputationTargetCollapser second) {
+    ChainedCollapser(final ComputationTargetCollapser first, final ComputationTargetCollapser second) {
       _first = first;
       _second = second;
     }
@@ -33,7 +33,8 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
     }
 
     @Override
-    public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a, final ComputationTargetSpecification b) {
+    public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a,
+        final ComputationTargetSpecification b) {
       ComputationTargetSpecification result = _first.collapse(function, a, b);
       if (result == null) {
         result = _second.collapse(function, a, b);
@@ -43,7 +44,7 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
 
   }
 
-  private final ComputationTargetTypeMap<ComputationTargetCollapser> _collapsers = new ComputationTargetTypeMap<ComputationTargetCollapser>(
+  private final ComputationTargetTypeMap<ComputationTargetCollapser> _collapsers = new ComputationTargetTypeMap<>(
       new Function2<ComputationTargetCollapser, ComputationTargetCollapser, ComputationTargetCollapser>() {
         @Override
         public ComputationTargetCollapser execute(final ComputationTargetCollapser a, final ComputationTargetCollapser b) {
@@ -52,7 +53,8 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
       });
 
   /**
-   * Creates a new instance with no underlying collapsers. Unless one or more collapser instances are added to it by {@link #addCollapser}, {@link #canApplyTo} will always return false.
+   * Creates a new instance with no underlying collapsers. Unless one or more collapser instances are added to it by {@link #addCollapser}, {@link #canApplyTo}
+   * will always return false.
    */
   public DefaultComputationTargetCollapser() {
   }
@@ -74,13 +76,13 @@ public class DefaultComputationTargetCollapser implements ComputationTargetColla
     final ComputationTargetCollapser collapser = getCollapser(target.getType());
     if (collapser != null) {
       return collapser.canApplyTo(target);
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override
-  public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a, final ComputationTargetSpecification b) {
+  public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a,
+      final ComputationTargetSpecification b) {
     // A and B are the same type, and the type must have been matched for canApplyTo to return true
     return getCollapser(a.getType()).collapse(function, a, b);
   }

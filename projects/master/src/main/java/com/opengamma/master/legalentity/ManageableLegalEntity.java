@@ -24,7 +24,6 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.core.Attributable;
 import com.opengamma.core.legalentity.Account;
 import com.opengamma.core.legalentity.Capability;
 import com.opengamma.core.legalentity.LegalEntity;
@@ -35,60 +34,71 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.MutableUniqueIdentifiable;
 import com.opengamma.id.UniqueId;
-import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicSPI;
 
 /** A legal entity. */
 @PublicSPI
 @BeanDefinition
-public class ManageableLegalEntity
-    implements LegalEntity, Bean, UniqueIdentifiable, MutableUniqueIdentifiable, Attributable, Serializable {
+public class ManageableLegalEntity implements LegalEntity, Bean, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
   /**
-   * The unique identifier of the legal entity.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * The unique identifier of the legal entity. This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
-   * The bundle of external identifiers that define the legal entity.
-   * This field must not be null for the object to be valid.
+   * The bundle of external identifiers that define the legal entity. This field must not be null for the object to be valid.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
-  /** The map of attributes, which can be used for attaching additional application-level information. */
-  @PropertyDefinition
+  /**
+   * The map of attributes, which can be used for attaching additional application-level information.
+   */
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private final Map<String, String> _attributes = new HashMap<>();
-  /** The map of details, which can be used for attaching additional application-level information. */
-  @PropertyDefinition
+  /**
+   * The map of details, which can be used for attaching additional application-level information.
+   */
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private final Map<String, String> _details = new HashMap<>();
   /**
-   * The name of the legal entity.
-   * This field must not be null for the object to be valid.
+   * The name of the legal entity. This field must not be null for the object to be valid.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
-
-  @PropertyDefinition(validate = "notNull")
+  /**
+   * A list of ratings.
+   */
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Rating> _ratings = new ArrayList<>();
-
-  @PropertyDefinition(validate = "notNull")
+  /**
+   * A list of capabilities.
+   */
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Capability> _capabilities = new ArrayList<>();
-
-  @PropertyDefinition(validate = "notNull")
+  /**
+   * A list of identifiers of issued securities.
+   */
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<ExternalIdBundle> _issuedSecurities = new ArrayList<>();
-
-  @PropertyDefinition(validate = "notNull")
+  /**
+   * A list of obligations.
+   */
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Obligation> _obligations = new ArrayList<>();
-
-  @PropertyDefinition()
+  /**
+   * The root portfolio.
+   */
+  @PropertyDefinition(overrideGet = true)
   private RootPortfolio _rootPortfolio;
-
-  @PropertyDefinition(validate = "notNull")
+  /**
+   * A list of accounts.
+   */
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Account> _accounts = new ArrayList<>();
 
   /** Creates a legal entity. */
@@ -98,10 +108,12 @@ public class ManageableLegalEntity
   /**
    * Creates a legal entity specifying the values of the main fields.
    *
-   * @param name the name of the legal entity, not null
-   * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
+   * @param name
+   *          the name of the legal entity, not null
+   * @param externalIdBundle
+   *          the bundle of identifiers that define the legal entity, not null
    */
-  public ManageableLegalEntity(String name, ExternalIdBundle externalIdBundle) {
+  public ManageableLegalEntity(final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(externalIdBundle, "externalIdBundle");
     setName(name);
@@ -111,11 +123,14 @@ public class ManageableLegalEntity
   /**
    * Creates a legal entity specifying the values of the main fields.
    *
-   * @param uniqueId the unique identifier, not null
-   * @param name the name of the legal entity, not null
-   * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param name
+   *          the name of the legal entity, not null
+   * @param externalIdBundle
+   *          the bundle of identifiers that define the legal entity, not null
    */
-  protected ManageableLegalEntity(UniqueId uniqueId, String name, ExternalIdBundle externalIdBundle) {
+  protected ManageableLegalEntity(final UniqueId uniqueId, final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(externalIdBundle, "externalIdBundle");
     setUniqueId(uniqueId);
@@ -123,26 +138,27 @@ public class ManageableLegalEntity
     setExternalIdBundle(externalIdBundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Adds an external identifier to the bundle representing this legal entity.
    *
-   * @param legalEntityId the identifier to add, not null
+   * @param legalEntityId
+   *          the identifier to add, not null
    */
-  public void addExternalId(ExternalId legalEntityId) {
+  public void addExternalId(final ExternalId legalEntityId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(legalEntityId));
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
   }
 
   @Override
-  public void addDetail(String key, String value) {
+  public void addDetail(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _details.put(key, value);
@@ -179,26 +195,25 @@ public class ManageableLegalEntity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifier of the legal entity.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Gets the unique identifier of the legal entity. This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
 
   /**
-   * Sets the unique identifier of the legal entity.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Sets the unique identifier of the legal entity. This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
 
   /**
    * Gets the the {@code uniqueId} property.
-   * This must be null when adding to a master and not null when retrieved from a master.
    * @return the property, not null
    */
   public final Property<UniqueId> uniqueId() {
@@ -207,17 +222,16 @@ public class ManageableLegalEntity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bundle of external identifiers that define the legal entity.
-   * This field must not be null for the object to be valid.
+   * Gets the bundle of external identifiers that define the legal entity. This field must not be null for the object to be valid.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
 
   /**
-   * Sets the bundle of external identifiers that define the legal entity.
-   * This field must not be null for the object to be valid.
+   * Sets the bundle of external identifiers that define the legal entity. This field must not be null for the object to be valid.
    * @param externalIdBundle  the new value of the property, not null
    */
   public void setExternalIdBundle(ExternalIdBundle externalIdBundle) {
@@ -227,7 +241,6 @@ public class ManageableLegalEntity
 
   /**
    * Gets the the {@code externalIdBundle} property.
-   * This field must not be null for the object to be valid.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalIdBundle() {
@@ -239,6 +252,7 @@ public class ManageableLegalEntity
    * Gets the map of attributes, which can be used for attaching additional application-level information.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getAttributes() {
     return _attributes;
   }
@@ -247,6 +261,7 @@ public class ManageableLegalEntity
    * Sets the map of attributes, which can be used for attaching additional application-level information.
    * @param attributes  the new value of the property, not null
    */
+  @Override
   public void setAttributes(Map<String, String> attributes) {
     JodaBeanUtils.notNull(attributes, "attributes");
     this._attributes.clear();
@@ -266,6 +281,7 @@ public class ManageableLegalEntity
    * Gets the map of details, which can be used for attaching additional application-level information.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getDetails() {
     return _details;
   }
@@ -274,6 +290,7 @@ public class ManageableLegalEntity
    * Sets the map of details, which can be used for attaching additional application-level information.
    * @param details  the new value of the property, not null
    */
+  @Override
   public void setDetails(Map<String, String> details) {
     JodaBeanUtils.notNull(details, "details");
     this._details.clear();
@@ -290,17 +307,16 @@ public class ManageableLegalEntity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the name of the legal entity.
-   * This field must not be null for the object to be valid.
+   * Gets the name of the legal entity. This field must not be null for the object to be valid.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }
 
   /**
-   * Sets the name of the legal entity.
-   * This field must not be null for the object to be valid.
+   * Sets the name of the legal entity. This field must not be null for the object to be valid.
    * @param name  the new value of the property, not null
    */
   public void setName(String name) {
@@ -310,7 +326,6 @@ public class ManageableLegalEntity
 
   /**
    * Gets the the {@code name} property.
-   * This field must not be null for the object to be valid.
    * @return the property, not null
    */
   public final Property<String> name() {
@@ -319,15 +334,16 @@ public class ManageableLegalEntity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the ratings.
+   * Gets a list of ratings.
    * @return the value of the property, not null
    */
+  @Override
   public List<Rating> getRatings() {
     return _ratings;
   }
 
   /**
-   * Sets the ratings.
+   * Sets a list of ratings.
    * @param ratings  the new value of the property, not null
    */
   public void setRatings(List<Rating> ratings) {
@@ -345,15 +361,16 @@ public class ManageableLegalEntity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the capabilities.
+   * Gets a list of capabilities.
    * @return the value of the property, not null
    */
+  @Override
   public List<Capability> getCapabilities() {
     return _capabilities;
   }
 
   /**
-   * Sets the capabilities.
+   * Sets a list of capabilities.
    * @param capabilities  the new value of the property, not null
    */
   public void setCapabilities(List<Capability> capabilities) {
@@ -371,15 +388,16 @@ public class ManageableLegalEntity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the issuedSecurities.
+   * Gets a list of identifiers of issued securities.
    * @return the value of the property, not null
    */
+  @Override
   public List<ExternalIdBundle> getIssuedSecurities() {
     return _issuedSecurities;
   }
 
   /**
-   * Sets the issuedSecurities.
+   * Sets a list of identifiers of issued securities.
    * @param issuedSecurities  the new value of the property, not null
    */
   public void setIssuedSecurities(List<ExternalIdBundle> issuedSecurities) {
@@ -397,15 +415,16 @@ public class ManageableLegalEntity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the obligations.
+   * Gets a list of obligations.
    * @return the value of the property, not null
    */
+  @Override
   public List<Obligation> getObligations() {
     return _obligations;
   }
 
   /**
-   * Sets the obligations.
+   * Sets a list of obligations.
    * @param obligations  the new value of the property, not null
    */
   public void setObligations(List<Obligation> obligations) {
@@ -423,15 +442,16 @@ public class ManageableLegalEntity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the rootPortfolio.
+   * Gets the root portfolio.
    * @return the value of the property
    */
+  @Override
   public RootPortfolio getRootPortfolio() {
     return _rootPortfolio;
   }
 
   /**
-   * Sets the rootPortfolio.
+   * Sets the root portfolio.
    * @param rootPortfolio  the new value of the property
    */
   public void setRootPortfolio(RootPortfolio rootPortfolio) {
@@ -448,15 +468,16 @@ public class ManageableLegalEntity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the accounts.
+   * Gets a list of accounts.
    * @return the value of the property, not null
    */
+  @Override
   public List<Account> getAccounts() {
     return _accounts;
   }
 
   /**
-   * Sets the accounts.
+   * Sets a list of accounts.
    * @param accounts  the new value of the property, not null
    */
   public void setAccounts(List<Account> accounts) {

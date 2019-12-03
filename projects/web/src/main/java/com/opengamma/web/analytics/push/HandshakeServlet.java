@@ -42,7 +42,7 @@ public class HandshakeServlet extends HttpServlet {
   private ConnectionManager _connectionManager;
 
   @Override
-  public void init(ServletConfig config) throws ServletException {
+  public void init(final ServletConfig config) throws ServletException {
     super.init(config);
     _connectionManager = WebPushServletContextUtils.getConnectionManager(config.getServletContext());
   }
@@ -50,8 +50,8 @@ public class HandshakeServlet extends HttpServlet {
   //-------------------------------------------------------------------------
   // this is a hack to get round a problem with browsers caching GET requests even when they're told not to
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String method = req.getParameter(METHOD);
+  protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+    final String method = req.getParameter(METHOD);
     if (GET.equals(method)) {
       doGet(req, resp);
     } else {
@@ -60,14 +60,14 @@ public class HandshakeServlet extends HttpServlet {
   }
 
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String userName = (AuthUtils.isPermissive() ? null : AuthUtils.getUserName());
-    String clientId = _connectionManager.clientConnected(userName);
+  protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+    final String userName = AuthUtils.isPermissive() ? null : AuthUtils.getUserName();
+    final String clientId = _connectionManager.clientConnected(userName);
     resp.setContentType(MediaType.APPLICATION_JSON);
-    JSONObject json = new JSONObject();
+    final JSONObject json = new JSONObject();
     try {
       json.put("clientId", clientId);
-    } catch (JSONException e) {
+    } catch (final JSONException e) {
       throw new OpenGammaRuntimeException("Unexpected problem creating JSON", e);
     }
     resp.getWriter().write(json.toString());

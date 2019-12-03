@@ -16,32 +16,39 @@ import com.opengamma.master.security.SecuritySearchRequest;
 import com.opengamma.master.security.SecuritySearchResult;
 
 /**
- * Security master which tracks accesses using UniqueIds.
+ * Security master which tracks accesses using
+ * {@link com.opengamma.id.UniqueId}s.
  */
 public class DataTrackingSecurityMaster extends AbstractDataTrackingMaster<SecurityDocument, SecurityMaster> implements SecurityMaster {
-  
-  public DataTrackingSecurityMaster(SecurityMaster delegate) {
+
+  /**
+   * Sets up the delegate security master.
+   *
+   * @param delegate
+   *          the delegate, not null
+   */
+  public DataTrackingSecurityMaster(final SecurityMaster delegate) {
     super(delegate);
   }
 
   @Override
-  public SecuritySearchResult search(SecuritySearchRequest request) {
-    SecuritySearchResult searchResult = delegate().search(request);
+  public SecuritySearchResult search(final SecuritySearchRequest request) {
+    final SecuritySearchResult searchResult = delegate().search(request);
     trackDocs(searchResult.getDocuments());
     return searchResult;
   }
 
   @Override
-  public SecurityHistoryResult history(SecurityHistoryRequest request) {
-    SecurityHistoryResult historyResult = delegate().history(request);
+  public SecurityHistoryResult history(final SecurityHistoryRequest request) {
+    final SecurityHistoryResult historyResult = delegate().history(request);
     trackDocs(historyResult.getDocuments());
     return historyResult;
   }
 
   @Override
-  public SecurityMetaDataResult metaData(SecurityMetaDataRequest request) {
+  public SecurityMetaDataResult metaData(final SecurityMetaDataRequest request) {
     return delegate().metaData(request);
   }
-  
-  
+
+
 }

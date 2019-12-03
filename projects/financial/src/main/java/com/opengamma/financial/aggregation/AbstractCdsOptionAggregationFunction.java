@@ -49,7 +49,7 @@ public abstract class AbstractCdsOptionAggregationFunction<T> implements Aggrega
    * @param securitySource the security source used for resolution of the CDS security, not null
    * @param extractor the extractor which will process the cds option and return the required type, not null
    */
-  public AbstractCdsOptionAggregationFunction(String name, SecuritySource securitySource, CdsOptionValueExtractor<T> extractor) {
+  public AbstractCdsOptionAggregationFunction(final String name, final SecuritySource securitySource, final CdsOptionValueExtractor<T> extractor) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(securitySource, "securitySource");
     _name = name;
@@ -64,16 +64,15 @@ public abstract class AbstractCdsOptionAggregationFunction<T> implements Aggrega
   }
 
   @Override
-  public String classifyPosition(Position position) {
-    Security security = resolveSecurity(position);
+  public String classifyPosition(final Position position) {
+    final Security security = resolveSecurity(position);
     if (security instanceof CreditDefaultSwapOptionSecurity) {
-      CreditDefaultSwapOptionSecurity cdsOption = (CreditDefaultSwapOptionSecurity) security;
-      T extracted = _extractor.extract(cdsOption);
+      final CreditDefaultSwapOptionSecurity cdsOption = (CreditDefaultSwapOptionSecurity) security;
+      final T extracted = _extractor.extract(cdsOption);
       if (extracted != null) {
         return handleExtractedData(extracted);
-      } else {
-        return NOT_APPLICABLE;
       }
+      return NOT_APPLICABLE;
     }
 
     return NOT_APPLICABLE;
@@ -91,9 +90,9 @@ public abstract class AbstractCdsOptionAggregationFunction<T> implements Aggrega
     return _securitySource;
   }
 
-  private Security resolveSecurity(Position position) {
+  private Security resolveSecurity(final Position position) {
 
-    Security security = position.getSecurityLink().getTarget();
+    final Security security = position.getSecurityLink().getTarget();
     return security != null ? security : position.getSecurityLink().resolveQuiet(_securitySource);
   }
 
@@ -108,7 +107,7 @@ public abstract class AbstractCdsOptionAggregationFunction<T> implements Aggrega
   }
 
   @Override
-  public int compare(String sector1, String sector2) {
+  public int compare(final String sector1, final String sector2) {
     return sector1.compareTo(sector2);
   }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.financial.curve;
 
@@ -22,8 +22,7 @@ import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
 import com.opengamma.id.ExternalId;
 
 /**
- * Contains a curve node that holds information about the underlying instrument (e.g. the underlying overnight rate
- * for Fed funds futures).
+ * Contains a curve node that holds information about the underlying instrument (e.g. the underlying overnight rate for Fed funds futures).
  */
 @BeanDefinition
 public class QuandlCurveNodeWithIdentifierAndUnderlying extends CurveNodeWithIdentifier {
@@ -42,12 +41,18 @@ public class QuandlCurveNodeWithIdentifierAndUnderlying extends CurveNodeWithIde
   /**
    * Creates an instance.
    *
-   * @param node  the curve node, not null
-   * @param id  the market data id, not null
-   * @param dataField  the data field, not null
-   * @param fieldType  the field type, not null
-   * @param underlyingIdentifier  the underlying market data id, not null
-   * @param underlyingDataField  the underlying market data field, not null
+   * @param node
+   *          the curve node, not null
+   * @param id
+   *          the market data id, not null
+   * @param dataField
+   *          the data field, not null
+   * @param fieldType
+   *          the field type, not null
+   * @param underlyingIdentifier
+   *          the underlying market data id, not null
+   * @param underlyingDataField
+   *          the underlying market data field, not null
    */
   public QuandlCurveNodeWithIdentifierAndUnderlying(final CurveNode node, final ExternalId id, final String dataField, final DataFieldType fieldType,
       final ExternalId underlyingIdentifier, final String underlyingDataField) {

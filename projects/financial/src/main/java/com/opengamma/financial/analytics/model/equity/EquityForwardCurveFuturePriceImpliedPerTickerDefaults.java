@@ -28,16 +28,17 @@ import com.opengamma.id.ExternalIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Populate {@link EquityForwardCurveFromFutureCurveFunction} with defaults for tickers provided.<p>
- * The intention is that, for Tickers (Symbols) with futures traded on them,  the Forward Curve will be bootstrapped from these.
+ * Populate {@link EquityForwardCurveFromFutureCurveFunction} with defaults for tickers provided.
+ * <p>
+ * The intention is that, for Tickers (Symbols) with futures traded on them, the Forward Curve will be bootstrapped from these.
  */
 public class EquityForwardCurveFuturePriceImpliedPerTickerDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityForwardCurveFuturePriceImpliedPerTickerDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardCurveFuturePriceImpliedPerTickerDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.FORWARD_CURVE,
-    ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA
+                ValueRequirementNames.FORWARD_CURVE,
+                ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA
   };
   /** The priority of this set of defaults */
   private final PriorityClass _priority;
@@ -45,8 +46,10 @@ public class EquityForwardCurveFuturePriceImpliedPerTickerDefaults extends Defau
   private final Map<String, String[]> _perTickerConfig;
 
   /**
-   * @param priority The priority, not null
-   * @param perTickerConfig The default values per equity, not null
+   * @param priority
+   *          The priority, not null
+   * @param perTickerConfig
+   *          The default values per equity, not null
    */
   public EquityForwardCurveFuturePriceImpliedPerTickerDefaults(final String priority, final String... perTickerConfig) {
     super(ComputationTargetType.PRIMITIVE, true); // REVIEW Andrew 2012-11-06 -- Is PRIMITIVE correct, shouldn't it be SECURITY or even EquitySecurity?
@@ -57,7 +60,8 @@ public class EquityForwardCurveFuturePriceImpliedPerTickerDefaults extends Defau
     _priority = PriorityClass.valueOf(priority);
     _perTickerConfig = new HashMap<>();
     for (int i = 0; i < perTickerConfig.length; i += 6) {
-      final String[] config = new String[] {perTickerConfig[i + 1], perTickerConfig[i + 2], perTickerConfig[i + 3], perTickerConfig[i + 4], perTickerConfig[i + 5]};
+      final String[] config = new String[] { perTickerConfig[i + 1], perTickerConfig[i + 2], perTickerConfig[i + 3], perTickerConfig[i + 4],
+                    perTickerConfig[i + 5] };
       _perTickerConfig.put(perTickerConfig[i].toUpperCase(), config);
     }
   }
@@ -67,7 +71,7 @@ public class EquityForwardCurveFuturePriceImpliedPerTickerDefaults extends Defau
     if (!(target.getValue() instanceof ExternalIdentifiable)) {
       return false;
     }
-    ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
+    final ExternalId id = ((ExternalIdentifiable) target.getValue()).getExternalId();
     final String ticker = EquitySecurityUtils.getIndexOrEquityName(id);
     if (ticker == null) {
       return false;
@@ -81,10 +85,10 @@ public class EquityForwardCurveFuturePriceImpliedPerTickerDefaults extends Defau
     for (final String valueRequirement : VALUE_REQUIREMENTS) {
       defaults.addValuePropertyName(valueRequirement, ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
       defaults.addValuePropertyName(valueRequirement, InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE);
-    }  
+    }
     // Properties specific to FORWARD_CURVE
     defaults.addValuePropertyName(ValueRequirementNames.FORWARD_CURVE, ValuePropertyNames.CURVE);
-    //  Properties specific to STANDARD_VOLATILITY_SURFACE_DATA
+    // Properties specific to STANDARD_VOLATILITY_SURFACE_DATA
     defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ValuePropertyNames.FORWARD_CURVE_NAME);
     defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ValuePropertyNames.CURVE_CURRENCY);
     defaults.addValuePropertyName(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, ValuePropertyNames.DISCOUNTING_CURVE_NAME);
@@ -97,7 +101,7 @@ public class EquityForwardCurveFuturePriceImpliedPerTickerDefaults extends Defau
       final String propertyName) {
     final String tickerId = EquitySecurityUtils.getIndexOrEquityName(((ExternalIdentifiable) target.getValue()).getExternalId());
     if (!_perTickerConfig.containsKey(tickerId)) {
-      s_logger.error("Could not get config for ticker " + tickerId + "; should never happen");
+      LOGGER.error("Could not get config for ticker " + tickerId + "; should never happen");
       return null;
     }
     final String[] config = _perTickerConfig.get(tickerId);
@@ -119,7 +123,7 @@ public class EquityForwardCurveFuturePriceImpliedPerTickerDefaults extends Defau
       case InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE:
         return Collections.singleton(InstrumentTypeProperties.EQUITY_FUTURE_PRICE);
       default:
-        s_logger.error("Cannot get a default value for {}", propertyName);
+        LOGGER.error("Cannot get a default value for {}", propertyName);
         return null;
     }
   }

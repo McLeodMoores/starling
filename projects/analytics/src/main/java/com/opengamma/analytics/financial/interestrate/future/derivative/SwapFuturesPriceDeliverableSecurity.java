@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.future.derivative;
@@ -33,12 +33,18 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
 
   /**
    * Constructor.
-   * @param lastTradingTime The futures last trading time.
-   * @param deliveryTime The delivery time.
-   * @param underlyingSwap The futures underlying swap.
-   * @param notional The notional of the future (also called face value or contract value).
+   *
+   * @param lastTradingTime
+   *          The futures last trading time.
+   * @param deliveryTime
+   *          The delivery time.
+   * @param underlyingSwap
+   *          The futures underlying swap.
+   * @param notional
+   *          The notional of the future (also called face value or contract value).
    */
-  public SwapFuturesPriceDeliverableSecurity(final double lastTradingTime, final double deliveryTime, final SwapFixedCoupon<? extends Coupon> underlyingSwap, final double notional) {
+  public SwapFuturesPriceDeliverableSecurity(final double lastTradingTime, final double deliveryTime, final SwapFixedCoupon<? extends Coupon> underlyingSwap,
+      final double notional) {
     super(lastTradingTime);
     ArgumentChecker.notNull(underlyingSwap, "Underlying swap");
     _deliveryTime = deliveryTime;
@@ -48,6 +54,7 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
 
   /**
    * Gets the delivery time.
+   *
    * @return The time.
    */
   public double getDeliveryTime() {
@@ -56,6 +63,7 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
 
   /**
    * Gets the futures underlying swap.
+   *
    * @return The underlying swap.
    */
   public SwapFixedCoupon<? extends Coupon> getUnderlyingSwap() {
@@ -64,6 +72,7 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
 
   /**
    * Gets the notional of the future (also called face value or contract value).
+   *
    * @return The notional.
    */
   public double getNotional() {
@@ -72,6 +81,7 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
 
   /**
    * Gets the futures currency.
+   *
    * @return The currency.
    */
   @Override
@@ -97,15 +107,15 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_deliveryTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingSwap.hashCode();
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -115,7 +125,7 @@ public class SwapFuturesPriceDeliverableSecurity extends FuturesSecurity {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    SwapFuturesPriceDeliverableSecurity other = (SwapFuturesPriceDeliverableSecurity) obj;
+    final SwapFuturesPriceDeliverableSecurity other = (SwapFuturesPriceDeliverableSecurity) obj;
     if (Double.doubleToLongBits(_deliveryTime) != Double.doubleToLongBits(other._deliveryTime)) {
       return false;
     }

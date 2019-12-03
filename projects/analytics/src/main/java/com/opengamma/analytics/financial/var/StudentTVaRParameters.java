@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.var;
@@ -12,7 +12,7 @@ import com.opengamma.analytics.math.statistics.distribution.StudentTDistribution
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class StudentTVaRParameters {
   private final double _horizon;
@@ -22,7 +22,7 @@ public class StudentTVaRParameters {
   private final double _mult;
   private final double _scale;
   private final ProbabilityDistribution<Double> _studentT;
-  
+
   public StudentTVaRParameters(final double horizon, final double periods, final double quantile, final double dof) {
     Validate.isTrue(horizon > 0, "horizon");
     Validate.isTrue(periods > 0, "periods");
@@ -38,27 +38,27 @@ public class StudentTVaRParameters {
     _mult = Math.sqrt((_dof - 2) * horizon / dof / periods) * _studentT.getInverseCDF(quantile);
     _scale = horizon / periods;
   }
-  
+
   public double getMult() {
     return _mult;
   }
-  
+
   public double getScale() {
     return _scale;
   }
-  
+
   public double getHorizon() {
     return _horizon;
   }
-  
+
   public double getPeriods() {
     return _periods;
   }
-  
+
   public double getQuantile() {
     return _quantile;
   }
-  
+
   public double getDegreesOfFreedom() {
     return _dof;
   }
@@ -69,17 +69,17 @@ public class StudentTVaRParameters {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_dof);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_horizon);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_periods);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_quantile);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -89,7 +89,7 @@ public class StudentTVaRParameters {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    StudentTVaRParameters other = (StudentTVaRParameters) obj;
+    final StudentTVaRParameters other = (StudentTVaRParameters) obj;
     if (Double.doubleToLongBits(_dof) != Double.doubleToLongBits(other._dof)) {
       return false;
     }
@@ -104,5 +104,5 @@ public class StudentTVaRParameters {
     }
     return true;
   }
-  
+
 }

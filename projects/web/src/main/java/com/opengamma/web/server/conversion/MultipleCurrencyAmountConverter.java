@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.server.conversion;
@@ -15,30 +15,31 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * 
+ *
  */
 public class MultipleCurrencyAmountConverter implements ResultConverter<MultipleCurrencyAmount> {
 
-  private DoubleConverter _doubleConverter;
+  private final DoubleConverter _doubleConverter;
 
-  public MultipleCurrencyAmountConverter(DoubleConverter doubleConverter) {
+  public MultipleCurrencyAmountConverter(final DoubleConverter doubleConverter) {
     _doubleConverter = doubleConverter;
   }
-  
+
   @Override
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, MultipleCurrencyAmount value, ConversionMode mode) {
-    Map<String, Object> result = new HashMap<String, Object>();
-    int length = value.size();
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final MultipleCurrencyAmount value,
+      final ConversionMode mode) {
+    final Map<String, Object> result = new HashMap<>();
+    final int length = value.size();
     result.put("summary", length);
-    
+
     if (mode == ConversionMode.FULL) {
-      Map<Object, Object> labelledValues = new LinkedHashMap<Object, Object>();
-      Iterator<CurrencyAmount> iter = value.iterator();
+      final Map<Object, Object> labelledValues = new LinkedHashMap<>();
+      final Iterator<CurrencyAmount> iter = value.iterator();
       while (iter.hasNext()) {
-        CurrencyAmount ca = iter.next();
-        String label = ca.getCurrency().getCode(); 
-        Object currentLabel = context.convert(label, ConversionMode.SUMMARY);
-        Object currentValue = _doubleConverter.convertForDisplay(context, valueSpec, ca.getAmount(), ConversionMode.SUMMARY);
+        final CurrencyAmount ca = iter.next();
+        final String label = ca.getCurrency().getCode();
+        final Object currentLabel = context.convert(label, ConversionMode.SUMMARY);
+        final Object currentValue = _doubleConverter.convertForDisplay(context, valueSpec, ca.getAmount(), ConversionMode.SUMMARY);
         labelledValues.put(currentLabel, currentValue);
       }
       result.put("full", labelledValues);
@@ -47,7 +48,7 @@ public class MultipleCurrencyAmountConverter implements ResultConverter<Multiple
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, MultipleCurrencyAmount value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final MultipleCurrencyAmount value) {
     return null;
   }
 
@@ -57,7 +58,7 @@ public class MultipleCurrencyAmountConverter implements ResultConverter<Multiple
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, MultipleCurrencyAmount value) {
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final MultipleCurrencyAmount value) {
     return value.toString();
   }
 

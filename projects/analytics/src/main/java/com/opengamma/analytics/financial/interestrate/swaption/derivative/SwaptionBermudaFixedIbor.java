@@ -20,8 +20,8 @@ import com.opengamma.util.money.Currency;
 public class SwaptionBermudaFixedIbor implements InstrumentDerivative {
 
   /**
-   * The swaps underlying the swaption. There is one swap for each expiration date. All swaps shoud have the same currency.
-   * The swap do not need to be identical; this allow to incorporate fees or changing margins in the description.
+   * The swaps underlying the swaption. There is one swap for each expiration date. All swaps shoud have the same currency. The swap do not need to be
+   * identical; this allow to incorporate fees or changing margins in the description.
    */
   private final SwapFixedCoupon<? extends Coupon>[] _underlyingSwap;
   /**
@@ -39,12 +39,18 @@ public class SwaptionBermudaFixedIbor implements InstrumentDerivative {
 
   /**
    * Constructor for the Bermuda swaption.
-   * @param underlyingSwap The swaps underlying the swaption. There is one swap for each expiration date.
-   * @param isLong Flag indicating if the option is long (true) or short (false).
-   * @param expiryTime The swaption expiration times.
-   * @param settlementTime The times (in year) to the swaps settlement.
+   *
+   * @param underlyingSwap
+   *          The swaps underlying the swaption. There is one swap for each expiration date.
+   * @param isLong
+   *          Flag indicating if the option is long (true) or short (false).
+   * @param expiryTime
+   *          The swaption expiration times.
+   * @param settlementTime
+   *          The times (in year) to the swaps settlement.
    */
-  public SwaptionBermudaFixedIbor(final SwapFixedCoupon<? extends Coupon>[] underlyingSwap, final boolean isLong, final double[] expiryTime, final double[] settlementTime) {
+  public SwaptionBermudaFixedIbor(final SwapFixedCoupon<? extends Coupon>[] underlyingSwap, final boolean isLong, final double[] expiryTime,
+      final double[] settlementTime) {
     ArgumentChecker.notNull(expiryTime, "Expiry time");
     ArgumentChecker.notNull(underlyingSwap, "Underlying swap");
     ArgumentChecker.notNull(settlementTime, "Settlement time");
@@ -58,6 +64,7 @@ public class SwaptionBermudaFixedIbor implements InstrumentDerivative {
 
   /**
    * Gets the swaps underlying the swaption. There is one swap for each expiration date.
+   *
    * @return The underlying swaps.
    */
   public SwapFixedCoupon<? extends Coupon>[] getUnderlyingSwap() {
@@ -66,6 +73,7 @@ public class SwaptionBermudaFixedIbor implements InstrumentDerivative {
 
   /**
    * Gets the flag indicating if the option is long (true) or short (false).
+   *
    * @return The flag.
    */
   public boolean isLong() {
@@ -74,6 +82,7 @@ public class SwaptionBermudaFixedIbor implements InstrumentDerivative {
 
   /**
    * Gets the swaption expiration dates.
+   *
    * @return The swaption expiration dates.
    */
   public double[] getExpiryTime() {
@@ -82,6 +91,7 @@ public class SwaptionBermudaFixedIbor implements InstrumentDerivative {
 
   /**
    * Gets the times (in year) to the swaps settlement.
+   *
    * @return The times to the swaps settlement.
    */
   public double[] getSettlementTime() {
@@ -90,6 +100,7 @@ public class SwaptionBermudaFixedIbor implements InstrumentDerivative {
 
   /**
    * Gets the swaption currency.
+   *
    * @return The currency.
    */
   public Currency getCurrency() {

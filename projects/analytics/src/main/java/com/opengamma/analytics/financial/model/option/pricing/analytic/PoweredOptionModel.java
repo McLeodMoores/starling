@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -15,22 +15,7 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * Analytic pricing model for powered options. *This model is only valid for options with an integer power.*
- * <p>
- * The price of a powered option is:
- * $$
- * \begin{align*}
- * c &= \sum_{j=0}^i \frac{i!}{j!(i-j)!}S^{i-j}(-K)^j e^{(i-j-1)(r + (i-j)\frac{\sigma^2}{2})T - (i-j)(r-b)T}N(d_{i,j})\\
- * p &= \sum_{j=0}^i \frac{i!}{j!(i-j)!}(-S)^{i-j}K^j e^{(i-j-1)(r + (i-j)\frac{\sigma^2}{2})T - (i-j)(r-b)T}N(-d_{i,j})\\
- * \end{align*}
- * $$
- * where
- * $$
- * \begin{align*}
- * d_{i,j} = \frac{\ln(\frac{S}{K}) + (b + (i - j - \frac{1}{2})\sigma^2)T}{\sigma\sqrt{T}}
- * \end{align*}
- * $$
- * 
+ * Analytic pricing model for powered options. <b>This model is only valid for options with an integer power.</b>
  */
 public class PoweredOptionModel extends AnalyticOptionModel<PoweredOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -44,7 +29,8 @@ public class PoweredOptionModel extends AnalyticOptionModel<PoweredOptionDefinit
     final Function1D<StandardOptionDataBundle, Double> pricingFunction = new Function1D<StandardOptionDataBundle, Double>() {
 
       /**
-       * @throws OptionPricingException If the power is not an integer.
+       * @throws OptionPricingException
+       *           If the power is not an integer.
        */
       @SuppressWarnings("synthetic-access")
       @Override
@@ -68,7 +54,8 @@ public class PoweredOptionModel extends AnalyticOptionModel<PoweredOptionDefinit
         double price = 0;
         for (int i = 0; i <= power; i++) {
           diff = power - i;
-          price += getCombinatorial(power, i) * Math.pow(sign * s, diff) * Math.pow(-sign * k, i) * Math.exp((diff - 1) * (r + diff * sigmaSq / 2.) * t - diff * (r - b) * t)
+          price += getCombinatorial(power, i) * Math.pow(sign * s, diff) * Math.pow(-sign * k, i)
+              * Math.exp((diff - 1) * (r + diff * sigmaSq / 2.) * t - diff * (r - b) * t)
               * NORMAL.getCDF(sign * getD(x, diff, sigmaT, sigmaSq, t));
         }
         return price;
@@ -92,7 +79,7 @@ public class PoweredOptionModel extends AnalyticOptionModel<PoweredOptionDefinit
   }
 
   long getCombinatorial(final long i, final long j) {
-    return getFactorial(i) / (getFactorial(j) * (getFactorial(i - j)));
+    return getFactorial(i) / (getFactorial(j) * getFactorial(i - j));
   }
 
   double getD(final double x, final double diff, final double sigmaT, final double sigmaSq, final double t) {

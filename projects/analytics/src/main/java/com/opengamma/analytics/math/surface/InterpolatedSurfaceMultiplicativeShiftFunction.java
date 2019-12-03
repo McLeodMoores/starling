@@ -12,8 +12,8 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 
 /**
- * Shifts an {@link InterpolatedDoublesSurface}. If the <i>(x, y)</i> value(s) of the shift(s) are not in the nodal points of the
- * original surface, they are added (with shift) to the nodal points of the new surface.
+ * Shifts an {@link InterpolatedDoublesSurface}. If the <i>(x, y)</i> value(s) of the shift(s) are not in the nodal points of the original surface, they are
+ * added (with shift) to the nodal points of the new surface.
  */
 public class InterpolatedSurfaceMultiplicativeShiftFunction implements SurfaceShiftFunction<InterpolatedDoublesSurface> {
 
@@ -55,7 +55,8 @@ public class InterpolatedSurfaceMultiplicativeShiftFunction implements SurfaceSh
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double x, final double y, final double percentage, final String newName) {
+  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double x, final double y, final double percentage,
+      final String newName) {
     Validate.notNull(surface, "surface");
     final double[] xData = surface.getXDataAsPrimitive();
     final double[] yData = surface.getYDataAsPrimitive();
@@ -88,7 +89,8 @@ public class InterpolatedSurfaceMultiplicativeShiftFunction implements SurfaceSh
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] percentage) {
+  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double[] xShift, final double[] yShift,
+      final double[] percentage) {
     Validate.notNull(surface, "surface");
     return evaluate(surface, xShift, yShift, percentage, "MULTIPLE_MULTIPLIER_" + surface.getName());
   }
@@ -97,14 +99,16 @@ public class InterpolatedSurfaceMultiplicativeShiftFunction implements SurfaceSh
    * {@inheritDoc}
    */
   @Override
-  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] percentage, final String newName) {
+  public InterpolatedDoublesSurface evaluate(final InterpolatedDoublesSurface surface, final double[] xShift, final double[] yShift,
+      final double[] percentage, final String newName) {
     Validate.notNull(surface, "surface");
     Validate.notNull(xShift, "x shift");
     Validate.notNull(yShift, "y shift");
     Validate.notNull(percentage, "shifts");
     final int n = xShift.length;
     if (n == 0) {
-      return InterpolatedDoublesSurface.from(surface.getXDataAsPrimitive(), surface.getYDataAsPrimitive(), surface.getZDataAsPrimitive(), surface.getInterpolator(), newName);
+      return InterpolatedDoublesSurface.from(surface.getXDataAsPrimitive(), surface.getYDataAsPrimitive(), surface.getZDataAsPrimitive(),
+          surface.getInterpolator(), newName);
     }
     Validate.isTrue(n == yShift.length && n == percentage.length);
     final Double[] x = surface.getXData();

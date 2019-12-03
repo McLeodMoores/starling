@@ -35,13 +35,13 @@ public class RestEntitySubscriptionTest {
 
   private Server _server;
   private TestChangeManager _changeManager;
-  private WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
+  private final WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
 
   @BeforeClass
   public void createServer() throws Exception {
-    Pair<Server,WebApplicationContext> serverAndContext = _webPushTestUtils.createJettyServer("classpath:/com/opengamma/web/analytics/push/rest-subscription-test.xml");
+    final Pair<Server, WebApplicationContext> serverAndContext = _webPushTestUtils.createJettyServer("classpath:/com/opengamma/web/analytics/push/rest-subscription-test.xml");
     _server = serverAndContext.getFirst();
-    WebApplicationContext context = serverAndContext.getSecond();
+    final WebApplicationContext context = serverAndContext.getSecond();
     _changeManager = context.getBean("changeManager", TestChangeManager.class);
   }
 
@@ -52,59 +52,59 @@ public class RestEntitySubscriptionTest {
 
   @Test
   public void entitySubscription() throws IOException, JSONException {
-    String clientId = _webPushTestUtils.handshake();
-    String restUrl = "/jax/test/" + _uidStr;
+    final String clientId = _webPushTestUtils.handshake();
+    final String restUrl = "/jax/test/" + _uidStr;
     // this REST request should set up a subscription for object ID Tst~101
     _webPushTestUtils.readFromPath(restUrl, clientId);
     // send a change event
     _changeManager.entityChanged(ChangeType.CHANGED, _uidV1.getObjectId(), null, null, Instant.now());
     // connect to the long-polling URL to receive notification of the change
-    String json = _webPushTestUtils.readFromPath("/updates/" + clientId);
+    final String json = _webPushTestUtils.readFromPath("/updates/" + clientId);
     WebPushTestUtils.checkJsonResults(json, restUrl);
   }
 
   @Test
   public void subResourceSubscription() throws IOException, JSONException {
-    String clientId = _webPushTestUtils.handshake();
-    String restUrl = "/jax/testsub/" + _uidStr;
+    final String clientId = _webPushTestUtils.handshake();
+    final String restUrl = "/jax/testsub/" + _uidStr;
     _webPushTestUtils.readFromPath(restUrl, clientId);
     _changeManager.entityChanged(ChangeType.CHANGED, _uidV1.getObjectId(), null, null, Instant.now());
-    String json = _webPushTestUtils.readFromPath("/updates/" + clientId);
+    final String json = _webPushTestUtils.readFromPath("/updates/" + clientId);
     WebPushTestUtils.checkJsonResults(json, restUrl);
   }
 
   @Test
   public void multipleEntitySubscription() throws IOException, JSONException {
-    String clientId = _webPushTestUtils.handshake();
-    String restUrl1 = "/jax/test/" + _uidStr;
-    String uid2Str = "Tst~102";
-    UniqueId uid2 = UniqueId.parse(uid2Str);
-    UniqueId uid2V1 = uid2.withVersion("1");
-    String restUrl2 = "/jax/test/" + uid2Str;
+    final String clientId = _webPushTestUtils.handshake();
+    final String restUrl1 = "/jax/test/" + _uidStr;
+    final String uid2Str = "Tst~102";
+    final UniqueId uid2 = UniqueId.parse(uid2Str);
+    final UniqueId uid2V1 = uid2.withVersion("1");
+    final String restUrl2 = "/jax/test/" + uid2Str;
     _webPushTestUtils.readFromPath(restUrl1, clientId);
     _webPushTestUtils.readFromPath(restUrl2, clientId);
     _changeManager.entityChanged(ChangeType.CHANGED, _uidV1.getObjectId(), null, null, Instant.now());
     _changeManager.entityChanged(ChangeType.CHANGED, uid2V1.getObjectId(), null, null, Instant.now());
-    String json = _webPushTestUtils.readFromPath("/updates/" + clientId);
+    final String json = _webPushTestUtils.readFromPath("/updates/" + clientId);
     WebPushTestUtils.checkJsonResults(json, restUrl1, restUrl2);
   }
 
   @Test
   public void noClientIdNoSubscription() throws IOException {
-    String clientId = _webPushTestUtils.handshake();
-    String restUrl = "/jax/test/" + _uidStr;
+    final String clientId = _webPushTestUtils.handshake();
+    final String restUrl = "/jax/test/" + _uidStr;
     // this REST request shouldn't set up a subscription because there is no client ID so the server doesn't know
     // where to send the update
     _webPushTestUtils.readFromPath(restUrl);
     // send a change event that we should never see
     _changeManager.entityChanged(ChangeType.CHANGED, _uidV1.getObjectId(), null, null, Instant.now());
-    String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
+    final String result = _webPushTestUtils.readFromPath("/updates/" + clientId);
     assertEquals("", result);
   }
 
   @Test(expectedExceptions = FileNotFoundException.class)
   public void invalidClientId() throws IOException {
-    String restUrl = "/jax/test/" + _uidStr;
+    final String restUrl = "/jax/test/" + _uidStr;
     // this REST request shouldn't set up a subscription because the client ID doesn't match an existing client connection
     _webPushTestUtils.readFromPath(restUrl);
     // send a change event that we should never see

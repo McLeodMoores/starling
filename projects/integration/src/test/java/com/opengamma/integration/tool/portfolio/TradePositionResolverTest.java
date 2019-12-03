@@ -33,35 +33,35 @@ public class TradePositionResolverTest {
   @Test(expectedExceptions = IllegalStateException.class)
   public void testGetPositionsCannotBeCalledBeforeResolve() {
 
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
     resolver.getPositions();
   }
 
   @Test(expectedExceptions = IllegalStateException.class)
   public void testGetOrphansCannotBeCalledBeforeResolve() {
 
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
     resolver.getOrphans();
   }
 
   @Test(expectedExceptions = IllegalStateException.class)
   public void testGetDuplicatesCannotBeCalledBeforeResolve() {
 
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
     resolver.getDuplicateTrades();
   }
 
   @Test(expectedExceptions = IllegalStateException.class)
   public void testGetUnknownsCannotBeCalledBeforeResolve() {
 
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
     resolver.getUnknownTrades();
   }
 
   @Test
   public void testPositionsAreEmptyWhenNoneAdded() {
 
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
     resolver.resolve();
     assertTrue(resolver.getPositions().isEmpty());
   }
@@ -69,7 +69,7 @@ public class TradePositionResolverTest {
   @Test
   public void testAllTradesAreOrphansWhenNoPositionsAdded() {
 
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1", "T2"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1", "T2"));
     resolver.resolve();
     assertEquals(resolver.getOrphans(), ImmutableSet.of("T1", "T2"));
   }
@@ -77,39 +77,39 @@ public class TradePositionResolverTest {
   @Test(expectedExceptions = IllegalStateException.class)
   public void testPositionsCannotBeAddedAfterResolve() {
 
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
     resolver.resolve();
     resolver.addToPosition("P1", "T1");
   }
 
   @Test
   public void testSimplePositionAddition() {
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
     resolver.addToPosition("P1", "T1");
     resolver.resolve();
 
     assertFalse(resolver.getOrphans().iterator().hasNext());
-    Multimap<String, String> positions = resolver.getPositions();
+    final Multimap<String, String> positions = resolver.getPositions();
     assertEquals(positions.size(), 1);
     assertEquals(positions.get("P1"), ImmutableSet.of("T1"));
   }
 
   @Test
   public void testDuplicatePositionTradeCombinationIsNotIgnored() {
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
     resolver.addToPosition("P1", "T1");
     resolver.addToPosition("P1", "T1");
     resolver.resolve();
 
     assertFalse(resolver.getOrphans().iterator().hasNext());
-    Multimap<String, String> positions = resolver.getPositions();
+    final Multimap<String, String> positions = resolver.getPositions();
     assertEquals(positions.size(), 2);
     assertEquals(positions.get("P1"), ImmutableList.of("T1", "T1"));
   }
 
   @Test
   public void testPositionAddition() {
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1","T2","T3","T4","T5"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1", "T2", "T3", "T4", "T5"));
     resolver.addToPosition("P1", "T1");
     resolver.addToPosition("P2", "T2");
     resolver.addToPosition("P1", "T3");
@@ -118,11 +118,11 @@ public class TradePositionResolverTest {
     resolver.resolve();
 
     assertFalse(resolver.getOrphans().iterator().hasNext());
-    Multimap<String, String> positions = resolver.getPositions();
+    final Multimap<String, String> positions = resolver.getPositions();
     assertEquals(positions.keySet().size(), 2);
     assertEquals(positions.size(), 5);
-    assertEquals(positions.get("P1"), ImmutableSet.of("T1","T3","T5"));
-    assertEquals(positions.get("P2"), ImmutableSet.of("T2","T4"));
+    assertEquals(positions.get("P1"), ImmutableSet.of("T1", "T3", "T5"));
+    assertEquals(positions.get("P2"), ImmutableSet.of("T2", "T4"));
   }
 
   @Test
@@ -130,7 +130,7 @@ public class TradePositionResolverTest {
 
     // The XMl load process should mean this can't happen in
     // the actual load, but ...
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
     resolver.addToPosition("P1", "T1");
     resolver.addToPosition("P1", "T2");
     resolver.resolve();
@@ -140,14 +140,14 @@ public class TradePositionResolverTest {
 
   @Test
   public void testDuplicatedTradesAreIdentified() {
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1"));
     resolver.addToPosition("P1", "T1");
     resolver.addToPosition("P2", "T1");
     resolver.resolve();
 
     // Multimap comparison seems somewhat awkward, therefore do comparisons with
     // the more familiar java collection methods
-    Multimap<String, String> duplicateTrades = resolver.getDuplicateTrades();
+    final Multimap<String, String> duplicateTrades = resolver.getDuplicateTrades();
     assertEquals(duplicateTrades.keySet().size(), 1);
     assertEquals(duplicateTrades.get("T1"), ImmutableSet.of("P1", "P2"));
   }
@@ -155,7 +155,7 @@ public class TradePositionResolverTest {
   @Test
   public void testCombined() {
 
-    TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1","T2","T3","T4","T5"));
+    final TradePositionResolver resolver = new TradePositionResolver(ImmutableSet.of("T1", "T2", "T3", "T4", "T5"));
     resolver.addToPosition("P1", "T1");
     resolver.addToPosition("P2", "T1");
     resolver.addToPosition("P2", "T2");
@@ -164,11 +164,11 @@ public class TradePositionResolverTest {
     resolver.addToPosition("P3", "T6");
     resolver.resolve();
 
-    Iterator<String> orphans = resolver.getOrphans().iterator();
+    final Iterator<String> orphans = resolver.getOrphans().iterator();
     assertEquals(orphans.next(), "T5");
     assertFalse(orphans.hasNext());
 
-    Multimap<String, String> positions = resolver.getPositions();
+    final Multimap<String, String> positions = resolver.getPositions();
     assertEquals(positions.keySet().size(), 3);
     assertEquals(positions.get("P1"), ImmutableList.of("T1", "T3"));
     assertEquals(positions.get("P2"), ImmutableList.of("T1", "T2", "T4"));
@@ -176,7 +176,7 @@ public class TradePositionResolverTest {
 
     assertEquals(ImmutableSet.copyOf(resolver.getUnknownTrades()), ImmutableSet.of("T6"));
 
-    Multimap<String, String> duplicateTrades = resolver.getDuplicateTrades();
+    final Multimap<String, String> duplicateTrades = resolver.getDuplicateTrades();
     assertEquals(duplicateTrades.keySet().size(), 1);
     assertEquals(duplicateTrades.get("T1"), ImmutableSet.of("P1", "P2"));
   }

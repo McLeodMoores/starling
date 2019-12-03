@@ -45,43 +45,44 @@ public class ComputationTargetSpecificationTest {
   private static final Trade TRADE = createTrade();
 
   private static Trade createTrade() {
-    final SimpleTrade trade = new SimpleTrade(SECURITY, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of(Counterparty.DEFAULT_SCHEME, "Foo")), LocalDate.now(), null);
+    final SimpleTrade trade = new SimpleTrade(SECURITY, BigDecimal.ONE,
+        new SimpleCounterparty(ExternalId.of(Counterparty.DEFAULT_SCHEME, "Foo")), LocalDate.now(), null);
     trade.setUniqueId(UID);
     return trade;
   }
 
   public void test_constructor_Object_Node() {
-    ComputationTargetSpecification test = ComputationTargetSpecification.of(NODE);
+    final ComputationTargetSpecification test = ComputationTargetSpecification.of(NODE);
     assertEquals(ComputationTargetType.PORTFOLIO_NODE, test.getType());
     assertEquals(NODE.getUniqueId(), test.getUniqueId());
   }
 
   public void test_constructor_Object_Position() {
-    ComputationTargetSpecification test = ComputationTargetSpecification.of(POSITION);
+    final ComputationTargetSpecification test = ComputationTargetSpecification.of(POSITION);
     assertEquals(ComputationTargetType.POSITION, test.getType());
     assertEquals(POSITION.getUniqueId(), test.getUniqueId());
   }
 
   public void test_constructor_Object_Security() {
-    ComputationTargetSpecification test = ComputationTargetSpecification.of(SECURITY);
+    final ComputationTargetSpecification test = ComputationTargetSpecification.of(SECURITY);
     assertEquals(ComputationTargetType.SECURITY, test.getType());
     assertEquals(SECURITY.getUniqueId(), test.getUniqueId());
   }
 
   public void test_constructor_Object_Trade() {
-    ComputationTargetSpecification test = ComputationTargetSpecification.of(TRADE);
+    final ComputationTargetSpecification test = ComputationTargetSpecification.of(TRADE);
     assertEquals(ComputationTargetType.TRADE, test.getType());
     assertEquals(TRADE.getUniqueId(), test.getUniqueId());
   }
 
   public void test_constructor_Object_Currency() {
-    ComputationTargetSpecification test = ComputationTargetSpecification.of(Currency.USD);
+    final ComputationTargetSpecification test = ComputationTargetSpecification.of(Currency.USD);
     assertEquals(ComputationTargetType.CURRENCY, test.getType());
     assertEquals(Currency.USD.getUniqueId(), test.getUniqueId());
   }
 
   public void test_constructor_Object_UniqueId() {
-    ComputationTargetSpecification test = ComputationTargetSpecification.of(UID);
+    final ComputationTargetSpecification test = ComputationTargetSpecification.of(UID);
     assertEquals(ComputationTargetType.PRIMITIVE, test.getType());
     assertEquals(UID, test.getUniqueId());
   }
@@ -103,14 +104,14 @@ public class ComputationTargetSpecificationTest {
     new ComputationTargetSpecification(null, UID);
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_constructor_Type_UniqueId_nullId() {
     new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, (UniqueId) null);
   }
 
   //-------------------------------------------------------------------------
   public void test_getters_PortfolioNode() {
-    ComputationTargetSpecification test = new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UID);
+    final ComputationTargetSpecification test = new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UID);
     assertEquals(ComputationTargetType.PORTFOLIO_NODE, test.getType());
     assertEquals(UID.getScheme(), test.getUniqueId().getScheme());
     assertEquals(UID.getValue(), test.getUniqueId().getValue());
@@ -118,56 +119,56 @@ public class ComputationTargetSpecificationTest {
 
   //-------------------------------------------------------------------------
   public void test_toSpecification() {
-    ComputationTargetSpecification test = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
+    final ComputationTargetSpecification test = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
     assertEquals(true, test.toString().contains("POSITION"));
     assertEquals(true, test.toString().contains(UID.toString()));
   }
 
   //-------------------------------------------------------------------------
   public void test_equals_similar() {
-    ComputationTargetSpecification a1 = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
-    ComputationTargetSpecification a2 = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
-    
+    final ComputationTargetSpecification a1 = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
+    final ComputationTargetSpecification a2 = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
+
     assertEquals(true, a1.equals(a1));
     assertEquals(true, a1.equals(a2));
-    
+
     assertEquals(true, a2.equals(a1));
     assertEquals(true, a2.equals(a2));
   }
 
   public void test_equals_different() {
-    ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
-    ComputationTargetSpecification b = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID2);
-    ComputationTargetSpecification c = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UID2);
-    
+    final ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
+    final ComputationTargetSpecification b = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID2);
+    final ComputationTargetSpecification c = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UID2);
+
     assertEquals(true, a.equals(a));
     assertEquals(false, a.equals(b));
     assertEquals(false, a.equals(c));
-    
+
     assertEquals(false, b.equals(a));
     assertEquals(true, b.equals(b));
     assertEquals(false, b.equals(c));
-    
+
     assertEquals(false, c.equals(a));
     assertEquals(false, c.equals(b));
     assertEquals(true, c.equals(c));
   }
 
   public void test_equals_other() {
-    ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
+    final ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
     assertEquals(false, a.equals(null));
     assertEquals(false, a.equals("Rubbish"));
   }
 
   public void test_hashCode() {
-    ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
-    ComputationTargetSpecification b = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
+    final ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
+    final ComputationTargetSpecification b = new ComputationTargetSpecification(ComputationTargetType.POSITION, UID);
     assertEquals(true, a.equals(b));
   }
 
   public void test_isCompatible() {
-    ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.of(SimpleSecurity.class), UID);
-    ComputationTargetSpecification b = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UID);
+    final ComputationTargetSpecification a = new ComputationTargetSpecification(ComputationTargetType.of(SimpleSecurity.class), UID);
+    final ComputationTargetSpecification b = new ComputationTargetSpecification(ComputationTargetType.SECURITY, UID);
     assertFalse(a.isCompatible(b));
     assertTrue(b.isCompatible(a));
   }

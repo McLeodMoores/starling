@@ -26,7 +26,8 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class DependencyNodeImpl implements DependencyNode, Serializable {
 
-  // TODO: Change DependencyNode from an interface to an abstract class and put the static stuff into it rather than have static methods & instanceof checks here
+  // TODO: Change DependencyNode from an interface to an abstract class and put the static stuff into it rather than have
+  // static methods & instanceof checks here
 
   private static final long serialVersionUID = 1L;
 
@@ -66,11 +67,15 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Creates a new node.
-   * 
-   * @param function the function, not null
-   * @param target the target specification, not null
-   * @param outputs the outputs of the node, not null and not containing null
-   * @param inputs the input values to the node, not null and not containing null
+   *
+   * @param function
+   *          the function, not null
+   * @param target
+   *          the target specification, not null
+   * @param outputs
+   *          the outputs of the node, not null and not containing null
+   * @param inputs
+   *          the input values to the node, not null and not containing null
    */
   public DependencyNodeImpl(final DependencyNodeFunction function, final ComputationTargetSpecification target, final Collection<ValueSpecification> outputs,
       final Map<ValueSpecification, DependencyNode> inputs) {
@@ -83,7 +88,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
     int size = outputs.size();
     _outputValues = new ValueSpecification[size];
     int i = 0;
-    for (ValueSpecification output : outputs) {
+    for (final ValueSpecification output : outputs) {
       ArgumentChecker.notNull(output, "output");
       assert _target.equals(output.getTargetSpecification());
       _outputValues[i++] = output;
@@ -97,7 +102,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
       _inputValues = new ValueSpecification[size];
       _inputNodes = new DependencyNode[size];
       i = 0;
-      for (Map.Entry<ValueSpecification, DependencyNode> input : inputs.entrySet()) {
+      for (final Map.Entry<ValueSpecification, DependencyNode> input : inputs.entrySet()) {
         ArgumentChecker.notNull(input, "input");
         ArgumentChecker.notNull(input.getKey(), "input.key");
         ArgumentChecker.notNull(input.getValue(), "input.value");
@@ -109,8 +114,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
     }
   }
 
-  private DependencyNodeImpl(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] outputValues, final ValueSpecification[] inputValues,
-      final DependencyNode[] inputNodes) {
+  private DependencyNodeImpl(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] outputValues,
+      final ValueSpecification[] inputValues, final DependencyNode[] inputNodes) {
     _function = function;
     _target = target;
     _outputValues = outputValues;
@@ -142,30 +147,29 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   public static DependencyNode addInputs(final DependencyNode oldNode, final ValueSpecification[] inputValues, final DependencyNode[] inputNodes) {
     if (oldNode instanceof DependencyNodeImpl) {
       return ((DependencyNodeImpl) oldNode).addInputs(inputValues, inputNodes);
-    } else {
-      int additionalInputs = 0;
-      for (int i = 0; i < inputValues.length; i++) {
-        if (oldNode.findInputValue(inputValues[i]) < 0) {
-          inputValues[additionalInputs] = inputValues[i];
-          inputNodes[additionalInputs] = inputNodes[i];
-          additionalInputs++;
-        }
-      }
-      if (additionalInputs == 0) {
-        // No changes; all of those inputs are present
-        return oldNode;
-      }
-      final int oldInputs = oldNode.getInputCount();
-      final ValueSpecification[] newInputValues = new ValueSpecification[oldInputs + additionalInputs];
-      final DependencyNode[] newInputNodes = new DependencyNode[oldInputs + additionalInputs];
-      for (int i = 0; i < oldInputs; i++) {
-        newInputValues[i] = oldNode.getInputValue(i);
-        newInputNodes[i] = oldNode.getInputNode(i);
-      }
-      System.arraycopy(inputValues, 0, newInputValues, oldInputs, additionalInputs);
-      System.arraycopy(inputNodes, 0, newInputNodes, oldInputs, additionalInputs);
-      return new DependencyNodeImpl(oldNode.getFunction(), oldNode.getTarget(), getOutputValueArray(oldNode), inputValues, inputNodes);
     }
+    int additionalInputs = 0;
+    for (int i = 0; i < inputValues.length; i++) {
+      if (oldNode.findInputValue(inputValues[i]) < 0) {
+        inputValues[additionalInputs] = inputValues[i];
+        inputNodes[additionalInputs] = inputNodes[i];
+        additionalInputs++;
+      }
+    }
+    if (additionalInputs == 0) {
+      // No changes; all of those inputs are present
+      return oldNode;
+    }
+    final int oldInputs = oldNode.getInputCount();
+    final ValueSpecification[] newInputValues = new ValueSpecification[oldInputs + additionalInputs];
+    final DependencyNode[] newInputNodes = new DependencyNode[oldInputs + additionalInputs];
+    for (int i = 0; i < oldInputs; i++) {
+      newInputValues[i] = oldNode.getInputValue(i);
+      newInputNodes[i] = oldNode.getInputNode(i);
+    }
+    System.arraycopy(inputValues, 0, newInputValues, oldInputs, additionalInputs);
+    System.arraycopy(inputNodes, 0, newInputNodes, oldInputs, additionalInputs);
+    return new DependencyNodeImpl(oldNode.getFunction(), oldNode.getTarget(), getOutputValueArray(oldNode), inputValues, inputNodes);
   }
 
   private DependencyNode replaceInput(final ValueSpecification oldInputValue, final ValueSpecification newInputValue, final DependencyNode newInputNode) {
@@ -197,34 +201,34 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
     return new DependencyNodeImpl(_function, _target, _outputValues, newInputValues, newInputNodes);
   }
 
-  public static DependencyNode replaceInput(final DependencyNode oldNode, final ValueSpecification oldInputValue, final ValueSpecification newInputValue, final DependencyNode newInputNode) {
+  public static DependencyNode replaceInput(final DependencyNode oldNode, final ValueSpecification oldInputValue, final ValueSpecification newInputValue,
+      final DependencyNode newInputNode) {
     if (oldNode instanceof DependencyNodeImpl) {
       return ((DependencyNodeImpl) oldNode).replaceInput(oldInputValue, newInputValue, newInputNode);
-    } else {
-      final int oldInputs = oldNode.getInputCount();
-      ValueSpecification[] newInputValues = new ValueSpecification[oldInputs];
-      DependencyNode[] newInputNodes = new DependencyNode[oldInputs];
-      boolean replaced = false;
-      int j = 0;
-      for (int i = 0; i < oldInputs; i++) {
-        final ValueSpecification oldInput = oldNode.getInputValue(i);
-        if (oldInputValue.equals(oldInput) || newInputValue.equals(oldInput)) {
-          if (!replaced) {
-            newInputValues[j] = newInputValue;
-            newInputNodes[j++] = newInputNode;
-            replaced = true;
-          }
-        } else {
-          newInputValues[j] = oldInput;
-          newInputNodes[j++] = oldNode.getInputNode(i);
-        }
-      }
-      if (j < oldInputs) {
-        newInputValues = Arrays.copyOf(newInputValues, j);
-        newInputNodes = Arrays.copyOf(newInputNodes, j);
-      }
-      return new DependencyNodeImpl(oldNode.getFunction(), oldNode.getTarget(), getOutputValueArray(oldNode), newInputValues, newInputNodes);
     }
+    final int oldInputs = oldNode.getInputCount();
+    ValueSpecification[] newInputValues = new ValueSpecification[oldInputs];
+    DependencyNode[] newInputNodes = new DependencyNode[oldInputs];
+    boolean replaced = false;
+    int j = 0;
+    for (int i = 0; i < oldInputs; i++) {
+      final ValueSpecification oldInput = oldNode.getInputValue(i);
+      if (oldInputValue.equals(oldInput) || newInputValue.equals(oldInput)) {
+        if (!replaced) {
+          newInputValues[j] = newInputValue;
+          newInputNodes[j++] = newInputNode;
+          replaced = true;
+        }
+      } else {
+        newInputValues[j] = oldInput;
+        newInputNodes[j++] = oldNode.getInputNode(i);
+      }
+    }
+    if (j < oldInputs) {
+      newInputValues = Arrays.copyOf(newInputValues, j);
+      newInputNodes = Arrays.copyOf(newInputNodes, j);
+    }
+    return new DependencyNodeImpl(oldNode.getFunction(), oldNode.getTarget(), getOutputValueArray(oldNode), newInputValues, newInputNodes);
   }
 
   private DependencyNode withOutputs(final ValueSpecification[] outputValues) {
@@ -234,13 +238,12 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   public static DependencyNode withOutputs(final DependencyNode oldNode, final ValueSpecification[] outputValues) {
     if (oldNode instanceof DependencyNodeImpl) {
       return ((DependencyNodeImpl) oldNode).withOutputs(outputValues);
-    } else {
-      return new DependencyNodeImpl(oldNode.getFunction(), oldNode.getTarget(), outputValues, getInputValueArray(oldNode), getInputNodeArray(oldNode));
     }
+    return new DependencyNodeImpl(oldNode.getFunction(), oldNode.getTarget(), outputValues, getInputValueArray(oldNode), getInputNodeArray(oldNode));
   }
 
   private static boolean outputValueTargets(final ComputationTargetSpecification target, final ValueSpecification[] outputValues) {
-    for (ValueSpecification outputValue : outputValues) {
+    for (final ValueSpecification outputValue : outputValues) {
       if (!target.equals(outputValue.getTargetSpecification())) {
         return false;
       }
@@ -248,8 +251,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
     return true;
   }
 
-  public static DependencyNode of(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] outputValues, final ValueSpecification[] inputValues,
-      final DependencyNode[] inputNodes) {
+  public static DependencyNode of(final DependencyNodeFunction function, final ComputationTargetSpecification target, final ValueSpecification[] outputValues,
+      final ValueSpecification[] inputValues, final DependencyNode[] inputNodes) {
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(target, "target");
     ArgumentChecker.noNulls(outputValues, "outputValues");
@@ -279,7 +282,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
         }
       }
     }
-    if ((newOutputs != null) && (newOutputCount == 0)) {
+    if (newOutputs != null && newOutputCount == 0) {
       // We have a node that isn't needed anymore - it produces no necessary outputs
       return null;
     }
@@ -352,96 +355,95 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   /* package */static DependencyNode removeUnnecessaryValues(final DependencyNode oldNode, final Map<ValueSpecification, DependencyNode> necessary) {
     if (oldNode instanceof DependencyNodeImpl) {
       return ((DependencyNodeImpl) oldNode).removeUnnecessaryValues(necessary);
-    } else {
-      int outputCount = oldNode.getOutputCount();
-      ValueSpecification[] newOutputs = null;
-      int newOutputCount = 0;
-      for (int j = 0; j < outputCount; j++) {
-        final ValueSpecification output = oldNode.getOutputValue(j);
-        if (necessary.containsKey(output)) {
-          if (newOutputs != null) {
-            newOutputs[newOutputCount++] = output;
-          }
-        } else {
-          if (newOutputs == null) {
-            newOutputs = new ValueSpecification[outputCount - 1];
-            for (newOutputCount = 0; newOutputCount < j; newOutputCount++) {
-              newOutputs[newOutputCount] = oldNode.getOutputValue(newOutputCount);
-            }
+    }
+    final int outputCount = oldNode.getOutputCount();
+    ValueSpecification[] newOutputs = null;
+    int newOutputCount = 0;
+    for (int j = 0; j < outputCount; j++) {
+      final ValueSpecification output = oldNode.getOutputValue(j);
+      if (necessary.containsKey(output)) {
+        if (newOutputs != null) {
+          newOutputs[newOutputCount++] = output;
+        }
+      } else {
+        if (newOutputs == null) {
+          newOutputs = new ValueSpecification[outputCount - 1];
+          for (newOutputCount = 0; newOutputCount < j; newOutputCount++) {
+            newOutputs[newOutputCount] = oldNode.getOutputValue(newOutputCount);
           }
         }
       }
-      if ((newOutputs != null) && (newOutputCount == 0)) {
-        // We have a node that isn't needed anymore - it produces no necessary outputs
-        return null;
+    }
+    if (newOutputs != null && newOutputCount == 0) {
+      // We have a node that isn't needed anymore - it produces no necessary outputs
+      return null;
+    }
+    final int inputCount = oldNode.getInputCount();
+    ValueSpecification[] newInputValues = null;
+    DependencyNode[] newInputNodes = null;
+    int newInputCount = 0;
+    for (int j = 0; j < inputCount; j++) {
+      final ValueSpecification inputValue = oldNode.getInputValue(j);
+      final DependencyNode oldInputNode = oldNode.getInputNode(j);
+      DependencyNode newInputNode = necessary.get(inputValue);
+      if (newInputNode == null) {
+        assert necessary.containsKey(inputValue);
+        newInputNode = removeUnnecessaryValues(oldInputNode, necessary);
+        assert newInputNode != null;
       }
-      final int inputCount = oldNode.getInputCount();
-      ValueSpecification[] newInputValues = null;
-      DependencyNode[] newInputNodes = null;
-      int newInputCount = 0;
-      for (int j = 0; j < inputCount; j++) {
-        final ValueSpecification inputValue = oldNode.getInputValue(j);
-        final DependencyNode oldInputNode = oldNode.getInputNode(j);
-        DependencyNode newInputNode = necessary.get(inputValue);
-        if (newInputNode == null) {
-          assert necessary.containsKey(inputValue);
-          newInputNode = removeUnnecessaryValues(oldInputNode, necessary);
-          assert newInputNode != null;
-        }
-        if (newInputNode == oldInputNode) {
-          if (newInputValues != null) {
-            newInputValues[newInputCount] = inputValue;
-            newInputNodes[newInputCount++] = newInputNode;
-          }
-        } else {
-          if (newInputValues == null) {
-            newInputValues = new ValueSpecification[inputCount];
-            newInputNodes = new DependencyNode[inputCount];
-            for (newInputCount = 0; newInputCount < j; newInputCount++) {
-              newInputValues[newInputCount] = oldNode.getInputValue(newInputCount);
-              newInputNodes[newInputCount] = oldNode.getInputNode(newInputCount);
-            }
-          }
+      if (newInputNode == oldInputNode) {
+        if (newInputValues != null) {
           newInputValues[newInputCount] = inputValue;
           newInputNodes[newInputCount++] = newInputNode;
         }
-      }
-      final DependencyNode newNode;
-      if (newOutputs == null) {
-        newOutputs = DependencyNodeImpl.getOutputValueArray(oldNode);
-        newOutputCount = newOutputs.length;
-        if (newInputNodes == null) {
-          // No changes required at this node
-          newNode = oldNode;
-        } else {
-          // New inputs, previous output set
-          if (newInputCount != newInputValues.length) {
-            newInputValues = Arrays.copyOf(newInputValues, newInputCount);
-            newInputNodes = Arrays.copyOf(newInputNodes, newInputCount);
-          }
-          newNode = new DependencyNodeImpl(oldNode.getFunction(), oldNode.getTarget(), newOutputs, newInputValues, newInputNodes);
-        }
       } else {
-        if (newOutputCount != newOutputs.length) {
-          newOutputs = Arrays.copyOf(newOutputs, newOutputCount);
-        }
-        if (newInputNodes == null) {
-          // New outputs, previous input set
-          newInputValues = DependencyNodeImpl.getInputValueArray(oldNode);
-          newInputNodes = DependencyNodeImpl.getInputNodeArray(oldNode);
-        } else {
-          if (newInputCount != newInputValues.length) {
-            newInputValues = Arrays.copyOf(newInputValues, newInputCount);
-            newInputNodes = Arrays.copyOf(newInputNodes, newInputCount);
+        if (newInputValues == null) {
+          newInputValues = new ValueSpecification[inputCount];
+          newInputNodes = new DependencyNode[inputCount];
+          for (newInputCount = 0; newInputCount < j; newInputCount++) {
+            newInputValues[newInputCount] = oldNode.getInputValue(newInputCount);
+            newInputNodes[newInputCount] = oldNode.getInputNode(newInputCount);
           }
+        }
+        newInputValues[newInputCount] = inputValue;
+        newInputNodes[newInputCount++] = newInputNode;
+      }
+    }
+    final DependencyNode newNode;
+    if (newOutputs == null) {
+      newOutputs = DependencyNodeImpl.getOutputValueArray(oldNode);
+      newOutputCount = newOutputs.length;
+      if (newInputNodes == null) {
+        // No changes required at this node
+        newNode = oldNode;
+      } else {
+        // New inputs, previous output set
+        if (newInputCount != newInputValues.length) {
+          newInputValues = Arrays.copyOf(newInputValues, newInputCount);
+          newInputNodes = Arrays.copyOf(newInputNodes, newInputCount);
         }
         newNode = new DependencyNodeImpl(oldNode.getFunction(), oldNode.getTarget(), newOutputs, newInputValues, newInputNodes);
       }
-      for (int i = 0; i < newOutputCount; i++) {
-        necessary.put(newOutputs[i], newNode);
+    } else {
+      if (newOutputCount != newOutputs.length) {
+        newOutputs = Arrays.copyOf(newOutputs, newOutputCount);
       }
-      return newNode;
+      if (newInputNodes == null) {
+        // New outputs, previous input set
+        newInputValues = DependencyNodeImpl.getInputValueArray(oldNode);
+        newInputNodes = DependencyNodeImpl.getInputNodeArray(oldNode);
+      } else {
+        if (newInputCount != newInputValues.length) {
+          newInputValues = Arrays.copyOf(newInputValues, newInputCount);
+          newInputNodes = Arrays.copyOf(newInputNodes, newInputCount);
+        }
+      }
+      newNode = new DependencyNodeImpl(oldNode.getFunction(), oldNode.getTarget(), newOutputs, newInputValues, newInputNodes);
     }
+    for (int i = 0; i < newOutputCount; i++) {
+      necessary.put(newOutputs[i], newNode);
+    }
+    return newNode;
   }
 
   // Function & Target operations
@@ -485,8 +487,9 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Obtains a copy of the input value specifications for a node as a set.
-   * 
-   * @param node the node instance to query
+   *
+   * @param node
+   *          the node instance to query
    * @return the set of input value specifications to the node
    */
   public static Set<ValueSpecification> getInputValues(final DependencyNode node) {
@@ -499,9 +502,10 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
   }
 
   /**
-   * Obtains a copy of the input value specifications and nodes as a map of value specifications to the node that produces each one
-   * 
-   * @param node the node instance to query
+   * Obtains a copy of the input value specifications and nodes as a map of value specifications to the node that produces each one.
+   *
+   * @param node
+   *          the node instance to query
    * @return the input values and nodes
    */
   public static Map<ValueSpecification, DependencyNode> getInputs(final DependencyNode node) {
@@ -515,8 +519,9 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Obtains a copy of the input values to a node as an array.
-   * 
-   * @param node the node instance to query, not null
+   *
+   * @param node
+   *          the node instance to query, not null
    * @return the array of input values to the node, not null and not containing null
    */
   public static ValueSpecification[] getInputValueArray(final DependencyNode node) {
@@ -533,8 +538,9 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Obtains a copy of the input nodes to a node as an array.
-   * 
-   * @param node the node instance to query, not null
+   *
+   * @param node
+   *          the node instance to query, not null
    * @return the array of input nodes, not null and not containing null
    */
   public static DependencyNode[] getInputNodeArray(final DependencyNode node) {
@@ -563,8 +569,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   @Override
   public boolean hasOutputValue(final ValueSpecification value) {
-    for (int i = 0; i < _outputValues.length; i++) {
-      if (value.equals(_outputValues[i])) {
+    for (final ValueSpecification outputValue : _outputValues) {
+      if (value.equals(outputValue)) {
         return true;
       }
     }
@@ -573,8 +579,9 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Obtains a copy of the output value specifications for a node as a set.
-   * 
-   * @param node the node instance to query, not null
+   *
+   * @param node
+   *          the node instance to query, not null
    * @return the set of output value specifications to the node, not null
    */
   public static Set<ValueSpecification> getOutputValues(final DependencyNode node) {
@@ -588,8 +595,9 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   /**
    * Obtains a copy of the output value specifications for a node as an array.
-   * 
-   * @param node the node instance to query, not null
+   *
+   * @param node
+   *          the node instance to query, not null
    * @return the array of output value specifications to the node, not null
    */
   public static ValueSpecification[] getOutputValueArray(final DependencyNode node) {
@@ -605,7 +613,7 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
     int count = node.getOutputCount();
     for (int i = 0; i < count; i++) {
       final ValueSpecification output = node.getOutputValue(i);
-      DependencyNode existing = outputs.put(output, node);
+      final DependencyNode existing = outputs.put(output, node);
       if (existing != null) {
         assert existing == node;
         return;
@@ -621,7 +629,8 @@ public class DependencyNodeImpl implements DependencyNode, Serializable {
 
   @Override
   public String toString() {
-    return "Node" + Integer.toHexString(System.identityHashCode(this)) + "[" + getFunction() + " on " + getTarget() + ", " + _inputValues.length + " input(s), " + _outputValues.length + " output(s)]";
+    return "Node" + Integer.toHexString(System.identityHashCode(this)) + "[" + getFunction() + " on " + getTarget() + ", "
+        + _inputValues.length + " input(s), " + _outputValues.length + " output(s)]";
   }
 
   private void writeObject(final ObjectOutputStream out) throws IOException {

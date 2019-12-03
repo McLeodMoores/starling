@@ -46,7 +46,8 @@ public class CurveSpecificationFunction extends AbstractFunction {
   private CurveSpecificationBuilder _curveSpecificationBuilder;
 
   /**
-   * @param curveName The curve name, not null
+   * @param curveName
+   *          The curve name, not null
    */
   public CurveSpecificationFunction(final String curveName) {
     ArgumentChecker.notNull(curveName, "curve name");
@@ -72,7 +73,8 @@ public class CurveSpecificationFunction extends AbstractFunction {
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
     try {
-      final AbstractCurveSpecification curveSpecification = CurveUtils.getSpecification(atInstant, _curveDefinitionSource, _curveSpecificationBuilder, atZDT.toLocalDate(), _curveName);
+      final AbstractCurveSpecification curveSpecification = CurveUtils.getSpecification(atInstant, _curveDefinitionSource, _curveSpecificationBuilder,
+          atZDT.toLocalDate(), _curveName);
       final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, _curveName).get();
       final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, properties);
       return new MyCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000), curveSpecification, spec);
@@ -91,12 +93,17 @@ public class CurveSpecificationFunction extends AbstractFunction {
     private final Set<ComputedValue> _result;
 
     /**
-     * @param earliestInvocation The earliest time at which this function is valid
-     * @param latestInvocation The latest time at which this function is valid
-     * @param specification The curve specification
-     * @param spec The result specification
+     * @param earliestInvocation
+     *          The earliest time at which this function is valid
+     * @param latestInvocation
+     *          The latest time at which this function is valid
+     * @param specification
+     *          The curve specification
+     * @param spec
+     *          The result specification
      */
-    public MyCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final AbstractCurveSpecification specification, final ValueSpecification spec) {
+    public MyCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final AbstractCurveSpecification specification,
+        final ValueSpecification spec) {
       super(earliestInvocation, latestInvocation);
       _spec = spec;
       _result = Collections.singleton(new ComputedValue(spec, specification));
@@ -119,7 +126,8 @@ public class CurveSpecificationFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       return Collections.emptySet();
     }
 

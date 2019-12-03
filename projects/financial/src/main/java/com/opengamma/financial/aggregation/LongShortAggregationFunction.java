@@ -136,18 +136,16 @@ public class LongShortAggregationFunction implements AggregationFunction<String>
       final Map<String, String> attributes = position.getAttributes();
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
-      } else {
-        return NOT_LONG_SHORT;
-      }
-    } else {
-      position.getSecurityLink().resolve(_secSource);
-      final FinancialSecurityVisitor<String> visitor = new Visitor(position);
-      if (position.getSecurity() instanceof FinancialSecurity) {
-        final FinancialSecurity finSec = (FinancialSecurity) position.getSecurity();
-        return finSec.accept(visitor);
       }
       return NOT_LONG_SHORT;
     }
+    position.getSecurityLink().resolve(_secSource);
+    final FinancialSecurityVisitor<String> visitor = new Visitor(position);
+    if (position.getSecurity() instanceof FinancialSecurity) {
+      final FinancialSecurity finSec = (FinancialSecurity) position.getSecurity();
+      return finSec.accept(visitor);
+    }
+    return NOT_LONG_SHORT;
   }
 
   @Override
@@ -543,22 +541,22 @@ public class LongShortAggregationFunction implements AggregationFunction<String>
     }
 
     @Override
-    public String visitStandardCDSSecurity(StandardCDSSecurity security) {
+    public String visitStandardCDSSecurity(final StandardCDSSecurity security) {
       return null;
     }
 
     @Override
-    public String visitLegacyCDSSecurity(LegacyCDSSecurity security) {
+    public String visitLegacyCDSSecurity(final LegacyCDSSecurity security) {
       return null;
     }
 
     @Override
-    public String visitIndexCDSSecurity(IndexCDSSecurity security) {
+    public String visitIndexCDSSecurity(final IndexCDSSecurity security) {
       return null;
     }
 
     @Override
-    public String visitIndexCDSDefinitionSecurity(IndexCDSDefinitionSecurity security) {
+    public String visitIndexCDSDefinitionSecurity(final IndexCDSDefinitionSecurity security) {
       return null;
     }
   }

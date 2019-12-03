@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.quandl.historicaltimeseries.QuandlHistoricalTimeSeriesUpdater;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.financial.tool.ToolContext;
@@ -38,12 +37,12 @@ import com.opengamma.util.time.DateUtils;
  * <p>
  * This loads missing historical time-series data from Quandl.
  */
-//TODO rename me
+// TODO rename me
 @Scriptable
 public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static Logger s_logger = LoggerFactory.getLogger(QuandlHTSMasterUpdaterTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QuandlHTSMasterUpdaterTool.class);
 
   /** Command line option. */
   private static final String RELOAD_OPTION = "reload";
@@ -54,7 +53,7 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
 
   private final GUIFeedback _feedback;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
    *
@@ -66,10 +65,11 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
    *  -s,--start (yyyymmdd)                          Start date
    * </pre>
    *
-   * @param args the command line arguments
+   * @param args
+   *          the command line arguments
    */
   public static void main(final String[] args) { // CSIGNORE
-    s_logger.info("Updating time-series data from Quandl");
+    LOGGER.info("Updating time-series data from Quandl");
     GUIFeedback feedback = null;
     try {
       feedback = new GUIFeedback("Updating time series database from Quandl");
@@ -84,7 +84,7 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
 
     } catch (final Exception ex) {
       GUIFeedback.shout(ex.getClass().getSimpleName() + " - " + ex.getMessage());
-      s_logger.error("Caught exception", ex);
+      LOGGER.error("Caught exception", ex);
       ex.printStackTrace();
     } finally {
       if (feedback != null) {
@@ -98,10 +98,12 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
     System.exit(1);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructor when we have a GUIFeedback handler.
-   * @param feedback  the GUI feedback handler
+   * 
+   * @param feedback
+   *          the GUI feedback handler
    */
   public QuandlHTSMasterUpdaterTool(final GUIFeedback feedback) {
     _feedback = feedback;
@@ -149,14 +151,13 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
             }
           }
           return true;
-        } else {
-          if (_feedback != null) {
-            synchronized (_feedback) {
-              _feedback.workCompleted(1);
-            }
-          }
-          return false;
         }
+        if (_feedback != null) {
+          synchronized (_feedback) {
+            _feedback.workCompleted(1);
+          }
+        }
+        return false;
       }
 
       @Override
@@ -174,7 +175,7 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
 
       @Override
       protected Map<ExternalIdBundle, LocalDateDoubleTimeSeries> getTimeSeries(final String dataField, final LocalDate startDate,
-                                                                               final LocalDate endDate, final String bbgDataProvider,
+          final LocalDate endDate, final String bbgDataProvider,
           final Set<ExternalIdBundle> identifierSet) {
         final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> result = super.getTimeSeries(dataField, startDate, endDate, bbgDataProvider, identifierSet);
         if (_feedback != null) {
@@ -231,7 +232,7 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
     dataLoader.setReload(line.hasOption(RELOAD_OPTION));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected Options createOptions(final boolean mandatoryConfigResource) {
     final Options options = super.createOptions(mandatoryConfigResource);

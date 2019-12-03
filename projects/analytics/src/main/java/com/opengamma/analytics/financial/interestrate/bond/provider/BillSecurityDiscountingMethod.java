@@ -32,7 +32,8 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Class with methods related to bill security valued by discounting.
- * <P> Reference: Bill pricing, version 1.0. OpenGamma documentation, January 2012.
+ * <P>
+ * Reference: Bill pricing, version 1.0. OpenGamma documentation, January 2012.
  */
 public final class BillSecurityDiscountingMethod {
 
@@ -51,6 +52,7 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Return the class instance.
+   *
    * @return The instance.
    */
   public static BillSecurityDiscountingMethod getInstance() {
@@ -65,8 +67,11 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the present value of the bill security by discounting.
-   * @param bill The bill.
-   * @param issuer The issuer and multi-curves provider.
+   *
+   * @param bill
+   *          The bill.
+   * @param issuer
+   *          The issuer and multi-curves provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final BillSecurity bill, final IssuerProviderInterface issuer) {
@@ -78,8 +83,11 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Compute the bill price from the yield. The price is the relative price at settlement. The yield is in the bill yield convention.
-   * @param bill The bill.
-   * @param yield The yield in the bill yield convention.
+   *
+   * @param bill
+   *          The bill.
+   * @param yield
+   *          The yield in the bill yield convention.
    * @return The price.
    */
   public double priceFromYield(final BillSecurity bill, final double yield) {
@@ -88,9 +96,13 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Compute the bill price from the yield. The price is the relative price at settlement.
-   * @param convention The yield convention.
-   * @param yield The yield in the bill yield convention.
-   * @param accrualFactor The accrual factor between settlement and maturity.
+   *
+   * @param convention
+   *          The yield convention.
+   * @param yield
+   *          The yield in the bill yield convention.
+   * @param accrualFactor
+   *          The accrual factor between settlement and maturity.
    * @return The price.
    */
   public double priceFromYield(final YieldConvention convention, final double yield, final double accrualFactor) {
@@ -105,8 +117,11 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the bill yield from the price. The yield is in the bill yield convention.
-   * @param bill The bill.
-   * @param price The price. The price is the relative price at settlement.
+   *
+   * @param bill
+   *          The bill.
+   * @param price
+   *          The price. The price is the relative price at settlement.
    * @return The yield.
    */
   public double yieldFromCleanPrice(final BillSecurity bill, final double price) {
@@ -121,8 +136,11 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the derivative of the bill yield with respect to the price. The yield is in the bill yield convention.
-   * @param bill The bill.
-   * @param price The price. The price is the relative price at settlement.
+   *
+   * @param bill
+   *          The bill.
+   * @param price
+   *          The price. The price is the relative price at settlement.
    * @return The yield derivative.
    */
   public double yieldFromPriceDerivative(final BillSecurity bill, final double price) {
@@ -137,9 +155,13 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the present value of the bill security by discounting from its yield.
-   * @param bill The bill.
-   * @param yield The bill yield.
-   * @param issuer The issuer and multi-curves provider.
+   *
+   * @param bill
+   *          The bill.
+   * @param yield
+   *          The bill yield.
+   * @param issuer
+   *          The issuer and multi-curves provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValueFromYield(final BillSecurity bill, final double yield, final IssuerProviderInterface issuer) {
@@ -151,50 +173,66 @@ public final class BillSecurityDiscountingMethod {
 
   /**
    * Computes the present value of the bill security by discounting from its price.
-   * @param bill The bill.
-   * @param price The (dirty) price at settlement.
-   * @param issuer The issuer and multi-curves provider.
+   *
+   * @param bill
+   *          The bill.
+   * @param price
+   *          The (dirty) price at settlement.
+   * @param issuer
+   *          The issuer and multi-curves provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValueFromPrice(final BillSecurity bill, final double price, final IssuerProviderInterface issuer) {
     ArgumentChecker.notNull(bill, "Bill");
     ArgumentChecker.notNull(issuer, "Issuer and multi-curves provider");
-    final double pvBill = bill.getNotional() * price * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime());
+    final double pvBill = bill.getNotional() * price
+        * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime());
     return MultipleCurrencyAmount.of(bill.getCurrency(), pvBill);
   }
 
   /**
    * Compute the bill price from the curves. The price is the relative price at settlement.
-   * @param bill The bill.
-   * @param issuer The issuer and multi-curves provider.
+   *
+   * @param bill
+   *          The bill.
+   * @param issuer
+   *          The issuer and multi-curves provider.
    * @return The price.
    */
   public double priceFromCurves(final BillSecurity bill, final IssuerProviderInterface issuer) {
     ArgumentChecker.notNull(bill, "Bill");
     ArgumentChecker.notNull(issuer, "Issuer and multi-curves provider");
     final double pvBill = bill.getNotional() * issuer.getDiscountFactor(bill.getIssuerEntity(), bill.getEndTime());
-    final double price = pvBill / (bill.getNotional() * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime()));
+    final double price = pvBill
+        / (bill.getNotional() * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime()));
     return price;
   }
 
   /**
    * Computes the bill yield from the curves. The yield is in the bill yield convention.
-   * @param bill The bill.
-   * @param issuer The issuer and multi-curves provider.
+   *
+   * @param bill
+   *          The bill.
+   * @param issuer
+   *          The issuer and multi-curves provider.
    * @return The yield.
    */
   public double yieldFromCurves(final BillSecurity bill, final IssuerProviderInterface issuer) {
     ArgumentChecker.notNull(bill, "Bill");
     ArgumentChecker.notNull(issuer, "Issuer and multi-curves provider");
     final double pvBill = bill.getNotional() * issuer.getDiscountFactor(bill.getIssuerEntity(), bill.getEndTime());
-    final double price = pvBill / (bill.getNotional() * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime()));
+    final double price = pvBill
+        / (bill.getNotional() * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime()));
     return yieldFromCleanPrice(bill, price);
   }
 
   /**
    * Computes the bill present value curve sensitivity.
-   * @param bill The bill.
-   * @param issuer The issuer and multi-curves provider.
+   *
+   * @param bill
+   *          The bill.
+   * @param issuer
+   *          The issuer and multi-curves provider.
    * @return The sensitivity.
    */
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BillSecurity bill, final IssuerProviderInterface issuer) {
@@ -213,14 +251,19 @@ public final class BillSecurityDiscountingMethod {
   }
 
   /**
-   * Computes a bill z-spread from the curves and a present value.
-   * The z-spread is a parallel shift applied to the discounting curve associated to the bill (Issuer Entity) to match the present value.
-   * @param bill The bill.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param pv The target present value.
+   * Computes a bill z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve
+   * associated to the bill (Issuer Entity) to match the present value.
+   *
+   * @param bill
+   *          The bill.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param pv
+   *          The target present value.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndPV(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves, final MultipleCurrencyAmount pv) {
+  public double zSpreadFromCurvesAndPV(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves,
+      final MultipleCurrencyAmount pv) {
     ArgumentChecker.notNull(bill, "bill");
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
     final Currency ccy = bill.getCurrency();
@@ -237,40 +280,77 @@ public final class BillSecurityDiscountingMethod {
   }
 
   /**
-   * Computes the present value of a bill security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bill (Issuer Entity).
-   * The parallel shift is done in the curve convention.
-   * @param bill The bill security.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param zSpread The z-spread.
+   * Computes the present value of a bill security from z-spread. The z-spread is a parallel shift applied to the discounting curve
+   * associated to the bill (Issuer Entity). The parallel shift is done in the curve convention.
+   *
+   * @param bill
+   *          The bill security.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param zSpread
+   *          The z-spread.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValueFromZSpread(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves, final double zSpread) {
-    final IssuerProviderInterface issuerShifted = new IssuerProviderIssuerDecoratedSpread(issuerMulticurves, bill.getIssuerEntity(), zSpread);
+  public MultipleCurrencyAmount presentValueFromZSpread(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves,
+      final double zSpread) {
+    final IssuerProviderInterface issuerShifted = new IssuerProviderIssuerDecoratedSpread(issuerMulticurves, bill.getIssuerEntity(),
+        zSpread);
     return presentValue(bill, issuerShifted);
   }
 
   /**
    * Computes a bill z-spread from the curves and a yield.
-   * @param bill The bill.
-   * @param issuerMulticurves The issuer and multi-curves provider.
-   * @param yield The yield.
+   *
+   * @param bill
+   *          The bill.
+   * @param issuerMulticurves
+   *          The issuer and multi-curves provider.
+   * @param yield
+   *          The yield.
    * @return The z-spread.
    */
   public double zSpreadFromCurvesAndYield(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves, final double yield) {
     return zSpreadFromCurvesAndPV(bill, issuerMulticurves, presentValueFromYield(bill, yield, issuerMulticurves));
   }
 
+  /**
+   * Calculates the Macaulay duration using curve data.
+   *
+   * @param bill
+   *          the bill, not null
+   * @param marketData
+   *          the market data, not null
+   * @return the duration
+   */
   public double macaulayDurationFromCurves(final BillSecurity bill, final IssuerProviderInterface marketData) {
     return bill.getEndTime();
   }
 
+  /**
+   * Calculates the modified duration using curve data.
+   *
+   * @param bill
+   *          the bill, not null
+   * @param marketData
+   *          the market data, not null
+   * @return the duration
+   */
   public double modifiedDurationFromCurves(final BillSecurity bill, final IssuerProviderInterface marketData) {
     return macaulayDurationFromCurves(bill, marketData) / (1 + yieldFromCurves(bill, marketData));
   }
 
+  /**
+   * Calculates the convexity using curve data.
+   *
+   * @param bill
+   *          the bill, not null
+   * @param marketData
+   *          the market data, not null
+   * @return the convexity
+   */
   public double convexityFromCurves(final BillSecurity bill, final IssuerProviderInterface marketData) {
-    final double yield = yieldFromCurves(bill, marketData);
-    return 0; //convexityFromYield(bill, yield);
+    // final double yield = yieldFromCurves(bill, marketData);
+    return 0; // convexityFromYield(bill, yield);
   }
 
 }

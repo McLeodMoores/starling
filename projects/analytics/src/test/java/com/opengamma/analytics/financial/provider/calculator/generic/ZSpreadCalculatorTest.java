@@ -32,9 +32,10 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.money.Currency;
@@ -48,7 +49,8 @@ import com.opengamma.util.tuple.DoublesPair;
 public class ZSpreadCalculatorTest {
   private static final String CURVE_NAME = "Discounting";
   private static final PresentValueDiscountingCalculator PV_CALCULATOR = PresentValueDiscountingCalculator.getInstance();
-  private static final PresentValueCurveSensitivityDiscountingCalculator PVS_CALCULATOR = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
+  private static final PresentValueCurveSensitivityDiscountingCalculator PVS_CALCULATOR = PresentValueCurveSensitivityDiscountingCalculator
+      .getInstance();
   private static final double[] T;
   private static final double[] R1;
   private static final double[] R2;
@@ -62,14 +64,15 @@ public class ZSpreadCalculatorTest {
   private static final Currency CUR = Currency.EUR;
   private static final ZSpreadCalculator<MulticurveProviderInterface> CALCULATOR = new ZSpreadCalculator<>(
       PV_CALCULATOR, PVS_CALCULATOR);
-  private static final Interpolator1D INTERPOLATOR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC,
-      Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME,
+      LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
 
   static {
     int n = 5;
     final CouponFixed[] rateAtYield = new CouponFixed[n];
     EUR_DISCOUNTING = YieldCurve.from(ConstantDoublesCurve.from(YIELD, CURVE_NAME));
-    final Map<Currency, YieldAndDiscountCurve> constantDiscounting = Collections.<Currency, YieldAndDiscountCurve>singletonMap(Currency.EUR, EUR_DISCOUNTING);
+    final Map<Currency, YieldAndDiscountCurve> constantDiscounting = Collections
+        .<Currency, YieldAndDiscountCurve> singletonMap(Currency.EUR, EUR_DISCOUNTING);
     final Map<IborIndex, YieldAndDiscountCurve> emptyForwardIbor = Collections.emptyMap();
     final Map<IndexON, YieldAndDiscountCurve> emptyForwardON = Collections.emptyMap();
     final FXMatrix fxMatrix = new FXMatrix();
@@ -100,70 +103,111 @@ public class ZSpreadCalculatorTest {
     forwardIbor.put(new IborIndex(Currency.EUR, Period.ofMonths(6), n, DayCounts.ACT_360,
         BusinessDayConventions.NONE, false, "Ibor"), YieldCurve.from(InterpolatedDoublesCurve.from(T, R3, INTERPOLATOR)));
     final Map<IndexON, YieldAndDiscountCurve> forwardON = new HashMap<>();
-    forwardON.put(new IndexON("ON", Currency.EUR, DayCounts.ACT_360, 0), YieldCurve.from(InterpolatedDoublesCurve.from(T, R4, INTERPOLATOR)));
+    forwardON.put(new IndexON("ON", Currency.EUR, DayCounts.ACT_360, 0),
+        YieldCurve.from(InterpolatedDoublesCurve.from(T, R4, INTERPOLATOR)));
     MULTI_CURVES = new MulticurveProviderDiscount(discounting, forwardIbor, forwardON, fxMatrix);
     PAYMENTS = new Annuity<>(rateAtYield);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullPVCalculator() {
     new ZSpreadCalculator<>(null, PVS_CALCULATOR);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullPVSCalculator() {
     new ZSpreadCalculator<>(PV_CALCULATOR, null);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAnnuity1() {
     CALCULATOR.calculatePriceForZSpread(null, MULTI_CURVES, 0.04);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAnnuity2() {
     CALCULATOR.calculatePriceSensitivityToCurve(null, MULTI_CURVES, 0.04);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAnnuity3() {
     CALCULATOR.calculatePriceSensitivityToZSpread(null, MULTI_CURVES, 0.04);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAnnuity4() {
     CALCULATOR.calculateZSpread(null, MULTI_CURVES, 0.04);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAnnuity5() {
     CALCULATOR.calculateZSpreadSensitivityToCurve(null, MULTI_CURVES, 0.04);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurves1() {
     CALCULATOR.calculatePriceForZSpread(PAYMENTS, null, 0.04);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurves2() {
     CALCULATOR.calculatePriceSensitivityToCurve(PAYMENTS, null, 0.04);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurves3() {
     CALCULATOR.calculatePriceSensitivityToZSpread(PAYMENTS, null, 0.04);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurves4() {
     CALCULATOR.calculateZSpread(PAYMENTS, null, 0.04);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurves5() {
     CALCULATOR.calculateZSpreadSensitivityToCurve(PAYMENTS, null, 0.04);
   }
+
+  /**
+   *
+   */
   @Test
   public void testZeroSpread() {
     double price = 0;
@@ -175,6 +219,9 @@ public class ZSpreadCalculatorTest {
     assertEquals(CALCULATOR.calculatePriceForZSpread(PAYMENTS, CONSTANT_CURVES, 0), price, 1e-12);
   }
 
+  /**
+   *
+   */
   @Test
   public void testZSpread() {
     final double price = PAYMENTS.accept(PV_CALCULATOR, CONSTANT_CURVES).getAmount(Currency.EUR);
@@ -189,6 +236,9 @@ public class ZSpreadCalculatorTest {
     assertEquals(price, CALCULATOR.calculatePriceForZSpread(PAYMENTS, MULTI_CURVES, zSpread), 1e-12);
   }
 
+  /**
+   *
+   */
   @Test
   public void testPriceSensitivityToZSpread() {
     final double price = PAYMENTS.accept(PV_CALCULATOR, CONSTANT_CURVES).getAmount(Currency.EUR);
@@ -204,6 +254,9 @@ public class ZSpreadCalculatorTest {
     assertEquals((newPrice - price) / eps, CALCULATOR.calculatePriceSensitivityToZSpread(PAYMENTS, MULTI_CURVES, zSpread), eps);
   }
 
+  /**
+   *
+   */
   @Test
   public void testSensitivities() {
     double zSpread = 0.06;
@@ -250,11 +303,17 @@ public class ZSpreadCalculatorTest {
     }
   }
 
+  /**
+   *
+   */
   @Test
   public void testZSpreadSensitivityToCurve() {
 
   }
 
+  /**
+   *
+   */
   @Test
   public void testPriceSensitivityToCurve() {
 

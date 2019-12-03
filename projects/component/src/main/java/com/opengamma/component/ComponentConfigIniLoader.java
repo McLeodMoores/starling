@@ -41,11 +41,11 @@ public class ComponentConfigIniLoader extends AbstractComponentConfigLoader {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param logger  the logger, not null
    * @param properties  the properties in use, not null
    */
-  public ComponentConfigIniLoader(ComponentLogger logger, ConfigProperties properties) {
+  public ComponentConfigIniLoader(final ComponentLogger logger, final ConfigProperties properties) {
     super(logger, properties);
   }
 
@@ -54,7 +54,7 @@ public class ComponentConfigIniLoader extends AbstractComponentConfigLoader {
    * Loads the INI file.
    * <p>
    * Loads the configuration defining components from the specified resource.
-   * 
+   *
    * @param resource  the config resource to load, not null
    * @param depth  the depth of the properties file, used for logging
    * @param config  the config being loaded, not null
@@ -66,8 +66,8 @@ public class ComponentConfigIniLoader extends AbstractComponentConfigLoader {
     try {
       doLoad(resource, depth, config);
       overrideProperties(config);
-      
-    } catch (RuntimeException ex) {
+
+    } catch (final RuntimeException ex) {
       throw new ComponentConfigException("Unable to load INI file: " + resource, ex);
     }
   }
@@ -76,15 +76,14 @@ public class ComponentConfigIniLoader extends AbstractComponentConfigLoader {
    * Loads the INI file.
    * <p>
    * Loads the configuration defining components from the specified resource.
-   * 
+   *
    * @param resource  the config resource to load, not null
    * @param depth  the depth of the properties file, used for logging
    * @param config  the config being loaded, not null
-   * @return the config, not null
    * @throws ComponentConfigException if the resource has an invalid format
    */
   private void doLoad(final Resource resource, final int depth, final ComponentConfig config) {
-    List<String> lines = readLines(resource);
+    final List<String> lines = readLines(resource);
     String group = null;
     int lineNum = 0;
     for (String line : lines) {
@@ -96,27 +95,27 @@ public class ComponentConfigIniLoader extends AbstractComponentConfigLoader {
       if (line.startsWith("[") && line.endsWith("]")) {
         group = line.substring(1, line.length() - 1);
         config.addGroup(group);
-        
+
       } else if (group == null) {
         throw new ComponentConfigException("Invalid format, properties must be specified within a [group], line " + lineNum);
-        
+
       } else {
-        int equalsPosition = line.indexOf('=');
+        final int equalsPosition = line.indexOf('=');
         if (equalsPosition < 0) {
           throw new ComponentConfigException("Invalid format, line " + lineNum);
         }
-        String key = line.substring(0, equalsPosition).trim();
-        String value = line.substring(equalsPosition + 1).trim();
+        final String key = line.substring(0, equalsPosition).trim();
+        final String value = line.substring(equalsPosition + 1).trim();
         if (key.length() == 0) {
           throw new ComponentConfigException("Invalid empty key, line " + lineNum);
         }
         if (config.contains(group, key)) {
           throw new ComponentConfigException("Invalid file, key '" + key + "' specified twice, line " + lineNum);
         }
-        
+
         // resolve ${} references
-        ConfigProperty resolved = getProperties().resolveProperty(key, value, lineNum);
-        
+        final ConfigProperty resolved = getProperties().resolveProperty(key, value, lineNum);
+
         // handle includes
         if (key.equals(ComponentManager.MANAGER_INCLUDE)) {
           handleInclude(resource, resolved.getValue(), depth, config);
@@ -134,31 +133,31 @@ public class ComponentConfigIniLoader extends AbstractComponentConfigLoader {
 
   /**
    * Handle the inclusion of another file.
-   * 
+   *
    * @param baseResource  the base resource, not null
    * @param includeFile  the resource to include, not null
    * @param depth  the depth of the properties file, used for logging
    * @param config  the config being loaded, not null
    * @throws ComponentConfigException if the included resource cannot be found or read
    */
-  private void handleInclude(final Resource baseResource, String includeFile, final int depth, final ComponentConfig config) {
+  private void handleInclude(final Resource baseResource, final String includeFile, final int depth, final ComponentConfig config) {
     // find resource
     Resource include;
     try {
       include = ResourceUtils.createResource(includeFile);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       try {
         include = baseResource.createRelative(includeFile);
-      } catch (Exception ex2) {
+      } catch (final Exception ex2) {
         throw new ComponentConfigException(ex2.getMessage(), ex2);
       }
     }
-    
+
     // load and merge
     getLogger().logInfo(StringUtils.repeat(" ", depth) + "   Including item: " + ResourceUtils.getLocation(include));
     try {
       doLoad(include, depth + 1, config);
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new ComponentConfigException("Unable to load INI file: " + include, ex);
     }
   }
@@ -169,15 +168,15 @@ public class ComponentConfigIniLoader extends AbstractComponentConfigLoader {
    * <p>
    * Any property that has a key of the form '[group].key' will replace the
    * specified key within the group.
-   * 
+   *
    * @param config  the config to update, not null
    */
   private void overrideProperties(final ComponentConfig config) {
-    for (ConfigProperty cp : getProperties().values()) {
-      Matcher matcher = GROUP_OVERRIDE.matcher(cp.getKey());
+    for (final ConfigProperty cp : getProperties().values()) {
+      final Matcher matcher = GROUP_OVERRIDE.matcher(cp.getKey());
       if (matcher.matches()) {
-        String group = matcher.group(1);
-        String propertyKey = matcher.group(2);
+        final String group = matcher.group(1);
+        final String propertyKey = matcher.group(2);
         config.getGroup(group).add(cp.withKey(propertyKey));
         getLogger().logDebug("  Replacing group property: [" + group + "]." + propertyKey + "=" + cp.loggableValue());
       }

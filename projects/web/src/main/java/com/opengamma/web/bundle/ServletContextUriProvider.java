@@ -20,23 +20,23 @@ public class ServletContextUriProvider implements UriProvider {
 
   private final String _basePath;
   private final ServletContext _servletContext;
-  
-  public ServletContextUriProvider(String basePath, ServletContext servletContext) {
+
+  public ServletContextUriProvider(final String basePath, final ServletContext servletContext) {
     ArgumentChecker.notNull(basePath, "baseDir");
     ArgumentChecker.notNull(servletContext, "servletContext");
     _basePath = basePath.startsWith("/") ? basePath : "/" + basePath;
     _servletContext = servletContext;
   }
-  
+
   @Override
-  public URI getUri(String resourceReference) {
+  public URI getUri(final String resourceReference) {
     try {
-      URL resource = _servletContext.getResource(_basePath + resourceReference);
+      final URL resource = _servletContext.getResource(_basePath + resourceReference);
       if (resource == null) {
         throw new OpenGammaRuntimeException("Resource not found: " + resourceReference);
       }
       return resource.toURI();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new OpenGammaRuntimeException("Error obtaining URI for resource " + resourceReference, e);
     }
   }

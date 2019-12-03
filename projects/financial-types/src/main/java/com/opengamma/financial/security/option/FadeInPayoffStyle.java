@@ -46,18 +46,18 @@ public class FadeInPayoffStyle extends PayoffStyle {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param upperBound  the upper bound
    * @param lowerBound  the lower bound
    */
-  public FadeInPayoffStyle(double upperBound, double lowerBound) {
+  public FadeInPayoffStyle(final double upperBound, final double lowerBound) {
     setUpperBound(upperBound);
     setLowerBound(lowerBound);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(PayoffStyleVisitor<T> visitor) {
+  public <T> T accept(final PayoffStyleVisitor<T> visitor) {
     return visitor.visitFadeInPayoffStyle(this);
   }
 

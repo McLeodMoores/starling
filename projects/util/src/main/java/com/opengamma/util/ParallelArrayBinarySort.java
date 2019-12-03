@@ -5,8 +5,6 @@
  */
 package com.opengamma.util;
 
-import org.apache.commons.lang.Validate;
-
 /**
  * Performs sorting. This is not "parallel" in the sense of threads, but parallel in the sense that
  * two arrays are sorted in parallel.
@@ -20,9 +18,9 @@ public class ParallelArrayBinarySort {
    * @param values The values
    */
   public static void parallelBinarySort(final double[] keys, final double[] values) {
-    Validate.notNull(keys, "x data");
-    Validate.notNull(values, "y data");
-    Validate.isTrue(keys.length == values.length);
+    ArgumentChecker.notNull(keys, "keys");
+    ArgumentChecker.notNull(values, "values");
+    ArgumentChecker.isTrue(keys.length == values.length, "Key and value arrays must have the same length");
     final int n = keys.length;
     dualArrayQuickSort(keys, values, 0, n - 1);
   }
@@ -34,9 +32,9 @@ public class ParallelArrayBinarySort {
    * @param values The values
    */
   public static void parallelBinarySort(final float[] keys, final double[] values) {
-    Validate.notNull(keys, "x data");
-    Validate.notNull(values, "y data");
-    Validate.isTrue(keys.length == values.length);
+    ArgumentChecker.notNull(keys, "keys");
+    ArgumentChecker.notNull(values, "values");
+    ArgumentChecker.isTrue(keys.length == values.length, "Key and value arrays must have the same length");
     final int n = keys.length;
     dualArrayQuickSort(keys, values, 0, n - 1);
   }
@@ -48,9 +46,9 @@ public class ParallelArrayBinarySort {
    * @param values The values
    */
   public static void parallelBinarySort(final int[] keys, final double[] values) {
-    Validate.notNull(keys, "x data");
-    Validate.notNull(values, "y data");
-    Validate.isTrue(keys.length == values.length);
+    ArgumentChecker.notNull(keys, "keys");
+    ArgumentChecker.notNull(values, "values");
+    ArgumentChecker.isTrue(keys.length == values.length, "Key and value arrays must have the same length");
     final int n = keys.length;
     dualArrayQuickSort(keys, values, 0, n - 1);
   }
@@ -63,9 +61,9 @@ public class ParallelArrayBinarySort {
    * @param values The values
    */
   public static void parallelBinarySort(final long[] keys, final double[] values) {
-    Validate.notNull(keys, "x data");
-    Validate.notNull(values, "y data");
-    Validate.isTrue(keys.length == values.length);
+    ArgumentChecker.notNull(keys, "keys");
+    ArgumentChecker.notNull(values, "values");
+    ArgumentChecker.isTrue(keys.length == values.length, "Key and value arrays must have the same length");
     final int n = keys.length;
     dualArrayQuickSort(keys, values, 0, n - 1);
   }
@@ -77,9 +75,9 @@ public class ParallelArrayBinarySort {
    * @param values The values
    */
   public static void parallelBinarySort(final float[] keys, final int[] values) {
-    Validate.notNull(keys, "x data");
-    Validate.notNull(values, "y data");
-    Validate.isTrue(keys.length == values.length);
+    ArgumentChecker.notNull(keys, "keys");
+    ArgumentChecker.notNull(values, "values");
+    ArgumentChecker.isTrue(keys.length == values.length, "Key and value arrays must have the same length");
     final int n = keys.length;
     dualArrayQuickSort(keys, values, 0, n - 1);
   }
@@ -91,9 +89,9 @@ public class ParallelArrayBinarySort {
    * @param values The values
    */
   public static void parallelBinarySort(final int[] keys, final int[] values) {
-    Validate.notNull(keys, "x data");
-    Validate.notNull(values, "y data");
-    Validate.isTrue(keys.length == values.length);
+    ArgumentChecker.notNull(keys, "keys");
+    ArgumentChecker.notNull(values, "values");
+    ArgumentChecker.isTrue(keys.length == values.length, "Key and value arrays must have the same length");
     final int n = keys.length;
     dualArrayQuickSort(keys, values, 0, n - 1);
   }
@@ -105,9 +103,9 @@ public class ParallelArrayBinarySort {
    * @param values The values
    */
   public static void parallelBinarySort(final long[] keys, final int[] values) {
-    Validate.notNull(keys, "x data");
-    Validate.notNull(values, "y data");
-    Validate.isTrue(keys.length == values.length);
+    ArgumentChecker.notNull(keys, "keys");
+    ArgumentChecker.notNull(values, "values");
+    ArgumentChecker.isTrue(keys.length == values.length, "Key and value arrays must have the same length");
     final int n = keys.length;
     dualArrayQuickSort(keys, values, 0, n - 1);
   }
@@ -119,9 +117,9 @@ public class ParallelArrayBinarySort {
    * @param values The values
    */
   public static void parallelBinarySort(final double[] keys, final int[] values) {
-    Validate.notNull(keys, "x data");
-    Validate.notNull(values, "y data");
-    Validate.isTrue(keys.length == values.length);
+    ArgumentChecker.notNull(keys, "keys");
+    ArgumentChecker.notNull(values, "values");
+    ArgumentChecker.isTrue(keys.length == values.length, "Key and value arrays must have the same length");
     final int n = keys.length;
     dualArrayQuickSort(keys, values, 0, n - 1);
   }
@@ -135,9 +133,9 @@ public class ParallelArrayBinarySort {
    * @param values The values
    */
   public static <T extends Comparable<T>, U> void parallelBinarySort(final T[] keys, final U[] values) {
-    Validate.notNull(keys, "x data");
-    Validate.notNull(values, "y data");
-    Validate.isTrue(keys.length == values.length);
+    ArgumentChecker.notNull(keys, "keys");
+    ArgumentChecker.notNull(values, "values");
+    ArgumentChecker.isTrue(keys.length == values.length, "Key and value arrays must have the same length");
     final int n = keys.length;
     dualArrayQuickSort(keys, values, 0, n - 1);
   }
@@ -150,9 +148,9 @@ public class ParallelArrayBinarySort {
    * @param values The values
    */
   public static <T> void parallelBinarySort(final double[] keys, final T[] values) {
-    Validate.notNull(keys, "x data");
-    Validate.notNull(values, "y data");
-    Validate.isTrue(keys.length == values.length);
+    ArgumentChecker.notNull(keys, "keys");
+    ArgumentChecker.notNull(values, "values");
+    ArgumentChecker.isTrue(keys.length == values.length, "Key and value arrays must have the same length");
     final int n = keys.length;
     dualArrayQuickSort(keys, values, 0, n - 1);
   }
@@ -161,7 +159,7 @@ public class ParallelArrayBinarySort {
   /** hard coded types */
   private static void dualArrayQuickSort(final double[] keys, final double[] values, final int left, final int right) {
     if (right > left) {
-      final int pivot = (left + right) >> 1;
+      final int pivot = left + right >> 1;
       final int pivotNewIndex = partition(keys, values, left, right, pivot);
       dualArrayQuickSort(keys, values, left, pivotNewIndex - 1);
       dualArrayQuickSort(keys, values, pivotNewIndex + 1, right);
@@ -170,7 +168,7 @@ public class ParallelArrayBinarySort {
 
   private static void dualArrayQuickSort(final float[] keys, final double[] values, final int left, final int right) {
     if (right > left) {
-      final int pivot = (left + right) >> 1;
+      final int pivot = left + right >> 1;
       final int pivotNewIndex = partition(keys, values, left, right, pivot);
       dualArrayQuickSort(keys, values, left, pivotNewIndex - 1);
       dualArrayQuickSort(keys, values, pivotNewIndex + 1, right);
@@ -179,7 +177,7 @@ public class ParallelArrayBinarySort {
 
   private static void dualArrayQuickSort(final int[] keys, final double[] values, final int left, final int right) {
     if (right > left) {
-      final int pivot = (left + right) >> 1;
+      final int pivot = left + right >> 1;
       final int pivotNewIndex = partition(keys, values, left, right, pivot);
       dualArrayQuickSort(keys, values, left, pivotNewIndex - 1);
       dualArrayQuickSort(keys, values, pivotNewIndex + 1, right);
@@ -188,7 +186,7 @@ public class ParallelArrayBinarySort {
 
   private static void dualArrayQuickSort(final long[] keys, final double[] values, final int left, final int right) {
     if (right > left) {
-      final int pivot = (left + right) >> 1;
+      final int pivot = left + right >> 1;
       final int pivotNewIndex = partition(keys, values, left, right, pivot);
       dualArrayQuickSort(keys, values, left, pivotNewIndex - 1);
       dualArrayQuickSort(keys, values, pivotNewIndex + 1, right);
@@ -197,7 +195,7 @@ public class ParallelArrayBinarySort {
 
   private static void dualArrayQuickSort(final double[] keys, final int[] values, final int left, final int right) {
     if (right > left) {
-      final int pivot = (left + right) >> 1;
+      final int pivot = left + right >> 1;
       final int pivotNewIndex = partition(keys, values, left, right, pivot);
       dualArrayQuickSort(keys, values, left, pivotNewIndex - 1);
       dualArrayQuickSort(keys, values, pivotNewIndex + 1, right);
@@ -206,7 +204,7 @@ public class ParallelArrayBinarySort {
 
   private static void dualArrayQuickSort(final float[] keys, final int[] values, final int left, final int right) {
     if (right > left) {
-      final int pivot = (left + right) >> 1;
+      final int pivot = left + right >> 1;
       final int pivotNewIndex = partition(keys, values, left, right, pivot);
       dualArrayQuickSort(keys, values, left, pivotNewIndex - 1);
       dualArrayQuickSort(keys, values, pivotNewIndex + 1, right);
@@ -215,7 +213,7 @@ public class ParallelArrayBinarySort {
 
   private static void dualArrayQuickSort(final int[] keys, final int[] values, final int left, final int right) {
     if (right > left) {
-      final int pivot = (left + right) >> 1;
+      final int pivot = left + right >> 1;
       final int pivotNewIndex = partition(keys, values, left, right, pivot);
       dualArrayQuickSort(keys, values, left, pivotNewIndex - 1);
       dualArrayQuickSort(keys, values, pivotNewIndex + 1, right);
@@ -224,7 +222,7 @@ public class ParallelArrayBinarySort {
 
   private static void dualArrayQuickSort(final long[] keys, final int[] values, final int left, final int right) {
     if (right > left) {
-      final int pivot = (left + right) >> 1;
+      final int pivot = left + right >> 1;
       final int pivotNewIndex = partition(keys, values, left, right, pivot);
       dualArrayQuickSort(keys, values, left, pivotNewIndex - 1);
       dualArrayQuickSort(keys, values, pivotNewIndex + 1, right);
@@ -234,7 +232,7 @@ public class ParallelArrayBinarySort {
   /** bendy types */
   private static <T extends Comparable<T>, U> void dualArrayQuickSort(final T[] keys, final U[] values, final int left, final int right) {
     if (right > left) {
-      final int pivot = (left + right) >> 1;
+      final int pivot = left + right >> 1;
       final int pivotNewIndex = partition(keys, values, left, right, pivot);
       dualArrayQuickSort(keys, values, left, pivotNewIndex - 1);
       dualArrayQuickSort(keys, values, pivotNewIndex + 1, right);
@@ -243,7 +241,7 @@ public class ParallelArrayBinarySort {
 
   private static <T> void dualArrayQuickSort(final double[] keys, final T[] values, final int left, final int right) {
     if (right > left) {
-      final int pivot = (left + right) >> 1;
+      final int pivot = left + right >> 1;
       final int pivotNewIndex = partition(keys, values, left, right, pivot);
       dualArrayQuickSort(keys, values, left, pivotNewIndex - 1);
       dualArrayQuickSort(keys, values, pivotNewIndex + 1, right);
@@ -405,7 +403,7 @@ public class ParallelArrayBinarySort {
   }
 
   private static void swap(final float[] keys, final double[] values, final int first, final int second) {
-    float t = keys[first];
+    final float t = keys[first];
     double k = values[first];
     keys[first] = keys[second];
     keys[second] = t;
@@ -415,7 +413,7 @@ public class ParallelArrayBinarySort {
   }
 
   private static void swap(final int[] keys, final double[] values, final int first, final int second) {
-    int t = keys[first];
+    final int t = keys[first];
     double k = values[first];
     keys[first] = keys[second];
     keys[second] = t;
@@ -425,7 +423,7 @@ public class ParallelArrayBinarySort {
   }
 
   private static void swap(final long[] keys, final double[] values, final int first, final int second) {
-    long t = keys[first];
+    final long t = keys[first];
     double k = values[first];
     keys[first] = keys[second];
     keys[second] = t;
@@ -435,7 +433,7 @@ public class ParallelArrayBinarySort {
   }
 
   private static void swap(final double[] keys, final int[] values, final int first, final int second) {
-    double t = keys[first];
+    final double t = keys[first];
     int k = values[first];
     keys[first] = keys[second];
     keys[second] = t;
@@ -445,7 +443,7 @@ public class ParallelArrayBinarySort {
   }
 
   private static void swap(final float[] keys, final int[] values, final int first, final int second) {
-    float t = keys[first];
+    final float t = keys[first];
     int k = values[first];
     keys[first] = keys[second];
     keys[second] = t;
@@ -455,7 +453,7 @@ public class ParallelArrayBinarySort {
   }
 
   private static void swap(final int[] keys, final int[] values, final int first, final int second) {
-    int t = keys[first];
+    final int t = keys[first];
     int k = values[first];
     keys[first] = keys[second];
     keys[second] = t;
@@ -465,7 +463,7 @@ public class ParallelArrayBinarySort {
   }
 
   private static void swap(final long[] keys, final int[] values, final int first, final int second) {
-    long t = keys[first];
+    final long t = keys[first];
     int k = values[first];
     keys[first] = keys[second];
     keys[second] = t;

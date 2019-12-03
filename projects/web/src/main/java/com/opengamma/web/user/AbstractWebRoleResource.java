@@ -18,14 +18,15 @@ public abstract class AbstractWebRoleResource
     extends AbstractPerRequestWebResource<WebRoleData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "users/html/";
 
   /**
    * Creates the resource.
-   * 
-   * @param userMaster  the role master, not null
+   *
+   * @param userMaster
+   *          the role master, not null
    */
   protected AbstractWebRoleResource(final UserMaster userMaster) {
     super(new WebRoleData());
@@ -35,22 +36,23 @@ public abstract class AbstractWebRoleResource
 
   /**
    * Creates the resource.
-   * 
-   * @param parent  the parent resource, not null
+   *
+   * @param parent
+   *          the parent resource, not null
    */
   protected AbstractWebRoleResource(final AbstractWebRoleResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("uris", new WebRoleUris(data()));
     return out;
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.definition;
@@ -11,14 +11,15 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
 
 /**
- * 
+ *
  */
 public class StandardOptionDataBundle extends OptionDataBundle {
   private final double _b;
   private final double _spot;
 
   // TODO need a cost of carry model
-  public StandardOptionDataBundle(final YieldAndDiscountCurve interestRateCurve, final double b, final VolatilitySurface volatilitySurface, final double spot, final ZonedDateTime date) {
+  public StandardOptionDataBundle(final YieldAndDiscountCurve interestRateCurve, final double b, final VolatilitySurface volatilitySurface, final double spot,
+      final ZonedDateTime date) {
     super(interestRateCurve, volatilitySurface, date);
     _b = b;
     _spot = spot;
@@ -67,9 +68,9 @@ public class StandardOptionDataBundle extends OptionDataBundle {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_b);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

@@ -40,7 +40,7 @@ public class DataConfigSourceResource extends AbstractDataResource {
   /**
    * The config source.
    */
-  private final ConfigSource _exgSource;
+  private final ConfigSource _configSource;
 
   /**
    * Creates the resource, exposing the underlying source over REST.
@@ -49,7 +49,7 @@ public class DataConfigSourceResource extends AbstractDataResource {
    */
   public DataConfigSourceResource(final ConfigSource configSource) {
     ArgumentChecker.notNull(configSource, "configSource");
-    _exgSource = configSource;
+    _configSource = configSource;
   }
 
   //-------------------------------------------------------------------------
@@ -60,11 +60,11 @@ public class DataConfigSourceResource extends AbstractDataResource {
    * @return the configuration source, not null
    */
   public ConfigSource getConfigSource() {
-    return _exgSource;
+    return _configSource;
   }
 
   @SuppressWarnings("unchecked")
-  private FudgeMsg configItemCollectionResult(final Collection<?> items) {
+  private static FudgeMsg configItemCollectionResult(final Collection<?> items) {
     final FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
     final MutableFudgeMsg msg = serializer.newMessage();
     for (final ConfigItem<?> item : (Collection<ConfigItem<?>>) items) {
@@ -73,12 +73,12 @@ public class DataConfigSourceResource extends AbstractDataResource {
     return msg;
   }
 
-  private FudgeMsg configItemResult(final ConfigItem<?> item) {
+  private static FudgeMsg configItemResult(final ConfigItem<?> item) {
     final FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
     return FudgeSerializer.addClassHeader(serializer.objectToFudgeMsg(item), item.getClass(), ConfigItem.class);
   }
 
-  private FudgeMsg configValueResult(final Class<?> clazz, final Object value) {
+  private static FudgeMsg configValueResult(final Class<?> clazz, final Object value) {
     if (value == null) {
       return null;
     }
@@ -87,64 +87,118 @@ public class DataConfigSourceResource extends AbstractDataResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets a HATEAOS response.
+   *
+   * @param uriInfo
+   *          the URI, not null
+   * @return the response
+   */
   @GET
   public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
+  /**
+   * Searches for a configuration by name, type and / or version.
+   *
+   * @param typeStr
+   *          the type, not null
+   * @param versionCorrectionStr
+   *          the version/correction, can be null. LATEST is used in that case.
+   * @param name
+   *          the name, can be null. All configurations of the desired type are
+   *          returned in that case.
+   * @return the configurations as a Fudge message
+   */
   @GET
   @Path("configs")
   public Response search(
-    @QueryParam("type") final String typeStr,
-    @QueryParam("versionCorrection") final String versionCorrectionStr,
-    @QueryParam("name") final String name) {
+      @QueryParam("type") final String typeStr,
+      @QueryParam("versionCorrection") final String versionCorrectionStr,
+      @QueryParam("name") final String name) {
     final Class<?> type = ReflectionUtils.loadClass(typeStr);
-    final VersionCorrection versionCorrection = (versionCorrectionStr != null) ? VersionCorrection.parse(versionCorrectionStr) : VersionCorrection.LATEST;
+    final VersionCorrection versionCorrection = versionCorrectionStr != null ? VersionCorrection.parse(versionCorrectionStr) : VersionCorrection.LATEST;
     if (name == null) {
       return responseOkObject(configItemCollectionResult(getConfigSource().getAll(type, versionCorrection)));
-    } else {
-      return responseOkObject(configItemCollectionResult(getConfigSource().get(type, name, versionCorrection)));
     }
+    return responseOkObject(configItemCollectionResult(getConfigSource().get(type, name, versionCorrection)));
   }
 
+  /**
+   * Gets the configuration associated with a unique id.
+   *
+   * @param uidStr
+   *          the unique id, not null
+   * @return the configuration
+   */
   @GET
   @Path("configs/{uid}")
   public Response get(
-    @PathParam("uid") final String uidStr) {
+      @PathParam("uid") final String uidStr) {
     final UniqueId uid = UniqueId.parse(uidStr);
     final ConfigItem<?> result = getConfigSource().get(uid);
     return responseOkObject(configItemResult(result));
   }
 
+  /**
+   * Gets the configuration associated with an object id and version.
+   *
+   * @param idStr
+   *          the object id, not null
+   * @param versionCorrectionStr
+   *          the version, not null
+   * @return the configuration
+   */
   @GET
   @Path("configs/{oid}/{versionCorrection}")
   public Response getByOidVersionCorrection(
-    @PathParam("oid") final String idStr,
-    @PathParam("versionCorrection") final String versionCorrectionStr) {
+      @PathParam("oid") final String idStr,
+      @PathParam("versionCorrection") final String versionCorrectionStr) {
     final ObjectId objectId = ObjectId.parse(idStr);
     final VersionCorrection versionCorrection = VersionCorrection.parse(versionCorrectionStr);
     final ConfigItem<?> result = getConfigSource().get(objectId, versionCorrection);
     return responseOkObject(configItemResult(result));
   }
 
+  /**
+   * Searches for a configuration by name, type and / or version.
+   *
+   * @param typeStr
+   *          the type, not null
+   * @param versionCorrectionStr
+   *          the version/correction, can be null. LATEST is used in that case.
+   * @param name
+   *          the name, not null
+   * @return the configuration as a Fudge message
+   */
   @GET
   @Path("configSearches/single")
   public Response searchSingle(
-    @QueryParam("type") final String typeStr,
-    @QueryParam("versionCorrection") final String versionCorrectionStr,
-    @QueryParam("name") final String name) {
+      @QueryParam("type") final String typeStr,
+      @QueryParam("versionCorrection") final String versionCorrectionStr,
+      @QueryParam("name") final String name) {
     final Class<?> type = ReflectionUtils.loadClass(typeStr);
-    final VersionCorrection versionCorrection = (versionCorrectionStr != null) ? VersionCorrection.parse(versionCorrectionStr) : VersionCorrection.LATEST;
+    final VersionCorrection versionCorrection = versionCorrectionStr != null ? VersionCorrection.parse(versionCorrectionStr) : VersionCorrection.LATEST;
     return responseOkObject(configValueResult(type, getConfigSource().getSingle(type, name, versionCorrection)));
   }
 
+  /**
+   * Searches for configurations by type and version.
+   * 
+   * @param typeStr
+   *          the type, not null
+   * @param versionCorrectionStr
+   *          the version/correction, can be null. LATEST is used in that case.
+   * @return the configurations as a Fudge message
+   */
   @GET
   @Path("configSearches")
   public Response search(
-    @QueryParam("type") final String typeStr,
-    @QueryParam("versionCorrection") final String versionCorrectionStr) {
+      @QueryParam("type") final String typeStr,
+      @QueryParam("versionCorrection") final String versionCorrectionStr) {
     final Class<?> type = ReflectionUtils.loadClass(typeStr);
-    final VersionCorrection versionCorrection = (versionCorrectionStr != null) ? VersionCorrection.parse(versionCorrectionStr) : VersionCorrection.LATEST;
+    final VersionCorrection versionCorrection = versionCorrectionStr != null ? VersionCorrection.parse(versionCorrectionStr) : VersionCorrection.LATEST;
     return responseOkObject(configItemCollectionResult(getConfigSource().getAll(type, versionCorrection)));
   }
 
@@ -152,10 +206,10 @@ public class DataConfigSourceResource extends AbstractDataResource {
   @PUT
   @Path("put")
   public Response put(
-    @QueryParam("type") final String typeStr,
-    @QueryParam("versionCorrection") final String versionCorrectionStr) {
+      @QueryParam("type") final String typeStr,
+      @QueryParam("versionCorrection") final String versionCorrectionStr) {
     final Class<?> type = ReflectionUtils.loadClass(typeStr);
-    final VersionCorrection versionCorrection = (versionCorrectionStr != null) ? VersionCorrection.parse(versionCorrectionStr) : VersionCorrection.LATEST;
+    final VersionCorrection versionCorrection = versionCorrectionStr != null ? VersionCorrection.parse(versionCorrectionStr) : VersionCorrection.LATEST;
     return responseOkObject(configItemCollectionResult(getConfigSource().getAll(type, versionCorrection)));
   }
 

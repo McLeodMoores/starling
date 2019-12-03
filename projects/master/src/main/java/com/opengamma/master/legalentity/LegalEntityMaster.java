@@ -10,7 +10,7 @@ import com.opengamma.util.PublicSPI;
 
 /**
  * A general-purpose legal entity master.
- * <p/>
+ * <p>
  * The legal entity master provides a uniform view over a set of legal entity definitions.
  * This interface provides methods that allow the master to be searched and updated.
  */
@@ -19,7 +19,7 @@ public interface LegalEntityMaster extends AbstractChangeProvidingMaster<LegalEn
 
   /**
    * Queries the meta-data about the master.
-   * <p/>
+   * <p>
    * This can return information that is useful for drop-down lists.
    *
    * @param request the search request, not null
@@ -38,7 +38,7 @@ public interface LegalEntityMaster extends AbstractChangeProvidingMaster<LegalEn
 
   /**
    * Queries the history of a single legal entity.
-   * <p/>
+   * <p>
    * The request must contain an object identifier to identify the legal entity.
    *
    * @param request the history request, not null

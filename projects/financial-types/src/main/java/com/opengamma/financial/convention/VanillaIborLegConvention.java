@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -27,6 +29,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Convention for a vanilla ibor swap leg.
  */
+@ConventionMetaData(description = "Vanilla *IBOR swap leg", group = ConventionGroups.SWAP_LEG_CONVENTION)
 @BeanDefinition
 public class VanillaIborLegConvention extends FinancialConvention {
 
@@ -93,7 +96,7 @@ public class VanillaIborLegConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param iborIndexConvention  the underlying ibor index convention, not null
@@ -126,7 +129,7 @@ public class VanillaIborLegConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

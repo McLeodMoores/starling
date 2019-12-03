@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.config.impl;
@@ -18,11 +18,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.opengamma.id.ObjectId;
-import com.opengamma.id.ObjectIdentifiable;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.config.ConfigDocument;
@@ -58,8 +56,10 @@ public class DataConfigResource extends AbstractDataResource {
   /**
    * Creates the resource.
    *
-   * @param configsResource  the parent resource, not null
-   * @param configId  the config unique identifier, not null
+   * @param configsResource
+   *          the parent resource, not null
+   * @param configId
+   *          the config unique identifier, not null
    */
   public DataConfigResource(final DataConfigMasterResource configsResource, final ObjectId configId) {
     ArgumentChecker.notNull(configsResource, "configsResource");
@@ -68,7 +68,7 @@ public class DataConfigResource extends AbstractDataResource {
     _urlResourceId = configId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the configs resource.
@@ -88,7 +88,7 @@ public class DataConfigResource extends AbstractDataResource {
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the config master.
@@ -99,21 +99,21 @@ public class DataConfigResource extends AbstractDataResource {
     return getConfigsResource().getConfigMaster();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
-  public Response get(@QueryParam("versionAsOf") String versionAsOf, @QueryParam("correctedTo") String correctedTo) {
-    VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-    ConfigDocument result = getConfigMaster().get(getUrlConfigId(), vc);
+  public Response get(@QueryParam("versionAsOf") final String versionAsOf, @QueryParam("correctedTo") final String correctedTo) {
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final ConfigDocument result = getConfigMaster().get(getUrlConfigId(), vc);
     return responseOkObject(result);
   }
 
   @POST
-  public Response update(@Context UriInfo uriInfo, ConfigDocument request) {
-    if (getUrlConfigId().equals(request.getUniqueId().getObjectId()) == false) {
+  public Response update(@Context final UriInfo uriInfo, final ConfigDocument request) {
+    if (!getUrlConfigId().equals(request.getUniqueId().getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
-    ConfigDocument result = getConfigMaster().update(request);
-    URI uri = DataConfigUris.uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+    final ConfigDocument result = getConfigMaster().update(request);
+    final URI uri = DataConfigUris.uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(uri, result);
   }
 
@@ -122,58 +122,58 @@ public class DataConfigResource extends AbstractDataResource {
     getConfigMaster().remove(getUrlConfigId().atLatestVersion());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("versions")
-  public Response history(@Context UriInfo uriInfo) {
-    ConfigHistoryRequest<?> request = RestUtils.decodeQueryParams(uriInfo, ConfigHistoryRequest.class);
-    if (getUrlConfigId().equals(request.getObjectId()) == false) {
+  public Response history(@Context final UriInfo uriInfo) {
+    final ConfigHistoryRequest<?> request = RestUtils.decodeQueryParams(uriInfo, ConfigHistoryRequest.class);
+    if (!getUrlConfigId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
-    ConfigHistoryResult<?> result = getConfigMaster().history(request);
+    final ConfigHistoryResult<?> result = getConfigMaster().history(request);
     return responseOkObject(result);
   }
 
   @GET
   @Path("versions/{versionId}")
-  public Response getVersioned(@PathParam("versionId") String versionId) {
-    UniqueId uniqueId = getUrlConfigId().atVersion(versionId);
-    ConfigDocument result = getConfigMaster().get(uniqueId);
+  public Response getVersioned(@PathParam("versionId") final String versionId) {
+    final UniqueId uniqueId = getUrlConfigId().atVersion(versionId);
+    final ConfigDocument result = getConfigMaster().get(uniqueId);
     return responseOkObject(result);
   }
 
   @POST
   @Path("versions/{versionId}")
-  public Response correct(@Context UriInfo uriInfo, @PathParam("versionId") String versionId, ConfigDocument document) {
-    UniqueId uniqueId = getUrlConfigId().atVersion(versionId);
+  public Response correct(@Context final UriInfo uriInfo, @PathParam("versionId") final String versionId, final ConfigDocument document) {
+    final UniqueId uniqueId = getUrlConfigId().atVersion(versionId);
     if (!uniqueId.equals(document.getUniqueId())) {
       throw new IllegalArgumentException("Document uniqueId does not match URI");
     }
-    ConfigDocument result = getConfigMaster().correct(document);
-    URI uri = DataConfigUris.uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+    final ConfigDocument result = getConfigMaster().correct(document);
+    final URI uri = DataConfigUris.uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(uri, result);
   }
 
   @PUT
   @Path("versions/{versionId}")
-  public Response replaceVersion(@PathParam("versionId") String versionId, List<ConfigDocument> replacementDocuments) {
-    UniqueId uniqueId = getUrlConfigId().atVersion(versionId);
+  public Response replaceVersion(@PathParam("versionId") final String versionId, final List<ConfigDocument> replacementDocuments) {
+    final UniqueId uniqueId = getUrlConfigId().atVersion(versionId);
 
-    List<UniqueId> result = getConfigMaster().replaceVersion(uniqueId, replacementDocuments);
+    final List<UniqueId> result = getConfigMaster().replaceVersion(uniqueId, replacementDocuments);
     return responseOkObject(result);
   }
 
   @PUT
-  public <T> Response replaceAllVersions(List<ConfigDocument> replacementDocuments) {
-    ObjectId objectId = getUrlConfigId();
-    List<UniqueId> result = getConfigMaster().replaceAllVersions(objectId, replacementDocuments);
+  public Response replaceAllVersions(final List<ConfigDocument> replacementDocuments) {
+    final ObjectId objectId = getUrlConfigId();
+    final List<UniqueId> result = getConfigMaster().replaceAllVersions(objectId, replacementDocuments);
     return responseOkObject(result);
   }
 
   @DELETE
   @Path("versions/{versionId}")
-  public void removeVersion(@PathParam("versionId") String versionId) {
-    UniqueId uniqueId = getUrlConfigId().atVersion(versionId);
+  public void removeVersion(@PathParam("versionId") final String versionId) {
+    final UniqueId uniqueId = getUrlConfigId().atVersion(versionId);
     getConfigMaster().removeVersion(uniqueId);
   }
 

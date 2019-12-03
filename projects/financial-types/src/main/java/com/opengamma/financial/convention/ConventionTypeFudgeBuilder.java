@@ -24,7 +24,7 @@ public final class ConventionTypeFudgeBuilder implements FudgeBuilder<Convention
   public static final String CONVENTION_TYPE_FIELD_NAME = "conventionType";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ConventionType object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ConventionType object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     FudgeSerializer.addClassHeader(msg, ConventionType.class);
     serializer.addToMessage(msg, CONVENTION_TYPE_FIELD_NAME, null, object.getName());
@@ -32,7 +32,7 @@ public final class ConventionTypeFudgeBuilder implements FudgeBuilder<Convention
   }
 
   @Override
-  public ConventionType buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public ConventionType buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     final String conventionTypeStr = msg.getString(CONVENTION_TYPE_FIELD_NAME);
     if (conventionTypeStr == null) {
       throw new IllegalArgumentException("Fudge message is not a ConventionType - field 'conventionType' is not present");

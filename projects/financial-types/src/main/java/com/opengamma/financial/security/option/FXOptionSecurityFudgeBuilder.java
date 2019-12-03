@@ -43,13 +43,13 @@ public class FXOptionSecurityFudgeBuilder extends AbstractFudgeBuilder implement
   public static final String EXERCISE_TYPE_FIELD_NAME = "exerciseType";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FXOptionSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FXOptionSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     FXOptionSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, FXOptionSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final FXOptionSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, PUT_CURRENCY_FIELD_NAME, object.getPutCurrency());
     addToMessage(msg, CALL_CURRENCY_FIELD_NAME, object.getCallCurrency());
@@ -62,13 +62,13 @@ public class FXOptionSecurityFudgeBuilder extends AbstractFudgeBuilder implement
   }
 
   @Override
-  public FXOptionSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    FXOptionSecurity object = new FXOptionSecurity();
+  public FXOptionSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final FXOptionSecurity object = new FXOptionSecurity();
     FXOptionSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, FXOptionSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final FXOptionSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setPutCurrency(msg.getValue(Currency.class, PUT_CURRENCY_FIELD_NAME));
     object.setCallCurrency(msg.getValue(Currency.class, CALL_CURRENCY_FIELD_NAME));

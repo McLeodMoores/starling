@@ -28,7 +28,7 @@ public final class TripleFudgeBuilder implements FudgeBuilder<Triple<?, ?, ?>> {
   public static final String THIRD_FIELD_NAME = "third";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, Triple<?, ?, ?> object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Triple<?, ?, ?> object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     if (object.getFirst() != null) {
       serializer.addToMessageObject(msg, FIRST_FIELD_NAME, null, object.getFirst(), Object.class);
@@ -43,7 +43,7 @@ public final class TripleFudgeBuilder implements FudgeBuilder<Triple<?, ?, ?>> {
   }
 
   @Override
-  public Triple<?, ?, ?> buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
+  public Triple<?, ?, ?> buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     Object first = null;
     if (msg.hasField(FIRST_FIELD_NAME)) {
       first = deserializer.fieldValueToObject(msg.getByName(FIRST_FIELD_NAME));

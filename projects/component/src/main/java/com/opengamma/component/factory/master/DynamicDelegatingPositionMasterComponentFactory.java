@@ -8,6 +8,7 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
@@ -27,17 +28,13 @@ import com.opengamma.master.position.PositionMaster;
 import com.opengamma.master.position.impl.DataPositionMasterResource;
 import com.opengamma.master.position.impl.DynamicDelegatingPositionMaster;
 import com.opengamma.master.position.impl.RemotePositionMaster;
-import org.joda.beans.Bean;
 
 /**
- * Component factory for delegating master that maintains a map of delegate masters
- * <p/>
- * Register as both a generic PositionMaster as well as the concrete type
- * DynamicDelegatingPositionMasterComponentFactory, to allow command processor
- * to access out of band methods like:
- * {@link DynamicDelegatingPositionMaster#register(String, PositionMaster)},
- * {@link DynamicDelegatingPositionMaster#deregister(String)} and
- * {@link DynamicDelegatingPositionMaster#add(String, PositionDocument)}
+ * Component factory for delegating master that maintains a map of delegate masters.
+ * <p>
+ * Register as both a generic PositionMaster as well as the concrete type DynamicDelegatingPositionMasterComponentFactory, to allow command processor to access
+ * out of band methods like: {@link DynamicDelegatingPositionMaster#register(String, PositionMaster)},
+ * {@link DynamicDelegatingPositionMaster#deregister(String)} and {@link DynamicDelegatingPositionMaster#add(String, PositionDocument)}
  */
 @BeanDefinition
 public class DynamicDelegatingPositionMasterComponentFactory extends AbstractComponentFactory {

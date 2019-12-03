@@ -29,14 +29,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public class DbHolidayMasterTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbHolidayMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbHolidayMasterTest.class);
 
   private DbHolidayMaster _holMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbHolidayMasterTest(String databaseType, String databaseVersion) {
+  public DbHolidayMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -62,11 +62,11 @@ public class DbHolidayMasterTest extends AbstractDbTest {
   //-------------------------------------------------------------------------
   @Test
   public void test_example() throws Exception {
-    ManageableHoliday hol = new ManageableHoliday(Currency.GBP, Arrays.asList(LocalDate.of(2010, 2, 3)));
-    HolidayDocument addDoc = new HolidayDocument(hol);
-    HolidayDocument added = _holMaster.add(addDoc);
-    
-    HolidayDocument loaded = _holMaster.get(added.getUniqueId());
+    final ManageableHoliday hol = new ManageableHoliday(Currency.GBP, Arrays.asList(LocalDate.of(2010, 2, 3)));
+    final HolidayDocument addDoc = new HolidayDocument(hol);
+    final HolidayDocument added = _holMaster.add(addDoc);
+
+    final HolidayDocument loaded = _holMaster.get(added.getUniqueId());
     assertEquals(added, loaded);
   }
 

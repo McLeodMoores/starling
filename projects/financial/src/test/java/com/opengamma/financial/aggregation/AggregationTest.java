@@ -14,7 +14,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class AggregationTest {
-//  private static final Logger s_logger = LoggerFactory.getLogger(AggregationTest.class);
+//  private static final Logger LOGGER = LoggerFactory.getLogger(AggregationTest.class);
 //  private List<Position> _equities;
 //  private List<Position> _americanOptions;
 //  private List<Position> _europeanOptions;
@@ -189,7 +189,7 @@ public class AggregationTest {
   
   @Test
   public void testMultiLevelAggregation() {
-    s_logger.info("Starting testMultiLevelAggregation()");
+    LOGGER.info("Starting testMultiLevelAggregation()");
     Portfolio testPortfolio = makeTestPortfolio();
     PortfolioAggregator aggregator = new PortfolioAggregator(new AssetClassAggregationFunction(), new CurrencyAggregationFunction());
     PortfolioNode aggregatedPortfolio = aggregator.aggregate(testPortfolio);

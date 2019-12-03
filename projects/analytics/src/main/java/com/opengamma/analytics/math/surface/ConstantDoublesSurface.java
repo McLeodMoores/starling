@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.surface;
@@ -52,6 +52,7 @@ public class ConstantDoublesSurface extends Surface<Double, Double, Double> {
   /**
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public Double[] getXData() {
@@ -61,6 +62,7 @@ public class ConstantDoublesSurface extends Surface<Double, Double, Double> {
   /**
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public Double[] getYData() {
@@ -109,7 +111,7 @@ public class ConstantDoublesSurface extends Surface<Double, Double, Double> {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_z);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

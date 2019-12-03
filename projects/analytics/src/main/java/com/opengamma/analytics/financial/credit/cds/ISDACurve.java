@@ -5,7 +5,6 @@
  */
 package com.opengamma.analytics.financial.credit.cds;
 
-import static com.opengamma.analytics.math.interpolation.Interpolator1DFactory.FLAT_EXTRAPOLATOR;
 import static com.opengamma.analytics.math.interpolation.Interpolator1DFactory.ISDA_EXTRAPOLATOR;
 import static com.opengamma.analytics.math.interpolation.Interpolator1DFactory.ISDA_INTERPOLATOR;
 
@@ -15,21 +14,23 @@ import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolator;
 import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
 
 /**
  * A curve that behaves according to the ISDA standard for CDS pricing.
- * 
+ *
  * This curve is intended for use with {@link ISDAApproxCDSPricingMethod} in order
  * to produce numbers that match the ISDA standard pricing model for CDS. It
  * may be useful in other situations where ISDA standard discount factors
  * are assumed.
- * 
+ *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
-* @deprecated Use classes from isdastandardmodel
+ * @deprecated Use classes from isdastandardmodel
  */
 @Deprecated
 public class ISDACurve {
-  private static final CombinedInterpolatorExtrapolator INTERPOLATOR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(ISDA_INTERPOLATOR, FLAT_EXTRAPOLATOR, ISDA_EXTRAPOLATOR);
+  private static final CombinedInterpolatorExtrapolator INTERPOLATOR =
+      CombinedInterpolatorExtrapolatorFactory.getInterpolator(ISDA_INTERPOLATOR, FlatExtrapolator1dAdapter.NAME, ISDA_EXTRAPOLATOR);
 
   private final String _name;
 

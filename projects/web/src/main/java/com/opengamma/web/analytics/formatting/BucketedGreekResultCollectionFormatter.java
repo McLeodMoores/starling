@@ -16,28 +16,27 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /* package */ class BucketedGreekResultCollectionFormatter extends AbstractFormatter<BucketedGreekResultCollection> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BucketedGreekResultCollectionFormatter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BucketedGreekResultCollectionFormatter.class);
 
   /* package */ BucketedGreekResultCollectionFormatter() {
     super(BucketedGreekResultCollection.class);
   }
 
   @Override
-  public Object formatCell(BucketedGreekResultCollection value, ValueSpecification valueSpec, Object inlineKey) {
+  public Object formatCell(final BucketedGreekResultCollection value, final ValueSpecification valueSpec, final Object inlineKey) {
     if (value.getBucketedGreeks(BucketedGreekResultCollection.BUCKETED_VEGA) != null) {
-      double[] expiries = value.getExpiries();
-      double[][] strikes = value.getStrikes();
-      double[] uniqueStrikes = strikes[0];
+      final double[] expiries = value.getExpiries();
+      final double[][] strikes = value.getStrikes();
+      final double[] uniqueStrikes = strikes[0];
       for (int i = 1; i < strikes.length; i++) {
         if (strikes[i].length != uniqueStrikes.length) {
-          s_logger.warn("Did not have a rectangular bucketed vega surface");
+          LOGGER.warn("Did not have a rectangular bucketed vega surface");
           return FORMATTING_ERROR;
         }
       }
       return "Volatility Surface (" + expiries.length + " x " + uniqueStrikes.length + ")";
-    } else {
-      return FORMATTING_ERROR;
     }
+    return FORMATTING_ERROR;
   }
 
   @Override

@@ -27,8 +27,8 @@ import com.opengamma.util.time.DateUtils;
 public class EquityIndexDividendFutureTest {
 
   private static final double PRICE = 95.0;
-  private static final double timeToSettlement = 1.45;
-  private static final double timeToFixing = 1.44;
+  private static final double TIME_TO_SETTLEMENT = 1.45;
+  private static final double TIME_TO_FIXING = 1.44;
 
   private static final ZonedDateTime FIXING_DATE = DateUtils.getUTCDate(2011, 1, 3);
   private static final ZonedDateTime[] FIXING_DATES = {FIXING_DATE, FIXING_DATE.plusYears(1), DateUtils.getDateOffsetWithYearFraction(FIXING_DATE, 1.0) };
@@ -38,10 +38,10 @@ public class EquityIndexDividendFutureTest {
   @Test
   public void test() {
 
-    final EquityIndexDividendFuture theFuture = new EquityIndexDividendFuture(timeToFixing, timeToSettlement, PRICE, Currency.CAD, 10.);
+    final EquityIndexDividendFuture theFuture = new EquityIndexDividendFuture(TIME_TO_FIXING, TIME_TO_SETTLEMENT, PRICE, Currency.CAD, 10.);
 
-    assertEquals(theFuture.getTimeToSettlement(), timeToSettlement, 0);
-    assertFalse(Double.compare(theFuture.getTimeToExpiry(), timeToSettlement) == 0);
+    assertEquals(theFuture.getTimeToSettlement(), TIME_TO_SETTLEMENT, 0);
+    assertFalse(Double.compare(theFuture.getTimeToExpiry(), TIME_TO_SETTLEMENT) == 0);
   }
 
   @Test

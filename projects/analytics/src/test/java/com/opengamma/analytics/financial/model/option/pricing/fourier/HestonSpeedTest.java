@@ -23,7 +23,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class HestonSpeedTest {
-  private static Logger s_logger = LoggerFactory.getLogger(HestonSpeedTest.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(HestonSpeedTest.class);
   private static int WARMUP_CYCLES = 0;
   private static int BENCHMARK_CYCLES = 1;
 
@@ -77,7 +77,7 @@ public class HestonSpeedTest {
       priceWithIntegral();
     }
     if (BENCHMARK_CYCLES > 0) {
-      final OperationTimer timer = new OperationTimer(s_logger, "processing {} cycles on integral", BENCHMARK_CYCLES);
+      final OperationTimer timer = new OperationTimer(LOGGER, "processing {} cycles on integral", BENCHMARK_CYCLES);
       for (int i = 0; i < BENCHMARK_CYCLES; i++) {
         priceWithIntegral();
       }
@@ -91,7 +91,7 @@ public class HestonSpeedTest {
       priceWithIntegralCorrection();
     }
     if (BENCHMARK_CYCLES > 0) {
-      final OperationTimer timer = new OperationTimer(s_logger, "processing {} cycles on integral (corrected)", BENCHMARK_CYCLES);
+      final OperationTimer timer = new OperationTimer(LOGGER, "processing {} cycles on integral (corrected)", BENCHMARK_CYCLES);
       for (int i = 0; i < BENCHMARK_CYCLES; i++) {
         priceWithIntegralCorrection();
       }
@@ -105,7 +105,7 @@ public class HestonSpeedTest {
       priceWithFFT();
     }
     if (BENCHMARK_CYCLES > 0) {
-      final OperationTimer timer = new OperationTimer(s_logger, "processing {} cycles on FFT", BENCHMARK_CYCLES);
+      final OperationTimer timer = new OperationTimer(LOGGER, "processing {} cycles on FFT", BENCHMARK_CYCLES);
       for (int i = 0; i < BENCHMARK_CYCLES; i++) {
         priceWithFFT();
       }

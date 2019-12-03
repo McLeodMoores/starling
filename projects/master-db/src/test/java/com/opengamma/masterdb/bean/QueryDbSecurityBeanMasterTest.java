@@ -39,71 +39,71 @@ import com.opengamma.util.test.TestGroup;
 public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(QueryDbSecurityBeanMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueryDbSecurityBeanMasterTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public QueryDbSecurityBeanMasterTest(String databaseType, String databaseVersion) {
+  public QueryDbSecurityBeanMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, true);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_getSecurity_nullUID() {
-    _secMaster.get((UniqueId)null);
+    _secMaster.get((UniqueId) null);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getSecurity_versioned_notFoundId() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
     _secMaster.get(uniqueId);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getSecurity_versioned_notFoundVersion() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "1");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "1");
     _secMaster.get(uniqueId);
   }
 
   @Test
   public void test_getSecurity_versioned_oneSecurityKey() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
-    SecurityDocument test = _secMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final SecurityDocument test = _secMaster.get(uniqueId);
     assert101(test);
   }
 
   @Test
   public void test_getSecurity_versioned_twoSecurityKeys() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "102", "0");
-    SecurityDocument test = _secMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "102", "0");
+    final SecurityDocument test = _secMaster.get(uniqueId);
     assert102(test);
   }
 
   @Test
   public void test_getSecurity_versioned_notLatest() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
-    SecurityDocument test = _secMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
+    final SecurityDocument test = _secMaster.get(uniqueId);
     assert201(test);
   }
 
   @Test
   public void test_getSecurity_versioned_latest() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "201", "1");
-    SecurityDocument test = _secMaster.get(uniqueId);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "201", "1");
+    final SecurityDocument test = _secMaster.get(uniqueId);
     assert202(test);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_getSecurity_unversioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "0");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "0");
     _secMaster.get(uniqueId);
   }
 
   @Test
   public void test_getSecurity_unversioned() {
-    UniqueId oid = UniqueId.of("DbSec", "201");
-    SecurityDocument test = _secMaster.get(oid);
+    final UniqueId oid = UniqueId.of("DbSec", "201");
+    final SecurityDocument test = _secMaster.get(oid);
     assert202(test);
   }
 
@@ -112,12 +112,12 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
   //-------------------------------------------------------------------------
   @Test
   public void test_searchSecurities_documents() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(PagingRequest.ALL, test.getPaging().getRequest());
     assertEquals(_totalSecurities, test.getPaging().getTotalItems());
-    
+
     assertEquals(_totalSecurities, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
@@ -127,14 +127,14 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
   //-------------------------------------------------------------------------
   @Test
   public void test_search_pageOne() {
-    PagingRequest pr = PagingRequest.ofPage(1, 2);
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final PagingRequest pr = PagingRequest.ofPage(1, 2);
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setPagingRequest(pr);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(pr, test.getPaging().getRequest());
     assertEquals(_totalSecurities, test.getPaging().getTotalItems());
-    
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
@@ -142,77 +142,77 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_pageTwo() {
-    PagingRequest pr = PagingRequest.ofPage(2, 2);
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final PagingRequest pr = PagingRequest.ofPage(2, 2);
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setPagingRequest(pr);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(pr, test.getPaging().getRequest());
     assertEquals(_totalSecurities, test.getPaging().getTotalItems());
-    
+
     assertEquals(1, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
   }
 
   @Test
   public void test_search_pageAtEnd() {
-    PagingRequest pr = PagingRequest.ofIndex(3, 2);
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final PagingRequest pr = PagingRequest.ofIndex(3, 2);
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setPagingRequest(pr);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(pr, test.getPaging().getRequest());
     assertEquals(_totalSecurities, test.getPaging().getTotalItems());
-    
+
     assertEquals(0, test.getDocuments().size());
   }
 
   @Test
   public void test_search_identifier() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdValue("B");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
   }
-    
+
   @Test
   public void test_search_identifier_case() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdValue("hi");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
-  
+
   @Test
   public void test_search_identifier_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdValue("FooBar");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
-  
+
   @Test
   public void test_search_identifier_wildcard() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdValue("H*");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
-  
+
   @Test
   public void test_search_identifier_wildcardCase() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdValue("h*");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
@@ -221,50 +221,50 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_scheme() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdScheme("A");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
   }
-    
+
   @Test
   public void test_search_scheme_case() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdScheme("gh");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
-  
+
   @Test
   public void test_search_scheme_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdScheme("FooBar");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
-  
+
   @Test
   public void test_search_scheme_wildcard() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdScheme("G*");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
-  
+
   @Test
   public void test_search_scheme_wildcardCase() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdScheme("g*");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
@@ -273,38 +273,38 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_name_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setName("FooBar");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   @Test
   public void test_search_name() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setName("TestSecurity102");
-    SecuritySearchResult test = _secMaster.search(request);
+    final SecuritySearchResult test = _secMaster.search(request);
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
-  
+
   @Test
   public void test_search_name_case() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setName("TESTSecurity102");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
 
   @Test
   public void test_search_name_wildcard() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setName("TestSecurity1*");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
@@ -312,10 +312,10 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_name_wildcardCase() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setName("TESTSecurity1*");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
@@ -324,14 +324,14 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
   //-------------------------------------------------------------------------
   @Test
   public void test_search_type() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setSecurityType("EQUITY");
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(3, test.getDocuments().size());
-    SecurityDocument doc0 = test.getDocuments().get(0);
-    SecurityDocument doc1 = test.getDocuments().get(1);
-    SecurityDocument doc2 = test.getDocuments().get(2);
+    final SecurityDocument doc0 = test.getDocuments().get(0);
+    final SecurityDocument doc1 = test.getDocuments().get(1);
+    final SecurityDocument doc2 = test.getDocuments().get(2);
     assertEquals(UniqueId.of("DbSec", "101", "0"), doc0.getUniqueId());
     assertEquals(UniqueId.of("DbSec", "102", "0"), doc1.getUniqueId());
     assertEquals(UniqueId.of("DbSec", "201", "1"), doc2.getUniqueId());
@@ -340,21 +340,21 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
   //-------------------------------------------------------------------------
   @Test
   public void test_search_securityIds_none() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setObjectIds(new ArrayList<ObjectId>());
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   @Test
   public void test_search_securityIds() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addObjectId(ObjectId.of("DbSec", "101"));
     request.addObjectId(ObjectId.of("DbSec", "201"));
     request.addObjectId(ObjectId.of("DbSec", "9999"));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert202(test.getDocuments().get(1));
@@ -362,7 +362,7 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_search_securityIds_badSchemeValidOid() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addObjectId(ObjectId.of("Rubbish", "120"));
     _secMaster.search(request);
   }
@@ -370,51 +370,51 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
   //-------------------------------------------------------------------------
   @Test
   public void test_search_noKeys_Exact_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdSearch(ExternalIdSearch.of());
     request.setExternalIdSearchType(ExternalIdSearchType.EXACT);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   @Test
   public void test_search_noKeys_All_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdSearch(ExternalIdSearch.of());
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   @Test
   public void test_search_noKeys_Any_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdSearch(ExternalIdSearch.of());
     request.setExternalIdSearchType(ExternalIdSearchType.ANY);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   @Test
   public void test_search_noKeys_None_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setExternalIdSearch(ExternalIdSearch.of());
     request.setExternalIdSearchType(ExternalIdSearchType.NONE);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(_totalSecurities, test.getDocuments().size());
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_search_oneKey_Any_AB() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("A", "B"));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
@@ -422,10 +422,10 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_oneKey_Any_CD() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("C", "D"));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(3, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
@@ -434,10 +434,10 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_oneKey_Any_EF() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("E", "F"));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert202(test.getDocuments().get(1));
@@ -445,30 +445,30 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_oneKey_Any_GHI() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("GH", "HI"));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
 
   @Test
   public void test_search_oneKey_Any_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("A", "HI"));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_search_twoKeys_Any_AB_CD() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalId.of("A", "B"), ExternalId.of("C", "D"));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(3, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
@@ -477,10 +477,10 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_twoKeys_EF_GHI() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalId.of("E", "F"), ExternalId.of("GH", "HI"));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(3, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
@@ -489,21 +489,21 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_twoKeys_Any_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalId.of("E", "HI"), ExternalId.of("A", "D"));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_search_oneKey_All_AB() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("A", "B"));
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
@@ -511,11 +511,11 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_oneKey_All_CD() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("C", "D"));
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(3, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
@@ -524,11 +524,11 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_oneKey_All_EF() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("E", "F"));
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert202(test.getDocuments().get(1));
@@ -536,33 +536,33 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_oneKey_All_GHI() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("GH", "HI"));
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
 
   @Test
   public void test_search_oneKey_All_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("A", "HI"));
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_search_twoKeys_All_AB_CD() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalId.of("A", "B"), ExternalId.of("C", "D"));
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert102(test.getDocuments().get(1));
@@ -570,11 +570,11 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_twoKeys_All_CD_EF() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalId.of("C", "D"), ExternalId.of("E", "F"));
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(2, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
     assert202(test.getDocuments().get(1));
@@ -582,122 +582,122 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_twoKeys_All_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalIdBundle.of(ExternalId.of("C", "D"), ExternalId.of("E", "HI")));
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_search_threeKeys_All_AB_CD_EF() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalId.of("A", "B"), ExternalId.of("C", "D"), ExternalId.of("E", "F"));
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
   }
 
   @Test
   public void test_search_threeKeys_All_AB_CD_GHI() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalId.of("A", "B"), ExternalId.of("C", "D"), ExternalId.of("GH", "HI"));
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
 
   @Test
   public void test_search_threeKeys_All_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalIdBundle.of(ExternalId.of("C", "D"), ExternalId.of("E", "F"), ExternalId.of("A", "HI")));
     request.setExternalIdSearchType(ExternalIdSearchType.ALL);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_search_oneKey_None_AB() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("A", "B"));
     request.setExternalIdSearchType(ExternalIdSearchType.NONE);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
   }
 
   @Test
   public void test_search_oneKey_None_CD_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalId(ExternalId.of("C", "D"));
     request.setExternalIdSearchType(ExternalIdSearchType.NONE);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_search_threeKeys_Exact_AB_CD_EF() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalId.of("A", "B"), ExternalId.of("C", "D"), ExternalId.of("E", "F"));
     request.setExternalIdSearchType(ExternalIdSearchType.EXACT);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert101(test.getDocuments().get(0));
   }
 
   @Test
   public void test_search_threeKeys_Exact_AB_CD_GHI() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalId.of("A", "B"), ExternalId.of("C", "D"), ExternalId.of("GH", "HI"));
     request.setExternalIdSearchType(ExternalIdSearchType.EXACT);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
 
   @Test
   public void test_search_threeKeys_Exact_noMatch() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(ExternalId.of("A", "B"), ExternalId.of("C", "D"));
     request.setExternalIdSearchType(ExternalIdSearchType.EXACT);
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   //-------------------------------------------------------------------------
   @Test
   public void test_search_versionAsOf_below() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setVersionCorrection(VersionCorrection.ofVersionAsOf(_version1Instant.minusSeconds(5)));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(0, test.getDocuments().size());
   }
 
   @Test
   public void test_search_versionAsOf_mid() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setVersionCorrection(VersionCorrection.ofVersionAsOf(_version1Instant.plusSeconds(5)));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(3, test.getDocuments().size());
-    SecurityDocument doc0 = test.getDocuments().get(0);
-    SecurityDocument doc1 = test.getDocuments().get(1);
-    SecurityDocument doc2 = test.getDocuments().get(2);
+    final SecurityDocument doc0 = test.getDocuments().get(0);
+    final SecurityDocument doc1 = test.getDocuments().get(1);
+    final SecurityDocument doc2 = test.getDocuments().get(2);
     assertEquals(UniqueId.of("DbSec", "101", "0"), doc0.getUniqueId());
     assertEquals(UniqueId.of("DbSec", "102", "0"), doc1.getUniqueId());
     assertEquals(UniqueId.of("DbSec", "201", "0"), doc2.getUniqueId());  // old version
@@ -705,14 +705,14 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_search_versionAsOf_above() {
-    SecuritySearchRequest request = new SecuritySearchRequest();
+    final SecuritySearchRequest request = new SecuritySearchRequest();
     request.setVersionCorrection(VersionCorrection.ofVersionAsOf(_version2Instant.plusSeconds(5)));
-    SecuritySearchResult test = _secMaster.search(request);
-    
+    final SecuritySearchResult test = _secMaster.search(request);
+
     assertEquals(3, test.getDocuments().size());
-    SecurityDocument doc0 = test.getDocuments().get(0);
-    SecurityDocument doc1 = test.getDocuments().get(1);
-    SecurityDocument doc2 = test.getDocuments().get(2);
+    final SecurityDocument doc0 = test.getDocuments().get(0);
+    final SecurityDocument doc1 = test.getDocuments().get(1);
+    final SecurityDocument doc2 = test.getDocuments().get(2);
     assertEquals(UniqueId.of("DbSec", "101", "0"), doc0.getUniqueId());
     assertEquals(UniqueId.of("DbSec", "102", "0"), doc1.getUniqueId());
     assertEquals(UniqueId.of("DbSec", "201", "1"), doc2.getUniqueId());  // new version
@@ -723,10 +723,10 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
   //-------------------------------------------------------------------------
   @Test
   public void test_history_documents() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(2, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
     assert201(test.getDocuments().get(1));
@@ -734,12 +734,12 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_history_documentCountWhenMultipleSecuritys() {
-    ObjectId oid = ObjectId.of("DbSec", "102");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final ObjectId oid = ObjectId.of("DbSec", "102");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(1, test.getPaging().getTotalItems());
-    
+
     assertEquals(1, test.getDocuments().size());
     assert102(test.getDocuments().get(0));
   }
@@ -747,13 +747,13 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
   //-------------------------------------------------------------------------
   @Test
   public void test_history_noInstants() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(PagingRequest.ALL, test.getPaging().getRequest());
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertEquals(2, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
     assert201(test.getDocuments().get(1));
@@ -762,32 +762,32 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
   //-------------------------------------------------------------------------
   @Test
   public void test_history_noInstants_pageOne() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    PagingRequest pr = PagingRequest.ofPage(1, 1);
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final PagingRequest pr = PagingRequest.ofPage(1, 1);
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setPagingRequest(pr);
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(pr, test.getPaging().getRequest());
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertEquals(1, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
   }
 
   @Test
   public void test_history_noInstants_pageTwo() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    PagingRequest pr = PagingRequest.ofPage(2, 1);
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final PagingRequest pr = PagingRequest.ofPage(2, 1);
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setPagingRequest(pr);
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertNotNull(test);
     assertNotNull(test.getPaging());
     assertEquals(pr, test.getPaging().getRequest());
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertNotNull(test.getDocuments());
     assertEquals(1, test.getDocuments().size());
     assert201(test.getDocuments().get(0));
@@ -796,13 +796,13 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
   //-------------------------------------------------------------------------
   @Test
   public void test_history_versionsFrom_preFirst() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsFromInstant(_version1Instant.minusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertEquals(2, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
     assert201(test.getDocuments().get(1));
@@ -810,13 +810,13 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_history_versionsFrom_firstToSecond() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsFromInstant(_version1Instant.plusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertEquals(2, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
     assert201(test.getDocuments().get(1));
@@ -824,13 +824,13 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
 
   @Test
   public void test_history_versionsFrom_postSecond() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsFromInstant(_version2Instant.plusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(1, test.getPaging().getTotalItems());
-    
+
     assertEquals(1, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
   }
@@ -838,38 +838,38 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
   //-------------------------------------------------------------------------
   @Test
   public void test_history_versionsTo_preFirst() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsToInstant(_version1Instant.minusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(0, test.getPaging().getTotalItems());
-    
+
     assertEquals(0, test.getDocuments().size());
   }
 
   @Test
   public void test_history_versionsTo_firstToSecond() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsToInstant(_version1Instant.plusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(1, test.getPaging().getTotalItems());
-    
+
     assertEquals(1, test.getDocuments().size());
     assert201(test.getDocuments().get(0));
   }
 
   @Test
   public void test_history_versionsTo_postSecond() {
-    ObjectId oid = ObjectId.of("DbSec", "201");
-    SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
+    final ObjectId oid = ObjectId.of("DbSec", "201");
+    final SecurityHistoryRequest request = new SecurityHistoryRequest(oid);
     request.setVersionsToInstant(_version2Instant.plusSeconds(5));
-    SecurityHistoryResult test = _secMaster.history(request);
-    
+    final SecurityHistoryResult test = _secMaster.history(request);
+
     assertEquals(2, test.getPaging().getTotalItems());
-    
+
     assertEquals(2, test.getDocuments().size());
     assert202(test.getDocuments().get(0));
     assert201(test.getDocuments().get(1));

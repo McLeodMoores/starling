@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.config;
@@ -45,7 +45,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.test.TestLifecycle;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class RepositoryFactoryTest {
@@ -58,7 +58,8 @@ public class RepositoryFactoryTest {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       return null;
     }
 
@@ -78,7 +79,8 @@ public class RepositoryFactoryTest {
     }
 
     @Override
-    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       return null;
     }
 
@@ -181,7 +183,8 @@ public class RepositoryFactoryTest {
     final FunctionConfigurationBundle configuration = new FunctionConfigurationBundle();
     configuration.addFunctions(new ParameterizedFunctionConfiguration(MockSingleArgumentFunction.class.getName(), Collections.singleton("foo")));
     configuration.addFunctions(new ParameterizedFunctionConfiguration(MockMultiArgumentFunctionArrayForm.class.getName(), Lists.newArrayList("foo1", "foo2")));
-    configuration.addFunctions(new ParameterizedFunctionConfiguration(MockMultiArgumentFunctionIndividualParameterForm.class.getName(), Lists.newArrayList("bar1", "bar2")));
+    configuration.addFunctions(new ParameterizedFunctionConfiguration(MockMultiArgumentFunctionIndividualParameterForm.class.getName(),
+        Lists.newArrayList("bar1", "bar2")));
     final InMemoryFunctionRepository repo = FunctionRepositoryFactory.constructRepository(configuration);
     assertNotNull(repo);
 
@@ -207,8 +210,8 @@ public class RepositoryFactoryTest {
     }
   }
 
-  private boolean isIntrinsicFunctionDefinition(FunctionDefinition definition) {
-    return (definition instanceof NoOpFunction) || (definition instanceof MarketDataAliasingFunction) || (definition instanceof StructureManipulationFunction);
+  private boolean isIntrinsicFunctionDefinition(final FunctionDefinition definition) {
+    return definition instanceof NoOpFunction || definition instanceof MarketDataAliasingFunction || definition instanceof StructureManipulationFunction;
   }
 
   public void testStaticRepository() {

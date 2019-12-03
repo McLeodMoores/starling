@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.convention;
 
@@ -18,6 +22,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -27,6 +33,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Convention for price indices.
  */
+@ConventionMetaData(description = "Price", group = ConventionGroups.INDEX)
 @BeanDefinition
 public class PriceIndexConvention extends FinancialConvention {
 
@@ -50,8 +57,10 @@ public class PriceIndexConvention extends FinancialConvention {
   private ExternalId _region;
   /**
    * The id of the price index.
+   * @deprecated  the identifier should be in the ExternalIdBundle
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition
+  @Deprecated
   private ExternalId _priceIndexId;
 
   /**
@@ -63,13 +72,31 @@ public class PriceIndexConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
+   * @param name  the convention name, not null
+   * @param externalIdBundle  the external identifiers for this convention, not null
+   * @param currency  the currency, not null
+   * @param region  the region, not null
+   */
+  public PriceIndexConvention(
+      final String name, final ExternalIdBundle externalIdBundle, final Currency currency,
+      final ExternalId region) {
+    super(name, externalIdBundle);
+    setCurrency(currency);
+    setRegion(region);
+  }
+
+  /**
+   * Creates an instance.
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param currency  the currency, not null
    * @param region  the region, not null
    * @param priceIndexId  the price time series id, not null
+   * @deprecated  the identifier(s) should be in the external id bundle
    */
+  @Deprecated
   public PriceIndexConvention(
       final String name, final ExternalIdBundle externalIdBundle, final Currency currency,
       final ExternalId region, final ExternalId priceIndexId) {
@@ -82,7 +109,7 @@ public class PriceIndexConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override
@@ -177,25 +204,30 @@ public class PriceIndexConvention extends FinancialConvention {
   //-----------------------------------------------------------------------
   /**
    * Gets the id of the price index.
-   * @return the value of the property, not null
+   * @deprecated  the identifier should be in the ExternalIdBundle
+   * @return the value of the property
    */
+  @Deprecated
   public ExternalId getPriceIndexId() {
     return _priceIndexId;
   }
 
   /**
    * Sets the id of the price index.
-   * @param priceIndexId  the new value of the property, not null
+   * @deprecated  the identifier should be in the ExternalIdBundle
+   * @param priceIndexId  the new value of the property
    */
+  @Deprecated
   public void setPriceIndexId(ExternalId priceIndexId) {
-    JodaBeanUtils.notNull(priceIndexId, "priceIndexId");
     this._priceIndexId = priceIndexId;
   }
 
   /**
    * Gets the the {@code priceIndexId} property.
+   * @deprecated  the identifier should be in the ExternalIdBundle
    * @return the property, not null
    */
+  @Deprecated
   public final Property<ExternalId> priceIndexId() {
     return metaBean().priceIndexId().createProperty(this);
   }
@@ -338,8 +370,10 @@ public class PriceIndexConvention extends FinancialConvention {
 
     /**
      * The meta-property for the {@code priceIndexId} property.
+     * @deprecated  the identifier should be in the ExternalIdBundle
      * @return the meta-property, not null
      */
+    @Deprecated
     public final MetaProperty<ExternalId> priceIndexId() {
       return _priceIndexId;
     }
@@ -378,7 +412,6 @@ public class PriceIndexConvention extends FinancialConvention {
     protected void validate(Bean bean) {
       JodaBeanUtils.notNull(((PriceIndexConvention) bean)._currency, "currency");
       JodaBeanUtils.notNull(((PriceIndexConvention) bean)._region, "region");
-      JodaBeanUtils.notNull(((PriceIndexConvention) bean)._priceIndexId, "priceIndexId");
       super.validate(bean);
     }
 

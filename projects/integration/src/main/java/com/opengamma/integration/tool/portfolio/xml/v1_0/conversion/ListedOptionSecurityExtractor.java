@@ -22,27 +22,27 @@ public class ListedOptionSecurityExtractor extends AbstractListedSecurityExtract
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securityDefinition  the definition, not null
    */
-  public ListedOptionSecurityExtractor(OptionSecurityDefinition securityDefinition) {
+  public ListedOptionSecurityExtractor(final OptionSecurityDefinition securityDefinition) {
     super(securityDefinition);
   }
 
   //-------------------------------------------------------------------------
   @Override
   protected ManageableSecurity createSecurity() {
-    OptionSecurityDefinition defn = getSecurityDefinition();
+    final OptionSecurityDefinition defn = getSecurityDefinition();
     switch (defn.getListedOptionType()) {
       case EQUITY_DIVIDEND_OPTION:
         throw new PortfolioParsingException("EquityIndexDividendOption is not yet supported");
       case EQUITY_INDEX_OPTION:
-        ExternalId underlyingId = defn.getUnderlyingId().toExternalId();
-        ExerciseType exerciseType = defn.getExerciseType().convert();
+        final ExternalId underlyingId = defn.getUnderlyingId().toExternalId();
+        final ExerciseType exerciseType = defn.getExerciseType().convert();
 
         // We are only give month/year (e.g. MAR13) so arbitrarily use the first day of
         // the month but set the accuracy to reflect that
-        Expiry expiry = new Expiry(defn.getOptionExpiry().atDay(1).atStartOfDay(ZoneOffset.UTC),
+        final Expiry expiry = new Expiry(defn.getOptionExpiry().atDay(1).atStartOfDay(ZoneOffset.UTC),
                                    ExpiryAccuracy.MONTH_YEAR);
 
         return new EquityIndexOptionSecurity(defn.getOptionType(),

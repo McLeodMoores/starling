@@ -37,10 +37,11 @@ public class TargetReturningFunction extends AbstractFunction.NonCompiledInvoker
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     //final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), properties);
-    ValueProperties outputProperties = createValueProperties().get();
-    ValueSpecification spec = new ValueSpecification(ValueRequirementNames.TARGET, target.toSpecification(), outputProperties);
+    final ValueProperties outputProperties = createValueProperties().get();
+    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.TARGET, target.toSpecification(), outputProperties);
     //return new ValueSpecification(_newValueName, inputSpec.getTargetSpecification(), outputProperties);
     return ImmutableSet.of(new ComputedValue(spec, target.getValue()));
   }
@@ -51,34 +52,35 @@ public class TargetReturningFunction extends AbstractFunction.NonCompiledInvoker
   }
 
   @Override
-  public boolean canApplyTo(FunctionCompilationContext context, ComputationTarget target) {
+  public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     return true;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return ImmutableSet.of(new ValueSpecification(ValueRequirementNames.TARGET, target.toSpecification(), createValueProperties().get()));
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     return Collections.EMPTY_SET;
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     if (!inputs.isEmpty()) { // doesn't take any inputs
       return null;
     }
-    ValueProperties outputProperties = createValueProperties().get();
-    ValueSpecification spec = new ValueSpecification(ValueRequirementNames.TARGET, target.toSpecification(), outputProperties);
+    final ValueProperties outputProperties = createValueProperties().get();
+    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.TARGET, target.toSpecification(), outputProperties);
     return ImmutableSet.of(spec);
     //ValueSpecification inputSpec = Iterables.getOnlyElement(inputs.keySet());
     //return ImmutableSet.of(getOutputSpec(inputSpec));
   }
 
-  protected ValueSpecification getOutputSpec(ValueSpecification inputSpec) {
-    ValueProperties outputProperties = inputSpec.getProperties().copy()
+  protected ValueSpecification getOutputSpec(final ValueSpecification inputSpec) {
+    final ValueProperties outputProperties = inputSpec.getProperties().copy()
         .withoutAny(ValuePropertyNames.FUNCTION)
         .with(ValuePropertyNames.FUNCTION, getUniqueId()).get();
     return new ValueSpecification(ValueRequirementNames.TARGET, inputSpec.getTargetSpecification(), outputProperties);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit;
@@ -26,7 +26,9 @@ import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.sta
  * Visitor interface for credit instruments.
  * @param <DATA_TYPE> The type of the market data
  * @param <RESULT_TYPE> The type of the result
+ * @deprecated The instruments that are visited are deprecated
  */
+@Deprecated
 public interface CreditInstrumentDefinitionVisitor<DATA_TYPE, RESULT_TYPE> {
 
   /**

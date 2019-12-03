@@ -33,29 +33,29 @@ public class SabrExtrapolationExample {
 
   /**
    * Generates the SABR data.
-   * 
+   *
    * @param out  the output stream, not null
    * @throws IOException if an error occurs
    */
-  public static void generateSabrData(PrintStream out) throws IOException {
+  public static void generateSabrData(final PrintStream out) throws IOException {
     double mu;
     double strike;
     double price;
     double impliedVolatilityPct;
     SABRExtrapolationRightFunction sabrExtra;
 
-    BlackImpliedVolatilityFormula implied = new BlackImpliedVolatilityFormula();
-    BlackFunctionData blackData = new BlackFunctionData(FORWARD, 1.0, 0.0);
+    final BlackImpliedVolatilityFormula implied = new BlackImpliedVolatilityFormula();
+    final BlackFunctionData blackData = new BlackFunctionData(FORWARD, 1.0, 0.0);
 
     out.println("Mu\tPrice\tStrike\tImpliedVolPct");
 
-    for (int i = 0; i < MU_VALUES.length; i++) {
-      mu = MU_VALUES[i];
+    for (final double element : MU_VALUES) {
+      mu = element;
       sabrExtra = new SABRExtrapolationRightFunction(FORWARD, SABR_DATA, CUT_OFF_STRIKE, TIME_TO_EXPIRY, mu);
 
       for (int p = 0; p <= N_PTS; p++) {
         strike = CUT_OFF_STRIKE - RANGE_STRIKE + p * 4.0 * RANGE_STRIKE / N_PTS;
-        EuropeanVanillaOption option = new EuropeanVanillaOption(strike, TIME_TO_EXPIRY, true);
+        final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, TIME_TO_EXPIRY, true);
         price = sabrExtra.price(option);
         impliedVolatilityPct = implied.getImpliedVolatility(blackData, option, price) * 100;
         out.format("%4.0f\t%1.10f\t%1.10f\t%1.10f%n", mu, price, strike, impliedVolatilityPct);
@@ -63,7 +63,7 @@ public class SabrExtrapolationExample {
     }
   }
 
-  public static void main(String[] args) throws Exception {  // CSIGNORE
+  public static void main(final String[] args) throws Exception {  // CSIGNORE
     generateSabrData(System.out);
   }
 

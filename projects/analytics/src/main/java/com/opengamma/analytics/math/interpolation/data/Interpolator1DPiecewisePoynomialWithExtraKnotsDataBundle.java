@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation.data;
@@ -11,12 +11,12 @@ import org.apache.commons.lang.NotImplementedException;
 
 import com.opengamma.analytics.math.interpolation.PiecewisePolynomialInterpolator;
 import com.opengamma.analytics.math.interpolation.PiecewisePolynomialResult;
-import com.opengamma.analytics.math.interpolation.PiecewisePolynomialResultsWithSensitivity;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * For certain methods of {@link PiecewisePolynomialInterpolator} introducing extra breakpoints, {@link PiecewisePolynomialResultsWithSensitivity} is not well-defined
- * In this case, finite difference approximation is used to derive node sensitivity
+ * For certain methods of {@link PiecewisePolynomialInterpolator} introducing extra breakpoints,
+ * {@link com.opengamma.analytics.math.interpolation.PiecewisePolynomialResultsWithSensitivity} is not well-defined In this case, finite difference
+ * approximation is used to derive node sensitivity.
  */
 public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements Interpolator1DDataBundle {
 
@@ -29,9 +29,12 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
   private static final double SMALL = 1.e-14;
 
   /**
-   * Constructor where coefficients for interpolant and its node sensitivity are computed 
-   * @param underlyingData Contains sorted data (x,y)
-   * @param method {@link PiecewisePolynomialInterpolator}
+   * Constructor where coefficients for interpolant and its node sensitivity are computed.
+   *
+   * @param underlyingData
+   *          Contains sorted data (x,y)
+   * @param method
+   *          {@link PiecewisePolynomialInterpolator}
    */
   public Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle(final Interpolator1DDataBundle underlyingData, final PiecewisePolynomialInterpolator method) {
     ArgumentChecker.notNull(underlyingData, "underlying data");
@@ -44,8 +47,8 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
     final int nData = yValues.length;
     _polyUp = new PiecewisePolynomialResult[nData];
     _polyDw = new PiecewisePolynomialResult[nData];
-    double[] yValuesUp = Arrays.copyOf(yValues, nData);
-    double[] yValuesDw = Arrays.copyOf(yValues, nData);
+    final double[] yValuesUp = Arrays.copyOf(yValues, nData);
+    final double[] yValuesDw = Arrays.copyOf(yValues, nData);
     for (int i = 0; i < nData; ++i) {
       yValuesUp[i] = Math.abs(yValues[i]) < SMALL ? EPS : yValues[i] * (1. + EPS);
       yValuesDw[i] = Math.abs(yValues[i]) < SMALL ? -EPS : yValues[i] * (1. - EPS);
@@ -57,7 +60,8 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
   }
 
   /**
-   * Access PiecewisePolynomialResult
+   * Access PiecewisePolynomialResult.
+   *
    * @return PiecewisePolynomialResult
    */
   public PiecewisePolynomialResult getPiecewisePolynomialResult() {
@@ -65,7 +69,8 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
   }
 
   /**
-   * Access PiecewisePolynomialResult with yValuesUp
+   * Access PiecewisePolynomialResult with yValuesUp.
+   *
    * @return PiecewisePolynomialResult
    */
   public PiecewisePolynomialResult[] getPiecewisePolynomialResultUp() {
@@ -73,7 +78,8 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
   }
 
   /**
-   * Access PiecewisePolynomialResult with yValuesDw
+   * Access PiecewisePolynomialResult with yValuesDw.
+   *
    * @return PiecewisePolynomialResult
    */
   public PiecewisePolynomialResult[] getPiecewisePolynomialResultDw() {
@@ -81,7 +87,8 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
   }
 
   /**
-   * Access a fixed parameter for the finite difference approximation
+   * Access a fixed parameter for the finite difference approximation.
+   *
    * @return EPS
    */
   public double getEps() {
@@ -89,7 +96,8 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
   }
 
   /**
-   * Access a fixed parameter for the finite difference approximation
+   * Access a fixed parameter for the finite difference approximation.
+   *
    * @return SMALL
    */
   public double getSmall() {
@@ -97,7 +105,8 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
   }
 
   /**
-   * Get x values of breakpoints, which are different from "keys" for certain interpolations
+   * Get x values of breakpoints, which are different from "keys" for certain interpolations.
+   *
    * @return X values of breakpoints
    */
   public double[] getBreakpointsX() {
@@ -105,7 +114,8 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
   }
 
   /**
-   * Get y values of breakpoints, which are different from "values" for certain interpolations
+   * Get y values of breakpoints, which are different from "values" for certain interpolations.
+   *
    * @return Y values of breakpoints
    */
   public double[] getBreakPointsY() {
@@ -192,7 +202,7 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
   }
 
   @Override
-  public void setYValueAtIndex(int index, double y) {
+  public void setYValueAtIndex(final int index, final double y) {
     throw new NotImplementedException();
   }
 
@@ -206,7 +216,7 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -216,7 +226,7 @@ public class Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle implements
     if (!(obj instanceof Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle)) {
       return false;
     }
-    Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle other = (Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle) obj;
+    final Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle other = (Interpolator1DPiecewisePoynomialWithExtraKnotsDataBundle) obj;
     if (!_underlyingData.equals(other._underlyingData)) {
       return false;
     }

@@ -25,7 +25,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.security.swap.BondTotalReturnSwapSecurity;
 
@@ -36,7 +35,8 @@ import com.opengamma.financial.security.swap.BondTotalReturnSwapSecurity;
 public class BondTotalReturnSwapGammaPV01Function extends BondTotalReturnSwapFunction {
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#GAMMA_PV01}.
+   * Sets the value requirement to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#GAMMA_PV01}.
    */
   public BondTotalReturnSwapGammaPV01Function() {
     super(GAMMA_PV01);

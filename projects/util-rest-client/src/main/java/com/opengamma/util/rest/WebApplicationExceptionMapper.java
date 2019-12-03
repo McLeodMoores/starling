@@ -28,9 +28,9 @@ public class WebApplicationExceptionMapper
 
   //-------------------------------------------------------------------------
   @Override
-  protected String buildHtmlErrorPage(WebApplicationException exception) {
-    Map<String, String> data = new HashMap<>();
-    int status = exception.getResponse().getStatus();
+  protected String buildHtmlErrorPage(final WebApplicationException exception) {
+    final Map<String, String> data = new HashMap<>();
+    final int status = exception.getResponse().getStatus();
     switch (status) {
       case 400:  // bad request
         buildOutputMessage(exception, data);
@@ -47,12 +47,12 @@ public class WebApplicationExceptionMapper
   }
 
   @Override
-  protected Response doHtmlResponse(WebApplicationException exception, String htmlPage) {
+  protected Response doHtmlResponse(final WebApplicationException exception, final String htmlPage) {
     return Response.status(exception.getResponse().getStatus()).entity(htmlPage).build();
   }
 
   @Override
-  protected Response doRestfulResponse(WebApplicationException exception) {
+  protected Response doRestfulResponse(final WebApplicationException exception) {
     return exception.getResponse();
   }
 

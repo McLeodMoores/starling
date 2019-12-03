@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.test;
@@ -10,6 +10,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -26,9 +28,9 @@ public class TestProperties {
   /** Default file name. */
   private static final String DEFAULT_PROPS_FILE_NAME = "tests.properties";
   /** Relative file location, deprecated (just use classpath). */
-  private static final String DEFAULT_PROPS_DIR1 = "../../../Integration-Tests/src/test/resources/";
+  private static final String DEFAULT_PROPS_DIR1 = "../../../../../../../../master-db/config/";
   /** Relative file location, deprecated (just use classpath). */
-  private static final String DEFAULT_PROPS_DIR2 = "../Integration-Tests/src/test/resources/";
+  private static final String DEFAULT_PROPS_DIR2 = "../../../../../../master-db/config/";
   /** Relative file location, deprecated (just use classpath). */
   private static final String DEFAULT_PROPS_DIR3 = "../../common/"; // OG-Platform/common/
   /** The properties. */
@@ -36,19 +38,19 @@ public class TestProperties {
 
   /**
    * Gets the testing properties.
-   * 
+   *
    * @return the properties, not null
    */
   public static synchronized Properties getTestProperties() {
     if (s_props == null) {
       s_props = new Properties();
-      
+
       // file name
-      String overridePropsFileName = System.getProperty("test.properties"); // from command line
-      String propsFileName = selectFileName(overridePropsFileName);
-      
+      final String overridePropsFileName = System.getProperty("test.properties"); // from command line
+      final String propsFileName = selectFileName(overridePropsFileName);
+
       // load properties
-      ClassPathResource res = new ClassPathResource(propsFileName, ClassUtils.getDefaultClassLoader());
+      final ClassPathResource res = new ClassPathResource(propsFileName, ClassUtils.getDefaultClassLoader());
       if (res.exists()) {
         loadClasspath(res);
       } else {
@@ -59,7 +61,7 @@ public class TestProperties {
   }
 
   //-------------------------------------------------------------------------
-  private static String selectFileName(String overridePropsFileName) {
+  private static String selectFileName(final String overridePropsFileName) {
     String propsFileName = DEFAULT_PROPS_FILE_NAME;
     if (overridePropsFileName != null) {
       propsFileName = overridePropsFileName;
@@ -70,29 +72,29 @@ public class TestProperties {
     return propsFileName;
   }
 
-  private static void loadClasspath(ClassPathResource res) {
+  private static void loadClasspath(final ClassPathResource res) {
     URL url = null;
     try {
       url = res.getURL();
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       System.out.println("Unable to get test properties URL: " + res.getDescription());
       throw new OpenGammaRuntimeException("Unable to get test properties URL: " + res.getDescription(), ex);
     }
     System.out.println("Loading test properties from classpath: " + url);
     try (InputStream fis = res.getInputStream()) {
       s_props.load(fis);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       System.out.println("Unable to read test properties: " + url);
       throw new OpenGammaRuntimeException("Unable to read test properties: " + url, ex);
     }
   }
 
-  private static void loadFile(String propsFileName) {
-    String overridePropsDir = System.getProperty("test.properties.dir"); // from command line
+  private static void loadFile(final String propsFileName) {
+    final String overridePropsDir = System.getProperty("test.properties.dir"); // from command line
     if (overridePropsDir != null) {
       System.out.println("Using test.properties.dir from system property: " + overridePropsDir);
       loadFile(new File(overridePropsDir, propsFileName));
-      
+
     } else {
       File file = new File(DEFAULT_PROPS_DIR1, propsFileName);
       if (file.exists()) {
@@ -114,16 +116,16 @@ public class TestProperties {
     }
   }
 
-  private static void loadFile(File file) {
+  private static void loadFile(final File file) {
     try {
       System.out.println("Loading test properties from file: " + file.getCanonicalPath());
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       System.out.println("Unable to get canonical path: " + file);
       throw new OpenGammaRuntimeException("Unable to get canonical path: " + file, ex);
     }
     try (InputStream fis = new FileInputStream(file)) {
       s_props.load(fis);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       System.out.println("Unable to read test properties: " + file);
       throw new OpenGammaRuntimeException("Unable to read test properties: " + file, ex);
     }
@@ -132,14 +134,14 @@ public class TestProperties {
   //-------------------------------------------------------------------------
   /**
    * Gets a bean suitable for use in a Spring XML file to reference the test properties.
-   * 
+   *
    * @return the Spring XML bean, not null
    */
   public static PropertyPlaceholderConfigurer springProperties() {
     return new PropertyPlaceholderConfigurer() {
       @Override
-      protected void loadProperties(Properties props) throws IOException {
-        Properties testProperties = getTestProperties();
+      protected void loadProperties(final Properties props) throws IOException {
+        final Properties testProperties = getTestProperties();
         props.putAll(testProperties);
       }
     };

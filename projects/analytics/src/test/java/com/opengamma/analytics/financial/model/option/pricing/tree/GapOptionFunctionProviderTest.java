@@ -24,8 +24,8 @@ public class GapOptionFunctionProviderTest {
 
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
-  private static final BinomialTreeOptionPricingModel _model = new BinomialTreeOptionPricingModel();
-  private static final TrinomialTreeOptionPricingModel _modelTrinomial = new TrinomialTreeOptionPricingModel();
+  private static final BinomialTreeOptionPricingModel MODEL = new BinomialTreeOptionPricingModel();
+  private static final TrinomialTreeOptionPricingModel TRINOMIAL = new TrinomialTreeOptionPricingModel();
   private static final double SPOT = 105.;
   private static final double[] STRIKES = new double[] {97., 105., 105.1, 114. };
   private static final double[] PAYOFF_STRIKES = new double[] {101., 112. };
@@ -54,7 +54,7 @@ public class GapOptionFunctionProviderTest {
               for (final double payoffStrike : PAYOFF_STRIKES) {
                 final OptionFunctionProvider1D function = new GapOptionFunctionProvider(strike, TIME, nSteps, isCall, payoffStrike);
                 final double exactDiv = price(SPOT, strike, payoffStrike, TIME, vol, interest, interest - dividend, isCall);
-                final double resDiv = _modelTrinomial.getPrice(lattice, function, SPOT, vol, interest, dividend);
+                final double resDiv = TRINOMIAL.getPrice(lattice, function, SPOT, vol, interest, dividend);
                 final double refDiv = Math.max(Math.abs(exactDiv), 1.) * 5.e-2;
                 assertEquals(resDiv, exactDiv, refDiv);
               }
@@ -80,7 +80,7 @@ public class GapOptionFunctionProviderTest {
             for (final double dividend : DIVIDENDS) {
               for (final double payoffStrike : PAYOFF_STRIKES) {
                 final OptionFunctionProvider1D function = new GapOptionFunctionProvider(strike, TIME, nSteps, isCall, payoffStrike);
-                final GreekResultCollection resDiv = _modelTrinomial.getGreeks(lattice, function, SPOT, vol, interest, dividend);
+                final GreekResultCollection resDiv = TRINOMIAL.getGreeks(lattice, function, SPOT, vol, interest, dividend);
                 final double priceDiv = price(SPOT, strike, payoffStrike, TIME, vol, interest, interest - dividend, isCall);
                 final double refPriceDiv = Math.max(Math.abs(priceDiv), 1.) * 5.e-2;
                 assertEquals(resDiv.get(Greek.FAIR_PRICE), priceDiv, refPriceDiv);
@@ -124,7 +124,7 @@ public class GapOptionFunctionProviderTest {
                 for (final double payoffStrike : PAYOFF_STRIKES) {
                   final OptionFunctionProvider1D function = new GapOptionFunctionProvider(strike, TIME, nSteps, isCall, payoffStrike);
                   final double exactDiv = price(SPOT, strike, payoffStrike, TIME, vol, interest, interest - dividend, isCall);
-                  final double resDiv = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
+                  final double resDiv = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
                   final double refDiv = Math.max(Math.abs(exactDiv), 1.) * 1.e-6;
                   assertEquals(resDiv, exactDiv, refDiv);
                 }
@@ -168,18 +168,18 @@ public class GapOptionFunctionProviderTest {
                     Math.exp(-interest * dividendTimes[2]);
                 final double exactProp = price(resSpot, strike, payoffStrike, TIME, vol, interest, interest, isCall);
                 final double appCash = price(modSpot, strike, payoffStrike, TIME, vol, interest, interest, isCall);
-                final double resProp = _model.getPrice(lattice, function, SPOT, vol, interest, propDividend);
+                final double resProp = MODEL.getPrice(lattice, function, SPOT, vol, interest, propDividend);
                 final double refProp = Math.max(Math.abs(exactProp), 1.) * 1.e-2;
                 assertEquals(resProp, exactProp, refProp);
-                final double resCash = _model.getPrice(lattice, function, SPOT, vol, interest, cashDividend);
+                final double resCash = MODEL.getPrice(lattice, function, SPOT, vol, interest, cashDividend);
                 final double refCash = Math.max(Math.abs(appCash), 1.) * 1.e-1;
                 assertEquals(resCash, appCash, refCash);
 
                 final LatticeSpecification latticeTri = new TianLatticeSpecification();
                 final int nStepsTri = 531;
                 final OptionFunctionProvider1D functionTri = new GapOptionFunctionProvider(strike, TIME, nStepsTri, isCall, payoffStrike);
-                final double resPropTrinomial = _modelTrinomial.getPrice(latticeTri, functionTri, SPOT, vol, interest, propDividend);
-                final double resCashTrinomial = _modelTrinomial.getPrice(latticeTri, functionTri, SPOT, vol, interest, cashDividend);
+                final double resPropTrinomial = TRINOMIAL.getPrice(latticeTri, functionTri, SPOT, vol, interest, propDividend);
+                final double resCashTrinomial = TRINOMIAL.getPrice(latticeTri, functionTri, SPOT, vol, interest, cashDividend);
                 assertEquals(resPropTrinomial, exactProp, Math.max(exactProp, 1.) * 1.e-1);
                 assertEquals(resCashTrinomial, appCash, Math.max(appCash, 1.) * 1.e-1);
               }
@@ -212,7 +212,7 @@ public class GapOptionFunctionProviderTest {
                 final int nSteps = 831;
                 for (final double dividend : DIVIDENDS) {
                   final OptionFunctionProvider1D function = new GapOptionFunctionProvider(strike, TIME, nSteps, isCall, payoffStrike);
-                  final GreekResultCollection resDiv = _model.getGreeks(lattice, function, SPOT, vol, interest, dividend);
+                  final GreekResultCollection resDiv = MODEL.getGreeks(lattice, function, SPOT, vol, interest, dividend);
                   final double priceDiv = price(SPOT, strike, payoffStrike, TIME, vol, interest, interest - dividend, isCall);
                   final double refPriceDiv = Math.max(Math.abs(priceDiv), 1.) * 1.e-6;
                   assertEquals(resDiv.get(Greek.FAIR_PRICE), priceDiv, refPriceDiv);
@@ -274,8 +274,8 @@ public class GapOptionFunctionProviderTest {
                 final OptionFunctionProvider1D function = new GapOptionFunctionProvider(strike, TIME, nSteps, isCall, payoffStrike);
                 final DividendFunctionProvider cashDividend = new CashDividendFunctionProvider(dividendTimes, cashDividends);
                 final DividendFunctionProvider propDividend = new ProportionalDividendFunctionProvider(dividendTimes, propDividends);
-                final GreekResultCollection resProp = _model.getGreeks(lattice, function, SPOT, vol, interest, propDividend);
-                final GreekResultCollection resCash = _model.getGreeks(lattice, function, SPOT, vol, interest, cashDividend);
+                final GreekResultCollection resProp = MODEL.getGreeks(lattice, function, SPOT, vol, interest, propDividend);
+                final GreekResultCollection resCash = MODEL.getGreeks(lattice, function, SPOT, vol, interest, cashDividend);
 
                 assertEquals(resProp.get(Greek.FAIR_PRICE), exactPriceProp, Math.max(1., Math.abs(exactPriceProp)) * 1.e-2);
                 assertEquals(resProp.get(Greek.DELTA), exactDeltaProp, Math.max(1., Math.abs(exactDeltaProp)) * 1.e-1);
@@ -290,8 +290,8 @@ public class GapOptionFunctionProviderTest {
                 final LatticeSpecification latticeTri = new TianLatticeSpecification();
                 final int nStepsTri = 731;
                 final OptionFunctionProvider1D functionTri = new GapOptionFunctionProvider(strike, TIME, nStepsTri, isCall, payoffStrike);
-                final GreekResultCollection resPropTrinomial = _modelTrinomial.getGreeks(latticeTri, functionTri, SPOT, vol, interest, propDividend);
-                final GreekResultCollection resCashTrinomial = _modelTrinomial.getGreeks(latticeTri, functionTri, SPOT, vol, interest, cashDividend);
+                final GreekResultCollection resPropTrinomial = TRINOMIAL.getGreeks(latticeTri, functionTri, SPOT, vol, interest, propDividend);
+                final GreekResultCollection resCashTrinomial = TRINOMIAL.getGreeks(latticeTri, functionTri, SPOT, vol, interest, cashDividend);
 
                 assertEquals(resPropTrinomial.get(Greek.FAIR_PRICE), exactPriceProp, Math.max(1., Math.abs(exactPriceProp)) * 1.e-1);
                 assertEquals(resPropTrinomial.get(Greek.DELTA), exactDeltaProp, Math.max(1., Math.abs(exactDeltaProp)) * 1.e-1);
@@ -350,11 +350,11 @@ public class GapOptionFunctionProviderTest {
           for (final double payoffStrike : PAYOFF_STRIKES) {
 
             final OptionFunctionProvider1D function = new GapOptionFunctionProvider(strike, time, steps, isCall, payoffStrike);
-            final double resPrice = _model.getPrice(function, SPOT, vol, rate, dividend);
-            final GreekResultCollection resGreeks = _model.getGreeks(function, SPOT, vol, rate, dividend);
+            final double resPrice = MODEL.getPrice(function, SPOT, vol, rate, dividend);
+            final GreekResultCollection resGreeks = MODEL.getGreeks(function, SPOT, vol, rate, dividend);
 
-            final double resPriceConst = _model.getPrice(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
-            final GreekResultCollection resGreeksConst = _model.getGreeks(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
+            final double resPriceConst = MODEL.getPrice(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
+            final GreekResultCollection resGreeksConst = MODEL.getGreeks(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
             assertEquals(resPrice, resPriceConst, Math.max(Math.abs(resPriceConst), 1.) * 1.e-1);
             assertEquals(resGreeks.get(Greek.FAIR_PRICE), resGreeksConst.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConst.get(Greek.FAIR_PRICE)), 1.) * 0.1);
             assertEquals(resGreeks.get(Greek.DELTA), resGreeksConst.get(Greek.DELTA), Math.max(Math.abs(resGreeksConst.get(Greek.DELTA)), 1.) * 0.1);
@@ -362,9 +362,9 @@ public class GapOptionFunctionProviderTest {
             assertEquals(resGreeks.get(Greek.THETA), resGreeksConst.get(Greek.THETA), Math.max(Math.abs(resGreeksConst.get(Greek.THETA)), 1.));
 
             final OptionFunctionProvider1D functionTri = new GapOptionFunctionProvider(strike, time, stepsTri, isCall, payoffStrike);
-            final double resPriceTrinomial = _modelTrinomial.getPrice(functionTri, SPOT, volTri, rateTri, dividendTri);
+            final double resPriceTrinomial = TRINOMIAL.getPrice(functionTri, SPOT, volTri, rateTri, dividendTri);
             assertEquals(resPriceTrinomial, resPriceConst, Math.max(Math.abs(resPriceConst), 1.));
-            final GreekResultCollection resGreeksTrinomial = _modelTrinomial.getGreeks(functionTri, SPOT, volTri, rateTri, dividendTri);
+            final GreekResultCollection resGreeksTrinomial = TRINOMIAL.getGreeks(functionTri, SPOT, volTri, rateTri, dividendTri);
             assertEquals(resGreeksTrinomial.get(Greek.FAIR_PRICE), resGreeksConst.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConst.get(Greek.FAIR_PRICE)), 1.));
             assertEquals(resGreeksTrinomial.get(Greek.DELTA), resGreeksConst.get(Greek.DELTA), Math.max(Math.abs(resGreeksConst.get(Greek.DELTA)), 1.));
             assertEquals(resGreeksTrinomial.get(Greek.GAMMA), resGreeksConst.get(Greek.GAMMA), Math.max(Math.abs(resGreeksConst.get(Greek.GAMMA)), 1.));

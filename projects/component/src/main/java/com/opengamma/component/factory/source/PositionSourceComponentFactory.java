@@ -8,8 +8,6 @@ package com.opengamma.component.factory.source;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -32,6 +30,8 @@ import com.opengamma.core.position.impl.RemotePositionSource;
 import com.opengamma.master.portfolio.PortfolioMaster;
 import com.opengamma.master.position.PositionMaster;
 import com.opengamma.master.position.impl.MasterPositionSource;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory providing the {@code PositionSource}.
@@ -69,15 +69,15 @@ public class PositionSourceComponentFactory extends AbstractComponentFactory {
   /**
    * Initializes the position source, setting up component information and REST.
    * Override using {@link #createPositionSource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    PositionSource source = createPositionSource(repo);
-    
-    ComponentInfo info = new ComponentInfo(PositionSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final PositionSource source = createPositionSource(repo);
+
+    final ComponentInfo info = new ComponentInfo(PositionSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemotePositionSource.class);
@@ -90,11 +90,11 @@ public class PositionSourceComponentFactory extends AbstractComponentFactory {
 
   /**
    * Creates the position source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the position source, not null
    */
-  protected PositionSource createPositionSource(ComponentRepository repo) {
+  protected PositionSource createPositionSource(final ComponentRepository repo) {
     PositionSource source = new MasterPositionSource(getPortfolioMaster(), getPositionMaster());
     if (getCacheManager() != null) {
       source = new EHCachingPositionSource(source, getCacheManager());

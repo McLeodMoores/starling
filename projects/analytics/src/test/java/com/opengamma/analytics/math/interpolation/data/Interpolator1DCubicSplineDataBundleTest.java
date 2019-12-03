@@ -103,10 +103,10 @@ public class Interpolator1DCubicSplineDataBundleTest {
   public void testSecondDerivatives() {
 
     int n = 10;
-    double x[] = new double[n];
-    double y[] = new double[n];
+    double[] x = new double[n];
+    double[] y = new double[n];
     for (int i = 0; i < n; i++) {
-      x[i] = (i - 5);
+      x[i] = i - 5;
       y[i] = LINEAR.evaluate(x[i]);
     }
     Interpolator1DCubicSplineDataBundle data = new Interpolator1DCubicSplineDataBundle(

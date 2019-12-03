@@ -25,7 +25,7 @@ public class SimpleLiveDataMetaDataProvider implements LiveDataMetaDataProvider 
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param metaData  the meta-data, not null
    */
   public SimpleLiveDataMetaDataProvider(final LiveDataMetaData metaData) {
@@ -39,7 +39,7 @@ public class SimpleLiveDataMetaDataProvider implements LiveDataMetaDataProvider 
   }
 
   @Override
-  public LiveDataMetaDataProviderResult metaData(LiveDataMetaDataProviderRequest request) {
+  public LiveDataMetaDataProviderResult metaData(final LiveDataMetaDataProviderRequest request) {
     ArgumentChecker.notNull(request, "request");
     return new LiveDataMetaDataProviderResult(_metaData);
   }

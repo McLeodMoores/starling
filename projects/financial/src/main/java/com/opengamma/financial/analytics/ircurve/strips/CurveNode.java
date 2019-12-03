@@ -39,7 +39,7 @@ public abstract class CurveNode extends DirectBean implements Serializable, Comp
   private String _curveNodeIdMapperName;
 
   /**
-   * The name, can be null
+   * The name, can be null.
    */
   @PropertyDefinition
   private String _name;
@@ -52,15 +52,18 @@ public abstract class CurveNode extends DirectBean implements Serializable, Comp
   }
 
   /**
-   * @param curveNodeIdMapperName The name of the id mapper, not null
+   * @param curveNodeIdMapperName
+   *          The name of the id mapper, not null
    */
   public CurveNode(final String curveNodeIdMapperName) {
     setCurveNodeIdMapperName(curveNodeIdMapperName);
   }
 
   /**
-   * @param curveNodeIdMapperName The name of the id mapper, not null
-   * @param name The name of the node, not null
+   * @param curveNodeIdMapperName
+   *          The name of the id mapper, not null
+   * @param name
+   *          The name of the node, not null
    */
   public CurveNode(final String curveNodeIdMapperName, final String name) {
     setCurveNodeIdMapperName(curveNodeIdMapperName);
@@ -69,6 +72,7 @@ public abstract class CurveNode extends DirectBean implements Serializable, Comp
 
   /**
    * Gets the resolved maturity of the node.
+   * 
    * @return The resolved maturity of the node
    */
   public abstract Tenor getResolvedMaturity();
@@ -128,7 +132,7 @@ public abstract class CurveNode extends DirectBean implements Serializable, Comp
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the name, can be null
+   * Gets the name, can be null.
    * @return the value of the property
    */
   public String getName() {
@@ -136,7 +140,7 @@ public abstract class CurveNode extends DirectBean implements Serializable, Comp
   }
 
   /**
-   * Sets the name, can be null
+   * Sets the name, can be null.
    * @param name  the new value of the property
    */
   public void setName(String name) {

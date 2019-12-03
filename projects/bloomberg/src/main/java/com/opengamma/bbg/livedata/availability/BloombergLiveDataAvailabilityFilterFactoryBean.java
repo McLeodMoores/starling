@@ -10,7 +10,7 @@ import com.opengamma.engine.marketdata.availability.MarketDataAvailabilityFilter
 import com.opengamma.util.SingletonFactoryBean;
 
 /**
- * Constructs a {@link MarketDataAvailabilityFilter} which reflects Bloomberg
+ * Constructs a {@link MarketDataAvailabilityFilter} which reflects Bloomberg.
  */
 public class BloombergLiveDataAvailabilityFilterFactoryBean extends SingletonFactoryBean<MarketDataAvailabilityFilter> {
 

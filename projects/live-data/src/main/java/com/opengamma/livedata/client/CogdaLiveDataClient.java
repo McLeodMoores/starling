@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.client;
@@ -73,7 +73,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifecycle, FudgeMessageReceiver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaLiveDataClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaLiveDataClient.class);
 
   // Injected parameters:
   /**
@@ -114,14 +114,14 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
   /**
    * The active subscription requests.
    */
-  private final Map<Long, SubscriptionHandle> _activeSubscriptionRequests = new ConcurrentHashMap<Long, SubscriptionHandle>();
+  private final Map<Long, SubscriptionHandle> _activeSubscriptionRequests = new ConcurrentHashMap<>();
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param user  the user to connect with, not null
    */
-  public CogdaLiveDataClient(UserPrincipal user) {
+  public CogdaLiveDataClient(final UserPrincipal user) {
     ArgumentChecker.notNull(user, "user");
     _user = user;
   }
@@ -129,7 +129,7 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
   //-------------------------------------------------------------------------
   /**
    * Gets the server name.
-   * 
+   *
    * @return the server name, not null
    */
   public String getServerName() {
@@ -138,16 +138,16 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
 
   /**
    * Sets the server name.
-   * 
+   *
    * @param serverName  the server name, not null
    */
-  public void setServerName(String serverName) {
+  public void setServerName(final String serverName) {
     _serverName = serverName;
   }
 
   /**
    * Gets the server port.
-   * 
+   *
    * @return the server port
    */
   public int getServerPort() {
@@ -156,16 +156,16 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
 
   /**
    * Sets the server port.
-   * 
+   *
    * @param serverPort  the server port
    */
-  public void setServerPort(int serverPort) {
+  public void setServerPort(final int serverPort) {
     _serverPort = serverPort;
   }
 
   /**
    * Gets the fudge context.
-   * 
+   *
    * @return the fudge context, not null
    */
   @Override
@@ -175,22 +175,22 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
 
   /**
    * Sets the fudge context.
-   * 
+   *
    * @param fudgeContext  the fudge context, not null
    */
   @Override
-  public void setFudgeContext(FudgeContext fudgeContext) {
+  public void setFudgeContext(final FudgeContext fudgeContext) {
     _fudgeContext = fudgeContext;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Checks whether the specified user matches the user this client is for.
-   * 
+   *
    * @param user  the user to check, not null
    * @throws IllegalArgumentException if the user is invalid
    */
-  protected void checkUserMatches(UserPrincipal user) {
+  protected void checkUserMatches(final UserPrincipal user) {
     if (!ObjectUtils.equals(user, _user)) {
       throw new IllegalArgumentException("Specified user " + user + " does not match client user " + _user);
     }
@@ -198,29 +198,29 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean isEntitled(UserPrincipal user, LiveDataSpecification requestedSpecification) {
+  public boolean isEntitled(final UserPrincipal user, final LiveDataSpecification requestedSpecification) {
     // TODO kirk 2012-08-23 -- Implement this properly.
     return true;
   }
 
   @Override
-  public Map<LiveDataSpecification, Boolean> isEntitled(UserPrincipal user, Collection<LiveDataSpecification> requestedSpecifications) {
-    Map<LiveDataSpecification, Boolean> result = new HashMap<LiveDataSpecification, Boolean>();
-    for (LiveDataSpecification ldc : requestedSpecifications) {
+  public Map<LiveDataSpecification, Boolean> isEntitled(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications) {
+    final Map<LiveDataSpecification, Boolean> result = new HashMap<>();
+    for (final LiveDataSpecification ldc : requestedSpecifications) {
       result.put(ldc, isEntitled(user, ldc));
     }
     return result;
   }
 
   @Override
-  protected void handleSubscriptionRequest(Collection<SubscriptionHandle> subHandle) {
+  protected void handleSubscriptionRequest(final Collection<SubscriptionHandle> subHandle) {
     // TODO kirk 2012-08-15 -- Batch these up. This is just for testing.
-    for (SubscriptionHandle handle : subHandle) {
-      long correlationId = _nextRequestId.getAndIncrement();
+    for (final SubscriptionHandle handle : subHandle) {
+      final long correlationId = _nextRequestId.getAndIncrement();
       switch (handle.getSubscriptionType()) {
         case NON_PERSISTENT:
         case PERSISTENT:
-          CogdaLiveDataSubscriptionRequestMessage subRequest = new CogdaLiveDataSubscriptionRequestMessage();
+          final CogdaLiveDataSubscriptionRequestMessage subRequest = new CogdaLiveDataSubscriptionRequestMessage();
           subRequest.setCorrelationId(correlationId);
           subRequest.setNormalizationScheme(handle.getRequestedSpecification().getNormalizationRuleSetId());
           // REVIEW kirk 2012-08-15 -- The next line is SOOOOO UGLLYYYYY!!!!!
@@ -230,7 +230,7 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
           // Same thing in Cogda.
           break;
         case SNAPSHOT:
-          CogdaLiveDataSnapshotRequestMessage snapshotRequest = new CogdaLiveDataSnapshotRequestMessage();
+          final CogdaLiveDataSnapshotRequestMessage snapshotRequest = new CogdaLiveDataSnapshotRequestMessage();
           snapshotRequest.setCorrelationId(correlationId);
           snapshotRequest.setNormalizationScheme(handle.getRequestedSpecification().getNormalizationRuleSetId());
           // REVIEW kirk 2012-08-15 -- The next line is SOOOOO UGLLYYYYY!!!!!
@@ -238,13 +238,15 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
           _activeSubscriptionRequests.put(correlationId, handle);
           _messageSender.send(CogdaLiveDataSnapshotRequestBuilder.buildMessageStatic(new FudgeSerializer(getFudgeContext()), snapshotRequest));
           break;
+        default:
+          throw new OpenGammaRuntimeException("Unhandled subscription type " + handle.getSubscriptionType());
       }
     }
   }
 
   @Override
-  protected void cancelPublication(LiveDataSpecification fullyQualifiedSpecification) {
-    CogdaLiveDataUnsubscribeMessage message = new CogdaLiveDataUnsubscribeMessage();
+  protected void cancelPublication(final LiveDataSpecification fullyQualifiedSpecification) {
+    final CogdaLiveDataUnsubscribeMessage message = new CogdaLiveDataUnsubscribeMessage();
     message.setCorrelationId(_nextRequestId.getAndIncrement());
     message.setNormalizationScheme(fullyQualifiedSpecification.getNormalizationRuleSetId());
     message.setSubscriptionId(fullyQualifiedSpecification.getIdentifiers().iterator().next());
@@ -252,10 +254,10 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
   }
 
   @Override
-  public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
-    s_logger.info("Got message {}", msgEnvelope);
-    FudgeMsg msg = msgEnvelope.getMessage();
-    CogdaMessageType msgType = CogdaMessageType.getFromMessage(msg);
+  public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
+    LOGGER.info("Got message {}", msgEnvelope);
+    final FudgeMsg msg = msgEnvelope.getMessage();
+    final CogdaMessageType msgType = CogdaMessageType.getFromMessage(msg);
     switch (msgType) {
       case SUBSCRIPTION_RESPONSE:
       case SNAPSHOT_RESPONSE:
@@ -265,41 +267,41 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
         dispatchLiveDataUpdate(msg);
         break;
       default:
-        s_logger.warn("Received message that wasn't understood: {}", msg);
+        LOGGER.warn("Received message that wasn't understood: {}", msg);
     }
   }
 
   /**
    * Dispatches a message to the server.
-   * 
+   *
    * @param msg  the message, not null
    */
-  private void dispatchLiveDataUpdate(FudgeMsg msg) {
-    CogdaLiveDataUpdateMessage updateMessage = CogdaLiveDataUpdateBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
-    LiveDataSpecification ldspec = new LiveDataSpecification(updateMessage.getNormalizationScheme(), updateMessage.getSubscriptionId());
-    LiveDataValueUpdateBean valueUpdateBean = new LiveDataValueUpdateBean(0L, ldspec, updateMessage.getValues());
+  private void dispatchLiveDataUpdate(final FudgeMsg msg) {
+    final CogdaLiveDataUpdateMessage updateMessage = CogdaLiveDataUpdateBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
+    final LiveDataSpecification ldspec = new LiveDataSpecification(updateMessage.getNormalizationScheme(), updateMessage.getSubscriptionId());
+    final LiveDataValueUpdateBean valueUpdateBean = new LiveDataValueUpdateBean(0L, ldspec, updateMessage.getValues());
     super.valueUpdate(valueUpdateBean);
   }
 
   /**
    * Dispatches a command response.
-   * 
+   *
    * @param msgType  the type, not null
    * @param msg  the message, not null
    */
-  private void dispatchCommandResponse(CogdaMessageType msgType, FudgeMsg msg) {
+  private void dispatchCommandResponse(final CogdaMessageType msgType, final FudgeMsg msg) {
     if (!msg.hasField("correlationId")) {
-      s_logger.warn("Received subscription response message without correlationId: {}", msg);
+      LOGGER.warn("Received subscription response message without correlationId: {}", msg);
       return;
     }
-    long correlationId = msg.getLong("correlationId");
-    
-    SubscriptionHandle subHandle = _activeSubscriptionRequests.remove(correlationId);
+    final long correlationId = msg.getLong("correlationId");
+
+    final SubscriptionHandle subHandle = _activeSubscriptionRequests.remove(correlationId);
     if (subHandle == null) {
-      s_logger.warn("Got subscription result on correlationId {} without active subscription: {}", correlationId, msg);
+      LOGGER.warn("Got subscription result on correlationId {} without active subscription: {}", correlationId, msg);
       return;
     }
-    
+
     switch (msgType) {
       case SUBSCRIPTION_RESPONSE:
         dispatchSubscriptionResponse(msg, subHandle);
@@ -308,49 +310,51 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
         dispatchSnapshotResponse(msg, subHandle);
         break;
       default:
-        s_logger.warn("Got unexpected msg type {} as a command response - {}", msgType, msg);
+        LOGGER.warn("Got unexpected msg type {} as a command response - {}", msgType, msg);
         break;
     }
   }
 
   /**
    * Dispatches the response to a snapshot.
-   * 
+   *
    * @param msg  the message, not null
    * @param subHandle  the subscription handle, not null
    */
-  private void dispatchSnapshotResponse(FudgeMsg msg, SubscriptionHandle subHandle) {
-    CogdaLiveDataSnapshotResponseMessage responseMessage = CogdaLiveDataSnapshotResponseBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
-    LiveDataSpecification ldSpec = new LiveDataSpecification(responseMessage.getNormalizationScheme(), responseMessage.getSubscriptionId());
-    
-    LiveDataSubscriptionResult ldsResult = responseMessage.getGenericResult().toLiveDataSubscriptionResult();
-    LiveDataSubscriptionResponse ldsResponse = new LiveDataSubscriptionResponse(subHandle.getRequestedSpecification(), ldsResult);
+  private void dispatchSnapshotResponse(final FudgeMsg msg, final SubscriptionHandle subHandle) {
+    final CogdaLiveDataSnapshotResponseMessage responseMessage =
+        CogdaLiveDataSnapshotResponseBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
+    final LiveDataSpecification ldSpec = new LiveDataSpecification(responseMessage.getNormalizationScheme(), responseMessage.getSubscriptionId());
+
+    final LiveDataSubscriptionResult ldsResult = responseMessage.getGenericResult().toLiveDataSubscriptionResult();
+    final LiveDataSubscriptionResponse ldsResponse = new LiveDataSubscriptionResponse(subHandle.getRequestedSpecification(), ldsResult);
     ldsResponse.setFullyQualifiedSpecification(ldSpec);
     ldsResponse.setUserMessage(responseMessage.getUserMessage());
-    
-    LiveDataValueUpdateBean valueUpdateBean = new LiveDataValueUpdateBean(0L, subHandle.getRequestedSpecification(), responseMessage.getValues());
+
+    final LiveDataValueUpdateBean valueUpdateBean = new LiveDataValueUpdateBean(0L, subHandle.getRequestedSpecification(), responseMessage.getValues());
     ldsResponse.setSnapshot(valueUpdateBean);
     subHandle.subscriptionResultReceived(ldsResponse);
   }
 
   /**
    * Dispatches the response to subscription.
-   * 
+   *
    * @param msg  the message, not null
    * @param subHandle  the subscription handle, not null
    */
-  private void dispatchSubscriptionResponse(FudgeMsg msg, SubscriptionHandle subHandle) {
-    CogdaLiveDataSubscriptionResponseMessage responseMessage = CogdaLiveDataSubscriptionResponseBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
-    LiveDataSpecification ldSpec = new LiveDataSpecification(responseMessage.getNormalizationScheme(), responseMessage.getSubscriptionId());
-    
-    LiveDataSubscriptionResult ldsResult = responseMessage.getGenericResult().toLiveDataSubscriptionResult();
-    LiveDataSubscriptionResponse ldsResponse = new LiveDataSubscriptionResponse(subHandle.getRequestedSpecification(), ldsResult);
+  private void dispatchSubscriptionResponse(final FudgeMsg msg, final SubscriptionHandle subHandle) {
+    final CogdaLiveDataSubscriptionResponseMessage responseMessage =
+        CogdaLiveDataSubscriptionResponseBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
+    final LiveDataSpecification ldSpec = new LiveDataSpecification(responseMessage.getNormalizationScheme(), responseMessage.getSubscriptionId());
+
+    final LiveDataSubscriptionResult ldsResult = responseMessage.getGenericResult().toLiveDataSubscriptionResult();
+    final LiveDataSubscriptionResponse ldsResponse = new LiveDataSubscriptionResponse(subHandle.getRequestedSpecification(), ldsResult);
     ldsResponse.setFullyQualifiedSpecification(ldSpec);
     ldsResponse.setUserMessage(responseMessage.getUserMessage());
-    
-    LiveDataValueUpdateBean valueUpdateBean = new LiveDataValueUpdateBean(0L, subHandle.getRequestedSpecification(), responseMessage.getSnapshot());
+
+    final LiveDataValueUpdateBean valueUpdateBean = new LiveDataValueUpdateBean(0L, subHandle.getRequestedSpecification(), responseMessage.getSnapshot());
     ldsResponse.setSnapshot(valueUpdateBean);
-    
+
     switch (responseMessage.getGenericResult()) {
       case SUCCESSFUL:
         super.subscriptionRequestSatisfied(subHandle, ldsResponse);
@@ -372,50 +376,52 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
     InetAddress serverAddress = null;
     try {
       serverAddress = InetAddress.getByName(getServerName());
-    } catch (UnknownHostException ex) {
-      s_logger.error("Illegal host name: " + getServerName(), ex);
+    } catch (final UnknownHostException ex) {
+      LOGGER.error("Illegal host name: " + getServerName(), ex);
       throw new IllegalArgumentException("Cannot identify host " + getServerName());
     }
     try {
-      Socket socket = new Socket(serverAddress, getServerPort());
-      InputStream is = socket.getInputStream();
-      OutputStream os = socket.getOutputStream();
+      final Socket socket = new Socket(serverAddress, getServerPort());
+      final InputStream is = socket.getInputStream();
+      final OutputStream os = socket.getOutputStream();
       _messageSender = new ByteArrayFudgeMessageSender(new OutputStreamByteArrayMessageSender(os));
-      
+
       login(is);
-      
-      InputStreamFudgeMessageDispatcher messageDispatcher = new InputStreamFudgeMessageDispatcher(is, this);
-      Thread t = new Thread(messageDispatcher, "CogdaLiveDataClient Dispatch Thread");
+
+      final InputStreamFudgeMessageDispatcher messageDispatcher = new InputStreamFudgeMessageDispatcher(is, this);
+      final Thread t = new Thread(messageDispatcher, "CogdaLiveDataClient Dispatch Thread");
       t.setDaemon(true);
       t.start();
       _socketReadThread = t;
-      
+
       _socket = socket;
-    } catch (IOException ioe) {
-      s_logger.error("Unable to establish connection to" + getServerName() + ":" + getServerPort(), ioe);
+    } catch (final IOException ioe) {
+      LOGGER.error("Unable to establish connection to" + getServerName() + ":" + getServerPort(), ioe);
       throw new OpenGammaRuntimeException("Unable to establish connection to" + getServerName() + ":" + getServerPort());
     }
-    
+
   }
 
-  protected void login(InputStream is) throws IOException {
-    ConnectionRequestMessage requestMessage = new ConnectionRequestMessage();
+  protected void login(final InputStream is) {
+    final ConnectionRequestMessage requestMessage = new ConnectionRequestMessage();
     requestMessage.setUserName(_user.getUserName());
     _messageSender.send(ConnectionRequestBuilder.buildMessageStatic(new FudgeSerializer(getFudgeContext()), requestMessage));
     // TODO kirk 2012-08-22 -- This needs a timeout.
-    FudgeMsgReader reader = getFudgeContext().createMessageReader(is);
-    FudgeMsg msg = reader.nextMessage();
-    ConnectionResponseMessage response = ConnectionResponseBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
-    switch(response.getResult()) {
+    final FudgeMsgReader reader = getFudgeContext().createMessageReader(is);
+    final FudgeMsg msg = reader.nextMessage();
+    final ConnectionResponseMessage response = ConnectionResponseBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
+    switch (response.getResult()) {
       case NEW_CONNECTION_SUCCESS:
       case EXISTING_CONNECTION_RESTART:
         // We're good to go!
         // TODO kirk 2012-08-15 -- Add logic eventually for connection restart semantics.
-        s_logger.warn("Successfully logged into server.");
+        LOGGER.warn("Successfully logged into server.");
         break;
       case NOT_AUTHORIZED:
         // REVIEW kirk 2012-08-15 -- Is this the right error?
         throw new OpenGammaRuntimeException("Server says NOT_AUTHORIZED");
+      default:
+        throw new OpenGammaRuntimeException("Cannot handle response result " + response.getResult());
     }
   }
 
@@ -425,57 +431,57 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
 
   @Override
   public boolean isRunning() {
-    return ((_socket != null) && (_socket.isConnected()));
+    return _socket != null && _socket.isConnected();
   }
 
   //-------------------------------------------------------------------------
   /**
    * A simple test that runs against localhost. Only useful for protocol development.
-   * 
+   *
    * @param args Command-line args. Ignored.
    * @throws InterruptedException Required to make the compiler happy
    */
   public static void main(final String[] args) throws InterruptedException { // CSIGNORE
-    CogdaLiveDataClient client = new CogdaLiveDataClient(UserPrincipal.getLocalUser());
+    final CogdaLiveDataClient client = new CogdaLiveDataClient(UserPrincipal.getLocalUser());
     //client.setServerName("cogdasvr-lx-1.hq.opengamma.com");
     client.start();
-    
-    LiveDataSpecification lds = new LiveDataSpecification("OpenGamma", ExternalId.of("SURF", "FV2DBEURUSD12M"));
-    LiveDataSubscriptionResponse response = client.snapshot(UserPrincipal.getLocalUser(), lds, 60000L);
-    s_logger.warn("Snapshot {}", response);
-    List<LiveDataSpecification> subs = new LinkedList<LiveDataSpecification>();
+
+    final LiveDataSpecification lds = new LiveDataSpecification("OpenGamma", ExternalId.of("SURF", "FV2DBEURUSD12M"));
+    final LiveDataSubscriptionResponse response = client.snapshot(UserPrincipal.getLocalUser(), lds, 60000L);
+    LOGGER.warn("Snapshot {}", response);
+    final List<LiveDataSpecification> subs = new LinkedList<>();
     subs.add(lds);
     subs.add(new LiveDataSpecification("OpenGamma", ExternalId.of("SURF", "ASIRSEUR49Y30A03L")));
     subs.add(new LiveDataSpecification("OpenGamma", ExternalId.of("SURF", "FV1DRUSDBRL06M")));
     subs.add(new LiveDataSpecification("OpenGamma", ExternalId.of("ICAP", "SAUD_9Y")));
     subs.add(new LiveDataSpecification("OpenGamma", ExternalId.of("ICAP", "GBP_5Y")));
     subs.add(new LiveDataSpecification("OpenGamma", ExternalId.of("ICAP", "GBPUSD7M")));
-    LiveDataListener ldl = new LiveDataListener() {
+    final LiveDataListener ldl = new LiveDataListener() {
       @Override
-      public void subscriptionResultReceived(LiveDataSubscriptionResponse subscriptionResult) {
-        s_logger.warn("Sub result {}", subscriptionResult);
+      public void subscriptionResultReceived(final LiveDataSubscriptionResponse subscriptionResult) {
+        LOGGER.warn("Sub result {}", subscriptionResult);
       }
 
       @Override
       public void subscriptionResultsReceived(final Collection<LiveDataSubscriptionResponse> subscriptionResults) {
-        s_logger.warn("Sub result {}", subscriptionResults);
+        LOGGER.warn("Sub result {}", subscriptionResults);
       }
 
       @Override
-      public void subscriptionStopped(LiveDataSpecification fullyQualifiedSpecification) {
-        s_logger.warn("Sub stopped {}", fullyQualifiedSpecification);
+      public void subscriptionStopped(final LiveDataSpecification fullyQualifiedSpecification) {
+        LOGGER.warn("Sub stopped {}", fullyQualifiedSpecification);
       }
 
       @Override
-      public void valueUpdate(LiveDataValueUpdate valueUpdate) {
-        s_logger.warn("Data received {}", valueUpdate);
+      public void valueUpdate(final LiveDataValueUpdate valueUpdate) {
+        LOGGER.warn("Data received {}", valueUpdate);
       }
-      
-    }; 
+
+    };
     client.subscribe(UserPrincipal.getLocalUser(), subs, ldl);
-    
+
     client.subscribe(UserPrincipal.getLocalUser(), new LiveDataSpecification("OpenGamma", ExternalId.of("SURF", "NO_SUCH_THING")), ldl);
-    
+
     Thread.sleep(100000000L);
   }
 

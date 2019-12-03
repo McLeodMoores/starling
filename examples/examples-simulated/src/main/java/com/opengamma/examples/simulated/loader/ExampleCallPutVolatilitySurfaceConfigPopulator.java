@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.loader;
 
@@ -13,8 +13,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.common.collect.Sets;
 import com.opengamma.core.config.impl.ConfigItem;
@@ -34,10 +32,11 @@ import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.ConfigMasterUtils;
 import com.opengamma.util.ArgumentChecker;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
- * Populates the example data with equity option volatility surface definitions and specifications.
- * The ATM strike used for the call / put crossover is taken from the historical-data.csv file. If
- * there is no entry for the requested ticker, nothing is stored.
+ * Populates the example data with equity option volatility surface definitions and specifications. The ATM strike used for the call / put crossover is taken
+ * from the historical-data.csv file. If there is no entry for the requested ticker, nothing is stored.
  */
 public final class ExampleCallPutVolatilitySurfaceConfigPopulator {
   /** The logger */
@@ -50,12 +49,16 @@ public final class ExampleCallPutVolatilitySurfaceConfigPopulator {
   }
 
   /**
-   * Populates the config master with equity option volatility surface definitions and specifications.
-   * The approximate ATM strike is found from the historical market data file.
-   * @param configMaster The config master, not null
-   * @param configs A map from ticker to surface name, not null
+   * Populates the config master with equity option volatility surface definitions and specifications. The approximate ATM strike is found from the historical
+   * market data file.
+   *
+   * @param configMaster
+   *          The config master, not null
+   * @param configs
+   *          A map from ticker to surface name, not null
    * @return The populated config master
-   * @throws IOException If there is an error opening the historical data file.
+   * @throws IOException
+   *           If there is an error opening the historical data file.
    */
   public static ConfigMaster populateSurfaceConfigMaster(final ConfigMaster configMaster, final Map<String, String> configs) throws IOException {
     ArgumentChecker.notNull(configMaster, "configMaster");
@@ -65,8 +68,8 @@ public final class ExampleCallPutVolatilitySurfaceConfigPopulator {
         LOGGER.error("Could not get file called historical-data.csv");
         return configMaster;
       }
-      try (final CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(resource)))) {
-        String[] line = reader.readNext(); //ignore headers
+      try (CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(resource)))) {
+        String[] line = reader.readNext(); // ignore headers
         final Set<String> matchedTickers = new HashSet<>();
         while ((line = reader.readNext()) != null) {
           if (!line[0].equals(ExternalSchemes.OG_SYNTHETIC_TICKER.getName()) || line.length != 4) {
@@ -93,16 +96,22 @@ public final class ExampleCallPutVolatilitySurfaceConfigPopulator {
   }
 
   /**
-   * Adds an equity option volatility surface specification. The surface quote type is put / call, the quote units
-   * are volatility and the market data requirement is {@link MarketDataRequirementNames#IMPLIED_VOLATILITY}.
-   * @param configMaster The config master
-   * @param name The surface name
-   * @param target The target
-   * @param ticker The ticker
-   * @param spot The spot price
+   * Adds an equity option volatility surface specification. The surface quote type is put / call, the quote units are volatility and the market data
+   * requirement is {@link MarketDataRequirementNames#IMPLIED_VOLATILITY}.
+   *
+   * @param configMaster
+   *          The config master
+   * @param name
+   *          The surface name
+   * @param target
+   *          The target
+   * @param ticker
+   *          The ticker
+   * @param spot
+   *          The spot price
    */
-  private static void populateSurfaceSpecification(final ConfigMaster configMaster, final String name, final UniqueIdentifiable target,
-      final String ticker, final Double spot) {
+  private static void populateSurfaceSpecification(final ConfigMaster configMaster, final String name, final UniqueIdentifiable target, final String ticker,
+      final Double spot) {
     final SurfaceInstrumentProvider<Number, Double> provider = new ExampleCallPutVolatilitySurfaceInstrumentProvider(ticker,
         MarketDataRequirementNames.IMPLIED_VOLATILITY, spot);
     final VolatilitySurfaceSpecification specification = new VolatilitySurfaceSpecification(name, target, SurfaceAndCubeQuoteType.CALL_AND_PUT_STRIKE,
@@ -111,16 +120,20 @@ public final class ExampleCallPutVolatilitySurfaceConfigPopulator {
   }
 
   /**
-   * Adds an equity option volatility surface definition. The x axis points are the first eight expiries
-   * and the difference between strikes requested is relative to the spot price.
-   * @param configMaster The config master
-   * @param name The surface name
-   * @param target The target
-   * @param spot The spot price
+   * Adds an equity option volatility surface definition. The x axis points are the first eight expiries and the difference between strikes requested is
+   * relative to the spot price.
+   *
+   * @param configMaster
+   *          The config master
+   * @param name
+   *          The surface name
+   * @param target
+   *          The target
+   * @param spot
+   *          The spot price
    */
-  private static void populateSurfaceDefinition(final ConfigMaster configMaster, final String name, final UniqueIdentifiable target,
-      final Double spot) {
-    final Number[] xs = new Number[] {1, 2, 3, 4, 5, 6, 7, 8 };
+  private static void populateSurfaceDefinition(final ConfigMaster configMaster, final String name, final UniqueIdentifiable target, final Double spot) {
+    final Number[] xs = new Number[] { 1, 2, 3, 4, 5, 6, 7, 8 };
     final Double[] ys = new Double[20];
     final double delta = Math.round(spot.intValue() * 2500 / 250000.);
     final double intSpot = Math.round(spot);
@@ -133,8 +146,11 @@ public final class ExampleCallPutVolatilitySurfaceConfigPopulator {
 
   /**
    * Creates a config item.
-   * @param config The config object
-   * @param name The config name
+   *
+   * @param config
+   *          The config object
+   * @param name
+   *          The config name
    * @return The config item
    */
   private static <T> ConfigItem<T> makeConfigDocument(final T config, final String name) {

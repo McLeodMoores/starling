@@ -41,7 +41,7 @@ public class TimeSeriesWithInfo extends DirectBean implements UniqueIdentifiable
   public TimeSeriesWithInfo() {
   }
 
-  public TimeSeriesWithInfo(ManageableHistoricalTimeSeriesInfo info, ManageableHistoricalTimeSeries timeSeries) {
+  public TimeSeriesWithInfo(final ManageableHistoricalTimeSeriesInfo info, final ManageableHistoricalTimeSeries timeSeries) {
     ArgumentChecker.notNull(info, "info");
     ArgumentChecker.notNull(timeSeries, "timeSeries");
     _info = info;

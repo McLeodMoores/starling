@@ -30,7 +30,7 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
    * Tests the availability of an item that can be referenced by external identifier.
    * <p>
    * The default implementation here returns false.
-   * 
+   *
    * @param targetSpec the target specification as passed to {@link MarketDataAvailabilityProvider#getAvailability}, possibly null
    * @param identifier the external identifier of the target object, not null
    * @param desiredValue the requested value to test and resolve, not null
@@ -40,24 +40,25 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
     return false;
   }
 
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier, final ValueRequirement desiredValue,
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier,
+      final ValueRequirement desiredValue,
       final AbstractMarketDataAvailabilityProvider underlying) {
     if (isAvailable(targetSpec, identifier, desiredValue)) {
       return underlying.getAvailability(targetSpec, identifier, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
    * Tests the availability of an item that can be referenced by one or more external identifiers.
-   * 
+   *
    * @param targetSpec the target specification as passed to {@link MarketDataAvailabilityProvider#getAvailability}, possibly null
    * @param identifiers the external identifiers of the target object, not null
    * @param desiredValue the requested value to test and resolve, not null
    * @return true if the value is available, false otherwise
    */
-  protected final boolean isAvailable(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue) {
+  protected final boolean isAvailable(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers,
+      final ValueRequirement desiredValue) {
     for (final ExternalId identifier : identifiers) {
       if (isAvailable(targetSpec, identifier, desiredValue)) {
         return true;
@@ -66,13 +67,14 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
     return false;
   }
 
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue,
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers,
+      final ValueRequirement desiredValue,
       final AbstractMarketDataAvailabilityProvider underlying) {
     List<ExternalId> acceptable = null;
     for (final ExternalId identifier : identifiers) {
       if (isAvailable(targetSpec, identifier, desiredValue)) {
         if (acceptable == null) {
-          acceptable = new ArrayList<ExternalId>();
+          acceptable = new ArrayList<>();
         }
         acceptable.add(identifier);
       }
@@ -80,19 +82,17 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
     if (acceptable != null) {
       if (acceptable.size() > 1) {
         return underlying.getAvailability(targetSpec, ExternalIdBundle.of(acceptable), desiredValue);
-      } else {
-        return underlying.getAvailability(targetSpec, acceptable.get(0), desiredValue);
       }
-    } else {
-      return null;
+      return underlying.getAvailability(targetSpec, acceptable.get(0), desiredValue);
     }
+    return null;
   }
 
   /**
    * Tests the availability of an item that can only be referenced by unique identifier
    * <p>
    * The default implementation here returns false.
-   * 
+   *
    * @param targetSpec the target specification as passed to {@link MarketDataAvailabilityProvider#getAvailability}, possibly null
    * @param identifier the unique identifier of the target object, null only if {@code targetSpec} is {@link ComputationTargetType#NULL}
    * @param desiredValue the requested value to test and resolve, not null
@@ -106,16 +106,15 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
       final AbstractMarketDataAvailabilityProvider underlying) {
     if (isAvailable(targetSpec, identifier, desiredValue)) {
       return underlying.getAvailability(targetSpec, identifier, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
    * Tests the availability of the null target.
    * <p>
    * The default implementation here calls the {@link #isAvailable(ComputationTargetSpecification,UniqueId,ValueRequirement)} form.
-   * 
+   *
    * @param targetSpec the target specification, always {@link ComputationTargetSpecification#NULL}
    * @param desiredValue the requested value to test and resolve, not null
    * @return true if the value is available, false otherwise
@@ -124,17 +123,17 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
     return isAvailable(targetSpec, (UniqueId) null, desiredValue);
   }
 
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue, final AbstractMarketDataAvailabilityProvider underlying) {
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue,
+      final AbstractMarketDataAvailabilityProvider underlying) {
     if (isAvailable(targetSpec, desiredValue)) {
       return underlying.getAvailability(targetSpec, desiredValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
    * Tests how the target can be referenced and defers to one of the other {@code isAvailable} methods.
-   * 
+   *
    * @param targetSpec the target specification as passed to {@link MarketDataAvailabilityFilter#isAvailable}, possibly null
    * @param target the target to evaluate, not null
    * @param desiredValue the requested value to test and resolve, not null
@@ -159,15 +158,15 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
     }
     if (target == null) {
       return isAvailable(targetSpec, desiredValue);
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**
-   * Updates a collection containing keys that will be used to form the cache hint when this is used to construct an availability provider. A sub-class should put any construction parameters into the
+   * Updates a collection containing keys that will be used to form the cache hint when this is used to construct an
+   * availability provider. A sub-class should put any construction parameters into the
    * key that distinguish its behavior from other filters of the same class.
-   * 
+   *
    * @param key the key to update
    */
   protected abstract void populateAvailabilityHintKey(Collection<Serializable> key);
@@ -183,17 +182,20 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
       }
 
       @Override
-      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier, final ValueRequirement desiredValue) {
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier,
+          final ValueRequirement desiredValue) {
         return AbstractMarketDataAvailabilityFilter.this.getAvailability(targetSpec, identifier, desiredValue, underlying);
       }
 
       @Override
-      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue) {
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers,
+          final ValueRequirement desiredValue) {
         return AbstractMarketDataAvailabilityFilter.this.getAvailability(targetSpec, identifiers, desiredValue, underlying);
       }
 
       @Override
-      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier, final ValueRequirement desiredValue) {
+      protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier,
+          final ValueRequirement desiredValue) {
         return AbstractMarketDataAvailabilityFilter.this.getAvailability(targetSpec, identifier, desiredValue, underlying);
       }
 
@@ -204,7 +206,7 @@ public abstract class AbstractMarketDataAvailabilityFilter implements MarketData
 
       @Override
       public Serializable getAvailabilityHintKey() {
-        final ArrayList<Serializable> key = new ArrayList<Serializable>(5);
+        final ArrayList<Serializable> key = new ArrayList<>(5);
         key.add(getClass().getName());
         key.add(AbstractMarketDataAvailabilityFilter.this.getClass().getName());
         key.add(provider.getAvailabilityHintKey());

@@ -18,7 +18,7 @@ public class CostOfCarryValueRhoFuturesFunction extends CostOfCarryFuturesFuncti
    * @param costOfCarryField The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY". Set in *FunctionConfiguration
    * @param resolutionKey The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
    */
-  public CostOfCarryValueRhoFuturesFunction(String closingPriceField, String costOfCarryField, String resolutionKey) {
+  public CostOfCarryValueRhoFuturesFunction(final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
     super(ValueRequirementNames.VALUE_RHO, CostOfCarryFuturesCalculator.RatesDeltaCalculator.getInstance(), closingPriceField, costOfCarryField, resolutionKey);
   }
 }

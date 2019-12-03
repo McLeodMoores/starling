@@ -8,8 +8,6 @@ package com.opengamma.master.position.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +28,8 @@ import com.opengamma.util.paging.Paging;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.tuple.IntObjectPair;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * A cache decorating a {@code PositionMaster}, mainly intended to reduce the frequency and repetition of queries
  * from the management UI to a {@code DbPositionMaster}.
@@ -39,11 +39,11 @@ import com.opengamma.util.tuple.IntObjectPair;
 public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDocument> implements PositionMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingPositionMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingPositionMaster.class);
 
   /** The document search cache */
   private EHCachingSearchCache _documentSearchCache;
-  
+
   /** The history search cache */
   private EHCachingSearchCache _historySearchCache;
 
@@ -60,9 +60,9 @@ public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDoc
     // Create the doc search cache and register a position master searcher
     _documentSearchCache = new EHCachingSearchCache(name + "Position", cacheManager, new EHCachingSearchCache.Searcher() {
       @Override
-      public IntObjectPair<List<UniqueId>> search(Bean request, PagingRequest pagingRequest) {
+      public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
         // Fetch search results from underlying master
-        PositionSearchResult result = ((PositionMaster) getUnderlying()).search((PositionSearchRequest)
+        final PositionSearchResult result = ((PositionMaster) getUnderlying()).search((PositionSearchRequest)
             EHCachingSearchCache.withPagingRequest(request, pagingRequest));
 
         // Cache the result documents
@@ -70,16 +70,16 @@ public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDoc
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                 EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
 
     // Create the history search cache and register a security master searcher
     _historySearchCache = new EHCachingSearchCache(name + "PositionHistory", cacheManager, new EHCachingSearchCache.Searcher() {
       @Override
-      public IntObjectPair<List<UniqueId>> search(Bean request, PagingRequest pagingRequest) {
+      public IntObjectPair<List<UniqueId>> search(final Bean request, final PagingRequest pagingRequest) {
         // Fetch search results from underlying master
-        PositionHistoryResult result = ((PositionMaster) getUnderlying()).history((PositionHistoryRequest)
+        final PositionHistoryResult result = ((PositionMaster) getUnderlying()).history((PositionHistoryRequest)
             EHCachingSearchCache.withPagingRequest(request, pagingRequest));
 
         // Cache the result documents
@@ -87,36 +87,36 @@ public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDoc
 
         // Return the list of result UniqueIds
         return IntObjectPair.of(result.getPaging().getTotalItems(),
-                                 EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
+            EHCachingSearchCache.extractUniqueIds(result.getDocuments()));
       }
     });
-    
+
     // Prime search cache
-    PositionSearchRequest defaultSearch = new PositionSearchRequest();
+    final PositionSearchRequest defaultSearch = new PositionSearchRequest();
     _documentSearchCache.prefetch(defaultSearch, PagingRequest.FIRST_PAGE);
   }
 
   @Override
-  public ManageableTrade getTrade(UniqueId tradeId) {
+  public ManageableTrade getTrade(final UniqueId tradeId) {
     return ((PositionMaster) getUnderlying()).getTrade(tradeId);
   }
 
   @Override
-  public PositionSearchResult search(PositionSearchRequest request) {
+  public PositionSearchResult search(final PositionSearchRequest request) {
     // Ensure that the relevant prefetch range is cached, otherwise fetch and cache any missing sub-ranges in background
     _documentSearchCache.prefetch(EHCachingSearchCache.withPagingRequest(request, null), request.getPagingRequest());
 
     // Fetch the paged request range; if not entirely cached then fetch and cache it in foreground
-    IntObjectPair<List<UniqueId>> pair = _documentSearchCache.search(
+    final IntObjectPair<List<UniqueId>> pair = _documentSearchCache.search(
         EHCachingSearchCache.withPagingRequest(request, null),
-        request.getPagingRequest() , false); // don't block until cached
+        request.getPagingRequest(), false); // don't block until cached
 
-    List<PositionDocument> documents = new ArrayList<>();
-    for (UniqueId uniqueId : pair.getSecond()) {
+    final List<PositionDocument> documents = new ArrayList<>();
+    for (final UniqueId uniqueId : pair.getSecond()) {
       documents.add(get(uniqueId));
     }
 
-    PositionSearchResult result = new PositionSearchResult(documents);
+    final PositionSearchResult result = new PositionSearchResult(documents);
     result.setPaging(Paging.of(request.getPagingRequest(), pair.getFirstInt()));
 
     final VersionCorrection vc = request.getVersionCorrection().withLatestFixed(Instant.now());
@@ -124,17 +124,17 @@ public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDoc
 
     // Debug: check result against underlying
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
-      PositionSearchResult check = ((PositionMaster) getUnderlying()).search(request);
+      final PositionSearchResult check = ((PositionMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
-        s_logger.error(_documentSearchCache.getCache().getName()
-                           + "\n\tCache:\t" + result.getPaging()
-                           + "\n\tUnderlying:\t" + check.getPaging());
+        LOGGER.error(_documentSearchCache.getCache().getName()
+            + "\n\tCache:\t" + result.getPaging()
+            + "\n\tUnderlying:\t" + check.getPaging());
       }
       if (!result.getDocuments().equals(check.getDocuments())) {
         System.out.println(_documentSearchCache.getCache().getName() + ": ");
         if (check.getDocuments().size() != result.getDocuments().size()) {
           System.out.println("\tSizes differ (Underlying " + check.getDocuments().size()
-                             + "; Cache " + result.getDocuments().size() + ")");
+              + "; Cache " + result.getDocuments().size() + ")");
         } else {
           for (int i = 0; i < check.getDocuments().size(); i++) {
             if (!check.getDocuments().get(i).equals(result.getDocuments().get(i))) {
@@ -149,24 +149,24 @@ public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDoc
   }
 
   @Override
-  public PositionHistoryResult history(PositionHistoryRequest request) {
+  public PositionHistoryResult history(final PositionHistoryRequest request) {
 
     // Ensure that the relevant prefetch range is cached, otherwise fetch and cache any missing sub-ranges in background
     _historySearchCache.prefetch(EHCachingSearchCache.withPagingRequest(request, null), request.getPagingRequest());
 
     // Fetch the paged request range; if not entirely cached then fetch and cache it in foreground
-    IntObjectPair<List<UniqueId>> pair = _historySearchCache.search(
+    final IntObjectPair<List<UniqueId>> pair = _historySearchCache.search(
         EHCachingSearchCache.withPagingRequest(request, null),
         request.getPagingRequest(), false); // don't block until cached
 
-    List<PositionDocument> documents = new ArrayList<>();
-    for (UniqueId uniqueId : pair.getSecond()) {
+    final List<PositionDocument> documents = new ArrayList<>();
+    for (final UniqueId uniqueId : pair.getSecond()) {
       documents.add(get(uniqueId));
     }
 
-    PositionHistoryResult result = new PositionHistoryResult(documents);
+    final PositionHistoryResult result = new PositionHistoryResult(documents);
     result.setPaging(Paging.of(request.getPagingRequest(), pair.getFirstInt()));
-    return result;    
+    return result;
   }
 
 }

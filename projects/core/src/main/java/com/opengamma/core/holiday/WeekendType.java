@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.core.holiday;
 
@@ -9,9 +9,8 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Contains information about which days of the week are weekends. This allows the holiday sources to be used
- * without explicitly storing every weekend as a holiday while removing the hard coding found in some of the
- * sources.
+ * Contains information about which days of the week are weekends. This allows the holiday sources to be used without explicitly storing every weekend as a
+ * holiday while removing the hard coding found in some of the sources.
  */
 public enum WeekendType {
 
@@ -47,22 +46,45 @@ public enum WeekendType {
 
   /**
    * Creates an instance.
-   * @param day1  the first day of the weekend
-   * @param day2  the second day of the weekend
+   * 
+   * @param day1
+   *          the first day of the weekend
+   * @param day2
+   *          the second day of the weekend
    */
-  private WeekendType(final DayOfWeek day1, final DayOfWeek day2) {
+  WeekendType(final DayOfWeek day1, final DayOfWeek day2) {
     _day1 = day1;
     _day2 = day2;
   }
 
   /**
    * Returns true if the date falls on a weekend.
-   * @param date  the date, not null
-   * @return  true if the date falls on a weekend
+   * 
+   * @param date
+   *          the date, not null
+   * @return true if the date falls on a weekend
    */
   public boolean isWeekend(final LocalDate date) {
     ArgumentChecker.notNull(date, "date");
     final DayOfWeek day = date.getDayOfWeek();
     return day == _day1 || day == _day2;
+  }
+
+  /**
+   * Gets the first weekend day.
+   * 
+   * @return the first weekend day
+   */
+  public DayOfWeek getFirstDay() {
+    return _day1;
+  }
+
+  /**
+   * Gets the second weekend day.
+   * 
+   * @return the second weekend day
+   */
+  public DayOfWeek getSecondDay() {
+    return _day2;
   }
 }

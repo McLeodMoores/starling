@@ -16,21 +16,24 @@ import com.opengamma.timeseries.BigDecimalObjectTimeSeriesTest;
 
 /**
  * Abstract test class for {@code PreciseObjectTimeSeries}.
- * 
+ *
  * @param <T>  the time type
  */
 @Test(groups = "unit")
 public abstract class PreciseObjectTimeSeriesTest<T> extends BigDecimalObjectTimeSeriesTest<T> {
 
+  /**
+   * Tests an intersection of two time series using the values from the first.
+   */
   @Test
-  public void test_intersectionFirstValue() {
-    PreciseObjectTimeSeries<T, BigDecimal> dts = (PreciseObjectTimeSeries<T, BigDecimal>) createStandardTimeSeries();
-    PreciseObjectTimeSeries<T, BigDecimal> dts2 = (PreciseObjectTimeSeries<T, BigDecimal>) createStandardTimeSeries2();
-    PreciseObjectTimeSeries<T, BigDecimal> ets = (PreciseObjectTimeSeries<T, BigDecimal>) createEmptyTimeSeries();
+  public void testIntersectionFirstValue() {
+    final PreciseObjectTimeSeries<T, BigDecimal> dts = (PreciseObjectTimeSeries<T, BigDecimal>) createStandardTimeSeries();
+    final PreciseObjectTimeSeries<T, BigDecimal> dts2 = (PreciseObjectTimeSeries<T, BigDecimal>) createStandardTimeSeries2();
+    final PreciseObjectTimeSeries<T, BigDecimal> ets = (PreciseObjectTimeSeries<T, BigDecimal>) createEmptyTimeSeries();
     assertEquals(ets, ets.intersectionFirstValue(dts));
     assertEquals(ets, dts.intersectionFirstValue(ets));
-    
-    PreciseObjectTimeSeries<T, BigDecimal> result = dts.intersectionFirstValue(dts2);
+
+    final PreciseObjectTimeSeries<T, BigDecimal> result = dts.intersectionFirstValue(dts2);
     assertEquals(3, result.size());
     assertEquals(testValues()[3], result.getValueAtIndex(0));
     assertEquals(testValues()[4], result.getValueAtIndex(1));
@@ -40,21 +43,24 @@ public abstract class PreciseObjectTimeSeriesTest<T> extends BigDecimalObjectTim
     assertEquals(dts.getTimeAtIndex(5), result.getTimeAtIndex(2));
   }
 
+  /**
+   * Tests the no intersection operation.
+   */
   @Test
-  public void test_noIntersectionOperation() {
-    PreciseObjectTimeSeries<T, BigDecimal> dts = (PreciseObjectTimeSeries<T, BigDecimal>) createStandardTimeSeries();
-    PreciseObjectTimeSeries<T, BigDecimal> dts2 = (PreciseObjectTimeSeries<T, BigDecimal>) createStandardTimeSeries2();
-    PreciseObjectTimeSeries<T, BigDecimal> ets = (PreciseObjectTimeSeries<T, BigDecimal>) createEmptyTimeSeries();
+  public void testNoIntersectionOperation() {
+    final PreciseObjectTimeSeries<T, BigDecimal> dts = (PreciseObjectTimeSeries<T, BigDecimal>) createStandardTimeSeries();
+    final PreciseObjectTimeSeries<T, BigDecimal> dts2 = (PreciseObjectTimeSeries<T, BigDecimal>) createStandardTimeSeries2();
+    final PreciseObjectTimeSeries<T, BigDecimal> ets = (PreciseObjectTimeSeries<T, BigDecimal>) createEmptyTimeSeries();
     assertEquals(dts, ets.noIntersectionOperation(dts));
     assertEquals(dts, dts.noIntersectionOperation(ets));
     try {
       dts.noIntersectionOperation(dts2);
       fail("Should have failed");
-    } catch (IllegalStateException ex) {
+    } catch (final IllegalStateException ex) {
       //do nothing - expected exception because the two timeseries have overlapping dates which will require intersection operation
     }
-    PreciseObjectTimeSeries<T, BigDecimal> dts3 = dts2.subSeries(dts.getLatestTime(), false, dts2.getLatestTime(), false);
-    PreciseObjectTimeSeries<T, BigDecimal> noIntersecOp = dts.noIntersectionOperation(dts3);
+    final PreciseObjectTimeSeries<T, BigDecimal> dts3 = dts2.subSeries(dts.getLatestTime(), false, dts2.getLatestTime(), false);
+    final PreciseObjectTimeSeries<T, BigDecimal> noIntersecOp = dts.noIntersectionOperation(dts3);
     assertEquals(dts.getValueAtIndex(0), noIntersecOp.getValueAtIndex(0));
     assertEquals(dts.getValueAtIndex(1), noIntersecOp.getValueAtIndex(1));
     assertEquals(dts.getValueAtIndex(2), noIntersecOp.getValueAtIndex(2));

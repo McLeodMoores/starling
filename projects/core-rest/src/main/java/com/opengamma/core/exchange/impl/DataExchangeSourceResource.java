@@ -40,7 +40,7 @@ public class DataExchangeSourceResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param exchangeSource  the underlying exchange source, not null
    */
   public DataExchangeSourceResource(final ExchangeSource exchangeSource) {
@@ -51,7 +51,7 @@ public class DataExchangeSourceResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the exchange source.
-   * 
+   *
    * @return the exchange source, not null
    */
   public ExchangeSource getExchangeSource() {
@@ -59,49 +59,86 @@ public class DataExchangeSourceResource extends AbstractDataResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets a HATEAOS response.
+   *
+   * @param uriInfo
+   *          the URI, not null
+   * @return the response
+   */
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
+  /**
+   * Searches for an exchange by version, correction and external identifiers.
+   *
+   * @param versionAsOf
+   *          the version, can be null. If null, the latest is used.
+   * @param correctedTo
+   *          the correction, can be null. If null, the latest is used.
+   * @param externalIdStrs
+   *          the external ids, not null
+   * @return the exchange as a Fudge message
+   */
   @GET
   @Path("exchanges")
   public Response search(
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo,
-      @QueryParam("id") List<String> externalIdStrs) {
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo,
+      @QueryParam("id") final List<String> externalIdStrs) {
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
-    Collection<? extends Exchange> result = getExchangeSource().get(bundle, vc);
+    final Collection<? extends Exchange> result = getExchangeSource().get(bundle, vc);
     return responseOkObject(FudgeListWrapper.of(result));
   }
 
+  /**
+   * Searches for an exchange by identifier, version, version and correction.
+   *
+   * @param idStr
+   *          the object identifier, not null
+   * @param version
+   *          the version, can be null. If null, the latest is used
+   * @param versionAsOf
+   *          the version, can be null. If null, the latest is used.
+   * @param correctedTo
+   *          the correction, can be null. If null, the latest is used.
+   * @return the exchange as a Fudge message
+   */
   @GET
   @Path("exchanges/{exchangeId}")
   public Response get(
-      @PathParam("exchangeId") String idStr,
-      @QueryParam("version") String version,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo) {
+      @PathParam("exchangeId") final String idStr,
+      @QueryParam("version") final String version,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
     final ObjectId objectId = ObjectId.parse(idStr);
     if (version != null) {
       final Exchange result = getExchangeSource().get(objectId.atVersion(version));
       return responseOkObject(result);
-    } else {
-      final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      Exchange result = getExchangeSource().get(objectId, vc);
-      return responseOkObject(result);
     }
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final Exchange result = getExchangeSource().get(objectId, vc);
+    return responseOkObject(result);
   }
 
- 
+
   // deprecated
   //-------------------------------------------------------------------------
+  /**
+   * Searches for exchanges by identifiers.
+   *
+   * @param externalIdStrs
+   *          the object identifier, not null
+   * @return the conventions as a Fudge message
+   */
   @GET
   @Path("exchangeSearches/single")
-  public Response searchSingle(@QueryParam("id") List<String> externalIdStrs) {
+  public Response searchSingle(@QueryParam("id") final List<String> externalIdStrs) {
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
-    Exchange result = getExchangeSource().getSingle(bundle);
+    final Exchange result = getExchangeSource().getSingle(bundle);
     return responseOkObject(result);
   }
 

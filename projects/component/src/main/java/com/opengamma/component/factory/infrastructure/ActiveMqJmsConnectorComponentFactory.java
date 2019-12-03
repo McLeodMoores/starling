@@ -50,20 +50,23 @@ public class ActiveMqJmsConnectorComponentFactory extends AbstractAliasedCompone
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    JmsConnector connector = createJmsConnector(repo);
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final JmsConnector connector = createJmsConnector(repo);
     registerComponentAndAliases(repo, JmsConnector.class, connector);
   }
 
   /**
    * Creates the JMS connector without registering it.
-   * 
-   * @param repo  the component repository, only used to register secondary items like lifecycle, not null
+   *
+   * @param repo
+   *          the component repository, only used to register secondary items like lifecycle, not null
    * @return the JMS connector, not null
+   * @throws Exception
+   *           if there is a problem
    */
-  protected JmsConnector createJmsConnector(ComponentRepository repo) throws Exception {
-    ConnectionFactory connectionFactory = createConnectionFactory(repo);
-    JmsConnectorFactoryBean factoryBean = new JmsConnectorFactoryBean();
+  protected JmsConnector createJmsConnector(final ComponentRepository repo) throws Exception {
+    final ConnectionFactory connectionFactory = createConnectionFactory(repo);
+    final JmsConnectorFactoryBean factoryBean = new JmsConnectorFactoryBean();
     factoryBean.setName("StandardJms");
     factoryBean.setConnectionFactory(connectionFactory);
     factoryBean.setClientBrokerUri(new URI(getClientBrokerUri()));
@@ -73,14 +76,14 @@ public class ActiveMqJmsConnectorComponentFactory extends AbstractAliasedCompone
 
   /**
    * Creates the JMS connection factory without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the JMS connection factory, not null
    */
-  protected ConnectionFactory createConnectionFactory(ComponentRepository repo) {
-    ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(getClientBrokerUri());
+  protected ConnectionFactory createConnectionFactory(final ComponentRepository repo) {
+    final ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(getClientBrokerUri());
     connectionFactory.setWatchTopicAdvisories(false);
-    PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory(connectionFactory);
+    final PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory(connectionFactory);
     pooledConnectionFactory.setIdleTimeout(0);
     return pooledConnectionFactory;
   }

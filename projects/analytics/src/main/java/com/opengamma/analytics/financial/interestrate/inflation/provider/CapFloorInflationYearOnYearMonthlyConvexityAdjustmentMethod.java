@@ -25,8 +25,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- *  Pricing method for inflation Year on Year cap/floor. The price is computed by index estimation, discounting and using a convexity adjustment.
- * See note "Inflation convexity adjustment" by Arroub Zine-eddine for details.
+ * Pricing method for inflation Year on Year cap/floor. The price is computed by index estimation, discounting and using a convexity adjustment. See note
+ * "Inflation convexity adjustment" by Arroub Zine-eddine for details.
  */
 public final class CapFloorInflationYearOnYearMonthlyConvexityAdjustmentMethod {
 
@@ -43,6 +43,7 @@ public final class CapFloorInflationYearOnYearMonthlyConvexityAdjustmentMethod {
 
   /**
    * Return the unique instance of the class.
+   *
    * @return The instance.
    */
   public static CapFloorInflationYearOnYearMonthlyConvexityAdjustmentMethod getInstance() {
@@ -52,7 +53,8 @@ public final class CapFloorInflationYearOnYearMonthlyConvexityAdjustmentMethod {
   /**
    * The convexity adjustment function used in the pricing.
    */
-  private static final InflationMarketModelConvexityAdjustmentForCapFloor CONVEXITY_ADJUSTMENT_FUNCTION = new InflationMarketModelConvexityAdjustmentForCapFloor();
+  private static final InflationMarketModelConvexityAdjustmentForCapFloor CONVEXITY_ADJUSTMENT_FUNCTION =
+      new InflationMarketModelConvexityAdjustmentForCapFloor();
 
   /**
    * The Black function used in the pricing.
@@ -61,11 +63,15 @@ public final class CapFloorInflationYearOnYearMonthlyConvexityAdjustmentMethod {
 
   /**
    * Computes the net amount.
-   * @param cap The caplet/floorlet.
-   * @param black The Black implied volatility and multi-curve provider.
+   *
+   * @param cap
+   *          The caplet/floorlet.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value.
    */
-  public MultipleCurrencyAmount netAmount(final CapFloorInflationYearOnYearMonthly cap, final BlackSmileCapInflationYearOnYearWithConvexityProviderInterface black) {
+  public MultipleCurrencyAmount netAmount(final CapFloorInflationYearOnYearMonthly cap,
+      final BlackSmileCapInflationYearOnYearWithConvexityProviderInterface black) {
     ArgumentChecker.notNull(cap, "The cap/floor shoud not be null");
     ArgumentChecker.notNull(black, "Black provider");
     final double timeToMaturity = cap.getReferenceEndTime() - cap.getLastKnownFixingTime();
@@ -83,11 +89,15 @@ public final class CapFloorInflationYearOnYearMonthlyConvexityAdjustmentMethod {
 
   /**
    * Computes the present value.
-   * @param cap The caplet/floorlet.
-   * @param black The Black implied volatility and multi-curve provider.
+   *
+   * @param cap
+   *          The caplet/floorlet.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValue(final CapFloorInflationYearOnYearMonthly cap, final BlackSmileCapInflationYearOnYearWithConvexityProviderInterface black) {
+  public MultipleCurrencyAmount presentValue(final CapFloorInflationYearOnYearMonthly cap,
+      final BlackSmileCapInflationYearOnYearWithConvexityProviderInterface black) {
     final MultipleCurrencyAmount nonDiscountedPresentValue = netAmount(cap, black);
     final double df = black.getMulticurveProvider().getDiscountFactor(cap.getCurrency(), cap.getPaymentTime());
     return nonDiscountedPresentValue.multipliedBy(df);
@@ -95,23 +105,31 @@ public final class CapFloorInflationYearOnYearMonthlyConvexityAdjustmentMethod {
 
   /**
    * Computes the present value.
-   * @param instrument The instrument.
-   * @param black The Black implied volatility and multi-curve provider.
+   *
+   * @param instrument
+   *          The instrument.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValue(final InstrumentDerivative instrument, final BlackSmileCapInflationYearOnYearWithConvexityProviderInterface black) {
+  public MultipleCurrencyAmount presentValue(final InstrumentDerivative instrument,
+      final BlackSmileCapInflationYearOnYearWithConvexityProviderInterface black) {
     ArgumentChecker.isTrue(instrument instanceof CapFloorInflationYearOnYearMonthly, "Inflation Year on Year Cap/floor");
     return presentValue((CapFloorInflationYearOnYearMonthly) instrument, black);
   }
 
   /**
-   * Computes the present value rate sensitivity to rates of a cap/floor in the Black model.
-   * No smile impact is taken into account; equivalent to a sticky strike smile description.
-   * @param cap The caplet/floorlet.
-   * @param black The Black implied volatility and multi-curve provider.
+   * Computes the present value rate sensitivity to rates of a cap/floor in the Black model. No smile impact is taken into account; equivalent to a sticky
+   * strike smile description.
+   *
+   * @param cap
+   *          The caplet/floorlet.
+   * @param black
+   *          The Black implied volatility and multi-curve provider.
    * @return The present value curve sensitivity.
    */
-  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CapFloorInflationYearOnYearMonthly cap, final BlackSmileCapInflationYearOnYearWithConvexityProviderInterface black) {
+  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CapFloorInflationYearOnYearMonthly cap,
+      final BlackSmileCapInflationYearOnYearWithConvexityProviderInterface black) {
     ArgumentChecker.notNull(cap, "The cap/floor shoud not be null");
     ArgumentChecker.notNull(black, "Black provider");
     final InflationProviderInterface inflation = black.getInflationProvider();

@@ -33,7 +33,7 @@ import com.opengamma.util.test.TestGroup;
 public class FudgeProvidersTest {
 
   @SuppressWarnings({"rawtypes", "unchecked" })
-  private void testBeans(final MessageBodyWriter producer, final MessageBodyReader consumer) {
+  private static void testBeans(final MessageBodyWriter producer, final MessageBodyReader consumer) {
     final MutableFudgeMsg msgIn = OpenGammaFudgeContext.getInstance().newMessage();
     msgIn.add("foo", "bar");
     msgIn.add("number", 42);
@@ -43,7 +43,7 @@ public class FudgeProvidersTest {
     final ByteArrayOutputStream bos = new ByteArrayOutputStream();
     try {
       producer.writeTo(msgInEnv, msgInEnv.getClass(), null, null, null, null, bos);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("ioexception", e);
     }
     final byte[] data = bos.toByteArray();
@@ -57,7 +57,7 @@ public class FudgeProvidersTest {
       final FudgeMsgEnvelope env = (FudgeMsgEnvelope) consumer.readFrom(FudgeMsgEnvelope.class, null, null, null, null, bis);
       assertNotNull(env);
       msgOut = env.getMessage();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("ioexception", e);
     }
     assertNotNull(msgOut);
@@ -65,14 +65,23 @@ public class FudgeProvidersTest {
     assertEquals((Integer) 42, msgOut.getFieldValue(Integer.class, msgOut.getByName("number")));
   }
 
+  /**
+   * Tests the Fudge binary producer and consumer.
+   */
   public void testBinary() {
     testBeans(new FudgeObjectBinaryProducer(), new FudgeObjectBinaryConsumer());
   }
 
+  /**
+   * Tests the Fudge JSON producer and consumer.
+   */
   public void testJSON() {
     testBeans(new FudgeObjectJSONProducer(), new FudgeObjectJSONConsumer());
   }
 
+  /**
+   * Tests the Fudge XML producer and consumer.
+   */
   public void testXML() {
     testBeans(new FudgeObjectXMLProducer(), new FudgeObjectXMLConsumer());
   }

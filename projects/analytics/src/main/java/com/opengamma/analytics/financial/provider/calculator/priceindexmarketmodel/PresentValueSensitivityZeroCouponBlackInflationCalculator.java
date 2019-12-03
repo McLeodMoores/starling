@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.priceindexmarketmodel;
@@ -14,10 +14,10 @@ import com.opengamma.analytics.financial.provider.description.inflation.BlackSmi
 import com.opengamma.analytics.financial.provider.sensitivity.inflation.MultipleCurrencyInflationSensitivity;
 
 /**
- * 
+ *
  */
 public final class PresentValueSensitivityZeroCouponBlackInflationCalculator extends
-    InstrumentDerivativeVisitorAdapter<BlackSmileCapInflationZeroCouponProviderInterface, MultipleCurrencyInflationSensitivity> {
+InstrumentDerivativeVisitorAdapter<BlackSmileCapInflationZeroCouponProviderInterface, MultipleCurrencyInflationSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -32,6 +32,7 @@ public final class PresentValueSensitivityZeroCouponBlackInflationCalculator ext
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueSensitivityZeroCouponBlackInflationCalculator getInstance() {
@@ -41,10 +42,12 @@ public final class PresentValueSensitivityZeroCouponBlackInflationCalculator ext
   /**
    * Pricing methods.
    */
-  private static final CapFloorInflationZeroCouponInterpolationBlackSmileMethod METHOD_CAPFLOOR_INTERPOLATION = CapFloorInflationZeroCouponInterpolationBlackSmileMethod.getInstance();
-  private static final CapFloorInflationZeroCouponMonthlyBlackSmileMethod METHOD_CAPFLOOR_MONTHLY = CapFloorInflationZeroCouponMonthlyBlackSmileMethod.getInstance();
+  private static final CapFloorInflationZeroCouponInterpolationBlackSmileMethod METHOD_CAPFLOOR_INTERPOLATION =
+      CapFloorInflationZeroCouponInterpolationBlackSmileMethod.getInstance();
+  private static final CapFloorInflationZeroCouponMonthlyBlackSmileMethod METHOD_CAPFLOOR_MONTHLY = CapFloorInflationZeroCouponMonthlyBlackSmileMethod
+      .getInstance();
 
-  //-----     Cap/Floor Zero Coupon     -----
+  // ----- Cap/Floor Zero Coupon -----
 
   @Override
   public MultipleCurrencyInflationSensitivity visitCapFloorInflationZeroCouponInterpolation(final CapFloorInflationZeroCouponInterpolation cap,
@@ -53,7 +56,8 @@ public final class PresentValueSensitivityZeroCouponBlackInflationCalculator ext
   }
 
   @Override
-  public MultipleCurrencyInflationSensitivity visitCapFloorInflationZeroCouponMonthly(final CapFloorInflationZeroCouponMonthly cap, final BlackSmileCapInflationZeroCouponProviderInterface black) {
+  public MultipleCurrencyInflationSensitivity visitCapFloorInflationZeroCouponMonthly(final CapFloorInflationZeroCouponMonthly cap,
+      final BlackSmileCapInflationZeroCouponProviderInterface black) {
     return METHOD_CAPFLOOR_MONTHLY.presentValueCurveSensitivity(cap, black);
   }
 

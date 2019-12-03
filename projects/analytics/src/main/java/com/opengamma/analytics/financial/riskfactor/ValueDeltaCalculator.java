@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.riskfactor;
@@ -17,21 +17,22 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the value (or dollar) delta of an option given market data and the delta. The value delta is defined as the
- * option delta multiplied by the spot and shares per option.
+ * Calculates the value (or dollar) delta of an option given market data and the delta. The value delta is defined as the option delta multiplied by the spot
+ * and shares per option.
  */
 public final class ValueDeltaCalculator implements ValueGreekCalculator {
   /** Static instance */
-  private static final ValueDeltaCalculator s_instance = new ValueDeltaCalculator();
+  private static final ValueDeltaCalculator INSTANCE = new ValueDeltaCalculator();
   /** Calculates the multiplier for converting delta to value delta */
-  private static final MultiplierCalculator s_multiplierCalculator = new MultiplierCalculator();
+  private static final MultiplierCalculator MULTIPLIER_CALCULATOR = new MultiplierCalculator();
 
   /**
-   * Gets an instance of this calculator
+   * Gets an instance of this calculator.
+   * 
    * @return The (singleton) instance
    */
   public static ValueDeltaCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   private ValueDeltaCalculator() {
@@ -41,7 +42,7 @@ public final class ValueDeltaCalculator implements ValueGreekCalculator {
   public double valueGreek(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final double delta) {
     ArgumentChecker.notNull(derivative, "derivative");
     ArgumentChecker.notNull(market, "market");
-    return delta * derivative.accept(s_multiplierCalculator, market);
+    return delta * derivative.accept(MULTIPLIER_CALCULATOR, market);
   }
 
   /**
@@ -49,7 +50,7 @@ public final class ValueDeltaCalculator implements ValueGreekCalculator {
    */
   private static final class MultiplierCalculator extends InstrumentDerivativeVisitorAdapter<StaticReplicationDataBundle, Double> {
 
-    /* package */MultiplierCalculator() {
+    /* package */ MultiplierCalculator() {
     }
 
     @Override

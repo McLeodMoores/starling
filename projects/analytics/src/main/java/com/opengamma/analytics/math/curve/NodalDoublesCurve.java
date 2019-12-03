@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -29,7 +29,7 @@ import com.opengamma.util.tuple.DoublesPair;
 public class NodalDoublesCurve extends ArraysDoublesCurve {
 
   /**
-  * 
+  *
   * @param xData An array of <i>x</i> data points, not null, contains at least 2 data points
   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
   * @return A nodal curve with automatically-generated name
@@ -39,7 +39,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data points, not null, contains at least 2 data points
     * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @return A nodal curve with automatically-generated name
@@ -49,7 +49,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A map of <i>x-y</i> data points, not null, contains at least 2 data points
     * @return A nodal curve with automatically-generated name
     */
@@ -58,7 +58,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data An array of <i>x-y</i> pairs, not null, contains at least 2 data points
     * @return A nodal curve with automatically-generated name
     */
@@ -67,7 +67,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A set of <i>x-y</i> pairs, not null, contains at least 2 data points
     * @return A nodal curve with automatically-generated name
     */
@@ -76,7 +76,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData A list of <i>x</i> data points, not null, contains at least 2 data points
     * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @return A nodal curve with automatically-generated name
@@ -86,7 +86,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A list of <i>x-y</i> pairs, not null, contains at least 2 data points
     * @return A nodal curve with automatically-generated name
     */
@@ -95,7 +95,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data points, not null, contains at least 2 data points
     * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @param name The name of the curve
@@ -106,7 +106,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data points, not null, contains at least 2 data points
     * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @param name The name of the curve
@@ -117,7 +117,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A map of <i>x-y</i> data points, not null, contains at least 2 data points
     * @param name The name of the curve
     * @return A nodal curve with automatically-generated name
@@ -127,7 +127,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data An array of <i>x-y</i> pairs, not null, contains at least 2 data points
     * @param name The name of the curve
     * @return A nodal curve with automatically-generated name
@@ -137,7 +137,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A set of <i>x-y</i> pairs, not null, contains at least 2 data points
     * @param name The name of the curve
     * @return A nodal curve with automatically-generated name
@@ -147,7 +147,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData A list of <i>x</i> data points, not null, contains at least 2 data points
     * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @param name The name of the curve
@@ -158,7 +158,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A list of <i>x-y</i> pairs, not null, contains at least 2 data points
     * @param name The name of the curve
     * @return A nodal curve with automatically-generated name
@@ -168,7 +168,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
     * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @return A nodal curve with automatically-generated name
@@ -178,7 +178,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
     * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @return A nodal curve with automatically-generated name
@@ -188,7 +188,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A map of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
     * @return A nodal curve with automatically-generated name
     */
@@ -197,7 +197,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data An array of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
     * @return A nodal curve with automatically-generated name
     */
@@ -206,7 +206,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A set of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
     * @return A nodal curve with automatically-generated name
     */
@@ -215,7 +215,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A list of <i>x-y</i> pairs, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
     * @return A nodal curve with automatically-generated name
     */
@@ -224,7 +224,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData A list of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
     * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @return A nodal curve with automatically-generated name
@@ -234,7 +234,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
     * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @param name The name of the curve
@@ -245,7 +245,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
     * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @param name The name of the curve
@@ -256,7 +256,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A map of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
     * @param name The name of the curve
     * @return A nodal curve with automatically-generated name
@@ -266,7 +266,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data An array of <i>x-y</i> pairs, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
     * @param name The name of the curve
     * @return A nodal curve with automatically-generated name
@@ -276,7 +276,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A set of <i>x-y</i> pairs, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
     * @param name The name of the curve
     * @return A nodal curve with automatically-generated name
@@ -286,7 +286,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
     * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @param name The name of the curve
@@ -297,7 +297,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A list of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
     * @param name The name of the curve
     * @return A nodal curve with automatically-generated name
@@ -314,7 +314,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data, not null
     * @param yData An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
     * @param isSorted Is the <i>x</i>-data sorted
@@ -324,7 +324,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data, not null
     * @param yData An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
     * @param isSorted Is the <i>x</i>-data sorted
@@ -334,7 +334,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A map of <i>x-y</i> data, not null
     * @param isSorted Is the <i>x</i>-data sorted
     */
@@ -343,7 +343,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data An array of <i>x-y</i> pairs, not null
     * @param isSorted Is the <i>x</i>-data sorted
     */
@@ -352,7 +352,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A set of <i>x-y</i> pairs, not null
     * @param isSorted Is the <i>x</i>-data sorted
     */
@@ -361,7 +361,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData A list of <i>x</i> data points, assumed to be sorted ascending, not null
     * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
     * @param isSorted Is the <i>x</i>-data sorted
@@ -371,7 +371,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A list of <i>x-y</i> data points, assumed to be sorted ascending, not null
     * @param isSorted Is the <i>x</i>-data sorted
     */
@@ -380,7 +380,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data, not null
     * @param yData An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
     * @param isSorted Is the <i>x</i>-data sorted
@@ -391,7 +391,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData An array of <i>x</i> data, not null
     * @param yData An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
     * @param isSorted Is the <i>x</i>-data sorted
@@ -402,7 +402,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A map of <i>x-y</i> data, not null
     * @param isSorted Is the <i>x</i>-data sorted
     * @param name The name of the curve
@@ -412,7 +412,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data An array of <i>x-y</i> pairs, not null
     * @param isSorted Is the <i>x</i>-data sorted
     * @param name The name of the curve
@@ -422,7 +422,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A set of <i>x-y</i> pairs, not null
     * @param isSorted Is the <i>x</i>-data sorted
     * @param name The name of the curve
@@ -432,7 +432,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param xData A list of <i>x</i> data, not null
     * @param yData A list of <i>y</i> data, not null, contains same number of entries as <i>x</i>
     * @param isSorted Is the <i>x</i>-data sorted
@@ -443,7 +443,7 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-    * 
+    *
     * @param data A list of <i>x-y</i> pairs, not null
     * @param isSorted Is the <i>x</i>-data sorted
     * @param name The name of the curve
@@ -468,12 +468,12 @@ public class NodalDoublesCurve extends ArraysDoublesCurve {
   }
 
   @Override
-  public Double[] getYValueParameterSensitivity(Double x) {
+  public Double[] getYValueParameterSensitivity(final Double x) {
     throw new UnsupportedOperationException("Parameter sensitivity not supported yet for NodalDoublesCurve");
   }
 
   @Override
-  public double getDyDx(double x) {
+  public double getDyDx(final double x) {
     throw new NotImplementedException();
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.tool.portfolio;
@@ -25,16 +25,16 @@ import com.opengamma.master.position.impl.PositionSearchIterator;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Deletes positions that are not currently in a portfolio
+ * Deletes positions that are not currently in a portfolio.
  */
 public class OrphanedPositionRemover {
-  
-  private static final Logger s_logger = LoggerFactory.getLogger(OrphanedPositionRemover.class);
-  
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(OrphanedPositionRemover.class);
+
   private final PortfolioMaster _portfolioMaster;
   private final PositionMaster _positionMaster;
 
-  public OrphanedPositionRemover(PortfolioMaster portfolioMaster, PositionMaster positionMaster) {
+  public OrphanedPositionRemover(final PortfolioMaster portfolioMaster, final PositionMaster positionMaster) {
     ArgumentChecker.notNull(positionMaster, "position master");
     ArgumentChecker.notNull(portfolioMaster, "portfolio master");
     _portfolioMaster = portfolioMaster;
@@ -46,20 +46,20 @@ public class OrphanedPositionRemover {
     final Set<UniqueId> orphanedPositions = getOrphanedPositions(validPositions);
     removePositions(orphanedPositions);
   }
-  
-  private void removePositions(Set<UniqueId> orphanedPositions) {
-    s_logger.info("removing {} orphaned positions", orphanedPositions.size());
-    for (UniqueId orphanId : orphanedPositions) {
+
+  private void removePositions(final Set<UniqueId> orphanedPositions) {
+    LOGGER.info("removing {} orphaned positions", orphanedPositions.size());
+    for (final UniqueId orphanId : orphanedPositions) {
       _positionMaster.remove(orphanId);
-      s_logger.info("removed position {}", orphanId);
+      LOGGER.info("removed position {}", orphanId);
     }
   }
 
-  private Set<UniqueId> getOrphanedPositions(Set<ObjectId> validPositions) {
+  private Set<UniqueId> getOrphanedPositions(final Set<ObjectId> validPositions) {
     final Set<UniqueId> result = Sets.newHashSet();
-    PositionSearchRequest searchRequest = new PositionSearchRequest();
-    for (PositionDocument positionDocument : PositionSearchIterator.iterable(_positionMaster, searchRequest)) {
-      UniqueId positionId = positionDocument.getPosition().getUniqueId();
+    final PositionSearchRequest searchRequest = new PositionSearchRequest();
+    for (final PositionDocument positionDocument : PositionSearchIterator.iterable(_positionMaster, searchRequest)) {
+      final UniqueId positionId = positionDocument.getPosition().getUniqueId();
       if (!validPositions.contains(positionId.getObjectId())) {
         result.add(positionId);
       }
@@ -69,8 +69,8 @@ public class OrphanedPositionRemover {
 
   private Set<ObjectId> getValidPositions() {
     final Set<ObjectId> result = Sets.newHashSet();
-    PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
-    for (PortfolioDocument portfolioDocument : PortfolioSearchIterator.iterable(_portfolioMaster, searchRequest)) {
+    final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
+    for (final PortfolioDocument portfolioDocument : PortfolioSearchIterator.iterable(_portfolioMaster, searchRequest)) {
       accumulatePositionIdentifiers(portfolioDocument.getPortfolio().getRootNode(), result);
     }
     return result;
@@ -78,7 +78,7 @@ public class OrphanedPositionRemover {
 
   private void accumulatePositionIdentifiers(final ManageablePortfolioNode node, final Set<ObjectId> positions) {
     positions.addAll(node.getPositionIds());
-    for (ManageablePortfolioNode childNode : node.getChildNodes()) {
+    for (final ManageablePortfolioNode childNode : node.getChildNodes()) {
       accumulatePositionIdentifiers(childNode, positions);
     }
   }

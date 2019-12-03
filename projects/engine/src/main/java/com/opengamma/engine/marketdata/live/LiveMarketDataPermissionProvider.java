@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class LiveMarketDataPermissionProvider implements MarketDataPermissionProvider {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(LiveMarketDataPermissionProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LiveMarketDataPermissionProvider.class);
 
   private final LiveDataEntitlementChecker _entitlementChecker;
 
@@ -39,7 +39,7 @@ public class LiveMarketDataPermissionProvider implements MarketDataPermissionPro
   //-------------------------------------------------------------------------
   @Override
   public Set<ValueSpecification> checkMarketDataPermissions(final UserPrincipal user, final Set<ValueSpecification> specifications) {
-    s_logger.info("Checking that {} is entitled to computation results", user);
+    LOGGER.info("Checking that {} is entitled to computation results", user);
     final Map<LiveDataSpecification, Collection<ValueSpecification>> requiredLiveData = getRequiredLiveDataSpecifications(specifications);
     Map<LiveDataSpecification, Boolean> entitlements;
     try {
@@ -47,7 +47,7 @@ public class LiveMarketDataPermissionProvider implements MarketDataPermissionPro
     } catch (final Exception e) {
       // 2013-02-04 Andrew -- The message below said this was failing open, but it's returning the full set of specifications which is no access. I kept
       // this behaviour but changed the logging message.
-      s_logger.warn("Failed to perform entitlement checking. Assuming no access to data.", e);
+      LOGGER.warn("Failed to perform entitlement checking. Assuming no access to data.", e);
       return Sets.newHashSet();  //specifications;
     }
     final Set<ValueSpecification> failures = Sets.newHashSet();
@@ -57,9 +57,9 @@ public class LiveMarketDataPermissionProvider implements MarketDataPermissionPro
       }
     }
     if (!failures.isEmpty()) {
-      s_logger.warn("User {} does not have permission to access {} out of {} market data values",
-                    user, failures.size(), specifications.size());
-      s_logger.info("User {} does not have permission to access {}", user, failures);
+      LOGGER.warn("User {} does not have permission to access {} out of {} market data values",
+          user, failures.size(), specifications.size());
+      LOGGER.info("User {} does not have permission to access {}", user, failures);
     }
     return failures;
   }
@@ -70,7 +70,7 @@ public class LiveMarketDataPermissionProvider implements MarketDataPermissionPro
       final LiveDataSpecification liveDataSpec = LiveMarketDataAvailabilityProvider.getLiveDataSpecification(specification);
       Collection<ValueSpecification> specs = returnValue.get(liveDataSpec);
       if (specs == null) {
-        specs = new ArrayList<ValueSpecification>();
+        specs = new ArrayList<>();
         returnValue.put(liveDataSpec, specs);
       }
       specs.add(specification);

@@ -15,22 +15,23 @@ import com.opengamma.core.change.ChangeManager;
  * @param <D> document type
  * @param <M> type of a change providing master
  */
-public class ChangeProvidingCombinedMaster<D extends AbstractDocument, M extends AbstractChangeProvidingMaster<D>> extends CombinedMaster<D, M> implements AbstractChangeProvidingMaster<D> {
+public class ChangeProvidingCombinedMaster<D extends AbstractDocument, M extends AbstractChangeProvidingMaster<D>> extends CombinedMaster<D, M>
+implements AbstractChangeProvidingMaster<D> {
 
   private final AggregatingChangeManager _changeManager;
 
-  protected ChangeProvidingCombinedMaster(List<M> masterList) {
+  protected ChangeProvidingCombinedMaster(final List<M> masterList) {
     super(masterList);
-    
-    AggregatingChangeManager changeManager = new AggregatingChangeManager();
-    
-    for (M master : masterList) {
+
+    final AggregatingChangeManager changeManager = new AggregatingChangeManager();
+
+    for (final M master : masterList) {
       changeManager.addChangeManager(master.changeManager());
     }
-    
+
     _changeManager = changeManager;
 
-    
+
   }
 
   @Override

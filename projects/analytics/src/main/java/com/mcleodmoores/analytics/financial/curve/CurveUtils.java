@@ -47,41 +47,46 @@ import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 /**
  *
  */
-public class CurveUtils {
+public final class CurveUtils {
 
   public static final InstrumentDerivativeVisitor<Void, Double> RATES_INITIALIZATION = new InitialGuessForRates();
   public static final InstrumentDefinitionVisitor<Void, Double> INFLATION_INITIALIZATION = new InitialGuessForInflation();
   public static final InstrumentDefinitionVisitor<Map<Index, ZonedDateTimeDoubleTimeSeries>, ZonedDateTimeDoubleTimeSeries[]> FIXING_TIME_SERIES_PROVIDER = new FixingTimeSeriesProvider();
 
-  protected static class FixingTimeSeriesProvider extends InstrumentDefinitionVisitorSameValueAdapter<Map<Index, ZonedDateTimeDoubleTimeSeries>, ZonedDateTimeDoubleTimeSeries[]> {
+  protected static class FixingTimeSeriesProvider extends
+      InstrumentDefinitionVisitorSameValueAdapter<Map<Index, ZonedDateTimeDoubleTimeSeries>, ZonedDateTimeDoubleTimeSeries[]> {
 
     protected FixingTimeSeriesProvider() {
-      super(new ZonedDateTimeDoubleTimeSeries[] {ImmutableZonedDateTimeDoubleTimeSeries.ofEmptyUTC()});
+      super(new ZonedDateTimeDoubleTimeSeries[] { ImmutableZonedDateTimeDoubleTimeSeries.ofEmptyUTC() });
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitSwapFixedIborDefinition(final SwapFixedIborDefinition swap, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitSwapFixedIborDefinition(final SwapFixedIborDefinition swap,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       return swap.getIborLeg().accept(this, data);
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitSwapIborIborDefinition(final SwapIborIborDefinition swap, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitSwapIborIborDefinition(final SwapIborIborDefinition swap,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       return visitSwapDefinition(swap, data);
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitSwapXCcyIborIborDefinition(final SwapXCcyIborIborDefinition swap, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitSwapXCcyIborIborDefinition(final SwapXCcyIborIborDefinition swap,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries[] firstLegTs = swap.getFirstLeg().accept(this, data);
       final ZonedDateTimeDoubleTimeSeries[] secondLegTs = swap.getSecondLeg().accept(this, data);
       final ZonedDateTimeDoubleTimeSeries[] result = new ZonedDateTimeDoubleTimeSeries[firstLegTs.length + secondLegTs.length];
       System.arraycopy(firstLegTs, 0, result, 0, firstLegTs.length);
       System.arraycopy(secondLegTs, 0, result, firstLegTs.length, secondLegTs.length);
       return result;
-//      return visitSwapDefinition(swap, data);
+      // return visitSwapDefinition(swap, data);
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitSwapDefinition(final SwapDefinition swap, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitSwapDefinition(final SwapDefinition swap,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries[] firstLegTs = swap.getFirstLeg().accept(this, data);
       final ZonedDateTimeDoubleTimeSeries[] secondLegTs = swap.getSecondLeg().accept(this, data);
       final ZonedDateTimeDoubleTimeSeries[] result = new ZonedDateTimeDoubleTimeSeries[firstLegTs.length + secondLegTs.length];
@@ -91,7 +96,8 @@ public class CurveUtils {
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitAnnuityDefinition(final AnnuityDefinition<? extends PaymentDefinition> annuity, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitAnnuityDefinition(final AnnuityDefinition<? extends PaymentDefinition> annuity,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       // overly cautious, as no annuities with different coupon types are used in the tests
       // linked hash-set used to preserve order
       final Set<ZonedDateTimeDoubleTimeSeries> tss = new LinkedHashSet<>();
@@ -108,39 +114,43 @@ public class CurveUtils {
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitCouponIborDefinition(final CouponIborDefinition coupon, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitCouponIborDefinition(final CouponIborDefinition coupon,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries ts = data.get(coupon.getIndex());
       if (ts == null) {
         throw new IllegalStateException("Could not get fixing series for " + coupon.getIndex());
       }
-      return new ZonedDateTimeDoubleTimeSeries[] {ts};
+      return new ZonedDateTimeDoubleTimeSeries[] { ts };
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitCouponOISDefinition(final CouponONDefinition coupon, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitCouponOISDefinition(final CouponONDefinition coupon,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries ts = data.get(coupon.getIndex());
       if (ts == null) {
         throw new IllegalStateException("Could not get fixing series for " + coupon.getIndex());
       }
-      return new ZonedDateTimeDoubleTimeSeries[] {ts};
+      return new ZonedDateTimeDoubleTimeSeries[] { ts };
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitCouponIborSpreadDefinition(final CouponIborSpreadDefinition coupon, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitCouponIborSpreadDefinition(final CouponIborSpreadDefinition coupon,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries ts = data.get(coupon.getIndex());
       if (ts == null) {
         throw new IllegalStateException("Could not get fixing series for " + coupon.getIndex());
       }
-      return new ZonedDateTimeDoubleTimeSeries[] {ts};
+      return new ZonedDateTimeDoubleTimeSeries[] { ts };
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitForwardRateAgreementDefinition(final ForwardRateAgreementDefinition fra, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitForwardRateAgreementDefinition(final ForwardRateAgreementDefinition fra,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries ts = data.get(fra.getIndex());
       if (ts == null) {
         throw new IllegalStateException("Could not get fixing series for " + fra.getIndex());
       }
-      return new ZonedDateTimeDoubleTimeSeries[] {ts};
+      return new ZonedDateTimeDoubleTimeSeries[] { ts };
     }
   }
 
@@ -170,7 +180,7 @@ public class CurveUtils {
       return 1 - irFuture.getReferencePrice();
     }
 
-    //TODO instrument types
+    // TODO instrument types
   }
 
   protected static class InitialGuessForInflation extends InstrumentDefinitionVisitorSameValueAdapter<Void, Double> {
@@ -190,10 +200,12 @@ public class CurveUtils {
         return ((SwapFixedONDefinition) swap).getFixedLeg().getNthPayment(0).getRate();
       }
       if (swap instanceof SwapFixedInflationZeroCouponDefinition) {
-        if (((SwapFixedInflationZeroCouponDefinition) swap).getFirstLeg().getNthPayment(0) instanceof CouponInflationZeroCouponMonthlyDefinition) {
+        if (((SwapFixedInflationZeroCouponDefinition) swap).getFirstLeg()
+            .getNthPayment(0) instanceof CouponInflationZeroCouponMonthlyDefinition) {
           return 100.;
         }
-        if (((SwapFixedInflationZeroCouponDefinition) swap).getFirstLeg().getNthPayment(0) instanceof CouponInflationZeroCouponInterpolationDefinition) {
+        if (((SwapFixedInflationZeroCouponDefinition) swap).getFirstLeg()
+            .getNthPayment(0) instanceof CouponInflationZeroCouponInterpolationDefinition) {
           return 100.;
         }
         return 100.;
@@ -213,7 +225,9 @@ public class CurveUtils {
 
   }
 
-  public static InstrumentDerivative convert(final InstrumentDefinition<?> instrument, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final ZonedDateTime valuationDate) {
+  public static InstrumentDerivative convert(final InstrumentDefinition<?> instrument,
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
+      final ZonedDateTime valuationDate) {
     final InstrumentDerivative ird;
     if (instrument instanceof InstrumentDefinitionWithData) {
       final ZonedDateTimeDoubleTimeSeries[] ts = instrument.accept(FIXING_TIME_SERIES_PROVIDER, fixingTs);
@@ -225,9 +239,11 @@ public class CurveUtils {
       } else if (instrument instanceof SwapDefinition) {
         ird = ((InstrumentDefinitionWithData<InstrumentDerivative, Object>) instrument).toDerivative(valuationDate, ts);
       } else if (instrument instanceof InterestRateFutureTransactionDefinition) {
-        ird = ((InterestRateFutureTransactionDefinition) instrument).toDerivative(valuationDate, 0.0); // Trade date = today, reference price not used.
+        ird = ((InterestRateFutureTransactionDefinition) instrument).toDerivative(valuationDate, 0.0); // Trade date = today, reference
+                                                                                                       // price not used.
       } else if (instrument instanceof SwapFuturesPriceDeliverableTransactionDefinition) {
-        ird = ((SwapFuturesPriceDeliverableTransactionDefinition) instrument).toDerivative(valuationDate, 0.0); // Trade date = today, reference price not used.
+        ird = ((SwapFuturesPriceDeliverableTransactionDefinition) instrument).toDerivative(valuationDate, 0.0); // Trade date = today,
+                                                                                                                // reference price not used.
       } else {
         throw new UnsupportedOperationException("Unsupported instrument type " + instrument.getClass());
       }
@@ -237,7 +253,9 @@ public class CurveUtils {
     return ird;
   }
 
-  public static InstrumentDerivative[][] convert(final InstrumentDefinition<?>[][] definitions, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final ZonedDateTime valuationDate) {
+  public static InstrumentDerivative[][] convert(final InstrumentDefinition<?>[][] definitions,
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
+      final ZonedDateTime valuationDate) {
     final InstrumentDerivative[][] instruments = new InstrumentDerivative[definitions.length][];
     for (int i = 0; i < definitions.length; i++) {
       instruments[i] = new InstrumentDerivative[definitions[i].length];
@@ -249,7 +267,9 @@ public class CurveUtils {
     return instruments;
   }
 
-  public static InstrumentDerivative[] convert(final InstrumentDefinition<?>[] definitions, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final ZonedDateTime valuationDate) {
+  public static InstrumentDerivative[] convert(final InstrumentDefinition<?>[] definitions,
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
+      final ZonedDateTime valuationDate) {
     final InstrumentDerivative[] instruments = new InstrumentDerivative[definitions.length];
     for (int i = 0; i < definitions.length; i++) {
       instruments[i] = convert(definitions[i], fixingTs, valuationDate);
@@ -268,6 +288,8 @@ public class CurveUtils {
     public int compare(final InstrumentDerivative arg0, final InstrumentDerivative arg1) {
       return arg0.accept(_nodeTimeCalculator).compareTo(arg1.accept(_nodeTimeCalculator));
     }
+  }
 
+  private CurveUtils() {
   }
 }

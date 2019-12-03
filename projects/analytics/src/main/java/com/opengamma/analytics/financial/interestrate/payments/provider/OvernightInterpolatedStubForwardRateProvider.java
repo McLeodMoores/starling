@@ -16,25 +16,28 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 public final class OvernightInterpolatedStubForwardRateProvider implements ForwardRateProvider<IndexON> {
 
   private final InterpolatedStubCoupon<DepositIndexCoupon<IndexON>, IndexON> _coupon;
-  
+
   public OvernightInterpolatedStubForwardRateProvider(final InterpolatedStubCoupon<DepositIndexCoupon<IndexON>, IndexON> coupon) {
     _coupon = coupon;
   }
-  
+
   @Override
   public <T extends DepositIndexCoupon<IndexON>> double getRate(
       final MulticurveProviderInterface multicurves,
       final T coupon,
       final double fixingPeriodStartTime,
       final double fixingPeriodEndTime,
-      double fixingPeriodYearFraction) {
-    IndexON index = coupon.getIndex();
-    double forwardInterpStart = multicurves.getSimplyCompoundForwardRate(index, fixingPeriodStartTime, _coupon.getFirstInterpolatedTime(), _coupon.getFirstInterpolatedYearFraction());
-    double forwardInterpEnd = multicurves.getSimplyCompoundForwardRate(index, fixingPeriodStartTime, _coupon.getSecondInterpolatedTime(), _coupon.getSecondInterpolatedYearFraction());
+      final double fixingPeriodYearFraction) {
+    final IndexON index = coupon.getIndex();
+    final double forwardInterpStart = multicurves.getSimplyCompoundForwardRate(index, fixingPeriodStartTime, _coupon.getFirstInterpolatedTime(),
+        _coupon.getFirstInterpolatedYearFraction());
+    final double forwardInterpEnd = multicurves.getSimplyCompoundForwardRate(index, fixingPeriodStartTime, _coupon.getSecondInterpolatedTime(),
+        _coupon.getSecondInterpolatedYearFraction());
 
-    double forward = forwardInterpStart + (forwardInterpEnd - forwardInterpStart) 
-        * (fixingPeriodYearFraction - _coupon.getFirstInterpolatedYearFraction()) / (_coupon.getSecondInterpolatedYearFraction() - _coupon.getFirstInterpolatedYearFraction());
-    
+    final double forward = forwardInterpStart + (forwardInterpEnd - forwardInterpStart)
+        * (fixingPeriodYearFraction - _coupon.getFirstInterpolatedYearFraction())
+        / (_coupon.getSecondInterpolatedYearFraction() - _coupon.getFirstInterpolatedYearFraction());
+
     return forward;
   }
 }

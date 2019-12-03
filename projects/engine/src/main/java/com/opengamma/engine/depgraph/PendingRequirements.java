@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -19,10 +19,10 @@ import com.opengamma.engine.value.ValueRequirement;
  */
 /* package */final class PendingRequirements implements ResolvedValueCallback {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PendingRequirements.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PendingRequirements.class);
   private static final int REPORT_PERIOD = 10; // Only report every Nth housekeeping tick (1s per tick)
 
-  private static final Housekeeper.Callback<PendingRequirements> s_report = new Housekeeper.Callback<PendingRequirements>() {
+  private static final Housekeeper.Callback<PendingRequirements> REPORT = new Housekeeper.Callback<PendingRequirements>() {
 
     @Override
     public boolean tick(final DependencyGraphBuilder builder, final PendingRequirements data) {
@@ -43,15 +43,16 @@ import com.opengamma.engine.value.ValueRequirement;
   };
 
   private final Housekeeper _monitor;
-  private final ConcurrentMap<ValueRequirement, ValueRequirement> _valueRequirements = new ConcurrentHashMap<ValueRequirement, ValueRequirement>();
+  private final ConcurrentMap<ValueRequirement, ValueRequirement> _valueRequirements = new ConcurrentHashMap<>();
   private int _tick;
 
-  public PendingRequirements(final DependencyGraphBuilder builder) {
-    _monitor = Housekeeper.of(builder, s_report, this);
+  PendingRequirements(final DependencyGraphBuilder builder) {
+    _monitor = Housekeeper.of(builder, REPORT, this);
   }
 
   @Override
-  public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
+  public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
+      final ResolutionPump pump) {
     _valueRequirements.remove(valueRequirement);
     if (pump != null) {
       context.close(pump);
@@ -69,11 +70,11 @@ import com.opengamma.engine.value.ValueRequirement;
   }
 
   private void tick() {
-    if ((++_tick % REPORT_PERIOD) == 0) {
-      if (s_logger.isDebugEnabled()) {
-        s_logger.debug("{} pending in run queue", _valueRequirements);
+    if (++_tick % REPORT_PERIOD == 0) {
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("{} pending in run queue", _valueRequirements);
       } else {
-        s_logger.info("{} requirements pending in run queue", _valueRequirements.size());
+        LOGGER.info("{} requirements pending in run queue", _valueRequirements.size());
       }
     }
   }
@@ -81,7 +82,7 @@ import com.opengamma.engine.value.ValueRequirement;
   public void add(final GraphBuildingContext context, final ResolvedValueProducer producer) {
     _valueRequirements.put(producer.getValueRequirement(), producer.getValueRequirement());
     producer.addCallback(context, this);
-    if (s_logger.isDebugEnabled() || s_logger.isInfoEnabled()) {
+    if (LOGGER.isDebugEnabled() || LOGGER.isInfoEnabled()) {
       _monitor.start();
     }
   }

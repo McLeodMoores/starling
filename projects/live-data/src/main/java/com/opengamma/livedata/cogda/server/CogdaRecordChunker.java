@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.server;
@@ -31,12 +31,12 @@ public abstract class CogdaRecordChunker implements MetricProducer {
    * Used to establish the size of the internal statics maintenance structures.
    */
   private static final int ESTIMATE_SYMBOL_COUNT = 10000;
-  private final ConcurrentMap<String, Meter> _symbolStatistics = new ConcurrentHashMap<String, Meter>(ESTIMATE_SYMBOL_COUNT);
+  private final ConcurrentMap<String, Meter> _symbolStatistics = new ConcurrentHashMap<>(ESTIMATE_SYMBOL_COUNT);
   private MetricRegistry _detailedRegistry;
   private String _metricNamePrefix;
   private Meter _tickMeter;
-  private Lock _metricsModificationLock = new ReentrantLock();
-  
+  private final Lock _metricsModificationLock = new ReentrantLock();
+
   /**
    * The destination for decoded messsages.
    */
@@ -47,7 +47,7 @@ public abstract class CogdaRecordChunker implements MetricProducer {
   private InputStreamFactory _inputStreamFactory;
 
   @Override
-  public synchronized void registerMetrics(MetricRegistry summaryRegistry, MetricRegistry detailedRegistry, String namePrefix) {
+  public synchronized void registerMetrics(final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry, final String namePrefix) {
     _detailedRegistry = detailedRegistry;
     _metricNamePrefix = namePrefix;
     _tickMeter = summaryRegistry.meter(namePrefix + ".total");
@@ -65,10 +65,10 @@ public abstract class CogdaRecordChunker implements MetricProducer {
    * Sets the fudgeSender.
    * @param fudgeSender  the fudgeSender
    */
-  public void setFudgeSender(FudgeMessageSender fudgeSender) {
+  public void setFudgeSender(final FudgeMessageSender fudgeSender) {
     _fudgeSender = fudgeSender;
   }
-  
+
   /**
    * Gets the inputStreamFactory.
    * @return the inputStreamFactory
@@ -81,7 +81,7 @@ public abstract class CogdaRecordChunker implements MetricProducer {
    * Sets the inputStreamFactory.
    * @param inputStreamFactory  the inputStreamFactory
    */
-  public void setInputStreamFactory(InputStreamFactory inputStreamFactory) {
+  public void setInputStreamFactory(final InputStreamFactory inputStreamFactory) {
     _inputStreamFactory = inputStreamFactory;
   }
 
@@ -90,7 +90,7 @@ public abstract class CogdaRecordChunker implements MetricProducer {
    * Allows the parent class to update statistics visible by the MBean.
    * @param symbol The symbol a tick is received on.
    */
-  protected void symbolSeen(String symbol) {
+  protected void symbolSeen(final String symbol) {
     // Note the paradigm here. We avoid any overlap by the .putIfAbsent call,
     // but we really want to avoid excess garbage generation so we still do the .get
     // first. The case where map won't be populated is extremely rare and only
@@ -113,7 +113,7 @@ public abstract class CogdaRecordChunker implements MetricProducer {
       _tickMeter.mark();
     }
   }
-  
+
   public int getNumActiveSymbols() {
     return _symbolStatistics.size();
   }
@@ -123,10 +123,10 @@ public abstract class CogdaRecordChunker implements MetricProducer {
    * @return All symbols seen since startup.
    */
   public Set<String> getAllSymbols() {
-    Set<String> allSymbols = new TreeSet<String>(_symbolStatistics.keySet());
+    final Set<String> allSymbols = new TreeSet<>(_symbolStatistics.keySet());
     return allSymbols;
   }
-  
+
   /**
    * Return a description (e.g. hostname/port) for the remote endpoint
    * for this connection.

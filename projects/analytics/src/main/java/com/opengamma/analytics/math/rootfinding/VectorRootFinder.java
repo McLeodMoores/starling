@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.rootfinding;
 
@@ -9,12 +13,13 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.NamedInstance;
 
 /**
  * Parent class for root-finders that calculate a root for a vector function (i.e. $\mathbf{y} = f(\mathbf{x})$, where
  * $\mathbf{x}$ and $\mathbf{y}$ are vectors).
  */
-public abstract class VectorRootFinder implements SingleRootFinder<DoubleMatrix1D, DoubleMatrix1D> {
+public abstract class VectorRootFinder implements SingleRootFinder<DoubleMatrix1D, DoubleMatrix1D>, NamedInstance {
 
   /**
    * {@inheritDoc}
@@ -55,4 +60,8 @@ public abstract class VectorRootFinder implements SingleRootFinder<DoubleMatrix1
     }
   }
 
+  @Override
+  public String getName() {
+    return getClass().getSimpleName();
+  }
 }

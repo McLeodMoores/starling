@@ -23,8 +23,8 @@ import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Class describing a issuer provider created from a issuer provider where the discounting curve for one issuer is
- * shifted (decorated) by a a parallel spread (in the zero-coupon continuously compounded rate).
+ * Class describing a issuer provider created from a issuer provider where the discounting curve for one issuer is shifted (decorated) by a a parallel spread
+ * (in the zero-coupon continuously compounded rate).
  */
 public class InflationIssuerProviderIssuerDecoratedSpread implements InflationIssuerProviderInterface {
 
@@ -43,11 +43,16 @@ public class InflationIssuerProviderIssuerDecoratedSpread implements InflationIs
 
   /**
    * Constructor.
-   * @param inflationIssuerProvider The underlying inflation issuer provider on which the multi-curves provider is based, not null
-   * @param issuer The issuer, not null
-   * @param spread The spread
+   *
+   * @param inflationIssuerProvider
+   *          The underlying inflation issuer provider on which the multi-curves provider is based, not null
+   * @param issuer
+   *          The issuer, not null
+   * @param spread
+   *          The spread
    */
-  public InflationIssuerProviderIssuerDecoratedSpread(final InflationIssuerProviderInterface inflationIssuerProvider, final LegalEntity issuer, final double spread) {
+  public InflationIssuerProviderIssuerDecoratedSpread(final InflationIssuerProviderInterface inflationIssuerProvider, final LegalEntity issuer,
+      final double spread) {
     ArgumentChecker.notNull(inflationIssuerProvider, "inflationIssuerProvider");
     ArgumentChecker.notNull(issuer, "issuer");
     _inflationIssuerProvider = inflationIssuerProvider;
@@ -62,7 +67,7 @@ public class InflationIssuerProviderIssuerDecoratedSpread implements InflationIs
 
   @Override
   public IssuerProviderInterface getIssuerProvider() {
-    return this.getIssuerProvider();
+    return _inflationIssuerProvider.getIssuerProvider();
   }
 
   @Override
@@ -209,22 +214,26 @@ public class InflationIssuerProviderIssuerDecoratedSpread implements InflationIs
     return _inflationIssuerProvider.withDiscountFactor(ccy, replacement);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   *
    * @see java.lang.Object#hashCode()
    */
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_inflationIssuerProvider == null) ? 0 : _inflationIssuerProvider.hashCode());
-    result = prime * result + ((_issuer == null) ? 0 : _issuer.hashCode());
+    result = prime * result + (_inflationIssuerProvider == null ? 0 : _inflationIssuerProvider.hashCode());
+    result = prime * result + (_issuer == null ? 0 : _issuer.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override

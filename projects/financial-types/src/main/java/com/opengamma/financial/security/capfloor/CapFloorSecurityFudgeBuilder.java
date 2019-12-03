@@ -50,13 +50,13 @@ public class CapFloorSecurityFudgeBuilder extends AbstractFudgeBuilder implement
   public static final String IS_IBOR_FIELD_NAME = "isIbor";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CapFloorSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CapFloorSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     CapFloorSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, CapFloorSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final CapFloorSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, START_DATE_FIELD_NAME, ZonedDateTimeFudgeBuilder.toFudgeMsg(serializer, object.getStartDate()));
     addToMessage(msg, MATURITY_DATE_FIELD_NAME, ZonedDateTimeFudgeBuilder.toFudgeMsg(serializer, object.getMaturityDate()));
@@ -72,13 +72,13 @@ public class CapFloorSecurityFudgeBuilder extends AbstractFudgeBuilder implement
   }
 
   @Override
-  public CapFloorSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    CapFloorSecurity object = new CapFloorSecurity();
+  public CapFloorSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final CapFloorSecurity object = new CapFloorSecurity();
     CapFloorSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, CapFloorSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final CapFloorSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setStartDate(ZonedDateTimeFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(START_DATE_FIELD_NAME)));
     object.setMaturityDate(ZonedDateTimeFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(MATURITY_DATE_FIELD_NAME)));

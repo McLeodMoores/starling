@@ -50,60 +50,60 @@ public class SimpleTrade extends DirectBean
   /**
    * The unique identifier of the trade.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The number of units in the trade.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private BigDecimal _quantity;
   /**
    * The link referencing the security, not null.
    * This may also hold the resolved security.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private SecurityLink _securityLink;
   /**
    * The counterparty.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private Counterparty _counterparty;
   /**
    * The trade date.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private LocalDate _tradeDate;
   /**
    * The trade time with offset, null if not known.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private OffsetTime _tradeTime;
   /**
    * Amount paid for trade at time of purchase, null if not known.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private Double _premium;
   /**
    * Currency of payment at time of purchase, null if not known.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private Currency _premiumCurrency;
   /**
    * Date of premium payment, null if not known.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private LocalDate _premiumDate;
   /**
    * Time of premium payment, null if not known.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private OffsetTime _premiumTime;
   /**
    * The general purpose trade attributes.
    * These can be used to add arbitrary additional information to the object
    * and for aggregating in portfolios.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideSet = true, overrideGet = true)
   private final Map<String, String> _attributes = Maps.newHashMap();
 
   /**
@@ -115,14 +115,15 @@ public class SimpleTrade extends DirectBean
 
   /**
    * Creates a trade from a positionId, an amount of a security identified by key, counterparty and tradeinstant.
-   * 
+   *
    * @param securityLink  the security identifier, not null
    * @param quantity  the amount of the trade, not null
    * @param counterparty  the counterparty, not null
    * @param tradeDate  the trade date, not null
    * @param tradeTime  the trade time with offset, may be null
    */
-  public SimpleTrade(SecurityLink securityLink, BigDecimal quantity, Counterparty counterparty, LocalDate tradeDate, OffsetTime tradeTime) {
+  public SimpleTrade(final SecurityLink securityLink, final BigDecimal quantity, final Counterparty counterparty,
+      final LocalDate tradeDate, final OffsetTime tradeTime) {
     ArgumentChecker.notNull(securityLink, "securityLink");
     ArgumentChecker.notNull(quantity, "quantity");
     ArgumentChecker.notNull(counterparty, "counterparty");
@@ -136,14 +137,15 @@ public class SimpleTrade extends DirectBean
 
   /**
    * Creates a trade from a positionId, an amount of a security, counterparty and trade instant.
-   * 
+   *
    * @param security  the security, not null
    * @param quantity  the amount of the trade, not null
    * @param counterparty  the counterparty, not null
    * @param tradeDate  the trade date, not null
    * @param tradeTime  the trade time with offset, may be null
    */
-  public SimpleTrade(Security security, BigDecimal quantity, Counterparty counterparty, LocalDate tradeDate, OffsetTime tradeTime) {
+  public SimpleTrade(final Security security, final BigDecimal quantity, final Counterparty counterparty, final LocalDate tradeDate,
+      final OffsetTime tradeTime) {
     ArgumentChecker.notNull(security, "security");
     ArgumentChecker.notNull(quantity, "quantity");
     ArgumentChecker.notNull(counterparty, "counterparty");
@@ -157,7 +159,7 @@ public class SimpleTrade extends DirectBean
 
   /**
    * Creates a deep copy of the specified position.
-   * 
+   *
    * @param copyFrom instance to copy fields from, not null
    */
   public SimpleTrade(final Trade copyFrom) {
@@ -181,7 +183,7 @@ public class SimpleTrade extends DirectBean
    * <p>
    * This convenience method gets the target security from the link.
    * This is guaranteed to return a security within an analytic function.
-   * 
+   *
    * @return the security link, null if target not resolved in the link
    */
   @Override
@@ -191,7 +193,7 @@ public class SimpleTrade extends DirectBean
 
   //-------------------------------------------------------------------------
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
@@ -199,7 +201,7 @@ public class SimpleTrade extends DirectBean
 
   /**
    * Removes the attribute with specified key.
-   * 
+   *
    * @param key  the attribute key to remove, not null
    */
   public void removeAttribute(final String key) {
@@ -226,7 +228,7 @@ public class SimpleTrade extends DirectBean
         .append(']')
         .toString();
   }
-  
+
   //------------------------- AUTOGENERATED START -------------------------
   ///CLOVER:OFF
   /**
@@ -251,6 +253,7 @@ public class SimpleTrade extends DirectBean
    * Gets the unique identifier of the trade.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -259,6 +262,7 @@ public class SimpleTrade extends DirectBean
    * Sets the unique identifier of the trade.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -276,6 +280,7 @@ public class SimpleTrade extends DirectBean
    * Gets the number of units in the trade.
    * @return the value of the property
    */
+  @Override
   public BigDecimal getQuantity() {
     return _quantity;
   }
@@ -302,6 +307,7 @@ public class SimpleTrade extends DirectBean
    * This may also hold the resolved security.
    * @return the value of the property, not null
    */
+  @Override
   public SecurityLink getSecurityLink() {
     return _securityLink;
   }
@@ -330,6 +336,7 @@ public class SimpleTrade extends DirectBean
    * Gets the counterparty.
    * @return the value of the property
    */
+  @Override
   public Counterparty getCounterparty() {
     return _counterparty;
   }
@@ -355,6 +362,7 @@ public class SimpleTrade extends DirectBean
    * Gets the trade date.
    * @return the value of the property
    */
+  @Override
   public LocalDate getTradeDate() {
     return _tradeDate;
   }
@@ -380,6 +388,7 @@ public class SimpleTrade extends DirectBean
    * Gets the trade time with offset, null if not known.
    * @return the value of the property
    */
+  @Override
   public OffsetTime getTradeTime() {
     return _tradeTime;
   }
@@ -405,6 +414,7 @@ public class SimpleTrade extends DirectBean
    * Gets amount paid for trade at time of purchase, null if not known.
    * @return the value of the property
    */
+  @Override
   public Double getPremium() {
     return _premium;
   }
@@ -430,6 +440,7 @@ public class SimpleTrade extends DirectBean
    * Gets currency of payment at time of purchase, null if not known.
    * @return the value of the property
    */
+  @Override
   public Currency getPremiumCurrency() {
     return _premiumCurrency;
   }
@@ -455,6 +466,7 @@ public class SimpleTrade extends DirectBean
    * Gets date of premium payment, null if not known.
    * @return the value of the property
    */
+  @Override
   public LocalDate getPremiumDate() {
     return _premiumDate;
   }
@@ -480,6 +492,7 @@ public class SimpleTrade extends DirectBean
    * Gets time of premium payment, null if not known.
    * @return the value of the property
    */
+  @Override
   public OffsetTime getPremiumTime() {
     return _premiumTime;
   }
@@ -507,6 +520,7 @@ public class SimpleTrade extends DirectBean
    * and for aggregating in portfolios.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getAttributes() {
     return _attributes;
   }
@@ -517,6 +531,7 @@ public class SimpleTrade extends DirectBean
    * and for aggregating in portfolios.
    * @param attributes  the new value of the property, not null
    */
+  @Override
   public void setAttributes(Map<String, String> attributes) {
     JodaBeanUtils.notNull(attributes, "attributes");
     this._attributes.clear();

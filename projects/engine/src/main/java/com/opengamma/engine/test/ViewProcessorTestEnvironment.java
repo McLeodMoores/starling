@@ -70,9 +70,9 @@ public class ViewProcessorTestEnvironment {
   public static final String TEST_VIEW_DEFINITION_NAME = "Test View";
   public static final String TEST_CALC_CONFIG_NAME = "Test Calc Config";
 
-  private static final ComputationTargetSpecification s_primitiveTarget = ComputationTargetSpecification.of(UniqueId.of("Scheme", "PrimitiveValue"));
-  private static final ValueRequirement s_primitive1 = new ValueRequirement("Value1", s_primitiveTarget);
-  private static final ValueRequirement s_primitive2 = new ValueRequirement("Value2", s_primitiveTarget);
+  private static final ComputationTargetSpecification PRIMITIVE_TARGET = ComputationTargetSpecification.of(UniqueId.of("Scheme", "PrimitiveValue"));
+  private static final ValueRequirement PRIMITIVE_1 = new ValueRequirement("Value1", PRIMITIVE_TARGET);
+  private static final ValueRequirement PRIMITIVE_2 = new ValueRequirement("Value2", PRIMITIVE_TARGET);
 
   // Settings
   private MarketDataProvider _marketDataProvider;
@@ -98,7 +98,8 @@ public class ViewProcessorTestEnvironment {
 
     final FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
     final SecuritySource securitySource = getSecuritySource() != null ? getSecuritySource() : generateSecuritySource();
-    final FunctionCompilationContext functionCompilationContext = getFunctionCompilationContext() != null ? getFunctionCompilationContext() : generateFunctionCompilationContext();
+    final FunctionCompilationContext functionCompilationContext =
+        getFunctionCompilationContext() != null ? getFunctionCompilationContext() : generateFunctionCompilationContext();
 
     final ConfigSource configSource = getConfigSource() != null ? getConfigSource() : generateConfigSource();
 
@@ -110,12 +111,14 @@ public class ViewProcessorTestEnvironment {
     vpFactBean.setDependencyGraphExecutorFactory(dependencyGraphExecutorFactory);
 
     final FunctionRepository functionRepository = getFunctionRepository() != null ? getFunctionRepository() : generateFunctionRepository();
-    final CompiledFunctionService compiledFunctions = new CompiledFunctionService(functionRepository, new CachingFunctionRepositoryCompiler(), functionCompilationContext);
+    final CompiledFunctionService compiledFunctions =
+        new CompiledFunctionService(functionRepository, new CachingFunctionRepositoryCompiler(), functionCompilationContext);
     TestLifecycle.register(compiledFunctions);
     compiledFunctions.initialize();
     vpFactBean.setFunctionCompilationService(compiledFunctions);
 
-    final MarketDataProviderResolver marketDataProviderResolver = getMarketDataProviderResolver() != null ? getMarketDataProviderResolver() : generateMarketDataProviderResolver();
+    final MarketDataProviderResolver marketDataProviderResolver =
+        getMarketDataProviderResolver() != null ? getMarketDataProviderResolver() : generateMarketDataProviderResolver();
     vpFactBean.setMarketDataProviderResolver(marketDataProviderResolver);
 
     vpFactBean.setConfigSource(configSource);
@@ -123,7 +126,8 @@ public class ViewProcessorTestEnvironment {
     vpFactBean.setNamedMarketDataSpecificationRepository(new InMemoryNamedMarketDataSpecificationRepository());
     _configSource = configSource;
 
-    final FunctionExecutionContext functionExecutionContext = getFunctionExecutionContext() != null ? getFunctionExecutionContext() : generateFunctionExecutionContext();
+    final FunctionExecutionContext functionExecutionContext =
+        getFunctionExecutionContext() != null ? getFunctionExecutionContext() : generateFunctionExecutionContext();
     functionExecutionContext.setSecuritySource(securitySource);
 
     final ThreadLocalLogEventListener threadLocalLogListener = new ThreadLocalLogEventListener();
@@ -144,9 +148,10 @@ public class ViewProcessorTestEnvironment {
     if (getViewProcessor() == null) {
       throw new IllegalStateException(ViewProcessorTestEnvironment.class.getName() + " has not been initialised");
     }
-    final ViewCompilationServices compilationServices = new ViewCompilationServices(getMarketDataProvider().getAvailabilityProvider(MarketData.live()), getFunctionResolver(),
+    final ViewCompilationServices compilationServices =
+        new ViewCompilationServices(getMarketDataProvider().getAvailabilityProvider(MarketData.live()), getFunctionResolver(),
         getFunctionCompilationContext(), getViewProcessor().getFunctionCompilationService().getExecutorService(),
-        (getDependencyGraphBuilderFactory() != null) ? getDependencyGraphBuilderFactory() : generateDependencyGraphBuilderFactory());
+        getDependencyGraphBuilderFactory() != null ? getDependencyGraphBuilderFactory() : generateDependencyGraphBuilderFactory());
     return ViewDefinitionCompiler.compile(getViewDefinition(), compilationServices, valuationTime, versionCorrection);
   }
 
@@ -346,15 +351,15 @@ public class ViewProcessorTestEnvironment {
   }
 
   public static ComputationTargetSpecification getPrimitiveTarget() {
-    return s_primitiveTarget;
+    return PRIMITIVE_TARGET;
   }
 
   public static ValueRequirement getPrimitive1() {
-    return s_primitive1;
+    return PRIMITIVE_1;
   }
 
   public static ValueRequirement getPrimitive2() {
-    return s_primitive2;
+    return PRIMITIVE_2;
   }
 
   public ViewCalculationResultModel getCalculationResult(final ViewResultModel result) {

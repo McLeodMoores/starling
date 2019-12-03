@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -12,8 +12,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-import net.sf.ehcache.CacheManager;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -28,6 +26,8 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Tests the {@link LazyResolvedPosition} class
@@ -56,7 +56,8 @@ public class LazyResolvedPositionTest {
   public void testBasicMethods() {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final Position underlying = resolver.getPositionSource().getPosition(UniqueId.of("Position", "0"));
-    final Position position = new LazyResolvedPosition(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    final Position position =
+        new LazyResolvedPosition(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
     assertEquals(position.getAttributes(), underlying.getAttributes());
     assertEquals(position.getQuantity(), underlying.getQuantity());
     assertEquals(position.getTrades().size(), underlying.getTrades().size());
@@ -66,7 +67,8 @@ public class LazyResolvedPositionTest {
   public void testSerialization_full() throws Exception {
     final MockComputationTargetResolver resolver = MockComputationTargetResolver.resolved();
     final Position underlying = resolver.getPositionSource().getPosition(UniqueId.of("Position", "0"));
-    Position position = new LazyResolvedPosition(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
+    Position position =
+        new LazyResolvedPosition(new LazyResolveContext(resolver.getSecuritySource(), null).atVersionCorrection(VersionCorrection.LATEST), underlying);
     final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     new ObjectOutputStream(baos).writeObject(position);
     final Object resultObject = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray())).readObject();

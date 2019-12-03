@@ -29,23 +29,25 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Calculator of the cash flow equivalent sensitivity to the curve. The result is a map of <Double, PresentValueSensitivity>.
- * The cash flow equivalent sensitivity is represented by the double which is the time of the cash flow and the PresentValueSensitivity which is the sensitivity of the
- * cash flow at that date.
+ * Calculator of the cash flow equivalent sensitivity to the curve. The result is a map from Double to {@link MulticurveSensitivity}. The cash flow equivalent
+ * sensitivity is represented by the double which is the time of the cash flow and the MulticurveSensitivity which is the sensitivity of the cash flow at that
+ * date.
  */
-public class CashFlowEquivalentCurveSensitivityCalculator extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Map<Double, MulticurveSensitivity>> {
+public class CashFlowEquivalentCurveSensitivityCalculator
+    extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Map<Double, MulticurveSensitivity>> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final CashFlowEquivalentCurveSensitivityCalculator s_instance = new CashFlowEquivalentCurveSensitivityCalculator();
+  private static final CashFlowEquivalentCurveSensitivityCalculator INSTANCE = new CashFlowEquivalentCurveSensitivityCalculator();
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static CashFlowEquivalentCurveSensitivityCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**
@@ -74,7 +76,8 @@ public class CashFlowEquivalentCurveSensitivityCalculator extends InstrumentDeri
     final double paymentTime = payment.getPaymentTime();
     final double dfRatio = multicurves.getDiscountFactor(ccy, paymentTime) / multicurves.getDiscountFactor(ccy, fixingStartTime);
     final double af = payment.getFixingAccrualFactor();
-    final double beta = (1.0 + af * multicurves.getSimplyCompoundForwardRate(payment.getIndex(), fixingStartTime, fixingEndTime, payment.getFixingAccrualFactor())) * dfRatio;
+    final double beta = (1.0
+        + af * multicurves.getSimplyCompoundForwardRate(payment.getIndex(), fixingStartTime, fixingEndTime, payment.getFixingAccrualFactor())) * dfRatio;
     final double betaBar = payment.getNotional() * payment.getPaymentYearFraction() / af;
     final double forwardBar = af * dfRatio * betaBar;
 
@@ -106,7 +109,8 @@ public class CashFlowEquivalentCurveSensitivityCalculator extends InstrumentDeri
     final double paymentTime = payment.getPaymentTime();
     final double dfRatio = multicurves.getDiscountFactor(ccy, paymentTime) / multicurves.getDiscountFactor(ccy, fixingStartTime);
     final double af = payment.getFixingAccrualFactor();
-    final double beta = (1.0 + af * multicurves.getSimplyCompoundForwardRate(payment.getIndex(), fixingStartTime, fixingEndTime, payment.getFixingAccrualFactor())) * dfRatio;
+    final double beta = (1.0
+        + af * multicurves.getSimplyCompoundForwardRate(payment.getIndex(), fixingStartTime, fixingEndTime, payment.getFixingAccrualFactor())) * dfRatio;
     final double betaBar = payment.getNotional() * payment.getPaymentYearFraction() / af;
     final double forwardBar = af * dfRatio * betaBar;
 

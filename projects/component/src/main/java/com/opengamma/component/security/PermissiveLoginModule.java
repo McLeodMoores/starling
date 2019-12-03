@@ -19,10 +19,10 @@ import com.google.common.collect.ImmutableList;
 public class PermissiveLoginModule extends AbstractLoginModule {
 
   @Override
-  public UserInfo getUserInfo(String username) throws Exception {
+  public UserInfo getUserInfo(final String username) throws Exception {
     return new UserInfo(username, new OpenGammaCredential(), ImmutableList.of("user"));
   }
-  
+
   /**
    * Permissive credential.
    */
@@ -31,10 +31,10 @@ public class PermissiveLoginModule extends AbstractLoginModule {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public boolean check(Object credentials) {
+    public boolean check(final Object credentials) {
       return true;
     }
-    
+
   }
 
 }

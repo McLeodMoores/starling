@@ -20,9 +20,9 @@ import com.opengamma.util.ArgumentChecker;
  * This exists to handle the late arrival of the {@code ServletContext}
  */
 public class BundleManagerFactory {
-  
+
   private static final String DEFAULT_CONFIG_XML_PATH = "/WEB-INF/uiResourceConfig.xml";
-  
+
   /**
    * The base directory.
    */
@@ -57,13 +57,13 @@ public class BundleManagerFactory {
 
   /**
    * Sets the base directory.
-   * 
+   *
    * @param baseDir  the base directory
    */
-  public void setBaseDir(String baseDir) {
+  public void setBaseDir(final String baseDir) {
     _baseDir = baseDir;
   }
-  
+
   /**
    * Gets the configXmlPath.
    * @return the configXmlPath
@@ -76,12 +76,12 @@ public class BundleManagerFactory {
    * Sets the configXmlPath.
    * @param configXmlPath  the configXmlPath
    */
-  public void setConfigXmlPath(String configXmlPath) {
+  public void setConfigXmlPath(final String configXmlPath) {
     if (!StringUtils.isEmpty(configXmlPath)) {
       _configXmlPath = configXmlPath.startsWith("/") ? configXmlPath : "/" + configXmlPath;
     }
   }
-  
+
   /**
    * Gets the uriProvider.
    * @return the uriProvider
@@ -94,7 +94,7 @@ public class BundleManagerFactory {
    * Sets the uriProvider.
    * @param uriProvider  the uriProvider
    */
-  public void setUriProvider(UriProvider uriProvider) {
+  public void setUriProvider(final UriProvider uriProvider) {
     _uriProvider = uriProvider;
   }
 
@@ -104,11 +104,11 @@ public class BundleManagerFactory {
    * <p>
    * This is used to obtain the manager from the servlet context, because the
    * servlet context is usually available after the factory is setup.
-   * 
+   *
    * @param servletContext  the servlet context, not null
    * @return the manager, not null
    */
-  public BundleManager get(ServletContext servletContext) {
+  public BundleManager get(final ServletContext servletContext) {
     BundleManager manager = _manager;
     if (manager == null) {
       synchronized (this) {
@@ -123,18 +123,18 @@ public class BundleManagerFactory {
 
   /**
    * Creates a bundle manager using the servlet context.
-   * 
+   *
    * @param servletContext  the servlet context, not null
    * @return the manager, not null
    */
-  protected BundleManager createManager(ServletContext servletContext) {
+  protected BundleManager createManager(final ServletContext servletContext) {
     ArgumentChecker.notNull(servletContext, "servletContext");
     InputStream uiResource = null;
     try {
-      ServletContextUriProvider uriProvider = new ServletContextUriProvider(getBaseDir(), servletContext);
+      final ServletContextUriProvider uriProvider = new ServletContextUriProvider(getBaseDir(), servletContext);
       setUriProvider(uriProvider);
       uiResource = getXMLStream(servletContext);
-      BundleParser parser = new BundleParser(uriProvider, getBaseDir());
+      final BundleParser parser = new BundleParser(uriProvider, getBaseDir());
       return parser.parse(uiResource);
     } finally {
       IOUtils.closeQuietly(uiResource);
@@ -143,13 +143,13 @@ public class BundleManagerFactory {
 
   /**
    * Resolves the config file.
-   * @param servletContext 
-   * 
+   * @param servletContext
+   *
    * @return the resolved file
    */
-  private InputStream getXMLStream(ServletContext servletContext) {
-    String configXMlPath = _configXmlPath == null ? DEFAULT_CONFIG_XML_PATH : _configXmlPath;
-    InputStream result = servletContext.getResourceAsStream(configXMlPath);
+  private InputStream getXMLStream(final ServletContext servletContext) {
+    final String configXMlPath = _configXmlPath == null ? DEFAULT_CONFIG_XML_PATH : _configXmlPath;
+    final InputStream result = servletContext.getResourceAsStream(configXMlPath);
     if (result == null) {
       throw new IllegalStateException("Cannot find resource XML in " + configXMlPath);
     }

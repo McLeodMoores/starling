@@ -32,13 +32,13 @@ public final class ConfigProperty {
   //-------------------------------------------------------------------------
   /**
    * Obtains a property object consisting of a key, value and whether it is hidden.
-   * 
+   *
    * @param key  the key, not null
    * @param value  the value, not null
    * @param hidden  whether the value is hidden
    * @return the property, not null
    */
-  public static ConfigProperty of(String key, String value, boolean hidden) {
+  public static ConfigProperty of(final String key, final String value, final boolean hidden) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     return new ConfigProperty(key, value, hidden);
@@ -47,12 +47,12 @@ public final class ConfigProperty {
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param key  the key, not null
    * @param value  the value, not null
    * @param hidden  whether the value is hidden
    */
-  private ConfigProperty(String key, String value, boolean hidden) {
+  private ConfigProperty(final String key, final String value, final boolean hidden) {
     _key = key;
     _value = value;
     _hidden = hidden;
@@ -61,7 +61,7 @@ public final class ConfigProperty {
   //-------------------------------------------------------------------------
   /**
    * Gets the key.
-   * 
+   *
    * @return the key, not null
    */
   public String getKey() {
@@ -70,7 +70,7 @@ public final class ConfigProperty {
 
   /**
    * Gets the value.
-   * 
+   *
    * @return the value, not null
    */
   public String getValue() {
@@ -79,7 +79,7 @@ public final class ConfigProperty {
 
   /**
    * Whether the value is hidden.
-   * 
+   *
    * @return whether the value is hidden, not null
    */
   public boolean isHidden() {
@@ -89,31 +89,31 @@ public final class ConfigProperty {
   //-------------------------------------------------------------------------
   /**
    * Returns a copy of this property with a different key.
-   * 
+   *
    * @param key  the new key, not null
    * @return the new property, not null
    */
-  public ConfigProperty withKey(String key) {
+  public ConfigProperty withKey(final String key) {
     return ConfigProperty.of(key, _value, _hidden);
   }
 
   /**
    * Gets the loggable value.
-   * 
+   *
    * @return the loggable value, not null
    */
   public String loggableValue() {
-    return (isHidden() ? ConfigProperties.HIDDEN : getValue());
+    return isHidden() ? ConfigProperties.HIDDEN : getValue();
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj instanceof ConfigProperty) {
-      ConfigProperty other = (ConfigProperty) obj;
+      final ConfigProperty other = (ConfigProperty) obj;
       return getKey().equals(other.getKey()) && getValue().equals(other.getValue()) && isHidden() == other.isHidden();
     }
     return false;

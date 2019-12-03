@@ -30,12 +30,12 @@ import com.opengamma.util.test.TestGroup;
 public class ModifySecurityDbSecurityMasterWorkerCorrectTest extends AbstractDbSecurityMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifySecurityDbSecurityMasterWorkerCorrectTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifySecurityDbSecurityMasterWorkerCorrectTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifySecurityDbSecurityMasterWorkerCorrectTest(String databaseType, String databaseVersion) {
+  public ModifySecurityDbSecurityMasterWorkerCorrectTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -46,25 +46,25 @@ public class ModifySecurityDbSecurityMasterWorkerCorrectTest extends AbstractDbS
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noSecurityId() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "101");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument();
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(security);
     _secMaster.correct(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noSecurity() {
-    SecurityDocument doc = new SecurityDocument();
+    final SecurityDocument doc = new SecurityDocument();
     doc.setUniqueId(UniqueId.of("DbSec", "101", "0"));
     _secMaster.correct(doc);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_correct_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument(security);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.correct(doc);
   }
 
@@ -78,32 +78,32 @@ public class ModifySecurityDbSecurityMasterWorkerCorrectTest extends AbstractDbS
 
   @Test
   public void test_correct_getUpdateGet() {
-    Instant now = Instant.now(_secMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
-    SecurityDocument base = _secMaster.get(uniqueId);
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument input = new SecurityDocument(security);
-    
-    SecurityDocument corrected = _secMaster.correct(input);
+    final Instant now = Instant.now(_secMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final SecurityDocument base = _secMaster.get(uniqueId);
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument input = new SecurityDocument(security);
+
+    final SecurityDocument corrected = _secMaster.correct(input);
     assertEquals(false, base.getUniqueId().equals(corrected.getUniqueId()));
     assertEquals(base.getVersionFromInstant(), corrected.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), corrected.getVersionToInstant());
     assertEquals(now, corrected.getCorrectionFromInstant());
     assertEquals(null, corrected.getCorrectionToInstant());
     assertEquals(input.getSecurity(), corrected.getSecurity());
-    
-    SecurityDocument old = _secMaster.get(UniqueId.of("DbSec", "101", "0"));
+
+    final SecurityDocument old = _secMaster.get(UniqueId.of("DbSec", "101", "0"));
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), old.getVersionToInstant());
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(now, old.getCorrectionToInstant());  // old version ended
     assertEquals(base.getSecurity(), old.getSecurity());
-    
-    SecurityHistoryRequest search = new SecurityHistoryRequest(base.getUniqueId(), now, null);
+
+    final SecurityHistoryRequest search = new SecurityHistoryRequest(base.getUniqueId(), now, null);
     search.setFullDetail(false);
-    SecurityHistoryResult searchResult = _secMaster.history(search);
+    final SecurityHistoryResult searchResult = _secMaster.history(search);
     assertEquals(2, searchResult.getDocuments().size());
   }
 

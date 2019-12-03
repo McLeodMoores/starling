@@ -19,8 +19,8 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Determines which nodes in a graph have changed. A node has 'changed' if and only if its subtree contains a node for which PreviousLiveDataInput != CurrentLiveDataInput. Note that this excludes
- * changes due to passage of the system clock.
+ * Determines which nodes in a graph have changed. A node has 'changed' if and only if its subtree contains a node for which
+ * PreviousLiveDataInput != CurrentLiveDataInput. Note that this excludes changes due to passage of the system clock.
  */
 public class LiveDataDeltaCalculator {
 
@@ -29,21 +29,26 @@ public class LiveDataDeltaCalculator {
   private final ViewComputationCache _previousCache;
   private final Set<ValueSpecification> _changedSpecifications;
 
-  private final Set<DependencyNode> _changedNodes = new HashSet<DependencyNode>();
-  private final Set<DependencyNode> _unchangedNodes = new HashSet<DependencyNode>();
+  private final Set<DependencyNode> _changedNodes = new HashSet<>();
+  private final Set<DependencyNode> _unchangedNodes = new HashSet<>();
 
   private boolean _done; // = false
 
   /**
-   * For the delta calculation to be meaningful, the caches should be populated with LiveData inputs required to compute the given dependency graph. See {@link DependencyNode#getRequiredLiveData()}
-   * and {@link ViewComputationCache#getValue(ValueSpecification)}.
-   * 
-   * @param graph Dependency graph
-   * @param cache Contains CurrentLiveDataInputs (for the given graph)
-   * @param previousCache Contains PreviousLiveDataInputs (for the given graph)
-   * @param dirtySpecifications Value specifications that are to be considered "changed"
+   * For the delta calculation to be meaningful, the caches should be populated with LiveData inputs required to compute the given dependency graph. See
+   * {@link DependencyNode#getInputValue(int)} and {@link ViewComputationCache#getValue(ValueSpecification)}.
+   *
+   * @param graph
+   *          Dependency graph
+   * @param cache
+   *          Contains CurrentLiveDataInputs (for the given graph)
+   * @param previousCache
+   *          Contains PreviousLiveDataInputs (for the given graph)
+   * @param dirtySpecifications
+   *          Value specifications that are to be considered "changed"
    */
-  public LiveDataDeltaCalculator(final DependencyGraph graph, final ViewComputationCache cache, final ViewComputationCache previousCache, final Set<ValueSpecification> dirtySpecifications) {
+  public LiveDataDeltaCalculator(final DependencyGraph graph, final ViewComputationCache cache, final ViewComputationCache previousCache,
+      final Set<ValueSpecification> dirtySpecifications) {
     ArgumentChecker.notNull(graph, "Graph");
     ArgumentChecker.notNull(cache, "Cache");
     ArgumentChecker.notNull(previousCache, "Previous cache");
@@ -108,7 +113,7 @@ public class LiveDataDeltaCalculator {
         // if any children changed, this node requires recalculation
         hasChanged |= computeDelta(node.getInputNode(i));
       }
-      if (!hasChanged && (_changedSpecifications != null)) {
+      if (!hasChanged && _changedSpecifications != null) {
         count = node.getOutputCount();
         for (int i = 0; i < count; i++) {
           if (_changedSpecifications.contains(node.getOutputValue(i))) {

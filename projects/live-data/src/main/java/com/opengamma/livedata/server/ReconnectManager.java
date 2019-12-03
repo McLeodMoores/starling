@@ -19,13 +19,13 @@ import com.opengamma.util.ArgumentChecker;
  * Monitors the state of the connection to the underlying market data API
  * and reconnects if the connection has been lost.
  * <p>
- * This beans depends-on the Live Data Server, and any Spring configuration must reflect 
- * this. See <a href="http://jira.springframework.org/browse/SPR-2325">http://jira.springframework.org/browse/SPR-2325</a>.  
+ * This beans depends-on the Live Data Server, and any Spring configuration must reflect
+ * this. See <a href="http://jira.springframework.org/browse/SPR-2325">http://jira.springframework.org/browse/SPR-2325</a>.
  */
 public class ReconnectManager implements Lifecycle {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ReconnectManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ReconnectManager.class);
 
   /**
    * How often connection status should be checked. Milliseconds
@@ -51,31 +51,31 @@ public class ReconnectManager implements Lifecycle {
 
   /**
    * Creates an instance wrapping an underlying server.
-   * 
+   *
    * @param server  the server, not null
    */
-  public ReconnectManager(StandardLiveDataServer server) {
-    this(server, DEFAULT_CHECK_PERIOD);    
+  public ReconnectManager(final StandardLiveDataServer server) {
+    this(server, DEFAULT_CHECK_PERIOD);
   }
 
   /**
    * Creates an instance wrapping an underlying server.
-   * 
+   *
    * @param server  the server, not null
    * @param checkIntervalMillis  the checking interval in milliseconds
    */
-  public ReconnectManager(StandardLiveDataServer server, long checkIntervalMillis) {
-    this(server, checkIntervalMillis, new Timer("ReconnectManager Timer"));    
+  public ReconnectManager(final StandardLiveDataServer server, final long checkIntervalMillis) {
+    this(server, checkIntervalMillis, new Timer("ReconnectManager Timer"));
   }
 
   /**
    * Creates an instance wrapping an underlying server.
-   * 
+   *
    * @param server  the server, not null
    * @param checkIntervalMillis  the checking interval in milliseconds
    * @param timer  the timer, not null
    */
-  public ReconnectManager(StandardLiveDataServer server, long checkIntervalMillis, Timer timer) {
+  public ReconnectManager(final StandardLiveDataServer server, final long checkIntervalMillis, final Timer timer) {
     ArgumentChecker.notNull(server, "server");
     ArgumentChecker.notNull(timer, "timer");
     if (checkIntervalMillis <= 0) {
@@ -101,7 +101,7 @@ public class ReconnectManager implements Lifecycle {
   @Override
   public void stop() {
     _checkTask.cancel();
-    _checkTask = null;    
+    _checkTask = null;
   }
 
   //-------------------------------------------------------------------------
@@ -110,8 +110,8 @@ public class ReconnectManager implements Lifecycle {
     public void run() {
       try {
         check();
-      } catch (RuntimeException e) {
-        s_logger.error("Checking for reconnection failed", e);
+      } catch (final RuntimeException e) {
+        LOGGER.error("Checking for reconnection failed", e);
       }
     }
   }
@@ -119,21 +119,21 @@ public class ReconnectManager implements Lifecycle {
   // called by the timer task
   private void check() {
     if (_server.getConnectionStatus() == ConnectionStatus.NOT_CONNECTED) {
-      s_logger.warn("Connection to market data API down. Attemping to reconnect to {}.", _server);
-      
+      LOGGER.warn("Connection to market data API down. Attemping to reconnect to {}.", _server);
+
       try {
         _server.connect();
-      } catch (RuntimeException e) {
-        s_logger.warn("Could not reconnect", e);
+      } catch (final RuntimeException e) {
+        LOGGER.warn("Could not reconnect", e);
         return;
       }
-      
-      s_logger.info("Reconnection successful. Reestablishing subscriptions.");
+
+      LOGGER.info("Reconnection successful. Reestablishing subscriptions.");
       _server.reestablishSubscriptions();
-      s_logger.info("Reconnect done.");
-    
+      LOGGER.info("Reconnect done.");
+
     } else {
-      s_logger.debug("Connection up to server {}", _server.getClass().getSimpleName());
+      LOGGER.debug("Connection up to server {}", _server.getClass().getSimpleName());
     }
   }
 

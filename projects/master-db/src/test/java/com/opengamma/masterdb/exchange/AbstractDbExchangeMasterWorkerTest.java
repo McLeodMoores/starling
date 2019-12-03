@@ -46,16 +46,16 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbExchangeMasterWorkerTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbExchangeMasterWorkerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbExchangeMasterWorkerTest.class);
 
   protected DbExchangeMaster _exgMaster;
   protected Instant _version1Instant;
   protected Instant _version2Instant;
   protected int _totalExchanges;
 
-  public AbstractDbExchangeMasterWorkerTest(String databaseType, String databaseVersion, boolean readOnly) {
+  public AbstractDbExchangeMasterWorkerTest(final String databaseType, final String databaseVersion, final boolean readOnly) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -75,31 +75,31 @@ public abstract class AbstractDbExchangeMasterWorkerTest extends AbstractDbTest 
   }
 
   //-------------------------------------------------------------------------
-  protected ObjectId setupTestData(Instant now) {
-    Clock origClock = _exgMaster.getClock();
+  protected ObjectId setupTestData(final Instant now) {
+    final Clock origClock = _exgMaster.getClock();
     try {
       _exgMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
 
       final ExternalIdBundle bundle = ExternalIdBundle.of("B", "B0");
       final ExternalIdBundle region = ExternalIdBundle.of("R", "R0");
-      ManageableExchange exchange = new ManageableExchange(bundle, "initial", region, null);
-      ExchangeDocument initialDoc = new ExchangeDocument(exchange);
+      final ManageableExchange exchange = new ManageableExchange(bundle, "initial", region, null);
+      final ExchangeDocument initialDoc = new ExchangeDocument(exchange);
 
       _exgMaster.add(initialDoc);
 
-      ObjectId baseOid = initialDoc.getObjectId();
+      final ObjectId baseOid = initialDoc.getObjectId();
 
-      List<ExchangeDocument> firstReplacement = newArrayList();
+      final List<ExchangeDocument> firstReplacement = newArrayList();
       for (int i = 0; i < 5; i++) {
-        ManageableExchange ex = new ManageableExchange(bundle, "setup_" + i, region, null);
-        ExchangeDocument doc = new ExchangeDocument(ex);
+        final ManageableExchange ex = new ManageableExchange(bundle, "setup_" + i, region, null);
+        final ExchangeDocument doc = new ExchangeDocument(ex);
         doc.setVersionFromInstant(now.plus(i, MINUTES));
         firstReplacement.add(doc);
       }
       _exgMaster.setClock(Clock.fixed(now.plus(1, HOURS), ZoneOffset.UTC));
       _exgMaster.replaceVersions(baseOid, firstReplacement);
       return baseOid;
-      
+
     } finally {
       _exgMaster.setClock(origClock);
     }
@@ -107,7 +107,7 @@ public abstract class AbstractDbExchangeMasterWorkerTest extends AbstractDbTest 
 
   private void init() {
     _exgMaster = new DbExchangeMaster(getDbConnector());
-    
+
 //    id bigint not null,
 //    oid bigint not null,
 //    ver_from_instant timestamp not null,
@@ -117,16 +117,16 @@ public abstract class AbstractDbExchangeMasterWorkerTest extends AbstractDbTest 
 //    name varchar(255) not null,
 //    time_zone varchar(255),
 //    detail blob not null,
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     _exgMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
     _version1Instant = now.minusSeconds(100);
     _version2Instant = now.minusSeconds(50);
-    s_logger.debug("test data now:   {}", _version1Instant);
-    s_logger.debug("test data later: {}", _version2Instant);
-    FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
-    LobHandler lobHandler = new DefaultLobHandler();
+    LOGGER.debug("test data now:   {}", _version1Instant);
+    LOGGER.debug("test data later: {}", _version2Instant);
+    final FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
+    final LobHandler lobHandler = new DefaultLobHandler();
     final JdbcOperations template = _exgMaster.getDbConnector().getJdbcOperations();
-    ManageableExchange exchange = new ManageableExchange();
+    final ManageableExchange exchange = new ManageableExchange();
     exchange.setUniqueId(UniqueId.of("DbExg", "101", "0"));
     exchange.setExternalIdBundle(ExternalIdBundle.of(ExternalId.of("A", "B"), ExternalId.of("C", "D"), ExternalId.of("E", "F")));
     exchange.setName("TestExchange101");
@@ -197,14 +197,14 @@ public abstract class AbstractDbExchangeMasterWorkerTest extends AbstractDbTest 
 
   //-------------------------------------------------------------------------
   protected void assert101(final ExchangeDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbExg", "101", "0");
+    final UniqueId uniqueId = UniqueId.of("DbExg", "101", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableExchange exchange = test.getExchange();
+    final ManageableExchange exchange = test.getExchange();
     assertNotNull(exchange);
     assertEquals(uniqueId, exchange.getUniqueId());
     assertEquals("TestExchange101", test.getName());
@@ -213,14 +213,14 @@ public abstract class AbstractDbExchangeMasterWorkerTest extends AbstractDbTest 
   }
 
   protected void assert102(final ExchangeDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbExg", "102", "0");
+    final UniqueId uniqueId = UniqueId.of("DbExg", "102", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableExchange exchange = test.getExchange();
+    final ManageableExchange exchange = test.getExchange();
     assertNotNull(exchange);
     assertEquals(uniqueId, exchange.getUniqueId());
     assertEquals("TestExchange102", test.getName());
@@ -229,14 +229,14 @@ public abstract class AbstractDbExchangeMasterWorkerTest extends AbstractDbTest 
   }
 
   protected void assert201(final ExchangeDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbExg", "201", "0");
+    final UniqueId uniqueId = UniqueId.of("DbExg", "201", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(_version2Instant, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableExchange exchange = test.getExchange();
+    final ManageableExchange exchange = test.getExchange();
     assertNotNull(exchange);
     assertEquals(uniqueId, exchange.getUniqueId());
     assertEquals("TestExchange201", test.getName());
@@ -245,14 +245,14 @@ public abstract class AbstractDbExchangeMasterWorkerTest extends AbstractDbTest 
   }
 
   protected void assert202(final ExchangeDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbExg", "201", "1");
+    final UniqueId uniqueId = UniqueId.of("DbExg", "201", "1");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version2Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version2Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableExchange exchange = test.getExchange();
+    final ManageableExchange exchange = test.getExchange();
     assertNotNull(exchange);
     assertEquals(uniqueId, exchange.getUniqueId());
     assertEquals("TestExchange202", test.getName());

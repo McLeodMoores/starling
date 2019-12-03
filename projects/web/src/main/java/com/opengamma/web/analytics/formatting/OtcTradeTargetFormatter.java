@@ -31,12 +31,12 @@ import com.opengamma.web.analytics.OtcTradeTarget;
   }
 
   @Override
-  public Map<String, Object> formatCell(OtcTradeTarget target, ValueSpecification valueSpec, Object inlineKey) {
-    Map<String, Object> results = Maps.newHashMap();
+  public Map<String, Object> formatCell(final OtcTradeTarget target, final ValueSpecification valueSpec, final Object inlineKey) {
+    final Map<String, Object> results = Maps.newHashMap();
     results.put(NAME, target.getName());
     results.put(NODE_ID, target.getNodeId().getObjectId());
     results.put(POSITION_ID, target.getPositionId().getObjectId());
-    UniqueId tradeId = target.getTradeId();
+    final UniqueId tradeId = target.getTradeId();
     if (tradeId != null) {
       results.put(TRADE_ID, tradeId.getObjectId());
     }

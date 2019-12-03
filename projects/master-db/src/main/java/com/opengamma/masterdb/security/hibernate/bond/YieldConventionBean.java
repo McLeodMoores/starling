@@ -18,7 +18,7 @@ public class YieldConventionBean extends EnumBean {
   protected YieldConventionBean() {
   }
 
-  public YieldConventionBean(String yieldConvention) {
+  public YieldConventionBean(final String yieldConvention) {
     super(yieldConvention);
   }
 

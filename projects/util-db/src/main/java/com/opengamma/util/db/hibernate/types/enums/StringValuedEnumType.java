@@ -15,16 +15,18 @@ import java.sql.Types;
 import java.util.Properties;
 
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.EnhancedUserType;
 import org.hibernate.usertype.ParameterizedType;
 
 //Please notice the calls to getNameFromValue *************************
 /**
  * An enum type for Hibernate.
- * 
- * @param <T> the enum type
+ *
+ * @param <T>
+ *          the enum type
  */
-public class StringValuedEnumType<T extends Enum<T> & StringValuedEnum>  // CSIGNORE
+public class StringValuedEnumType<T extends Enum<T> & StringValuedEnum> // CSIGNORE
     implements EnhancedUserType, ParameterizedType {
 
   /**
@@ -37,17 +39,18 @@ public class StringValuedEnumType<T extends Enum<T> & StringValuedEnum>  // CSIG
    */
   private String _defaultValue;
 
-  /** Creates a new instance of ActiveStateEnumType */
+  /** Creates a new instance of ActiveStateEnumType. */
   public StringValuedEnumType() {
   }
 
+  @Override
   @SuppressWarnings("unchecked")
-  public void setParameterValues(Properties parameters) {
-    String enumClassName = parameters.getProperty("enum");
+  public void setParameterValues(final Properties parameters) {
+    final String enumClassName = parameters.getProperty("enum");
     try {
-      _enumClass = (Class<T>) Class.forName(enumClassName).asSubclass(Enum.class).
-          asSubclass(StringValuedEnum.class); //Validates the class but does not eliminate the cast
-    } catch (ClassNotFoundException cnfe) {
+      _enumClass = (Class<T>) Class.forName(enumClassName).asSubclass(Enum.class).asSubclass(StringValuedEnum.class); // Validates the class but does not
+                                                                                                                      // eliminate the cast
+    } catch (final ClassNotFoundException cnfe) {
       throw new HibernateException("Enum class not found", cnfe);
     }
     setDefaultValue(parameters.getProperty("defaultValue"));
@@ -57,64 +60,80 @@ public class StringValuedEnumType<T extends Enum<T> & StringValuedEnum>  // CSIG
     return _defaultValue;
   }
 
-  public void setDefaultValue(String defaultValue) {
+  public void setDefaultValue(final String defaultValue) {
     this._defaultValue = defaultValue;
   }
 
   /**
    * The class returned by <tt>nullSafeGet()</tt>.
+   *
    * @return Class
    */
+  @Override
   public Class<?> returnedClass() {
     return _enumClass;
   }
 
+  @Override
   public int[] sqlTypes() {
-    return new int[] {Types.VARCHAR };
+    return new int[] { Types.VARCHAR };
   }
 
+  @Override
   public boolean isMutable() {
     return false;
   }
 
   /**
-   * Retrieve an instance of the mapped class from a JDBC resultset. Implementors
-   * should handle possibility of null values.
+   * Retrieve an instance of the mapped class from a JDBC resultset. Implementors should handle possibility of null values.
    *
-   * @param rs a JDBC result set
-   * @param names the column names
-   * @param owner the containing entity
+   * @param rs
+   *          a JDBC result set
+   * @param names
+   *          the column names
+   * @param owner
+   *          the containing entity
    * @return Object
    * @throws HibernateException
+   *           if there is a problem
    * @throws SQLException
+   *           if there is a problem
    */
-  public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException {
+  @Override
+  public Object nullSafeGet(final ResultSet rs, final String[] names, final SharedSessionContractImplementor session,
+      final Object owner) throws HibernateException, SQLException {
     String value = rs.getString(names[0]);
     if (value == null) {
       value = getDefaultValue();
-      if (value == null) { //no default value
+      if (value == null) { // no default value
         return null;
       }
     }
-    String name = getNameFromValue(_enumClass, value);
-    Object res = rs.wasNull() ? null : Enum.valueOf(_enumClass, name);
+    final String name = getNameFromValue(_enumClass, value);
+    final Object res = rs.wasNull() ? null : Enum.valueOf(_enumClass, name);
 
     return res;
   }
 
   /**
-   * Write an instance of the mapped class to a prepared statement. Implementors
-   * should handle possibility of null values. A multi-column type should be written
+   * Write an instance of the mapped class to a prepared statement. Implementors should handle possibility of null values. A multi-column type should be written
    * to parameters starting from <tt>index</tt>.
    *
-   * @param st a JDBC prepared statement
-   * @param value the object to write
-   * @param index statement parameter index
+   * @param st
+   *          a JDBC prepared statement
+   * @param value
+   *          the object to write
+   * @param index
+   *          statement parameter index
    * @throws HibernateException
+   *           if there is a problem
    * @throws SQLException
+   *           if there is a problem
    */
+  @Override
   @SuppressWarnings("unchecked")
-  public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
+  public void nullSafeSet(final PreparedStatement st, final Object value, final int index,
+      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
     if (value == null) {
       st.setNull(index, Types.VARCHAR);
     } else {
@@ -122,43 +141,52 @@ public class StringValuedEnumType<T extends Enum<T> & StringValuedEnum>  // CSIG
     }
   }
 
-  public Object assemble(Serializable cached, Object owner) throws HibernateException {
+  @Override
+  public Object assemble(final Serializable cached, final Object owner) throws HibernateException {
     return cached;
   }
 
+  @Override
   @SuppressWarnings("rawtypes")
-  public Serializable disassemble(Object value) throws HibernateException {
+  public Serializable disassemble(final Object value) throws HibernateException {
     return (Enum) value;
   }
 
-  public Object deepCopy(Object value) throws HibernateException {
+  @Override
+  public Object deepCopy(final Object value) throws HibernateException {
     return value;
   }
 
-  public boolean equals(Object x, Object y) throws HibernateException {
+  @Override
+  public boolean equals(final Object x, final Object y) throws HibernateException {
     return x == y;
   }
 
-  public int hashCode(Object x) throws HibernateException {
+  @Override
+  public int hashCode(final Object x) throws HibernateException {
     return x.hashCode();
   }
 
-  public Object replace(Object original, Object target, Object owner) throws HibernateException {
+  @Override
+  public Object replace(final Object original, final Object target, final Object owner) throws HibernateException {
     return original;
   }
 
+  @Override
   @SuppressWarnings("unchecked")
-  public String objectToSQLString(Object value) {
+  public String objectToSQLString(final Object value) {
     return '\'' + ((T) value).getValue() + '\'';
   }
 
+  @Override
   @SuppressWarnings("unchecked")
-  public String toXMLString(Object value) {
+  public String toXMLString(final Object value) {
     return ((T) value).getValue();
   }
 
-  public Object fromXMLString(String xmlValue) {
-    String name = getNameFromValue(_enumClass, xmlValue);
+  @Override
+  public Object fromXMLString(final String xmlValue) {
+    final String name = getNameFromValue(_enumClass, xmlValue);
     return Enum.valueOf(_enumClass, name);
   }
 

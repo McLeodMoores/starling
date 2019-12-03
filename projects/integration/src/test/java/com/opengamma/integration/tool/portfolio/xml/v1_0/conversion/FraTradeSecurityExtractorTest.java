@@ -1,12 +1,11 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.tool.portfolio.xml.v1_0.conversion;
 
 import static org.testng.Assert.assertEquals;
-
 
 import java.math.BigDecimal;
 
@@ -26,22 +25,22 @@ import com.opengamma.util.test.TestGroup;
 
 @Test(groups = TestGroup.UNIT)
 public class FraTradeSecurityExtractorTest {
-  
+
   @Test
   public void testExtractSecurities() {
-    FraTrade fra = createBasicFra();
-    FraTradeSecurityExtractor fraExtractor = new FraTradeSecurityExtractor(fra);
-    ManageableSecurity[] extractSecurities = fraExtractor.extractSecurities();
+    final FraTrade fra = createBasicFra();
+    final FraTradeSecurityExtractor fraExtractor = new FraTradeSecurityExtractor(fra);
+    final ManageableSecurity[] extractSecurities = fraExtractor.extractSecurities();
     assertEquals(1, extractSecurities.length, "One fra expected");
     assertEquals(FRASecurity.class, extractSecurities[0].getClass(), "Expected instance of FraSecurity");
-    
+
   }
 
-  @Test(expectedExceptions={OpenGammaRuntimeException.class})
+  @Test(expectedExceptions = {OpenGammaRuntimeException.class})
   public void testExtractSecuritiesBadPaymentDate() {
-    FraTrade fra = createBasicFra();
+    final FraTrade fra = createBasicFra();
     fra.setPaymentDate(fra.getEffectiveDate().plusDays(1));
-    FraTradeSecurityExtractor fraExtractor = new FraTradeSecurityExtractor(fra);
+    final FraTradeSecurityExtractor fraExtractor = new FraTradeSecurityExtractor(fra);
     //should throw:
     fraExtractor.extractSecurities();
   }
@@ -49,25 +48,25 @@ public class FraTradeSecurityExtractorTest {
   @Test
   public void testExtractSecuritiesWithCalendarInfo() {
     //should work, but will print a warning
-    FraTrade fra = createBasicFra();
+    final FraTrade fra = createBasicFra();
     fra.setDayCount("Modified Following");
     fra.setBusinessDayConvention("Actual/365");
-    FraTradeSecurityExtractor fraExtractor = new FraTradeSecurityExtractor(fra);
-    ManageableSecurity[] extractSecurities = fraExtractor.extractSecurities();
+    final FraTradeSecurityExtractor fraExtractor = new FraTradeSecurityExtractor(fra);
+    final ManageableSecurity[] extractSecurities = fraExtractor.extractSecurities();
     assertEquals(1, extractSecurities.length, "One fra expected");
     assertEquals(FRASecurity.class, extractSecurities[0].getClass(), "Expected instance of FraSecurity");
   }
-  
+
   /**
    * @return a fra with some fields set
    */
-  private FraTrade createBasicFra(){
-    FraTrade fra = new FraTrade();
+  private FraTrade createBasicFra() {
+    final FraTrade fra = new FraTrade();
 
-    IdWrapper tradeId = createExternalId("IdFromExternalSystem", "External");
-    IdWrapper regionId = createExternalId("IdFromExternalSystem", "External");
-    IdWrapper counterparty = createExternalId("GOLDMAN", "Cpty");
-    
+    final IdWrapper tradeId = createExternalId("IdFromExternalSystem", "External");
+    final IdWrapper regionId = createExternalId("IdFromExternalSystem", "External");
+    final IdWrapper counterparty = createExternalId("GOLDMAN", "Cpty");
+
     fra.setExternalSystemId(tradeId);
     fra.setTradeDate(LocalDate.of(2013, 1, 21));
     fra.setCounterparty(counterparty);
@@ -80,20 +79,20 @@ public class FraTradeSecurityExtractorTest {
     fra.setCurrency(Currency.USD);
     fra.setNotional(BigDecimal.valueOf(1000000));
     fra.setRate(BigDecimal.valueOf(105.25));
-    
-    FixingIndex fixingIndex = new FixingIndex();
+
+    final FixingIndex fixingIndex = new FixingIndex();
     fixingIndex.setIndex(createExternalId("US0003M Curncy", "BLOOMBERG_TICKER").getExternalId());
     fixingIndex.setRateType(RateType.IBOR);
     fra.setFixingIndex(fixingIndex);
-    
+
     return fra;
   }
 
-  private IdWrapper createExternalId(String id, String scheme) {
-    ExtId tradeExtId = new ExtId();
+  private IdWrapper createExternalId(final String id, final String scheme) {
+    final ExtId tradeExtId = new ExtId();
     tradeExtId.setId(id);
     tradeExtId.setScheme(scheme);
-    IdWrapper tradeId = new IdWrapper();
+    final IdWrapper tradeId = new IdWrapper();
     tradeId.setExternalId(tradeExtId);
     return tradeId;
   }

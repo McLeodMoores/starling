@@ -35,8 +35,8 @@ import com.opengamma.util.PublicSPI;
 /**
  * An exchange on which financial products can be traded or settled.
  * <p>
- * Financial products are often traded at a specific location known as an exchange.
- * This class represents details of the exchange, including region and opening hours.
+ * Financial products are often traded at a specific location known as an exchange. This class represents details of the exchange, including region and opening
+ * hours.
  */
 @PublicSPI
 @BeanDefinition
@@ -46,38 +46,35 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
   private static final long serialVersionUID = 1L;
 
   /**
-   * The unique identifier of the exchange.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * The unique identifier of the exchange. This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private UniqueId _uniqueId;
   /**
-   * The bundle of external identifiers that define the exchange.
-   * This field must not be null for the object to be valid.
+   * The bundle of external identifiers that define the exchange. This field must not be null for the object to be valid.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, validate = "notNull")
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
-   * The name of the exchange intended for display purposes.
-   * This field must not be null for the object to be valid.
+   * The name of the exchange intended for display purposes. This field must not be null for the object to be valid.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, validate = "notNull")
   private String _name;
   /**
    * The region external identifier bundle that defines where the exchange is located.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalIdBundle _regionIdBundle;
   /**
    * The time-zone of the exchange.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ZoneId _timeZone;
   /**
    * The detailed information about when an exchange is open or closed, not null.
    */
   @PropertyDefinition
-  private final List<ManageableExchangeDetail> _detail = new ArrayList<ManageableExchangeDetail>();
+  private final List<ManageableExchangeDetail> _detail = new ArrayList<>();
 
   /**
    * Creates an exchange.
@@ -87,13 +84,17 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
 
   /**
    * Creates an exchange specifying the values of the main fields.
-   * 
-   * @param identifiers  the bundle of identifiers that define the exchange, not null
-   * @param name  the name of the exchange, for display purposes, not null
-   * @param regionBundle  the region external identifier bundle where the exchange is located, null if not applicable (dark pool, electronic, ...)
-   * @param timeZone  the time-zone, may be null
+   *
+   * @param identifiers
+   *          the bundle of identifiers that define the exchange, not null
+   * @param name
+   *          the name of the exchange, for display purposes, not null
+   * @param regionBundle
+   *          the region external identifier bundle where the exchange is located, null if not applicable (dark pool, electronic, ...)
+   * @param timeZone
+   *          the time-zone, may be null
    */
-  public ManageableExchange(ExternalIdBundle identifiers, String name, ExternalIdBundle regionBundle, ZoneId timeZone) {
+  public ManageableExchange(final ExternalIdBundle identifiers, final String name, final ExternalIdBundle regionBundle, final ZoneId timeZone) {
     ArgumentChecker.notNull(identifiers, "identifiers");
     ArgumentChecker.notNull(name, "name");
     setExternalIdBundle(identifiers);
@@ -104,33 +105,36 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
 
   /**
    * Returns an independent clone of this exchange.
-   * 
+   *
    * @return the clone, not null
    */
+  @Override
   public ManageableExchange clone() {
-    ManageableExchange cloned = new ManageableExchange();
+    final ManageableExchange cloned = new ManageableExchange();
     cloned._uniqueId = _uniqueId;
     cloned._name = _name;
     cloned._externalIdBundle = _externalIdBundle;
     cloned._regionIdBundle = _regionIdBundle;
     cloned._detail.addAll(_detail);
+    cloned._timeZone = _timeZone;
     return cloned;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle representing this exchange.
-   * 
-   * @param exchangeId  the identifier to add, not null
+   *
+   * @param exchangeId
+   *          the identifier to add, not null
    */
-  public void addExternalId(ExternalId exchangeId) {
+  public void addExternalId(final ExternalId exchangeId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(exchangeId));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the ISO MIC code.
-   * 
+   *
    * @return the value of the property
    */
   public String getISOMic() {
@@ -139,10 +143,11 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
 
   /**
    * Sets the ISO MIC code, stored in the identifier set.
-   * 
-   * @param isoMicCode  the exchange MIC to set, null to remove any defined ISO MIC
+   *
+   * @param isoMicCode
+   *          the exchange MIC to set, null to remove any defined ISO MIC
    */
-  public void setISOMic(String isoMicCode) {
+  public void setISOMic(final String isoMicCode) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_MIC));
     if (isoMicCode != null) {
       addExternalId(ExternalSchemes.isoMicExchangeId(isoMicCode));
@@ -170,17 +175,16 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifier of the exchange.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Gets the unique identifier of the exchange. This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
 
   /**
-   * Sets the unique identifier of the exchange.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Sets the unique identifier of the exchange. This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
   public void setUniqueId(UniqueId uniqueId) {
@@ -189,7 +193,6 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
 
   /**
    * Gets the the {@code uniqueId} property.
-   * This must be null when adding to a master and not null when retrieved from a master.
    * @return the property, not null
    */
   public final Property<UniqueId> uniqueId() {
@@ -198,26 +201,25 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bundle of external identifiers that define the exchange.
-   * This field must not be null for the object to be valid.
-   * @return the value of the property
+   * Gets the bundle of external identifiers that define the exchange. This field must not be null for the object to be valid.
+   * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
 
   /**
-   * Sets the bundle of external identifiers that define the exchange.
-   * This field must not be null for the object to be valid.
-   * @param externalIdBundle  the new value of the property
+   * Sets the bundle of external identifiers that define the exchange. This field must not be null for the object to be valid.
+   * @param externalIdBundle  the new value of the property, not null
    */
   public void setExternalIdBundle(ExternalIdBundle externalIdBundle) {
+    JodaBeanUtils.notNull(externalIdBundle, "externalIdBundle");
     this._externalIdBundle = externalIdBundle;
   }
 
   /**
    * Gets the the {@code externalIdBundle} property.
-   * This field must not be null for the object to be valid.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalIdBundle() {
@@ -226,26 +228,25 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the name of the exchange intended for display purposes.
-   * This field must not be null for the object to be valid.
-   * @return the value of the property
+   * Gets the name of the exchange intended for display purposes. This field must not be null for the object to be valid.
+   * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }
 
   /**
-   * Sets the name of the exchange intended for display purposes.
-   * This field must not be null for the object to be valid.
-   * @param name  the new value of the property
+   * Sets the name of the exchange intended for display purposes. This field must not be null for the object to be valid.
+   * @param name  the new value of the property, not null
    */
   public void setName(String name) {
+    JodaBeanUtils.notNull(name, "name");
     this._name = name;
   }
 
   /**
    * Gets the the {@code name} property.
-   * This field must not be null for the object to be valid.
    * @return the property, not null
    */
   public final Property<String> name() {
@@ -257,6 +258,7 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
    * Gets the region external identifier bundle that defines where the exchange is located.
    * @return the value of the property
    */
+  @Override
   public ExternalIdBundle getRegionIdBundle() {
     return _regionIdBundle;
   }
@@ -282,6 +284,7 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
    * Gets the time-zone of the exchange.
    * @return the value of the property
    */
+  @Override
   public ZoneId getTimeZone() {
     return _timeZone;
   }
@@ -571,6 +574,8 @@ public class ManageableExchange extends DirectBean implements Exchange, Serializ
 
     @Override
     protected void validate(Bean bean) {
+      JodaBeanUtils.notNull(((ManageableExchange) bean)._externalIdBundle, "externalIdBundle");
+      JodaBeanUtils.notNull(((ManageableExchange) bean)._name, "name");
       JodaBeanUtils.notNull(((ManageableExchange) bean)._detail, "detail");
     }
 

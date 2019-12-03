@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.resolver;
@@ -47,7 +47,7 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class DefaultCompiledFunctionResolverTest {
@@ -72,7 +72,8 @@ public class DefaultCompiledFunctionResolverTest {
     resolver.addRule(new ResolutionRule(parameterizedF1, ApplyToAllTargets.INSTANCE, 100));
     resolver.addRule(new ResolutionRule(parameterizedF2, ApplyToAllTargets.INSTANCE, 200));
     resolver.compileRules();
-    Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> result = resolver.resolveFunction("req1", target, ValueProperties.none()).next();
+    final Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> result =
+        resolver.resolveFunction("req1", target, ValueProperties.none()).next();
     assertEquals(result.getFirst(), parameterizedF2);
   }
 
@@ -99,9 +100,10 @@ public class DefaultCompiledFunctionResolverTest {
     resolver.addRule(new ResolutionRule(parameterizedF1, ApplyToAllTargets.INSTANCE, 100));
     resolver.addRule(new ResolutionRule(parameterizedF2, new Filter(target), 200));
     resolver.compileRules();
-    Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> result = resolver.resolveFunction("req1", target, ValueProperties.none()).next();
+    Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> result =
+        resolver.resolveFunction("req1", target, ValueProperties.none()).next();
     assertEquals(result.getFirst(), parameterizedF2);
-    ComputationTarget anotherTarget = new ComputationTarget(ComputationTargetType.PRIMITIVE, UniqueId.of("scheme", "target2"));
+    final ComputationTarget anotherTarget = new ComputationTarget(ComputationTargetType.PRIMITIVE, UniqueId.of("scheme", "target2"));
     result = resolver.resolveFunction("req1", anotherTarget, ValueProperties.none()).next();
     assertEquals(result.getFirst(), parameterizedF1);
   }
@@ -125,7 +127,8 @@ public class DefaultCompiledFunctionResolverTest {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       fail();
       return null;
     }
@@ -146,11 +149,11 @@ public class DefaultCompiledFunctionResolverTest {
     }
 
     @Override
-    public void setAttributes(Map<String, String> attributes) {
+    public void setAttributes(final Map<String, String> attributes) {
     }
 
     @Override
-    public void addAttribute(String key, String value) {
+    public void addAttribute(final String key, final String value) {
     }
 
     @Override
@@ -181,7 +184,8 @@ public class DefaultCompiledFunctionResolverTest {
     final DefaultCompiledFunctionResolver resolver = new DefaultCompiledFunctionResolver(createFunctionCompilationContext());
     resolver.addRule(new ResolutionRule(pfn, ApplyToAllTargets.INSTANCE, 0));
     resolver.compileRules();
-    Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> result = resolver.resolveFunction("Value", target, ValueProperties.none()).next();
+    final Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> result =
+        resolver.resolveFunction("Value", target, ValueProperties.none()).next();
     assertEquals(result.getFirst(), pfn);
   }
 
@@ -193,11 +197,11 @@ public class DefaultCompiledFunctionResolverTest {
     }
 
     @Override
-    public void setAttributes(Map<String, String> attributes) {
+    public void setAttributes(final Map<String, String> attributes) {
     }
 
     @Override
-    public void addAttribute(String key, String value) {
+    public void addAttribute(final String key, final String value) {
     }
 
     @Override
@@ -248,7 +252,8 @@ public class DefaultCompiledFunctionResolverTest {
     Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> result = resolver.resolveFunction("Value",
         new ComputationTarget(ComputationTargetType.of(MockSecurityA.class), new MockSecurityA()), ValueProperties.none()).next();
     assertEquals(result.getFirst(), pfn2);
-    result = resolver.resolveFunction("Value", new ComputationTarget(ComputationTargetType.of(MockSecurityB.class), new MockSecurityB()), ValueProperties.none()).next();
+    result = resolver.resolveFunction("Value",
+        new ComputationTarget(ComputationTargetType.of(MockSecurityB.class), new MockSecurityB()), ValueProperties.none()).next();
     assertEquals(result.getFirst(), pfn1);
   }
 
@@ -271,7 +276,8 @@ public class DefaultCompiledFunctionResolverTest {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       fail();
       return null;
     }
@@ -296,12 +302,13 @@ public class DefaultCompiledFunctionResolverTest {
     final DefaultCompiledFunctionResolver resolver = new DefaultCompiledFunctionResolver(createFunctionCompilationContext());
     resolver.addRule(new ResolutionRule(pfn, ApplyToAllTargets.INSTANCE, 0));
     resolver.compileRules();
-    Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> result = resolver.resolveFunction("Value", target, ValueProperties.none()).next();
+    Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> result =
+        resolver.resolveFunction("Value", target, ValueProperties.none()).next();
     assertEquals(result.getFirst(), pfn);
     result = resolver.resolveFunction(
         "Value",
-        new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Node", "0")).containing(ComputationTargetType.POSITION, target.getUniqueId()),
-            target.getValue()), ValueProperties.none())
+        new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Node", "0"))
+            .containing(ComputationTargetType.POSITION, target.getUniqueId()), target.getValue()), ValueProperties.none())
         .next();
     assertEquals(result.getFirst(), pfn);
   }
@@ -326,7 +333,8 @@ public class DefaultCompiledFunctionResolverTest {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       fail();
       return null;
     }
@@ -350,8 +358,9 @@ public class DefaultCompiledFunctionResolverTest {
     resolver.addRule(new ResolutionRule(pfn, ApplyToAllTargets.INSTANCE, 0));
     resolver.compileRules();
     assertFalse(resolver.resolveFunction("Value", target, ValueProperties.none()).hasNext());
-    Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> result = resolver.resolveFunction(
-        "Value", new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Node", "0")).containing(ComputationTargetType.of(SimplePosition.class),
+    final Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> result = resolver.resolveFunction(
+        "Value", new ComputationTarget(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
+            UniqueId.of("Node", "0")).containing(ComputationTargetType.of(SimplePosition.class),
             target.getUniqueId()), target.getValue()), ValueProperties.none()).next();
     assertEquals(result.getFirst(), pfn);
   }
@@ -375,7 +384,8 @@ public class DefaultCompiledFunctionResolverTest {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       fail();
       return null;
     }
@@ -407,7 +417,8 @@ public class DefaultCompiledFunctionResolverTest {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       fail();
       return null;
     }
@@ -436,7 +447,8 @@ public class DefaultCompiledFunctionResolverTest {
     resolver.addRule(new ResolutionRule(pfn2, ApplyToAllTargets.INSTANCE, 1));
     resolver.addRule(new ResolutionRule(pfn3, ApplyToAllTargets.INSTANCE, 2));
     resolver.compileRules();
-    Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> itr = resolver.resolveFunction("Value", target1, ValueProperties.none());
+    Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> itr =
+        resolver.resolveFunction("Value", target1, ValueProperties.none());
     assertEquals(itr.next().getFirst(), pfn3);
     assertEquals(itr.next().getFirst(), pfn1);
     itr = resolver.resolveFunction("Value", target2, ValueProperties.none());
@@ -462,7 +474,8 @@ public class DefaultCompiledFunctionResolverTest {
     resolver.addRule(new ResolutionRule(pfn1, ApplyToAllTargets.INSTANCE, 1));
     resolver.addRule(new ResolutionRule(pfn2, ApplyToAllTargets.INSTANCE, 2));
     resolver.compileRules();
-    Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> itr = resolver.resolveFunction("Value", target, ValueProperties.none());
+    final Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> itr =
+        resolver.resolveFunction("Value", target, ValueProperties.none());
     assertEquals(itr.next().getFirst(), pfn2);
     assertEquals(itr.next().getFirst(), pfn1);
   }

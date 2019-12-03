@@ -5,15 +5,14 @@
  */
 package com.opengamma.masterdb.security.hibernate.future;
 
-import com.opengamma.financial.security.future.InterestRateFutureSecurity;
-
 /**
- * A Hibernate bean representation of {@link InterestRateFutureSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.future.InterestRateFutureSecurity}.
  */
 public class InterestRateFutureBean extends FutureSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitInterestRateFutureType(this);
   }
 

@@ -27,25 +27,25 @@ import com.opengamma.engine.value.ValueSpecification;
 public class EquityFutureOptionBAWGreeksFunction extends EquityFutureOptionBAWFunction {
   /** Value requirement names */
   private static final String[] GREEK_NAMES = new String[] {
-    ValueRequirementNames.DELTA,
-    ValueRequirementNames.DUAL_DELTA,
-    ValueRequirementNames.RHO,
-    ValueRequirementNames.CARRY_RHO,
-    ValueRequirementNames.VEGA,
-    ValueRequirementNames.THETA
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.DUAL_DELTA,
+                ValueRequirementNames.RHO,
+                ValueRequirementNames.CARRY_RHO,
+                ValueRequirementNames.VEGA,
+                ValueRequirementNames.THETA
   };
   /** Equivalent greeks */
   private static final Greek[] GREEKS = new Greek[] {
-    Greek.DELTA,
-    Greek.DUAL_DELTA,
-    Greek.RHO,
-    Greek.CARRY_RHO,
-    Greek.VEGA,
-    Greek.THETA
+                Greek.DELTA,
+                Greek.DUAL_DELTA,
+                Greek.RHO,
+                Greek.CARRY_RHO,
+                Greek.VEGA,
+                Greek.THETA
   };
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityFutureOptionBAWGreeksFunction() {
     super(GREEK_NAMES);

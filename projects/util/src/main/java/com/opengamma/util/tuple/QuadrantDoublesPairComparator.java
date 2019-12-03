@@ -33,12 +33,12 @@ public final class QuadrantDoublesPairComparator implements Comparator<DoublesPa
   }
 
   @Override
-  public int compare(DoublesPair p1, DoublesPair p2) {
+  public int compare(final DoublesPair p1, final DoublesPair p2) {
     if (p1.equals(p2)) {
       return 0;
     }
-    int firstQuadrant = getQuadrant(p1);
-    int secondQuadrant = getQuadrant(p2);
+    final int firstQuadrant = getQuadrant(p1);
+    final int secondQuadrant = getQuadrant(p2);
     if (firstQuadrant == secondQuadrant) {
       return FirstThenSecondDoublesPairComparator.INSTANCE.compare(p1, p2);
     }
@@ -52,14 +52,13 @@ public final class QuadrantDoublesPairComparator implements Comparator<DoublesPa
    * @param pair  the pair to extract from, not null
    * @return the quadrant from 1 to 4
    */
-  private int getQuadrant(DoublesPair pair) {
-    double x = pair.first;
-    double y = pair.second;
+  private static int getQuadrant(final DoublesPair pair) {
+    final double x = pair.first;
+    final double y = pair.second;
     if (x >= 0) {
-      return (y >= 0 ? 1 : 4);
-    } else {
-      return (y >= 0 ? 2 : 3);
+      return y >= 0 ? 1 : 4;
     }
+    return y >= 0 ? 2 : 3;
   }
 
 }

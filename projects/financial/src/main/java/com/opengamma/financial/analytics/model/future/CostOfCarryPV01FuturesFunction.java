@@ -18,7 +18,7 @@ public class CostOfCarryPV01FuturesFunction extends CostOfCarryFuturesFunction<D
    * @param costOfCarryField The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY". Set in *FunctionConfiguration
    * @param resolutionKey The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
    */
-  public CostOfCarryPV01FuturesFunction(String closingPriceField, String costOfCarryField, String resolutionKey) {
+  public CostOfCarryPV01FuturesFunction(final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
     super(ValueRequirementNames.PV01, CostOfCarryFuturesCalculator.PV01Calculator.getInstance(), closingPriceField, costOfCarryField, resolutionKey);
   }
 

@@ -63,13 +63,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_SLOW)
 public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRecompilationTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ParallelRecompilationInfiniteLatestTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParallelRecompilationInfiniteLatestTest.class);
 
-  private CompiledViewDefinitionWithGraphs compiledViewDefinition(final ViewDefinition viewDefinition, final Map<ComputationTargetReference, UniqueId> resolutions) {
+  private CompiledViewDefinitionWithGraphs compiledViewDefinition(final ViewDefinition viewDefinition,
+      final Map<ComputationTargetReference, UniqueId> resolutions) {
     final VersionCorrection versionCorrection = VersionCorrection.of(Instant.now(), Instant.now());
     final DependencyGraph graph = new TestDependencyGraphBuilder("Default").buildGraph();
     final Portfolio portfolio = Mockito.mock(Portfolio.class);
-    return new CompiledViewDefinitionWithGraphsImpl(versionCorrection, "view-id", viewDefinition, Collections.singleton(graph), new HashMap<ComputationTargetReference, UniqueId>(resolutions),
+    return new CompiledViewDefinitionWithGraphsImpl(versionCorrection, "view-id", viewDefinition, Collections.singleton(graph), new HashMap<>(resolutions),
         portfolio, 0, Collections.<CompiledViewCalculationConfiguration>singleton(CompiledViewCalculationConfigurationImpl.of(graph)), null, null);
   }
 
@@ -77,12 +78,13 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
     final Random rand = new Random();
     return new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
         final AtomicBoolean terminated = new AtomicBoolean();
         Mockito.doAnswer(new Answer<Void>() {
           @Override
-          public Void answer(InvocationOnMock invocation) throws Throwable {
+          public Void answer(final InvocationOnMock invocation) throws Throwable {
             terminated.set(true);
             return null;
           }
@@ -101,10 +103,10 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
                 context.cycleCompleted(Mockito.mock(ViewCycle.class));
                 Thread.sleep(rand.nextInt(300) + 50);
               }
-            } catch (InterruptedException e) {
-              s_logger.debug("Interrupted", e);
-            } catch (RuntimeException e) {
-              s_logger.error("Caught exception", e);
+            } catch (final InterruptedException e) {
+              LOGGER.debug("Interrupted", e);
+            } catch (final RuntimeException e) {
+              LOGGER.error("Caught exception", e);
             }
           }
         });
@@ -116,7 +118,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
   private static class MockContext implements ViewProcessWorkerContext {
 
     private final ViewProcessContext _context;
-    private final LinkedBlockingQueue<String> _events = new LinkedBlockingQueue<String>();
+    private final LinkedBlockingQueue<String> _events = new LinkedBlockingQueue<>();
 
     public MockContext(final ViewProcessContext context) {
       _context = context;
@@ -132,32 +134,32 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
     }
 
     @Override
-    public void viewDefinitionCompiled(ViewExecutionDataProvider dataProvider, CompiledViewDefinitionWithGraphs compiled) {
+    public void viewDefinitionCompiled(final ViewExecutionDataProvider dataProvider, final CompiledViewDefinitionWithGraphs compiled) {
       _events.add("view definition compiled");
     }
 
     @Override
-    public void viewDefinitionCompilationFailed(Instant compilationTime, Exception exception) {
+    public void viewDefinitionCompilationFailed(final Instant compilationTime, final Exception exception) {
       _events.add("view definition compilation failed");
     }
 
     @Override
-    public void cycleStarted(ViewCycleMetadata cycleMetadata) {
+    public void cycleStarted(final ViewCycleMetadata cycleMetadata) {
       _events.add("cycle started");
     }
 
     @Override
-    public void cycleFragmentCompleted(ViewComputationResultModel result, ViewDefinition viewDefinition) {
+    public void cycleFragmentCompleted(final ViewComputationResultModel result, final ViewDefinition viewDefinition) {
       _events.add("cycle fragment completed");
     }
 
     @Override
-    public void cycleCompleted(ViewCycle cycle) {
+    public void cycleCompleted(final ViewCycle cycle) {
       _events.add("cycle completed");
     }
 
     @Override
-    public void cycleExecutionFailed(ViewCycleExecutionOptions options, Exception exception) {
+    public void cycleExecutionFailed(final ViewCycleExecutionOptions options, final Exception exception) {
       _events.add("cycle execution failed");
     }
 
@@ -172,7 +174,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
   protected void testImpl(final Function2<ParallelRecompilationViewProcessWorker, ViewExecutionOptions, Void> callback) throws InterruptedException {
     final ExecutorService executor = Executors.newCachedThreadPool();
     try {
-      final Map<ComputationTargetReference, UniqueId> resolutions = new HashMap<ComputationTargetReference, UniqueId>();
+      final Map<ComputationTargetReference, UniqueId> resolutions = new HashMap<>();
       resolutions.put(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, UniqueId.of("Test", "0")), UniqueId.of("Test", "0", "0"));
       final ChangeManager changeManager = new BasicChangeManager();
       final ComputationTargetResolver targetResolver = Mockito.mock(ComputationTargetResolver.class);
@@ -186,37 +188,39 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
       final MockContext context = new MockContext(vpContext);
       final ViewExecutionOptions options = ExecutionOptions.infinite(MarketData.live(), ExecutionFlags.none().ignoreCompilationValidity().get());
       final ViewDefinition viewDefinition = Mockito.mock(ViewDefinition.class);
-      final ParallelRecompilationViewProcessWorker worker = new ParallelRecompilationViewProcessWorker(workerFactory(executor, resolutions), context, options, viewDefinition);
+      final ParallelRecompilationViewProcessWorker worker =
+          new ParallelRecompilationViewProcessWorker(workerFactory(executor, resolutions), context, options, viewDefinition);
       callback.execute(worker, options);
-      s_logger.debug("Waiting for initial compilation");
+      LOGGER.debug("Waiting for initial compilation");
       assertEquals(context.event(), "view definition compiled"); // From primary worker
       for (int j = 0; j < 5; j++) {
         // Expect a sequence of operations
         for (int i = 0; i < 3; i++) {
-          s_logger.debug("Waiting for cycle to start");
+          LOGGER.debug("Waiting for cycle to start");
           assertEquals(context.event(), "cycle started"); // From primary worker
-          s_logger.info("Cycle started");
+          LOGGER.info("Cycle started");
           assertEquals(context.event(), "cycle fragment completed");
-          s_logger.info("Cycle fragment completed");
+          LOGGER.info("Cycle fragment completed");
           assertEquals(context.event(), "cycle completed");
-          s_logger.info("Cycle completed");
+          LOGGER.info("Cycle completed");
         }
         // Signal change ...
-        s_logger.debug("Signalling change");
-        resolutions.put(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, UniqueId.of("Test", "0")), UniqueId.of("Test", "0", Integer.toString(j + 1)));
+        LOGGER.debug("Signalling change");
+        resolutions.put(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO,
+            UniqueId.of("Test", "0")), UniqueId.of("Test", "0", Integer.toString(j + 1)));
         changeManager.entityChanged(ChangeType.CHANGED, ObjectId.of("Test", "0"), Instant.now(), Instant.now(), Instant.now());
-        s_logger.info("Change signalled");
-        // ... and expect a view definition compiled to interrupt the sequence 
+        LOGGER.info("Change signalled");
+        // ... and expect a view definition compiled to interrupt the sequence
         String event = context.event();
         for (int i = 0; i < 20; i++) {
           if (event.equals("cycle started")) {
-            s_logger.info("Legacy cycle started");
+            LOGGER.info("Legacy cycle started");
             event = context.event();
             if (event.equals("cycle fragment completed")) {
-              s_logger.info("Legacy fragment completed");
+              LOGGER.info("Legacy fragment completed");
               event = context.event();
               if (event.equals("cycle completed")) {
-                s_logger.info("Legacy cycle completed");
+                LOGGER.info("Legacy cycle completed");
                 event = context.event();
               } else {
                 break;
@@ -229,7 +233,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
           }
         }
         assertEquals(event, "view definition compiled");
-        s_logger.info("New compilation");
+        LOGGER.info("New compilation");
       }
     } finally {
       executor.shutdownNow();

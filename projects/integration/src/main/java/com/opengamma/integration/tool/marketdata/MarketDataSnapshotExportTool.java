@@ -30,7 +30,7 @@ import com.opengamma.scripts.Scriptable;
 public class MarketDataSnapshotExportTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSnapshotExportTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSnapshotExportTool.class);
 
   /** File name option flag */
   private static final String FILE_NAME_OPTION = "f";
@@ -39,14 +39,14 @@ public class MarketDataSnapshotExportTool extends AbstractTool<ToolContext> {
   /** Snapshot name option flag */
   private static final String SNAPSHOT_NAME_OPTION = "n";
   /** Snapshot version date option flag */
-  private static final String SNAPSHOT_DATE_OPTION = "d";  
+  private static final String SNAPSHOT_DATE_OPTION = "d";
 
   private static ToolContext s_context;
 
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
@@ -57,15 +57,15 @@ public class MarketDataSnapshotExportTool extends AbstractTool<ToolContext> {
   @Override
   protected void doRun() throws Exception {
     s_context = getToolContext();
-    SnapshotUtils snapshotUtils = SnapshotUtils.of(s_context.getMarketDataSnapshotMaster());
+    final SnapshotUtils snapshotUtils = SnapshotUtils.of(s_context.getMarketDataSnapshotMaster());
     if (!MarketDataSnapshotToolUtils.handleQueryOptions(snapshotUtils, getCommandLine())) {
-      SnapshotReader snapshotReader = constructSnapshotReader(UniqueId.parse(getCommandLine().getOptionValue(
+      final SnapshotReader snapshotReader = constructSnapshotReader(UniqueId.parse(getCommandLine().getOptionValue(
           SNAPSHOT_UID_OPTION)));
-      SnapshotWriter snapshotWriter = constructSnapshotWriter(getCommandLine().getOptionValue(FILE_NAME_OPTION));
-      SnapshotCopier snapshotCopier = new SimpleSnapshotCopier();
-  
+      final SnapshotWriter snapshotWriter = constructSnapshotWriter(getCommandLine().getOptionValue(FILE_NAME_OPTION));
+      final SnapshotCopier snapshotCopier = new SimpleSnapshotCopier();
+
       snapshotCopier.copy(snapshotReader, snapshotWriter);
-  
+
       // close the reader and writer
       snapshotReader.close();
       snapshotWriter.close();
@@ -73,19 +73,19 @@ public class MarketDataSnapshotExportTool extends AbstractTool<ToolContext> {
     System.exit(0);
   }
 
-  private static SnapshotReader constructSnapshotReader(UniqueId uniqueId) {
-    MarketDataSnapshotMaster marketDataSnapshotMaster = s_context.getMarketDataSnapshotMaster();
+  private static SnapshotReader constructSnapshotReader(final UniqueId uniqueId) {
+    final MarketDataSnapshotMaster marketDataSnapshotMaster = s_context.getMarketDataSnapshotMaster();
     if (marketDataSnapshotMaster == null) {
-      s_logger.warn("No market data snapshot masters found at {}", s_context);
+      LOGGER.warn("No market data snapshot masters found at {}", s_context);
 
     }
     return new MasterSnapshotReader(uniqueId, marketDataSnapshotMaster);
   }
 
-  private static SnapshotWriter constructSnapshotWriter(String filename) {
-    MarketDataSnapshotMaster marketDataSnapshotMaster = s_context.getMarketDataSnapshotMaster();
+  private static SnapshotWriter constructSnapshotWriter(final String filename) {
+    final MarketDataSnapshotMaster marketDataSnapshotMaster = s_context.getMarketDataSnapshotMaster();
     if (marketDataSnapshotMaster == null) {
-      s_logger.warn("No market data snapshot masters found at {}", s_context);
+      LOGGER.warn("No market data snapshot masters found at {}", s_context);
     }
 
     if (SheetFormat.of(filename) == SheetFormat.CSV) {
@@ -100,7 +100,7 @@ public class MarketDataSnapshotExportTool extends AbstractTool<ToolContext> {
 
   //-------------------------------------------------------------------------
   @Override
-  protected Options createOptions(boolean mandatoryConfig) {
+  protected Options createOptions(final boolean mandatoryConfig) {
     final Options options = super.createOptions(mandatoryConfig);
     options.addOption(createSnapshotUidOption());
     options.addOption(createFilenameOption());
@@ -130,10 +130,10 @@ public class MarketDataSnapshotExportTool extends AbstractTool<ToolContext> {
     option.setArgName("snapshot name");
     return option;
   }
-   
+
   private static Option createSnapshotDateOption() {
     final Option option = new Option(SNAPSHOT_DATE_OPTION, "snapshot-date", true, "Specify a version date for a named snapshot");
     option.setArgName("snapshot name");
-    return option;    
+    return option;
   }
 }

@@ -23,7 +23,7 @@ public final class ConfigMasterUtils {
    * either add or update as necessary. Since the read and modify are two
    * separate steps, there is a race condition, thus this method is intended
    * for sensible setup purposes rather than ensuring uniqueness.
-   * 
+   *
    * @param <T>  the configuration element type
    * @param master  the config master, not null
    * @param item  the item to store, not null
@@ -38,11 +38,11 @@ public final class ConfigMasterUtils {
       while (true) {
         try {
           return storeByNameInner(master, item);
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
           if (++retries == maxRetries) {
             throw ex;
           }
-        } catch (IncorrectUpdateSemanticsDataAccessException ex) {
+        } catch (final IncorrectUpdateSemanticsDataAccessException ex) {
           if (++retries == maxRetries) {
             throw ex;
           }
@@ -50,31 +50,29 @@ public final class ConfigMasterUtils {
 
         item.setUniqueId(null);
       }
-    } else {
-      return storeByNameInner(master, item);
     }
+    return storeByNameInner(master, item);
   }
 
   @SuppressWarnings("unchecked")
   private static <T> ConfigItem<T> storeByNameInner(final ConfigMaster master, final ConfigItem<T> item) {
-    ConfigSearchRequest<T> searchRequest = new ConfigSearchRequest<T>();
+    final ConfigSearchRequest<T> searchRequest = new ConfigSearchRequest<>();
     searchRequest.setType(item.getType());
     searchRequest.setName(item.getName());
-    ConfigSearchResult<T> searchResult = master.search(searchRequest);
-    for (ConfigItem<T> existingItem : searchResult.getValues()) {
+    final ConfigSearchResult<T> searchResult = master.search(searchRequest);
+    for (final ConfigItem<T> existingItem : searchResult.getValues()) {
       if (existingItem.getValue().equals(item.getValue())) {
         return existingItem;
       }
     }
-    ConfigItem<T> firstExistingItem = searchResult.getFirstValue();
+    final ConfigItem<T> firstExistingItem = searchResult.getFirstValue();
     if (firstExistingItem == null) {
       return (ConfigItem<T>) master.add(new ConfigDocument(item)).getConfig();
-    } else {
-      if (item.getUniqueId() == null) {
-        item.setUniqueId(firstExistingItem.getUniqueId());
-      }
-      return (ConfigItem<T>) master.update(new ConfigDocument(item)).getConfig();
     }
+    if (item.getUniqueId() == null) {
+      item.setUniqueId(firstExistingItem.getUniqueId());
+    }
+    return (ConfigItem<T>) master.update(new ConfigDocument(item)).getConfig();
   }
 
 }

@@ -33,7 +33,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
 import com.opengamma.financial.analytics.curve.CurveSpecification;
@@ -46,13 +45,15 @@ import com.opengamma.util.tuple.Pair;
  * Calculates the node sensitivities to the market quotes of a bond or bond future for all curves
  * to which the instruments are sensitive.
  */
-public class BondAndBondFutureYCNSFunction extends BondAndBondFutureFromCurvesFunction<ParameterIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> {
+public class BondAndBondFutureYCNSFunction
+extends BondAndBondFutureFromCurvesFunction<ParameterIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BondAndBondFutureYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondAndBondFutureYCNSFunction.class);
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES} and
-   * sets the calculator to null.
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * and sets the calculator to null.
    */
   public BondAndBondFutureYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES, null);
@@ -83,7 +84,7 @@ public class BondAndBondFutureYCNSFunction extends BondAndBondFutureFromCurvesFu
         return results;
       }
     }
-    s_logger.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
+    LOGGER.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
     return Collections.emptySet();
   }
 

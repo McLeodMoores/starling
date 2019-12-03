@@ -111,7 +111,7 @@ public class IborDepositConvention implements CurveDataConvention<DepositIborDef
     final DayCount dayCount = _index.getDayCount();
     final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(date, spotLag, _calendar);
     final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, _tenor, _calendar);
-    final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate, new CalendarAdapter(_calendar));
+    final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate, CalendarAdapter.of(_calendar));
     return new DepositIborDefinition(currency, startDate, endDate, notional, fixedRate, accrualFactor, _index);
   }
 

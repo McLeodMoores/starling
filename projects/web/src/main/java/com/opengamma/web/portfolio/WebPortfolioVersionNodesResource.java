@@ -26,17 +26,18 @@ public class WebPortfolioVersionNodesResource extends WebPortfolioNodesResource 
    * Creates the resource.
    * @param parent  the parent resource, not null
    */
-  public WebPortfolioVersionNodesResource(AbstractWebPortfolioResource parent) {
+  public WebPortfolioVersionNodesResource(final AbstractWebPortfolioResource parent) {
     super(parent);
   }
 
   //-------------------------------------------------------------------------
+  @Override
   @Path("{nodeId}")
-  public WebPortfolioNodeResource findNode(@PathParam("nodeId") String idStr) {
+  public WebPortfolioNodeResource findNode(@PathParam("nodeId") final String idStr) {
     data().setUriNodeId(idStr);
-    UniqueId oid = UniqueId.parse(idStr);
-    PortfolioDocument portfolioDoc = data().getVersioned();
-    Stack<ManageablePortfolioNode> nodes = portfolioDoc.getPortfolio().getRootNode().findNodeStackByObjectId(oid);
+    final UniqueId oid = UniqueId.parse(idStr);
+    final PortfolioDocument portfolioDoc = data().getVersioned();
+    final Stack<ManageablePortfolioNode> nodes = portfolioDoc.getPortfolio().getRootNode().findNodeStackByObjectId(oid);
     if (nodes.isEmpty()) {
       throw new DataNotFoundException("PortfolioNode not found: " + idStr);
     }
@@ -54,7 +55,7 @@ public class WebPortfolioVersionNodesResource extends WebPortfolioNodesResource 
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data) {
-    String portfolioId = data.getBestPortfolioUriId(null);
+    final String portfolioId = data.getBestPortfolioUriId(null);
     return data.getUriInfo().getBaseUriBuilder().path(WebPortfolioNodesResource.class).build(portfolioId);
   }
 

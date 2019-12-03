@@ -14,7 +14,7 @@ import org.threeten.bp.temporal.TemporalAdjuster;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test for the day of month temporal adjuster
+ * Test for the day of month temporal adjuster.
  */
 @Test(groups = TestGroup.UNIT)
 public class DayOfMonthTemporalAdjusterTest {
@@ -23,8 +23,8 @@ public class DayOfMonthTemporalAdjusterTest {
   public void testFirstMonth() {
     final LocalDate date = LocalDate.of(2013, 1, 1);
     for (int i = 1; i < 30; i++) {
-      final TemporalAdjuster ADJUSTER = new DayOfMonthTemporalAdjuster(i);
-      assertEquals(LocalDate.of(2013, 1, i), ADJUSTER.adjustInto(date));
+      final TemporalAdjuster adjusster = new DayOfMonthTemporalAdjuster(i);
+      assertEquals(LocalDate.of(2013, 1, i), adjusster.adjustInto(date));
     }
   }
 }

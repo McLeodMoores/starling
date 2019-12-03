@@ -37,7 +37,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the payment amounts due on the valuation date (|time to payment|<small).
+ * Calculates the payment amounts due on the valuation date (|time to payment|&lt;small).
  */
 public final class TodayPaymentCalculator extends InstrumentDerivativeVisitorAdapter<Void, MultipleCurrencyAmount> {
   /**
@@ -58,9 +58,11 @@ public final class TodayPaymentCalculator extends InstrumentDerivativeVisitorAda
   }
 
   /**
-   * Primary constructor
-   * Note on negative timeLimits: toDerivative functions often drop past payments so using this calculator with timeLimits < -1dy may have unexpected impacts.
-   * @param timeLimit the horizon in years, either positive (forward looking) or negative (backward looking) in which the calculator returns payment amounts
+   * Primary constructor Note on negative timeLimits: toDerivative functions often drop past payments so using this calculator with timeLimits &lt; -1dy may
+   * have unexpected impacts.
+   *
+   * @param timeLimit
+   *          the horizon in years, either positive (forward looking) or negative (backward looking) in which the calculator returns payment amounts
    * @return the calculator
    */
   public static TodayPaymentCalculator getInstance(final double timeLimit) {
@@ -82,7 +84,7 @@ public final class TodayPaymentCalculator extends InstrumentDerivativeVisitorAda
    * @return true if the payment is to be counted as happening within the time limit / horizon
    */
   private boolean isWithinLimit(final double paymentTime) {
-    return (Math.abs(paymentTime) < Math.abs(_timeLimit) && _timeLimit * paymentTime >= 0);
+    return Math.abs(paymentTime) < Math.abs(_timeLimit) && _timeLimit * paymentTime >= 0;
   }
 
   //     -----     Deposit     -----

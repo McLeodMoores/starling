@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 import com.opengamma.core.AbstractEHCachingSource;
 import com.opengamma.core.change.ChangeEvent;
 import com.opengamma.core.change.ChangeListener;
@@ -25,11 +21,16 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 import com.opengamma.util.tuple.Triple;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
 /**
  * EHCache backed {@link ConfigSource}.
  * <p>
- * The current implementation of {@link #getSingle} is incorrect; it will cache values queried with a version/correction containing "latest". This should only be used if the issues that such caching
- * will cause are of less concern than the performance penalty of not caching the calls at all.
+ * It is possible to cache the latest version of config objects via calls to {@link #getSingle}, which is technically incorrect.
+ * This should only be used if the issues that such caching will cause are of less concern than the performance penalty of not
+ * caching the calls at all.
  */
 public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>, ConfigSource> implements ConfigSource {
 
@@ -38,17 +39,36 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
 
   private final Cache _nameCache;
   private final Cache _classCache;
+  private final boolean _cacheLatestForSingle;
 
+  /**
+   * Constructs a source that caches the latest version of a config when {@link #getSingle} is called.
+   *
+   * @param underlying  the underlying source
+   * @param cacheManager  the cache manager
+   */
   public EHCachingConfigSource(final ConfigSource underlying, final CacheManager cacheManager) {
+    this(underlying, cacheManager, true);
+  }
+
+  /**
+   * Constructs a source.
+   *
+   * @param underlying  the underlying source
+   * @param cacheManager  the cache manager
+   * @param  cacheLatestForSingle  true to cache latest versions of configs
+   */
+  public EHCachingConfigSource(final ConfigSource underlying, final CacheManager cacheManager, final boolean cacheLatestForSingle) {
     super(underlying, cacheManager);
     EHCacheUtils.addCache(cacheManager, _nameCacheName);
     EHCacheUtils.addCache(cacheManager, _classCacheName);
     _nameCache = EHCacheUtils.getCacheFromManager(cacheManager, _nameCacheName);
     _classCache = EHCacheUtils.getCacheFromManager(cacheManager, _classCacheName);
+    _cacheLatestForSingle = cacheLatestForSingle;
     // this is not nice, but it's better than a stale cache.
     getUnderlying().changeManager().addChangeListener(new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
+      public void entityChanged(final ChangeEvent event) {
         switch (event.getType()) {
           case ADDED:
             break;
@@ -70,7 +90,7 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
   }
 
   private synchronized <R> void cacheNameHit(final Triple<Class<R>, String, VersionCorrection> key, final R value) {
-    Element element = _nameCache.get(key);
+    final Element element = _nameCache.get(key);
     if (element == null) {
       // Don't cache the single form if a collection (or another single) has already been written
       _nameCache.put(new Element(key, ConfigItem.of(value, key.getSecond(), key.getFirst())));
@@ -83,7 +103,7 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
   }
 
   private synchronized <R> void cacheNameMiss(final Triple<Class<R>, String, VersionCorrection> key) {
-    Element element = _nameCache.get(key);
+    final Element element = _nameCache.get(key);
     if (element == null) {
       _nameCache.put(new Element(key, Collections.<ConfigItem<?>>emptySet()));
     }
@@ -92,7 +112,7 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
   @SuppressWarnings("unchecked")
   @Override
   public <R> Collection<ConfigItem<R>> get(final Class<R> clazz, final String configName, final VersionCorrection versionCorrection) {
-    if (versionCorrection.containsLatest()) {
+    if (versionCorrection == null || versionCorrection.containsLatest()) {
       // Not cacheable
       return getUnderlying().get(clazz, configName, versionCorrection);
     }
@@ -107,8 +127,8 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
     final Pair<Class<R>, VersionCorrection> classKey = Pairs.of(clazz, versionCorrection);
     element = _classCache.get(classKey);
     if (element != null) {
-      result = new ArrayList<ConfigItem<R>>();
-      for (ConfigItem<?> item : (Collection<ConfigItem<?>>) element.getObjectValue()) {
+      result = new ArrayList<>();
+      for (final ConfigItem<?> item : (Collection<ConfigItem<?>>) element.getObjectValue()) {
         if (configName.equals(item.getName()) && clazz.isAssignableFrom(item.getValue().getClass())) {
           result.add((ConfigItem<R>) item);
         }
@@ -123,7 +143,7 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
   @SuppressWarnings("unchecked")
   @Override
   public <R> Collection<ConfigItem<R>> getAll(final Class<R> clazz, final VersionCorrection versionCorrection) {
-    if ((versionCorrection == null) || versionCorrection.containsLatest()) {
+    if (versionCorrection == null || versionCorrection.containsLatest()) {
       // Not cacheable
       return getUnderlying().getAll(clazz, versionCorrection);
     }
@@ -146,9 +166,8 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
     final Object value = get(uniqueId).getValue();
     if (clazz.isAssignableFrom(value.getClass())) {
       return (R) value;
-    } else {
-      throw new IllegalArgumentException("The requested object is " + value.getClass() + ", not " + clazz);
     }
+    throw new IllegalArgumentException("The requested object is " + value.getClass() + ", not " + clazz);
   }
 
   @SuppressWarnings("unchecked")
@@ -157,22 +176,23 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
     final Object value = get(objectId, versionCorrection).getValue();
     if (clazz.isAssignableFrom(value.getClass())) {
       return (R) value;
-    } else {
-      throw new IllegalArgumentException("The requested object is " + value.getClass() + ", not " + clazz);
     }
+    throw new IllegalArgumentException("The requested object is " + value.getClass() + ", not " + clazz);
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public <R> R getSingle(final Class<R> clazz, final String configName, final VersionCorrection versionCorrection) {
-    // TODO: This isn't strictly cacheable, if versionCorrection contains latest, but performance can be terrible if we don't
+    if (!_cacheLatestForSingle && versionCorrection.containsLatest()) {
+      return getUnderlying().getSingle(clazz, configName, versionCorrection);
+    }
     final Triple<Class<R>, String, VersionCorrection> nameKey = Triple.of(clazz, configName, versionCorrection);
     Element element = _nameCache.get(nameKey);
     if (element == null) {
       final Pair<Class<R>, VersionCorrection> classKey = Pairs.of(clazz, versionCorrection);
       element = _classCache.get(classKey);
       if (element != null) {
-        for (ConfigItem<?> item : (Collection<ConfigItem<?>>) element.getObjectValue()) {
+        for (final ConfigItem<?> item : (Collection<ConfigItem<?>>) element.getObjectValue()) {
           if (configName.equals(item.getName()) && clazz.isAssignableFrom(item.getValue().getClass())) {
             final R result = (R) item.getValue();
             cacheNameHit(nameKey, result);
@@ -204,9 +224,8 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
     value = results.iterator().next().getValue();
     if (clazz.isAssignableFrom(value.getClass())) {
       return (R) value;
-    } else {
-      throw new IllegalArgumentException("The requested object is " + value.getClass() + ", not " + clazz);
     }
+    throw new IllegalArgumentException("The requested object is " + value.getClass() + ", not " + clazz);
   }
 
   @Override
@@ -214,5 +233,25 @@ public class EHCachingConfigSource extends AbstractEHCachingSource<ConfigItem<?>
     return getSingle(clazz, name, VersionCorrection.LATEST);
   }
 
-}
+  /**
+   * For use by test methods only to control the caches.
+   */
+  void emptyCaches() {
+    EHCacheUtils.clear(getCacheManager(), _nameCacheName);
+    EHCacheUtils.clear(getCacheManager(), _classCacheName);
+  }
 
+  /**
+   * For use by test methods only to control the caches.
+   */
+  void emptyNameCache() {
+    EHCacheUtils.clear(getCacheManager(), _nameCacheName);
+  }
+
+  /**
+   * For use by test methods only to control the caches.
+   */
+  void emptyClassCache() {
+    EHCacheUtils.clear(getCacheManager(), _classCacheName);
+  }
+}

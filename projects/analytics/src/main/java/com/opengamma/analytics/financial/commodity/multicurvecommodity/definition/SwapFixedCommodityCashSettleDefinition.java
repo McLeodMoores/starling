@@ -25,7 +25,8 @@ public class SwapFixedCommodityCashSettleDefinition extends SwapDefinition {
    * @param fixedLeg The fixed leg.
    * @param commodityLeg The commodity cash settle leg.
    */
-  public SwapFixedCommodityCashSettleDefinition(final AnnuityCouponFixedDefinition fixedLeg, final AnnuityDefinition<? extends PaymentDefinition> commodityLeg) {
+  public SwapFixedCommodityCashSettleDefinition(final AnnuityCouponFixedDefinition fixedLeg,
+      final AnnuityDefinition<? extends PaymentDefinition> commodityLeg) {
     super(fixedLeg, commodityLeg);
     ArgumentChecker.isTrue(fixedLeg.getCurrency().equals(commodityLeg.getCurrency()), "legs should have the same currency");
   }

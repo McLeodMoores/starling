@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -19,7 +19,7 @@ import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ValueGreekSensitivityPnLDefaultPropertiesFunction extends DefaultPropertyFunction {
   private final String _returnCalculator;
@@ -27,7 +27,8 @@ public class ValueGreekSensitivityPnLDefaultPropertiesFunction extends DefaultPr
   private final String _scheduleCalculator;
   private final String _samplingCalculator;
 
-  public ValueGreekSensitivityPnLDefaultPropertiesFunction(final String samplingPeriod, final String scheduleCalculator, final String samplingCalculator, final String returnCalculator) {
+  public ValueGreekSensitivityPnLDefaultPropertiesFunction(final String samplingPeriod, final String scheduleCalculator, final String samplingCalculator,
+      final String returnCalculator) {
     super(ComputationTargetType.POSITION, true);
     ArgumentChecker.notNull(samplingPeriod, "sampling period");
     ArgumentChecker.notNull(scheduleCalculator, "schedule calculator");

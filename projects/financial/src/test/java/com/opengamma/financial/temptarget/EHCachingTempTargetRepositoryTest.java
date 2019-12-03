@@ -9,7 +9,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
-import net.sf.ehcache.CacheManager;
 
 import org.mockito.Mockito;
 import org.springframework.context.Lifecycle;
@@ -21,6 +20,8 @@ import com.opengamma.core.change.ChangeManager;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Tests the {@link EHCachingTempTargetRepository} class.
@@ -93,7 +94,7 @@ public class EHCachingTempTargetRepositoryTest {
     // TempTargetRepository
 
     @Override
-    public TempTarget get(UniqueId identifier) {
+    public TempTarget get(final UniqueId identifier) {
       throw new UnsupportedOperationException();
     }
 
@@ -103,7 +104,7 @@ public class EHCachingTempTargetRepositoryTest {
     }
 
     @Override
-    public UniqueId locateOrStore(TempTarget target) {
+    public UniqueId locateOrStore(final TempTarget target) {
       throw new UnsupportedOperationException();
     }
 

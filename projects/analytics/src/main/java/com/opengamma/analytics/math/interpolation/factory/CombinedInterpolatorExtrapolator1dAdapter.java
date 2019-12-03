@@ -23,8 +23,11 @@ public class CombinedInterpolatorExtrapolator1dAdapter extends NamedInterpolator
 
   /**
    * Creates an interpolator that can perform left and right extrapolation.
-   * @param interpolator  the interpolator, not null
-   * @param extrapolator  the left and right extrapolator, not null
+   * 
+   * @param interpolator
+   *          the interpolator, not null
+   * @param extrapolator
+   *          the left and right extrapolator, not null
    */
   public CombinedInterpolatorExtrapolator1dAdapter(final Interpolator1dAdapter interpolator, final Interpolator1dAdapter extrapolator) {
     _interpolator = new CombinedInterpolatorExtrapolator(interpolator, extrapolator);
@@ -40,9 +43,13 @@ public class CombinedInterpolatorExtrapolator1dAdapter extends NamedInterpolator
 
   /**
    * Creates an interpolator that can perform left and right extrapolation.
-   * @param interpolator  the interpolator, not null
-   * @param leftExtrapolator  the left extrapolator, not null
-   * @param rightExtrapolator  the right extrapolator, not null
+   * 
+   * @param interpolator
+   *          the interpolator, not null
+   * @param leftExtrapolator
+   *          the left extrapolator, not null
+   * @param rightExtrapolator
+   *          the right extrapolator, not null
    */
   public CombinedInterpolatorExtrapolator1dAdapter(final Interpolator1dAdapter interpolator, final Interpolator1dAdapter leftExtrapolator,
       final Interpolator1dAdapter rightExtrapolator) {
@@ -94,7 +101,8 @@ public class CombinedInterpolatorExtrapolator1dAdapter extends NamedInterpolator
 
   /**
    * Gets the interpolator.
-   * @return  the interpolator
+   *
+   * @return the interpolator
    */
   public Interpolator1D getInterpolator() {
     return _interpolator.getInterpolator();
@@ -102,7 +110,8 @@ public class CombinedInterpolatorExtrapolator1dAdapter extends NamedInterpolator
 
   /**
    * Gets the left extrapolator.
-   * @return  the left extrapolator
+   *
+   * @return the left extrapolator
    */
   public Interpolator1D getLeftExtrapolator() {
     return _interpolator.getLeftExtrapolator();
@@ -110,12 +119,21 @@ public class CombinedInterpolatorExtrapolator1dAdapter extends NamedInterpolator
 
   /**
    * Gets the right extrapolator.
-   * @return  the right extrapolator
+   *
+   * @return the right extrapolator
    */
   public Interpolator1D getRightExtrapolator() {
     return _interpolator.getRightExtrapolator();
   }
 
+  /**
+   * Gets the underlying combined interpolator.
+   *
+   * @return the underlying combined interpolator
+   */
+  public Interpolator1D getUnderlyingCombinedInterpolator() {
+    return _interpolator;
+  }
 
   @Override
   public int hashCode() {

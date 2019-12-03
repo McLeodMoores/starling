@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.quandl.robustwrapper;
 
 import java.util.ArrayList;
@@ -37,15 +40,16 @@ import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
  *
  */
 public class RobustQuandlSession {
-  private static final Logger s_logger = LoggerFactory.getLogger(RobustQuandlSession.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RobustQuandlSession.class);
   private final QuandlSession _session;
 
   private static final long BACKOFF_PERIOD_MILLIS = 60 * 1000;
 
   /**
-   * Public constructor.
-   * Takes a QuandlSession that it wraps.
-   * @param session  the underlying quandl session
+   * Public constructor. Takes a QuandlSession that it wraps.
+   * 
+   * @param session
+   *          the underlying quandl session
    */
   public RobustQuandlSession(final QuandlSession session) {
     _session = session;
@@ -53,7 +57,9 @@ public class RobustQuandlSession {
 
   /**
    * Get a tabular data set from Quandl.
-   * @param request the request object containing details of what is required
+   * 
+   * @param request
+   *          the request object containing details of what is required
    * @return a TabularResult set
    */
   public TabularResult getDataSet(final DataSetRequest request) {
@@ -62,7 +68,9 @@ public class RobustQuandlSession {
 
   /**
    * Get meta data from Quandl about a particular quandlCode.
-   * @param request the request object containing details of what is required
+   * 
+   * @param request
+   *          the request object containing details of what is required
    * @return a MetaDataResult
    */
   public MetaDataResult getMetaData(final MetaDataRequest request) {
@@ -71,7 +79,9 @@ public class RobustQuandlSession {
 
   /**
    * Get a multiple data sets from quandl and return as single tabular result.
-   * @param request the multi data set request object containing details of what is required
+   * 
+   * @param request
+   *          the multi data set request object containing details of what is required
    * @return a single TabularResult set containing all requested results
    */
   public TabularResult getDataSets(final MultiDataSetRequest request) {
@@ -128,16 +138,16 @@ public class RobustQuandlSession {
           count++;
         } catch (final QuandlRuntimeException qre) {
           count++;
-          s_logger.error("Can't process request for {}, giving up and skipping.  Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
+          LOGGER.error("Can't process request for {}, giving up and skipping.  Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
           if (count > maxRetries) {
-            s_logger.error("Problem getting data from Quandl for {}. Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
+            LOGGER.error("Problem getting data from Quandl for {}. Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
             break;
           }
           continue;
         }
       } while (tabularResult == null);
       if (count > maxRetries) {
-        s_logger.error("Problem getting data from Quandl for {}. Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
+        LOGGER.error("Problem getting data from Quandl for {}. Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
         break;
       }
       results.put(quandlCodeRequest, tabularResult);
@@ -148,7 +158,7 @@ public class RobustQuandlSession {
   private TabularResult mergeTables(final Map<QuandlCodeRequest, TabularResult> results, final SortOrder sortOrder) {
     int resultTableWidth = 1; // the date!
     final Map<QuandlCodeRequest, Integer> initialOffset = new HashMap<>();
-    final List<String> columnNames = new ArrayList<String>();
+    final List<String> columnNames = new ArrayList<>();
     columnNames.add("Date");
     for (final Map.Entry<QuandlCodeRequest, TabularResult> entry : results.entrySet()) {
       final QuandlCodeRequest codeRequest = entry.getKey();
@@ -159,15 +169,17 @@ public class RobustQuandlSession {
       resultTableWidth += table.getHeaderDefinition().size() - 1; // exclude the date column.
       final List<String> names = table.getHeaderDefinition().getColumnNames();
       final Iterator<String> iter = names.iterator();
-      if (!iter.hasNext()) { throw new Quandl4OpenGammaRuntimeException("table has no columns, expected at least date"); }
+      if (!iter.hasNext()) {
+        throw new Quandl4OpenGammaRuntimeException("table has no columns, expected at least date");
+      }
       iter.next(); // discard date column name
       while (iter.hasNext()) {
         final String colName = iter.next();
         columnNames.add(codeRequest.getQuandlCode() + " - " + colName);
       }
     }
-    final SortedMap<LocalDate, String[]> rows =
-        new TreeMap<>(sortOrder == SortOrder.ASCENDING ? LocalDate.timeLineOrder() : Collections.reverseOrder(LocalDate.timeLineOrder()));
+    final SortedMap<LocalDate, String[]> rows = new TreeMap<>(
+        sortOrder == SortOrder.ASCENDING ? LocalDate.timeLineOrder() : Collections.reverseOrder(LocalDate.timeLineOrder()));
     for (final Map.Entry<QuandlCodeRequest, TabularResult> mapEntry : results.entrySet()) {
       final QuandlCodeRequest codeRequest = mapEntry.getKey();
       final TabularResult table1 = mapEntry.getValue();
@@ -202,7 +214,9 @@ public class RobustQuandlSession {
 
   /**
    * Get meta data from Quandl about a range of quandlCodes returned as a single MetaDataResult.
-   * @param request the request object containing details of what is required
+   * 
+   * @param request
+   *          the request object containing details of what is required
    * @return a TabularResult set
    */
   public MetaDataResult getMetaData(final MultiMetaDataRequest request) {
@@ -210,16 +224,16 @@ public class RobustQuandlSession {
   }
 
   /**
-   * Get header definitions from Quandl about a range of quandlCodes returned as a Map of Quandl code to HeaderDefinition.
-   * The keys of the map will retain the order of the request and are backed by an unmodifiable LinkedHashMap.
-   * Throws a QuandlRuntimeException if it can't find a parsable quandl code or Date column in the result.
+   * Get header definitions from Quandl about a range of quandlCodes returned as a Map of Quandl code to HeaderDefinition. The keys of the map will retain the
+   * order of the request and are backed by an unmodifiable LinkedHashMap. Throws a QuandlRuntimeException if it can't find a parsable quandl code or Date
+   * column in the result.
    *
-   * This method handles errors from Quandl4J and splits up bulk requests if they fail.  In particular if
-   * Quandl indicates there have been too many requests, it first backs off for a minute and does five
-   * retries.  It will then fail.  If there are other errors, it will split the request up into a sequence
-   * of single requests in an attempt to stop a 'bad apple' spoiling the whole request.
+   * This method handles errors from Quandl4J and splits up bulk requests if they fail. In particular if Quandl indicates there have been too many requests, it
+   * first backs off for a minute and does five retries. It will then fail. If there are other errors, it will split the request up into a sequence of single
+   * requests in an attempt to stop a 'bad apple' spoiling the whole request.
    *
-   * @param request the request object containing details of what is required, not null
+   * @param request
+   *          the request object containing details of what is required, not null
    * @return an unmodifiable Map of Quandl codes to MetaDataResult for each code, keys ordered according to request, not null
    */
   public Map<String, HeaderDefinition> getMultipleHeaderDefinition(final MultiMetaDataRequest request) {
@@ -231,7 +245,7 @@ public class RobustQuandlSession {
       } catch (final QuandlTooManyRequestsException tooManyReqs) {
         backOff(retries); // note this modifies retries.
       } catch (final QuandlRuntimeException qre) {
-        s_logger.warn("There was an error performing a bulk request, falling back to single requests");
+        LOGGER.warn("There was an error performing a bulk request, falling back to single requests");
         return getMultipleHeaderDefinitionSlow(request);
       }
     } while (bulkMetaData == null);
@@ -251,7 +265,7 @@ public class RobustQuandlSession {
         } catch (final QuandlTooManyRequestsException tooManyReqs) {
           backOff(retries); // note this modifies retries.
         } catch (final QuandlRuntimeException qre) {
-          s_logger.error("There was a problem requesting metadata for {}, skipping", quandlCode);
+          LOGGER.error("There was a problem requesting metadata for {}, skipping", quandlCode);
           break;
         }
       } while (metaData == null || retries < 5);
@@ -262,19 +276,22 @@ public class RobustQuandlSession {
   private static void backOff(Integer retries) {
     try {
       if (retries++ < 5) {
-        s_logger.warn("Quandl indicated too many requests have been made.  Backing off for one minute.");
+        LOGGER.warn("Quandl indicated too many requests have been made.  Backing off for one minute.");
         Thread.sleep(BACKOFF_PERIOD_MILLIS);
       } else {
-        s_logger.warn("Quandl indicated too many requests have been made.  Giving up because tried 5 retries and limit unlikely to be reset until tomorrow.");
+        LOGGER.warn("Quandl indicated too many requests have been made.  Giving up because tried 5 retries and limit unlikely to be reset until tomorrow.");
         throw new Quandl4OpenGammaRuntimeException("Giving up because request limit unlikely to be reset until tomorrow.");
       }
-    } catch (final InterruptedException ie) { }
+    } catch (final InterruptedException ie) {
+    }
 
   }
 
   /**
    * Get search results from Quandl.
-   * @param request the search query parameter, not null
+   * 
+   * @param request
+   *          the search query parameter, not null
    * @return the search result, not null
    */
   public SearchResult search(final SearchRequest request) {

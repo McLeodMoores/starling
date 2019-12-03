@@ -5,7 +5,6 @@
  */
 package com.opengamma.master.region;
 
-import com.opengamma.core.change.ChangeProvider;
 import com.opengamma.master.AbstractChangeProvidingMaster;
 import com.opengamma.util.PublicSPI;
 
@@ -16,11 +15,11 @@ import com.opengamma.util.PublicSPI;
  * This interface provides methods that allow the master to be searched and updated.
  */
 @PublicSPI
-public interface RegionMaster extends AbstractChangeProvidingMaster<RegionDocument>, ChangeProvider {
+public interface RegionMaster extends AbstractChangeProvidingMaster<RegionDocument> {
 
   /**
    * Searches for regions matching the specified search criteria.
-   * 
+   *
    * @param request  the search request, not null
    * @return the search result, not null
    * @throws IllegalArgumentException if the request is invalid
@@ -31,7 +30,7 @@ public interface RegionMaster extends AbstractChangeProvidingMaster<RegionDocume
    * Queries the history of a single region.
    * <p>
    * The request must contain an object identifier to identify the region.
-   * 
+   *
    * @param request  the history request, not null
    * @return the region history, not null
    * @throws IllegalArgumentException if the request is invalid

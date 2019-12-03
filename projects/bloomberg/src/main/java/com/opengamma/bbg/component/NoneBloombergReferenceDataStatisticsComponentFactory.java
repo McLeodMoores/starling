@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.component;
@@ -15,7 +15,7 @@ import com.opengamma.component.ComponentRepository;
 public class NoneBloombergReferenceDataStatisticsComponentFactory extends DefaultBloombergReferenceDataStatisticsComponentFactory {
 
   @Override
-  protected BloombergReferenceDataStatistics initReferenceDataStatistics(ComponentRepository repo) {
+  protected BloombergReferenceDataStatistics initReferenceDataStatistics(final ComponentRepository repo) {
     return NullBloombergReferenceDataStatistics.INSTANCE;
   }
 

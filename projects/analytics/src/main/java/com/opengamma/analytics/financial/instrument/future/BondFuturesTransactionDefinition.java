@@ -20,27 +20,36 @@ public class BondFuturesTransactionDefinition extends FuturesTransactionDefiniti
 
   /**
    * Constructor of the future transaction.
-   * @param underlyingFuture Underlying future security.
-   * @param quantity Quantity of future. Can be positive or negative.
-   * @param tradeDate Transaction date.
-   * @param tradePrice Transaction price.
+   * 
+   * @param underlyingFuture
+   *          Underlying future security.
+   * @param quantity
+   *          Quantity of future. Can be positive or negative.
+   * @param tradeDate
+   *          Transaction date.
+   * @param tradePrice
+   *          Transaction price.
    */
-  public BondFuturesTransactionDefinition(final BondFuturesSecurityDefinition underlyingFuture, final long quantity, final ZonedDateTime tradeDate, final double tradePrice) {
+  public BondFuturesTransactionDefinition(final BondFuturesSecurityDefinition underlyingFuture, final long quantity, final ZonedDateTime tradeDate,
+      final double tradePrice) {
     super(underlyingFuture, quantity, tradeDate, tradePrice);
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public BondFuturesTransaction toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
-    throw new UnsupportedOperationException("The method toDerivative of BondFutureTransactionDefinition does not support the two argument method (without margin price data).");
+    throw new UnsupportedOperationException(
+        "The method toDerivative of BondFutureTransactionDefinition does not support the two argument method (without margin price data).");
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -54,7 +63,8 @@ public class BondFuturesTransactionDefinition extends FuturesTransactionDefiniti
 
   @Override
   public BondFuturesTransaction toDerivative(final ZonedDateTime date) {
-    throw new UnsupportedOperationException("The method toDerivative of BondFutureTransactionDefinition does not support the one argument method (without margin price data).");
+    throw new UnsupportedOperationException(
+        "The method toDerivative of BondFutureTransactionDefinition does not support the one argument method (without margin price data).");
   }
 
   @Override

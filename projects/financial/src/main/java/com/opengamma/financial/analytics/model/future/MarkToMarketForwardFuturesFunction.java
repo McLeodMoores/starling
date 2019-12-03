@@ -22,16 +22,17 @@ public class MarkToMarketForwardFuturesFunction extends MarkToMarketFuturesFunct
    * @param costOfCarryField The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY". Set in *FunctionConfiguration
    * @param resolutionKey The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
    */
-  public MarkToMarketForwardFuturesFunction(String closingPriceField, String costOfCarryField, String resolutionKey) {
-    super(ValueRequirementNames.FORWARD, MarkToMarketFuturesCalculator.ForwardPriceCalculator.getInstance(), closingPriceField, costOfCarryField, resolutionKey);
+  public MarkToMarketForwardFuturesFunction(final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
+    super(ValueRequirementNames.FORWARD, MarkToMarketFuturesCalculator.ForwardPriceCalculator.getInstance(),
+        closingPriceField, costOfCarryField, resolutionKey);
   }
-  
+
   @Override
   protected ValueProperties.Builder createValueProperties(final ComputationTarget target) {
     final ValueProperties.Builder properties = createValueProperties()
       .with(ValuePropertyNames.CALCULATION_METHOD, CALCULATION_METHOD_NAME);
     return properties;
   }
-  
-  
+
+
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec.plan;
@@ -16,20 +16,20 @@ import com.opengamma.engine.view.impl.ExecutionLogModeSource;
 /**
  * State shared among fragments of a dependency graph as part of the multiple node partitioning algorithm.
  */
-/*package*/class GraphFragmentContext {
+/* package */class GraphFragmentContext {
 
   private final String _calculationConfig;
   private final ExecutionLogModeSource _logModeSource;
   private final long _functionInitializationId;
-  private final Map<ValueSpecification, Boolean> _sharedCacheValues = new HashMap<ValueSpecification, Boolean>();
+  private final Map<ValueSpecification, Boolean> _sharedCacheValues = new HashMap<>();
   private final Map<ValueSpecification, FunctionParameters> _parameters;
 
-  public GraphFragmentContext(final String calculationConfig, final ExecutionLogModeSource logModeSource, final long functionInitializationId,
+  GraphFragmentContext(final String calculationConfig, final ExecutionLogModeSource logModeSource, final long functionInitializationId,
       final Collection<ValueSpecification> sharedValues, final Map<ValueSpecification, FunctionParameters> parameters) {
     _calculationConfig = calculationConfig;
     _logModeSource = logModeSource;
     _functionInitializationId = functionInitializationId;
-    for (ValueSpecification sharedValue : sharedValues) {
+    for (final ValueSpecification sharedValue : sharedValues) {
       _sharedCacheValues.put(sharedValue, Boolean.TRUE);
     }
     _parameters = parameters;
@@ -52,7 +52,7 @@ import com.opengamma.engine.view.impl.ExecutionLogModeSource;
   }
 
   public void setTerminalOutputs(final Collection<ValueSpecification> outputs) {
-    for (ValueSpecification output : outputs) {
+    for (final ValueSpecification output : outputs) {
       _sharedCacheValues.put(output, Boolean.TRUE);
     }
   }

@@ -33,7 +33,7 @@ public class UniqueIdSupplier implements Supplier<UniqueId> {
 
   /**
    * Creates an instance specifying the scheme.
-   * 
+   *
    * @param scheme  the scheme, not empty
    */
   public UniqueIdSupplier(final String scheme) {
@@ -44,9 +44,10 @@ public class UniqueIdSupplier implements Supplier<UniqueId> {
   //-------------------------------------------------------------------------
   /**
    * Generates the next unique identifier.
-   * 
+   *
    * @return the next unique identifier, not null
    */
+  @Override
   public UniqueId get() {
     final long id = _idCount.incrementAndGet();
     return UniqueId.of(_scheme, Long.toString(id));
@@ -54,7 +55,7 @@ public class UniqueIdSupplier implements Supplier<UniqueId> {
 
   /**
    * Generates the next unique identifier prefixing the value.
-   * 
+   *
    * @param valuePrefix  the prefix for the value, not null
    * @return the next unique identifier, not null
    */

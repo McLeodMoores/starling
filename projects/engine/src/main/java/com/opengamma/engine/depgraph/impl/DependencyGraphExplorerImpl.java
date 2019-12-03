@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph.impl;
@@ -21,7 +21,7 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Default engine-side implementation of {@link DependencyGraphExplorer}
+ * Default engine-side implementation of {@link DependencyGraphExplorer}.
  */
 public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
 
@@ -29,7 +29,7 @@ public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
   private volatile Map<ValueSpecification, DependencyNode> _nodesBySpecification;
   private volatile Set<ComputationTargetSpecification> _allTargets;
 
-  public DependencyGraphExplorerImpl(DependencyGraph graph) {
+  public DependencyGraphExplorerImpl(final DependencyGraph graph) {
     ArgumentChecker.notNull(graph, "graph");
     _graph = graph;
   }
@@ -51,8 +51,8 @@ public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
     return _graph;
   }
 
-  private static int terminalOutputSubset(final Map<ValueSpecification, Set<ValueRequirement>> allTerminals, final DependencyNode node, final Set<DependencyNode> visited,
-      final Map<ValueSpecification, Set<ValueRequirement>> subsetTerminals) {
+  private static int terminalOutputSubset(final Map<ValueSpecification, Set<ValueRequirement>> allTerminals,
+      final DependencyNode node, final Set<DependencyNode> visited, final Map<ValueSpecification, Set<ValueRequirement>> subsetTerminals) {
     if (visited.add(node)) {
       int count = node.getInputCount();
       int size = 1;
@@ -67,9 +67,8 @@ public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
         }
       }
       return size;
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   @Override
@@ -78,10 +77,11 @@ public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
     if (terminalNode == null) {
       return null;
     }
-    final Set<DependencyNode> visited = new HashSet<DependencyNode>();
-    final Map<ValueSpecification, Set<ValueRequirement>> terminals = new HashMap<ValueSpecification, Set<ValueRequirement>>();
+    final Set<DependencyNode> visited = new HashSet<>();
+    final Map<ValueSpecification, Set<ValueRequirement>> terminals = new HashMap<>();
     final int nodes = terminalOutputSubset(_graph.getTerminalOutputs(), terminalNode, visited, terminals);
-    return new DependencyGraphExplorerImpl(new DependencyGraphImpl(_graph.getCalculationConfigurationName(), Collections.singleton(terminalNode), nodes, terminals));
+    return new DependencyGraphExplorerImpl(new DependencyGraphImpl(_graph.getCalculationConfigurationName(),
+        Collections.singleton(terminalNode), nodes, terminals));
   }
 
   @Override
@@ -98,7 +98,7 @@ public class DependencyGraphExplorerImpl implements DependencyGraphExplorer {
   public Set<ComputationTargetSpecification> getComputationTargets() {
     Set<ComputationTargetSpecification> targets = _allTargets;
     if (targets == null) {
-      targets = new HashSet<ComputationTargetSpecification>();
+      targets = new HashSet<>();
       final Iterator<DependencyNode> itr = _graph.nodeIterator();
       while (itr.hasNext()) {
         targets.add(itr.next().getTarget());

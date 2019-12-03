@@ -29,25 +29,26 @@ import com.opengamma.lambdava.functions.Function1;
  */
 public class MasterUtils {
 
-  public static <D extends AbstractDocument> List<D> adjustVersionInstants(Instant now, Instant from, Instant to, List<D> documents) {
-    for (D document : documents) {
-      Instant fromInstant = document.getVersionFromInstant();
+  public static <D extends AbstractDocument> List<D> adjustVersionInstants(final Instant now, final Instant from,
+      final Instant to, final List<D> documents) {
+    for (final D document : documents) {
+      final Instant fromInstant = document.getVersionFromInstant();
       if (fromInstant == null) {
         document.setVersionFromInstant(from);
       }
     }
-    List<D> copy = newArrayList(documents);
+    final List<D> copy = newArrayList(documents);
     Collections.sort(copy, new Comparator<D>() {
       @Override
-      public int compare(D a, D b) {
-        Instant fromA = a.getVersionFromInstant();
-        Instant fromB = b.getVersionFromInstant();
+      public int compare(final D a, final D b) {
+        final Instant fromA = a.getVersionFromInstant();
+        final Instant fromB = b.getVersionFromInstant();
         return fromA.compareTo(fromB);
       }
     });
     final Instant latestDocumentVersionTo = copy.get(copy.size() - 1).getVersionToInstant();
     D prevDocument = null;
-    for (D document : copy) {
+    for (final D document : copy) {
       document.setVersionToInstant(latestDocumentVersionTo == null ? to : latestDocumentVersionTo);
       if (prevDocument != null) {
         prevDocument.setVersionToInstant(document.getVersionFromInstant());
@@ -59,40 +60,38 @@ public class MasterUtils {
     return copy;
   }
 
-  public static <D extends AbstractDocument> boolean checkUniqueVersionsFrom(List<D> documents) {
-    Set<Instant> instants = new HashSet<Instant>();
-    for (D document : documents) {
+  public static <D extends AbstractDocument> boolean checkUniqueVersionsFrom(final List<D> documents) {
+    final Set<Instant> instants = new HashSet<>();
+    for (final D document : documents) {
       instants.add(document.getVersionFromInstant());
     }
     return instants.size() == documents.size();
   }
 
-  public static <D extends AbstractDocument> boolean checkVersionInstantsWithinRange(Instant missing, Instant from, Instant to, List<D> documents, boolean equalFrom) {
+  public static <D extends AbstractDocument> boolean checkVersionInstantsWithinRange(final Instant missing, final Instant from,
+      final Instant to, final List<D> documents, final boolean equalFrom) {
     if (!documents.isEmpty()) {
-      SortedSet<Instant> instants = new TreeSet<Instant>();
-      for (D document : documents) {
-        Instant fromInstant = document.getVersionFromInstant();
+      final SortedSet<Instant> instants = new TreeSet<>();
+      for (final D document : documents) {
+        final Instant fromInstant = document.getVersionFromInstant();
         if (fromInstant == null) {
           instants.add(missing);
         } else {
           instants.add(document.getVersionFromInstant());
         }
       }
-      Instant minFromVersion = instants.first();
-      Instant maxFromVersion = instants.last();
-      return
-        ((equalFrom && minFromVersion.equals(from)) || (!equalFrom && !minFromVersion.isBefore(from)))
-          &&
-          (to == null || !maxFromVersion.isAfter(to));
-    } else {
-      return true;
+      final Instant minFromVersion = instants.first();
+      final Instant maxFromVersion = instants.last();
+      return (equalFrom && minFromVersion.equals(from) || !equalFrom && !minFromVersion.isBefore(from))
+          && (to == null || !maxFromVersion.isAfter(to));
     }
+    return true;
   }
 
-  public static <D extends UniqueIdentifiable> List<UniqueId> mapToUniqueIDs(List<D> documents) {
+  public static <D extends UniqueIdentifiable> List<UniqueId> mapToUniqueIDs(final List<D> documents) {
     return functional(documents).map(new Function1<D, UniqueId>() {
       @Override
-      public UniqueId execute(D d) {
+      public UniqueId execute(final D d) {
         return d.getUniqueId();
       }
     }).asList();

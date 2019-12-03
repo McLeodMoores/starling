@@ -22,12 +22,12 @@ public final class SessionOptionsUtils {
 
   /**
    * Converts a {@code SessionOptions} to a string for debugging.
-   * 
+   *
    * @param options  the session options, not null
    * @return the string for debugging, not null
    */
-  public static String toString(SessionOptions options) {
-    StringBuilder sb = new StringBuilder();
+  public static String toString(final SessionOptions options) {
+    final StringBuilder sb = new StringBuilder();
     sb.append("SessionOptions[host=");
     sb.append(options.getServerHost());
     sb.append(",port=");

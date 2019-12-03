@@ -15,12 +15,12 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.master.impl.AbstractRemoteMaster;
-import com.opengamma.master.legalentity.impl.DataTrackingLegalEntityMaster;
-import com.opengamma.masterdb.legalentity.DbLegalEntityBeanMaster;
-import com.opengamma.util.rest.AbstractDataResource;
 import com.opengamma.master.legalentity.LegalEntityMaster;
 import com.opengamma.master.legalentity.impl.DataLegalEntityMasterResource;
+import com.opengamma.master.legalentity.impl.DataTrackingLegalEntityMaster;
 import com.opengamma.master.legalentity.impl.RemoteLegalEntityMaster;
+import com.opengamma.masterdb.legalentity.DbLegalEntityBeanMaster;
+import com.opengamma.util.rest.AbstractDataResource;
 
 /**
  * Component factory for the database legal entity master.
@@ -29,11 +29,11 @@ import com.opengamma.master.legalentity.impl.RemoteLegalEntityMaster;
 public class DbLegalEntityMasterComponentFactory extends AbstractDocumentDbMasterComponentFactory<LegalEntityMaster, DbLegalEntityBeanMaster> {
 
 
-  
+
   public DbLegalEntityMasterComponentFactory() {
     super("len", LegalEntityMaster.class);
   }
-  
+
   @Override
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteLegalEntityMaster.class;
@@ -43,15 +43,15 @@ public class DbLegalEntityMasterComponentFactory extends AbstractDocumentDbMaste
   protected DbLegalEntityBeanMaster createDbDocumentMaster() {
     return new DbLegalEntityBeanMaster(getDbConnector());
   }
-  
-  @Override
-  protected AbstractDataResource createPublishedResource(DbLegalEntityBeanMaster dbMaster, LegalEntityMaster postProcessedMaster) {
-    return new DataLegalEntityMasterResource((LegalEntityMaster) postProcessedMaster);
-  }
-      
 
   @Override
-  protected LegalEntityMaster wrapMasterWithTrackingInterface(LegalEntityMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbLegalEntityBeanMaster dbMaster, final LegalEntityMaster postProcessedMaster) {
+    return new DataLegalEntityMasterResource(postProcessedMaster);
+  }
+
+
+  @Override
+  protected LegalEntityMaster wrapMasterWithTrackingInterface(final LegalEntityMaster postProcessedMaster) {
     return new DataTrackingLegalEntityMaster(postProcessedMaster);
   }
 

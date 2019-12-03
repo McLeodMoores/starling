@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -23,7 +23,6 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.financial.security.option.BarrierDirection;
 import com.opengamma.financial.security.option.BarrierType;
-import com.opengamma.financial.security.option.EquityBarrierOptionSecurity;
 import com.opengamma.financial.security.option.MonitoringType;
 import com.opengamma.financial.security.option.OptionType;
 import com.opengamma.financial.security.option.SamplingFrequency;
@@ -34,7 +33,8 @@ import com.opengamma.masterdb.security.hibernate.ExternalIdBean;
 import com.opengamma.masterdb.security.hibernate.SecurityBean;
 
 /**
- * A Hibernate bean representation of {@link EquityBarrierOptionSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.option.EquityBarrierOptionSecurity}.
  */
 @BeanDefinition
 public class EquityBarrierOptionSecurityBean extends SecurityBean {
@@ -64,7 +64,7 @@ public class EquityBarrierOptionSecurityBean extends SecurityBean {
   private SamplingFrequency _samplingFrequency;
   @PropertyDefinition
   private double _barrierLevel;
-  
+
   public EquityBarrierOptionSecurityBean() {
     super();
   }
@@ -77,30 +77,30 @@ public class EquityBarrierOptionSecurityBean extends SecurityBean {
     }
     final EquityBarrierOptionSecurityBean option = (EquityBarrierOptionSecurityBean) other;
     return new EqualsBuilder()
-      .append(getId(), option.getId())
-      .append(getOptionType(), option.getOptionType())
-      .append(getStrike(), option.getStrike())
-      .append(getExpiry(), option.getExpiry())
-      .append(getUnderlying(), option.getUnderlying())
-      .append(getCurrency(), option.getCurrency())
-      .append(getExchange(), option.getExchange())
-      .append(getPointValue(), option.getPointValue())
-      .append(getOptionExerciseType(), option.getOptionExerciseType())
-      .isEquals();
+        .append(getId(), option.getId())
+        .append(getOptionType(), option.getOptionType())
+        .append(getStrike(), option.getStrike())
+        .append(getExpiry(), option.getExpiry())
+        .append(getUnderlying(), option.getUnderlying())
+        .append(getCurrency(), option.getCurrency())
+        .append(getExchange(), option.getExchange())
+        .append(getPointValue(), option.getPointValue())
+        .append(getOptionExerciseType(), option.getOptionExerciseType())
+        .isEquals();
   }
 
   @Override
   public int hashCode() {
     return new HashCodeBuilder()
-      .append(getOptionType())
-      .append(getStrike())
-      .append(getExpiry())
-      .append(getUnderlying())
-      .append(getCurrency())
-      .append(getExchange())
-      .append(getPointValue())
-      .append(getOptionExerciseType())
-      .toHashCode();
+        .append(getOptionType())
+        .append(getStrike())
+        .append(getExpiry())
+        .append(getUnderlying())
+        .append(getCurrency())
+        .append(getExchange())
+        .append(getPointValue())
+        .append(getOptionExerciseType())
+        .toHashCode();
   }
 
   @Override

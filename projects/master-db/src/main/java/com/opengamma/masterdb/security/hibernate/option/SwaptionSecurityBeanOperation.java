@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -22,7 +22,7 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.OperationContext;
 
 /**
- * Conversion operation for OptionSecurity to/from OptionSecurityBean
+ * Conversion operation for OptionSecurity to/from OptionSecurityBean.
  */
 public final class SwaptionSecurityBeanOperation extends AbstractSecurityBeanOperation<SwaptionSecurity, SwaptionSecurityBean> {
 
@@ -37,7 +37,7 @@ public final class SwaptionSecurityBeanOperation extends AbstractSecurityBeanOpe
 
   @Override
   public SwaptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final SwaptionSecurity security) {
-    SwaptionSecurityBean bean = new SwaptionSecurityBean();
+    final SwaptionSecurityBean bean = new SwaptionSecurityBean();
     bean.setCashSettled(security.isCashSettled());
     bean.setLongShort(security.isLong());
     bean.setExpiry(expiryToExpiryBean(security.getExpiry()));
@@ -51,12 +51,12 @@ public final class SwaptionSecurityBeanOperation extends AbstractSecurityBeanOpe
   }
 
   @Override
-  public SwaptionSecurity createSecurity(OperationContext context, SwaptionSecurityBean bean) {
-    SwaptionSecurity swaptionSecurity = new SwaptionSecurity(bean.getPayer(), 
-        externalIdBeanToExternalId(bean.getUnderlying()), 
-        bean.getLongShort(), 
-        expiryBeanToExpiry(bean.getExpiry()), 
-        bean.getCashSettled(), 
+  public SwaptionSecurity createSecurity(final OperationContext context, final SwaptionSecurityBean bean) {
+    final SwaptionSecurity swaptionSecurity = new SwaptionSecurity(bean.getPayer(),
+        externalIdBeanToExternalId(bean.getUnderlying()),
+        bean.getLongShort(),
+        expiryBeanToExpiry(bean.getExpiry()),
+        bean.getCashSettled(),
         currencyBeanToCurrency(bean.getCurrency()));
     if (bean.getOptionExerciseType() != null) {
       final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());

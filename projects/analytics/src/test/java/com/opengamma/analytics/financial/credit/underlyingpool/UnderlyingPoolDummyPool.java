@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.underlyingpool;
@@ -20,9 +20,12 @@ import com.opengamma.analytics.financial.credit.underlyingpool.definition.Underl
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.util.money.Currency;
 
+// CSOFF
 /**
  * Dummy pool of obligors used for testing purposes
+ * @deprecated Deprecated
  */
+@Deprecated
 public class UnderlyingPoolDummyPool {
 
   //--------------------------------------------------------------------------------------------------------------------------------------------------

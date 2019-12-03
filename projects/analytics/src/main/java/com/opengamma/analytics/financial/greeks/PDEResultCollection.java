@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.greeks;
@@ -23,11 +23,11 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 //TODO GRID_PV and GRID_IMPLIED_VOL don't belong in here
 public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
-  /** The present value for each strike value on the space grid at expiry */
+  /** The present value for each strike value on the space grid at expiry. */
   public static final Greek GRID_PRICE = new Greek(new NthOrderUnderlying(0, UnderlyingType.FORWARD), "Local Volatility PV") {
 
     @Override
@@ -36,7 +36,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
     }
   };
 
-  /** The Black present value for each strike value on the space grid at expiry */
+  /** The Black present value for each strike value on the space grid at expiry. */
   public static final Greek GRID_BLACK_PRICE = new Greek(new NthOrderUnderlying(0, UnderlyingType.FORWARD), "Black PV") {
 
     @Override
@@ -45,7 +45,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
     }
   };
 
-  /** The Black implied volatility for each strike value of the space grid at expiry */
+  /** The Black implied volatility for each strike value of the space grid at expiry. */
   public static final Greek GRID_IMPLIED_VOL = new Greek(new NthOrderUnderlying(0, UnderlyingType.IMPLIED_VOLATILITY), "Black Implied Volatility") {
 
     @Override
@@ -54,7 +54,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
     }
   };
 
-  /** The Black delta for each strike value on the space grid at expiry */
+  /** The Black delta for each strike value on the space grid at expiry. */
   public static final Greek GRID_BLACK_DELTA = new Greek(new NthOrderUnderlying(1, UnderlyingType.FORWARD), "Forward Black delta") {
 
     @Override
@@ -62,7 +62,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The Black dual delta for each strike value on the space grid at expiry */
+  /** The Black dual delta for each strike value on the space grid at expiry. */
   public static final Greek GRID_BLACK_DUAL_DELTA = new Greek(new NthOrderUnderlying(1, UnderlyingType.STRIKE), "Dual Black delta") {
 
     @Override
@@ -70,7 +70,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The Black gamma for each strike value on the space grid at expiry */
+  /** The Black gamma for each strike value on the space grid at expiry. */
   public static final Greek GRID_BLACK_GAMMA = new Greek(new NthOrderUnderlying(2, UnderlyingType.FORWARD), "Forward Black gamma") {
 
     @Override
@@ -78,7 +78,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The Black dual gamma for each strike value on the space grid at expiry */
+  /** The Black dual gamma for each strike value on the space grid at expiry. */
   public static final Greek GRID_BLACK_DUAL_GAMMA = new Greek(new NthOrderUnderlying(2, UnderlyingType.STRIKE), "Dual Black gamma") {
 
     @Override
@@ -86,7 +86,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The Black vega for each strike value on the space grid at expiry */
+  /** The Black vega for each strike value on the space grid at expiry. */
   public static final Greek GRID_BLACK_VEGA = new Greek(new NthOrderUnderlying(1, UnderlyingType.IMPLIED_VOLATILITY), "Forward Black vega") {
 
     @Override
@@ -94,7 +94,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The Black driftless vanna for each strike value on the space grid at expiry */
+  /** The Black driftless vanna for each strike value on the space grid at expiry. */
   public static final Greek GRID_BLACK_VANNA = new Greek(new MixedOrderUnderlying(Arrays.asList(new NthOrderUnderlying(1, UnderlyingType.FORWARD),
       new NthOrderUnderlying(1, UnderlyingType.IMPLIED_VOLATILITY))), "Forward Black vanna") {
 
@@ -103,7 +103,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The Black vomma for each strike value on the space grid at expiry */
+  /** The Black vomma for each strike value on the space grid at expiry. */
   public static final Greek GRID_BLACK_VOMMA = new Greek(new NthOrderUnderlying(2, UnderlyingType.IMPLIED_VOLATILITY), "Forward Black vomma") {
 
     @Override
@@ -111,7 +111,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The delta for each strike value on the space grid at expiry */
+  /** The delta for each strike value on the space grid at expiry. */
   public static final Greek GRID_DELTA = new Greek(new NthOrderUnderlying(1, UnderlyingType.FORWARD), "Forward delta") {
 
     @Override
@@ -119,7 +119,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The dual delta for each strike value on the space grid at expiry */
+  /** The dual delta for each strike value on the space grid at expiry. */
   public static final Greek GRID_DUAL_DELTA = new Greek(new NthOrderUnderlying(1, UnderlyingType.STRIKE), "Dual delta") {
 
     @Override
@@ -127,7 +127,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The gamma for each strike value on the space grid at expiry */
+  /** The gamma for each strike value on the space grid at expiry. */
   public static final Greek GRID_GAMMA = new Greek(new NthOrderUnderlying(2, UnderlyingType.FORWARD), "Forward gamma") {
 
     @Override
@@ -135,7 +135,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The dual gamma for each strike value on the space grid at expiry */
+  /** The dual gamma for each strike value on the space grid at expiry. */
   public static final Greek GRID_DUAL_GAMMA = new Greek(new NthOrderUnderlying(2, UnderlyingType.STRIKE), "Dual gamma") {
 
     @Override
@@ -143,7 +143,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The vega for each strike value on the space grid at expiry */
+  /** The vega for each strike value on the space grid at expiry. */
   public static final Greek GRID_VEGA = new Greek(new NthOrderUnderlying(1, UnderlyingType.IMPLIED_VOLATILITY), "Forward vega") {
 
     @Override
@@ -151,8 +151,9 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
       throw new UnsupportedOperationException();
     }
   };
-  /** The driftless vanna for each strike value on the space grid at expiry */
-  public static final Greek GRID_VANNA = new Greek(new MixedOrderUnderlying(Arrays.asList(new NthOrderUnderlying(1, UnderlyingType.FORWARD), new NthOrderUnderlying(1,
+  /** The driftless vanna for each strike value on the space grid at expiry. */
+  public static final Greek GRID_VANNA =
+      new Greek(new MixedOrderUnderlying(Arrays.asList(new NthOrderUnderlying(1, UnderlyingType.FORWARD), new NthOrderUnderlying(1,
       UnderlyingType.IMPLIED_VOLATILITY))), "Forward vanna") {
 
     @Override
@@ -161,7 +162,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
     }
   };
 
-  /** domestic and foreign prices*/
+  /** domestic and foreign prices. */
   public static final Greek GRID_DOMESTIC_PV_QUOTE = new Greek(new NthOrderUnderlying(0, UnderlyingType.SPOT_PRICE), "Forex PV quote") {
 
     @Override
@@ -170,7 +171,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
     }
   };
 
-  /** The vomma for each strike value on the space grid at expiry */
+  /** The vomma for each strike value on the space grid at expiry. */
   public static final Greek GRID_VOMMA = new Greek(new NthOrderUnderlying(2, UnderlyingType.IMPLIED_VOLATILITY), "Forward vomma") {
 
     @Override
@@ -197,7 +198,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
   public Double getPointGreek(final Greek greek, final double strike, final Interpolator1D interpolator) {
     ArgumentChecker.notNull(greek, "greek");
     ArgumentChecker.notNull(interpolator, "interpolator");
-    if (!(_gridDataMap.containsKey(greek)) || _gridDataMap.get(greek) == null) {
+    if (!_gridDataMap.containsKey(greek) || _gridDataMap.get(greek) == null) {
       return null;
     }
     final Interpolator1DDataBundle data = interpolator.getDataBundle(_strikes, _gridDataMap.get(greek));
@@ -286,7 +287,7 @@ public class PDEResultCollection implements Iterable<Pair<Greek, double[]>> {
   private static class BackingMapGreekIterator implements Iterator<Pair<Greek, double[]>> {
     private final Iterator<Map.Entry<Greek, double[]>> _backingIterator;
 
-    public BackingMapGreekIterator(final Iterator<Map.Entry<Greek, double[]>> backingIterator) {
+    BackingMapGreekIterator(final Iterator<Map.Entry<Greek, double[]>> backingIterator) {
       _backingIterator = backingIterator;
     }
 

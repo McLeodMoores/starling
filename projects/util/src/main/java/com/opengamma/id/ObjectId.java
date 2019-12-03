@@ -44,7 +44,7 @@ public final class ObjectId
 
   /**
    * Identification scheme for the object identifier.
-   * This allows a unique identifier to be stored and passed using an {@code ExternalId}.
+   * This allows an object identifier to be stored and passed using an {@code ExternalId}.
    */
   public static final ExternalScheme EXTERNAL_SCHEME = ExternalScheme.of("OID");
 
@@ -62,12 +62,12 @@ public final class ObjectId
 
   /**
    * Obtains an {@code ObjectId} from a scheme and value.
-   * 
+   *
    * @param scheme  the scheme of the object identifier, not empty, not null
    * @param value  the value of the object identifier, not empty, not null
    * @return the object identifier, not null
    */
-  public static ObjectId of(String scheme, String value) {
+  public static ObjectId of(final String scheme, final String value) {
     return new ObjectId(scheme, value);
   }
 
@@ -76,32 +76,34 @@ public final class ObjectId
    * <p>
    * This parses the identifier from the form produced by {@code toString()}
    * which is {@code <SCHEME>~<VALUE>}.
-   * 
+   *
    * @param str  the object identifier to parse, not null
    * @return the object identifier, not null
    * @throws IllegalArgumentException if the identifier cannot be parsed
    */
   @FromString
-  public static ObjectId parse(String str) {
+  public static ObjectId parse(final String str) {
     ArgumentChecker.notEmpty(str, "str");
-    if (str.contains("~") == false) {
-      str = StringUtils.replace(str, "::", "~");  // leniently parse old data
+    String s = str;
+    if (!s.contains("~")) {
+      s = StringUtils.replace(s, "::", "~");  // leniently parse old data
     }
-    String[] split = StringUtils.splitByWholeSeparatorPreserveAllTokens(str, "~");
+    final String[] split = StringUtils.splitByWholeSeparatorPreserveAllTokens(s, "~");
     switch (split.length) {
       case 2:
         return ObjectId.of(split[0], split[1]);
+      default:
+        throw new IllegalArgumentException("Invalid identifier format: " + str);
     }
-    throw new IllegalArgumentException("Invalid identifier format: " + str);
   }
 
   /**
    * Creates an object identifier.
-   * 
+   *
    * @param scheme  the scheme of the identifier, not empty, not null
    * @param value  the value of the identifier, not empty, not null
    */
-  private ObjectId(String scheme, String value) {
+  private ObjectId(final String scheme, final String value) {
     ArgumentChecker.notEmpty(scheme, "scheme");
     ArgumentChecker.notEmpty(value, "value");
     _scheme = scheme;
@@ -114,7 +116,7 @@ public final class ObjectId
    * This is the first part of the object identifier.
    * <p>
    * This is not expected to be the same as {@link ExternalScheme}.
-   * 
+   *
    * @return the scheme, not empty, not null
    */
   public String getScheme() {
@@ -124,7 +126,7 @@ public final class ObjectId
   /**
    * Gets the value of the identifier.
    * This is the second part of the object identifier.
-   * 
+   *
    * @return the value, not empty, not null
    */
   public String getValue() {
@@ -134,7 +136,7 @@ public final class ObjectId
   //-------------------------------------------------------------------------
   /**
    * Returns a copy of this identifier with the specified scheme.
-   * 
+   *
    * @param scheme  the new scheme of the identifier, not empty, not null
    * @return an {@link ObjectId} based on this identifier with the specified scheme, not null
    */
@@ -144,7 +146,7 @@ public final class ObjectId
 
   /**
    * Returns a copy of this identifier with the specified value.
-   * 
+   *
    * @param value  the new value of the identifier, not empty, not null
    * @return an {@link ObjectId} based on this identifier with the specified value, not null
    */
@@ -158,7 +160,7 @@ public final class ObjectId
    * <p>
    * This creates a new unique identifier based on this object identifier marked
    * to retrieve the latest version.
-   * 
+   *
    * @return a {@link UniqueId} based on this identifier at the latest version, not null
    */
   public UniqueId atLatestVersion() {
@@ -170,7 +172,7 @@ public final class ObjectId
    * <p>
    * This creates a new unique identifier based on this object identifier using
    * the specified version.
-   * 
+   *
    * @param version  the new version of the identifier, empty treated as null, null treated as latest version
    * @return a {@link UniqueId} based on this identifier at the specified version, not null
    */
@@ -183,7 +185,7 @@ public final class ObjectId
    * Gets the object identifier.
    * <p>
    * This method trivially returns {@code this}.
-   * 
+   *
    * @return {@code this}, not null
    */
   @Override
@@ -194,13 +196,13 @@ public final class ObjectId
   //-------------------------------------------------------------------------
   /**
    * Compares the object identifiers, sorting alphabetically by scheme followed by value.
-   * 
+   *
    * @param other  the other object identifier, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(ObjectId other) {
-    int cmp = _scheme.compareTo(other._scheme);
+  public int compareTo(final ObjectId other) {
+    final int cmp = _scheme.compareTo(other._scheme);
     if (cmp != 0) {
       return cmp;
     }
@@ -208,14 +210,14 @@ public final class ObjectId
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof ObjectId) {
-      ObjectId other = (ObjectId) obj;
-      return _scheme.equals(other._scheme) &&
-          _value.equals(other._value);
+      final ObjectId other = (ObjectId) obj;
+      return _scheme.equals(other._scheme)
+          && _value.equals(other._value);
     }
     return false;
   }
@@ -227,7 +229,7 @@ public final class ObjectId
 
   /**
    * Returns the identifier in the form {@code <SCHEME>~<VALUE>}.
-   * 
+   *
    * @return a parsable representation of the identifier, not null
    */
   @Override

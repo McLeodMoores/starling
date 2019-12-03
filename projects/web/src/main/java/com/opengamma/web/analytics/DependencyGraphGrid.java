@@ -19,8 +19,8 @@ import com.opengamma.engine.view.cycle.ViewCycle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Grid for displaying the dependency graph for a cell. This graph contains all the calculation steps used in deriving the cell's value. The first row of the grid shows the cell's value and subsequent
- * rows show a tree structure containing the dependency graph.
+ * Grid for displaying the dependency graph for a cell. This graph contains all the calculation steps used in deriving the cell's value. The first row of the
+ * grid shows the cell's value and subsequent rows show a tree structure containing the dependency graph.
  */
 public final class DependencyGraphGrid extends AnalyticsGrid<DependencyGraphViewport> {
 
@@ -31,38 +31,53 @@ public final class DependencyGraphGrid extends AnalyticsGrid<DependencyGraphView
   /** The root vale specification. */
   private final DependencyGraphGridStructure _gridStructure;
   /**
-   * Each dependency graph maintains its own cache of results. The values in a dependency graph aren't necessarily view output values (apart from the root) and therefore aren't included in the main
-   * results model and main results cache.
+   * Each dependency graph maintains its own cache of results. The values in a dependency graph aren't necessarily view output values (apart from the root) and
+   * therefore aren't included in the main results model and main results cache.
    */
   private ViewCycle _latestCycle;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates a new grid for displaying a dependency graph of calculations.
-   * 
-   * @param compiledViewDef the view definition from which the graph and calculations were derived
-   * @param valueRequirement target value requirement
-   * @param calcConfigName the calculation configuration used for the calculations, not null
-   * @param cycle the view cycle that calculated the results, not null
-   * @param callbackId the ID that's passed to listeners when the row and column structure of the grid changes
-   * @param targetResolver the resolver for looking up the target of the calculation given its specification
-   * @param functions the function repository for any additional function metadata, not null
-   * @param viewportListener receives notifications when any viewport changes, not null
+   *
+   * @param compiledViewDef
+   *          the view definition from which the graph and calculations were derived
+   * @param valueRequirement
+   *          target value requirement
+   * @param calcConfigName
+   *          the calculation configuration used for the calculations, not null
+   * @param cycle
+   *          the view cycle that calculated the results, not null
+   * @param callbackId
+   *          the ID that's passed to listeners when the row and column structure of the grid changes
+   * @param targetResolver
+   *          the resolver for looking up the target of the calculation given its specification
+   * @param functions
+   *          the function repository for any additional function metadata, not null
+   * @param viewportListener
+   *          receives notifications when any viewport changes, not null
+   * @param valueMappings
+   *          maps between the requirement and specification
    * @return the grid, not null
    */
-  /* package */static DependencyGraphGrid create(CompiledViewDefinition compiledViewDef, ValueRequirement valueRequirement, String calcConfigName, ViewCycle cycle, String callbackId,
-      ComputationTargetResolver targetResolver, FunctionRepositoryFactory functions, ViewportListener viewportListener, ValueMappings valueMappings) {
-    DependencyGraphStructureBuilder builder = new DependencyGraphStructureBuilder(compiledViewDef, valueRequirement, calcConfigName, targetResolver, functions.constructRepository(Instant
-        .now()), cycle, valueMappings);
+  /* package */static DependencyGraphGrid create(final CompiledViewDefinition compiledViewDef, final ValueRequirement valueRequirement,
+      final String calcConfigName, final ViewCycle cycle, final String callbackId,
+      final ComputationTargetResolver targetResolver, final FunctionRepositoryFactory functions, final ViewportListener viewportListener,
+      final ValueMappings valueMappings) {
+    final DependencyGraphStructureBuilder builder = new DependencyGraphStructureBuilder(compiledViewDef, valueRequirement, calcConfigName, targetResolver,
+        functions.constructRepository(Instant
+            .now()),
+        cycle, valueMappings);
     return new DependencyGraphGrid(builder.getStructure(), calcConfigName, callbackId, cycle, viewportListener, valueRequirement);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an instance.
    */
-  private DependencyGraphGrid(DependencyGraphGridStructure gridStructure, String calcConfigName, String callbackId, ViewCycle cycle, ViewportListener viewportListener,
-      ValueRequirement target) {
+  private DependencyGraphGrid(final DependencyGraphGridStructure gridStructure, final String calcConfigName, final String callbackId, final ViewCycle cycle,
+      final ViewportListener viewportListener,
+      final ValueRequirement target) {
     super(viewportListener, callbackId);
     ArgumentChecker.notNull(gridStructure, "gridStructure");
     ArgumentChecker.notNull(calcConfigName, "calcConfigName");
@@ -75,7 +90,7 @@ public final class DependencyGraphGrid extends AnalyticsGrid<DependencyGraphView
     _targetRequirement = target;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public DependencyGraphGridStructure getGridStructure() {
     return _gridStructure;
@@ -91,14 +106,15 @@ public final class DependencyGraphGrid extends AnalyticsGrid<DependencyGraphView
   }
 
   @Override
-  protected DependencyGraphViewport createViewport(ViewportDefinition viewportDefinition, String callbackId, String structureCallbackId, ResultsCache cache) {
+  protected DependencyGraphViewport createViewport(final ViewportDefinition viewportDefinition, final String callbackId, final String structureCallbackId,
+      final ResultsCache cache) {
     return new DependencyGraphViewport(_calcConfigName, _gridStructure, callbackId, structureCallbackId, viewportDefinition, _latestCycle, cache);
   }
 
-  /* package */List<String> updateResults(ViewCycle cycle, ResultsCache cache) {
+  /* package */List<String> updateResults(final ViewCycle cycle, final ResultsCache cache) {
     _latestCycle = cycle;
-    List<String> updatedIds = Lists.newArrayList();
-    for (DependencyGraphViewport viewport : getViewports().values()) {
+    final List<String> updatedIds = Lists.newArrayList();
+    for (final DependencyGraphViewport viewport : getViewports().values()) {
       viewport.updateResults(cycle, cache);
       if (viewport.getState() == Viewport.State.FRESH_DATA) {
         updatedIds.add(viewport.getCallbackId());

@@ -20,14 +20,14 @@ public final class ConvexityFromCurvesCalculator extends InstrumentDerivativeVis
   /**
    * The calculator instance.
    */
-  private static final ConvexityFromCurvesCalculator s_instance = new ConvexityFromCurvesCalculator();
+  private static final ConvexityFromCurvesCalculator INSTANCE = new ConvexityFromCurvesCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static ConvexityFromCurvesCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

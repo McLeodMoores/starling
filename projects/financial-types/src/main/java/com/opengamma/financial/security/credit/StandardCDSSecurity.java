@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
@@ -28,7 +28,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.master.security.SecurityDescription;
 
 /**
- *  A standard (i.e post big bang) credit default swap.
+ * A standard (i.e post big bang) credit default swap.
  */
 @BeanDefinition
 @SecurityDescription(type = StandardCDSSecurity.SECURITY_TYPE, description = "cds")
@@ -38,7 +38,7 @@ public class StandardCDSSecurity extends FinancialSecurity {
   private static final long serialVersionUID = 1L;
 
   /**
-   * The security type
+   * The security type.
    */
   public static final String SECURITY_TYPE = "STANDARD_CDS";
 
@@ -84,25 +84,35 @@ public class StandardCDSSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private double _coupon;
 
-
-  StandardCDSSecurity() { // for fudge
+  /**
+   * For the builder.
+   */
+  StandardCDSSecurity() {
     super(SECURITY_TYPE);
   }
 
   /**
-   * A standard CDS security
+   * A standard CDS security.
    *
-   * @param ids identifer for this security
-   * @param tradeDate the trade date
-   * @param maturityDate the maturity date
-   * @param referenceEntity the reference entity
-   * @param notional the notional
-   * @param isBuy is protecting being bought
-   * @param coupon the premium leg coupon (fractional i.e. 100 bps = 0.01)
-   * @param debtSeniority the det seniority
+   * @param ids
+   *          identifier for this security
+   * @param tradeDate
+   *          the trade date
+   * @param maturityDate
+   *          the maturity date
+   * @param referenceEntity
+   *          the reference entity
+   * @param notional
+   *          the notional
+   * @param isBuy
+   *          is protection being bought
+   * @param coupon
+   *          the premium leg coupon (fractional i.e. 100 bps = 0.01)
+   * @param debtSeniority
+   *          the debt seniority
    */
   public StandardCDSSecurity(final ExternalIdBundle ids, final LocalDate tradeDate, final LocalDate maturityDate, final ExternalId referenceEntity,
-                             final InterestRateNotional notional, final boolean isBuy, final double coupon, final DebtSeniority debtSeniority) {
+      final InterestRateNotional notional, final boolean isBuy, final double coupon, final DebtSeniority debtSeniority) {
     super(SECURITY_TYPE);
     setExternalIdBundle(ids);
     setTradeDate(tradeDate);
@@ -115,21 +125,29 @@ public class StandardCDSSecurity extends FinancialSecurity {
   }
 
   /**
-   * A standard CDS security
+   * A standard CDS security.
    *
-   * @param ids identifer for this security
-   * @param name descriptive name
-   * @param tradeDate the trade date
-   * @param maturityDate the maturity date
-   * @param referenceEntity the reference entity
-   * @param notional the notional
-   * @param isBuy is protecting being bought
-   * @param coupon the premium leg coupon (fractional i.e. 100 bps = 0.01)
-   * @param debtSeniority the det seniority
+   * @param ids
+   *          identifier for this security
+   * @param name
+   *          descriptive name
+   * @param tradeDate
+   *          the trade date
+   * @param maturityDate
+   *          the maturity date
+   * @param referenceEntity
+   *          the reference entity
+   * @param notional
+   *          the notional
+   * @param isBuy
+   *          is protection being bought
+   * @param coupon
+   *          the premium leg coupon (fractional i.e. 100 bps = 0.01)
+   * @param debtSeniority
+   *          the debt seniority
    */
   public StandardCDSSecurity(final ExternalIdBundle ids, final String name, final LocalDate tradeDate, final LocalDate maturityDate,
-                             final ExternalId referenceEntity, final InterestRateNotional notional, final boolean isBuy, final double coupon,
-                             final DebtSeniority debtSeniority) {
+      final ExternalId referenceEntity, final InterestRateNotional notional, final boolean isBuy, final double coupon, final DebtSeniority debtSeniority) {
     super(SECURITY_TYPE);
     setExternalIdBundle(ids);
     setName(name);

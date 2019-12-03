@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.summary;
@@ -16,19 +16,19 @@ import com.opengamma.id.ExternalIdBundle;
 public class SwaptionSummaryFactory implements SummaryFactory<SwaptionSecurity> {
 
   private final SecuritySource _securitySource;
-  
-  public SwaptionSummaryFactory(SecuritySource securitySource) {
+
+  public SwaptionSummaryFactory(final SecuritySource securitySource) {
     _securitySource = securitySource;
   }
-  
+
   @Override
   public String getSecurityType() {
     return SwaptionSecurity.SECURITY_TYPE;
   }
 
   @Override
-  public Summary getSummary(SwaptionSecurity security) {
-    SwapSecurity underlyingSecurity = (SwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
+  public Summary getSummary(final SwaptionSecurity security) {
+    final SwapSecurity underlyingSecurity = (SwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId()));
     return SwapSummaryFactory.append(SummaryBuilder.create(security), underlyingSecurity)
         .with(SummaryField.MATURITY, security.getExpiry()).build();
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.bumpers;
@@ -9,9 +9,10 @@ import java.util.Arrays;
 
 import com.opengamma.OpenGammaRuntimeException;
 
+// CSOFF
 /**
- * 
- *@deprecated this will be deleted 
+ *
+ * @deprecated this will be deleted
  */
 @Deprecated
 public class InterestRateBumpers {
@@ -30,7 +31,8 @@ public class InterestRateBumpers {
     return bumped;
   }
 
-  private static void getBumpedRates(final double[] marketSpreads, final double spreadBump, final InterestRateBumpType bumpType, final double[] bumpedCreditSpreads, final int m) {
+  private static void getBumpedRates(final double[] marketSpreads, final double spreadBump, final InterestRateBumpType bumpType,
+      final double[] bumpedCreditSpreads, final int m) {
     switch (bumpType) {
       case ADDITIVE:
       case ADDITIVE_PARALLEL:

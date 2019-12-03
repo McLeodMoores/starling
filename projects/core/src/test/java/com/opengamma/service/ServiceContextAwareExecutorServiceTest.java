@@ -29,6 +29,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.opengamma.util.test.TestGroup;
 
+/**
+ * Tests for {@link ServiceContextAwareExecutorService} and {@link ThreadLocalServiceContext}.
+ */
 @Test(groups = TestGroup.UNIT)
 @SuppressWarnings("unchecked")
 public class ServiceContextAwareExecutorServiceTest {
@@ -36,32 +39,54 @@ public class ServiceContextAwareExecutorServiceTest {
   private final ExecutorService _underlying = Executors.newSingleThreadExecutor();
   private final ExecutorService _executor = new ServiceContextAwareExecutorService(_underlying);
 
+  /**
+   * Sets up an empty thread local context.
+   *
+   * @throws Exception
+   *           if the context cannot be created
+   */
   @BeforeMethod
   public void setUp() throws Exception {
-    ThreadLocalServiceContext.init(ServiceContext.of(Collections.<Class<?>, Object>emptyMap()));
+    ThreadLocalServiceContext.init(ServiceContext.of(Collections.<Class<?>, Object> emptyMap()));
   }
 
+  /**
+   * Removes services after each method.
+   *
+   * @throws Exception
+   *           if the services cannot be removed
+   */
   @AfterMethod
   public void tearDown() throws Exception {
     ThreadLocalServiceContext.init(null);
   }
 
+  /**
+   * @throws ExecutionException
+   *           if there is a problem with the execution
+   * @throws InterruptedException
+   *           if there is an interruption
+   */
   @Test
   public void submitCallable() throws ExecutionException, InterruptedException {
     assertFalse(_underlying.submit(callable()).get());
     assertTrue(_executor.submit(callable()).get());
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is an interruption
+   */
   @Test
   public void submitRunnable() throws InterruptedException {
     final ArrayBlockingQueue<Boolean> queue = new ArrayBlockingQueue<>(1);
-    Runnable r = new Runnable() {
+    final Runnable r = new Runnable() {
       @Override
       public void run() {
-        boolean b = ThreadLocalServiceContext.getInstance() != null;
+        final boolean b = ThreadLocalServiceContext.getInstance() != null;
         try {
           queue.put(b);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           throw new RuntimeException(e);
         }
       }
@@ -76,21 +101,31 @@ public class ServiceContextAwareExecutorServiceTest {
     assertTrue(queue.take());
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is an interruption
+   */
   @Test
   public void invokeAll() throws InterruptedException {
-    List<Callable<Boolean>> tasks2 = Lists.newArrayList(callable(), callable());
-    List<Future<Boolean>> futures2 = _executor.invokeAll(tasks2);
+    final List<Callable<Boolean>> tasks2 = Lists.newArrayList(callable(), callable());
+    final List<Future<Boolean>> futures2 = _executor.invokeAll(tasks2);
     assertTrue(Iterables.all(futures2, predicate()));
 
-    List<Callable<Boolean>> tasks1 = Lists.newArrayList(callable(), callable());
-    List<Future<Boolean>> futures1 = _underlying.invokeAll(tasks1);
+    final List<Callable<Boolean>> tasks1 = Lists.newArrayList(callable(), callable());
+    final List<Future<Boolean>> futures1 = _underlying.invokeAll(tasks1);
     assertTrue(Iterables.all(futures1, Predicates.not(predicate())));
   }
 
+  /**
+   * @throws ExecutionException
+   *           if there is a problem with the execution
+   * @throws InterruptedException
+   *           if there is an interruption
+   */
   @Test
   public void amendContext() throws InterruptedException, ExecutionException {
     ThreadLocalServiceContext.init(ServiceContext.of(String.class, "StringService"));
-    ExecutorService executor = new ServiceContextAwareExecutorService(_underlying);
+    final ExecutorService executor = new ServiceContextAwareExecutorService(_underlying);
     assertThat(executor.submit(stringCallable()).get(), is("WithString"));
 
     // Now change to a different context, without StringService
@@ -99,7 +134,7 @@ public class ServiceContextAwareExecutorServiceTest {
     assertThat(executor.submit(stringCallable()).get(), is("WithoutString"));
   }
 
-  private Callable<String> stringCallable() {
+  private static Callable<String> stringCallable() {
     return new Callable<String>() {
       @Override
       public String call() throws Exception {
@@ -110,17 +145,17 @@ public class ServiceContextAwareExecutorServiceTest {
         try {
           ThreadLocalServiceContext.getInstance().get(String.class);
           return "WithString";
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
           return "WithoutString";
         }
       }
     };
   }
 
-  private Predicate<Future<Boolean>> predicate() {
+  private static Predicate<Future<Boolean>> predicate() {
     return new Predicate<Future<Boolean>>() {
       @Override
-      public boolean apply(Future<Boolean> future) {
+      public boolean apply(final Future<Boolean> future) {
         try {
           return future.get();
         } catch (InterruptedException | ExecutionException e) {
@@ -130,7 +165,7 @@ public class ServiceContextAwareExecutorServiceTest {
     };
   }
 
-  private Callable<Boolean> callable() {
+  private static Callable<Boolean> callable() {
     return new Callable<Boolean>() {
       @Override
       public Boolean call() throws Exception {

@@ -52,28 +52,28 @@ public class RemoteProvidersComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    RemoteComponentServer remote = new RemoteComponentServer(_baseUri);
-    ComponentServer server = remote.getComponentServer();
-    for (ComponentInfo info : server.getComponentInfos()) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final RemoteComponentServer remote = new RemoteComponentServer(_baseUri);
+    final ComponentServer server = remote.getComponentServer();
+    for (final ComponentInfo info : server.getComponentInfos()) {
       initComponent(repo, info);
     }
   }
 
   /**
    * Initialize the remote component.
-   * 
+   *
    * @param repo  the local repository, not null
    * @param info  the remote information, not null
    */
-  protected void initComponent(ComponentRepository repo, ComponentInfo info) {
-    URI componentUri = info.getUri();
-    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA) && 
-        info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Provider")) {
-      String remoteTypeStr = info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
-      Class<?> remoteType = ReflectionUtils.loadClass(remoteTypeStr);
-      Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class);
-      Object target = ReflectionUtils.newInstance(con, componentUri);
+  protected void initComponent(final ComponentRepository repo, final ComponentInfo info) {
+    final URI componentUri = info.getUri();
+    if (info.getAttributes().containsKey(ComponentInfoAttributes.REMOTE_CLIENT_JAVA)
+        && info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA).endsWith("Provider")) {
+      final String remoteTypeStr = info.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
+      final Class<?> remoteType = ReflectionUtils.loadClass(remoteTypeStr);
+      final Constructor<?> con = ReflectionUtils.findConstructor(remoteType, URI.class);
+      final Object target = ReflectionUtils.newInstance(con, componentUri);
       repo.registerComponent(info, target);
       if (isPublishRest()) {
         repo.getRestComponents().republish(info);
@@ -86,15 +86,15 @@ public class RemoteProvidersComponentFactory extends AbstractComponentFactory {
 
   /**
    * Connect the permission check provider to the local authorization system.
-   * 
+   *
    * @param repo  the local repository, not null
    * @param info  the remote information, not null
    * @param provider  the remote provider, not null
    */
-  protected void connectPermissionCheckProvider(ComponentRepository repo, ComponentInfo info, PermissionCheckProvider provider) {
-    if (AuthUtils.isPermissive() == false && info.getAttributes().containsKey(ComponentInfoAttributes.ACCEPTED_TYPES)) {
-      String[] permissionPrefixes = StringUtils.split(info.getAttribute(ComponentInfoAttributes.ACCEPTED_TYPES), ',');
-      for (String permissionPrefix : permissionPrefixes) {
+  protected void connectPermissionCheckProvider(final ComponentRepository repo, final ComponentInfo info, final PermissionCheckProvider provider) {
+    if (!AuthUtils.isPermissive() && info.getAttributes().containsKey(ComponentInfoAttributes.ACCEPTED_TYPES)) {
+      final String[] permissionPrefixes = StringUtils.split(info.getAttribute(ComponentInfoAttributes.ACCEPTED_TYPES), ',');
+      for (final String permissionPrefix : permissionPrefixes) {
         AuthUtils.getPermissionResolver().register(
             new ProviderBasedPermissionResolver(permissionPrefix, provider));
       }

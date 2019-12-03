@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation;
@@ -14,6 +14,6 @@ import com.opengamma.analytics.math.function.Function1D;
 // TODO rename this after analytics reshuffle
 public interface GeneralSmileInterpolator {
 
-  Function1D<Double, Double> getVolatilityFunction(final double forward, final double[] strikes, final double expiry, final double[] impliedVols);
+  Function1D<Double, Double> getVolatilityFunction(double forward, double[] strikes, double expiry, double[] impliedVols);
 
 }

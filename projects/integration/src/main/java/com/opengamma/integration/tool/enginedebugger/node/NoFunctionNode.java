@@ -8,16 +8,16 @@ package com.opengamma.integration.tool.enginedebugger.node;
 import com.opengamma.engine.value.ValueRequirement;
 
 /**
- * Node representing no function found during graph building
+ * Node representing no function found during graph building.
  */
 public class NoFunctionNode extends ValueRequirementNode {
 
-  public NoFunctionNode(Object parent, ValueRequirement valueRequirement) {
+  public NoFunctionNode(final Object parent, final ValueRequirement valueRequirement) {
     super(parent, valueRequirement);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -27,7 +27,7 @@ public class NoFunctionNode extends ValueRequirementNode {
     if (!(obj instanceof NoFunctionNode)) {
       return false;
     }
-    NoFunctionNode other = (NoFunctionNode) obj;
+    final NoFunctionNode other = (NoFunctionNode) obj;
     if (_valueRequirement == null) {
       if (other._valueRequirement != null) {
         return false;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.value.properties;
@@ -19,10 +19,11 @@ import java.util.Set;
 
   /**
    * Creates a new instance.
-   * 
-   * @param values the values backing the set. This class will use this object but not modify it.
+   *
+   * @param values
+   *          the values backing the set. This class will use this object but not modify it.
    */
-  public StringArraySet(final String[] values) {
+  StringArraySet(final String[] values) {
     _values = values;
   }
 
@@ -43,7 +44,7 @@ import java.util.Set;
     if (o == null) {
       return false;
     }
-    for (String value : _values) {
+    for (final String value : _values) {
       if (o.equals(value)) {
         return true;
       }
@@ -104,7 +105,7 @@ import java.util.Set;
 
   @Override
   public boolean containsAll(final Collection<?> c) {
-    for (Object o : c) {
+    for (final Object o : c) {
       if (!contains(o)) {
         return false;
       }
@@ -151,13 +152,13 @@ import java.util.Set;
   @Override
   public int hashCode() {
     int hc = 0;
-    for (String value : _values) {
+    for (final String value : _values) {
       hc += value.hashCode();
     }
     return hc;
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked" })
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   @Override
   public boolean equals(final Object o) {
     if (o == this) {

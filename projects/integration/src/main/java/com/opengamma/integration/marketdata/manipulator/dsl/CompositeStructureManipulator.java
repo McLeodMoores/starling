@@ -30,7 +30,7 @@ public class CompositeStructureManipulator<T> implements StructureManipulator<T>
   private final List<StructureManipulator<T>> _manipulators;
   private final Class<T> _expectedType;
 
-  public CompositeStructureManipulator(List<StructureManipulator<T>> manipulators) {
+  public CompositeStructureManipulator(final List<StructureManipulator<T>> manipulators) {
     ArgumentChecker.notEmpty(manipulators, "manipulators");
     // TODO need to check all the manipulators and get the common supertype
     _expectedType = manipulators.get(0).getExpectedType();
@@ -38,9 +38,9 @@ public class CompositeStructureManipulator<T> implements StructureManipulator<T>
   }
 
   @Override
-  public T execute(T structure, ValueSpecification valueSpecification, FunctionExecutionContext executionContext) {
+  public T execute(final T structure, final ValueSpecification valueSpecification, final FunctionExecutionContext executionContext) {
     T value = structure;
-    for (StructureManipulator<T> manipulator : _manipulators) {
+    for (final StructureManipulator<T> manipulator : _manipulators) {
       value = manipulator.execute(value, valueSpecification, executionContext);
     }
     return value;
@@ -55,19 +55,19 @@ public class CompositeStructureManipulator<T> implements StructureManipulator<T>
     return _manipulators;
   }
 
-  public MutableFudgeMsg toFudgeMsg(FudgeSerializer serializer) {
-    MutableFudgeMsg msg = serializer.newMessage();
-    for (StructureManipulator<T> manipulator : _manipulators) {
+  public MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
+    final MutableFudgeMsg msg = serializer.newMessage();
+    for (final StructureManipulator<T> manipulator : _manipulators) {
       serializer.addToMessageWithClassHeaders(msg, MANIPULATOR_FIELD, null, manipulator);
     }
     return msg;
   }
 
-  public static <T> CompositeStructureManipulator<T> fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg) {
-    List<StructureManipulator<T>> manipulators = Lists.newArrayList();
-    for (FudgeField field : msg.getAllByName(MANIPULATOR_FIELD)) {
+  public static <T> CompositeStructureManipulator<T> fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final List<StructureManipulator<T>> manipulators = Lists.newArrayList();
+    for (final FudgeField field : msg.getAllByName(MANIPULATOR_FIELD)) {
       @SuppressWarnings("unchecked")
-      StructureManipulator<T> manipulator = deserializer.fieldValueToObject(StructureManipulator.class, field);
+      final StructureManipulator<T> manipulator = deserializer.fieldValueToObject(StructureManipulator.class, field);
       manipulators.add(manipulator);
     }
     return new CompositeStructureManipulator<>(manipulators);
@@ -75,8 +75,8 @@ public class CompositeStructureManipulator<T> implements StructureManipulator<T>
 
   @Override
   public String toString() {
-    return "CompositeStructureManipulator [" +
-        "_manipulators=" + _manipulators +
-        "]";
+    return "CompositeStructureManipulator ["
+        + "_manipulators=" + _manipulators
+        + "]";
   }
 }

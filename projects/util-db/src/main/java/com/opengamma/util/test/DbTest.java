@@ -34,27 +34,42 @@ public final class DbTest {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Returns the parameters for an HSQL database.
+   *
+   * @return  the parameters
+   */
   @DataProvider(name = "localDatabase")
-  public static Object[][] data_localDatabase() {  // CSIGNORE
-    Object[][] data = getParametersForDatabase("hsqldb");
+  public static Object[][] dataLocalDatabase() {
+    final Object[][] data = getParametersForDatabase("hsqldb");
     if (data.length == 0) {
       throw new IllegalStateException("No databases available");
     }
     return data;
   }
 
+  /**
+   * Gets the parameters for the databases set in the <code>test.database.type</code> system property.
+   *
+   * @return  the parameters
+   */
   @DataProvider(name = "databases")
-  public static Object[][] data_databases() {  // CSIGNORE
-    Object[][] data = getParameters();
+  public static Object[][] dataDatabases() {
+    final Object[][] data = getParameters();
     if (data.length == 0) {
       throw new IllegalStateException("No databases available");
     }
     return data;
   }
 
+  /**
+   * Gets the parameters for previous three versions of the databases set in the <code>test.database.type</code> system property.
+   *
+   * @return  the parameters
+   */
   @DataProvider(name = "databasesVersionsForSeparateMasters")
-  public static Object[][] data_databasesVersionsForSeparateMasters() {  // CSIGNORE
-    Object[][] data = getParametersForSeparateMasters(3);
+  public static Object[][] dataDatabasesVersionsForSeparateMasters() {
+    final Object[][] data = getParametersForSeparateMasters(3);
     if (data.length == 0) {
       throw new IllegalStateException("No databases available");
     }
@@ -62,12 +77,12 @@ public final class DbTest {
   }
 
   //-------------------------------------------------------------------------
-  private static Object[][] getParametersForSeparateMasters(int prevVersionCount) {
-    Collection<String> databaseTypes = getAvailableDatabaseTypes(System.getProperty("test.database.type"));
-    ArrayList<Object[]> parameters = new ArrayList<Object[]>();
-    for (DbSchemaGroupMetadata schemaGroupMetadata : DbScriptUtils.getAllSchemaGroupMetadata()) {
-      for (String databaseType : databaseTypes) {
-        int max = schemaGroupMetadata.getCurrentVersion();
+  private static Object[][] getParametersForSeparateMasters(final int prevVersionCount) {
+    final Collection<String> databaseTypes = getAvailableDatabaseTypes(System.getProperty("test.database.type"));
+    final ArrayList<Object[]> parameters = new ArrayList<>();
+    for (final DbSchemaGroupMetadata schemaGroupMetadata : DbScriptUtils.getAllSchemaGroupMetadata()) {
+      for (final String databaseType : databaseTypes) {
+        final int max = schemaGroupMetadata.getCurrentVersion();
         int min = max;
         while (schemaGroupMetadata.getCreateScript(databaseType, min - 1) != null) {
           min--;
@@ -75,30 +90,30 @@ public final class DbTest {
         for (int v = max; v >= Math.max(max - prevVersionCount, min); v--) {
           parameters.add(new Object[]{databaseType, schemaGroupMetadata.getSchemaGroupName(), max /*target_version*/, v /*migrate_from_version*/});
         }
-      }      
+      }
     }
-    Object[][] array = new Object[parameters.size()][];
+    final Object[][] array = new Object[parameters.size()][];
     parameters.toArray(array);
     return array;
   }
 
   private static Object[][] getParameters() {
-    Collection<String> databaseTypes = getAvailableDatabaseTypes(System.getProperty("test.database.type"));
-    ArrayList<Object[]> parameters = new ArrayList<Object[]>();
-    for (String databaseType : databaseTypes) {
+    final Collection<String> databaseTypes = getAvailableDatabaseTypes(System.getProperty("test.database.type"));
+    final ArrayList<Object[]> parameters = new ArrayList<>();
+    for (final String databaseType : databaseTypes) {
       parameters.add(new Object[]{databaseType, "latest"});
     }
-    Object[][] array = new Object[parameters.size()][];
+    final Object[][] array = new Object[parameters.size()][];
     parameters.toArray(array);
     return array;
   }
 
   private static Object[][] getParametersForDatabase(final String databaseType) {
-    ArrayList<Object[]> parameters = new ArrayList<Object[]>();
-    for (String db : getAvailableDatabaseTypes(databaseType)) {
+    final ArrayList<Object[]> parameters = new ArrayList<>();
+    for (final String db : getAvailableDatabaseTypes(databaseType)) {
       parameters.add(new Object[]{db, "latest"});
     }
-    Object[][] array = new Object[parameters.size()][];
+    final Object[][] array = new Object[parameters.size()][];
     parameters.toArray(array);
     return array;
   }
@@ -106,12 +121,12 @@ public final class DbTest {
   /**
    * Not all database drivers are available in some test environments.
    */
-  private static Collection<String> getAvailableDatabaseTypes(String databaseType) {
+  private static Collection<String> getAvailableDatabaseTypes(final String databaseType) {
     Collection<String> databaseTypes;
     if (databaseType == null) {
       databaseTypes = Sets.newHashSet(DbDialectUtils.getAvailableDatabaseTypes());
     } else {
-      if (DbDialectUtils.getAvailableDatabaseTypes().contains(databaseType) == false) {
+      if (!DbDialectUtils.getAvailableDatabaseTypes().contains(databaseType)) {
         throw new IllegalArgumentException("Unknown database: " + databaseType);
       }
       databaseTypes = Sets.newHashSet(databaseType);
@@ -122,54 +137,78 @@ public final class DbTest {
   /**
    * Creates a {@code DbTool} for a specific database.
    * The connector may be passed in to share if it exists already.
-   * 
+   *
    * @param databaseConfigPrefix  the prefix for a database in the config file, not null
    * @param connector  the connector, null if not to be shared
    * @return the tool, not null
    */
-  public static DbTool createDbTool(String databaseConfigPrefix, DbConnector connector) {
+  public static DbTool createDbTool(final String databaseConfigPrefix, final DbConnector connector) {
     ArgumentChecker.notNull(databaseConfigPrefix, "databaseConfigPrefix");
-    String dbHost = getDbHost(databaseConfigPrefix);
-    String user = getDbUsername(databaseConfigPrefix);
-    String password = getDbPassword(databaseConfigPrefix);
-    DataSource dataSource = (connector != null ? connector.getDataSource() : null);
-    DbTool dbTool = new DbTool(dbHost, user, password, dataSource);
+    final String dbHost = getDbHost(databaseConfigPrefix);
+    final String user = getDbUsername(databaseConfigPrefix);
+    final String password = getDbPassword(databaseConfigPrefix);
+    final DataSource dataSource = connector != null ? connector.getDataSource() : null;
+    final DbTool dbTool = new DbTool(dbHost, user, password, dataSource);
     dbTool.initialize();
     dbTool.setJdbcUrl(dbTool.getTestDatabaseUrl());
     return dbTool;
   }
 
   //-------------------------------------------------------------------------
-  public static DbDialect getDbType(String databaseConfigPrefix) {
-    String dbTypeProperty = databaseConfigPrefix + ".jdbc.type";
-    String dbType = TestProperties.getTestProperties().getProperty(dbTypeProperty);
+  /**
+   * Gets the database dialect. The type is taken from the <code>[PREFIX].jdbc.type</code> system property.
+   *
+   * @param databaseConfigPrefix  the prefix
+   * @return  the dialect
+   */
+  public static DbDialect getDbType(final String databaseConfigPrefix) {
+    final String dbTypeProperty = databaseConfigPrefix + ".jdbc.type";
+    final String dbType = TestProperties.getTestProperties().getProperty(dbTypeProperty);
     if (dbType == null) {
       throw new OpenGammaRuntimeException("Property " + dbTypeProperty + " not found");
     }
     return DbDialectUtils.getSupportedDbDialect(dbType);
   }
 
-  public static String getDbHost(String databaseConfigPrefix) {
-    String dbHostProperty = databaseConfigPrefix + ".jdbc.url";
-    String dbHost = TestProperties.getTestProperties().getProperty(dbHostProperty);
+  /**
+   * Gets the database host. The host is taken from the <code>[PREFIX].jdbc.url</code> system property.
+   *
+   * @param databaseConfigPrefix  the prefix
+   * @return  the host
+   */
+  public static String getDbHost(final String databaseConfigPrefix) {
+    final String dbHostProperty = databaseConfigPrefix + ".jdbc.url";
+    final String dbHost = TestProperties.getTestProperties().getProperty(dbHostProperty);
     if (dbHost == null) {
       throw new OpenGammaRuntimeException("Property " + dbHostProperty + " not found");
     }
     return dbHost;
   }
 
-  public static String getDbUsername(String databaseConfigPrefix) {
-    String userProperty = databaseConfigPrefix + ".jdbc.username";
-    String user = TestProperties.getTestProperties().getProperty(userProperty);
+  /**
+   * Gets the database user name. The name is taken from the <code>[PREFIX].jdbc.username</code> system property.
+   *
+   * @param databaseConfigPrefix  the prefix
+   * @return  the host
+   */
+  public static String getDbUsername(final String databaseConfigPrefix) {
+    final String userProperty = databaseConfigPrefix + ".jdbc.username";
+    final String user = TestProperties.getTestProperties().getProperty(userProperty);
     if (user == null) {
       throw new OpenGammaRuntimeException("Property " + userProperty + " not found");
     }
     return user;
   }
 
-  public static String getDbPassword(String databaseConfigPrefix) {
-    String passwordProperty = databaseConfigPrefix + ".jdbc.password";
-    String password = TestProperties.getTestProperties().getProperty(passwordProperty);
+  /**
+   * Gets the database password. The password is taken from the <code>[PREFIX].jdbc.password</code> system property.
+   *
+   * @param databaseConfigPrefix  the prefix
+   * @return  the host
+   */
+  public static String getDbPassword(final String databaseConfigPrefix) {
+    final String passwordProperty = databaseConfigPrefix + ".jdbc.password";
+    final String password = TestProperties.getTestProperties().getProperty(passwordProperty);
     if (password == null) {
       throw new OpenGammaRuntimeException("Property " + passwordProperty + " not found");
     }

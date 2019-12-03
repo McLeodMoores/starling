@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.view.rest;
@@ -28,7 +28,7 @@ public class RemoteDependencyGraphExplorer implements DependencyGraphExplorer {
 
   private volatile DependencyGraphExplorer _local;
 
-  public RemoteDependencyGraphExplorer(URI baseUri) {
+  public RemoteDependencyGraphExplorer(final URI baseUri) {
     _baseUri = baseUri;
     _client = FudgeRestClient.create();
   }
@@ -72,9 +72,8 @@ public class RemoteDependencyGraphExplorer implements DependencyGraphExplorer {
     final DependencyGraph graph = getSubgraphProducingImpl(output);
     if (graph != null) {
       return new DependencyGraphExplorerImpl(graph);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override

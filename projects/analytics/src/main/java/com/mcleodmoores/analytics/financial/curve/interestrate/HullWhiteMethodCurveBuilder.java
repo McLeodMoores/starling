@@ -45,10 +45,9 @@ import com.opengamma.util.tuple.Pair;
  *
  */
 public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactorProviderDiscount> {
-  private static final ParSpreadMarketQuoteHullWhiteCalculator CALCULATOR =
-      ParSpreadMarketQuoteHullWhiteCalculator.getInstance();
-  private static final ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator SENSITIVITY_CALCULATOR =
-      ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator.getInstance();
+  private static final ParSpreadMarketQuoteHullWhiteCalculator CALCULATOR = ParSpreadMarketQuoteHullWhiteCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator SENSITIVITY_CALCULATOR = ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator
+      .getInstance();
   private final HullWhiteProviderDiscountBuildingRepository _curveBuildingRepository;
   private final HullWhiteOneFactorPiecewiseConstantParameters _parameters;
   private final Currency _currency;
@@ -122,9 +121,8 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
       }
       convertedOvernightCurves.put(entry.getKey(), converted);
     }
-    final HullWhiteOneFactorProviderDiscount knownData =
-        new HullWhiteOneFactorProviderDiscount(
-            new MulticurveProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, fxMatrix), _parameters, _currency);
+    final HullWhiteOneFactorProviderDiscount knownData = new HullWhiteOneFactorProviderDiscount(
+        new MulticurveProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, fxMatrix), _parameters, _currency);
     if (knownBundle != null) {
       return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, convertedDiscountingCurves,
           convertedIborCurves, convertedOvernightCurves,
@@ -135,7 +133,7 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
         SENSITIVITY_CALCULATOR);
   }
 
-  //TODO should disappear - get correct builders etc by choosing a curve building type in buildCurves()
+  // TODO should disappear - get correct builders etc by choosing a curve building type in buildCurves()
   public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurvesWithoutConvexityAdjustment(
       final ZonedDateTime valuationDate,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
@@ -148,7 +146,8 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
       for (int j = 0; j < curveNamesForUnit.size(); j++) {
         final String curveName = curveNamesForUnit.get(j);
         // TODO sensible behaviour if not set
-        final NodeOrderCalculator nodeOrderCalculator = new CurveUtils.NodeOrderCalculator(getCurveTypes().get(curveName).getNodeTimeCalculator());
+        final NodeOrderCalculator nodeOrderCalculator = new CurveUtils.NodeOrderCalculator(
+            getCurveTypes().get(curveName).getNodeTimeCalculator());
         final List<InstrumentDefinition<?>> nodesForCurve = getNodes().get(curveName);
         if (nodesForCurve == null) {
           throw new IllegalStateException();
@@ -164,14 +163,16 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
         for (int k = 0; k < nNodes; k++) {
           curveInitialGuess[k] = instruments[k].accept(CurveUtils.RATES_INITIALIZATION);
         }
-        final GeneratorYDCurve instrumentGenerator = getCurveGenerators().get(curveName).buildCurveGenerator(valuationDate).finalGenerator(instruments);
+        final GeneratorYDCurve instrumentGenerator = getCurveGenerators().get(curveName).buildCurveGenerator(valuationDate)
+            .finalGenerator(instruments);
         generatorForCurve.put(curveName, instrumentGenerator);
-        unitBundle[j] = new SingleCurveBundle<>(curveName, instruments, instrumentGenerator.initialGuess(curveInitialGuess), instrumentGenerator);
+        unitBundle[j] = new SingleCurveBundle<>(curveName, instruments, instrumentGenerator.initialGuess(curveInitialGuess),
+            instrumentGenerator);
       }
       curveBundles[i] = new MultiCurveBundle<>(unitBundle);
     }
-    final MulticurveDiscountBuildingRepository curveBuildingRepository =
-        new MulticurveDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
+    final MulticurveDiscountBuildingRepository curveBuildingRepository = new MulticurveDiscountBuildingRepository(_absoluteTolerance,
+        _relativeTolerance, _maxSteps);
     final MulticurveProviderDiscount knownData = new MulticurveProviderDiscount(getKnownDiscountingCurves(), getKnownIborCurves(),
         getKnownOvernightCurves(), getFxMatrix());
     final LinkedHashMap<String, Currency> convertedDiscountingCurves = new LinkedHashMap<>();

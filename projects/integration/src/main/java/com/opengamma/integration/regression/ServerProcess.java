@@ -27,8 +27,8 @@ public final class ServerProcess implements AutoCloseable {
 
   /** The server process. */
   private final Process _process;
-  
-  private ServerProcess(Process process) {
+
+  private ServerProcess(final Process process) {
     _process = process;
   }
 
@@ -43,12 +43,12 @@ public final class ServerProcess implements AutoCloseable {
    * @param logbackConfig Property to set the logback configuration
    * @return The process
    */
-  public static ServerProcess start(String workingDir,
-                                    String classpath,
-                                    String configFile,
-                                    Properties propertyOverrides,
-                                    String logbackConfig) {
-    ImmutableList.Builder<String> commandBuilder = ImmutableList.builder();
+  public static ServerProcess start(final String workingDir,
+                                    final String classpath,
+                                    final String configFile,
+                                    final Properties propertyOverrides,
+                                    final String logbackConfig) {
+    final ImmutableList.Builder<String> commandBuilder = ImmutableList.builder();
     commandBuilder.add("java",
                        logbackConfig,
                        "-cp",
@@ -58,24 +58,24 @@ public final class ServerProcess implements AutoCloseable {
                        "com.opengamma.component.OpenGammaComponentServer",
                        configFile);
     // can override properties in the config on the command line with prop1=value1 prop2=value2 ...
-    for (Map.Entry<Object, Object> entry : propertyOverrides.entrySet()) {
+    for (final Map.Entry<Object, Object> entry : propertyOverrides.entrySet()) {
       commandBuilder.add(entry.getKey() + "=" + entry.getValue());
     }
-    ProcessBuilder processBuilder = new ProcessBuilder(commandBuilder.build()).directory(new File(workingDir));
+    final ProcessBuilder processBuilder = new ProcessBuilder(commandBuilder.build()).directory(new File(workingDir));
     Process process;
     try {
       process = processBuilder.start();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Failed to start server process", e);
     }
-    BlockingQueue<Boolean> startupQueue = new ArrayBlockingQueue<>(1);
+    final BlockingQueue<Boolean> startupQueue = new ArrayBlockingQueue<>(1);
     consumeStream(process.getInputStream(), OpenGammaComponentServer.STARTUP_COMPLETE_MESSAGE, startupQueue, true, System.out);
     consumeStream(process.getErrorStream(), OpenGammaComponentServer.STARTUP_FAILED_MESSAGE, startupQueue, false, System.err);
     Boolean startupSuccess;
     try {
       // TODO timeout mechanism in case the server dies and doesn't log correctly. timer task that interrupts this thread?
       startupSuccess = startupQueue.take();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       // not going to happen
       throw new OpenGammaRuntimeException("unexpected exception", e);
     }
@@ -101,7 +101,7 @@ public final class ServerProcess implements AutoCloseable {
                                     final BlockingQueue<Boolean> queue,
                                     final Boolean signalValue,
                                     final PrintStream output) {
-    Thread thread = new Thread(new Runnable() {
+    final Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
@@ -112,14 +112,14 @@ public final class ServerProcess implements AutoCloseable {
               queue.put(signalValue);
             }
           }
-        } catch (IOException e) {
+        } catch (final IOException e) {
           e.printStackTrace();
           try {
             queue.put(false);
-          } catch (InterruptedException e1) {
+          } catch (final InterruptedException e1) {
             // not going to happen
           }
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           // not going to happen
         }
       }

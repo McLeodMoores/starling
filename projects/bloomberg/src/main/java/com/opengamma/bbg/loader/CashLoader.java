@@ -31,7 +31,7 @@ import com.opengamma.master.security.ManageableSecurity;
 public final class CashLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(CashLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CashLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -48,39 +48,39 @@ public final class CashLoader extends SecurityLoader {
    * Creates an instance.
    * @param referenceDataProvider  the provider, not null
    */
-  public CashLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.CASH);
+  public CashLoader(final ReferenceDataProvider referenceDataProvider) {
+    super(LOGGER, referenceDataProvider, SecurityType.CASH);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String ticker = fieldData.getString(FIELD_TICKER);
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String ticker = fieldData.getString(FIELD_TICKER);
     String currency = fieldData.getString(FIELD_CRNCY);
     if (currency != null) {
       currency = currency.toUpperCase();
     }
-    String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
-    String countryIso = fieldData.getString(FIELD_COUNTRY_ISO);
-    String bbgUniqueID = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    String name = fieldData.getString(FIELD_NAME);
+    final String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
+    final String countryIso = fieldData.getString(FIELD_COUNTRY_ISO);
+    final String bbgUniqueID = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final String name = fieldData.getString(FIELD_NAME);
     if (!isValidField(bbgUniqueID)) {
-      s_logger.warn("bbgUniqueID is missing, cannot construct cash security");
+      LOGGER.warn("bbgUniqueID is missing, cannot construct cash security");
       return null;
     }
     if (!isValidField(name)) {
-      s_logger.warn("name is missing, cannot construct cash security");
+      LOGGER.warn("name is missing, cannot construct cash security");
     }
     if (!BloombergDataUtils.isValidField(ticker)) {
-      s_logger.warn("equity ticker is missing, cannot construct cash security");
+      LOGGER.warn("equity ticker is missing, cannot construct cash security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(countryIso)) {
-      s_logger.warn("equity exchange is missing, cannot construct cash security");
+      LOGGER.warn("equity exchange is missing, cannot construct cash security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(currency)) {
-      s_logger.warn("equity currency is missing, cannot construct cash security");
+      LOGGER.warn("equity currency is missing, cannot construct cash security");
       return null;
     }
 //    CashSecurity security = new CashSecurity(Currency.getInstance(currency), Identifier.of(InMemoryRegionRepository.ISO_COUNTRY_2, countryIso));
@@ -92,7 +92,7 @@ public final class CashLoader extends SecurityLoader {
 //      security.addIdentifier(Identifier.of(ExternalScheme.BLOOMBERG_TICKER, bbgTicker.toString()));
 //    }
 //    security.addIdentifier(Identifier.of(ExternalScheme.BLOOMBERG_BUID, bbgUniqueID));
-//  
+//
 //    return security;
     return null;
   }

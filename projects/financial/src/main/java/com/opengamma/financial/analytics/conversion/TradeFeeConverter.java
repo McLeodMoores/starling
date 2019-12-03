@@ -38,7 +38,7 @@ public class TradeFeeConverter implements TradeConverter {
   private static final String FEE_DIRECTION = "FEE_%d_DIRECTION";
 
   /**
-   * Get an instance
+   * Get an instance.
    *
    * @return the instance
    */
@@ -49,14 +49,16 @@ public class TradeFeeConverter implements TradeConverter {
   /**
    * Construct a definition from the fees on a trade.
    *
-   * @param trade the trade, not null
+   * @param trade
+   *          the trade, not null
    * @return the definition, null if no fees
    */
+  @Override
   public InstrumentDefinition<?> convert(final Trade trade) {
     ArgumentChecker.notNull(trade, "trade");
-    List<CouponFixedDefinition> fees = new ArrayList<>();
-    Security security = trade.getSecurity();
-    Currency securityCcy = FinancialSecurityUtils.getCurrency(security);
+    final List<CouponFixedDefinition> fees = new ArrayList<>();
+    final Security security = trade.getSecurity();
+    final Currency securityCcy = FinancialSecurityUtils.getCurrency(security);
     for (int i = 1;; i++) {
       if (!trade.getAttributes().containsKey(String.format(FEE_DATE, i))) {
         break;
@@ -67,15 +69,14 @@ public class TradeFeeConverter implements TradeConverter {
       ArgumentChecker.isTrue(securityCcy.equals(ccy), "Fee must be in security currency {} got {}", securityCcy, ccy);
       final Double amount = Double.parseDouble(trade.getAttributes().get(String.format(FEE_AMOUNT, i)));
       final PayReceiveType payOrReceive = PayReceiveType.valueOf(trade.getAttributes().get(String.format(FEE_DIRECTION, i)));
-      final CouponFixedDefinition payment = new CouponFixedDefinition(ccy, feeTime, feeTime, feeTime, 1, payOrReceive == PayReceiveType.PAY ? -amount : amount, 1);
+      final CouponFixedDefinition payment = new CouponFixedDefinition(ccy, feeTime, feeTime, feeTime, 1, payOrReceive == PayReceiveType.PAY ? -amount : amount,
+          1);
       fees.add(payment);
     }
     if (!fees.isEmpty()) {
       return new AnnuityDefinition<>(fees.toArray(new CouponFixedDefinition[fees.size()]), new MondayToFridayCalendar(""));
-    } else {
-      return null;
     }
+    return null;
   }
-
 
 }

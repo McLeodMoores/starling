@@ -21,7 +21,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class CGMYFourierPricerTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(CGMYFourierPricerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CGMYFourierPricerTest.class);
   private static final int WARMUP_CYCLES = 0;
   private static final int BENCHMARK_CYCLES = 1;
   private static final boolean TEST_TIMING = false;
@@ -66,7 +66,7 @@ public class CGMYFourierPricerTest {
       }
       res *= 2;
       if (BENCHMARK_CYCLES > 0) {
-        final OperationTimer timer = new OperationTimer(s_logger, "processing {} cycles on integral", BENCHMARK_CYCLES);
+        final OperationTimer timer = new OperationTimer(LOGGER, "processing {} cycles on integral", BENCHMARK_CYCLES);
         for (int count = 0; count < BENCHMARK_CYCLES; count++) {
           for (int i = 0; i < 100; i++) {
             final double x = -15. + i * 30. / 200.0;

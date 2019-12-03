@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.fxforwardcurve;
@@ -39,11 +39,11 @@ public class FXForwardCurveDefinitionFunction extends AbstractFunction {
 
   private ConfigDBFXForwardCurveDefinitionSource _fxForwardCurveDefinitionSource;
 
-  public FXForwardCurveDefinitionFunction(String ccy1, String ccy2, String curveName) {
+  public FXForwardCurveDefinitionFunction(final String ccy1, final String ccy2, final String curveName) {
     this(UnorderedCurrencyPair.of(Currency.of(ccy1), Currency.of(ccy2)), curveName);
   }
 
-  public FXForwardCurveDefinitionFunction(UnorderedCurrencyPair currencies, String curveName) {
+  public FXForwardCurveDefinitionFunction(final UnorderedCurrencyPair currencies, final String curveName) {
     _currencies = currencies;
     _curveName = curveName;
     _targetSpec = ComputationTargetType.UNORDERED_CURRENCY_PAIR.specification(currencies);
@@ -58,7 +58,7 @@ public class FXForwardCurveDefinitionFunction extends AbstractFunction {
 
     private final FXForwardCurveDefinition _curveDefinition;
 
-    public CompiledImpl(FXForwardCurveDefinition curveDefinition) {
+    CompiledImpl(final FXForwardCurveDefinition curveDefinition) {
       _curveDefinition = curveDefinition;
     }
 
@@ -68,13 +68,13 @@ public class FXForwardCurveDefinitionFunction extends AbstractFunction {
     }
 
     @Override
-    public boolean canApplyTo(FunctionCompilationContext context, ComputationTarget target) {
-      return _currencies.equals((UnorderedCurrencyPair) target.getValue());
+    public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
+      return _currencies.equals(target.getValue());
     }
 
     @Override
-    public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
-      ValueProperties properties = createResultProperties();
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
+      final ValueProperties properties = createResultProperties();
       return ImmutableSet.of(new ValueSpecification(ValueRequirementNames.FX_FORWARD_CURVE_DEFINITION, _targetSpec, properties));
     }
 
@@ -83,20 +83,23 @@ public class FXForwardCurveDefinitionFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       return ImmutableSet.of();
     }
 
     @Override
-    public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues)
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues)
         throws AsynchronousExecution {
-      return ImmutableSet.of(new ComputedValue(new ValueSpecification(ValueRequirementNames.FX_FORWARD_CURVE_DEFINITION, _targetSpec, createResultProperties()), _curveDefinition));
+      return ImmutableSet.of(new ComputedValue(new ValueSpecification(ValueRequirementNames.FX_FORWARD_CURVE_DEFINITION, _targetSpec,
+          createResultProperties()), _curveDefinition));
     }
 
   }
 
   @Override
-  public CompiledFunctionDefinition compile(FunctionCompilationContext context, Instant atInstant) {
+  public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final FXForwardCurveDefinition definition = _fxForwardCurveDefinitionSource.getDefinition(_curveName, _currencies.toString());
     return new CompiledImpl(definition);
   }

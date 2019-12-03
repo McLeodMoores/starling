@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.model.option.pricing.analytic.formula;
 import org.apache.commons.lang.Validate;
 
 /**
- * 
+ *
  */
 public class CEVFunctionData {
 
@@ -59,18 +59,18 @@ public class CEVFunctionData {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_beta);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_forward);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_numeraire);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_volatility);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -80,7 +80,7 @@ public class CEVFunctionData {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    CEVFunctionData other = (CEVFunctionData) obj;
+    final CEVFunctionData other = (CEVFunctionData) obj;
     if (Double.doubleToLongBits(_beta) != Double.doubleToLongBits(other._beta)) {
       return false;
     }

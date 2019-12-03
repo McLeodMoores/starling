@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention;
@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.id.ExternalIdBundle;
@@ -26,6 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Conventions for bonds.
  */
+@ConventionMetaData(description = "Bond", group = ConventionGroups.FIXED_INCOME)
 @BeanDefinition
 public class BondConvention extends FinancialConvention {
 
@@ -70,18 +73,25 @@ public class BondConvention extends FinancialConvention {
   /**
    * For the builder.
    */
-  /* package */BondConvention() {
+  /* package */ BondConvention() {
     super();
   }
 
   /**
-   * @param name The convention name, not null
-   * @param externalIdBundle The external id bundle, not null
-   * @param exDividendDays The number of ex-dividend days, not negative
-   * @param settlementDays The number of settlement days, not negative
-   * @param businessDayConvention The business day convention
-   * @param isEOM True if the schedule is generated using the end-of-month convention.
-   * @param isCalculateScheduleFromMaturity True if the schedule is to be calculated from the bond maturity date.
+   * @param name
+   *          The convention name, not null
+   * @param externalIdBundle
+   *          The external id bundle, not null
+   * @param exDividendDays
+   *          The number of ex-dividend days, not negative
+   * @param settlementDays
+   *          The number of settlement days, not negative
+   * @param businessDayConvention
+   *          The business day convention
+   * @param isEOM
+   *          True if the schedule is generated using the end-of-month convention.
+   * @param isCalculateScheduleFromMaturity
+   *          True if the schedule is to be calculated from the bond maturity date.
    */
   public BondConvention(final String name, final ExternalIdBundle externalIdBundle, final int exDividendDays, final int settlementDays,
       final BusinessDayConvention businessDayConvention, final boolean isEOM, final boolean isCalculateScheduleFromMaturity) {

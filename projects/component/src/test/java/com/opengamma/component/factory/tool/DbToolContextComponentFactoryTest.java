@@ -5,33 +5,35 @@
  */
 package com.opengamma.component.factory.tool;
 
+import static com.opengamma.component.factory.tool.DbToolContextComponentFactory.getCatalog;
+import static com.opengamma.component.factory.tool.DbToolContextComponentFactory.getMSSQLCatalog;
+import static com.opengamma.component.factory.tool.DbToolContextComponentFactory.getStandardCatalog;
+
 import org.apache.commons.lang.Validate;
 import org.testng.annotations.Test;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.test.TestGroup;
 
-import static com.opengamma.component.factory.tool.DbToolContextComponentFactory.*;
-
 /** Test. */
 @Test(groups = TestGroup.UNIT)
 public class DbToolContextComponentFactoryTest {
 
-  final static String MSSQL_URL_1 = "jdbc:sqlserver://someserver:1433;integratedSecurity=true;databaseName=someDatabase";
-  final static String MSSQL_URL_2 = "jdbc:sqlserver://someserver:1433;databaseName=someDatabase;integratedSecurity=true";
-  final static String MSSQL_URL_3 = "jdbc:sqlserver://someserver:1433;databaseName=someDatabase";
-  final static String HSQL_URL = "jdbc:hsqldb:file:data/hsqldb/og-fin";
-  final static String POSTGRES_URL = "jdbc:postgresql://localhost/og_financial";
+  private static final String MSSQL_URL_1 = "jdbc:sqlserver://someserver:1433;integratedSecurity=true;databaseName=someDatabase";
+  private static final String MSSQL_URL_2 = "jdbc:sqlserver://someserver:1433;databaseName=someDatabase;integratedSecurity=true";
+  private static final String MSSQL_URL_3 = "jdbc:sqlserver://someserver:1433;databaseName=someDatabase";
+  private static final String HSQL_URL = "jdbc:hsqldb:file:data/hsqldb/og-fin";
+  private static final String POSTGRES_URL = "jdbc:postgresql://localhost/og_financial";
 
-  final static String MSSQL_DB = "someDatabase";
-  final static String HSQL_DB = "og-fin";
-  final static String POSTGRES_DB = "og_financial";
+  private static final String MSSQL_DB = "someDatabase";
+  private static final String HSQL_DB = "og-fin";
+  private static final String POSTGRES_DB = "og_financial";
 
-  final static String MSSQL_BAD_INVALID_SLASH = "jdbc:sqlserver://someserver:1433;/databaseName=someDatabase";
-  final static String MSSQL_BAD_NO_DB_NAME = "jdbc:sqlserver://someserver:1433;integratedSecurity=true;databaseName=";
-  final static String MSSQL_BAD_NO_DB_ATALL = "jdbc:sqlserver://someserver:1433;integratedSecurity=true";
+  private static final String MSSQL_BAD_INVALID_SLASH = "jdbc:sqlserver://someserver:1433;/databaseName=someDatabase";
+  private static final String MSSQL_BAD_NO_DB_NAME = "jdbc:sqlserver://someserver:1433;integratedSecurity=true;databaseName=";
+  private static final String MSSQL_BAD_NO_DB_ATALL = "jdbc:sqlserver://someserver:1433;integratedSecurity=true";
 
-  final static String COMPLETE_GARBAGE = "abcdefgh";
+  private static final String COMPLETE_GARBAGE = "abcdefgh";
 
 
   @Test
@@ -77,7 +79,7 @@ public class DbToolContextComponentFactoryTest {
 
   @Test
   public void test_handleNull() {
-    Validate.isTrue((getCatalog(null) == null), "null did not work");
+    Validate.isTrue(getCatalog(null) == null, "null did not work");
   }
 
   @Test(expectedExceptions = OpenGammaRuntimeException.class)

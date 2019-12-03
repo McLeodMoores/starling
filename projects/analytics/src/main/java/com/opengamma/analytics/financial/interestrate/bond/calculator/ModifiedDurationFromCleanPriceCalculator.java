@@ -22,14 +22,15 @@ public final class ModifiedDurationFromCleanPriceCalculator extends InstrumentDe
   /**
    * The calculator instance.
    */
-  private static final ModifiedDurationFromCleanPriceCalculator s_instance = new ModifiedDurationFromCleanPriceCalculator();
+  private static final ModifiedDurationFromCleanPriceCalculator INSTANCE = new ModifiedDurationFromCleanPriceCalculator();
 
   /**
    * Return the calculator instance.
+   * 
    * @return The instance.
    */
   public static ModifiedDurationFromCleanPriceCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**
@@ -58,12 +59,11 @@ public final class ModifiedDurationFromCleanPriceCalculator extends InstrumentDe
   }
 
   @Override
-  public Double visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction bond, final Double price) {
+  public Double visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction<?> bond, final Double price) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(price, "yield");
-    ArgumentChecker.notNull(bond.getBondStandard() instanceof BondCapitalIndexedSecurity<?>, "the bond should be a BondCapitalIndexedSecurity");
 
-    final BondCapitalIndexedSecurity<?> bondSecurity = (BondCapitalIndexedSecurity<?>) bond.getBondStandard();
+    final BondCapitalIndexedSecurity<?> bondSecurity = bond.getBondStandard();
     return METHOD_INFLATION_BOND_SECURITY.modifiedDurationFromCleanPrice(bondSecurity, price);
   }
 
@@ -71,7 +71,6 @@ public final class ModifiedDurationFromCleanPriceCalculator extends InstrumentDe
   public Double visitBondCapitalIndexedSecurity(final BondCapitalIndexedSecurity<?> bond, final Double price) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(price, "yield");
-    ArgumentChecker.notNull(bond instanceof BondCapitalIndexedSecurity<?>, "the bond should be a BondCapitalIndexedSecurity");
 
     return METHOD_INFLATION_BOND_SECURITY.modifiedDurationFromCleanPrice(bond, price);
   }

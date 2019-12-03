@@ -11,7 +11,6 @@ package com.opengamma.analytics.financial.instrument.bond;
 
 import java.util.Objects;
 
-import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.date.CalendarAdapter;
@@ -69,33 +68,51 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Creates a bill with a legal entity that contains only the issuer name.
-   * @param currency  the bill currency, not null
-   * @param endDate  the bill end or maturity date, not null
-   * @param notional  the nominal amount
-   * @param settlementDays  the standard number of days between trade date and trade settlement
-   * @param calendar  the calendar used to compute the standard settlement date, not null
-   * @param yieldConvention  the yield (to maturity) computation convention, not null
-   * @param dayCount  the yield day count convention, not null
-   * @param issuer  the bill issuer name, not null
-   * @deprecated  Use {@link #BillSecurityDefinition(Currency, ZonedDateTime, double, int, WorkingDayCalendar, YieldConvention, DayCount, String)}.
+   * 
+   * @param currency
+   *          the bill currency, not null
+   * @param endDate
+   *          the bill end or maturity date, not null
+   * @param notional
+   *          the nominal amount
+   * @param settlementDays
+   *          the standard number of days between trade date and trade settlement
+   * @param calendar
+   *          the calendar used to compute the standard settlement date, not null
+   * @param yieldConvention
+   *          the yield (to maturity) computation convention, not null
+   * @param dayCount
+   *          the yield day count convention, not null
+   * @param issuer
+   *          the bill issuer name, not null
+   * @deprecated Use {@link #BillSecurityDefinition(Currency, ZonedDateTime, double, int, WorkingDayCalendar, YieldConvention, DayCount, String)}.
    */
   @Deprecated
-  public BillSecurityDefinition(final Currency currency, final ZonedDateTime endDate, final double notional, final int settlementDays,
-      final Calendar calendar, final YieldConvention yieldConvention, final DayCount dayCount, final String issuer) {
+  public BillSecurityDefinition(final Currency currency, final ZonedDateTime endDate, final double notional, final int settlementDays, final Calendar calendar,
+      final YieldConvention yieldConvention, final DayCount dayCount, final String issuer) {
     this(currency, endDate, notional, settlementDays, calendar, yieldConvention, dayCount, new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
    * Creates a bill.
-   * @param currency  the bill currency, not null
-   * @param endDate  the bill end or maturity date, not null
-   * @param notional  the nominal amount
-   * @param settlementDays  the standard number of days between trade date and trade settlement
-   * @param calendar  the calendar used to compute the standard settlement date, not null
-   * @param yieldConvention  the yield (to maturity) computation convention, not null
-   * @param dayCount  the yield day count convention, not null
-   * @param issuer  the bill issuer, not null
-   * @deprecated  Use {@link #BillSecurityDefinition(Currency, ZonedDateTime, double, int, WorkingDayCalendar, YieldConvention, DayCount, LegalEntity)}.
+   * 
+   * @param currency
+   *          the bill currency, not null
+   * @param endDate
+   *          the bill end or maturity date, not null
+   * @param notional
+   *          the nominal amount
+   * @param settlementDays
+   *          the standard number of days between trade date and trade settlement
+   * @param calendar
+   *          the calendar used to compute the standard settlement date, not null
+   * @param yieldConvention
+   *          the yield (to maturity) computation convention, not null
+   * @param dayCount
+   *          the yield day count convention, not null
+   * @param issuer
+   *          the bill issuer, not null
+   * @deprecated Use {@link #BillSecurityDefinition(Currency, ZonedDateTime, double, int, WorkingDayCalendar, YieldConvention, DayCount, LegalEntity)}.
    */
   @Deprecated
   public BillSecurityDefinition(final Currency currency, final ZonedDateTime endDate, final double notional, final int settlementDays, final Calendar calendar,
@@ -111,7 +128,7 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
     _endDate = endDate;
     _notional = notional;
     _settlementDays = settlementDays;
-    _calendar = new WorkingDayCalendarAdapter(calendar, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+    _calendar = WorkingDayCalendarAdapter.of(calendar);
     _issuer = issuer;
     _yieldConvention = yieldConvention;
     _dayCount = dayCount;
@@ -119,14 +136,23 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Creates a bill with a legal entity that contains only the issuer name.
-   * @param currency  the bill currency, not null
-   * @param endDate  the bill end or maturity date, not null
-   * @param notional  the nominal amount
-   * @param settlementDays  the standard number of days between trade date and trade settlement
-   * @param calendar  the calendar used to compute the standard settlement date, not null
-   * @param yieldConvention  the yield (to maturity) computation convention, not null
-   * @param dayCount  the yield day count convention, not null
-   * @param issuer  the bill issuer name, not null
+   * 
+   * @param currency
+   *          the bill currency, not null
+   * @param endDate
+   *          the bill end or maturity date, not null
+   * @param notional
+   *          the nominal amount
+   * @param settlementDays
+   *          the standard number of days between trade date and trade settlement
+   * @param calendar
+   *          the calendar used to compute the standard settlement date, not null
+   * @param yieldConvention
+   *          the yield (to maturity) computation convention, not null
+   * @param dayCount
+   *          the yield day count convention, not null
+   * @param issuer
+   *          the bill issuer name, not null
    */
   public BillSecurityDefinition(final Currency currency, final ZonedDateTime endDate, final double notional, final int settlementDays,
       final WorkingDayCalendar calendar, final YieldConvention yieldConvention, final DayCount dayCount, final String issuer) {
@@ -135,14 +161,23 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Creates a bill.
-   * @param currency  the bill currency, not null
-   * @param endDate  the bill end or maturity date, not null
-   * @param notional  the nominal amount
-   * @param settlementDays  the standard number of days between trade date and trade settlement
-   * @param calendar  the calendar used to compute the standard settlement date, not null
-   * @param yieldConvention  the yield (to maturity) computation convention, not null
-   * @param dayCount  the yield day count convention, not null
-   * @param issuer  the bill issuer, not null
+   * 
+   * @param currency
+   *          the bill currency, not null
+   * @param endDate
+   *          the bill end or maturity date, not null
+   * @param notional
+   *          the nominal amount
+   * @param settlementDays
+   *          the standard number of days between trade date and trade settlement
+   * @param calendar
+   *          the calendar used to compute the standard settlement date, not null
+   * @param yieldConvention
+   *          the yield (to maturity) computation convention, not null
+   * @param dayCount
+   *          the yield day count convention, not null
+   * @param issuer
+   *          the bill issuer, not null
    */
   public BillSecurityDefinition(final Currency currency, final ZonedDateTime endDate, final double notional, final int settlementDays,
       final WorkingDayCalendar calendar, final YieldConvention yieldConvention, final DayCount dayCount, final LegalEntity issuer) {
@@ -159,7 +194,8 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Get the bill currency.
-   * @return  the currency
+   * 
+   * @return the currency
    */
   public Currency getCurrency() {
     return _currency;
@@ -167,7 +203,8 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Gets the bill end or maturity date.
-   * @return  the date
+   * 
+   * @return the date
    */
   public ZonedDateTime getEndDate() {
     return _endDate;
@@ -175,7 +212,8 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Gets the notional amount.
-   * @return  the notional
+   * 
+   * @return the notional
    */
   public double getNotional() {
     return _notional;
@@ -183,7 +221,8 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Gets the standard number of days between trade date and trade settlement. Used for price and yield computation.
-   * @return  the number of days between trade date and trade settlement.
+   * 
+   * @return the number of days between trade date and trade settlement.
    */
   public int getSettlementDays() {
     return _settlementDays;
@@ -191,7 +230,8 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Gets the working day calendar used to compute the standard settlement date.
-   * @return  the working day calendar
+   * 
+   * @return the working day calendar
    */
   public WorkingDayCalendar getWorkingDayCalendar() {
     return _calendar;
@@ -199,17 +239,19 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Gets the calendar used to compute the standard settlement date.
-   * @return  the calendar
-   * @deprecated  the calendar type is deprecated
+   * 
+   * @return the calendar
+   * @deprecated the calendar type is deprecated
    */
   @Deprecated
   public Calendar getCalendar() {
-    return new CalendarAdapter(_calendar);
+    return CalendarAdapter.of(_calendar);
   }
 
   /**
    * Gets the yield (to maturity) computation convention.
-   * @return  the convention
+   * 
+   * @return the convention
    */
   public YieldConvention getYieldConvention() {
     return _yieldConvention;
@@ -217,7 +259,8 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Gets the yield day count convention.
-   * @return  the convention
+   * 
+   * @return the convention
    */
   public DayCount getDayCount() {
     return _dayCount;
@@ -225,7 +268,8 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Gets the bill issuer name.
-   * @return  the name
+   * 
+   * @return the name
    */
   public String getIssuer() {
     return _issuer.getShortName();
@@ -233,7 +277,8 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Gets the bill issuer.
-   * @return  the issuer
+   * 
+   * @return the issuer
    */
   public LegalEntity getIssuerEntity() {
     return _issuer;
@@ -254,9 +299,13 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   /**
    * Convert the "Definition" version to the "Derivative" version.
-   * @param date The reference date.
-   * @param settlementDate The bill settlement date.
-   * @param yieldCurveNames The yield curves names. [0] discounting curve, [1] credit curve.
+   * 
+   * @param date
+   *          The reference date.
+   * @param settlementDate
+   *          The bill settlement date.
+   * @param yieldCurveNames
+   *          The yield curves names. [0] discounting curve, [1] credit curve.
    * @return The bill security.
    * @deprecated Use the version without yield curve names
    */
@@ -269,14 +318,17 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
     double settlementTime = TimeCalculator.getTimeBetween(date, settlementDate);
     settlementTime = Math.max(settlementTime, 0.0);
     final double endTime = TimeCalculator.getTimeBetween(date, _endDate);
-    final double accrualFactor = _dayCount.getDayCountFraction(settlementDate, _endDate, new CalendarAdapter(_calendar));
+    final double accrualFactor = _dayCount.getDayCountFraction(settlementDate, _endDate, CalendarAdapter.of(_calendar));
     return new BillSecurity(_currency, settlementTime, endTime, _notional, _yieldConvention, accrualFactor, _issuer, yieldCurveNames[1], yieldCurveNames[0]);
   }
 
   /**
    * Convert the "Definition" version to the "Derivative" version.
-   * @param date The reference date.
-   * @param settlementDate The bill settlement date.
+   * 
+   * @param date
+   *          The reference date.
+   * @param settlementDate
+   *          The bill settlement date.
    * @return The bill security.
    */
   public BillSecurity toDerivative(final ZonedDateTime date, final ZonedDateTime settlementDate) {
@@ -286,12 +338,13 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
     double settlementTime = TimeCalculator.getTimeBetween(date, settlementDate);
     settlementTime = Math.max(settlementTime, 0.0);
     final double endTime = TimeCalculator.getTimeBetween(date, _endDate);
-    final double accrualFactor = _dayCount.getDayCountFraction(settlementDate, _endDate, new CalendarAdapter(_calendar));
+    final double accrualFactor = _dayCount.getDayCountFraction(settlementDate, _endDate, CalendarAdapter.of(_calendar));
     return new BillSecurity(_currency, settlementTime, endTime, _notional, _yieldConvention, accrualFactor, _issuer);
   }
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -300,7 +353,7 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(yieldCurveNames, "yieldCurveNames");
     ArgumentChecker.isTrue(!date.isAfter(_endDate), "Reference date {} is after end date {}", date, _endDate);
-    ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(date, _settlementDays, new CalendarAdapter(_calendar));
+    ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(date, _settlementDays, CalendarAdapter.of(_calendar));
     settlementDate = settlementDate.isAfter(_endDate) ? _endDate : settlementDate;
     return toDerivative(date, settlementDate, yieldCurveNames);
   }
@@ -309,7 +362,7 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
   public BillSecurity toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.isTrue(!date.isAfter(_endDate), "Reference date {} is after end date {}", date, _endDate);
-    ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(date, _settlementDays, new CalendarAdapter(_calendar));
+    ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(date, _settlementDays, CalendarAdapter.of(_calendar));
     settlementDate = settlementDate.isAfter(_endDate) ? _endDate : settlementDate;
     return toDerivative(date, settlementDate);
   }

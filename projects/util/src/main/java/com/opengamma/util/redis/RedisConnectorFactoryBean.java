@@ -1,14 +1,14 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.redis;
 
-import redis.clients.jedis.JedisPoolConfig;
-
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.SingletonFactoryBean;
+
+import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * Factory bean to provide Redis database connectors.
@@ -44,10 +44,10 @@ public class RedisConnectorFactoryBean extends SingletonFactoryBean<RedisConnect
    * Creates an instance based on an existing connector.
    * <p>
    * This copies the name, host and port.
-   * 
+   *
    * @param base  the base connector to copy, not null
    */
-  public RedisConnectorFactoryBean(RedisConnector base) {
+  public RedisConnectorFactoryBean(final RedisConnector base) {
     setName(base.getName());
     setHost(base.getHost());
     setPort(base.getPort());
@@ -59,15 +59,15 @@ public class RedisConnectorFactoryBean extends SingletonFactoryBean<RedisConnect
     return _name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     _name = name;
   }
-  
+
   public String getHost() {
     return _host;
   }
 
-  public void setHost(String host) {
+  public void setHost(final String host) {
     _host = host;
   }
 
@@ -75,10 +75,10 @@ public class RedisConnectorFactoryBean extends SingletonFactoryBean<RedisConnect
     return _port;
   }
 
-  public void setPort(int port) {
+  public void setPort(final int port) {
     _port = port;
   }
-  
+
   /**
    * Gets the config.
    * @return the config
@@ -91,7 +91,7 @@ public class RedisConnectorFactoryBean extends SingletonFactoryBean<RedisConnect
    * Sets the config.
    * @param config  the config
    */
-  public void setConfig(JedisPoolConfig config) {
+  public void setConfig(final JedisPoolConfig config) {
     _config = config;
   }
 

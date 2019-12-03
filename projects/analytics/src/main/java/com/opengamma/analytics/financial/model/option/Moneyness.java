@@ -6,19 +6,19 @@
 package com.opengamma.analytics.financial.model.option;
 
 /**
- * 
+ *
  */
 public enum Moneyness {
   /**
-   * In-the-money 
+   * In-the-money.
    */
   ITM,
   /**
-   * At-the-money
+   * At-the-money.
    */
   ATM,
   /**
-   * Out-of-the-money
+   * Out-of-the-money.
    */
   OTM
 }

@@ -57,12 +57,12 @@ public class WebRegionData extends WebPerRequestData {
    * The parents of the region.
    */
   @PropertyDefinition
-  private List<RegionDocument> _regionParents = new ArrayList<RegionDocument>();
+  private List<RegionDocument> _regionParents = new ArrayList<>();
   /**
    * The children of the region.
    */
   @PropertyDefinition
-  private List<RegionDocument> _regionChildren = new ArrayList<RegionDocument>();
+  private List<RegionDocument> _regionChildren = new ArrayList<>();
   /**
    * The versioned region.
    */

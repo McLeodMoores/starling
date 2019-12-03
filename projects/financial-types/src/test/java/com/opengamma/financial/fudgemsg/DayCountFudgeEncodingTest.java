@@ -5,7 +5,7 @@
  */
 package com.opengamma.financial.fudgemsg;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import org.fudgemsg.UnmodifiableFudgeField;
 import org.fudgemsg.wire.types.FudgeWireType;
@@ -22,17 +22,22 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class DayCountFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  private static final DayCount s_ref = DayCounts.ACT_360;
+  private static final DayCount REF = DayCounts.ACT_360;
 
+  /**
+   *
+   */
   @Test
   public void testCycle() {
-    assertEquals(s_ref, cycleObject(DayCount.class, s_ref));
+    assertEquals(REF, cycleObject(DayCount.class, REF));
   }
 
+  /**
+   *
+   */
   @Test
   public void testFromString() {
-    assertEquals(s_ref, getFudgeContext().getFieldValue(DayCount.class,
-        UnmodifiableFudgeField.of(FudgeWireType.STRING, s_ref.getName())));
+    assertEquals(REF, getFudgeContext().getFieldValue(DayCount.class, UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.getName())));
   }
 
 }

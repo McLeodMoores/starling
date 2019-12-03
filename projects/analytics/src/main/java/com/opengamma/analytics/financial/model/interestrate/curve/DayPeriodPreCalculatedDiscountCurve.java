@@ -14,7 +14,7 @@ import com.opengamma.util.time.DateUtils;
  * over a number of years, rendering all calls to obtain discount factors
  * to an array lookup. If {@link #preCalculateDiscountFactors(int)} is not called,
  * this class behaves precisely as a normal {@link DiscountCurve}.
- * <p/>
+ * <p>
  * This is <em>not</em> a general purpose class, and is only appropriate when
  * the following constraints are met:
  * <ul>
@@ -27,10 +27,10 @@ import com.opengamma.util.time.DateUtils;
  *       with the same curve object to warrant the pre-computation.</li>
  *   <li>No extrapolation is required.</li>
  * </ul>
- * <p/>
+ * <p>
  * Given these caveats, this class should only be used in cases where performance testing
  * and constraints on the problem domain warrant developers using this class.
- * <p/>
+ * <p>
  * For more information, see <a href="http://jira.opengamma.com/browse/PLAT-4688">PLAT-4688</a>.
  */
 public class DayPeriodPreCalculatedDiscountCurve extends DiscountCurve {

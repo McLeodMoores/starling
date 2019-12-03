@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.core.holiday.impl;
 
@@ -39,7 +39,7 @@ public class SimpleHolidayWithWeekend extends SimpleHoliday implements WeekendTy
   /**
    * The weekend type.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private WeekendType _weekendType;
 
   /**
@@ -47,6 +47,7 @@ public class SimpleHolidayWithWeekend extends SimpleHoliday implements WeekendTy
    */
   public SimpleHolidayWithWeekend() {
     super();
+    setWeekendType(WeekendType.SATURDAY_SUNDAY);
   }
 
   /**
@@ -84,6 +85,7 @@ public class SimpleHolidayWithWeekend extends SimpleHoliday implements WeekendTy
    * Gets the weekend type.
    * @return the value of the property, not null
    */
+  @Override
   public WeekendType getWeekendType() {
     return _weekendType;
   }

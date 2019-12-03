@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -21,7 +21,7 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * The stock price, S_t, is given by S_t = (F_t-D_t)X_t + D_t where F_t is the forward, D_t is the discounted value of future dividend payments
- * and X_t is the "pure stock price" process. See Buehler, Hans. Volatility and Dividends 
+ * and X_t is the "pure stock price" process. See Buehler, Hans. Volatility and Dividends
  */
 @Test(groups = TestGroup.UNIT)
 public class PureStockPriceImpliedVolTest {
@@ -45,7 +45,7 @@ public class PureStockPriceImpliedVolTest {
 
   static {
     for (int i = 0; i < N_DIVS; i++) {
-      double t = 0.1 + 0.5 * i;
+      final double t = 0.1 + 0.5 * i;
       TAU[i] = t;
     }
     //  Arrays.fill(ALPHA, 0.1);
@@ -58,11 +58,11 @@ public class PureStockPriceImpliedVolTest {
     //    Arrays.fill(BETA, 10, N_DIVS, 0.02);
     R = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(Double t) {
+      public Double evaluate(final Double t) {
         int index = 0;
         double prod = Math.exp(t * RISK_FREE_RATE);
         while (index < N_DIVS && t >= TAU[index]) {
-          prod *= (1 - BETA[index]);
+          prod *= 1 - BETA[index];
           index++;
         }
         return prod;
@@ -71,7 +71,7 @@ public class PureStockPriceImpliedVolTest {
 
     D = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(Double t) {
+      public Double evaluate(final Double t) {
         final double r_t = R.evaluate(t);
         double sum = 0.0;
         for (int index = 0; index < N_DIVS; index++) {
@@ -85,7 +85,7 @@ public class PureStockPriceImpliedVolTest {
 
     F = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(Double t) {
+      public Double evaluate(final Double t) {
         final double r_t = R.evaluate(t);
         double sum = 0.0;
         for (int index = 0; index < N_DIVS; index++) {
@@ -97,10 +97,10 @@ public class PureStockPriceImpliedVolTest {
       }
     };
 
-    Function<Double, Double> price = new Function<Double, Double>() {
+    final Function<Double, Double> price = new Function<Double, Double>() {
 
       @Override
-      public Double evaluate(Double... tk) {
+      public Double evaluate(final Double... tk) {
         final double t = tk[0];
         final double k = tk[1];
         final double f = F.evaluate(t);
@@ -121,10 +121,10 @@ public class PureStockPriceImpliedVolTest {
   public void printForward() {
     System.out.println("PureStockPriceImpliedVolTest.printForward");
     for (int i = 0; i < 101; i++) {
-      double t = 0.7 * i / 100.;
-      double f = F.evaluate(t);
-      double d = D.evaluate(t);
-      double r = R.evaluate(t);
+      final double t = 0.7 * i / 100.;
+      final double f = F.evaluate(t);
+      final double d = D.evaluate(t);
+      final double r = R.evaluate(t);
       System.out.println(t + "\t" + f + "\t" + d + "\t" + r);
     }
   }
@@ -136,7 +136,7 @@ public class PureStockPriceImpliedVolTest {
     final Function<Double, Double> pureImpVolFunc = new Function<Double, Double>() {
 
       @Override
-      public Double evaluate(Double... tx) {
+      public Double evaluate(final Double... tx) {
         final double t = tx[0];
         final double x = tx[1];
         final boolean isCall = x > 1.0;
@@ -160,7 +160,7 @@ public class PureStockPriceImpliedVolTest {
     final Function<Double, Double> impVolFunc = new Function<Double, Double>() {
 
       @Override
-      public Double evaluate(Double... tk) {
+      public Double evaluate(final Double... tk) {
         final double t = tk[0];
         final double k = tk[1];
         final double f = F.evaluate(t);
@@ -185,7 +185,7 @@ public class PureStockPriceImpliedVolTest {
     final Function<Double, Double> impVolFunc = new Function<Double, Double>() {
 
       @Override
-      public Double evaluate(Double... tx) {
+      public Double evaluate(final Double... tx) {
         final double t = tx[0];
         final double k = tx[1];
         final double f = F.evaluate(t);
@@ -286,7 +286,7 @@ public class PureStockPriceImpliedVolTest {
     final double impVol = 0.4;
     final Function<Double, Double> pureImpVolFunc = new Function<Double, Double>() {
       @Override
-      public Double evaluate(Double... tx) {
+      public Double evaluate(final Double... tx) {
         final double t = tx[0];
         final double x = tx[1];
         final boolean isCall = x > 1.0;
@@ -300,7 +300,7 @@ public class PureStockPriceImpliedVolTest {
 
     final Function<Double, Double> impVolFunc = new Function<Double, Double>() {
       @Override
-      public Double evaluate(Double... tk) {
+      public Double evaluate(final Double... tk) {
         final double t = tk[0];
         final double k = tk[1];
         final double f = F.evaluate(t);
@@ -325,7 +325,7 @@ public class PureStockPriceImpliedVolTest {
 
     final Function1D<Double, Double> integral = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(Double k) {
+      public Double evaluate(final Double k) {
         final double price = OTM_PRICE_SURFACE.getZValue(expiry, k);
         return price / k / k;
       }
@@ -335,7 +335,7 @@ public class PureStockPriceImpliedVolTest {
     double var = DEFAULT_INTEGRATOR.integrate(integral, 0.01 * f, 10.0 * f);
     int index = 0;
     while (index < N_DIVS && TAU[index] <= expiry) {
-      double temp = correction(index);
+      final double temp = correction(index);
       System.out.println("correction " + index + " " + temp + " " + var);
       var -= temp;
       index++;
@@ -349,14 +349,14 @@ public class PureStockPriceImpliedVolTest {
     final double expiry = TAU[index];
     final Function1D<Double, Double> integral = new Function1D<Double, Double>() {
       @Override
-      public Double evaluate(Double k) {
+      public Double evaluate(final Double k) {
         final double price = OTM_PRICE_SURFACE.getZValue(expiry, k);
         final double dPP = dPPrime(k, index);
         return price * dPP;
       }
     };
     double res = DEFAULT_INTEGRATOR.integrate(integral, 0.1, 1000.0);
-    double f = F.evaluate(expiry);
+    final double f = F.evaluate(expiry);
     res += d(f, index);
     return res;
   }
@@ -393,7 +393,7 @@ public class PureStockPriceImpliedVolTest {
     final double hPrime = hPrime(x, index);
     final double hPPrime = hPPrime(x, index);
     final double temp = x + ALPHA[index];
-    double res = -1 / x / x + 1 / temp / temp + (1 - 2 * h) * hPPrime - 2 * hPrime * hPrime;
+    final double res = -1 / x / x + 1 / temp / temp + (1 - 2 * h) * hPPrime - 2 * hPrime * hPrime;
     return res;
   }
 

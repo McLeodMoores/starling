@@ -31,39 +31,39 @@ import com.opengamma.financial.security.swap.ZeroCouponInflationSwapSecurity;
  *
  */
 public enum InterestRateInstrumentType {
-  /** A swap, one fixed leg, one floating referenced to an ibor rate */
+  /** A swap, one fixed leg, one floating referenced to an ibor rate. */
   SWAP_FIXED_IBOR,
-  /** A swap, one fixed leg, one floating referenced to an ibor rate and spread, paying fixed */
+  /** A swap, one fixed leg, one floating referenced to an ibor rate and spread, paying fixed. */
   SWAP_FIXED_IBOR_WITH_SPREAD,
-  /** A swap, two floating legs referenced to ibor rates */
+  /** A swap, two floating legs referenced to ibor rates. */
   SWAP_IBOR_IBOR,
-  /** A swap, one fixed leg, one CMS leg */
+  /** A swap, one fixed leg, one CMS leg. */
   SWAP_FIXED_CMS,
-  /** A swap, one ibor leg, one CMS leg */
+  /** A swap, one ibor leg, one CMS leg. */
   SWAP_IBOR_CMS,
-  /** A swap, one ibor leg, one CMS leg */
+  /** A swap, one ibor leg, one CMS leg. */
   SWAP_IBOR_OIS,
-  /** A swap, one ibor leg, one OIS leg */
+  /** A swap, one ibor leg, one OIS leg. */
   SWAP_CMS_CMS,
-  /** A swap, one fixed leg, one OIS leg */
+  /** A swap, one fixed leg, one OIS leg. */
   SWAP_FIXED_OIS,
-  /** A cross-currency swap */
+  /** A cross-currency swap. */
   SWAP_CROSS_CURRENCY,
-  /** Cash */
-  CASH, //TODO do we need ibor, deposit, OIS?
-  /** Cashflow */
+  /** Cash. */
+  CASH, // TODO do we need ibor, deposit, OIS?
+  /** Cashflow. */
   CASHFLOW,
-  /** FRA */
+  /** FRA. */
   FRA,
-  /** Interest rate future */
+  /** Interest rate future. */
   IR_FUTURE,
-  /** Fed fund future */
+  /** Fed fund future. */
   FED_FUND_FUTURE,
-  /** Coupon bond */
+  /** Coupon bond. */
   COUPON_BOND,
-  /** Bond future */
+  /** Bond future. */
   BOND_FUTURE,
-  /** Zero coupon inflation swap */
+  /** Zero coupon inflation swap. */
   ZERO_COUPON_INFLATION_SWAP;
 
   @SuppressWarnings("synthetic-access")

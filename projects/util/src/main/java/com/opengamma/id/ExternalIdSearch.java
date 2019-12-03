@@ -7,7 +7,6 @@ package com.opengamma.id;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -21,10 +20,10 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
@@ -64,7 +63,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
    * This uses {@link ExternalIdSearchType#ANY}.
    * <p>
    * This search will not match anything.
-   * 
+   *
    * @return the external identifier search, not null
    */
   public static ExternalIdSearch of() {
@@ -75,23 +74,23 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
    * Creates a search matching any of a collection of identifiers.
    * <p>
    * This uses {@link ExternalIdSearchType#ANY}.
-   * 
+   *
    * @param externalIds  the identifiers, not null
    * @return the external identifier search, not null
    */
-  public static ExternalIdSearch of(ExternalId... externalIds) {
+  public static ExternalIdSearch of(final ExternalId... externalIds) {
     ArgumentChecker.noNulls(externalIds, "externalIds");
     return new ExternalIdSearch(ExternalIdSearchType.ANY, Arrays.asList(externalIds));
   }
 
   /**
    * Creates a search of the specified type matching a collection of identifiers.
-   * 
+   *
    * @param searchType  the search type, not null
    * @param externalIds  the identifiers, not null
    * @return the external identifier search, not null
    */
-  public static ExternalIdSearch of(ExternalIdSearchType searchType, ExternalId... externalIds) {
+  public static ExternalIdSearch of(final ExternalIdSearchType searchType, final ExternalId... externalIds) {
     ArgumentChecker.noNulls(externalIds, "externalIds");
     return new ExternalIdSearch(searchType, Arrays.asList(externalIds));
   }
@@ -100,33 +99,33 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
    * Creates a search matching any of a collection of identifiers.
    * <p>
    * This uses {@link ExternalIdSearchType#ANY}.
-   * 
+   *
    * @param externalIds  the collection of identifiers, not null
    * @return the external identifier search, not null
    */
-  public static ExternalIdSearch of(Iterable<ExternalId> externalIds) {
+  public static ExternalIdSearch of(final Iterable<ExternalId> externalIds) {
     return new ExternalIdSearch(ExternalIdSearchType.ANY, externalIds);
   }
 
   /**
    * Creates a search of the specified type matching a collection of identifiers.
-   * 
+   *
    * @param searchType  the search type, not null
    * @param externalIds  the collection of identifiers, not null
    * @return the external identifier search, not null
    */
-  public static ExternalIdSearch of(ExternalIdSearchType searchType, Iterable<ExternalId> externalIds) {
+  public static ExternalIdSearch of(final ExternalIdSearchType searchType, final Iterable<ExternalId> externalIds) {
     return new ExternalIdSearch(searchType, externalIds);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates a search matching any of a collection of identifiers.
-   * 
+   *
    * @param searchType  the search type, not null
    * @param externalIds  the collection of identifiers, not null
    */
-  private ExternalIdSearch(ExternalIdSearchType searchType, Iterable<ExternalId> externalIds) {
+  private ExternalIdSearch(final ExternalIdSearchType searchType, final Iterable<ExternalId> externalIds) {
     ArgumentChecker.notNull(searchType, "searchType");
     ArgumentChecker.noNulls(externalIds, "externalIds");
     _externalIds = ImmutableSet.copyOf(externalIds);
@@ -138,13 +137,13 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
    * Returns a copy of this search with an additional identifier to search for.
    * <p>
    * This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param externalId  the identifier to add, not null
    * @return the external identifier search with the specified identifier, not null
    */
-  public ExternalIdSearch withExternalIdAdded(ExternalId externalId) {
+  public ExternalIdSearch withExternalIdAdded(final ExternalId externalId) {
     ArgumentChecker.notNull(externalId, "externalId");
-    Set<ExternalId> ids = Sets.newHashSet(_externalIds);
+    final Set<ExternalId> ids = Sets.newHashSet(_externalIds);
     ids.add(externalId);
     return new ExternalIdSearch(_searchType, ids);
   }
@@ -153,13 +152,13 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
    * Returns a copy of this search with additional identifiers to search for.
    * <p>
    * This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param externalIds  the identifiers to add, not null
    * @return the external identifier search with the specified identifier, not null
    */
-  public ExternalIdSearch withExternalIdsAdded(ExternalId... externalIds) {
+  public ExternalIdSearch withExternalIdsAdded(final ExternalId... externalIds) {
     ArgumentChecker.noNulls(externalIds, "externalIds");
-    Set<ExternalId> ids = Sets.newHashSet(_externalIds);
+    final Set<ExternalId> ids = Sets.newHashSet(_externalIds);
     Iterables.addAll(ids, Arrays.asList(externalIds));
     return new ExternalIdSearch(_searchType, ids);
   }
@@ -168,13 +167,13 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
    * Returns a copy of this search with additional identifiers to search for.
    * <p>
    * This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param externalIds  the identifiers to add, not null
    * @return the external identifier search with the specified identifier, not null
    */
-  public ExternalIdSearch withExternalIdsAdded(Iterable<ExternalId> externalIds) {
+  public ExternalIdSearch withExternalIdsAdded(final Iterable<ExternalId> externalIds) {
     ArgumentChecker.noNulls(externalIds, "externalIds");
-    Set<ExternalId> ids = Sets.newHashSet(_externalIds);
+    final Set<ExternalId> ids = Sets.newHashSet(_externalIds);
     Iterables.addAll(ids, externalIds);
     return new ExternalIdSearch(_searchType, ids);
   }
@@ -183,26 +182,26 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
    * Returns a copy of this search with the identifier removed.
    * <p>
    * This instance is immutable and unaffected by this method call.
-   * 
+   *
    * @param externalId  the identifier to remove, null ignored
    * @return the external identifier search with the specified identifier removed, not null
    */
-  public ExternalIdSearch withExternalIdRemoved(ExternalId externalId) {
-    if (externalId == null || contains(externalId) == false) {
+  public ExternalIdSearch withExternalIdRemoved(final ExternalId externalId) {
+    if (externalId == null || !contains(externalId)) {
       return this;
     }
-    Set<ExternalId> ids = Sets.newHashSet(_externalIds);
+    final Set<ExternalId> ids = Sets.newHashSet(_externalIds);
     ids.remove(externalId);
     return new ExternalIdSearch(_searchType, ids);
   }
 
   /**
    * Returns a copy of this search with the specified search type.
-   * 
+   *
    * @param searchType  the new search type, not null
    * @return a copy of this search with the new search type, not null
    */
-  public ExternalIdSearch withSearchType(ExternalIdSearchType searchType) {
+  public ExternalIdSearch withSearchType(final ExternalIdSearchType searchType) {
     if (searchType == _searchType) {
       return this;
     }
@@ -212,7 +211,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   //-------------------------------------------------------------------------
   /**
    * Gets the number of identifiers.
-   * 
+   *
    * @return the bundle size, zero or greater
    */
   public int size() {
@@ -221,9 +220,10 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Returns an iterator over the identifiers.
-   * 
+   *
    * @return the identifiers, not null
    */
+  @Override
   public Iterator<ExternalId> iterator() {
     return _externalIds.iterator();
   }
@@ -232,15 +232,16 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   /**
    * Checks if this search matches the identifier.
    * <p>
-   * An EXACT match returns true if there is one stored identifier and it is equal to the passed in identifier.<br />
-   * An ALL match returns true if this is empty or has a single identifier equal to the input.<br />
-   * An ANY match returns true if the passed in identifier matches any of the stored identifiers.<br />
-   * A NONE match returns true if the passed in identifier does not match any stored identifier.<br />
-   * 
-   * @param otherId  the identifier to search for, not null
+   * An EXACT match returns true if there is one stored identifier and it is equal to the passed in identifier.<br >
+   * An ALL match returns true if this is empty or has a single identifier equal to the input.<br >
+   * An ANY match returns true if the passed in identifier matches any of the stored identifiers.<br >
+   * A NONE match returns true if the passed in identifier does not match any stored identifier.<br >
+   *
+   * @param otherId
+   *          the identifier to search for, not null
    * @return true if this search contains all of the keys specified
    */
-  public boolean matches(ExternalId otherId) {
+  public boolean matches(final ExternalId otherId) {
     ArgumentChecker.notNull(otherId, "otherId");
     switch (_searchType) {
       case EXACT:
@@ -250,23 +251,25 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
       case ANY:
         return contains(otherId);
       case NONE:
-        return contains(otherId) == false;
+        return !contains(otherId);
+      default:
+        return false;
     }
-    return false;
   }
 
   /**
    * Checks if this search matches the identifiers.
    * <p>
-   * An EXACT match returns true if the passed in identifiers are the same set as the stored identifiers.<br />
-   * An ALL match returns true if the passed in identifiers match are a superset or equal the stored identifiers.<br />
-   * An ANY match returns true if the passed in identifiers match any of the stored identifiers.<br />
-   * A NONE match returns true if none of the passed in identifiers match a stored identifier.<br />
-   * 
-   * @param otherId  the identifiers to search for, empty returns true, not null
+   * An EXACT match returns true if the passed in identifiers are the same set as the stored identifiers.<br >
+   * An ALL match returns true if the passed in identifiers match are a superset or equal the stored identifiers.<br >
+   * An ANY match returns true if the passed in identifiers match any of the stored identifiers.<br >
+   * A NONE match returns true if none of the passed in identifiers match a stored identifier.<br >
+   *
+   * @param otherId
+   *          the identifiers to search for, empty returns true, not null
    * @return true if this search contains all of the keys specified
    */
-  public boolean matches(Iterable<ExternalId> otherId) {
+  public boolean matches(final Iterable<ExternalId> otherId) {
     ArgumentChecker.notNull(otherId, "otherId");
     switch (_searchType) {
       case EXACT:
@@ -276,9 +279,10 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
       case ANY:
         return containsAny(otherId);
       case NONE:
-        return containsAny(otherId) == false;
+        return !containsAny(otherId);
+      default:
+        return false;
     }
-    return false;
   }
 
   //-------------------------------------------------------------------------
@@ -288,14 +292,14 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
    * This is the opposite check to the ALL search type in {@code matches()}.
    * This method checks if this is a superset or equal to the passed in identifiers.
    * The ALL check checks the superset the other way around.
-   * 
+   *
    * @param otherId  the identifiers to search for, empty returns true, not null
    * @return true if this search contains all of the keys specified
    */
-  public boolean containsAll(Iterable<ExternalId> otherId) {
+  public boolean containsAll(final Iterable<ExternalId> otherId) {
     ArgumentChecker.notNull(otherId, "otherId");
-    for (ExternalId identifier : otherId) {
-      if (_externalIds.contains(identifier) == false) {
+    for (final ExternalId identifier : otherId) {
+      if (!_externalIds.contains(identifier)) {
         return false;
       }
     }
@@ -304,13 +308,13 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Checks if this search contains any key from the specified identifiers.
-   * 
+   *
    * @param otherId  the identifiers to search for, empty returns false, not null
    * @return true if this search contains any of the keys specified
    */
-  public boolean containsAny(Iterable<ExternalId> otherId) {
+  public boolean containsAny(final Iterable<ExternalId> otherId) {
     ArgumentChecker.notNull(otherId, "otherId");
-    for (ExternalId identifier : otherId) {
+    for (final ExternalId identifier : otherId) {
       if (_externalIds.contains(identifier)) {
         return true;
       }
@@ -320,18 +324,18 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Checks if this search contains the specified key.
-   * 
+   *
    * @param externalId  the key to search for, null returns false
    * @return true if this search contains the specified key
    */
-  public boolean contains(ExternalId externalId) {
+  public boolean contains(final ExternalId externalId) {
     return externalId != null && _externalIds.contains(externalId);
   }
 
   //-------------------------------------------------------------------
   /**
    * Checks if the specified instance can match anything.
-   * 
+   *
    * @param idSearch  the identifier search, null returns true
    * @return true if the search can match anything
    */
@@ -347,11 +351,11 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
 
   /**
    * Checks if this search always matches.
-   * 
+   *
    * @return true if the search always matches
    */
   public boolean alwaysMatches() {
-    return (getSearchType() == ExternalIdSearchType.NONE && size() == 0);
+    return getSearchType() == ExternalIdSearchType.NONE && size() == 0;
   }
 
   //------------------------- AUTOGENERATED START -------------------------
@@ -418,8 +422,8 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ExternalIdSearch other = (ExternalIdSearch) obj;
-      return JodaBeanUtils.equal(getExternalIds(), other.getExternalIds()) &&
-          JodaBeanUtils.equal(getSearchType(), other.getSearchType());
+      return JodaBeanUtils.equal(_externalIds, other._externalIds) &&
+          JodaBeanUtils.equal(_searchType, other._searchType);
     }
     return false;
   }
@@ -427,8 +431,8 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getExternalIds());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSearchType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_externalIds);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_searchType);
     return hash;
   }
 
@@ -436,8 +440,8 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   public String toString() {
     StringBuilder buf = new StringBuilder(96);
     buf.append("ExternalIdSearch{");
-    buf.append("externalIds").append('=').append(getExternalIds()).append(',').append(' ');
-    buf.append("searchType").append('=').append(JodaBeanUtils.toString(getSearchType()));
+    buf.append("externalIds").append('=').append(_externalIds).append(',').append(' ');
+    buf.append("searchType").append('=').append(JodaBeanUtils.toString(_searchType));
     buf.append('}');
     return buf.toString();
   }
@@ -547,7 +551,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   /**
    * The bean-builder for {@code ExternalIdSearch}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<ExternalIdSearch> {
+  private static final class Builder extends DirectPrivateBeanBuilder<ExternalIdSearch> {
 
     private Set<ExternalId> _externalIds = ImmutableSet.of();
     private ExternalIdSearchType _searchType;
@@ -556,6 +560,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -584,30 +589,6 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

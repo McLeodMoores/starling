@@ -14,21 +14,22 @@ import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Energy future option definition
+ * Energy future option definition.
  */
 public class EnergyFutureOptionDefinition extends CommodityFutureOptionDefinition<EnergyFutureDefinition, EnergyFutureOption> {
 
   /**
-   * Constructor for future options
+   * Constructor for future options.
    *
-   * @param expiryDate is the time and the day that a particular delivery month of a futures contract stops trading, as well as the final settlement price for that contract.
+   * @param expiryDate is the time and the day that a particular delivery month of a futures contract stops trading,
+   * as well as the final settlement price for that contract.
    * @param underlying Underlying future
    * @param strike Strike price
    * @param exerciseType Exercise type - European or American
    * @param isCall Call if true, Put if false
    */
-  public EnergyFutureOptionDefinition(final ZonedDateTime expiryDate, final EnergyFutureDefinition underlying, final double strike, final ExerciseDecisionType exerciseType,
-      final boolean isCall) {
+  public EnergyFutureOptionDefinition(final ZonedDateTime expiryDate, final EnergyFutureDefinition underlying,
+      final double strike, final ExerciseDecisionType exerciseType, final boolean isCall) {
     super(expiryDate, underlying, strike, exerciseType, isCall);
   }
 

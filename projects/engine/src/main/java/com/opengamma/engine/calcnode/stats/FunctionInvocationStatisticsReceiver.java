@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -32,7 +32,7 @@ public class FunctionInvocationStatisticsReceiver implements FudgeMessageReceive
 
   /**
    * Creates an instance wrapping an underlying function cost instance.
-   * 
+   *
    * @param underlying  the underlying function cost, not null
    */
   public FunctionInvocationStatisticsReceiver(final FunctionCosts underlying) {
@@ -43,7 +43,7 @@ public class FunctionInvocationStatisticsReceiver implements FudgeMessageReceive
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying function cost.
-   * 
+   *
    * @return the function cost, not null
    */
   public FunctionCosts getUnderlying() {
@@ -53,7 +53,7 @@ public class FunctionInvocationStatisticsReceiver implements FudgeMessageReceive
   //-------------------------------------------------------------------------
   /**
    * Handle a message.
-   * 
+   *
    * @param underlying  the underlying function cost, not null
    * @param invocations  the invocations to handle, not null
    * @return the scaling factor, null if no remote invocation cost
@@ -61,9 +61,9 @@ public class FunctionInvocationStatisticsReceiver implements FudgeMessageReceive
   public static Scaling messageReceived(final FunctionCosts underlying, final Invocations invocations) {
     double remoteInvocationCost = 0;
     double localInvocationCost = 0;
-    for (PerConfiguration configuration : invocations.getConfiguration()) {
+    for (final PerConfiguration configuration : invocations.getConfiguration()) {
       final FunctionCostsPerConfiguration configurationStats = underlying.getStatistics(configuration.getConfiguration());
-      for (PerFunction function : configuration.getFunction()) {
+      for (final PerFunction function : configuration.getFunction()) {
         final FunctionInvocationStatistics statistics = configurationStats.getStatistics(function.getIdentifier());
         localInvocationCost += statistics.getInvocationCost();
         statistics.recordInvocation(function.getCount(), function.getInvocation(), function.getDataInput(), function.getDataOutput());
@@ -72,9 +72,8 @@ public class FunctionInvocationStatisticsReceiver implements FudgeMessageReceive
     }
     if (remoteInvocationCost > 0) {
       return new Scaling(localInvocationCost / remoteInvocationCost);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override

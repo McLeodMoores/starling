@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.position.impl;
@@ -37,43 +37,42 @@ import com.opengamma.util.PublicSPI;
 /**
  * An abstract PositionSource built on top of an underlying master with possibly a PositionMaster and or PositionSource to
  * resolve the positions in the portfolio.
- * 
+ *
  */
 @PublicSPI
 public abstract class AbstractMasterPositionSource implements PositionSource {
-  
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractMasterPositionSource.class);
-  
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractMasterPositionSource.class);
+
   private final PortfolioMaster _portfolioMaster;
-  
-  public AbstractMasterPositionSource(PortfolioMaster portfolioMaster) {
+
+  public AbstractMasterPositionSource(final PortfolioMaster portfolioMaster) {
     ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
-    
+
     _portfolioMaster = portfolioMaster;
   }
-  
+
   /**
    * Get collection of Position referenced in the Portfolio.
-   * 
+   *
    * @param positionSearch the positionSearch populated with positionIds referenced in the portfolio.
    * @return the collection of positions referenced in the portfolio, not-null.
    */
   protected abstract Collection<Position> positions(PositionSearchRequest positionSearch);
-  
+
   protected abstract ChangeProvider[] changeProviders();
 
   @Override
   public ChangeManager changeManager() {
-    ChangeProvider[] changeProviders = changeProviders();
+    final ChangeProvider[] changeProviders = changeProviders();
     if (changeProviders != null) {
       return new PassthroughChangeManager(changeProviders());
-    } else {
-      return DummyChangeManager.INSTANCE;
     }
+    return DummyChangeManager.INSTANCE;
   }
-  
+
   @Override
-  public Portfolio getPortfolio(UniqueId uniqueId, VersionCorrection versionCorrection) {
+  public Portfolio getPortfolio(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     final ManageablePortfolio manPrt = getPortfolioMaster().get(uniqueId).getPortfolio();
     final SimplePortfolio prt = new SimplePortfolio(manPrt.getUniqueId(), manPrt.getName());
@@ -81,7 +80,7 @@ public abstract class AbstractMasterPositionSource implements PositionSource {
     copyAttributes(manPrt, prt);
     return prt;
   }
-  
+
   /**
    * Converts a manageable node to a source node.
    *
@@ -96,9 +95,9 @@ public abstract class AbstractMasterPositionSource implements PositionSource {
     if (positionCount > 0) {
       positionCache = Maps.newHashMapWithExpectedSize(positionCount);
       positionSearch.setVersionCorrection(versionCorrection);
-      Collection<Position> positions = positions(positionSearch);
+      final Collection<Position> positions = positions(positionSearch);
       if (positions != null) {
-        for (Position position : positions) {
+        for (final Position position : positions) {
           positionCache.put(position.getUniqueId().getObjectId(), position);
         }
       }
@@ -107,10 +106,10 @@ public abstract class AbstractMasterPositionSource implements PositionSource {
     }
     convertNode(manNode, sourceNode, positionCache);
   }
-  
-  
-  
-  private void copyAttributes(final ManageablePortfolio manPrt, final SimplePortfolio prt) {
+
+
+
+  private static void copyAttributes(final ManageablePortfolio manPrt, final SimplePortfolio prt) {
     if (manPrt.getAttributes() != null) {
       for (final Entry<String, String> entry : manPrt.getAttributes().entrySet()) {
         if (entry.getKey() != null && entry.getValue() != null) {
@@ -119,7 +118,7 @@ public abstract class AbstractMasterPositionSource implements PositionSource {
       }
     }
   }
-  
+
   private static int populatePositionSearchRequest(final PositionSearchRequest positionSearch, final ManageablePortfolioNode node) {
     int count = 0;
     for (final ObjectId positionId : node.getPositionIds()) {
@@ -131,7 +130,7 @@ public abstract class AbstractMasterPositionSource implements PositionSource {
     }
     return count;
   }
-  
+
   /**
    * Converts a manageable node to a source node.
    *
@@ -150,7 +149,7 @@ public abstract class AbstractMasterPositionSource implements PositionSource {
         if (foundPosition != null) {
           sourceNode.addPosition(foundPosition);
         } else {
-          s_logger.warn("Position {} not found for portfolio node {}", positionId, nodeId);
+          LOGGER.warn("Position {} not found for portfolio node {}", positionId, nodeId);
         }
       }
     }
@@ -162,7 +161,7 @@ public abstract class AbstractMasterPositionSource implements PositionSource {
   }
 
   @Override
-  public Portfolio getPortfolio(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Portfolio getPortfolio(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     final ManageablePortfolio manPrt = getPortfolioMaster().get(objectId, versionCorrection).getPortfolio();
@@ -173,7 +172,7 @@ public abstract class AbstractMasterPositionSource implements PositionSource {
   }
 
   @Override
-  public PortfolioNode getPortfolioNode(UniqueId uniqueId, VersionCorrection versionCorrection) {
+  public PortfolioNode getPortfolioNode(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     final ManageablePortfolioNode manNode = getPortfolioMaster().getNode(uniqueId);
     if (manNode == null) {

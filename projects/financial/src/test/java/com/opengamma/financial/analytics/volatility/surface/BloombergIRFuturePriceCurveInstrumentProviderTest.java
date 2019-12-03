@@ -31,7 +31,7 @@ public class BloombergIRFuturePriceCurveInstrumentProviderTest {
 
   private static final BloombergIRFuturePriceCurveInstrumentProvider PROVIDER_EUR = new BloombergIRFuturePriceCurveInstrumentProvider(PREFIX_EUR, POSTFIX, FIELD_NAME);
 
-  private static final int nFutures = 9;
+  private static final int N_FUTURES = 9;
   private static final String[] RESULTS_EUR = new String[] {"ERM10 Comdty", "ERU10 Comdty", "ERZ10 Comdty", "ERH11 Comdty", "ERM11 Comdty", "ERU11 Comdty", "ERZ11 Comdty", "ERH2 Comdty", "ERM2 Comdty" };
 
   /**
@@ -43,7 +43,7 @@ public class BloombergIRFuturePriceCurveInstrumentProviderTest {
   // Disabled so that the v1.2.x branch builds cleanly
   public void testEur() {
     String expected;
-    for (int ithFuture = 1; ithFuture <= nFutures; ithFuture++) {
+    for (int ithFuture = 1; ithFuture <= N_FUTURES; ithFuture++) {
       expected = RESULTS_EUR[ithFuture - 1];
       final ExternalId result = PROVIDER_EUR.getInstrument(ithFuture, SNAPSHOT_DATE);
       assertEquals(ExternalSchemes.BLOOMBERG_TICKER_WEAK, result.getScheme());

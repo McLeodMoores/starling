@@ -42,11 +42,11 @@ import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
-/** Creates EquityFutureSecurity from fields loaded from Bloomberg */
+/** Creates EquityFutureSecurity from fields loaded from Bloomberg. */
 public class EquityFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityFutureLoader.class);
 
   /** The fields to load from Bloomberg */
   private static final Set<String> BLOOMBERG_EQUITY_FUTURE_FIELDS = Collections.unmodifiableSet(Sets.newHashSet(
@@ -65,55 +65,59 @@ public class EquityFutureLoader extends SecurityLoader {
       FIELD_FUT_VAL_PT,
       FIELD_FUTURES_CATEGORY));
 
-  /** The set of valid Bloomberg 'Futures Category Types' that will map to EquityFutureSecurity */
+  /** The set of valid Bloomberg 'Futures Category Types' that will map to EquityFutureSecurity. */
   public static final Set<String> VALID_SECURITY_TYPES = ImmutableSet.of(
       BLOOMBERG_EQUITY_INDEX_TYPE,
-      BBG_WEEKLY_INDEX_OPTIONS_TYPE); // THIS IS IFFY - 2EH3 INDEX, FOR EXAMPLE, HAS A FUTURE CATEGORY OF WEEKLY INDEX OPTIONS, THOUGH IT JUST AN ALIAS FOR ESH3 INDEX WHICH IS EQUITY INDEX);
-                                      //TODO: Answer this: Are Equity Index Futures EquityFutureSecurity or IndexFutureSecurity? - See EquityFutureLoader, too
+      BBG_WEEKLY_INDEX_OPTIONS_TYPE); // THIS IS IFFY - 2EH3 INDEX, FOR EXAMPLE, HAS A FUTURE CATEGORY OF WEEKLY INDEX OPTIONS, THOUGH IT JUST AN ALIAS FOR ESH3
+  // INDEX WHICH IS EQUITY INDEX);
+  // TODO: Answer this: Are Equity Index Futures EquityFutureSecurity or IndexFutureSecurity? - See EquityFutureLoader, too
+
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   *
+   * @param referenceDataProvider
+   *          the provider, not null
    */
-  public EquityFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.EQUITY_FUTURE);
+  public EquityFutureLoader(final ReferenceDataProvider referenceDataProvider) {
+    super(LOGGER, referenceDataProvider, SecurityType.EQUITY_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
-    String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
-    String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
-    String currencyStr = fieldData.getString(FIELD_CRNCY);
-    String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
-    String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
-    String unitAmount = fieldData.getString(FIELD_FUT_VAL_PT);
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
+    final String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
+    final String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
+    final String currencyStr = fieldData.getString(FIELD_CRNCY);
+    final String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
+    final String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final String marketSector = fieldData.getString(FIELD_MARKET_SECTOR_DES);
+    final String unitAmount = fieldData.getString(FIELD_FUT_VAL_PT);
 
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct EquityFutureSecurity");
+      LOGGER.warn("bbgUnique is null, cannot construct EquityFutureSecurity");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null, cannot construct EquityFutureSecurity");
+      LOGGER.warn("expiry date is null, cannot construct EquityFutureSecurity");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null, cannot construct EquityFutureSecurity");
+      LOGGER.warn("futures trading hours is null, cannot construct EquityFutureSecurity");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null, cannot construct EquityFutureSecurity");
+      LOGGER.warn("settlement exchange is null, cannot construct EquityFutureSecurity");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.info("currency is null, cannot construct EquityFutureSecurity");
+      LOGGER.info("currency is null, cannot construct EquityFutureSecurity");
       return null;
     }
     if (!isValidField(category)) {
-      s_logger.info("category is null, cannot construct EquityFutureSecurity");
+      LOGGER.info("category is null, cannot construct EquityFutureSecurity");
       return null;
     }
     ExternalId underlying = null;
@@ -121,18 +125,19 @@ public class EquityFutureLoader extends SecurityLoader {
       underlying = ExternalSchemes.bloombergTickerSecurityId(underlyingTicker + " " + marketSector);
     }
 
-    Currency currency = Currency.parse(currencyStr);
+    final Currency currency = Currency.parse(currencyStr);
 
-    Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
+    final Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
     if (expiry == null) {
       return null;
     }
 
     // FIXME: Case - treatment of Settlement Date
-    s_logger.warn("Creating EquityFutureSecurity - settlementDate set equal to expiryDate. Missing lag.");
-    ZonedDateTime settlementDate = expiry.getExpiry();
+    LOGGER.warn("Creating EquityFutureSecurity - settlementDate set equal to expiryDate. Missing lag.");
+    final ZonedDateTime settlementDate = expiry.getExpiry();
 
-    EquityFutureSecurity security = new EquityFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, Double.valueOf(unitAmount), settlementDate, underlying, category);
+    final EquityFutureSecurity security = new EquityFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, Double.valueOf(unitAmount),
+        settlementDate, underlying, category);
     security.setName(name);
     // set identifiers
     parseIdentifiers(fieldData, security);

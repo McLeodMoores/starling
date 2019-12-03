@@ -13,7 +13,7 @@ import com.opengamma.analytics.financial.simpleinstruments.pricing.SimpleFutureD
 import com.opengamma.engine.value.ValueRequirementNames;
 
 /**
- * Simple Function computes PV as the difference between Live and last day's closing prices
+ * Simple Function computes PV as the difference between Live and last day's closing prices.
  */
 public class SimpleFuturePresentValueFunction extends SimpleFutureFunction {
 
@@ -24,8 +24,8 @@ public class SimpleFuturePresentValueFunction extends SimpleFutureFunction {
   private static final CommodityFuturePresentValueCalculator CALCULATOR = new CommodityFuturePresentValueCalculator();
 
   @Override
-  protected Object computeValues(InstrumentDerivative derivative, SimpleFutureDataBundle market) {
-    SimpleFuture simpleFuture = derivative.accept(SimpleFutureConverter.getInstance());
+  protected Object computeValues(final InstrumentDerivative derivative, final SimpleFutureDataBundle market) {
+    final SimpleFuture simpleFuture = derivative.accept(SimpleFutureConverter.getInstance());
     final Double pv = simpleFuture.accept(CALCULATOR, market);
     return pv;
   }

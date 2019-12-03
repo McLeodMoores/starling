@@ -5,16 +5,16 @@
  */
 package com.opengamma.analytics.financial.commodity.derivative;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.opengamma.analytics.financial.ExerciseDecisionType;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.util.ArgumentChecker;
 
-import org.apache.commons.lang.ObjectUtils;
-
 /**
  * Abstract commodity future derivative.
  *
- * @param <T>
+ * @param <T>  the type of the commodity future underlying
  */
 public abstract class CommodityFutureOption<T extends CommodityFuture> implements InstrumentDerivative {
   /** Time (in years as a double) until the date-time at which the future expires */
@@ -62,7 +62,7 @@ public abstract class CommodityFutureOption<T extends CommodityFuture> implement
   }
 
   /**
-   * Gets the strike price
+   * Gets the strike price.
    * @return the strike.
    */
   public double getStrike() {
@@ -70,7 +70,7 @@ public abstract class CommodityFutureOption<T extends CommodityFuture> implement
   }
 
   /**
-   * Gets the exercise type
+   * Gets the exercise type.
    * @return the exerciseType.
    */
   public ExerciseDecisionType getExerciseType() {
@@ -93,14 +93,14 @@ public abstract class CommodityFutureOption<T extends CommodityFuture> implement
     result = prime * result + (_isCall ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_expiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

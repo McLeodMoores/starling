@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -43,8 +43,8 @@ public class RemoteCacheClient {
       final FudgeSerializer scontext = new FudgeSerializer(getMessageSender().getFudgeContext());
       final long correlationId = getNextCorrelationId();
       request.setCorrelationId(correlationId);
-      final FudgeMsg responseMsg = sendRequestAndWaitForResponse(FudgeSerializer.addClassHeader(scontext.objectToFudgeMsg(request), request.getClass(), CacheMessage.class),
-          correlationId);
+      final FudgeMsg responseMsg = sendRequestAndWaitForResponse(FudgeSerializer.addClassHeader(scontext.objectToFudgeMsg(request),
+          request.getClass(), CacheMessage.class), correlationId);
       final FudgeDeserializer dcontext = new FudgeDeserializer(getMessageSender().getFudgeContext());
       final Response response = dcontext.fudgeMsgToObject(responseClass, responseMsg);
       return response;
@@ -62,7 +62,7 @@ public class RemoteCacheClient {
 
   /**
    * Creates a new client using a single underlying transport.
-   * 
+   *
    * @param connection the underlying transport
    */
   public RemoteCacheClient(final FudgeConnection connection) {
@@ -73,7 +73,7 @@ public class RemoteCacheClient {
 
   /**
    * Creates a new client using a transport pair, one for cache "get" operations and one for "put" operations.
-   * 
+   *
    * @param requestGets get operations
    * @param requestPuts put operations
    */

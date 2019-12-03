@@ -8,8 +8,6 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -29,6 +27,8 @@ import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.master.security.impl.DataSecurityMasterResource;
 import com.opengamma.master.security.impl.EHCachingSecurityMaster;
 import com.opengamma.master.security.impl.RemoteSecurityMaster;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the combined security master.
@@ -62,14 +62,14 @@ public class EHCachingSecurityMasterComponentFactory extends AbstractComponentFa
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> securityuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> securityuration) {
 
-    SecurityMaster master = new EHCachingSecurityMaster(getClassifier(),
+    final SecurityMaster master = new EHCachingSecurityMaster(getClassifier(),
                                                         getUnderlying(),
                                                         getCacheManager());
 
     // register
-    ComponentInfo info = new ComponentInfo(SecurityMaster.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(SecurityMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteSecurityMaster.class);

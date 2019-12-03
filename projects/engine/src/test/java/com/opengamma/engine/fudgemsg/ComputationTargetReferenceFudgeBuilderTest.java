@@ -52,12 +52,14 @@ public class ComputationTargetReferenceFudgeBuilderTest extends AbstractFudgeBui
   }
 
   public void testRequirement_multiple() {
-    final ComputationTargetRequirement req = new ComputationTargetRequirement(ComputationTargetType.POSITION.or(ComputationTargetType.SECURITY), ExternalId.of("Foo", "Bar"));
+    final ComputationTargetRequirement req =
+        new ComputationTargetRequirement(ComputationTargetType.POSITION.or(ComputationTargetType.SECURITY), ExternalId.of("Foo", "Bar"));
     assertEncodeDecodeCycle(ComputationTargetReference.class, req);
   }
 
   public void testSpecification_multiple() {
-    final ComputationTargetSpecification spec = new ComputationTargetSpecification(ComputationTargetType.POSITION.or(ComputationTargetType.SECURITY), UniqueId.of("Foo", "Bar"));
+    final ComputationTargetSpecification spec =
+        new ComputationTargetSpecification(ComputationTargetType.POSITION.or(ComputationTargetType.SECURITY), UniqueId.of("Foo", "Bar"));
     assertEncodeDecodeCycle(ComputationTargetReference.class, spec);
   }
 

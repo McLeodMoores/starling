@@ -22,70 +22,71 @@ public class IdentifierAssociationBean {
 
   public IdentifierAssociationBean() {
   }
-  
-  public IdentifierAssociationBean(SecurityBean security, ExternalIdBean externalId) {
+
+  public IdentifierAssociationBean(final SecurityBean security, final ExternalIdBean externalId) {
     _security = security;
     _externalId = externalId;
   }
-  
+
   public Long getId() {
     return _id;
   }
-  
-  public void setId(Long id) {
+
+  public void setId(final Long id) {
     _id = id;
   }
-  
+
   public ExternalIdBean getIdentifier() {
     return _externalId;
   }
-  
-  public void setIdentifier(ExternalIdBean identifier) {
+
+  public void setIdentifier(final ExternalIdBean identifier) {
     _externalId = identifier;
   }
-  
+
   public SecurityBean getSecurity() {
     return _security;
   }
-  
-  public void setSecurity(SecurityBean security) {
+
+  public void setSecurity(final SecurityBean security) {
     _security = security;
   }
-  
+
   public Date getValidStartDate() {
     return _validStartDate;
   }
-  
+
   public void setValidStartDate(final Date validStartDate) {
     _validStartDate = validStartDate;
   }
-  
+
   public Date getValidEndDate() {
     return _validEndDate;
   }
-  
+
   public void setValidEndDate(final Date validEndDate) {
     _validEndDate = validEndDate;
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_id == null) ? 0 : _id.hashCode());
-    result = prime * result + ((_security == null) ? 0 : _security.hashCode());
-    result = prime * result + ((_externalId == null) ? 0 : _externalId.hashCode());
-    result = prime * result + ((_validStartDate == null) ? 0 : _validStartDate.hashCode());
-    result = prime * result + ((_validEndDate == null) ? 0 : _validEndDate.hashCode());
+    result = prime * result + (_id == null ? 0 : _id.hashCode());
+    result = prime * result + (_security == null ? 0 : _security.hashCode());
+    result = prime * result + (_externalId == null ? 0 : _externalId.hashCode());
+    result = prime * result + (_validStartDate == null ? 0 : _validStartDate.hashCode());
+    result = prime * result + (_validEndDate == null ? 0 : _validEndDate.hashCode());
     return result;
   }
 
   //note this will match objects with different id's as long as the domain and identifier are the same.
-  public boolean equals(Object other) {
+  @Override
+  public boolean equals(final Object other) {
     if (!(other instanceof IdentifierAssociationBean)) {
       return false;
     }
-    IdentifierAssociationBean otherBean = (IdentifierAssociationBean) other;
+    final IdentifierAssociationBean otherBean = (IdentifierAssociationBean) other;
     if (ObjectUtils.equals(otherBean.getId(), getId())) {
       return true;
     }
@@ -98,6 +99,7 @@ public class IdentifierAssociationBean {
     return false;
   }
 
+  @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this);
   }

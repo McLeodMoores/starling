@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 
 /**
- * Parent class for a family of curves that have real <i>(x, y, z, value)</i> points.  
+ * Parent class for a family of curves that have real <i>(x, y, z, value)</i> points.
  */
 public abstract class DoublesCube extends Cube<Double, Double, Double, Double> {
   private final int _n;
@@ -25,10 +25,14 @@ public abstract class DoublesCube extends Cube<Double, Double, Double, Double> {
   private Double[] _valuesObject;
 
   /**
-   * @param xData An array of <i>x</i> data, not null
-   * @param yData An array of <i>y</i> data, not null, must be the same length as the <i>x</i> data array
-   * @param zData An array of <i>z</i> data, not null, must be the same length as the <i>x</i> data array
-   * @param values An array of <i>values</i> , not null, must be the same length as the <i>x</i> data array
+   * @param xData
+   *          An array of <i>x</i> data, not null
+   * @param yData
+   *          An array of <i>y</i> data, not null, must be the same length as the <i>x</i> data array
+   * @param zData
+   *          An array of <i>z</i> data, not null, must be the same length as the <i>x</i> data array
+   * @param values
+   *          An array of <i>values</i> , not null, must be the same length as the <i>x</i> data array
    */
   public DoublesCube(final double[] xData, final double[] yData, final double[] zData, final double[] values) {
     super();
@@ -47,10 +51,14 @@ public abstract class DoublesCube extends Cube<Double, Double, Double, Double> {
   }
 
   /**
-   * @param xData An array of <i>x</i> data, not null
-   * @param yData An array of <i>y</i> data, not null, must be the same length as the <i>x</i> data array
-   * @param zData An array of <i>z</i> data, not null, must be the same length as the <i>x</i> data array
-   * @param values An array of <i>values</i> , not null, must be the same length as the <i>x</i> data array
+   * @param xData
+   *          An array of <i>x</i> data, not null
+   * @param yData
+   *          An array of <i>y</i> data, not null, must be the same length as the <i>x</i> data array
+   * @param zData
+   *          An array of <i>z</i> data, not null, must be the same length as the <i>x</i> data array
+   * @param values
+   *          An array of <i>values</i> , not null, must be the same length as the <i>x</i> data array
    */
   public DoublesCube(final Double[] xData, final Double[] yData, final Double[] zData, final Double[] values) {
     super();
@@ -79,10 +87,14 @@ public abstract class DoublesCube extends Cube<Double, Double, Double, Double> {
   }
 
   /**
-   * @param xData A list of <i>x</i> data, not null
-   * @param yData A list of <i>y</i> data, not null, must be the same length as the <i>x</i> data list
-   * @param zData A list of <i>z</i> data, not null, must be the same length as the <i>x</i> data list
-   * @param values A list of <i>values</i> , not null, must be the same length as the <i>x</i> data list
+   * @param xData
+   *          A list of <i>x</i> data, not null
+   * @param yData
+   *          A list of <i>y</i> data, not null, must be the same length as the <i>x</i> data list
+   * @param zData
+   *          A list of <i>z</i> data, not null, must be the same length as the <i>x</i> data list
+   * @param values
+   *          A list of <i>values</i> , not null, must be the same length as the <i>x</i> data list
    */
   public DoublesCube(final List<Double> xData, final List<Double> yData, final List<Double> zData, final List<Double> values) {
     super();
@@ -115,11 +127,16 @@ public abstract class DoublesCube extends Cube<Double, Double, Double, Double> {
   }
 
   /**
-   * @param xData An array of <i>x</i> data, not null
-   * @param yData An array of <i>y</i> data, not null, must be the same length as the <i>x</i> data array
-   * @param zData An array of <i>z</i> data, not null, must be the same length as the <i>x</i> data array
-   * @param values An array of <i>values</i> , not null, must be the same length as the <i>x</i> data array
-   * @param name The name of the cube
+   * @param xData
+   *          An array of <i>x</i> data, not null
+   * @param yData
+   *          An array of <i>y</i> data, not null, must be the same length as the <i>x</i> data array
+   * @param zData
+   *          An array of <i>z</i> data, not null, must be the same length as the <i>x</i> data array
+   * @param values
+   *          An array of <i>values</i> , not null, must be the same length as the <i>x</i> data array
+   * @param name
+   *          The name of the cube
    */
   public DoublesCube(final double[] xData, final double[] yData, final double[] zData, final double[] values, final String name) {
     super(name);
@@ -138,11 +155,16 @@ public abstract class DoublesCube extends Cube<Double, Double, Double, Double> {
   }
 
   /**
-   * @param xData An array of <i>x</i> data, not null
-   * @param yData An array of <i>y</i> data, not null, must be the same length as the <i>x</i> data array
-   * @param zData An array of <i>z</i> data, not null, must be the same length as the <i>x</i> data array
-   * @param values An array of <i>values</i> , not null, must be the same length as the <i>x</i> data array
-   * @param name The name of the cube
+   * @param xData
+   *          An array of <i>x</i> data, not null
+   * @param yData
+   *          An array of <i>y</i> data, not null, must be the same length as the <i>x</i> data array
+   * @param zData
+   *          An array of <i>z</i> data, not null, must be the same length as the <i>x</i> data array
+   * @param values
+   *          An array of <i>values</i> , not null, must be the same length as the <i>x</i> data array
+   * @param name
+   *          The name of the cube
    */
   public DoublesCube(final Double[] xData, final Double[] yData, final Double[] zData, final Double[] values, final String name) {
     super(name);
@@ -171,11 +193,16 @@ public abstract class DoublesCube extends Cube<Double, Double, Double, Double> {
   }
 
   /**
-   * @param xData A list of <i>x</i> data, not null
-   * @param yData A list of <i>y</i> data, not null, must be the same length as the <i>x</i> data list
-   * @param zData A list of <i>z</i> data, not null, must be the same length as the <i>x</i> data list
-   * @param values A list of <i>values</i> , not null, must be the same length as the <i>x</i> data list
-   * @param name The name of the cube
+   * @param xData
+   *          A list of <i>x</i> data, not null
+   * @param yData
+   *          A list of <i>y</i> data, not null, must be the same length as the <i>x</i> data list
+   * @param zData
+   *          A list of <i>z</i> data, not null, must be the same length as the <i>x</i> data list
+   * @param values
+   *          A list of <i>values</i> , not null, must be the same length as the <i>x</i> data list
+   * @param name
+   *          The name of the cube
    */
   public DoublesCube(final List<Double> xData, final List<Double> yData, final List<Double> zData, final List<Double> values, final String name) {
     super(name);
@@ -256,31 +283,35 @@ public abstract class DoublesCube extends Cube<Double, Double, Double, Double> {
   }
 
   /**
-   * Returns the <i>x</i> data points as a primitive array
-   * @return The <i>x</i> data 
+   * Returns the <i>x</i> data points as a primitive array.
+   * 
+   * @return The <i>x</i> data
    */
   public double[] getXDataAsPrimitive() {
     return _xData;
   }
 
   /**
-   * Returns the <i>y</i> data points as a primitive array
-   * @return The <i>y</i> data 
+   * Returns the <i>y</i> data points as a primitive array.
+   * 
+   * @return The <i>y</i> data
    */
   public double[] getYDataAsPrimitive() {
     return _yData;
   }
 
   /**
-   * Returns the <i>z</i> data points as a primitive array
-   * @return The <i>z</i> data 
+   * Returns the <i>z</i> data points as a primitive array.
+   * 
+   * @return The <i>z</i> data
    */
   public double[] getZDataAsPrimitive() {
     return _zData;
   }
 
   /**
-   * Returns the values as a primitive array
+   * Returns the values as a primitive array.
+   * 
    * @return The values
    */
   public double[] getValuesAsPrimitive() {

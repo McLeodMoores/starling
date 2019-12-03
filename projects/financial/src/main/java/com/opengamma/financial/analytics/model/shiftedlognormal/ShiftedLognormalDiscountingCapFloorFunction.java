@@ -39,7 +39,6 @@ import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.FunctionCompilationContext;
@@ -52,11 +51,10 @@ import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.CapFloorSecurityConverter;
 import com.opengamma.financial.analytics.conversion.ConversionUtils;
+import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
 import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.FutureTradeConverter;
-import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
 import com.opengamma.financial.analytics.model.discounting.DiscountingFunction;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.frequency.Frequency;
 import com.opengamma.financial.security.FinancialSecurityUtils;
@@ -72,7 +70,8 @@ import com.opengamma.util.money.Currency;
 public abstract class ShiftedLognormalDiscountingCapFloorFunction extends DiscountingFunction {
 
   /**
-   * @param valueRequirements The value requirements, not null
+   * @param valueRequirements
+   *          The value requirements, not null
    */
   public ShiftedLognormalDiscountingCapFloorFunction(final String... valueRequirements) {
     super(valueRequirements);
@@ -80,13 +79,12 @@ public abstract class ShiftedLognormalDiscountingCapFloorFunction extends Discou
 
   @Override
   protected DefaultTradeConverter getTargetToDefinitionConverter(final FunctionCompilationContext context) {
-    final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final CapFloorSecurityConverter converter = new CapFloorSecurityConverter(holidaySource, conventionSource, regionSource);
-    final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().capFloorVisitor(converter).create();
+    final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>> builder()
+        .capFloorVisitor(converter).create();
     final FutureTradeConverter futureTradeConverter = new FutureTradeConverter();
     return new DefaultTradeConverter(futureTradeConverter, securityConverter);
   }
@@ -97,11 +95,15 @@ public abstract class ShiftedLognormalDiscountingCapFloorFunction extends Discou
   protected abstract class ShiftedLognormalDiscountingCompiledFunction extends DiscountingCompiledFunction {
 
     /**
-     * @param tradeToDefinitionConverter Converts targets to definitions, not null
-     * @param definitionToDerivativeConverter Converts definitions to derivatives, not null
-     * @param withCurrency True if the result properties set the {@link ValuePropertyNames#CURRENCY} property.
+     * @param tradeToDefinitionConverter
+     *          Converts targets to definitions, not null
+     * @param definitionToDerivativeConverter
+     *          Converts definitions to derivatives, not null
+     * @param withCurrency
+     *          True if the result properties set the {@link ValuePropertyNames#CURRENCY} property.
      */
-    protected ShiftedLognormalDiscountingCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter, final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
+    protected ShiftedLognormalDiscountingCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter,
+        final FixedIncomeConverterDataProvider definitionToDerivativeConverter,
         final boolean withCurrency) {
       super(tradeToDefinitionConverter, definitionToDerivativeConverter, withCurrency);
     }
@@ -114,7 +116,8 @@ public abstract class ShiftedLognormalDiscountingCapFloorFunction extends Discou
 
     @Override
     protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
-      final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(PROPERTY_VOLATILITY_MODEL, SHIFTED_LOGNORMAL)
+      final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+          .with(PROPERTY_VOLATILITY_MODEL, SHIFTED_LOGNORMAL)
           .with(LognormalVolatilityShiftFunction.SHIFT_CURVE, LognormalVolatilityShiftFunction.TEST).withAny(SURFACE).withAny(CURVE_EXPOSURES);
       if (isWithCurrency()) {
         final Security security = target.getTrade().getSecurity();
@@ -126,7 +129,8 @@ public abstract class ShiftedLognormalDiscountingCapFloorFunction extends Discou
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Set<ValueRequirement> requirements = super.getRequirements(context, target, desiredValue);
       if (requirements == null) {
         return null;
@@ -135,7 +139,8 @@ public abstract class ShiftedLognormalDiscountingCapFloorFunction extends Discou
       final Currency currency = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity());
       final Set<String> surface = constraints.getValues(SURFACE);
       final ValueProperties properties = ValueProperties.builder().with(SURFACE, surface).with(PROPERTY_SURFACE_INSTRUMENT_TYPE, CAP_FLOOR).get();
-      final ValueRequirement surfaceRequirement = new ValueRequirement(INTERPOLATED_VOLATILITY_SURFACE, ComputationTargetSpecification.of(currency), properties);
+      final ValueRequirement surfaceRequirement = new ValueRequirement(INTERPOLATED_VOLATILITY_SURFACE, ComputationTargetSpecification.of(currency),
+          properties);
       requirements.add(surfaceRequirement);
       final Set<String> shiftCurve = constraints.getValues(LognormalVolatilityShiftFunction.SHIFT_CURVE);
       final ValueProperties shiftProperties = ValueProperties.builder().with(LognormalVolatilityShiftFunction.SHIFT_CURVE, shiftCurve).get();
@@ -156,13 +161,18 @@ public abstract class ShiftedLognormalDiscountingCapFloorFunction extends Discou
     /**
      * Gets the Black surface and curve data.
      *
-     * @param executionContext The execution context, not null
-     * @param inputs The function inputs, not null
-     * @param target The computation target, not null
-     * @param fxMatrix The FX matrix, not null
+     * @param executionContext
+     *          The execution context, not null
+     * @param inputs
+     *          The function inputs, not null
+     * @param target
+     *          The computation target, not null
+     * @param fxMatrix
+     *          The FX matrix, not null
      * @return The Black surface and curve data
      */
-    protected BlackSmileShiftCapProviderInterface getBlackSurface(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+    protected BlackSmileShiftCapProviderInterface getBlackSurface(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
+        final ComputationTarget target,
         final FXMatrix fxMatrix) {
       final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(executionContext);
       final CapFloorSecurity security = (CapFloorSecurity) target.getTrade().getSecurity();

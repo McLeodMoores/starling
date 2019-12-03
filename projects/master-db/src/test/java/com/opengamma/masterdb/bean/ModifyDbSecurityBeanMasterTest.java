@@ -43,12 +43,12 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyDbSecurityBeanMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyDbSecurityBeanMasterTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyDbSecurityBeanMasterTest(String databaseType, String databaseVersion) {
+  public ModifyDbSecurityBeanMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -59,20 +59,20 @@ public class ModifyDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMaster
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_noSecurity() {
-    SecurityDocument doc = new SecurityDocument();
+    final SecurityDocument doc = new SecurityDocument();
     _secMaster.add(doc);
   }
 
   @Test
   public void test_add_add() {
-    Instant now = Instant.now(_secMaster.getClock());
-    
-    ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument();
+    final Instant now = Instant.now(_secMaster.getClock());
+
+    final ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(security);
-    SecurityDocument test = _secMaster.add(doc);
-    
-    UniqueId uniqueId = test.getUniqueId();
+    final SecurityDocument test = _secMaster.add(doc);
+
+    final UniqueId uniqueId = test.getUniqueId();
     assertNotNull(uniqueId);
     assertEquals("DbSec", uniqueId.getScheme());
     assertTrue(uniqueId.isVersioned());
@@ -82,12 +82,12 @@ public class ModifyDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMaster
     assertEquals(null, test.getVersionToInstant());
     assertEquals(now, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableSecurity testSecurity = test.getSecurity();
+    final ManageableSecurity testSecurity = test.getSecurity();
     assertNotNull(testSecurity);
     assertEquals(uniqueId, testSecurity.getUniqueId());
     assertEquals("TestSecurity", security.getName());
     assertEquals("EQUITY", security.getSecurityType());
-    ExternalIdBundle idKey = security.getExternalIdBundle();
+    final ExternalIdBundle idKey = security.getExternalIdBundle();
     assertNotNull(idKey);
     assertEquals(1, idKey.size());
     assertEquals(ExternalId.of("A", "B"), idKey.getExternalIds().iterator().next());
@@ -95,69 +95,69 @@ public class ModifyDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMaster
 
   @Test
   public void test_add_addThenGet() {
-    ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument();
+    final ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(security);
-    SecurityDocument added = _secMaster.add(doc);
-    
-    SecurityDocument test = _secMaster.get(added.getUniqueId());
+    final SecurityDocument added = _secMaster.add(doc);
+
+    final SecurityDocument test = _secMaster.get(added.getUniqueId());
     assertEquals(added, test);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addWithMissingNameProperty() throws Exception {
-    ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
-    Field field = ManageableSecurity.class.getDeclaredField("_name");
+    final ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
+    final Field field = ManageableSecurity.class.getDeclaredField("_name");
     field.setAccessible(true);
     field.set(security, null);
-    SecurityDocument doc = new SecurityDocument(security);
+    final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.add(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addWithMissingExternalIdBundleProperty() throws Exception {
-    ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
-    Field field = ManageableSecurity.class.getDeclaredField("_externalIdBundle");
+    final ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
+    final Field field = ManageableSecurity.class.getDeclaredField("_externalIdBundle");
     field.setAccessible(true);
     field.set(security, null);
-    SecurityDocument doc = new SecurityDocument(security);
+    final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.add(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addWithMissingTypeProperty() throws Exception {
-    ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
-    Field field = ManageableSecurity.class.getDeclaredField("_securityType");
+    final ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
+    final Field field = ManageableSecurity.class.getDeclaredField("_securityType");
     field.setAccessible(true);
     field.set(security, null);
-    SecurityDocument doc = new SecurityDocument(security);
+    final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.add(doc);
   }
 
   @Test
   public void test_add_addWithMinimalProperties() {
-    ManageableSecurity security = new ManageableSecurity();
-    SecurityDocument doc = new SecurityDocument(security);
+    final ManageableSecurity security = new ManageableSecurity();
+    final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.add(doc);
   }
 
   @Test
   public void test_add_searchByAttribute() {
-    ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
+    final ManageableSecurity security = new ManageableSecurity(null, "TestSecurity", "EQUITY", ExternalIdBundle.of("A", "B"));
     security.addAttribute("city", "London");
     security.addAttribute("office", "Southern");
-    SecurityDocument added = _secMaster.add(new SecurityDocument(security));
-    
-    ManageableSecurity security2 = new ManageableSecurity(null, "TestSecurity2", "EQUITY", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument added = _secMaster.add(new SecurityDocument(security));
+
+    final ManageableSecurity security2 = new ManageableSecurity(null, "TestSecurity2", "EQUITY", ExternalIdBundle.of("A", "B"));
     security2.addAttribute("office", "Southern");
-    SecurityDocument added2 = _secMaster.add(new SecurityDocument(security2));
-    
+    final SecurityDocument added2 = _secMaster.add(new SecurityDocument(security2));
+
     SecuritySearchRequest searchRequest = new SecuritySearchRequest();
     searchRequest.addAttribute("city", "London");
     SecuritySearchResult searchResult = _secMaster.search(searchRequest);
     assertEquals(1, searchResult.getDocuments().size());
     assertEquals(added, searchResult.getDocuments().get(0));
-    
+
     searchRequest = new SecuritySearchRequest();
     searchRequest.setSortOrder(SecuritySearchSortOrder.NAME_ASC);
     searchRequest.addAttribute("office", "Southern");
@@ -165,7 +165,7 @@ public class ModifyDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMaster
     assertEquals(2, searchResult.getDocuments().size());
     assertEquals(added, searchResult.getDocuments().get(0));
     assertEquals(added2, searchResult.getDocuments().get(1));
-    
+
     searchRequest = new SecuritySearchRequest();
     searchRequest.addAttribute("city", "London");
     searchRequest.addAttribute("office", "*thern");
@@ -184,83 +184,83 @@ public class ModifyDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMaster
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_noSecurityId() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "101");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument();
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(security);
     _secMaster.update(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_noSecurity() {
-    SecurityDocument doc = new SecurityDocument();
+    final SecurityDocument doc = new SecurityDocument();
     doc.setUniqueId(UniqueId.of("DbSec", "101", "0"));
     _secMaster.update(doc);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_update_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument(security);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.update(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_notLatestVersion() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument(security);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.update(doc);
   }
 
   @Test
   public void test_update_getUpdateGet() {
-    Instant now = Instant.now(_secMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
-    SecurityDocument base = _secMaster.get(uniqueId);
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument input = new SecurityDocument(security);
-    
-    SecurityDocument updated = _secMaster.update(input);
+    final Instant now = Instant.now(_secMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final SecurityDocument base = _secMaster.get(uniqueId);
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument input = new SecurityDocument(security);
+
+    final SecurityDocument updated = _secMaster.update(input);
     assertEquals(false, base.getUniqueId().equals(updated.getUniqueId()));
     assertEquals(now, updated.getVersionFromInstant());
     assertEquals(null, updated.getVersionToInstant());
     assertEquals(now, updated.getCorrectionFromInstant());
     assertEquals(null, updated.getCorrectionToInstant());
     assertEquals(input.getSecurity(), updated.getSecurity());
-    
-    SecurityDocument old = _secMaster.get(uniqueId);
+
+    final SecurityDocument old = _secMaster.get(uniqueId);
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(now, old.getVersionToInstant());  // old version ended
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(base.getCorrectionToInstant(), old.getCorrectionToInstant());
     assertEquals(base.getSecurity(), old.getSecurity());
-    
-    SecurityHistoryRequest search = new SecurityHistoryRequest(base.getUniqueId(), null, now);
+
+    final SecurityHistoryRequest search = new SecurityHistoryRequest(base.getUniqueId(), null, now);
     search.setFullDetail(false);
-    SecurityHistoryResult searchResult = _secMaster.history(search);
+    final SecurityHistoryResult searchResult = _secMaster.history(search);
     assertEquals(2, searchResult.getDocuments().size());
   }
 
   @Test
   public void test_update_rollback() {
-    DbSecurityBeanMaster w = new DbSecurityBeanMaster(_secMaster.getDbConnector());
+    final DbSecurityBeanMaster w = new DbSecurityBeanMaster(_secMaster.getDbConnector());
     w.setElSqlBundle(ElSqlBundle.of(new ElSqlConfig("TestRollback"), DbBeanMaster.class));
     final SecurityDocument base = _secMaster.get(UniqueId.of("DbSec", "101", "0"));
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument input = new SecurityDocument(security);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument input = new SecurityDocument(security);
     try {
       w.update(input);
       Assert.fail();
-    } catch (BadSqlGrammarException ex) {
+    } catch (final BadSqlGrammarException ex) {
       // expected
     }
     final SecurityDocument test = _secMaster.get(UniqueId.of("DbSec", "101", "0"));
-    
+
     assertEquals(base, test);
   }
 
@@ -274,25 +274,25 @@ public class ModifyDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMaster
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noSecurityId() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "101");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument();
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument();
     doc.setSecurity(security);
     _secMaster.correct(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noSecurity() {
-    SecurityDocument doc = new SecurityDocument();
+    final SecurityDocument doc = new SecurityDocument();
     doc.setUniqueId(UniqueId.of("DbSec", "101", "0"));
     _secMaster.correct(doc);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_correct_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument doc = new SecurityDocument(security);
+    final UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument doc = new SecurityDocument(security);
     _secMaster.correct(doc);
   }
 
@@ -306,32 +306,32 @@ public class ModifyDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMaster
 
   @Test
   public void test_correct_getUpdateGet() {
-    Instant now = Instant.now(_secMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
-    SecurityDocument base = _secMaster.get(uniqueId);
-    ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
-    SecurityDocument input = new SecurityDocument(security);
-    
-    SecurityDocument corrected = _secMaster.correct(input);
+    final Instant now = Instant.now(_secMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final SecurityDocument base = _secMaster.get(uniqueId);
+    final ManageableSecurity security = new ManageableSecurity(uniqueId, "Name", "Type", ExternalIdBundle.of("A", "B"));
+    final SecurityDocument input = new SecurityDocument(security);
+
+    final SecurityDocument corrected = _secMaster.correct(input);
     assertEquals(false, base.getUniqueId().equals(corrected.getUniqueId()));
     assertEquals(base.getVersionFromInstant(), corrected.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), corrected.getVersionToInstant());
     assertEquals(now, corrected.getCorrectionFromInstant());
     assertEquals(null, corrected.getCorrectionToInstant());
     assertEquals(input.getSecurity(), corrected.getSecurity());
-    
-    SecurityDocument old = _secMaster.get(UniqueId.of("DbSec", "101", "0"));
+
+    final SecurityDocument old = _secMaster.get(UniqueId.of("DbSec", "101", "0"));
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), old.getVersionToInstant());
     assertEquals(base.getCorrectionFromInstant(), old.getCorrectionFromInstant());
     assertEquals(now, old.getCorrectionToInstant());  // old version ended
     assertEquals(base.getSecurity(), old.getSecurity());
-    
-    SecurityHistoryRequest search = new SecurityHistoryRequest(base.getUniqueId(), now, null);
+
+    final SecurityHistoryRequest search = new SecurityHistoryRequest(base.getUniqueId(), now, null);
     search.setFullDetail(false);
-    SecurityHistoryResult searchResult = _secMaster.history(search);
+    final SecurityHistoryResult searchResult = _secMaster.history(search);
     assertEquals(2, searchResult.getDocuments().size());
   }
 
@@ -340,24 +340,24 @@ public class ModifyDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMaster
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_removeSecurity_versioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "0", "0");
     _secMaster.remove(uniqueId);
   }
 
   @Test
   public void test_remove_removed() {
-    Instant now = Instant.now(_secMaster.getClock());
-    
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final Instant now = Instant.now(_secMaster.getClock());
+
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
     _secMaster.remove(uniqueId);
-    SecurityDocument test = _secMaster.get(uniqueId);
-    
+    final SecurityDocument test = _secMaster.get(uniqueId);
+
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(now, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableSecurity security = test.getSecurity();
+    final ManageableSecurity security = test.getSecurity();
     assertNotNull(security);
     assertEquals(uniqueId, security.getUniqueId());
     assertEquals("TestSecurity101", security.getName());

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -23,19 +23,18 @@ import com.opengamma.timeseries.date.DateDoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * Calculates a PnL series by performing a full historical valuation over the required period, and weights the returns
- * by volatility.
+ * Calculates a PnL series by performing a full historical valuation over the required period, and weights the returns by volatility.
  */
 public class VolatilityWeightedHistoricalValuationPnLFunction extends HistoricalValuationPnLFunction {
 
   private static final TimeSeriesRelativeWeightedDifferenceOperator RELATIVE_WEIGHTED_DIFFERENCE = new TimeSeriesRelativeWeightedDifferenceOperator();
-  
+
   @Override
-  protected String getPriceSeriesStart(ValueProperties outputConstraints) {
+  protected String getPriceSeriesStart(final ValueProperties outputConstraints) {
     if (super.getPriceSeriesStart(outputConstraints) == null) {
       return null;
     }
-    Set<String> volatilityWeightingStartDates = outputConstraints.getValues(VolatilityWeightingFunctionUtils.VOLATILITY_WEIGHTING_START_DATE_PROPERTY);
+    final Set<String> volatilityWeightingStartDates = outputConstraints.getValues(VolatilityWeightingFunctionUtils.VOLATILITY_WEIGHTING_START_DATE_PROPERTY);
     if (volatilityWeightingStartDates == null || volatilityWeightingStartDates.size() != 1) {
       return null;
     }
@@ -43,28 +42,30 @@ public class VolatilityWeightedHistoricalValuationPnLFunction extends Historical
   }
 
   @Override
-  protected void removeTransformationProperties(Builder builder) {
+  protected void removeTransformationProperties(final Builder builder) {
     super.removeTransformationProperties(builder);
     builder.withoutAny(VolatilityWeightingFunctionUtils.VOLATILITY_WEIGHTING_LAMBDA_PROPERTY);
     builder.withoutAny(VolatilityWeightingFunctionUtils.VOLATILITY_WEIGHTING_START_DATE_PROPERTY);
   }
 
   @Override
-  protected void addTransformationProperties(Builder builder, ValueRequirement desiredValue) {
+  protected void addTransformationProperties(final Builder builder, final ValueRequirement desiredValue) {
     VolatilityWeightingFunctionUtils.addVolatilityWeightingProperties(builder, desiredValue);
   }
 
   @Override
-  protected DateDoubleTimeSeries<?> calculatePnlSeries(LocalDateDoubleTimeSeries priceSeries, FunctionExecutionContext executionContext, ValueRequirement desiredValue) {
-    double lambda = Double.parseDouble(desiredValue.getConstraint(VolatilityWeightingFunctionUtils.VOLATILITY_WEIGHTING_LAMBDA_PROPERTY));
-    TimeSeriesWeightedVolatilityOperator weightedVolatilityOperator = TimeSeriesWeightedVolatilityOperator.relative(lambda);
-    DateDoubleTimeSeries<?> weightedVolatilitySeries = weightedVolatilityOperator.evaluate(priceSeries);
+  protected DateDoubleTimeSeries<?> calculatePnlSeries(final LocalDateDoubleTimeSeries priceSeries, final FunctionExecutionContext executionContext,
+      final ValueRequirement desiredValue) {
+    final double lambda = Double.parseDouble(desiredValue.getConstraint(VolatilityWeightingFunctionUtils.VOLATILITY_WEIGHTING_LAMBDA_PROPERTY));
+    final TimeSeriesWeightedVolatilityOperator weightedVolatilityOperator = TimeSeriesWeightedVolatilityOperator.relative(lambda);
+    final DateDoubleTimeSeries<?> weightedVolatilitySeries = weightedVolatilityOperator.evaluate(priceSeries);
     LocalDateDoubleTimeSeries weightedPnlSeries = (LocalDateDoubleTimeSeries) RELATIVE_WEIGHTED_DIFFERENCE.evaluate(priceSeries, weightedVolatilitySeries);
-    LocalDate pnlSeriesStart = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY));
+    final LocalDate pnlSeriesStart = DateConstraint.evaluate(executionContext,
+        desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY));
     if (pnlSeriesStart.isAfter(weightedPnlSeries.getEarliestTime())) {
       weightedPnlSeries = weightedPnlSeries.subSeries(pnlSeriesStart, true, weightedPnlSeries.getLatestTime(), true);
     }
     return weightedPnlSeries;
   }
-  
+
 }

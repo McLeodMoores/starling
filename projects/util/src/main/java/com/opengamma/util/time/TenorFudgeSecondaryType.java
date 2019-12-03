@@ -32,7 +32,7 @@ public final class TenorFudgeSecondaryType extends SecondaryFieldType<Tenor, Str
 
   //-------------------------------------------------------------------------
   @Override
-  public String secondaryToPrimary(Tenor object) {
+  public String secondaryToPrimary(final Tenor object) {
     return object.toFormattedString();
   }
 

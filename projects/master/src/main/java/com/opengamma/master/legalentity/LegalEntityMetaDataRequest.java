@@ -23,7 +23,7 @@ import com.opengamma.util.PublicSPI;
 
 /**
  * Request for meta-data about the legal entity master.
- * <p/>
+ * <p>
  * This will return meta-data valid for the whole master.
  */
 @PublicSPI

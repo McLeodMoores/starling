@@ -55,7 +55,7 @@ public class DbTimeTest extends AbstractDbTest {
   private ElSqlBundle _elSqlBundle;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbTimeTest(final String databaseType, String databaseVersion) {
+  public DbTimeTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
   }
 
@@ -70,63 +70,63 @@ public class DbTimeTest extends AbstractDbTest {
   public void test_writeRead_timestamp() {
     try {
       // create test table
-      String drop = _elSqlBundle.getSql("DropTstTimes"); // "DROP TABLE IF EXISTS tst_times";
+      final String drop = _elSqlBundle.getSql("DropTstTimes"); // "DROP TABLE IF EXISTS tst_times";
       getDbConnector().getJdbcOperations().update(drop);
-      String create = _elSqlBundle.getSql("CreateTstTimes"); // "CREATE TABLE tst_times ( id bigint not null, ver timestamp without time zone not null )";
+      final String create = _elSqlBundle.getSql("CreateTstTimes"); // "CREATE TABLE tst_times ( id bigint not null, ver timestamp without time zone not null )";
       getDbConnector().getJdbcOperations().update(create);
-      
+
       // insert data
-      String insert = _elSqlBundle.getSql("InsertTstTimes"); // "INSERT INTO tst_times VALUES (?,?)";
+      final String insert = _elSqlBundle.getSql("InsertTstTimes"); // "INSERT INTO tst_times VALUES (?,?)";
       final Timestamp tsOut1 = DbDateUtils.toSqlTimestamp(INSTANT1);
       final Timestamp tsOut2 = DbDateUtils.toSqlTimestamp(INSTANT2);
       final Timestamp tsOut3 = DbDateUtils.toSqlTimestamp(INSTANT3);
-      
+
       getDbConnector().getJdbcOperations().update(insert, 1, tsOut1);
       getDbConnector().getJdbcOperations().update(insert, 2, tsOut2);
       getDbConnector().getJdbcOperations().update(insert, 3, tsOut3);
-      
+
       // pull back to check roundtripping
-      String select1 = _elSqlBundle.getSql("SelectTstTimes"); // "SELECT ver FROM tst_times WHERE id = ?";
-      
-      Map<String, Object> result1 = getDbConnector().getJdbcOperations().queryForMap(select1, 1);
-      Map<String, Object> result2 = getDbConnector().getJdbcOperations().queryForMap(select1, 2);
-      Map<String, Object> result3 = getDbConnector().getJdbcOperations().queryForMap(select1, 3);
-      Timestamp tsIn1 = (Timestamp) result1.get("ver");
-      Timestamp tsIn2 = (Timestamp) result2.get("ver");
-      Timestamp tsIn3 = (Timestamp) result3.get("ver");
-      Instant retrieved1 = DbDateUtils.fromSqlTimestamp(tsIn1);
-      Instant retrieved2 = DbDateUtils.fromSqlTimestamp(tsIn2);
-      Instant retrieved3 = DbDateUtils.fromSqlTimestamp(tsIn3);
+      final String select1 = _elSqlBundle.getSql("SelectTstTimes"); // "SELECT ver FROM tst_times WHERE id = ?";
+
+      final Map<String, Object> result1 = getDbConnector().getJdbcOperations().queryForMap(select1, 1);
+      final Map<String, Object> result2 = getDbConnector().getJdbcOperations().queryForMap(select1, 2);
+      final Map<String, Object> result3 = getDbConnector().getJdbcOperations().queryForMap(select1, 3);
+      final Timestamp tsIn1 = (Timestamp) result1.get("ver");
+      final Timestamp tsIn2 = (Timestamp) result2.get("ver");
+      final Timestamp tsIn3 = (Timestamp) result3.get("ver");
+      final Instant retrieved1 = DbDateUtils.fromSqlTimestamp(tsIn1);
+      final Instant retrieved2 = DbDateUtils.fromSqlTimestamp(tsIn2);
+      final Instant retrieved3 = DbDateUtils.fromSqlTimestamp(tsIn3);
       assertEquals(super.toString() + " Instant " + retrieved1, INSTANT1, retrieved1);
       assertEquals(super.toString() + " Instant " + retrieved2, INSTANT2, retrieved2);
       assertEquals(super.toString() + " Instant " + retrieved3, INSTANT3, retrieved3);
-      
+
       // pull back the raw DB string form to ensure it actually stored UTC field values
-      String retrievedText1 = getDbConnector().getJdbcOperations().queryForObject(select1, new RowMapper<String>() {
+      final String retrievedText1 = getDbConnector().getJdbcOperations().queryForObject(select1, new RowMapper<String>() {
         @Override
-        public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public String mapRow(final ResultSet rs, final int rowNum) throws SQLException {
           return rs.getString("ver");
         }
       }, 1);
-      String retrievedText2 = getDbConnector().getJdbcOperations().queryForObject(select1, new RowMapper<String>() {
+      final String retrievedText2 = getDbConnector().getJdbcOperations().queryForObject(select1, new RowMapper<String>() {
         @Override
-        public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public String mapRow(final ResultSet rs, final int rowNum) throws SQLException {
           return rs.getString("ver");
         }
       }, 2);
-      String retrievedText3 = getDbConnector().getJdbcOperations().queryForObject(select1, new RowMapper<String>() {
+      final String retrievedText3 = getDbConnector().getJdbcOperations().queryForObject(select1, new RowMapper<String>() {
         @Override
-        public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public String mapRow(final ResultSet rs, final int rowNum) throws SQLException {
           return rs.getString("ver");
         }
       }, 3);
       assertEquals(super.toString() + " Instant " + retrieved1, OffsetDateTime.ofInstant(INSTANT1, ZoneOffset.UTC).format(FORMAT), retrievedText1);
       assertEquals(super.toString() + " Instant " + retrieved2, OffsetDateTime.ofInstant(INSTANT2, ZoneOffset.UTC).format(FORMAT), retrievedText2);
       assertEquals(super.toString() + " Instant " + retrieved2, OffsetDateTime.ofInstant(INSTANT3, ZoneOffset.UTC).format(FORMAT), retrievedText3);
-      
+
       // tidy up
       getDbConnector().getJdbcOperations().update(drop);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       fail(ex.getMessage());
     }
   }
@@ -135,17 +135,17 @@ public class DbTimeTest extends AbstractDbTest {
 //  public void test_experiment() {
 ////    TimeZone.setDefault(TimeZone.getTimeZone("Europe/London"));
 ////    TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"));
-//    
+//
 //    String setupUTC = "SET TIME ZONE INTERVAL '+0:00' HOUR TO MINUTE";
 //    getDbConnector().getJdbcTemplate().update(setupUTC);
-//    
+//
 //    String create = "CREATE TABLE tst_times ( id bigint not null, ver1 timestamp without time zone not null, ver2 timestamp with time zone not null )";
 //    getDbConnector().getJdbcTemplate().update(create);
-//    
+//
 //    String insert = "INSERT INTO tst_times VALUES (?,?,?)";
 //    final Timestamp tsOut1 = DbDateUtils.toSqlTimestamp(INSTANT1);
 //    final Timestamp tsOut2 = DbDateUtils.toSqlTimestamp(INSTANT2);
-//    
+//
 //    getDbConnector().getJdbcTemplate().update(insert, 1, tsOut1, tsOut1);
 //    getDbConnector().getJdbcTemplate().update(insert, 2, tsOut2, tsOut2);
 //    getDbConnector().getJdbcTemplate().getJdbcOperations().execute(insert, new PreparedStatementCallback<Void>() {
@@ -168,12 +168,12 @@ public class DbTimeTest extends AbstractDbTest {
 //        return null;
 //      }
 //    });
-//    
+//
 ////    String setup = "SET TIME ZONE 'UTC'";
 ////    String setup = "SET TIME ZONE 'America/Los_Angeles'";
 //    String setup = "SET TIME ZONE INTERVAL '+5:00' HOUR TO MINUTE";
 //    getDbConnector().getJdbcTemplate().update(setup);
-//    
+//
 //    getDbConnector().getJdbcTemplate().update(insert, 5, tsOut1, tsOut1);
 //    getDbConnector().getJdbcTemplate().update(insert, 6, tsOut2, tsOut2);
 //    getDbConnector().getJdbcTemplate().getJdbcOperations().execute(insert, new PreparedStatementCallback<Void>() {
@@ -196,7 +196,7 @@ public class DbTimeTest extends AbstractDbTest {
 //        return null;
 //      }
 //    });
-//    
+//
 //    getDbConnector().getJdbcTemplate().getJdbcOperations().execute(insert, new PreparedStatementCallback<Void>() {
 //      @Override
 //      public Void doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
@@ -225,15 +225,15 @@ public class DbTimeTest extends AbstractDbTest {
 //    Calendar cal31 = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
 //    cal31.setTimeInMillis(INSTANT2.toEpochMilli());
 //    getDbConnector().getJdbcTemplate().update(insert, 15, cal31, cal31);
-//    
-//    
+//
+//
 ////    String select1 = "SELECT NOW() FROM tst_times";
 ////    Map<String, Object> result1 = getDbConnector().getJdbcTemplate().queryForMap(select1);
 ////    System.out.println(result1);
-//    
+//
 //    String select1 = "SELECT ver1, ver2, EXTRACT(TIMEZONE_HOUR FROM ver2) AS offsethr FROM tst_times WHERE id = 1";
 //    String select2 = "SELECT ver1, ver2, EXTRACT(TIMEZONE_HOUR FROM ver2) AS offsethr FROM tst_times WHERE id = 2";
-//    
+//
 //    Map<String, Object> result = getDbConnector().getJdbcTemplate().queryForMap(select1);
 //    Number offset = (Number) result.get("offsethr");
 //    Timestamp tsIn1 = (Timestamp) result.get("ver1");
@@ -259,7 +259,7 @@ public class DbTimeTest extends AbstractDbTest {
 //    assertEquals("Offset " + offset, 0, offset.intValue());
 //    assertEquals("Instant " + retrieved2 + " " + retrieved2b, INSTANT1, retrieved2);
 //    assertEquals("Instant " + retrieved1 + " " + retrieved1b, INSTANT1, retrieved1);
-//    
+//
 ////    String drop = "DROP TABLE tst_times";
 ////    getDbConnector().getJdbcTemplate().update(drop);
 //  }

@@ -18,42 +18,41 @@ import com.opengamma.engine.value.ValueSpecification;
 public class VolatilitySurfaceDataConverter implements ResultConverter<VolatilitySurfaceData> {
 
   @Override
-  // TODO PLAT-2249 Add field to allow transposing the display surface 
-  public Object convertForDisplay(ResultConverterCache context, ValueSpecification valueSpec, VolatilitySurfaceData rawValue, ConversionMode mode) {
-    @SuppressWarnings("unchecked")
-    VolatilitySurfaceData<Object, Object> value = rawValue;
-    Map<String, Object> result = new HashMap<String, Object>();
-    
+  // TODO PLAT-2249 Add field to allow transposing the display surface
+  public Object convertForDisplay(final ResultConverterCache context, final ValueSpecification valueSpec, final VolatilitySurfaceData rawValue,
+      final ConversionMode mode) {
+    final VolatilitySurfaceData<Object, Object> value = rawValue;
+    final Map<String, Object> result = new HashMap<>();
+
     result.put("xCount", value.getXs().length);
     result.put("yCount", value.getYs().length);
-    
+
     if (mode == ConversionMode.FULL) {
-      //TODO assuming that all surfaces are interpolated - bad
-      Object[] xs = value.getXs();
-      String[] xsStrings = new String[xs.length];
+      // TODO assuming that all surfaces are interpolated - bad
+      final Object[] xs = value.getXs();
+      final String[] xsStrings = new String[xs.length];
       for (int i = 0; i < xs.length; i++) {
         xsStrings[i] = LabelFormatter.format(xs[i]);
       }
       result.put("xs", xsStrings);
-      Object[] ys = value.getYs();
-      String[] ysStrings = new String[ys.length];
+      final Object[] ys = value.getYs();
+      final String[] ysStrings = new String[ys.length];
       for (int i = 0; i < ys.length; i++) {
         ysStrings[i] = LabelFormatter.format(ys[i]);
       }
       result.put("ys", ysStrings);
-      
-      
-      double[][] surface = new double[ys.length][xs.length];
-      boolean[][] missingValues = new boolean[ys.length][xs.length];
+
+      final double[][] surface = new double[ys.length][xs.length];
+      final boolean[][] missingValues = new boolean[ys.length][xs.length];
       // Summary view includes only the actual points of the surface
       for (int y = 0; y < ys.length; y++) {
         for (int x = 0; x < xs.length; x++) {
-          Object xt = xs[x];
-          Object yt = ys[y];
-          Double volatility = value.getVolatility(xt, yt);
+          final Object xt = xs[x];
+          final Object yt = ys[y];
+          final Double volatility = value.getVolatility(xt, yt);
           if (volatility == null) {
             missingValues[y][x] = true;
-            //Some 'obviously wrong' value in case client displays it.  Can't use NaN
+            // Some 'obviously wrong' value in case client displays it. Can't use NaN
             surface[y][x] = Double.MAX_VALUE;
           } else {
             surface[y][x] = volatility;
@@ -68,19 +67,19 @@ public class VolatilitySurfaceDataConverter implements ResultConverter<Volatilit
   }
 
   @Override
-  public Object convertForHistory(ResultConverterCache context, ValueSpecification valueSpec, VolatilitySurfaceData value) {
+  public Object convertForHistory(final ResultConverterCache context, final ValueSpecification valueSpec, final VolatilitySurfaceData value) {
     return null;
   }
 
   @Override
-  public String convertToText(ResultConverterCache context, ValueSpecification valueSpec, VolatilitySurfaceData value) {
+  public String convertToText(final ResultConverterCache context, final ValueSpecification valueSpec, final VolatilitySurfaceData value) {
     // Could actually serialise the surface to a string if this is an issue
     return "Volatility Surface (" + value.getXs().length + " x " + value.getYs().length + ")";
   }
-  
+
   @Override
   public String getFormatterName() {
     return "SURFACE_DATA";
   }
-  
+
 }

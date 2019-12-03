@@ -56,7 +56,7 @@ public class HolidayHistoryRequest extends AbstractHistoryRequest {
   /**
    * Creates an instance with object identifier.
    * This will retrieve all versions and corrections unless the relevant fields are set.
-   * 
+   *
    * @param objectId  the object identifier, not null
    */
   public HolidayHistoryRequest(final ObjectIdentifiable objectId) {
@@ -65,12 +65,12 @@ public class HolidayHistoryRequest extends AbstractHistoryRequest {
 
   /**
    * Creates an instance with object identifier and optional version and correction.
-   * 
+   *
    * @param objectId  the object identifier, not null
    * @param versionInstant  the version instant to retrieve, null for all versions
    * @param correctedToInstant  the instant that the data should be corrected to, null for all corrections
    */
-  public HolidayHistoryRequest(final ObjectIdentifiable objectId, Instant versionInstant, Instant correctedToInstant) {
+  public HolidayHistoryRequest(final ObjectIdentifiable objectId, final Instant versionInstant, final Instant correctedToInstant) {
     super(objectId, versionInstant, correctedToInstant);
   }
 

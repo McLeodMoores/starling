@@ -14,21 +14,26 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.time.Tenor;
 
 /**
- * 
+ *
+ * @deprecated This method of defining yield curve nodes should not be used. Use {@link CurveNodes} instead.
  */
+@Deprecated
 public class FixedIncomeStripWithIdentifier implements Comparable<FixedIncomeStripWithIdentifier> {
   private final FixedIncomeStrip _strip;
   private final ExternalId _security;
 
   /**
    * Gets the fixed income strip.
+   *
    * @return The fixed income strip
    */
   public FixedIncomeStrip getStrip() {
     return _strip;
   }
+
   /**
    * Gets the strip instrument type.
+   *
    * @return the strip instrument type
    */
   public StripInstrumentType getInstrumentType() {
@@ -37,6 +42,7 @@ public class FixedIncomeStripWithIdentifier implements Comparable<FixedIncomeStr
 
   /**
    * Gets the strip maturity.
+   *
    * @return the strip maturity
    */
   public Tenor getMaturity() {
@@ -45,6 +51,7 @@ public class FixedIncomeStripWithIdentifier implements Comparable<FixedIncomeStr
 
   /**
    * Gets the security field.
+   *
    * @return the security
    */
   public ExternalId getSecurity() {
@@ -52,8 +59,8 @@ public class FixedIncomeStripWithIdentifier implements Comparable<FixedIncomeStr
   }
 
   /**
-   * Get the number of the quarterly IR futures after the tenor to choose.
-   * NOTE: THIS DOESN'T REFER TO A GENERIC FUTURE
+   * Get the number of the quarterly IR futures after the tenor to choose. NOTE: THIS DOESN'T REFER TO A GENERIC FUTURE
+   *
    * @return number of futures after the tenor
    */
   public int getNumberOfFuturesAfterTenor() {
@@ -61,10 +68,11 @@ public class FixedIncomeStripWithIdentifier implements Comparable<FixedIncomeStr
   }
 
   /**
-   * Get the periods per year of a periodic zero deposit security
-   * 
+   * Get the periods per year of a periodic zero deposit security.
+   *
    * @return the number of periods per year
-   * @throws IllegalStateException if called on a non-periodic zero deposit strip
+   * @throws IllegalStateException
+   *           if called on a non-periodic zero deposit strip
    */
   public int getPeriodsPerYear() {
     return _strip.getPeriodsPerYear();
@@ -84,8 +92,7 @@ public class FixedIncomeStripWithIdentifier implements Comparable<FixedIncomeStr
     }
     if (obj instanceof FixedIncomeStripWithIdentifier) {
       final FixedIncomeStripWithIdentifier other = (FixedIncomeStripWithIdentifier) obj;
-      return ObjectUtils.equals(_strip, other._strip) &&
-          ObjectUtils.equals(_security, other._security);
+      return ObjectUtils.equals(_strip, other._strip) && ObjectUtils.equals(_security, other._security);
     }
     return false;
   }

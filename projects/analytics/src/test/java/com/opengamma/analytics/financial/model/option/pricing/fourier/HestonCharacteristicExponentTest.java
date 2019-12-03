@@ -15,10 +15,10 @@ import static org.testng.AssertJUnit.assertFalse;
 
 import org.testng.annotations.Test;
 
-import cern.jet.random.engine.RandomEngine;
-
 import com.opengamma.analytics.math.number.ComplexNumber;
 import com.opengamma.util.test.TestGroup;
+
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * Test.
@@ -31,7 +31,7 @@ public class HestonCharacteristicExponentTest {
   private static final double OMEGA = 0.66;
   private static final double RHO = -0.45;
   private static final HestonCharacteristicExponent EXPONENT = new HestonCharacteristicExponent(KAPPA, THETA, VOL0, OMEGA, RHO);
-  private RandomEngine RANDOM = new cern.jet.random.engine.MersenneTwister(123);
+  private final RandomEngine RANDOM = new cern.jet.random.engine.MersenneTwister(123);
 
   @Test
   public void test() {
@@ -107,9 +107,9 @@ public class HestonCharacteristicExponentTest {
   }
 
   private void testSensitivities(final HestonCharacteristicExponent ce, final ComplexNumber z, final double t) {
-    ComplexNumber[] fdSense = finiteDifferenceSensitivity(ce, z, t);
-    ComplexNumber[] sense = ce.getCharacteristicExponentAdjoint(z, t);
-    ComplexNumber[] senseConj = ce.getCharacteristicExponentAdjoint(multiply(-1.0, conjugate(z)), t);
+    final ComplexNumber[] fdSense = finiteDifferenceSensitivity(ce, z, t);
+    final ComplexNumber[] sense = ce.getCharacteristicExponentAdjoint(z, t);
+    final ComplexNumber[] senseConj = ce.getCharacteristicExponentAdjoint(multiply(-1.0, conjugate(z)), t);
     for (int i = 0; i < 6; i++) {
       assertEquals(i + " real z:" + z.toString() + ", t:" + t, fdSense[i].getReal(), sense[i].getReal(), 1e-5);
       assertEquals(i + " img z:" + z.toString() + ", t:" + t, fdSense[i].getImaginary(), sense[i].getImaginary(), 1e-5);
@@ -122,11 +122,11 @@ public class HestonCharacteristicExponentTest {
 
   @Test
   public void testSensitivities2() {
-    double t = 2.5;
-    ComplexNumber z = new ComplexNumber(2.3, -0.6);
-    ComplexNumber[] fdSense = finiteDifferenceSensitivity(EXPONENT, z, t);
-    ComplexNumber[] sense = EXPONENT.getCharacteristicExponentAdjointDebug(z, t);
-    ComplexNumber[] senseConj = EXPONENT.getCharacteristicExponentAdjointDebug(multiply(-1.0, conjugate(z)), t);
+    final double t = 2.5;
+    final ComplexNumber z = new ComplexNumber(2.3, -0.6);
+    final ComplexNumber[] fdSense = finiteDifferenceSensitivity(EXPONENT, z, t);
+    final ComplexNumber[] sense = EXPONENT.getCharacteristicExponentAdjointDebug(z, t);
+    final ComplexNumber[] senseConj = EXPONENT.getCharacteristicExponentAdjointDebug(multiply(-1.0, conjugate(z)), t);
     for (int i = 0; i < 6; i++) {
       //      System.out.println(fdSense[i] + "\t" + sense[i] + "\t"+senseConj[i]);
       assertEquals("real: " + i, fdSense[i].getReal(), sense[i].getReal(), 1e-9);
@@ -138,9 +138,9 @@ public class HestonCharacteristicExponentTest {
     }
   }
 
-  private ComplexNumber[] finiteDifferenceSensitivity(final HestonCharacteristicExponent heston, ComplexNumber z, double t) {
-    double eps = 1e-5;
-    ComplexNumber[] res = new ComplexNumber[6];
+  private ComplexNumber[] finiteDifferenceSensitivity(final HestonCharacteristicExponent heston, final ComplexNumber z, final double t) {
+    final double eps = 1e-5;
+    final ComplexNumber[] res = new ComplexNumber[6];
     res[0] = heston.getFunction(t).evaluate(z);
     //bump kappa
     final double kappa = heston.getKappa();
@@ -148,11 +148,11 @@ public class HestonCharacteristicExponentTest {
     ComplexNumber up = hestonT.getFunction(t).evaluate(z);
     if (kappa > eps) {
       hestonT = heston.withKappa(kappa - eps);
-      ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
       res[1] = divide(subtract(up, down), 2 * eps);
     } else {
       hestonT = heston.withKappa(kappa + 2 * eps);
-      ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
       res[1] = add(multiply(-1.5 / eps, res[0]), multiply(2 / eps, up), multiply(-0.5 / eps, up2));
     }
     //bump theta
@@ -161,11 +161,11 @@ public class HestonCharacteristicExponentTest {
     up = hestonT.getFunction(t).evaluate(z);
     if (theta > eps) {
       hestonT = heston.withTheta(theta - eps);
-      ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
       res[2] = divide(subtract(up, down), 2 * eps);
     } else {
       hestonT = heston.withTheta(theta + 2 * eps);
-      ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
       res[2] = add(multiply(-1.5 / eps, res[0]), multiply(2 / eps, up), multiply(-0.5 / eps, up2));
     }
     //bump vol0
@@ -174,11 +174,11 @@ public class HestonCharacteristicExponentTest {
     up = hestonT.getFunction(t).evaluate(z);
     if (vol0 > eps) {
       hestonT = heston.withVol0(vol0 - eps);
-      ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
       res[3] = divide(subtract(up, down), 2 * eps);
     } else {
       hestonT = heston.withVol0(vol0 + 2 * eps);
-      ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
       res[3] = add(multiply(-1.5 / eps, res[0]), multiply(2 / eps, up), multiply(-0.5 / eps, up2));
     }
     //bump omega
@@ -187,11 +187,11 @@ public class HestonCharacteristicExponentTest {
     up = hestonT.getFunction(t).evaluate(z);
     if (omega > eps) {
       hestonT = heston.withOmega(omega - eps);
-      ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
       res[4] = divide(subtract(up, down), 2 * eps);
     } else {
       hestonT = heston.withOmega(omega + 2 * eps);
-      ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
       res[4] = add(multiply(-1.5 / eps, res[0]), multiply(2 / eps, up), multiply(-0.5 / eps, up2));
     }
     //bump rho
@@ -200,19 +200,19 @@ public class HestonCharacteristicExponentTest {
       hestonT = heston.withRho(rho + eps);
       up = hestonT.getFunction(t).evaluate(z);
       hestonT = heston.withRho(rho + 2 * eps);
-      ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber up2 = hestonT.getFunction(t).evaluate(z);
       res[5] = add(multiply(-1.5 / eps, res[0]), multiply(2 / eps, up), multiply(-0.5 / eps, up2));
     } else if (1 - rho < eps) {
       hestonT = heston.withRho(rho - eps);
-      ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
       hestonT = heston.withRho(rho - 2 * eps);
-      ComplexNumber down2 = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down2 = hestonT.getFunction(t).evaluate(z);
       res[5] = add(multiply(0.5 / eps, down2), multiply(-2 / eps, down), multiply(1.5 / eps, res[0]));
     } else {
       hestonT = heston.withRho(rho + eps);
       up = hestonT.getFunction(t).evaluate(z);
       hestonT = heston.withRho(rho - eps);
-      ComplexNumber down = hestonT.getFunction(t).evaluate(z);
+      final ComplexNumber down = hestonT.getFunction(t).evaluate(z);
       res[5] = divide(subtract(up, down), 2 * eps);
     }
     return res;

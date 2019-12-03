@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.montecarlo;
@@ -33,7 +33,7 @@ public class DecisionSchedule {
    * @param impactTime The time impacting the value at each decision date.
    * @param impactAmount The reference amounts at each impact times.
    */
-  public DecisionSchedule(double[] decisionTime, double[][] impactTime, double[][] impactAmount) {
+  public DecisionSchedule(final double[] decisionTime, final double[][] impactTime, final double[][] impactAmount) {
     Validate.isTrue(decisionTime.length == impactTime.length, "Incorrect length");
     Validate.isTrue(decisionTime.length == impactAmount.length, "Incorrect length");
     _decisionTime = decisionTime;
@@ -76,7 +76,7 @@ public class DecisionSchedule {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -86,7 +86,7 @@ public class DecisionSchedule {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    DecisionSchedule other = (DecisionSchedule) obj;
+    final DecisionSchedule other = (DecisionSchedule) obj;
     if (!Arrays.equals(_decisionTime, other._decisionTime)) {
       return false;
     }

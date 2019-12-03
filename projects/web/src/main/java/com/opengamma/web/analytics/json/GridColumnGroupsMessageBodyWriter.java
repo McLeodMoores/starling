@@ -30,34 +30,34 @@ import com.opengamma.web.analytics.GridColumnsJsonWriter;
 
   private final GridColumnsJsonWriter _writer;
 
-  public GridColumnGroupsMessageBodyWriter(GridColumnsJsonWriter writer) {
+  public GridColumnGroupsMessageBodyWriter(final GridColumnsJsonWriter writer) {
     ArgumentChecker.notNull(writer, "writer");
     _writer = writer;
   }
 
   @Override
-  public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+  public boolean isWriteable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
     return type.equals(GridColumnGroups.class);
   }
 
   @Override
-  public long getSize(GridColumnGroups gridColumnGroups,
-                      Class<?> type,
-                      Type genericType,
-                      Annotation[] annotations,
-                      MediaType mediaType) {
+  public long getSize(final GridColumnGroups gridColumnGroups,
+                      final Class<?> type,
+                      final Type genericType,
+                      final Annotation[] annotations,
+                      final MediaType mediaType) {
     return -1;
   }
 
   @Override
-  public void writeTo(GridColumnGroups gridColumnGroups,
-                      Class<?> type,
-                      Type genericType,
-                      Annotation[] annotations,
-                      MediaType mediaType,
-                      MultivaluedMap<String, Object> httpHeaders,
-                      OutputStream entityStream) throws IOException, WebApplicationException {
-    String json = _writer.getJson(gridColumnGroups.getGroups());
+  public void writeTo(final GridColumnGroups gridColumnGroups,
+                      final Class<?> type,
+                      final Type genericType,
+                      final Annotation[] annotations,
+                      final MediaType mediaType,
+                      final MultivaluedMap<String, Object> httpHeaders,
+                      final OutputStream entityStream) throws IOException, WebApplicationException {
+    final String json = _writer.getJson(gridColumnGroups.getGroups());
     entityStream.write(json.getBytes());
   }
 }

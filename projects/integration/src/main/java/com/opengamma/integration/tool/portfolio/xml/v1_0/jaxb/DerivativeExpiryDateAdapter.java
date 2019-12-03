@@ -22,7 +22,7 @@ public class DerivativeExpiryDateAdapter extends AbstractDateAdapter<YearMonth> 
   }
 
   @Override
-  public YearMonth unmarshal(String v) throws Exception {
+  public YearMonth unmarshal(final String v) throws Exception {
     return getFormatter().parse(v, YearMonth.FROM);
   }
 

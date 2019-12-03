@@ -35,7 +35,7 @@ public class DbPortfolioMasterComponentFactory extends AbstractDocumentDbMasterC
   public DbPortfolioMasterComponentFactory() {
     super("prt", PortfolioMaster.class);
   }
-  
+
   @Override
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemotePortfolioMaster.class;
@@ -48,18 +48,18 @@ public class DbPortfolioMasterComponentFactory extends AbstractDocumentDbMasterC
   }
 
   @Override
-  protected AbstractDataResource createPublishedResource(DbPortfolioMaster dbMaster, PortfolioMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbPortfolioMaster dbMaster, final PortfolioMaster postProcessedMaster) {
     //note - the db instance is required for this resource
     return new DataDbPortfolioMasterResource(dbMaster);
   }
 
   @Override
-  protected PortfolioMaster wrapMasterWithTrackingInterface(PortfolioMaster postProcessedMaster) {
+  protected PortfolioMaster wrapMasterWithTrackingInterface(final PortfolioMaster postProcessedMaster) {
     return new DataTrackingPortfolioMaster(postProcessedMaster);
   }
 
   @Override
-  protected PortfolioMaster postProcess(DbPortfolioMaster master) {
+  protected PortfolioMaster postProcess(final DbPortfolioMaster master) {
     return PermissionedPortfolioMaster.wrap(master);
   }
 

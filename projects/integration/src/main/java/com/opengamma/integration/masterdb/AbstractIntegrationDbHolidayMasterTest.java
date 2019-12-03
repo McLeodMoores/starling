@@ -41,13 +41,13 @@ public abstract class AbstractIntegrationDbHolidayMasterTest extends AbstractLoc
     return _holMaster;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Test(enabled = false, description = "Queries the entire database")
-  public void test_queryAll() throws Exception {
+  public void testQueryAll() throws Exception {
     final HolidaySearchRequest request = new HolidaySearchRequest();
     request.setPagingRequest(PagingRequest.NONE);
     final int total = getHolidayMaster().search(request).getPaging().getTotalItems();
-    final int pages = (total / PAGE_SIZE) + 1;
+    final int pages = total / PAGE_SIZE + 1;
     for (int page = 1; page <= pages; page++) {
       request.setPagingRequest(PagingRequest.ofPage(page, PAGE_SIZE));
       System.out.println("Checking holiday master, page " + request.getPagingRequest());

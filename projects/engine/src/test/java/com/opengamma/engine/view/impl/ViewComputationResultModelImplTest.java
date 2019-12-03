@@ -22,24 +22,22 @@ import com.opengamma.engine.value.ComputedValueResult;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.view.ViewCalculationResultModel;
 import com.opengamma.engine.view.execution.ViewCycleExecutionOptions;
-import com.opengamma.engine.view.impl.InMemoryViewComputationResultModel;
-import com.opengamma.engine.view.impl.InMemoryViewResultModel;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class ViewComputationResultModelImplTest {
-  
+
   public void test() {
-    InMemoryViewComputationResultModel model = new InMemoryViewComputationResultModel();
+    final InMemoryViewComputationResultModel model = new InMemoryViewComputationResultModel();
     checkModel(model);
   }
 
-  static void checkModel(InMemoryViewResultModel model) {
-    ViewCycleExecutionOptions executionOptions = ViewCycleExecutionOptions.builder()
+  static void checkModel(final InMemoryViewResultModel model) {
+    final ViewCycleExecutionOptions executionOptions = ViewCycleExecutionOptions.builder()
         .setValuationTime(Instant.ofEpochMilli(400)).create();
 
     model.setViewCycleExecutionOptions(executionOptions);
@@ -48,14 +46,14 @@ public class ViewComputationResultModelImplTest {
     assertEquals(Instant.ofEpochMilli(500), model.getCalculationTime());
     model.setCalculationDuration(Duration.ofMillis(100));
     assertEquals(Duration.ofMillis(100), model.getCalculationDuration());
-    
+
     model.addValue("configName1", COMPUTED_VALUE_RESULT);
     assertEquals(Sets.newHashSet(SPEC), Sets.newHashSet(model.getAllTargets()));
-    
-    ViewCalculationResultModel calcResult = model.getCalculationResult("configName1");
+
+    final ViewCalculationResultModel calcResult = model.getCalculationResult("configName1");
     assertNotNull(calcResult);
-    
-    Map<Pair<String, ValueProperties>, ComputedValueResult> targetResults = calcResult.getValues(SPEC);
+
+    final Map<Pair<String, ValueProperties>, ComputedValueResult> targetResults = calcResult.getValues(SPEC);
     assertEquals(1, targetResults.size());
     assertEquals("DATA", targetResults.keySet().iterator().next().getFirst());
     assertEquals(COMPUTED_VALUE_RESULT, targetResults.values().iterator().next());

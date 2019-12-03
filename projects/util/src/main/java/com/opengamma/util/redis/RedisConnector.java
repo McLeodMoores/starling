@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.redis;
 
+import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.Connector;
+
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
-
-import com.opengamma.util.ArgumentChecker;
-import com.opengamma.util.Connector;
 
 /**
  * Connector used to access Redis databases.
@@ -23,22 +23,22 @@ public class RedisConnector implements Connector {
    * The configuration name.
    */
   private final String _name;
-  
+
   private final String _host;
-  
+
   private final int _port;
-  
+
   private final String _password;
-  
+
   private final JedisPool _jedisPool;
-  
+
   private final JedisPoolConfig _jedisPoolConfig;
-  
+
   private final int _timeOut;
-  
+
   /**
    * Creates an instance.
-   *  
+   *
    * @param name the configuration name, not null
    * @param host the redis server host, not null
    * @param port the redis server port, not null
@@ -49,19 +49,19 @@ public class RedisConnector implements Connector {
 
   /**
    * Creates an instance.
-   *  
+   *
    * @param name the configuration name, not null
    * @param host the redis server host, not null
    * @param port the redis server port, not null
    * @param password the redis server password, may be null
    */
-  public RedisConnector(final String name, final String host, final int port, String password) {
+  public RedisConnector(final String name, final String host, final int port, final String password) {
     this(name, host, port, password, new JedisPoolConfig(), Protocol.DEFAULT_TIMEOUT);
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the configuration name, not null
    * @param host  the redis server host, not null
    * @param port  the redis server port, not null
@@ -73,7 +73,7 @@ public class RedisConnector implements Connector {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the configuration name, not null
    * @param host  the redis server host, not null
    * @param port  the redis server port, not null
@@ -87,14 +87,14 @@ public class RedisConnector implements Connector {
     ArgumentChecker.notNull(port, "port");
     ArgumentChecker.notNull(config, "jedis pool config");
     ArgumentChecker.notNull(timeOut, "timeOut");
-    
+
     _name = name;
     _host = host;
     _port = port;
     _password = password;
     _jedisPoolConfig = config;
     _timeOut = timeOut;
-    
+
     JedisPool pool = null;
     if (password == null) {
       pool = new JedisPool(config, _host, _port, _timeOut);
@@ -109,7 +109,7 @@ public class RedisConnector implements Connector {
   public final String getName() {
     return _name;
   }
-  
+
   /**
    * Gets the host.
    * @return the host
@@ -141,7 +141,7 @@ public class RedisConnector implements Connector {
   public JedisPool getJedisPool() {
     return _jedisPool;
   }
-  
+
   /**
    * Gets the timeOut.
    * @return the timeOut
@@ -172,7 +172,7 @@ public class RedisConnector implements Connector {
   //-------------------------------------------------------------------------
   /**
    * Returns a description of this object suitable for debugging.
-   * 
+   *
    * @return the description, not null
    */
   @Override

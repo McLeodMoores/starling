@@ -13,8 +13,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a OIS-like floating coupon. The description is simplified by not creating the full set of fixing times.
- * Only the start and the end of the fixing period times are described. The description is enough to construct curves from OIS and price OIS coupons (even if some fixing already took place).
+ * Class describing a OIS-like floating coupon. The description is simplified by not creating the full set of fixing times. Only the start and the end of the
+ * fixing period times are described. The description is enough to construct curves from OIS and price OIS coupons (even if some fixing already took place).
  */
 public class CouponON extends Coupon implements DepositIndexCoupon<IndexON> {
 
@@ -23,8 +23,8 @@ public class CouponON extends Coupon implements DepositIndexCoupon<IndexON> {
    */
   private final IndexON _index;
   /**
-   * The fixing period start time (in years). The fixing period does take into account the already fixed period,
-   * i.e. the fixing period start time is the first date for which the coupon is not fixed yet.
+   * The fixing period start time (in years). The fixing period does take into account the already fixed period, i.e. the fixing period start time is the first
+   * date for which the coupon is not fixed yet.
    */
   private final double _fixingPeriodStartTime;
   /**
@@ -46,22 +46,35 @@ public class CouponON extends Coupon implements DepositIndexCoupon<IndexON> {
 
   /**
    * Constructor of a generic coupon from details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param fundingCurveName Name of the funding curve.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param index The OIS-like index on which the coupon fixes. Not null.
-   * @param fixingPeriodStartTime The fixing period start time (in years).
-   * @param fixingPeriodEndTime The fixing period end time (in years).
-   * @param fixingPeriodAccrualFactor The accrual factor (or year fraction) associated to the fixing period in the Index day count convention.
-   * @param notionalAccrued The notional accrued by the interest periods already fixed.
-   * @param forwardCurveName The name of the forward curve.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param fundingCurveName
+   *          Name of the funding curve.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param index
+   *          The OIS-like index on which the coupon fixes. Not null.
+   * @param fixingPeriodStartTime
+   *          The fixing period start time (in years).
+   * @param fixingPeriodEndTime
+   *          The fixing period end time (in years).
+   * @param fixingPeriodAccrualFactor
+   *          The accrual factor (or year fraction) associated to the fixing period in the Index day count convention.
+   * @param notionalAccrued
+   *          The notional accrued by the interest periods already fixed.
+   * @param forwardCurveName
+   *          The name of the forward curve.
    * @deprecated Use the constructor that does not take yield curve names
    */
   @Deprecated
-  public CouponON(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction, final double notional, final IndexON index,
-      final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingPeriodAccrualFactor, final double notionalAccrued, final String forwardCurveName) {
+  public CouponON(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction, final double notional,
+      final IndexON index, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingPeriodAccrualFactor,
+      final double notionalAccrued, final String forwardCurveName) {
     super(currency, paymentTime, fundingCurveName, paymentYearFraction, notional);
     ArgumentChecker.notNull(index, "Coupon OIS: index");
     _index = index;
@@ -74,15 +87,25 @@ public class CouponON extends Coupon implements DepositIndexCoupon<IndexON> {
 
   /**
    * Constructor of a generic coupon from details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param index The OIS-like index on which the coupon fixes. Not null.
-   * @param fixingPeriodStartTime The fixing period start time (in years).
-   * @param fixingPeriodEndTime The fixing period end time (in years).
-   * @param fixingPeriodAccrualFactor The accrual factor (or year fraction) associated to the fixing period in the Index day count convention.
-   * @param notionalAccrued The notional accrued by the interest periods already fixed.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param index
+   *          The OIS-like index on which the coupon fixes. Not null.
+   * @param fixingPeriodStartTime
+   *          The fixing period start time (in years).
+   * @param fixingPeriodEndTime
+   *          The fixing period end time (in years).
+   * @param fixingPeriodAccrualFactor
+   *          The accrual factor (or year fraction) associated to the fixing period in the Index day count convention.
+   * @param notionalAccrued
+   *          The notional accrued by the interest periods already fixed.
    */
   public CouponON(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final IndexON index,
       final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingPeriodAccrualFactor, final double notionalAccrued) {
@@ -98,14 +121,17 @@ public class CouponON extends Coupon implements DepositIndexCoupon<IndexON> {
 
   /**
    * Gets the OIS index of the instrument.
+   * 
    * @return The index.
    */
+  @Override
   public IndexON getIndex() {
     return _index;
   }
 
   /**
    * Gets the fixing period start time (in years).
+   * 
    * @return The fixing period start time.
    */
   public double getFixingPeriodStartTime() {
@@ -114,6 +140,7 @@ public class CouponON extends Coupon implements DepositIndexCoupon<IndexON> {
 
   /**
    * Gets the fixing period end time (in years).
+   * 
    * @return The fixing period end time.
    */
   public double getFixingPeriodEndTime() {
@@ -122,6 +149,7 @@ public class CouponON extends Coupon implements DepositIndexCoupon<IndexON> {
 
   /**
    * Gets the accrual factor for the fixing period.
+   * 
    * @return The accrual factor.
    */
   public double getFixingPeriodAccrualFactor() {
@@ -130,6 +158,7 @@ public class CouponON extends Coupon implements DepositIndexCoupon<IndexON> {
 
   /**
    * Gets the notional augmented by the interest accrued over the periods already fixed.
+   * 
    * @return The augmented notional.
    */
   public double getNotionalAccrued() {
@@ -138,6 +167,7 @@ public class CouponON extends Coupon implements DepositIndexCoupon<IndexON> {
 
   /**
    * Gets the forward curve name.
+   * 
    * @return The name.
    */
   public String getForwardCurveName() {
@@ -147,8 +177,8 @@ public class CouponON extends Coupon implements DepositIndexCoupon<IndexON> {
   @SuppressWarnings("deprecation")
   @Override
   public CouponON withNotional(final double notional) {
-    return new CouponON(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, _index, _fixingPeriodStartTime, _fixingPeriodEndTime, _fixingPeriodAccrualFactor,
-        _notionalAccrued / getNotional() * notional, _forwardCurveName);
+    return new CouponON(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, _index, _fixingPeriodStartTime,
+        _fixingPeriodEndTime, _fixingPeriodAccrualFactor, _notionalAccrued / getNotional() * notional, _forwardCurveName);
   }
 
   @Override
@@ -174,14 +204,14 @@ public class CouponON extends Coupon implements DepositIndexCoupon<IndexON> {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_fixingPeriodAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingPeriodEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_fixingPeriodStartTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _index.hashCode();
     temp = Double.doubleToLongBits(_notionalAccrued);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

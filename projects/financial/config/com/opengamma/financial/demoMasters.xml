@@ -237,18 +237,6 @@
   </bean>
 
   <!-- ================================================================== -->
-  <!-- Curves -->
-  <bean id="sharedInterpolatedYieldCurveDefinitionSource" class="com.opengamma.financial.analytics.ircurve.EHCachingInterpolatedYieldCurveDefinitionSource">
-        <constructor-arg ref="configDBInterpolatedYieldCurveDefinitionSource" />
-        <constructor-arg ref="standardCacheManager" />
-  </bean>
-  <bean id="configDBInterpolatedYieldCurveDefinitionSource" class="com.opengamma.financial.analytics.ircurve.ConfigDBInterpolatedYieldCurveDefinitionSource">
-    <constructor-arg ref="sharedConfigSource" />
-  </bean>
-  <bean id="sharedInterpolatedYieldCurveSpecificationBuilder" class="com.opengamma.financial.analytics.ircurve.ConfigDBInterpolatedYieldCurveSpecificationBuilder">
-    <constructor-arg ref="sharedConfigSource" />
-  </bean>
-
   <!-- Vol Cubes-->
   <!-- TODO: this properly, user source and cacheing -->
   <bean id="combinedVolatilityCubeDefinitionSource" class="com.opengamma.financial.analytics.volatility.cube.ConfigDBVolatilityCubeDefinitionSource">

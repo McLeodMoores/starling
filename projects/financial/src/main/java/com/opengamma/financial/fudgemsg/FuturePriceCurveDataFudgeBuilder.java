@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.fudgemsg;
@@ -25,7 +25,7 @@ import com.opengamma.financial.analytics.volatility.surface.FuturePriceCurveData
 import com.opengamma.id.UniqueIdentifiable;
 
 /**
- * 
+ *
  */
 @FudgeBuilderFor(FuturePriceCurveData.class)
 public class FuturePriceCurveDataFudgeBuilder implements FudgeBuilder<FuturePriceCurveData<?>> {
@@ -60,7 +60,7 @@ public class FuturePriceCurveDataFudgeBuilder implements FudgeBuilder<FuturePric
     final String definitionName = message.getString("definitionName");
     final String specificationName = message.getString("specificationName");
     final List<FudgeField> xsFields = message.getAllByName("xs");
-    final List<Object> xs = new ArrayList<Object>();
+    final List<Object> xs = new ArrayList<>();
     Object[] xsArray = null;
     for (final FudgeField xField : xsFields) {
       final Object x = deserializer.fieldValueToObject(xField);
@@ -71,7 +71,7 @@ public class FuturePriceCurveDataFudgeBuilder implements FudgeBuilder<FuturePric
     }
     if (xs.size() > 0) {
       final Class<?> xClazz = xs.get(0).getClass();
-      final Map<Object, Double> values = new HashMap<Object, Double>();
+      final Map<Object, Double> values = new HashMap<>();
       final List<FudgeField> valuesFields = message.getAllByName("values");
       for (final FudgeField valueField : valuesFields) {
         final FudgeMsg subMessage = (FudgeMsg) valueField.getValue();
@@ -79,9 +79,9 @@ public class FuturePriceCurveDataFudgeBuilder implements FudgeBuilder<FuturePric
         final Double value = subMessage.getDouble("value");
         values.put(x, value);
       }
-      return new FuturePriceCurveData<Object>(definitionName, specificationName, target, xs.toArray(xsArray), values);
+      return new FuturePriceCurveData<>(definitionName, specificationName, target, xs.toArray(xsArray), values);
     }
-    return new FuturePriceCurveData<Object>(definitionName, specificationName, target, xs.toArray(), Collections.<Object, Double>emptyMap());
+    return new FuturePriceCurveData<>(definitionName, specificationName, target, xs.toArray(), Collections.<Object, Double>emptyMap());
   }
 
 }

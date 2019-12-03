@@ -20,12 +20,12 @@ public class InMemoryAuditLogger extends AbstractAuditLogger {
   /**
    * The collection of log messages.
    */
-  private final List<AuditLogEntry> _logMessages = new ArrayList<AuditLogEntry>();
+  private final List<AuditLogEntry> _logMessages = new ArrayList<>();
 
   @Override
-  public void log(String user, String originatingSystem, String object, String operation,
-      String description, boolean success) {
-    AuditLogEntry auditLogEntry = new AuditLogEntry(user, originatingSystem, object, operation, description, success, new Date());
+  public void log(final String user, final String originatingSystem, final String object, final String operation,
+      final String description, final boolean success) {
+    final AuditLogEntry auditLogEntry = new AuditLogEntry(user, originatingSystem, object, operation, description, success, new Date());
     _logMessages.add(auditLogEntry);
   }
 
@@ -34,7 +34,7 @@ public class InMemoryAuditLogger extends AbstractAuditLogger {
    * @return the list of messages, not null
    */
   public List<AuditLogEntry> getMessages() {
-    return Collections.unmodifiableList(_logMessages);    
+    return Collections.unmodifiableList(_logMessages);
   }
 
 }

@@ -13,7 +13,7 @@ public class ExchangeBean extends EnumWithDescriptionBean {
   protected ExchangeBean() {
   }
 
-  public ExchangeBean(String exchangeName, String description) {
+  public ExchangeBean(final String exchangeName, final String description) {
     super(exchangeName, description);
   }
 

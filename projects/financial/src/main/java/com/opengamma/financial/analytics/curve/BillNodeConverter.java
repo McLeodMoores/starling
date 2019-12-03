@@ -13,11 +13,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.date.WorkingDayCalendar;
-import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
@@ -33,7 +31,7 @@ import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
-import com.opengamma.financial.analytics.conversion.CalendarUtils;
+import com.opengamma.financial.analytics.conversion.WorkingDayCalendarUtils;
 import com.opengamma.financial.analytics.ircurve.strips.BillNode;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.yield.YieldConvention;
@@ -45,10 +43,9 @@ import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts a {@link BillNode} into a {@link BillTransactionDefinition} using yield information from the market data snapshot. The
- * bill security must be available from the security source, as the maturity date and (optionally) the legal entity information
- * used in the definition is obtained from the security. If there is no legal entity information available from the source,
- * then an entity consisting of only the region is used to identify the issuer.
+ * Converts a {@link BillNode} into a {@link BillTransactionDefinition} using yield information from the market data snapshot. The bill security must be
+ * available from the security source, as the maturity date and (optionally) the legal entity information used in the definition is obtained from the security.
+ * If there is no legal entity information available from the source, then an entity consisting of only the region is used to identify the issuer.
  */
 public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinition<?>> {
   /** The region source */
@@ -67,13 +64,19 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
   private final ZonedDateTime _valuationTime;
 
   /**
-   * @param regionSource  the region source, not null
-   * @param holidaySource  the holiday source, not null
-   * @param securitySource  the security source, not null
-   * @param marketData  the market data, not null
-   * @param dataId  the market data id, not null
-   * @param valuationTime  the valuation time, not null
-   * @deprecated  A legal entity source should be supplied
+   * @param regionSource
+   *          the region source, not null
+   * @param holidaySource
+   *          the holiday source, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param marketData
+   *          the market data, not null
+   * @param dataId
+   *          the market data id, not null
+   * @param valuationTime
+   *          the valuation time, not null
+   * @deprecated A legal entity source should be supplied
    */
   @Deprecated
   public BillNodeConverter(final HolidaySource holidaySource, final RegionSource regionSource, final SecuritySource securitySource,
@@ -88,13 +91,20 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
   }
 
   /**
-   * @param regionSource  the region source, not null
-   * @param holidaySource  the holiday source, not null
-   * @param securitySource  the security source, not null
-   * @param legalEntitySource  the legal entity source, not null
-   * @param marketData  the market data, not null
-   * @param dataId  the market data id, not null
-   * @param valuationTime  the valuation time, not null
+   * @param regionSource
+   *          the region source, not null
+   * @param holidaySource
+   *          the holiday source, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param legalEntitySource
+   *          the legal entity source, not null
+   * @param marketData
+   *          the market data, not null
+   * @param dataId
+   *          the market data id, not null
+   * @param valuationTime
+   *          the valuation time, not null
    */
   public BillNodeConverter(final HolidaySource holidaySource, final RegionSource regionSource, final SecuritySource securitySource,
       final LegalEntitySource legalEntitySource, final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
@@ -113,14 +123,13 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     if (yield == null) {
       throw new OpenGammaRuntimeException("Could not get market data for " + _dataId);
     }
-    final Security security = _securitySource.getSingle(_dataId.toBundle()); //TODO this is in here because we can't ask for data by ISIN directly.
+    final Security security = _securitySource.getSingle(_dataId.toBundle()); // TODO this is in here because we can't ask for data by ISIN directly.
     if (!(security instanceof BillSecurity)) {
       throw new OpenGammaRuntimeException("Could not get security for " + _dataId.toBundle());
     }
     final BillSecurity billSecurity = (BillSecurity) security;
     final ExternalId regionId = billSecurity.getRegionId();
-    final WorkingDayCalendar calendar =
-        new WorkingDayCalendarAdapter(CalendarUtils.getCalendar(_regionSource, _holidaySource, regionId), DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+    final WorkingDayCalendar calendar = WorkingDayCalendarUtils.getCalendarForRegion(_regionSource, _holidaySource, regionId);
     final Currency currency = billSecurity.getCurrency();
     final ZonedDateTime maturityDate = billSecurity.getMaturityDate().getExpiry();
     final DayCount dayCount = billSecurity.getDayCount();
@@ -128,7 +137,6 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     final int settlementDays = billSecurity.getDaysToSettle();
     final ExternalIdBundle identifiers = security.getExternalIdBundle();
     // TODO: [PLAT-5905] Add legal entity to node.
-    // Legal Entity
     final LegalEntity legalEntity;
     if (_legalEntitySource != null) {
       final com.opengamma.core.legalentity.LegalEntity legalEntityFromSource = _legalEntitySource.getSingle(billSecurity.getLegalEntityId());
@@ -141,7 +149,7 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
         if (creditRatings == null) {
           creditRatings = new HashSet<>();
         }
-        //TODO seniority level needs to go into the credit rating
+        // TODO seniority level needs to go into the credit rating
         creditRatings.add(CreditRating.of(rating.getRater(), rating.getScore().toString(), true));
       }
       final Region region = Region.of(regionId.getValue(), Country.of(regionId.getValue()), billSecurity.getCurrency());
@@ -150,8 +158,8 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
       final Region region = Region.of(regionId.getValue(), Country.of(regionId.getValue()), billSecurity.getCurrency());
       legalEntity = new LegalEntity(null, "", null, null, region);
     }
-    final BillSecurityDefinition securityDefinition = new BillSecurityDefinition(currency, maturityDate, 1, settlementDays, calendar,
-        yieldConvention, dayCount, legalEntity);
+    final BillSecurityDefinition securityDefinition = new BillSecurityDefinition(currency, maturityDate, 1, settlementDays, calendar, yieldConvention, dayCount,
+        legalEntity);
     // TODO what if it isn't a yield quote
     return BillTransactionDefinition.fromYield(securityDefinition, 1, _valuationTime, yield, calendar);
   }

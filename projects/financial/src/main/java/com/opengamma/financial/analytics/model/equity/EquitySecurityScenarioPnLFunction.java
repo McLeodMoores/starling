@@ -38,32 +38,35 @@ import com.opengamma.util.async.AsynchronousExecution;
  * Shift to option volatilities clearly have no effect.
  * <p>
  * For this function to resolve, at least one of the following properties must be set. {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_PRICE_SHIFT}
- * {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_VOL_SHIFT} {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_PRICE_SHIFT_TYPE} {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_VOL_SHIFT_TYPE}
+ * {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_VOL_SHIFT} {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_PRICE_SHIFT_TYPE}
+ * {@link ScenarioPnLPropertyNamesAndValues#PROPERTY_VOL_SHIFT_TYPE}
  */
 public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final String s_priceShift = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT;
-  private static final String s_volShift = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT;
-  private static final String s_priceShiftType = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT_TYPE;
-  private static final String s_volShiftType = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT_TYPE;
+  private static final String PRICE_SHIFT = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT;
+  private static final String VOL_SHIFT = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT;
+  private static final String PRICE_SHIFT_TYPE = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT_TYPE;
+  private static final String VOL_SHIFT_TYPE = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT_TYPE;
 
   private String getValueRequirementName() {
     return ValueRequirementNames.PNL;
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
     // Get equity price (market value)
     final EquitySecurity equity = (EquitySecurity) target.getSecurity();
-    final double price = (Double) inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, equity.getUniqueId()));
+    final double price = (Double) inputs
+        .getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, equity.getUniqueId()));
 
     // Get shift to price, if provided, and hence PNL
     final double pnl;
 
-    ValueProperties constraints = desiredValues.iterator().next().getConstraints();
-    String stockConstraint = constraints.getValues(s_priceShift).iterator().next();
-    String priceShiftTypeConstraint = constraints.getValues(s_priceShiftType).iterator().next();
+    final ValueProperties constraints = desiredValues.iterator().next().getConstraints();
+    final String stockConstraint = constraints.getValues(PRICE_SHIFT).iterator().next();
+    final String priceShiftTypeConstraint = constraints.getValues(PRICE_SHIFT_TYPE).iterator().next();
 
     if (stockConstraint.equals("")) {
       pnl = 0.0;
@@ -78,7 +81,7 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
         // The market value under shift, d = (1 + d ) * market_value, hence pnl = scenario_value - market_value = d * market_value
         pnl = shiftStock * price;
       } else {
-        s_logger.debug("Valid PriceShiftType's: Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
+        LOGGER.debug("Valid PriceShiftType's: Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
         pnl = shiftStock * price;
       }
     }
@@ -95,69 +98,70 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
-    ValueProperties properties = createValueProperties()
-        .withAny(s_priceShift).withAny(s_priceShiftType)
-        .withAny(s_volShift).withAny(s_volShiftType)
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
+    final ValueProperties properties = createValueProperties()
+        .withAny(PRICE_SHIFT).withAny(PRICE_SHIFT_TYPE)
+        .withAny(VOL_SHIFT).withAny(VOL_SHIFT_TYPE)
         .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode())
         .get();
     return Collections.singleton(new ValueSpecification(getValueRequirementName(), target.toSpecification(), properties));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-    ValueSpecification input = inputs.keySet().iterator().next();
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
+    final ValueSpecification input = inputs.keySet().iterator().next();
     if (getValueRequirementName().equals(input.getValueName())) {
       return inputs.keySet();
-    } else {
-      return getResults(context, target);
     }
+    return getResults(context, target);
   }
 
   @Override
   /**
-   * The only requirement for the present value of an EquitySecurity is the MARKET_VALUE. <p>
+   * The only requirement for the present value of an EquitySecurity is the MARKET_VALUE.
+   * <p>
    * We also use getRequirements to set defaults for the shift properties.
    */
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
 
     // Test constraints are provided, else set to ""
     final ValueProperties constraints = desiredValue.getConstraints();
     ValueProperties.Builder scenarioDefaults = null;
     boolean somethingConstrained = false;
 
-    final Set<String> priceShiftSet = constraints.getValues(s_priceShift);
+    final Set<String> priceShiftSet = constraints.getValues(PRICE_SHIFT);
     if (priceShiftSet == null || priceShiftSet.isEmpty()) {
-      scenarioDefaults = constraints.copy().withoutAny(s_priceShift).with(s_priceShift, "");
+      scenarioDefaults = constraints.copy().withoutAny(PRICE_SHIFT).with(PRICE_SHIFT, "");
     } else {
       somethingConstrained = true;
     }
-    final Set<String> priceShiftTypeSet = constraints.getValues(s_priceShiftType);
+    final Set<String> priceShiftTypeSet = constraints.getValues(PRICE_SHIFT_TYPE);
     if (priceShiftTypeSet == null || priceShiftTypeSet.isEmpty()) {
       if (scenarioDefaults == null) {
-        scenarioDefaults = constraints.copy().withoutAny(s_priceShiftType).with(s_priceShiftType, "Multiplicative");
+        scenarioDefaults = constraints.copy().withoutAny(PRICE_SHIFT_TYPE).with(PRICE_SHIFT_TYPE, "Multiplicative");
       } else {
-        scenarioDefaults = scenarioDefaults.withoutAny(s_priceShiftType).with(s_priceShiftType, "Multiplicative");
+        scenarioDefaults = scenarioDefaults.withoutAny(PRICE_SHIFT_TYPE).with(PRICE_SHIFT_TYPE, "Multiplicative");
       }
     } else {
       somethingConstrained = true;
     }
-    final Set<String> volShiftSet = constraints.getValues(s_volShift);
+    final Set<String> volShiftSet = constraints.getValues(VOL_SHIFT);
     if (volShiftSet == null || volShiftSet.isEmpty()) {
       if (scenarioDefaults == null) {
-        scenarioDefaults = constraints.copy().withoutAny(s_volShift).with(s_volShift, "");
+        scenarioDefaults = constraints.copy().withoutAny(VOL_SHIFT).with(VOL_SHIFT, "");
       } else {
-        scenarioDefaults = scenarioDefaults.withoutAny(s_volShift).with(s_volShift, "");
+        scenarioDefaults = scenarioDefaults.withoutAny(VOL_SHIFT).with(VOL_SHIFT, "");
       }
     } else {
       somethingConstrained = true;
     }
-    final Set<String> volShiftSetType = constraints.getValues(s_volShiftType);
+    final Set<String> volShiftSetType = constraints.getValues(VOL_SHIFT_TYPE);
     if (volShiftSetType == null || volShiftSetType.isEmpty()) {
       if (scenarioDefaults == null) {
-        scenarioDefaults = constraints.copy().withoutAny(s_volShiftType).with(s_volShiftType, "Multiplicative");
+        scenarioDefaults = constraints.copy().withoutAny(VOL_SHIFT_TYPE).with(VOL_SHIFT_TYPE, "Multiplicative");
       } else {
-        scenarioDefaults = scenarioDefaults.withoutAny(s_volShiftType).with(s_volShiftType, "Multiplicative");
+        scenarioDefaults = scenarioDefaults.withoutAny(VOL_SHIFT_TYPE).with(VOL_SHIFT_TYPE, "Multiplicative");
       }
     } else {
       somethingConstrained = true;
@@ -169,10 +173,10 @@ public class EquitySecurityScenarioPnLFunction extends AbstractFunction.NonCompi
     // If defaults have been added, this adds additional copy of the Function into dep graph with the adjusted constraints
     if (scenarioDefaults != null) {
       return Collections.singleton(new ValueRequirement(getValueRequirementName(), target.toSpecification(), scenarioDefaults.get()));
-    } else { // Scenarios are defined, so we're satisfied
-      return Collections.singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, target.getSecurity().getUniqueId()));
     }
+    return Collections
+        .singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, target.getSecurity().getUniqueId()));
   }
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EquitySecurityScenarioPnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquitySecurityScenarioPnLFunction.class);
 }

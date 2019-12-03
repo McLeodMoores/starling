@@ -33,7 +33,7 @@ import com.opengamma.util.ArgumentChecker;
 public class BundleParser {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BundleParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BundleParser.class);
 
   /** The bundle element tag name. */
   private static final String BUNDLE_ELEMENT = "bundle";
@@ -57,96 +57,99 @@ public class BundleParser {
   /**
    * The cache of elements.
    */
-  private final Map<String, Element> _elementsByIdMap = new HashMap<String, Element>(); 
+  private final Map<String, Element> _elementsByIdMap = new HashMap<>();
 
   /**
-   * Creates a parser
-   * 
-   * @param fragmentUriProvider  the URI provider for fragments, not null
-   * @param basePath  the base path, not null
+   * Creates a parser.
+   *
+   * @param fragmentUriProvider
+   *          the URI provider for fragments, not null
+   * @param basePath
+   *          the base path, not null
    */
-  public BundleParser(UriProvider fragmentUriProvider, String basePath) {
+  public BundleParser(final UriProvider fragmentUriProvider, final String basePath) {
     ArgumentChecker.notNull(fragmentUriProvider, "fragmentUriProvider");
     ArgumentChecker.notNull(basePath, "basePath");
     _fragmentUriProvider = fragmentUriProvider;
     _basePath = basePath.startsWith("/") ? basePath : "/" + basePath;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Parses the XML file, returning the bundle manager.
-   * 
-   * @param xmlStream the XML input stream, not null
+   *
+   * @param xmlStream
+   *          the XML input stream, not null
    * @return the parsed bundle manager, not null
    */
-  public BundleManager parse(InputStream xmlStream) {
+  public BundleManager parse(final InputStream xmlStream) {
     ArgumentChecker.notNull(xmlStream, "xml inputstream");
-    DocumentBuilder builder = getDocumentBuilder();
+    final DocumentBuilder builder = getDocumentBuilder();
     if (builder != null) {
       try {
-        Document document = builder.parse(xmlStream);
+        final Document document = builder.parse(xmlStream);
         processXMLDocument(document);
-      } catch (SAXException ex) {
+      } catch (final SAXException ex) {
         throw new OpenGammaRuntimeException("unable to parse xml file", ex);
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         throw new OpenGammaRuntimeException("unable to read xml file", ex);
       }
     }
     return _bundleManager;
   }
 
-  private void processXMLDocument(Document document) {
+  private void processXMLDocument(final Document document) {
     buildAllElements(document);
-    for (Element element : _elementsByIdMap.values()) {
+    for (final Element element : _elementsByIdMap.values()) {
       addToManager(element);
     }
   }
 
-  private void addToManager(Element element) {
-    String idAttr = element.getAttribute(ID_ATTR);
-    Bundle bundle = new Bundle(idAttr);
-    NodeList childNodes = element.getChildNodes();
+  private void addToManager(final Element element) {
+    final String idAttr = element.getAttribute(ID_ATTR);
+    final Bundle bundle = new Bundle(idAttr);
+    final NodeList childNodes = element.getChildNodes();
     for (int i = 0; i < childNodes.getLength(); i++) {
-      Node node = childNodes.item(i);
+      final Node node = childNodes.item(i);
       if (node.getNodeType() == Node.ELEMENT_NODE) {
-        Element childElement = (Element) node;
+        final Element childElement = (Element) node;
         if (childElement.getNodeName().equals(BUNDLE_ELEMENT)) {
           processRefBundle(bundle, childElement);
         }
         if (childElement.getNodeName().equals(FRAGMENT_ELEMENT)) {
           processFragment(bundle, childElement);
-        } 
+        }
       }
     }
     _bundleManager.addBundle(bundle);
   }
 
-  private void processFragment(Bundle bundle, Element element) {
-    String fragment = element.getTextContent();
+  private void processFragment(final Bundle bundle, final Element element) {
+    final String fragment = element.getTextContent();
     if (isValidFragment(fragment)) {
       bundle.addChildNode(createBundleFragment(fragment));
     }
   }
 
-  private boolean isValidFragment(String fragment) {
+  private static boolean isValidFragment(final String fragment) {
     if (StringUtils.isNotBlank(fragment)) {
       return true;
     }
     throw new OpenGammaRuntimeException("invalid fragment value while parsing bundle xml file");
   }
 
-  private BundleNode createBundleFragment(String fragment) {
-    URI fragmentUri = getFragmentUriProvider().getUri(fragment);
-    String fragmentPath = getBasePath() + fragment;
+  private BundleNode createBundleFragment(final String fragment) {
+    final URI fragmentUri = getFragmentUriProvider().getUri(fragment);
+    final String fragmentPath = getBasePath() + fragment;
     return new Fragment(fragmentUri, fragmentPath);
   }
 
-  private void processRefBundle(Bundle bundle, Element element) {
-    String idRef = element.getAttribute("idref");
+  private void processRefBundle(final Bundle bundle, final Element element) {
+    final String idRef = element.getAttribute("idref");
     if (isValidIdRef(idRef)) {
       Bundle refBundle = _bundleManager.getBundle(idRef);
       if (refBundle == null) {
-        Element refElement = _elementsByIdMap.get(idRef);
+        final Element refElement = _elementsByIdMap.get(idRef);
         // this can cause infinite loop if we have circular reference
         addToManager(refElement);
         refBundle = _bundleManager.getBundle(idRef);
@@ -155,28 +158,28 @@ public class BundleParser {
     }
   }
 
-  private boolean isValidIdRef(String idRef) {
+  private boolean isValidIdRef(final String idRef) {
     if (StringUtils.isNotBlank(idRef) && idRefExists(idRef)) {
       return true;
     }
-    throw new OpenGammaRuntimeException(" invalid idref ["  + idRef + "]");
+    throw new OpenGammaRuntimeException(" invalid idref [" + idRef + "]");
   }
 
-  private boolean idRefExists(String idRef) {
+  private boolean idRefExists(final String idRef) {
     return _elementsByIdMap.get(idRef) != null;
   }
 
-  private void buildAllElements(Document document) {
-    Element rootElement = document.getDocumentElement();
+  private void buildAllElements(final Document document) {
+    final Element rootElement = document.getDocumentElement();
     if (isValidRootElement(rootElement)) {
       rootElement.normalize();
-      NodeList childNodes = rootElement.getChildNodes();
+      final NodeList childNodes = rootElement.getChildNodes();
       for (int i = 0; i < childNodes.getLength(); i++) {
-        Node node = childNodes.item(i);
+        final Node node = childNodes.item(i);
         if (node.getNodeType() == Node.ELEMENT_NODE) {
-          Element element = (Element) node;
+          final Element element = (Element) node;
           if (isValidBundleElement(element)) {
-            String idAttr = element.getAttribute(ID_ATTR);
+            final String idAttr = element.getAttribute(ID_ATTR);
             if (_elementsByIdMap.get(idAttr) == null) {
               _elementsByIdMap.put(idAttr, element);
             } else {
@@ -188,53 +191,53 @@ public class BundleParser {
     }
   }
 
-  private boolean isValidRootElement(Element rootElement) {
+  private static boolean isValidRootElement(final Element rootElement) {
     if (rootElement.getNodeName().equals("uiResourceConfig")) {
       return true;
     }
     throw new OpenGammaRuntimeException("parsing bundle XML : invalid root element " + rootElement.getNodeName());
   }
 
-  private boolean isValidBundleElement(Element element) {
+  private static boolean isValidBundleElement(final Element element) {
     return isBundleElement(element) && hasChildren(element) && hasValidId(element);
   }
 
-  private boolean hasValidId(Element element) {
+  private static boolean hasValidId(final Element element) {
     if (element.hasAttribute(ID_ATTR) && StringUtils.isNotBlank(element.getAttribute(ID_ATTR))) {
       return true;
-    } 
+    }
     throw new OpenGammaRuntimeException("parsing bundle XML : bundle element needs id attribute");
   }
 
-  private boolean hasChildren(Element element) {
+  private static boolean hasChildren(final Element element) {
     if (element.hasChildNodes()) {
       return true;
-    } 
+    }
     throw new OpenGammaRuntimeException("parsing bundle XML : missing children elements in bundle");
   }
 
-  private boolean isBundleElement(Element element) {
+  private static boolean isBundleElement(final Element element) {
     if (element.getNodeName().equals(BUNDLE_ELEMENT)) {
       return true;
-    } 
+    }
     throw new OpenGammaRuntimeException("parsing bundle XML : element not a bundle");
   }
 
-  private DocumentBuilder getDocumentBuilder() {
+  private static DocumentBuilder getDocumentBuilder() {
     DocumentBuilder builder = null;
-    DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+    final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
     try {
       builder = builderFactory.newDocumentBuilder();
-    } catch (ParserConfigurationException e) {
-      s_logger.warn("Unable to create a DOM parser", e);
+    } catch (final ParserConfigurationException e) {
+      LOGGER.warn("Unable to create a DOM parser", e);
     }
     return builder;
   }
-  
+
   private UriProvider getFragmentUriProvider() {
     return _fragmentUriProvider;
   }
-  
+
   private String getBasePath() {
     return _basePath;
   }

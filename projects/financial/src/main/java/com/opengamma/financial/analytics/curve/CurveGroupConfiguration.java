@@ -27,8 +27,7 @@ import com.opengamma.core.link.ConfigLink;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Configuration defining a group on curves, where a group is a set of curves
- * that are to be calculated at the same time.
+ * Configuration defining a group of curves, where a group is a set of curves that are to be calculated at the same time.
  */
 @BeanDefinition
 public class CurveGroupConfiguration extends DirectBean implements Serializable {
@@ -49,8 +48,7 @@ public class CurveGroupConfiguration extends DirectBean implements Serializable 
   private Map<String, List<? extends CurveTypeConfiguration>> _typesForCurves;
 
   /**
-   * The types for each curve, where each curve is resolved.
-   * In the future we may want to expose the links directly.
+   * The types for each curve, where each curve is resolved. In the future we may want to expose the links directly.
    */
   private Map<ConfigLink<AbstractCurveDefinition>, List<? extends CurveTypeConfiguration>> _typesForCurvesLinks;
 
@@ -61,8 +59,10 @@ public class CurveGroupConfiguration extends DirectBean implements Serializable 
   }
 
   /**
-   * @param order The order of this configuration, not negative
-   * @param curveTypes The curve types for a name, not null
+   * @param order
+   *          The order of this configuration, not negative
+   * @param curveTypes
+   *          The curve types for a name, not null
    */
   public CurveGroupConfiguration(final int order, final Map<String, List<? extends CurveTypeConfiguration>> curveTypes) {
     ArgumentChecker.notNegative(order, "order");
@@ -72,13 +72,15 @@ public class CurveGroupConfiguration extends DirectBean implements Serializable 
 
   /**
    * Sets the types for each curve.
-   * @param typesForCurves  the new value of the property, not null
+   * 
+   * @param typesForCurves
+   *          the new value of the property, not null
    */
-  public void setTypesForCurves(Map<String, List<? extends CurveTypeConfiguration>> typesForCurves) {
+  public void setTypesForCurves(final Map<String, List<? extends CurveTypeConfiguration>> typesForCurves) {
     _typesForCurves = ArgumentChecker.notNull(typesForCurves, "typesForCurves");
 
-    ImmutableMap.Builder<ConfigLink<AbstractCurveDefinition>, List<? extends CurveTypeConfiguration>> builder = ImmutableMap.builder();
-    for (Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : _typesForCurves.entrySet()) {
+    final ImmutableMap.Builder<ConfigLink<AbstractCurveDefinition>, List<? extends CurveTypeConfiguration>> builder = ImmutableMap.builder();
+    for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : _typesForCurves.entrySet()) {
       builder.put(ConfigLink.resolvable(entry.getKey(), AbstractCurveDefinition.class), entry.getValue());
     }
     _typesForCurvesLinks = builder.build();
@@ -86,12 +88,13 @@ public class CurveGroupConfiguration extends DirectBean implements Serializable 
 
   /**
    * Resolves the types for each curve.
-   * @return map of CurveDefinition -> List<CurveTypeConfiguration>, not null
+   *
+   * @return map of CurveDefinition -&gt; List&lt;CurveTypeConfiguration&gt;, not null
    */
   public Map<AbstractCurveDefinition, List<? extends CurveTypeConfiguration>> resolveTypesForCurves() {
 
-    ImmutableMap.Builder<AbstractCurveDefinition, List<? extends CurveTypeConfiguration>> builder = ImmutableMap.builder();
-    for (Map.Entry<ConfigLink<AbstractCurveDefinition>, List<? extends CurveTypeConfiguration>> entry : _typesForCurvesLinks.entrySet()) {
+    final ImmutableMap.Builder<AbstractCurveDefinition, List<? extends CurveTypeConfiguration>> builder = ImmutableMap.builder();
+    for (final Map.Entry<ConfigLink<AbstractCurveDefinition>, List<? extends CurveTypeConfiguration>> entry : _typesForCurvesLinks.entrySet()) {
       builder.put(entry.getKey().resolve(), entry.getValue());
     }
     return builder.build();

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util;
@@ -18,16 +18,16 @@ import java.util.Set;
  * class hierarchy and then any interfaces.
  * <p>
  * Results, both positive and negative, are cached to improve future lookup performance.
- * 
+ *
  * @param <T>  the type of the values
  */
 public class ClassMap<T> implements Map<Class<?>, T> {
 
   private final Map<Class<?>, T> _map = new HashMap<>();
   private final Map<Class<?>, T> _cache = new HashMap<>();
-  
+
   private boolean _cacheModified;
-  
+
   @Override
   public synchronized void clear() {
     _map.clear();
@@ -35,12 +35,12 @@ public class ClassMap<T> implements Map<Class<?>, T> {
   }
 
   @Override
-  public synchronized boolean containsKey(Object key) {
+  public synchronized boolean containsKey(final Object key) {
     return get(key) != null;
   }
 
   @Override
-  public synchronized boolean containsValue(Object value) {
+  public synchronized boolean containsValue(final Object value) {
     return _map.containsValue(value);
   }
 
@@ -51,29 +51,29 @@ public class ClassMap<T> implements Map<Class<?>, T> {
   }
 
   @Override
-  public synchronized T get(Object key) {
-    Class<?> clazz = (Class<?>) key;
+  public synchronized T get(final Object key) {
+    final Class<?> clazz = (Class<?>) key;
     if (_cache.containsKey(clazz)) {
       // Could be null
       return _cache.get(key);
     }
 
     if (clazz.getSuperclass() != null) {
-      T value = get(clazz.getSuperclass());
+      final T value = get(clazz.getSuperclass());
       if (value != null) {
         addValueToCache(clazz, value);
         return value;
       }
     }
-    
-    for (Class<?> intface : clazz.getInterfaces()) {
-      T value = get(intface);
+
+    for (final Class<?> intface : clazz.getInterfaces()) {
+      final T value = get(intface);
       if (value != null) {
         addValueToCache(clazz, value);
         return value;
       }
     }
-    
+
     addValueToCache(clazz, null);
     return null;
   }
@@ -90,8 +90,8 @@ public class ClassMap<T> implements Map<Class<?>, T> {
   }
 
   @Override
-  public synchronized T put(Class<?> key, T value) {
-    T result = _map.put(key, value);
+  public synchronized T put(final Class<?> key, final T value) {
+    final T result = _map.put(key, value);
     if (_cacheModified) {
       initCache();
     } else {
@@ -101,7 +101,7 @@ public class ClassMap<T> implements Map<Class<?>, T> {
   }
 
   @Override
-  public synchronized void putAll(Map<? extends Class<?>, ? extends T> m) {
+  public synchronized void putAll(final Map<? extends Class<?>, ? extends T> m) {
     _map.putAll(m);
     if (_cacheModified) {
       initCache();
@@ -111,8 +111,8 @@ public class ClassMap<T> implements Map<Class<?>, T> {
   }
 
   @Override
-  public synchronized T remove(Object key) {
-    T result = _map.remove(key);
+  public synchronized T remove(final Object key) {
+    final T result = _map.remove(key);
     if (_cacheModified) {
       initCache();
     } else {
@@ -133,15 +133,15 @@ public class ClassMap<T> implements Map<Class<?>, T> {
   }
 
   //-------------------------------------------------------------------------
-  private void addValueToCache(Class<?> key, T value) {
+  private void addValueToCache(final Class<?> key, final T value) {
     _cache.put(key, value);
     _cacheModified = true;
   }
-  
+
   private void initCache() {
     _cache.clear();
     _cache.putAll(_map);
     _cacheModified = false;
   }
-  
+
 }

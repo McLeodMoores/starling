@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.server;
@@ -16,13 +16,13 @@ import com.opengamma.transport.FudgeMessageReceiver;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Listens to Fudge updates containing {@link CogdaLiveDataUpdateBean} instances and
+ * Listens to Fudge updates containing {@link LiveDataValueUpdateBean} instances and
  * dispatches them to a {@link CogdaLiveDataServer}.
  */
 public class CogdaLiveDataServerUpdateListener implements FudgeMessageReceiver {
   private final CogdaLiveDataServer _liveDataServer;
-  
-  public CogdaLiveDataServerUpdateListener(CogdaLiveDataServer liveDataServer) {
+
+  public CogdaLiveDataServerUpdateListener(final CogdaLiveDataServer liveDataServer) {
     ArgumentChecker.notNull(liveDataServer, "liveDataServer");
     _liveDataServer = liveDataServer;
   }
@@ -36,10 +36,10 @@ public class CogdaLiveDataServerUpdateListener implements FudgeMessageReceiver {
   }
 
   @Override
-  public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+  public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
     // TODO kirk 2012-08-13 -- Check schema version.
-    FudgeMsg msg = msgEnvelope.getMessage();
-    LiveDataValueUpdateBean updateBean = LiveDataValueUpdateBeanFudgeBuilder.fromFudgeMsg(new FudgeDeserializer(fudgeContext), msg);
+    final FudgeMsg msg = msgEnvelope.getMessage();
+    final LiveDataValueUpdateBean updateBean = LiveDataValueUpdateBeanFudgeBuilder.fromFudgeMsg(new FudgeDeserializer(fudgeContext), msg);
     getLiveDataServer().liveDataReceived(updateBean);
   }
 

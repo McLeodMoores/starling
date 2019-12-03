@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.linearalgebra;
@@ -14,19 +14,19 @@ import com.opengamma.analytics.math.matrix.Matrix;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class representing a tridiagonal matrix:
- * $$
- * \begin{align*}
- * \begin{pmatrix}
- * a_1     & b_1     & 0       & \cdots  & 0       & 0       & 0        \\
- * c_1     & a_2     & b_2     & \cdots  & 0       & 0       & 0        \\
- * 0       &         & \ddots  &         & \vdots  & \vdots  & \vdots   \\
- * 0       & 0       & 0       &         & c_{n-2} & a_{n-1} & b_{n-1}  \\
- * 0       & 0       & 0       & \cdots  & 0       & c_{n-1} & a_n     
- * \end{pmatrix}
- * \end{align*}
- * $$
+ * Class representing a tridiagonal matrix.
  */
+// * $$
+// * \begin{align*}
+// * \begin{pmatrix}
+// * a_1 & b_1 & 0 & \cdots & 0 & 0 & 0 \\
+// * c_1 & a_2 & b_2 & \cdots & 0 & 0 & 0 \\
+// * 0 & & \ddots & & \vdots & \vdots & \vdots \\
+// * 0 & 0 & 0 & & c_{n-2} & a_{n-1} & b_{n-1} \\
+// * 0 & 0 & 0 & \cdots & 0 & c_{n-1} & a_n
+// * \end{pmatrix}
+// * \end{align*}
+// * $$
 public class TridiagonalMatrix implements Matrix<Double> {
   private final double[] _a;
   private final double[] _b;
@@ -34,9 +34,12 @@ public class TridiagonalMatrix implements Matrix<Double> {
   private DoubleMatrix2D _matrix;
 
   /**
-   * @param a An array containing the diagonal values of the matrix, not null
-   * @param b An array containing the upper sub-diagonal values of the matrix, not null. Its length must be one less than the length of the diagonal array
-   * @param c An array containing the lower sub-diagonal values of the matrix, not null. Its length must be one less than the length of the diagonal array
+   * @param a
+   *          An array containing the diagonal values of the matrix, not null
+   * @param b
+   *          An array containing the upper sub-diagonal values of the matrix, not null. Its length must be one less than the length of the diagonal array
+   * @param c
+   *          An array containing the lower sub-diagonal values of the matrix, not null. Its length must be one less than the length of the diagonal array
    */
   public TridiagonalMatrix(final double[] a, final double[] b, final double[] c) {
     Validate.notNull(a, "a");
@@ -51,7 +54,8 @@ public class TridiagonalMatrix implements Matrix<Double> {
   }
 
   /**
-   * Direct access to Diagonal Data
+   * Direct access to Diagonal Data.
+   *
    * @return An array of the values of the diagonal
    */
   public double[] getDiagonalData() {
@@ -66,7 +70,8 @@ public class TridiagonalMatrix implements Matrix<Double> {
   }
 
   /**
-   *  Direct access to upper sub-Diagonal Data
+   * Direct access to upper sub-Diagonal Data.
+   *
    * @return An array of the values of the upper sub-diagonal
    */
   public double[] getUpperSubDiagonalData() {
@@ -81,7 +86,8 @@ public class TridiagonalMatrix implements Matrix<Double> {
   }
 
   /**
-   * Direct access to lower sub-Diagonal Data
+   * Direct access to lower sub-Diagonal Data.
+   *
    * @return An array of the values of the lower sub-diagonal
    */
   public double[] getLowerSubDiagonalData() {
@@ -106,7 +112,7 @@ public class TridiagonalMatrix implements Matrix<Double> {
   }
 
   private void calMatrix() {
-    int n = _a.length;
+    final int n = _a.length;
     final double[][] data = new double[n][n];
     for (int i = 0; i < n; i++) {
       data[i][i] = _a[i];
@@ -160,7 +166,7 @@ public class TridiagonalMatrix implements Matrix<Double> {
   }
 
   @Override
-  public Double getEntry(int... index) {
+  public Double getEntry(final int... index) {
     ArgumentChecker.notNull(index, "indices");
     final int n = _a.length;
     final int i = index[0];
@@ -169,9 +175,9 @@ public class TridiagonalMatrix implements Matrix<Double> {
     ArgumentChecker.isTrue(j >= 0 && j < n, "y index {} out of range. Matrix has {} columns", index[1], n);
     if (i == j) {
       return _a[i];
-    } else if ((i - 1) == j) {
+    } else if (i - 1 == j) {
       return _c[i - 1];
-    } else if ((i + 1) == j) {
+    } else if (i + 1 == j) {
       return _b[i];
     }
 

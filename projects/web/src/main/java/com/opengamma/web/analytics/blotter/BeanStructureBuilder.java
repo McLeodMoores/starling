@@ -34,31 +34,31 @@ import com.opengamma.util.OpenGammaClock;
  */
 /* package */ class BeanStructureBuilder implements BeanVisitor<Map<String, Object>> {
 
-  private static final Map<Class<?>, String> s_types = Maps.newHashMap();
+  private static final Map<Class<?>, String> TYPES = Maps.newHashMap();
 
   private static final String NUMBER = "number";
   private static final String BOOLEAN = "boolean";
   private static final String STRING = "string";
 
   static {
-    s_types.put(Double.TYPE, NUMBER);
-    s_types.put(Double.class, NUMBER);
-    s_types.put(Float.TYPE, NUMBER);
-    s_types.put(Float.class, NUMBER);
-    s_types.put(Long.TYPE, NUMBER);
-    s_types.put(Long.class, NUMBER);
-    s_types.put(Short.TYPE, NUMBER);
-    s_types.put(Short.class, NUMBER);
-    s_types.put(Integer.TYPE, NUMBER);
-    s_types.put(Integer.class, NUMBER);
-    s_types.put(Byte.TYPE, NUMBER);
-    s_types.put(Byte.class, NUMBER);
-    s_types.put(BigDecimal.class, NUMBER);
-    s_types.put(Boolean.TYPE, BOOLEAN);
-    s_types.put(Boolean.class, BOOLEAN);
-    s_types.put(Character.TYPE, STRING);
-    s_types.put(Character.class, STRING);
-    s_types.put(String.class, STRING);
+    TYPES.put(Double.TYPE, NUMBER);
+    TYPES.put(Double.class, NUMBER);
+    TYPES.put(Float.TYPE, NUMBER);
+    TYPES.put(Float.class, NUMBER);
+    TYPES.put(Long.TYPE, NUMBER);
+    TYPES.put(Long.class, NUMBER);
+    TYPES.put(Short.TYPE, NUMBER);
+    TYPES.put(Short.class, NUMBER);
+    TYPES.put(Integer.TYPE, NUMBER);
+    TYPES.put(Integer.class, NUMBER);
+    TYPES.put(Byte.TYPE, NUMBER);
+    TYPES.put(Byte.class, NUMBER);
+    TYPES.put(BigDecimal.class, NUMBER);
+    TYPES.put(Boolean.TYPE, BOOLEAN);
+    TYPES.put(Boolean.class, BOOLEAN);
+    TYPES.put(Character.TYPE, STRING);
+    TYPES.put(Character.class, STRING);
+    TYPES.put(String.class, STRING);
   }
 
   private final StringConvert _stringConvert;
@@ -68,10 +68,10 @@ import com.opengamma.util.OpenGammaClock;
   private final Map<Class<?>, Class<?>> _underlyingSecurityTypes;
   private final Map<Class<?>, String> _endpoints;
 
-  /* package */ BeanStructureBuilder(Set<MetaBean> metaBeans,
-                                     Map<Class<?>, Class<?>> underlyingSecurityTypes,
-                                     Map<Class<?>, String> endpoints,
-                                     StringConvert stringConvert) {
+  /* package */ BeanStructureBuilder(final Set<MetaBean> metaBeans,
+      final Map<Class<?>, Class<?>> underlyingSecurityTypes,
+      final Map<Class<?>, String> endpoints,
+      final StringConvert stringConvert) {
     ArgumentChecker.notNull(underlyingSecurityTypes, "underlyingSecurityTypes");
     ArgumentChecker.notNull(metaBeans, "metaBeans");
     ArgumentChecker.notNull(endpoints, "endpoints");
@@ -83,11 +83,11 @@ import com.opengamma.util.OpenGammaClock;
   }
 
   @Override
-  public void visitMetaBean(MetaBean metaBean) {
+  public void visitMetaBean(final MetaBean metaBean) {
     _beanData.clear();
-    String typeName = metaBean.beanType().getSimpleName();
+    final String typeName = metaBean.beanType().getSimpleName();
     _beanData.put("type", typeName);
-    Map<String, Object> typeProperty = Maps.newHashMap();
+    final Map<String, Object> typeProperty = Maps.newHashMap();
     typeProperty.put("name", "type");
     typeProperty.put("type", PropertyType.SINGLE.name().toLowerCase());
     typeProperty.put("types", ImmutableList.of(typeInfo("string", null, null, false)));
@@ -95,43 +95,43 @@ import com.opengamma.util.OpenGammaClock;
     typeProperty.put("readOnly", false);
     typeProperty.put("value", typeName);
     _propertyData.add(typeProperty);
-    Class<?> underlyingType = _underlyingSecurityTypes.get(metaBean.beanType());
+    final Class<?> underlyingType = _underlyingSecurityTypes.get(metaBean.beanType());
     if (underlyingType != null) {
       _beanData.put("underlyingTypes", typesFor(underlyingType));
     }
   }
 
   @Override
-  public void visitBeanProperty(MetaProperty<?> property, BeanTraverser traverser) {
-    Class<?> type = property.propertyType();
+  public void visitBeanProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
+    final Class<?> type = property.propertyType();
     _propertyData.add(property(property, typesFor(type), null, PropertyType.SINGLE));
   }
 
   @Override
-  public void visitCollectionProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitCollectionProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _propertyData.add(arrayType(property));
   }
 
   @Override
-  public void visitSetProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitSetProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _propertyData.add(arrayType(property));
   }
 
   @Override
-  public void visitListProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitListProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _propertyData.add(arrayType(property));
   }
 
   @Override
-  public void visitMapProperty(MetaProperty<?> property, BeanTraverser traverser) {
-    Class<? extends Bean> beanType = property.metaBean().beanType();
-    Class<?> keyType = JodaBeanUtils.mapKeyType(property, beanType);
-    Class<?> valueType = JodaBeanUtils.mapValueType(property, beanType);
+  public void visitMapProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
+    final Class<? extends Bean> beanType = property.metaBean().beanType();
+    final Class<?> keyType = JodaBeanUtils.mapKeyType(property, beanType);
+    final Class<?> valueType = JodaBeanUtils.mapValueType(property, beanType);
     _propertyData.add(property(property, typesFor(keyType), typesFor(valueType), PropertyType.MAP));
   }
 
   @Override
-  public void visitProperty(MetaProperty<?> property, BeanTraverser traverser) {
+  public void visitProperty(final MetaProperty<?> property, final BeanTraverser traverser) {
     _propertyData.add(property(property, typesFor(property.propertyType()), null, PropertyType.SINGLE));
   }
 
@@ -142,61 +142,58 @@ import com.opengamma.util.OpenGammaClock;
     return _beanData;
   }
 
-  private Map<String, Object> arrayType(MetaProperty<?> property) {
+  private Map<String, Object> arrayType(final MetaProperty<?> property) {
     return property(property, typesFor(property.propertyType()), null, PropertyType.ARRAY);
   }
 
-  private boolean isConvertible(Class<?> type) {
+  private boolean isConvertible(final Class<?> type) {
     boolean canConvert;
     try {
       _stringConvert.findConverter(type);
       canConvert = true;
-    } catch (Exception e) {
+    } catch (final Exception e) {
       canConvert = false;
     }
     return canConvert;
   }
 
-  private static boolean isNullable(MetaProperty<?> property) {
+  private static boolean isNullable(final MetaProperty<?> property) {
     if (property.propertyType().isPrimitive()) {
       return false;
-    } else {
-      PropertyDefinition definitionAnnotation = property.annotation(PropertyDefinition.class);
-      return !definitionAnnotation.validate().equals("notNull");
     }
+    final PropertyDefinition definitionAnnotation = property.annotation(PropertyDefinition.class);
+    return !definitionAnnotation.validate().equals("notNull");
   }
 
-  /* package */ List<Map<String, Object>> typesFor(Class<?> type) {
-    String typeName = s_types.get(type);
+  /* package */ List<Map<String, Object>> typesFor(final Class<?> type) {
+    final String typeName = TYPES.get(type);
     if (typeName != null) {
       return ImmutableList.of(typeInfo(typeName, null, null, false));
-    } else {
-      boolean canConvert;
-      canConvert = isConvertible(type);
-      if (canConvert) {
-        return ImmutableList.of(typeInfo(STRING, type.getSimpleName(), _endpoints.get(type), false));
-      } else {
-        // TODO deal with (potentially multiple) bean types
-        Set<Class<? extends Bean>> subtypes = _beanHierarchy.subtypes(type);
-        if (subtypes.isEmpty()) {
-          throw new OpenGammaRuntimeException("No type mapping found for class " + type.getName());
-        }
-        List<Map<String, Object>> types = Lists.newArrayListWithCapacity(subtypes.size());
-        for (Class<? extends Bean> subtype : subtypes) {
-          types.add(typeInfo(subtype.getSimpleName(), null, _endpoints.get(subtype), true));
-        }
-        return types;
-      }
     }
+    boolean canConvert;
+    canConvert = isConvertible(type);
+    if (canConvert) {
+      return ImmutableList.of(typeInfo(STRING, type.getSimpleName(), _endpoints.get(type), false));
+    }
+    // TODO deal with (potentially multiple) bean types
+    final Set<Class<? extends Bean>> subtypes = _beanHierarchy.subtypes(type);
+    if (subtypes.isEmpty()) {
+      throw new OpenGammaRuntimeException("No type mapping found for class " + type.getName());
+    }
+    final List<Map<String, Object>> types = Lists.newArrayListWithCapacity(subtypes.size());
+    for (final Class<? extends Bean> subtype : subtypes) {
+      types.add(typeInfo(subtype.getSimpleName(), null, _endpoints.get(subtype), true));
+    }
+    return types;
   }
 
-  /* package */ static Map<String, Object> property(MetaProperty<?> property,
-                                                    List<Map<String, Object>> types,
-                                                    List<Map<String, Object>> valueTypes,
-                                                    PropertyType propertyType) {
-    Map<String, Object> result = Maps.newHashMap();
+  /* package */ static Map<String, Object> property(final MetaProperty<?> property,
+      final List<Map<String, Object>> types,
+      final List<Map<String, Object>> valueTypes,
+      final PropertyType propertyType) {
+    final Map<String, Object> result = Maps.newHashMap();
     // TODO this is *really* dirty and not supposed to be anything else. fix or remove
-    boolean readOnly = property.style() == PropertyStyle.READ_ONLY || property.name().equals("uniqueId");
+    final boolean readOnly = property.style() == PropertyStyle.READ_ONLY || property.name().equals("uniqueId");
 
     // TODO this is obviously a poor choice of names
     result.put("type", propertyType.name().toLowerCase());
@@ -215,11 +212,11 @@ import com.opengamma.util.OpenGammaClock;
     SINGLE, ARRAY, MAP
   }
 
-  /* package */ static Map<String, Object> typeInfo(String expectedType,
-                                                    String actualType,
-                                                    String endpoint,
-                                                    boolean isBeanType) {
-    Map<String, Object> results = Maps.newHashMap();
+  /* package */ static Map<String, Object> typeInfo(final String expectedType,
+      final String actualType,
+      final String endpoint,
+      final boolean isBeanType) {
+    final Map<String, Object> results = Maps.newHashMap();
     results.put("expectedType", expectedType);
     results.put("actualType", actualType);
     results.put("endpoint", endpoint);

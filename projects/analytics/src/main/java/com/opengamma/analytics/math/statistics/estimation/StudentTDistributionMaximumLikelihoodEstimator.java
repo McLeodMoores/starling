@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.estimation;
@@ -18,7 +18,7 @@ import com.opengamma.analytics.math.statistics.distribution.StudentTDistribution
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class StudentTDistributionMaximumLikelihoodEstimator extends DistributionParameterEstimator<Double> {
   // TODO add error estimates
@@ -39,7 +39,8 @@ public class StudentTDistributionMaximumLikelihoodEstimator extends Distribution
       public Double evaluate(final Double nu) {
         double sum = 0;
         for (final double t : standardized) {
-          sum += Math.log(_gamma.evaluate((nu + 1) / 2.) * Math.pow(1 + t * t / (nu - 2), -(nu + 1) / 2.) / Math.sqrt(Math.PI * (nu - 2)) / _gamma.evaluate(nu / 2.));
+          sum += Math
+              .log(_gamma.evaluate((nu + 1) / 2.) * Math.pow(1 + t * t / (nu - 2), -(nu + 1) / 2.) / Math.sqrt(Math.PI * (nu - 2)) / _gamma.evaluate(nu / 2.));
         }
         return -sum;
       }

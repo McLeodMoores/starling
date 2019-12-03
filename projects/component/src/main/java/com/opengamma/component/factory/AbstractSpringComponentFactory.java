@@ -19,7 +19,6 @@ import org.joda.beans.impl.direct.DirectBean;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.ResourceEntityResolver;
@@ -29,16 +28,17 @@ import org.springframework.core.io.Resource;
 
 import com.opengamma.component.ComponentFactory;
 import com.opengamma.component.ComponentRepository;
-import com.opengamma.component.spring.ComponentRepositoryBeanPostProcessor;
 
 /**
  * Base factory for reading components from a Spring file.
  * <p>
- * The component is configured with a Spring XML file and a single properties file.
- * This class contains the tools to read the file, parse it and extract components.
+ * The component is configured with a Spring XML file and a single properties
+ * file. This class contains the tools to read the file, parse it and extract
+ * components.
  * <p>
- * The Spring file may use {@link ComponentRepositoryBeanPostProcessor} to pull the
- * components into the Spring context.
+ * The Spring file may use
+ * {@link com.opengamma.component.spring.ComponentRepositoryBeanPostProcessor}
+ * to pull the components into the Spring context.
  */
 @BeanDefinition
 public abstract class AbstractSpringComponentFactory extends DirectBean implements ComponentFactory {
@@ -57,53 +57,53 @@ public abstract class AbstractSpringComponentFactory extends DirectBean implemen
   //-------------------------------------------------------------------------
   /**
    * Creates the application context.
-   * 
+   *
    * @param repo  the component repository, not null
    * @return the Spring application context, not null
    */
-  protected GenericApplicationContext createApplicationContext(ComponentRepository repo) {
-    Resource springFile = getSpringFile();
+  protected GenericApplicationContext createApplicationContext(final ComponentRepository repo) {
+    final Resource springFile = getSpringFile();
     try {
       repo.getLogger().logDebug("  Spring file: " + springFile.getURI());
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       // ignore
     }
-    
-    DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
-    GenericApplicationContext appContext = new GenericApplicationContext(beanFactory);
-    
-    PropertyPlaceholderConfigurer properties = new PropertyPlaceholderConfigurer();
+
+    final DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+    final GenericApplicationContext appContext = new GenericApplicationContext(beanFactory);
+
+    final PropertyPlaceholderConfigurer properties = new PropertyPlaceholderConfigurer();
     properties.setLocation(getPropertiesFile());
-    
-    XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+
+    final XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
     beanDefinitionReader.setValidating(true);
     beanDefinitionReader.setResourceLoader(appContext);
     beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(appContext));
     beanDefinitionReader.loadBeanDefinitions(springFile);
-    
+
     appContext.getBeanFactory().registerSingleton("injectedProperties", properties);
     appContext.getBeanFactory().registerSingleton("componentRepository", repo);
-    
+
     appContext.refresh();
     return appContext;
   }
 
   /**
    * Registers a set of beans by type.
-   * 
+   *
    * @param <T> the type
    * @param repo  the repository to register in, not null
    * @param type  the type of bean to extract from the Spring context, not null
    * @param appContext  the Spring context, not null
    */
-  protected <T> void registerInfrastructureByType(ComponentRepository repo, Class<T> type, GenericApplicationContext appContext) {
-    String[] beanNames = appContext.getBeanNamesForType(type);
-    for (String beanName : beanNames) {
-      T bean = appContext.getBean(beanName, type);
+  protected <T> void registerInfrastructureByType(final ComponentRepository repo, final Class<T> type, final GenericApplicationContext appContext) {
+    final String[] beanNames = appContext.getBeanNamesForType(type);
+    for (final String beanName : beanNames) {
+      final T bean = appContext.getBean(beanName, type);
       String name = simplifyName(type, beanName);
       repo.registerComponent(type, name, bean);
-      String[] aliases = appContext.getAliases(beanName);
-      for (String alias : aliases) {
+      final String[] aliases = appContext.getAliases(beanName);
+      for (final String alias : aliases) {
         name = simplifyName(type, alias);
         repo.registerComponent(type, name, bean);
       }
@@ -114,25 +114,26 @@ public abstract class AbstractSpringComponentFactory extends DirectBean implemen
    * Simplifies the name of a Spring bean.
    * <p>
    * This removes the end of the bean name if it matches the class name.
-   * 
+   *
    * @param type  the bean type, not null
    * @param springBeanName  the Spring bean name, not null
    * @return the simplified name, not null
    */
-  protected String simplifyName(Class<?> type, String springBeanName) {
+  protected String simplifyName(final Class<?> type, final String springBeanName) {
     return StringUtils.chomp(springBeanName, type.getSimpleName());
   }
 
   /**
    * Registers the spring context to be stopped at the end of the application.
    * <p>
-   * This will call {@link ConfigurableListableBeanFactory#destroySingletons()}
-   * at the end of the application.
-   * 
-   * @param repo  the repository to register in, not null
-   * @param appContext  the Spring context, not null
+   * This will call {@link org.springframework.beans.factory.config.ConfigurableListableBeanFactory#destroySingletons()} at the end of the application.
+   *
+   * @param repo
+   *          the repository to register in, not null
+   * @param appContext
+   *          the Spring context, not null
    */
-  protected void registerSpringLifecycleStop(ComponentRepository repo, GenericApplicationContext appContext) {
+  protected void registerSpringLifecycleStop(final ComponentRepository repo, final GenericApplicationContext appContext) {
     repo.registerLifecycleStop(appContext.getBeanFactory(), "destroySingletons");
   }
 

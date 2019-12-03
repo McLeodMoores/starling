@@ -28,12 +28,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Helper class for offering visual feedback while a script runs. Most scripts will be scheduled tasks that will write details to the console or a log and not require this. Some are intended to be
- * launched from a desktop environment (for example a link on the Windows Start Menu) which require a more sophisticated feedback mechanism.
+ * Helper class for offering visual feedback while a script runs. Most scripts will be scheduled tasks that will write details to the console or a log and not
+ * require this. Some are intended to be launched from a desktop environment (for example a link on the Windows Start Menu) which require a more sophisticated
+ * feedback mechanism.
  */
 public class GUIFeedback implements AutoCloseable {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(GUIFeedback.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GUIFeedback.class);
 
   private static final boolean ENABLED = System.getProperty("tool.gui", "FALSE").equalsIgnoreCase("TRUE");
 
@@ -117,14 +118,14 @@ public class GUIFeedback implements AutoCloseable {
       final int width = getWidth();
       final int height = getHeight();
       pack();
-      if ((width != getWidth()) || (height != getHeight())) {
+      if (width != getWidth() || height != getHeight()) {
         final Point pos = getLocation();
-        setLocation(pos.x + ((width - getWidth()) >> 1), pos.y + ((height - getHeight()) >> 1));
+        setLocation(pos.x + (width - getWidth() >> 1), pos.y + (height - getHeight() >> 1));
       }
     }
 
     private void showWindow(final String message) {
-      s_logger.info("Showing window");
+      LOGGER.info("Showing window");
       setTitle("OpenGamma Platform");
       final Container inner = getContentPane();
       inner.setLayout(new BorderLayout());
@@ -135,7 +136,7 @@ public class GUIFeedback implements AutoCloseable {
       inner.add(button(), BorderLayout.SOUTH);
       pack();
       final Dimension scr = Toolkit.getDefaultToolkit().getScreenSize();
-      setLocation((scr.width - getWidth()) >> 1, (scr.height - getHeight() >> 1));
+      setLocation(scr.width - getWidth() >> 1, scr.height - getHeight() >> 1);
       setVisible(true);
       addWindowListener(new WindowAdapter() {
         @Override
@@ -146,17 +147,17 @@ public class GUIFeedback implements AutoCloseable {
     }
 
     private void hideWindow() {
-      s_logger.info("Hiding window");
+      LOGGER.info("Hiding window");
       setVisible(false);
     }
 
     private void messageBox(final String message) {
-      s_logger.info("Showing message box '{}'", message);
+      LOGGER.info("Showing message box '{}'", message);
       final String previous = _message.getText();
       _message.setText(message);
       _button.setVisible(true);
       repack();
-      final BlockingQueue<String> buttonActions = new LinkedBlockingQueue<String>();
+      final BlockingQueue<String> buttonActions = new LinkedBlockingQueue<>();
       final ActionListener listener = new ActionListener() {
         @Override
         public void actionPerformed(final ActionEvent e) {
@@ -166,8 +167,8 @@ public class GUIFeedback implements AutoCloseable {
       _button.addActionListener(listener);
       try {
         buttonActions.take();
-      } catch (InterruptedException ex) {
-        s_logger.error("Interrupted", ex);
+      } catch (final InterruptedException ex) {
+        LOGGER.error("Interrupted", ex);
       }
       _button.removeActionListener(listener);
       _button.setVisible(false);
@@ -176,7 +177,7 @@ public class GUIFeedback implements AutoCloseable {
     }
 
     private void sayImpl(final String message) {
-      s_logger.info("Displaying text '{}'", message);
+      LOGGER.info("Displaying text '{}'", message);
       _message.setText(message);
       repack();
     }
@@ -201,7 +202,7 @@ public class GUIFeedback implements AutoCloseable {
       _progress.setMaximum(_totalWork);
       _completedWork += completed;
       _progress.setValue(_completedWork);
-      s_logger.debug("Update progress bar - {} of {}", _completedWork, _totalWork);
+      LOGGER.debug("Update progress bar - {} of {}", _completedWork, _totalWork);
     }
 
   }
@@ -210,8 +211,8 @@ public class GUIFeedback implements AutoCloseable {
   private boolean _closed;
 
   public GUIFeedback(final String message) {
-    s_logger.debug("Creating instance");
-    s_logger.info("{}", message);
+    LOGGER.debug("Creating instance");
+    LOGGER.info("{}", message);
     if (ENABLED) {
       _impl = new Impl();
       synchronized (LOCK) {
@@ -228,13 +229,14 @@ public class GUIFeedback implements AutoCloseable {
   }
 
   /**
-   * Reports an informational message to the user about what is going on. Ideally, a new message should appear at least every 15 seconds (unless the progress bar is used) but no more often than every
-   * two seconds.
-   * 
-   * @param message the message to write, not null
+   * Reports an informational message to the user about what is going on. Ideally, a new message should appear at least every 15 seconds (unless the progress
+   * bar is used) but no more often than every two seconds.
+   *
+   * @param message
+   *          the message to write, not null
    */
   public static void say(final String message) {
-    s_logger.info("{}", message);
+    LOGGER.info("{}", message);
     if (ENABLED) {
       synchronized (LOCK) {
         if (s_instance != null) {
@@ -245,12 +247,14 @@ public class GUIFeedback implements AutoCloseable {
   }
 
   /**
-   * Reports a message to the user which will require acknowledgement. This should only happen as part of task completion (see {@link #done}) or in the case of an error.
-   * 
-   * @param message the message to write, not null
+   * Reports a message to the user which will require acknowledgement. This should only happen as part of task completion (see {@link #done}) or in the case of
+   * an error.
+   *
+   * @param message
+   *          the message to write, not null
    */
   public static void shout(final String message) {
-    s_logger.error("{}", message);
+    LOGGER.error("{}", message);
     if (ENABLED) {
       synchronized (LOCK) {
         if (s_instance != null) {
@@ -262,8 +266,9 @@ public class GUIFeedback implements AutoCloseable {
 
   /**
    * Reports an increase in the amount of work required.
-   * 
-   * @param count an arbitrary number of work units
+   *
+   * @param count
+   *          an arbitrary number of work units
    */
   public void workRequired(final int count) {
     if (ENABLED) {
@@ -280,8 +285,9 @@ public class GUIFeedback implements AutoCloseable {
 
   /**
    * Reports completion of an amount of work.
-   * 
-   * @param count the amount of arbitrary work units completed
+   *
+   * @param count
+   *          the amount of arbitrary work units completed
    */
   public void workCompleted(int count) {
     if (ENABLED) {
@@ -301,13 +307,14 @@ public class GUIFeedback implements AutoCloseable {
   }
 
   /**
-   * Reports completion of this feedback instance. This is the equivalent of calling {@link #close} but will display a message at the same time. If this is the primary instance the message will
-   * require acknowledgement. If this is a nested instance, the message is just displayed and this method returns.
-   * 
-   * @param message the message to display, not null
+   * Reports completion of this feedback instance. This is the equivalent of calling {@link #close} but will display a message at the same time. If this is the
+   * primary instance the message will require acknowledgement. If this is a nested instance, the message is just displayed and this method returns.
+   *
+   * @param message
+   *          the message to display, not null
    */
   public void done(final String message) {
-    s_logger.info("{}", message);
+    LOGGER.info("{}", message);
     if (ENABLED) {
       if (!_closed) {
         _closed = true;
@@ -330,7 +337,7 @@ public class GUIFeedback implements AutoCloseable {
         }
       }
     }
-    s_logger.debug("Destroyed feedback instance");
+    LOGGER.debug("Destroyed feedback instance");
   }
 
 }

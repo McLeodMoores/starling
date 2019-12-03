@@ -25,7 +25,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.HullW
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueHullWhiteCalculator extends InstrumentDerivativeVisitorDelegate<HullWhiteOneFactorProviderInterface, MultipleCurrencyAmount> {
 
@@ -43,6 +43,7 @@ public final class PresentValueHullWhiteCalculator extends InstrumentDerivativeV
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueHullWhiteCalculator getInstance() {
@@ -54,13 +55,15 @@ public final class PresentValueHullWhiteCalculator extends InstrumentDerivativeV
    */
   private static final CapFloorIborHullWhiteMethod METHOD_CAPFLOOR_IBOR = CapFloorIborHullWhiteMethod.getInstance();
   private static final InterestRateFutureTransactionHullWhiteMethod METHOD_STIRFUT = InterestRateFutureTransactionHullWhiteMethod.getInstance();
-  private static final InterestRateFutureOptionMarginTransactionHullWhiteMethod METHOD_STIRFUT_OPT_MAR = InterestRateFutureOptionMarginTransactionHullWhiteMethod.getInstance();
-  private static final SwapFuturesPriceDeliverableTransactionHullWhiteMethod METHOD_SWAPFUT = SwapFuturesPriceDeliverableTransactionHullWhiteMethod.getInstance();
+  private static final InterestRateFutureOptionMarginTransactionHullWhiteMethod METHOD_STIRFUT_OPT_MAR =
+      InterestRateFutureOptionMarginTransactionHullWhiteMethod.getInstance();
+  private static final SwapFuturesPriceDeliverableTransactionHullWhiteMethod METHOD_SWAPFUT = SwapFuturesPriceDeliverableTransactionHullWhiteMethod
+      .getInstance();
   private static final SwaptionPhysicalFixedIborHullWhiteMethod METHOD_SWPT_PHYS = SwaptionPhysicalFixedIborHullWhiteMethod.getInstance();
   private static final SwaptionCashFixedIborHullWhiteApproximationMethod METHOD_SWPT_CASH = SwaptionCashFixedIborHullWhiteApproximationMethod.getInstance();
   private static final CouponCMSHullWhiteApproximationMethod METHOD_CMS_CPN = CouponCMSHullWhiteApproximationMethod.getInstance();
 
-  //     -----     Payment/Coupon     -----
+  // ----- Payment/Coupon -----
 
   @Override
   public MultipleCurrencyAmount visitCapFloorIbor(final CapFloorIbor cap, final HullWhiteOneFactorProviderInterface hullWhite) {
@@ -72,24 +75,27 @@ public final class PresentValueHullWhiteCalculator extends InstrumentDerivativeV
     return METHOD_CMS_CPN.presentValue(cms, hullWhite);
   }
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
-  public MultipleCurrencyAmount visitInterestRateFutureTransaction(final InterestRateFutureTransaction futures, final HullWhiteOneFactorProviderInterface hullWhite) {
+  public MultipleCurrencyAmount visitInterestRateFutureTransaction(final InterestRateFutureTransaction futures,
+      final HullWhiteOneFactorProviderInterface hullWhite) {
     return METHOD_STIRFUT.presentValue(futures, hullWhite);
   }
 
   @Override
-  public MultipleCurrencyAmount visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction option, final HullWhiteOneFactorProviderInterface hullWhite) {
+  public MultipleCurrencyAmount visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction option,
+      final HullWhiteOneFactorProviderInterface hullWhite) {
     return METHOD_STIRFUT_OPT_MAR.presentValue(option, hullWhite);
   }
 
   @Override
-  public MultipleCurrencyAmount visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction futures, final HullWhiteOneFactorProviderInterface hullWhite) {
+  public MultipleCurrencyAmount visitSwapFuturesPriceDeliverableTransaction(final SwapFuturesPriceDeliverableTransaction futures,
+      final HullWhiteOneFactorProviderInterface hullWhite) {
     return METHOD_SWAPFUT.presentValue(futures, hullWhite);
   }
 
-  //     -----     Swaption     -----
+  // ----- Swaption -----
 
   @Override
   public MultipleCurrencyAmount visitSwaptionPhysicalFixedIbor(final SwaptionPhysicalFixedIbor swaption, final HullWhiteOneFactorProviderInterface hullWhite) {

@@ -26,7 +26,7 @@ public final class ExtendedFudgeBuilderFactory extends FudgeBuilderFactoryAdapte
    * Map of bean class to builder.
    */
   private final ConcurrentMap<Class<?>, FudgeObjectBuilder<?>> _builders =
-      new ConcurrentHashMap<Class<?>, FudgeObjectBuilder<?>>();
+      new ConcurrentHashMap<>();
 
   /**
    * Initializes an instance of this factory.
@@ -34,7 +34,7 @@ public final class ExtendedFudgeBuilderFactory extends FudgeBuilderFactoryAdapte
    * @param dictionary  the object dictionary to install into, not null
    */
   public static void init(final FudgeObjectDictionary dictionary) {
-    FudgeBuilderFactory factory = new ExtendedFudgeBuilderFactory(dictionary.getDefaultBuilderFactory());
+    final FudgeBuilderFactory factory = new ExtendedFudgeBuilderFactory(dictionary.getDefaultBuilderFactory());
     dictionary.setDefaultBuilderFactory(factory);
   }
 
@@ -50,7 +50,7 @@ public final class ExtendedFudgeBuilderFactory extends FudgeBuilderFactoryAdapte
   @Override
   public <T> FudgeMessageBuilder<T> createMessageBuilder(final Class<T> clazz) {
     if (Bean.class.isAssignableFrom(clazz) && clazz != FlexiBean.class) {
-      FudgeMessageBuilder<T> bld = super.createMessageBuilder(clazz);
+      final FudgeMessageBuilder<T> bld = super.createMessageBuilder(clazz);
       if (bld == null || bld.getClass().getSimpleName().equals("JavaBeanBuilder")) {  // best we can do
         return createBeanBuilder(clazz);
       }
@@ -62,7 +62,7 @@ public final class ExtendedFudgeBuilderFactory extends FudgeBuilderFactoryAdapte
   @Override
   public <T> FudgeObjectBuilder<T> createObjectBuilder(final Class<T> clazz) {
     if (Bean.class.isAssignableFrom(clazz) && clazz != FlexiBean.class) {
-      FudgeObjectBuilder<T> bld = super.createObjectBuilder(clazz);
+      final FudgeObjectBuilder<T> bld = super.createObjectBuilder(clazz);
       if (bld == null || bld.getClass().getSimpleName().equals("JavaBeanBuilder")) {  // best we can do
         return createBeanBuilder(clazz);
       }

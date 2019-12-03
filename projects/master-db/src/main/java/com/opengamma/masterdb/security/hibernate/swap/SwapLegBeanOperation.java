@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -39,10 +39,10 @@ public final class SwapLegBeanOperation {
     Converters.validateBusinessDayConvention(swapLeg.getBusinessDayConvention().getName());
     Converters.validateFrequency(swapLeg.getFrequency().getName());
     Converters.validateDayCount(swapLeg.getDayCount().getName());
-    
+
     return swapLeg.accept(new SwapLegVisitor<SwapLegBean>() {
 
-      private SwapLegBean createSwapLegBean(SwapLeg swapLeg) {
+      private SwapLegBean createSwapLegBean(final SwapLeg swapLeg) {
         final SwapLegBean bean = new SwapLegBean();
         bean.setSwapLegType(SwapLegType.identify(swapLeg));
         bean.setBusinessDayConvention(secMasterSession.getOrCreateBusinessDayConventionBean(swapLeg.getBusinessDayConvention().getName()));
@@ -54,11 +54,11 @@ public final class SwapLegBeanOperation {
         return bean;
       }
 
-      private SwapLegBean createInterestRateLegBean(InterestRateLeg swapLeg) {
+      private SwapLegBean createInterestRateLegBean(final InterestRateLeg swapLeg) {
         return createSwapLegBean(swapLeg);
       }
-      
-      private void setFloatingInterestRateProperties(FloatingInterestRateLeg swapLeg, final SwapLegBean bean) {
+
+      private void setFloatingInterestRateProperties(final FloatingInterestRateLeg swapLeg, final SwapLegBean bean) {
         if (swapLeg.getInitialFloatingRate() != null) {
           bean.setRate(swapLeg.getInitialFloatingRate());
         }
@@ -74,21 +74,21 @@ public final class SwapLegBeanOperation {
       }
 
       @Override
-      public SwapLegBean visitFixedInterestRateLeg(FixedInterestRateLeg swapLeg) {
+      public SwapLegBean visitFixedInterestRateLeg(final FixedInterestRateLeg swapLeg) {
         final SwapLegBean bean = createInterestRateLegBean(swapLeg);
         bean.setRate(swapLeg.getRate());
         return bean;
       }
 
       @Override
-      public SwapLegBean visitFloatingInterestRateLeg(FloatingInterestRateLeg swapLeg) {
+      public SwapLegBean visitFloatingInterestRateLeg(final FloatingInterestRateLeg swapLeg) {
         final SwapLegBean bean = createInterestRateLegBean(swapLeg);
         setFloatingInterestRateProperties(swapLeg, bean);
         return bean;
       }
-      
+
       @Override
-      public SwapLegBean visitFloatingSpreadIRLeg(FloatingSpreadIRLeg swapLeg) {
+      public SwapLegBean visitFloatingSpreadIRLeg(final FloatingSpreadIRLeg swapLeg) {
         final SwapLegBean bean = createInterestRateLegBean(swapLeg);
         setFloatingInterestRateProperties(swapLeg, bean);
         bean.setSpread(swapLeg.getSpread());
@@ -96,7 +96,7 @@ public final class SwapLegBeanOperation {
       }
 
       @Override
-      public SwapLegBean visitFloatingGearingIRLeg(FloatingGearingIRLeg swapLeg) {
+      public SwapLegBean visitFloatingGearingIRLeg(final FloatingGearingIRLeg swapLeg) {
         final SwapLegBean bean = createInterestRateLegBean(swapLeg);
         setFloatingInterestRateProperties(swapLeg, bean);
         bean.setGearing(swapLeg.getGearing());
@@ -104,18 +104,18 @@ public final class SwapLegBeanOperation {
       }
 
       @Override
-      public SwapLegBean visitFixedVarianceSwapLeg(FixedVarianceSwapLeg swapLeg) {
-        SwapLegBean bean = createSwapLegBean(swapLeg);
+      public SwapLegBean visitFixedVarianceSwapLeg(final FixedVarianceSwapLeg swapLeg) {
+        final SwapLegBean bean = createSwapLegBean(swapLeg);
         bean.setStrike(swapLeg.getStrike());
         bean.setVarianceSwapType(swapLeg.getType());
         return bean;
       }
 
       @Override
-      public SwapLegBean visitFloatingVarianceSwapLeg(FloatingVarianceSwapLeg swapLeg) {
-        SwapLegBean bean = createSwapLegBean(swapLeg);
+      public SwapLegBean visitFloatingVarianceSwapLeg(final FloatingVarianceSwapLeg swapLeg) {
+        final SwapLegBean bean = createSwapLegBean(swapLeg);
         bean.setUnderlyingId(externalIdToExternalIdBean(swapLeg.getUnderlyingId()));
-        Frequency monitoringFrequency = swapLeg.getMonitoringFrequency();
+        final Frequency monitoringFrequency = swapLeg.getMonitoringFrequency();
         if (monitoringFrequency != null) {
           Converters.validateFrequency(monitoringFrequency.getName());
           bean.setMonitoringFrequency(secMasterSession.getOrCreateFrequencyBean(monitoringFrequency.getName()));
@@ -125,15 +125,15 @@ public final class SwapLegBeanOperation {
       }
 
       @Override
-      public SwapLegBean visitFixedInflationSwapLeg(FixedInflationSwapLeg swapLeg) {
-        SwapLegBean bean = createSwapLegBean(swapLeg);
+      public SwapLegBean visitFixedInflationSwapLeg(final FixedInflationSwapLeg swapLeg) {
+        final SwapLegBean bean = createSwapLegBean(swapLeg);
         bean.setRate(swapLeg.getRate());
         return bean;
       }
 
       @Override
-      public SwapLegBean visitInflationIndexSwapLeg(InflationIndexSwapLeg swapLeg) {
-        SwapLegBean bean = createSwapLegBean(swapLeg);
+      public SwapLegBean visitInflationIndexSwapLeg(final InflationIndexSwapLeg swapLeg) {
+        final SwapLegBean bean = createSwapLegBean(swapLeg);
         bean.setRateIdentifier(externalIdToExternalIdBean(swapLeg.getIndexId()));
         bean.setActualIndexationLag(swapLeg.getQuotationIndexationLag());
         bean.setConventionalIndexationLag(swapLeg.getConventionalIndexationLag());
@@ -142,12 +142,12 @@ public final class SwapLegBeanOperation {
       }
     });
   }
-  
+
   public static SwapLeg createSwapLeg(final SwapLegBean bean) {
     return bean.getSwapLegType().accept(new SwapLegVisitor<SwapLeg>() {
 
       @Override
-      public SwapLeg visitFixedInterestRateLeg(FixedInterestRateLeg ignore) {
+      public SwapLeg visitFixedInterestRateLeg(final FixedInterestRateLeg ignore) {
         return new FixedInterestRateLeg(
             dayCountBeanToDayCount(bean.getDayCount()),
             frequencyBeanToFrequency(bean.getFrequency()),
@@ -158,14 +158,14 @@ public final class SwapLegBeanOperation {
       }
 
       @Override
-      public SwapLeg visitFloatingInterestRateLeg(FloatingInterestRateLeg ignore) {
-        FloatingInterestRateLeg floatingInterestRateLeg = new FloatingInterestRateLeg(
+      public SwapLeg visitFloatingInterestRateLeg(final FloatingInterestRateLeg ignore) {
+        final FloatingInterestRateLeg floatingInterestRateLeg = new FloatingInterestRateLeg(
             dayCountBeanToDayCount(bean.getDayCount()),
             frequencyBeanToFrequency(bean.getFrequency()),
             externalIdBeanToExternalId(bean.getRegion()),
             businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()),
             NotionalBeanOperation.createNotional(bean.getNotional()),
-            bean.isEom(), 
+            bean.isEom(),
             externalIdBeanToExternalId(bean.getRateIdentifier()),
             bean.getFloatingRateType());
         floatingInterestRateLeg.setInitialFloatingRate(bean.getRate());
@@ -175,14 +175,14 @@ public final class SwapLegBeanOperation {
       }
 
       @Override
-      public SwapLeg visitFloatingSpreadIRLeg(FloatingSpreadIRLeg ignore) {
-        FloatingSpreadIRLeg floatingSpreadIRLeg = new FloatingSpreadIRLeg(
+      public SwapLeg visitFloatingSpreadIRLeg(final FloatingSpreadIRLeg ignore) {
+        final FloatingSpreadIRLeg floatingSpreadIRLeg = new FloatingSpreadIRLeg(
             dayCountBeanToDayCount(bean.getDayCount()),
             frequencyBeanToFrequency(bean.getFrequency()),
             externalIdBeanToExternalId(bean.getRegion()),
             businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()),
             NotionalBeanOperation.createNotional(bean.getNotional()),
-            bean.isEom(), 
+            bean.isEom(),
             externalIdBeanToExternalId(bean.getRateIdentifier()),
             bean.getFloatingRateType(), bean.getSpread());
         floatingSpreadIRLeg.setInitialFloatingRate(bean.getRate());
@@ -192,14 +192,14 @@ public final class SwapLegBeanOperation {
       }
 
       @Override
-      public SwapLeg visitFloatingGearingIRLeg(FloatingGearingIRLeg ignore) {
-        FloatingGearingIRLeg floatingGearingIRLeg = new FloatingGearingIRLeg(
+      public SwapLeg visitFloatingGearingIRLeg(final FloatingGearingIRLeg ignore) {
+        final FloatingGearingIRLeg floatingGearingIRLeg = new FloatingGearingIRLeg(
             dayCountBeanToDayCount(bean.getDayCount()),
             frequencyBeanToFrequency(bean.getFrequency()),
             externalIdBeanToExternalId(bean.getRegion()),
             businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()),
             NotionalBeanOperation.createNotional(bean.getNotional()),
-            bean.isEom(), 
+            bean.isEom(),
             externalIdBeanToExternalId(bean.getRateIdentifier()),
             bean.getFloatingRateType(), bean.getGearing());
         floatingGearingIRLeg.setInitialFloatingRate(bean.getRate());
@@ -209,7 +209,7 @@ public final class SwapLegBeanOperation {
       }
 
       @Override
-      public SwapLeg visitFixedVarianceSwapLeg(FixedVarianceSwapLeg ignore) {
+      public SwapLeg visitFixedVarianceSwapLeg(final FixedVarianceSwapLeg ignore) {
         return new FixedVarianceSwapLeg(
             dayCountBeanToDayCount(bean.getDayCount()),
             frequencyBeanToFrequency(bean.getFrequency()),
@@ -222,7 +222,7 @@ public final class SwapLegBeanOperation {
       }
 
       @Override
-      public SwapLeg visitFloatingVarianceSwapLeg(FloatingVarianceSwapLeg ignore) {
+      public SwapLeg visitFloatingVarianceSwapLeg(final FloatingVarianceSwapLeg ignore) {
         return new FloatingVarianceSwapLeg(
             dayCountBeanToDayCount(bean.getDayCount()),
             frequencyBeanToFrequency(bean.getFrequency()),
@@ -236,7 +236,7 @@ public final class SwapLegBeanOperation {
       }
 
       @Override
-      public SwapLeg visitFixedInflationSwapLeg(FixedInflationSwapLeg swapLeg) {
+      public SwapLeg visitFixedInflationSwapLeg(final FixedInflationSwapLeg swapLeg) {
         return new FixedInflationSwapLeg(
             dayCountBeanToDayCount(bean.getDayCount()),
             frequencyBeanToFrequency(bean.getFrequency()),
@@ -248,7 +248,7 @@ public final class SwapLegBeanOperation {
       }
 
       @Override
-      public SwapLeg visitInflationIndexSwapLeg(InflationIndexSwapLeg swapLeg) {
+      public SwapLeg visitInflationIndexSwapLeg(final InflationIndexSwapLeg swapLeg) {
         return new InflationIndexSwapLeg(
             dayCountBeanToDayCount(bean.getDayCount()),
             frequencyBeanToFrequency(bean.getFrequency()),

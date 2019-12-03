@@ -24,16 +24,16 @@ public abstract class FuturesSecurityDefinition<F extends FuturesSecurity> imple
   private final ZonedDateTime _lastTradingDate;
 
   /**
-   * Constructor. 
+   * Constructor.
    * @param lastTradingDate The last trading date of the futures.
    */
-  public FuturesSecurityDefinition(ZonedDateTime lastTradingDate) {
+  public FuturesSecurityDefinition(final ZonedDateTime lastTradingDate) {
     ArgumentChecker.notNull(lastTradingDate, "last trading date");
     _lastTradingDate = lastTradingDate;
   }
 
   /**
-   * Returns the last trading date of the futures. 
+   * Returns the last trading date of the futures.
    * @return The date.
    */
   public ZonedDateTime getLastTradingDate() {
@@ -49,7 +49,7 @@ public abstract class FuturesSecurityDefinition<F extends FuturesSecurity> imple
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -60,6 +60,7 @@ public abstract class FuturesSecurityDefinition<F extends FuturesSecurity> imple
       return false;
     }
     @SuppressWarnings("unchecked")
+    final
     FuturesSecurityDefinition<F> other = (FuturesSecurityDefinition<F>) obj;
     if (!ObjectUtils.equals(_lastTradingDate, other._lastTradingDate)) {
       return false;

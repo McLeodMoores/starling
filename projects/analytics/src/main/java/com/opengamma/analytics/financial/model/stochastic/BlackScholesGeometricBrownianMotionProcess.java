@@ -13,9 +13,11 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.function.Function2D;
 
 /**
- * 
+ *
  * @param <T>
+ *          The type of the option
  * @param <U>
+ *          The type of the market data
  */
 public class BlackScholesGeometricBrownianMotionProcess<T extends OptionDefinition, U extends StandardOptionDataBundle> extends StochasticProcess<T, U> {
 

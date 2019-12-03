@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.msg;
@@ -15,7 +15,7 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 /**
- * A request for a current snapshot for the embedded market data item. 
+ * A request for a current snapshot for the embedded market data item.
  */
 @BeanDefinition
 public class CogdaLiveDataSnapshotRequestMessage extends CogdaLiveDataCommandMessage {

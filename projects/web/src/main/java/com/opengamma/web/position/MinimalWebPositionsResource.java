@@ -124,21 +124,21 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
     return getFreemarker().build(JSON_DIR + "positions.ftl", out);
   }
 
-  private FlexiBean createSearchResultData(final PagingRequest pr, final String identifier, String minQuantityStr,
-      String maxQuantityStr, final List<String> positionIdStrs, final List<String> tradeIdStrs, final String uniqueIdScheme) {
-    minQuantityStr = StringUtils.defaultString(minQuantityStr).replace(",", "");
-    maxQuantityStr = StringUtils.defaultString(maxQuantityStr).replace(",", "");
+  private FlexiBean createSearchResultData(final PagingRequest pr, final String identifier, final String minQuantityStr,
+      final String maxQuantityStr, final List<String> positionIdStrs, final List<String> tradeIdStrs, final String uniqueIdScheme) {
+    final String trimmedMinQuantityStr = StringUtils.defaultString(minQuantityStr).replace(",", "");
+    final String trimmedMaxQuantityStr = StringUtils.defaultString(maxQuantityStr).replace(",", "");
     final FlexiBean out = createRootData();
 
     final PositionSearchRequest searchRequest = new PositionSearchRequest();
     searchRequest.setPagingRequest(pr);
     searchRequest.setSecurityIdValue(StringUtils.trimToNull(identifier));
     searchRequest.setUniqueIdScheme(StringUtils.trimToNull(uniqueIdScheme));
-    if (NumberUtils.isNumber(minQuantityStr)) {
-      searchRequest.setMinQuantity(NumberUtils.createBigDecimal(minQuantityStr));
+    if (NumberUtils.isNumber(trimmedMinQuantityStr)) {
+      searchRequest.setMinQuantity(NumberUtils.createBigDecimal(trimmedMinQuantityStr));
     }
-    if (NumberUtils.isNumber(maxQuantityStr)) {
-      searchRequest.setMaxQuantity(NumberUtils.createBigDecimal(maxQuantityStr));
+    if (NumberUtils.isNumber(trimmedMaxQuantityStr)) {
+      searchRequest.setMaxQuantity(NumberUtils.createBigDecimal(trimmedMaxQuantityStr));
     }
     for (final String positionIdStr : positionIdStrs) {
       searchRequest.addPositionObjectId(ObjectId.parse(positionIdStr));
@@ -161,51 +161,55 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
-      @FormParam("quantity") String quantityStr,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue,
-      @FormParam("type") String type,
-      @FormParam(POSITION_XML) String positionXml,
-      @FormParam("uniqueIdScheme") String uniqueIdScheme) {
-    uniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
-    type = StringUtils.trimToEmpty(type);
+      @FormParam("quantity") final String quantityStr,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue,
+      @FormParam("type") final String type,
+      @FormParam(POSITION_XML) final String positionXml,
+      @FormParam("uniqueIdScheme") final String uniqueIdScheme) {
+    final String trimmedUniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
+    final String trimmedType = StringUtils.trimToEmpty(type);
     URI uri = null;
-    switch (type) {
+    String trimmedPositionXml;
+    String trimmedQuantityStr;
+    String trimmedIdScheme;
+    String trimmedIdValue;
+    switch (trimmedType) {
       case "xml":
-        positionXml = StringUtils.trimToNull(positionXml);
-        if (positionXml == null) {
+        trimmedPositionXml = StringUtils.trimToNull(positionXml);
+        if (trimmedPositionXml == null) {
           final FlexiBean out = createRootData();
           out.put("err_xmlMissing", true);
           final String html = getFreemarker().build(HTML_DIR + "positions-add.ftl", out);
           return Response.ok(html).build();
         }
-        uri = addPosition(positionXml, uniqueIdScheme);
+        uri = addPosition(trimmedPositionXml, trimmedUniqueIdScheme);
         break;
       case StringUtils.EMPTY:
-        quantityStr = StringUtils.replace(StringUtils.trimToNull(quantityStr), ",", "");
-        final BigDecimal quantity = quantityStr != null && NumberUtils.isNumber(quantityStr) ? new BigDecimal(quantityStr) : null;
-        idScheme = StringUtils.trimToNull(idScheme);
-        idValue = StringUtils.trimToNull(idValue);
-        if (quantity == null || idScheme == null || idValue == null) {
+        trimmedQuantityStr = StringUtils.replace(StringUtils.trimToNull(quantityStr), ",", "");
+        final BigDecimal quantity = trimmedQuantityStr != null && NumberUtils.isNumber(trimmedQuantityStr) ? new BigDecimal(trimmedQuantityStr) : null;
+        trimmedIdScheme = StringUtils.trimToNull(idScheme);
+        trimmedIdValue = StringUtils.trimToNull(idValue);
+        if (quantity == null || trimmedIdScheme == null || trimmedIdValue == null) {
           final FlexiBean out = createRootData();
-          if (quantityStr == null) {
+          if (trimmedQuantityStr == null) {
             out.put("err_quantityMissing", true);
           }
           if (quantity == null) {
             out.put("err_quantityNotNumeric", true);
           }
-          if (idScheme == null) {
+          if (trimmedIdScheme == null) {
             out.put("err_idschemeMissing", true);
           }
-          if (idValue == null) {
+          if (trimmedIdValue == null) {
             out.put("err_idvalueMissing", true);
           }
-          out.put("quantity", quantityStr);
-          out.put("idvalue", idValue);
+          out.put("quantity", trimmedQuantityStr);
+          out.put("idvalue", trimmedIdValue);
           final String html = getFreemarker().build(HTML_DIR + "positions-add.ftl", out);
           return Response.ok(html).build();
         }
-        final ExternalIdBundle id = ExternalIdBundle.of(ExternalId.of(idScheme, idValue));
+        final ExternalIdBundle id = ExternalIdBundle.of(ExternalId.of(trimmedIdScheme, trimmedIdValue));
         final UniqueId secUid = getSecurityUniqueId(id);
         if (secUid == null) {
           final FlexiBean out = createRootData();
@@ -213,7 +217,7 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
           final String html = getFreemarker().build(HTML_DIR + "positions-add.ftl", out);
           return Response.ok(html).build();
         }
-        uri = addPosition(quantity, secUid, uniqueIdScheme);
+        uri = addPosition(quantity, secUid, trimmedUniqueIdScheme);
         break;
       default:
         throw new IllegalArgumentException("Can only add position by XML or completing provided web form");
@@ -225,44 +229,44 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
   public Response postJSON(
-      @FormParam("quantity") String quantityStr,
-      @FormParam("idscheme") String idScheme,
-      @FormParam("idvalue") String idValue,
-      @FormParam("tradesJson") String tradesJson,
-      @FormParam("type") String type,
+      @FormParam("quantity") final String quantityStr,
+      @FormParam("idscheme") final String idScheme,
+      @FormParam("idvalue") final String idValue,
+      @FormParam("tradesJson") final String tradesJson,
+      @FormParam("type") final String type,
       @FormParam(POSITION_XML) final String positionXml,
-      @FormParam("uniqueIdScheme") String uniqueIdScheme) {
+      @FormParam("uniqueIdScheme") final String uniqueIdScheme) {
 
-    uniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
-    type = StringUtils.trimToEmpty(type);
+    final String trimmedUniqueIdScheme = StringUtils.trimToNull(uniqueIdScheme);
+    final String trimmedType = StringUtils.trimToEmpty(type);
     URI uri = null;
-    switch (type) {
+    switch (trimmedType) {
       case "xml":
-        uri = addPosition(positionXml, uniqueIdScheme);
+        uri = addPosition(positionXml, trimmedUniqueIdScheme);
         break;
       case StringUtils.EMPTY:
-        quantityStr = StringUtils.replace(StringUtils.trimToNull(quantityStr), ",", "");
-        final BigDecimal quantity = quantityStr != null && NumberUtils.isNumber(quantityStr) ? new BigDecimal(quantityStr) : null;
-        idScheme = StringUtils.trimToNull(idScheme);
-        idValue = StringUtils.trimToNull(idValue);
-        tradesJson = StringUtils.trimToNull(tradesJson);
+        final String trimmedQuantityStr = StringUtils.replace(StringUtils.trimToNull(quantityStr), ",", "");
+        final BigDecimal quantity = trimmedQuantityStr != null && NumberUtils.isNumber(trimmedQuantityStr) ? new BigDecimal(trimmedQuantityStr) : null;
+        final String trimmedIdScheme = StringUtils.trimToNull(idScheme);
+        final String trimmedIdValue = StringUtils.trimToNull(idValue);
+        final String trimmedTradesJson = StringUtils.trimToNull(tradesJson);
 
-        if (quantity == null || idScheme == null || idValue == null) {
+        if (quantity == null || trimmedIdScheme == null || trimmedIdValue == null) {
           return Response.status(Status.BAD_REQUEST).build();
         }
 
-        final ExternalIdBundle id = ExternalIdBundle.of(ExternalId.of(idScheme, idValue));
+        final ExternalIdBundle id = ExternalIdBundle.of(ExternalId.of(trimmedIdScheme, trimmedIdValue));
         final UniqueId secUid = getSecurityUniqueId(id);
         if (secUid == null) {
-          throw new DataNotFoundException("invalid " + idScheme + "~" + idValue);
+          throw new DataNotFoundException("invalid " + trimmedIdScheme + "~" + trimmedIdValue);
         }
         Collection<ManageableTrade> trades = null;
-        if (tradesJson != null) {
-          trades = parseTrades(tradesJson);
+        if (trimmedTradesJson != null) {
+          trades = parseTrades(trimmedTradesJson);
         } else {
           trades = Collections.<ManageableTrade>emptyList();
         }
-        uri = addPosition(quantity, secUid, trades, uniqueIdScheme);
+        uri = addPosition(quantity, secUid, trades, trimmedUniqueIdScheme);
         break;
       default:
         throw new IllegalArgumentException("Can only add position by XML or completing provided web form");
@@ -270,9 +274,9 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
     return Response.created(uri).build();
   }
 
-  private URI addPosition(String positionXml, final String uniqueIdScheme) {
-    positionXml = StringUtils.trimToEmpty(positionXml);
-    final Bean positionBean = JodaBeanSerialization.deserializer().xmlReader().read(positionXml);
+  private URI addPosition(final String positionXml, final String uniqueIdScheme) {
+    final String trimmedPositionXml = StringUtils.trimToEmpty(positionXml);
+    final Bean positionBean = JodaBeanSerialization.deserializer().xmlReader().read(trimmedPositionXml);
     final PositionMaster positionMaster = data().getPositionMaster();
     final ManageablePosition manageablePosition = (ManageablePosition) positionBean;
     if (uniqueIdScheme != null) {

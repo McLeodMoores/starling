@@ -29,29 +29,29 @@ public final class ConventionType implements Comparable<ConventionType>, Seriali
 
   /**
    * Obtains a {@code ConventionType}.
-   * 
+   *
    * @param name  the convention name, not null
    * @return the convention type, not null
    */
   @FromString
-  public static ConventionType of(String name) {
+  public static ConventionType of(final String name) {
     return new ConventionType(name);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    */
-  private ConventionType(String name) {
+  private ConventionType(final String name) {
     _name = name;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the name of the convention.
-   * 
+   *
    * @return the convention name, not null
    */
   public String getName() {
@@ -62,12 +62,12 @@ public final class ConventionType implements Comparable<ConventionType>, Seriali
   //-------------------------------------------------------------------------
   /**
    * Compares this type to another.
-   * 
+   *
    * @param other  the object to compare to, not null
    * @return the comparison
    */
   @Override
-  public int compareTo(ConventionType other) {
+  public int compareTo(final ConventionType other) {
     return getName().compareTo(other.getName());
   }
 
@@ -75,17 +75,17 @@ public final class ConventionType implements Comparable<ConventionType>, Seriali
    * Checks if this type equals another.
    * <p>
    * Types are compared based on the name.
-   * 
+   *
    * @param obj  the object to compare to, null returns false
    * @return true if equal
    */
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj instanceof ConventionType) {
-      ConventionType other = (ConventionType) obj;
+      final ConventionType other = (ConventionType) obj;
       return _name.equals(other.getName());
     }
     return false;
@@ -93,7 +93,7 @@ public final class ConventionType implements Comparable<ConventionType>, Seriali
 
   /**
    * Returns a suitable hash code.
-   * 
+   *
    * @return a suitable hash code
    */
   @Override
@@ -103,7 +103,7 @@ public final class ConventionType implements Comparable<ConventionType>, Seriali
 
   /**
    * Returns the name.
-   * 
+   *
    * @return the string form, not null
    */
   @Override

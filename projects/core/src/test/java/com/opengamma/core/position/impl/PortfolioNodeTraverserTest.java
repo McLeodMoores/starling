@@ -27,16 +27,14 @@ import com.opengamma.util.test.TestGroup;
  */
 public class PortfolioNodeTraverserTest {
 
-  /* Test tree =
-
-                                       N0
-                N1              N10               P19 P20
-         N2    N5  P8 P9    N11     N14   P17 P18
-       P3 P4 P6 P7        P12 P13 P15 P16
-   
+  /*
+   * Test tree =
+   *
+   * N0 N1 N10 P19 P20 N2 N5 P8 P9 N11 N14 P17 P18 P3 P4 P6 P7 P12 P13 P15 P16
+   *
    */
 
-  private Position createTestPosition(final AtomicInteger nextId) {
+  private static Position createTestPosition(final AtomicInteger nextId) {
     final SimplePosition position = new SimplePosition();
     position.setUniqueId(UniqueId.of("Test", Integer.toString(nextId.getAndIncrement())));
     return position;
@@ -59,9 +57,12 @@ public class PortfolioNodeTraverserTest {
   private static final int POSITION_PRE = 2;
   private static final int POSITION_POST = 3;
 
+  /**
+   *
+   */
   private static class Callback implements PortfolioNodeTraversalCallback {
 
-    private final Queue<Integer> _visited = new LinkedList<Integer>();
+    private final Queue<Integer> _visited = new LinkedList<>();
 
     protected void visit(final int type, final UniqueIdentifiable uniqueId) {
       _visited.add(type);
@@ -89,7 +90,7 @@ public class PortfolioNodeTraverserTest {
     }
 
     private void assertVisit(final int type, final int... identifiers) {
-      for (int identifier : identifiers) {
+      for (final int identifier : identifiers) {
         assertEquals(_visited.remove().intValue(), type);
         assertEquals(_visited.remove().intValue(), identifier);
       }
@@ -100,11 +101,11 @@ public class PortfolioNodeTraverserTest {
       while (itr.hasNext()) {
         int t = itr.next();
         int i = itr.next();
-        if ((t == t1) && (i == i1)) {
+        if (t == t1 && i == i1) {
           while (itr.hasNext()) {
             t = itr.next();
             i = itr.next();
-            if ((t == t2) && (i == i2)) {
+            if (t == t2 && i == i2) {
               return;
             }
           }
@@ -123,7 +124,10 @@ public class PortfolioNodeTraverserTest {
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(groups = TestGroup.UNIT)
   public void testDepthFirst() {
     final Callback cb = new Callback();
@@ -159,6 +163,9 @@ public class PortfolioNodeTraverserTest {
     cb.assertVisit(NODE_POST, 0);
   }
 
+  /**
+   *
+   */
   @Test(groups = TestGroup.UNIT, enabled = false)
   public void testBreadthFirst() {
     final Callback cb = new Callback();
@@ -179,13 +186,16 @@ public class PortfolioNodeTraverserTest {
     cb.assertVisit(NODE_POST, 0);
   }
 
+  /**
+   *
+   */
   @Test(groups = TestGroup.UNIT, expectedExceptions = UnsupportedOperationException.class)
   public void testBreadthFirstBroken() {
     final Callback cb = new Callback();
     PortfolioNodeTraverser.breadthFirst(cb).traverse(createTestPortfolioNode(new AtomicInteger(), 2));
   }
 
-  private void assertParallelOrder(final Callback cb) {
+  private static void assertParallelOrder(final Callback cb) {
     cb.assertVisitCount();
     // Exact ordering can't be predicted but make sure some thing happened before or after others
     cb.assertVisitBefore(NODE_PRE, 0, NODE_PRE, 1);
@@ -212,14 +222,20 @@ public class PortfolioNodeTraverserTest {
     cb.assertVisitAfter(POSITION_POST, 9, POSITION_POST, 4);
   }
 
+  /**
+   *
+   */
   @Test(groups = TestGroup.UNIT)
   public void testParallelNoSlaveThreads() {
     final Callback cb = new Callback();
     PortfolioNodeTraverser.parallel(cb, new PoolExecutor(0, getClass().getSimpleName())).traverse(createTestPortfolioNode(new AtomicInteger(), 2));
-    // With a single thread (the caller) should be depth first 
+    // With a single thread (the caller) should be depth first
     assertParallelOrder(cb);
   }
 
+  /**
+   *
+   */
   @Test(groups = TestGroup.UNIT_SLOW)
   public void testParallelSlaveThreads() {
     final Callback cb = new Callback() {
@@ -227,7 +243,7 @@ public class PortfolioNodeTraverserTest {
       protected synchronized void visit(final int type, final UniqueIdentifiable uniqueId) {
         try {
           Thread.sleep(100);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
         }
         super.visit(type, uniqueId);
       }

@@ -54,11 +54,11 @@ public class BondFutureDeliverable extends DirectBean implements Serializable {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param bundle  the external identifier bundle, not null
    * @param conversionFactor  the conversion factor
    */
-  public BondFutureDeliverable(ExternalIdBundle bundle, double conversionFactor) {
+  public BondFutureDeliverable(final ExternalIdBundle bundle, final double conversionFactor) {
     setIdentifiers(bundle);
     setConversionFactor(conversionFactor);
   }

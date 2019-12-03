@@ -19,7 +19,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,85 +33,87 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * RESTful resource for a {@link EngineResourceManager}
- * 
- * @param <T>  the type of resource
+ * RESTful resource for a {@link EngineResourceManager}.
+ *
+ * @param <T>
+ *          the type of resource
  */
 public abstract class DataEngineResourceManagerResource<T extends UniqueIdentifiable> extends AbstractDataResource {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DataEngineResourceManagerResource.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataEngineResourceManagerResource.class);
+
   private final URI _baseUri;
   private final EngineResourceManager<? extends T> _manager;
   private final AtomicLong _nextReferenceId = new AtomicLong();
-  private final Map<Long, DataEngineResourceReferenceResource<T>> _activeReferences = new ConcurrentHashMap<Long, DataEngineResourceReferenceResource<T>>();
+  private final Map<Long, DataEngineResourceReferenceResource<T>> _activeReferences = new ConcurrentHashMap<>();
 
-  protected DataEngineResourceManagerResource(URI baseUri, EngineResourceManager<? extends T> manager) {
+  protected DataEngineResourceManagerResource(final URI baseUri, final EngineResourceManager<? extends T> manager) {
     _baseUri = baseUri;
     _manager = manager;
   }
-  
+
   @POST
   @Consumes(FudgeRest.MEDIA)
-  public Response createReference(UniqueId uniqueId) {
-    EngineResourceReference<? extends T> reference = _manager.createReference(uniqueId);
+  public Response createReference(final UniqueId uniqueId) {
+    final EngineResourceReference<? extends T> reference = _manager.createReference(uniqueId);
     if (reference == null) {
       throw new WebApplicationException(Response.Status.NOT_FOUND);
     }
-    URI referenceUri = manageReference(reference);
+    final URI referenceUri = manageReference(reference);
     return responseCreated(referenceUri);
   }
-  
+
   @Path("{referenceId}")
-  public DataEngineResourceReferenceResource<T> getReference(@PathParam("referenceId") long referenceId) {
-    DataEngineResourceReferenceResource<T> referenceResource = _activeReferences.get(referenceId);
+  public DataEngineResourceReferenceResource<T> getReference(@PathParam("referenceId") final long referenceId) {
+    final DataEngineResourceReferenceResource<T> referenceResource = _activeReferences.get(referenceId);
     if (referenceResource == null) {
       throw new WebApplicationException(Response.Status.NOT_FOUND);
     }
     return referenceResource;
   }
-  
-  /*package*/ void referenceReleased(long uniqueId) {
+
+  /* package */ void referenceReleased(final long uniqueId) {
     _activeReferences.remove(uniqueId);
   }
-  
+
   private URI getBaseUri() {
     return _baseUri;
   }
-  
-  /*package*/ URI manageReference(EngineResourceReference<? extends T> reference) {
-    long referenceId = _nextReferenceId.getAndIncrement();
-    DataEngineResourceReferenceResource<T> referenceResource = createReferenceResource(referenceId, reference);
+
+  /* package */ URI manageReference(final EngineResourceReference<? extends T> reference) {
+    final long referenceId = _nextReferenceId.getAndIncrement();
+    final DataEngineResourceReferenceResource<T> referenceResource = createReferenceResource(referenceId, reference);
     _activeReferences.put(referenceId, referenceResource);
     return DataEngineResourceManagerUris.uriReference(getBaseUri(), referenceId);
   }
-  
+
   protected abstract DataEngineResourceReferenceResource<T> createReferenceResource(long referenceId, EngineResourceReference<? extends T> reference);
-  
+
   /**
    * Releases and discards any references that have not received a heartbeat since the given time.
-   * 
-   * @param oldestHeartbeatTime  the oldest permitted heartbeat time, not null
+   *
+   * @param oldestHeartbeatTime
+   *          the oldest permitted heartbeat time, not null
    */
   public void releaseExpiredReferences(final Instant oldestHeartbeatTime) {
     ArgumentChecker.notNull(oldestHeartbeatTime, "oldestHeartbeatTime");
     final Iterator<Map.Entry<Long, DataEngineResourceReferenceResource<T>>> it = _activeReferences.entrySet().iterator();
     while (it.hasNext()) {
       final Map.Entry<Long, DataEngineResourceReferenceResource<T>> entry = it.next();
-      DataEngineResourceReferenceResource<T> referenceResource = entry.getValue();
+      final DataEngineResourceReferenceResource<T> referenceResource = entry.getValue();
       if (referenceResource.getLastHeartbeat().isBefore(oldestHeartbeatTime)) {
         // Notifies the manager which removes it from the map
-        s_logger.warn("Releasing reference {} which has not received a heartbeat since {}, which exceeds the oldest allowed heartbeat of {}", 
-            new Object[] {entry.getKey(), referenceResource.getLastHeartbeat(), oldestHeartbeatTime});
+        LOGGER.warn("Releasing reference {} which has not received a heartbeat since {}, which exceeds the oldest allowed heartbeat of {}",
+            new Object[] { entry.getKey(), referenceResource.getLastHeartbeat(), oldestHeartbeatTime });
         referenceResource.release();
       }
     }
   }
-  
+
   public ReleaseExpiredReferencesRunnable createReleaseExpiredReferencesTask() {
     return new ReleaseExpiredReferencesRunnable();
   }
-  
+
   /**
    * Runnable to release expired references.
    */
@@ -125,12 +126,15 @@ public abstract class DataEngineResourceManagerResource<T extends UniqueIdentifi
 
     /**
      * Sets the scheduler.
-     * @param scheduler  the scheduler, not null
+     *
+     * @param scheduler
+     *          the scheduler, not null
      */
     public void setScheduler(final ScheduledExecutorService scheduler) {
-      scheduler.scheduleWithFixedDelay(this, DataEngineResourceManagerUris.REFERENCE_LEASE_MILLIS, DataEngineResourceManagerUris.REFERENCE_LEASE_MILLIS, TimeUnit.MILLISECONDS);
+      scheduler.scheduleWithFixedDelay(this, DataEngineResourceManagerUris.REFERENCE_LEASE_MILLIS, DataEngineResourceManagerUris.REFERENCE_LEASE_MILLIS,
+          TimeUnit.MILLISECONDS);
     }
-    
+
   }
-  
+
 }

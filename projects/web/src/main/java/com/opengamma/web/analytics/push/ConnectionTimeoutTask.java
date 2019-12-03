@@ -31,21 +31,25 @@ of knowing the client is still there.
  */
 /* package */ class ConnectionTimeoutTask extends TimerTask {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ConnectionTimeoutTask.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionTimeoutTask.class);
 
   private final AtomicLong _lastAccessTime = new AtomicLong();
   private final String _userId;
   private final String _clientId;
   private final long _timeout;
-  private ConnectionManager _connectionManager;
+  private final ConnectionManager _connectionManager;
 
   /**
-   * @param connectionManager The manager of the connection being timed
-   * @param userId The ID of the user who owns the connection
-   * @param clientId The ID of the connection
-   * @param timeout The maximum time in milliseconds the connection is allowed to be idle
+   * @param connectionManager
+   *          The manager of the connection being timed
+   * @param userId
+   *          The ID of the user who owns the connection
+   * @param clientId
+   *          The ID of the connection
+   * @param timeout
+   *          The maximum time in milliseconds the connection is allowed to be idle
    */
-  ConnectionTimeoutTask(ConnectionManager connectionManager, String userId, String clientId, long timeout) {
+  ConnectionTimeoutTask(final ConnectionManager connectionManager, final String userId, final String clientId, final long timeout) {
     _connectionManager = connectionManager;
     _userId = userId;
     _clientId = clientId;
@@ -67,18 +71,18 @@ of knowing the client is still there.
   public void run() {
     if (System.currentTimeMillis() - _lastAccessTime.get() > _timeout) {
       cancel();
-      s_logger.debug("Client timeout, userId: {}, clientId: {}", _userId, _clientId);
+      LOGGER.debug("Client timeout, userId: {}, clientId: {}", _userId, _clientId);
       _connectionManager.clientDisconnected(_userId, _clientId);
     }
   }
 
   @Override
   public String toString() {
-    return "ConnectionTimeoutTask [" +
-        "_userId='" + _userId + '\'' +
-        ", _clientId='" + _clientId + '\'' +
-        ", _lastAccessTime=" + _lastAccessTime +
-        ", _timeout=" + _timeout +
-        "]";
+    return "ConnectionTimeoutTask ["
+        + "_userId='" + _userId + '\''
+        + ", _clientId='" + _clientId + '\''
+        + ", _lastAccessTime=" + _lastAccessTime
+        + ", _timeout=" + _timeout
+        + "]";
   }
 }

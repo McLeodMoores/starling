@@ -21,24 +21,24 @@ import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 public class CorporateBondSecurityFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<CorporateBondSecurity> {
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CorporateBondSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CorporateBondSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     CorporateBondSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, CorporateBondSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final CorporateBondSecurity object, final MutableFudgeMsg msg) {
     BondSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
   }
 
   @Override
-  public CorporateBondSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    CorporateBondSecurity object = new CorporateBondSecurity();
+  public CorporateBondSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final CorporateBondSecurity object = new CorporateBondSecurity();
     CorporateBondSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, CorporateBondSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final CorporateBondSecurity object) {
     BondSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
   }
 

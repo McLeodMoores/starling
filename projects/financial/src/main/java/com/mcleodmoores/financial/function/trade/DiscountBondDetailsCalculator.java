@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.financial.function.trade;
 
@@ -15,7 +15,7 @@ import com.opengamma.util.money.CurrencyAmount;
  *
  */
 public class DiscountBondDetailsCalculator extends
-  InstrumentDerivativeVisitorAdapter<DiscountBondDetailsProvider, DiscountBondCashFlows> {
+    InstrumentDerivativeVisitorAdapter<DiscountBondDetailsProvider, DiscountBondCashFlows> {
   public static final DiscountBondDetailsCalculator INSTANCE = new DiscountBondDetailsCalculator();
 
   @Override
@@ -27,8 +27,8 @@ public class DiscountBondDetailsCalculator extends
     final double paymentTime = underlying.getEndTime();
     final Currency currency = definition.getCurrency();
     return new DiscountBondCashFlows(definition.getEndDate().toLocalDate(),
-                                     CurrencyAmount.of(currency, underlying.getNotional() * bill.getQuantity()),
-                                     paymentTime,
-                                     data.getCurves().getDiscountFactor(underlying.getIssuerEntity(), paymentTime));
+        CurrencyAmount.of(currency, underlying.getNotional() * bill.getQuantity()),
+        paymentTime,
+        data.getCurves().getDiscountFactor(underlying.getIssuerEntity(), paymentTime));
   }
 }

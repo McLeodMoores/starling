@@ -10,10 +10,10 @@ package com.opengamma.integration.tool.enginedebugger.node;
  */
 public class FunctionEntryNode extends AbstractTreeTableLeafNode {
   private static final String LABEL = "Function";
-  private Object _parent;
+  private final Object _parent;
   private final String _functionName;
 
-  public FunctionEntryNode(Object parent, String functionName) {
+  public FunctionEntryNode(final Object parent, final String functionName) {
     _parent = parent;
     _functionName = functionName;
   }
@@ -31,7 +31,7 @@ public class FunctionEntryNode extends AbstractTreeTableLeafNode {
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     switch (column) {
       case 0:
         return LABEL;
@@ -45,12 +45,12 @@ public class FunctionEntryNode extends AbstractTreeTableLeafNode {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_functionName == null) ? 0 : _functionName.hashCode());
+    result = prime * result + (_functionName == null ? 0 : _functionName.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -60,7 +60,7 @@ public class FunctionEntryNode extends AbstractTreeTableLeafNode {
     if (!(obj instanceof FunctionEntryNode)) {
       return false;
     }
-    FunctionEntryNode other = (FunctionEntryNode) obj;
+    final FunctionEntryNode other = (FunctionEntryNode) obj;
     if (_functionName == null) {
       if (other._functionName != null) {
         return false;

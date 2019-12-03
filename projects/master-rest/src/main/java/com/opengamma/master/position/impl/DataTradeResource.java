@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.position.impl;
@@ -35,11 +35,11 @@ public class DataTradeResource extends AbstractDataResource {
   /**
    * The identifier specified in the URI.
    */
-  private ObjectId _urlResourceId;
+  private final ObjectId _urlResourceId;
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parentResource  the parent resource, not null
    * @param positionId  the position unique identifier, not null
    */
@@ -53,7 +53,7 @@ public class DataTradeResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the parent resource.
-   * 
+   *
    * @return the parent resource, not null
    */
   public DataPositionMasterResource getParentResource() {
@@ -62,7 +62,7 @@ public class DataTradeResource extends AbstractDataResource {
 
   /**
    * Gets the position identifier from the URL.
-   * 
+   *
    * @return the unique identifier, not null
    */
   public ObjectId getUrlTradeId() {
@@ -72,7 +72,7 @@ public class DataTradeResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the position master.
-   * 
+   *
    * @return the position master, not null
    */
   public PositionMaster getPositionMaster() {
@@ -82,30 +82,30 @@ public class DataTradeResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   @GET
   public Response get() {
-    UniqueId tradeId = getUrlTradeId().atLatestVersion();
-    ManageableTrade result = getPositionMaster().getTrade(tradeId);
+    final UniqueId tradeId = getUrlTradeId().atLatestVersion();
+    final ManageableTrade result = getPositionMaster().getTrade(tradeId);
     return responseOkObject(result);
   }
 
   @GET
   @Path("versions/{versionId}")
-  public Response getVersioned(@PathParam("versionId") String versionId) {
-    UniqueId tradeId = getUrlTradeId().atVersion(versionId);
-    ManageableTrade result = getPositionMaster().getTrade(tradeId);
+  public Response getVersioned(@PathParam("versionId") final String versionId) {
+    final UniqueId tradeId = getUrlTradeId().atVersion(versionId);
+    final ManageableTrade result = getPositionMaster().getTrade(tradeId);
     return responseOkObject(result);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Builds a URI for the trade.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param objectId  the object identifier, not null
    * @param vc  the version-correction locator, null for latest
    * @return the URI, not null
    */
-  public static URI uri(URI baseUri, ObjectIdentifiable objectId, VersionCorrection vc) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("trades/{tradeId}");
+  public static URI uri(final URI baseUri, final ObjectIdentifiable objectId, final VersionCorrection vc) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("trades/{tradeId}");
     if (vc != null) {
       bld.queryParam("versionAsOf", vc.getVersionAsOfString());
       bld.queryParam("correctedTo", vc.getCorrectedToString());
@@ -115,12 +115,12 @@ public class DataTradeResource extends AbstractDataResource {
 
   /**
    * Builds a URI for a specific version of the trade.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param uniqueId  the unique identifier, not null
    * @return the URI, not null
    */
-  public static URI uriVersion(URI baseUri, UniqueId uniqueId) {
+  public static URI uriVersion(final URI baseUri, final UniqueId uniqueId) {
     if (uniqueId.isLatest()) {
       return uri(baseUri, uniqueId, null);
     }

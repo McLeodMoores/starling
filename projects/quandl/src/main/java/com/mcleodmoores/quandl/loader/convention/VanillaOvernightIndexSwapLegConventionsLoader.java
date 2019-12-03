@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.convention;
 
@@ -13,8 +13,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.opengamma.financial.convention.OISLegConvention;
 import com.opengamma.financial.convention.StubType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -23,10 +21,11 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.time.Tenor;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
- * Creates {@link OISLegConvention}s from a csv file called "vanilla-ois-leg-conventions.csv".
- * These conventions are used to construct the overnight-indexed leg of a vanilla overnight-indexed
- * swap.
+ * Creates {@link OISLegConvention}s from a csv file called "vanilla-ois-leg-conventions.csv". These conventions are used to construct the overnight-indexed leg
+ * of a vanilla overnight-indexed swap.
  */
 public final class VanillaOvernightIndexSwapLegConventionsLoader implements ConventionsLoader<OISLegConvention> {
   /** An instance of this loader. */
@@ -44,8 +43,10 @@ public final class VanillaOvernightIndexSwapLegConventionsLoader implements Conv
 
   /**
    * Generates {@link OISLegConvention}s from a csv file.
-   * @return  a set of conventions, or an empty set if the file was not available or no conventions could be created
-   * @throws Exception  if there is a problem reading the file
+   * 
+   * @return a set of conventions, or an empty set if the file was not available or no conventions could be created
+   * @throws Exception
+   *           if there is a problem reading the file
    */
   @Override
   public Set<OISLegConvention> loadConventionsFromFile() throws Exception {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -21,6 +21,7 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.financial.security.option.SwaptionSecurity;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.ExpiryBean;
 import com.opengamma.masterdb.security.hibernate.ExternalIdBean;
@@ -28,40 +29,40 @@ import com.opengamma.masterdb.security.hibernate.SecurityBean;
 import com.opengamma.masterdb.security.hibernate.ZonedDateTimeBean;
 
 /**
- * A Hibernate bean representation of {@link OptionSecurity}.
+ * A Hibernate bean representation of {@link SwaptionSecurity}.
  */
 @BeanDefinition
 public class SwaptionSecurityBean extends SecurityBean {
   @PropertyDefinition
   private ExpiryBean _expiry;
-  
+
   @PropertyDefinition
   private ExternalIdBean _underlying;
-  
+
   @PropertyDefinition
   private Boolean _cashSettled;
-  
+
   @PropertyDefinition
   private Boolean _longShort;
-  
+
   @PropertyDefinition
   private Boolean _payer;
-  
+
   @PropertyDefinition
   private CurrencyBean _currency;
-  
+
   @PropertyDefinition
   private Double _notional;
-  
+
   @PropertyDefinition
   private OptionExerciseType _optionExerciseType;
-  
+
   @PropertyDefinition
   private ZonedDateTimeBean _settlementDate;
-  
+
   public SwaptionSecurityBean() {
     super();
-  }  
+  }
 
   @Override
   public boolean equals(final Object other) {
@@ -73,26 +74,26 @@ public class SwaptionSecurityBean extends SecurityBean {
     //      return getId().longValue() == option.getId().longValue();
     //    }
     return new EqualsBuilder()
-      .append(getId(), option.getId())
-      .append(getExpiry(), option.getExpiry())
-      .append(getUnderlying(), option.getUnderlying())
-      .append(getCashSettled(), option.getCashSettled())
-      .append(getLongShort(), option.getLongShort())
-      .append(getPayer(), option.getPayer())
-      .append(getCurrency(), getCurrency())
-      .isEquals();
+        .append(getId(), option.getId())
+        .append(getExpiry(), option.getExpiry())
+        .append(getUnderlying(), option.getUnderlying())
+        .append(getCashSettled(), option.getCashSettled())
+        .append(getLongShort(), option.getLongShort())
+        .append(getPayer(), option.getPayer())
+        .append(getCurrency(), getCurrency())
+        .isEquals();
   }
 
   @Override
   public int hashCode() {
     return new HashCodeBuilder()
-      .append(getExpiry())
-      .append(getUnderlying())
-      .append(getCashSettled())
-      .append(getLongShort())
-      .append(getPayer())
-      .append(getCurrency())
-      .toHashCode();
+        .append(getExpiry())
+        .append(getUnderlying())
+        .append(getCashSettled())
+        .append(getLongShort())
+        .append(getPayer())
+        .append(getCurrency())
+        .toHashCode();
   }
 
   @Override

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.view.rest;
@@ -28,7 +28,7 @@ public class DataDependencyGraphExplorerResource extends AbstractDataResource {
 
   private final DependencyGraphExplorer _explorer;
 
-  public DataDependencyGraphExplorerResource(DependencyGraphExplorer explorer) {
+  public DataDependencyGraphExplorerResource(final DependencyGraphExplorer explorer) {
     ArgumentChecker.notNull(explorer, "explorer");
     _explorer = explorer;
   }
@@ -41,8 +41,8 @@ public class DataDependencyGraphExplorerResource extends AbstractDataResource {
 
   @Path(PATH_SUBGRAPH_PRODUCING)
   @GET
-  public Response getSubgraphProducing(@QueryParam("msg") String msgBase64) {
-    ValueSpecification output = RestUtils.decodeBase64(ValueSpecification.class, msgBase64);
+  public Response getSubgraphProducing(@QueryParam("msg") final String msgBase64) {
+    final ValueSpecification output = RestUtils.decodeBase64(ValueSpecification.class, msgBase64);
     return responseOkObject(_explorer.getSubgraphProducing(output));
   }
 

@@ -21,23 +21,29 @@ import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * For an instrument, computes the sensitivity of a value (often the present value) to the parameters used in the curve.
- * The meaning of "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.).
- * The return format is ParameterSensitivity object.
- * @param <DATA_TYPE> Data type.
+ * For an instrument, computes the sensitivity of a value (often the present value) to the parameters used in the curve. The meaning of "parameters" will depend
+ * of the way the curve is stored (interpolated yield, function parameters, etc.). The return format is ParameterSensitivity object.
+ *
+ * @param <DATA_TYPE>
+ *          Data type.
  */
-public class ParameterSensitivityParameterCalculator<DATA_TYPE extends ParameterProviderInterface> extends AbstractParameterSensitivityParameterCalculator<DATA_TYPE> {
+public class ParameterSensitivityParameterCalculator<DATA_TYPE extends ParameterProviderInterface>
+    extends AbstractParameterSensitivityParameterCalculator<DATA_TYPE> {
 
   /**
-   * Constructor
-   * @param curveSensitivityCalculator The curve sensitivity calculator.
+   * Constructor.
+   *
+   * @param curveSensitivityCalculator
+   *          The curve sensitivity calculator.
    */
-  public ParameterSensitivityParameterCalculator(final InstrumentDerivativeVisitor<DATA_TYPE, MultipleCurrencyMulticurveSensitivity> curveSensitivityCalculator) {
+  public ParameterSensitivityParameterCalculator(
+      final InstrumentDerivativeVisitor<DATA_TYPE, MultipleCurrencyMulticurveSensitivity> curveSensitivityCalculator) {
     super(curveSensitivityCalculator);
   }
 
   @Override
-  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyMulticurveSensitivity sensitivity, final DATA_TYPE parameterMulticurves, final Set<String> curvesSet) {
+  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyMulticurveSensitivity sensitivity,
+      final DATA_TYPE parameterMulticurves, final Set<String> curvesSet) {
     ArgumentChecker.notNull(sensitivity, "sensitivity");
     ArgumentChecker.notNull(parameterMulticurves, "multicurves parameter");
     ArgumentChecker.notNull(curvesSet, "curves set");
@@ -66,7 +72,8 @@ public class ParameterSensitivityParameterCalculator<DATA_TYPE extends Parameter
   }
 
   @Override
-  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyMulticurveSensitivity sensitivity, final DATA_TYPE parameterMulticurves) {
+  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyMulticurveSensitivity sensitivity,
+      final DATA_TYPE parameterMulticurves) {
     ArgumentChecker.notNull(sensitivity, "sensitivity");
     ArgumentChecker.notNull(parameterMulticurves, "multicurves parameter");
     MultipleCurrencyParameterSensitivity result = new MultipleCurrencyParameterSensitivity();

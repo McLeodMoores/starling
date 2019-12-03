@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.socket;
@@ -28,11 +28,11 @@ import com.opengamma.util.TerminatableJob;
 import com.opengamma.util.ThreadUtils;
 
 /**
- * 
+ *
  *
  */
 public abstract class AbstractServerSocketProcess implements Lifecycle, EndPointDescriptionProvider {
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractServerSocketProcess.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractServerSocketProcess.class);
 
   private final ExecutorService _executorService;
 
@@ -64,7 +64,7 @@ public abstract class AbstractServerSocketProcess implements Lifecycle, EndPoint
   /**
    * @param portNumber the portNumber to set
    */
-  public void setPortNumber(int portNumber) {
+  public void setPortNumber(final int portNumber) {
     _portNumber = portNumber;
   }
 
@@ -78,7 +78,7 @@ public abstract class AbstractServerSocketProcess implements Lifecycle, EndPoint
   /**
    * @param bindAddress the bindAddress to set
    */
-  public void setBindAddress(InetAddress bindAddress) {
+  public void setBindAddress(final InetAddress bindAddress) {
     _bindAddress = bindAddress;
   }
 
@@ -103,15 +103,15 @@ public abstract class AbstractServerSocketProcess implements Lifecycle, EndPoint
 
   @Override
   public synchronized void start() {
-    s_logger.info("Binding to {}:{}", getBindAddress(), getPortNumber());
+    LOGGER.info("Binding to {}:{}", getBindAddress(), getPortNumber());
     try {
       // NOTE kirk 2010-05-12 -- Backlog of 50 from ServerSocket.
       _serverSocket = new ServerSocket(getPortNumber(), 50, getBindAddress());
       if (getPortNumber() == 0) {
-        s_logger.info("Received inbound port {}", _serverSocket.getLocalPort());
+        LOGGER.info("Received inbound port {}", _serverSocket.getLocalPort());
       }
       setPortNumber(_serverSocket.getLocalPort());
-    } catch (IOException ioe) {
+    } catch (final IOException ioe) {
       throw new OpenGammaRuntimeException("Unable to bind to " + getBindAddress() + " port " + getPortNumber(), ioe);
     }
 
@@ -128,24 +128,24 @@ public abstract class AbstractServerSocketProcess implements Lifecycle, EndPoint
     _socketAcceptJob.terminate();
     // Open a socket locally in case we're trapped in .accept().
     try {
-      Socket socket = new Socket(InetAddress.getLocalHost(), getPortNumber());
+      final Socket socket = new Socket(InetAddress.getLocalHost(), getPortNumber());
       socket.close();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       // Totally fine.
     }
 
     ThreadUtils.safeJoin(_socketAcceptThread, 60 * 1000L);
     try {
       _serverSocket.close();
-    } catch (IOException e) {
-      s_logger.warn("Unable to close server socket on lifecycle stop", e);
+    } catch (final IOException e) {
+      LOGGER.warn("Unable to close server socket on lifecycle stop", e);
     }
 
     _started = false;
   }
 
   protected boolean exceptionForcedByClose(final Exception e) {
-    return (e instanceof SocketException) && "Socket closed".equals(e.getMessage());
+    return e instanceof SocketException && "Socket closed".equals(e.getMessage());
   }
 
   private class SocketAcceptJob extends TerminatableJob {
@@ -153,14 +153,14 @@ public abstract class AbstractServerSocketProcess implements Lifecycle, EndPoint
     protected void runOneCycle() {
       cleanupPreAccept();
       try {
-        Socket socket = _serverSocket.accept();
+        final Socket socket = _serverSocket.accept();
         // Double-check here because we sometimes open sockets just to force
         // termination.
         if (!isTerminated()) {
           socketOpened(socket);
         }
-      } catch (IOException e) {
-        s_logger.warn("Unable to accept a new connection", e);
+      } catch (final IOException e) {
+        LOGGER.warn("Unable to accept a new connection", e);
       }
     }
   }
@@ -187,7 +187,7 @@ public abstract class AbstractServerSocketProcess implements Lifecycle, EndPoint
       }
       final String hostAddress = a.getHostAddress();
       message.add(SocketEndPointDescriptionProvider.ADDRESS_KEY, hostAddress);
-      s_logger.debug("Address {}/{}", iface.getName(), hostAddress);
+      LOGGER.debug("Address {}/{}", iface.getName(), hostAddress);
     }
   }
 
@@ -199,12 +199,12 @@ public abstract class AbstractServerSocketProcess implements Lifecycle, EndPoint
     if (addr != null) {
       if (addr.isAnyLocalAddress()) {
         try {
-          Enumeration<NetworkInterface> ni = NetworkInterface.getNetworkInterfaces();
+          final Enumeration<NetworkInterface> ni = NetworkInterface.getNetworkInterfaces();
           while (ni.hasMoreElements()) {
             loadInterfaceAddress(ni.nextElement(), desc);
           }
-        } catch (IOException e) {
-          s_logger.warn("Error resolving local addresses", e);
+        } catch (final IOException e) {
+          LOGGER.warn("Error resolving local addresses", e);
         }
       } else {
         desc.add(SocketEndPointDescriptionProvider.ADDRESS_KEY, addr.getHostAddress());

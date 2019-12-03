@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * <p/>
+ * <p>
  * Please see distribution for license.
  */
 package com.opengamma.core.legalentity;
@@ -23,7 +23,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.id.ObjectId;
 
 /**
- * Account of a legal entity
+ * Account of a legal entity.
  */
 @BeanDefinition
 public class Account implements Bean {

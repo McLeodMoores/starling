@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.pnl;
@@ -26,7 +26,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Produces the aggregated P&L series for a curve for an FX Forward.
+ * Produces the aggregated P&amp;L series for a curve for an FX Forward.
  */
 public class FXForwardYieldCurvePnLFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -36,18 +36,19 @@ public class FXForwardYieldCurvePnLFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return ImmutableSet.of(new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), ValueProperties.all()));
   }
-  
+
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     return ImmutableSet.of(new ValueRequirement(ValueRequirementNames.YIELD_CURVE_PNL_SERIES, target.toSpecification(), desiredValue.getConstraints()));
   }
-  
+
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
-    ValueProperties properties = inputs.entrySet().iterator().next().getKey().getProperties().copy()
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
+    final ValueProperties properties = inputs.entrySet().iterator().next().getKey().getProperties().copy()
         .withoutAny(ValuePropertyNames.FUNCTION)
         .with(ValuePropertyNames.FUNCTION, getUniqueId())
         .get();
@@ -55,14 +56,16 @@ public class FXForwardYieldCurvePnLFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    ValueRequirement desiredValue = desiredValues.iterator().next();
-    TenorLabelledLocalDateDoubleTimeSeriesMatrix1D nodalPnlSeries = (TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) inputs.getValue(ValueRequirementNames.YIELD_CURVE_PNL_SERIES);
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+    final ValueRequirement desiredValue = desiredValues.iterator().next();
+    final TenorLabelledLocalDateDoubleTimeSeriesMatrix1D nodalPnlSeries = (TenorLabelledLocalDateDoubleTimeSeriesMatrix1D) inputs
+        .getValue(ValueRequirementNames.YIELD_CURVE_PNL_SERIES);
     LocalDateDoubleTimeSeries result = nodalPnlSeries.getValues()[0];
     for (int i = 1; i < nodalPnlSeries.size(); i++) {
       result = result.add(nodalPnlSeries.getValues()[i]);
     }
-    ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), desiredValue.getConstraints());
+    final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), desiredValue.getConstraints());
     return ImmutableSet.of(new ComputedValue(resultSpec, result));
   }
 

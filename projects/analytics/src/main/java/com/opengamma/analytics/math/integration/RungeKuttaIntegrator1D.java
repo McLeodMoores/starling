@@ -10,10 +10,8 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Adapted from the forth-order Runge-Kutta method for solving ODE. See <a
- * href="http://en.wikipedia.org/wiki/Runge-Kutta_methods">here </a> for the
- * maths. It is a very robust integrator and should be used before trying more
- * specialised methods.
+ * Adapted from the forth-order Runge-Kutta method for solving ODE. See <a href="http://en.wikipedia.org/wiki/Runge-Kutta_methods">here </a> for the maths. It
+ * is a very robust integrator and should be used before trying more specialised methods.
  */
 public class RungeKuttaIntegrator1D extends Integrator1D<Double, Double> {
   private static final double DEF_TOL = 1e-10;
@@ -65,7 +63,7 @@ public class RungeKuttaIntegrator1D extends Integrator1D<Double, Double> {
     if (Double.isNaN(lower) || Double.isInfinite(lower) || Double.isInfinite(upper) || Double.isNaN(upper)) {
       throw new OpenGammaRuntimeException("lower or upper was NaN or Inf");
     }
-    
+
     final double h = (upper - lower) / _minSteps;
     double f1, f2, f3, x;
     x = lower;
@@ -92,13 +90,14 @@ public class RungeKuttaIntegrator1D extends Integrator1D<Double, Double> {
     return result;
   }
 
-  private double calculateRungeKuttaFourthOrder(final Function1D<Double, Double> f, final double x, final double h, final double fl, final double fm, final double fu) {
-//    if (Double.isNaN(h) || Double.isInfinite(h) || 
-//        Double.isNaN(fl) || Double.isInfinite(fl) ||
-//        Double.isNaN(fm) || Double.isInfinite(fm) ||
-//        Double.isNaN(fu) || Double.isInfinite(fu)) {
-//      throw new OpenGammaRuntimeException("h was Inf or NaN");
-//    }
+  private double calculateRungeKuttaFourthOrder(final Function1D<Double, Double> f, final double x, final double h, final double fl, final double fm,
+      final double fu) {
+    // if (Double.isNaN(h) || Double.isInfinite(h) ||
+    // Double.isNaN(fl) || Double.isInfinite(fl) ||
+    // Double.isNaN(fm) || Double.isInfinite(fm) ||
+    // Double.isNaN(fu) || Double.isInfinite(fu)) {
+    // throw new OpenGammaRuntimeException("h was Inf or NaN");
+    // }
     final double f1 = f.evaluate(x + 0.25 * h);
     if (Double.isNaN(f1) || Double.isInfinite(f1)) {
       throw new OpenGammaRuntimeException("f.evaluate returned NaN or Inf");

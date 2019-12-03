@@ -17,7 +17,7 @@ import com.opengamma.examples.simulated.web.PortfolioLoaderUnavailableResource;
 public class PortfolioLoaderUnavailableComponentFactory extends AbstractComponentFactory {
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     repo.getRestComponents().publishResource(new PortfolioLoaderUnavailableResource());
   }
 }

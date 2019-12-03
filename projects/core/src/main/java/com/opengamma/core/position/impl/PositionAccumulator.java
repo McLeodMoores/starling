@@ -23,32 +23,32 @@ public class PositionAccumulator {
   /**
    * The set of positions.
    */
-  private final Set<Position> _positions = new HashSet<Position>();
+  private final Set<Position> _positions = new HashSet<>();
 
   /**
    * Gets all the positions beneath the starting node.
-   * 
+   *
    * @param startNode  the starting node, not null
    * @return All positions accumulated during execution
    */
-  public static Set<Position> getAccumulatedPositions(PortfolioNode startNode) {
+  public static Set<Position> getAccumulatedPositions(final PortfolioNode startNode) {
     return new PositionAccumulator(startNode).getPositions();
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates an accumulator starting from the specified node.
-   * 
+   *
    * @param startNode  the starting node, not null
    */
-  public PositionAccumulator(PortfolioNode startNode) {
+  public PositionAccumulator(final PortfolioNode startNode) {
     ArgumentChecker.notNull(startNode, "Portfolio Node");
     PortfolioNodeTraverser.depthFirst(new Callback()).traverse(startNode);
   }
 
   /**
    * Gets the positions that were found.
-   * 
+   *
    * @return the positions, not null
    */
   public Set<Position> getPositions() {

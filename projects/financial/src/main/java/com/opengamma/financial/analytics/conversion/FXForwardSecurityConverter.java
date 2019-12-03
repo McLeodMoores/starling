@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts {@link FXForwardSecurity} to {@link ForexDefinition}
+ * Converts {@link FXForwardSecurity} to {@link ForexDefinition}.
  */
 public class FXForwardSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
 

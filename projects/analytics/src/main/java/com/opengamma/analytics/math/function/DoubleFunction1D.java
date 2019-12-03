@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.function;
@@ -10,7 +10,7 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.differentiation.FiniteDifferenceType;
 
 /**
- * Parent class for a family of functions that take real arguments and return real values. The functionality of {@link Function1D} is 
+ * Parent class for a family of functions that take real arguments and return real values. The functionality of {@link Function1D} is
  * extended; this class allows arithmetic operations on functions and defines a derivative function.
  */
 public abstract class DoubleFunction1D extends Function1D<Double, Double> {
@@ -31,7 +31,7 @@ public abstract class DoubleFunction1D extends Function1D<Double, Double> {
    * Returns a function that calculates the first derivative. The method used
    * is finite difference, with the differencing type and $\epsilon$ as
    * arguments
-   * @param differenceType The differencing type to use 
+   * @param differenceType The differencing type to use
    * @param eps The $\epsilon$ to use
    * @return A function that calculates the first derivative of this function
    */
@@ -212,8 +212,10 @@ public abstract class DoubleFunction1D extends Function1D<Double, Double> {
   }
 
   /**
-   * Converts a Function1D<Double, Double> into a DoubleFunction1D.
-   * @param f The function to convert
+   * Converts a <code>Function1D&lt;Double, Double&gt;</code> into a DoubleFunction1D.
+   *
+   * @param f
+   *          The function to convert
    * @return The converted function
    */
   public static DoubleFunction1D from(final Function1D<Double, Double> f) {

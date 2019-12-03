@@ -24,14 +24,15 @@ public final class AccruedInterestFromCleanPriceCalculator extends InstrumentDer
   /**
    * The calculator instance.
    */
-  private static final AccruedInterestFromCleanPriceCalculator s_instance = new AccruedInterestFromCleanPriceCalculator();
+  private static final AccruedInterestFromCleanPriceCalculator INSTANCE = new AccruedInterestFromCleanPriceCalculator();
 
   /**
    * Return the calculator instance.
+   *
    * @return The instance.
    */
   public static AccruedInterestFromCleanPriceCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**
@@ -55,32 +56,28 @@ public final class AccruedInterestFromCleanPriceCalculator extends InstrumentDer
     ArgumentChecker.notNull(cleanPrice, "cleanPrice");
     return METHOD_BOND_SECURITY.accruedInterestFromCleanPrice(bond, cleanPrice) * 100;
   }
-  
+
   @Override
-  public Double visitBondFixedTransaction(BondFixedTransaction bond, Double cleanPrice) {
+  public Double visitBondFixedTransaction(final BondFixedTransaction bond, final Double cleanPrice) {
     return visitBondFixedSecurity(bond.getBondTransaction(), cleanPrice);
   }
-  
+
   @Override
-  public Double visitBondCapitalIndexedSecurity(BondCapitalIndexedSecurity<?> bond, Double cleanRealPrice) {
+  public Double visitBondCapitalIndexedSecurity(final BondCapitalIndexedSecurity<?> bond, final Double cleanRealPrice) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(cleanRealPrice, "yield");
-    double accruedInterest = METHOD_INFLATION_BOND_SECURITY.accruedInterestFromCleanRealPrice(bond, cleanRealPrice) * 100;
+    final double accruedInterest = METHOD_INFLATION_BOND_SECURITY.accruedInterestFromCleanRealPrice(bond, cleanRealPrice) * 100;
     if (bond.getYieldConvention().equals(INDEX_LINKED_FLOAT)) {
       return accruedInterest * bond.getIndexRatio();
-    } else {
-      return accruedInterest;
     }
+    return accruedInterest;
   }
 
   @Override
   public Double visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction<?> bond, final Double cleanPrice) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(cleanPrice, "yield");
-    if (!(bond.getBondStandard() instanceof BondCapitalIndexedSecurity<?>)) {
-      throw new IllegalArgumentException("Bond should be a BondCapitalIndexedSecurity");
-    }
-    final BondCapitalIndexedSecurity<?> bondSecurity = (BondCapitalIndexedSecurity<?>) bond.getBondStandard();
+    final BondCapitalIndexedSecurity<?> bondSecurity = bond.getBondStandard();
     return visitBondCapitalIndexedSecurity(bondSecurity, cleanPrice);
   }
 

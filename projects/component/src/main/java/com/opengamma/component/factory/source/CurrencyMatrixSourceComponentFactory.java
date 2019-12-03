@@ -55,15 +55,15 @@ public class CurrencyMatrixSourceComponentFactory extends AbstractComponentFacto
   /**
    * Initializes the currency matrix source, setting up component information and REST.
    * Override using {@link #createCurrencyMatrixSource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    CurrencyMatrixSource source = createCurrencyMatrixSource(repo);
-    
-    ComponentInfo info = new ComponentInfo(CurrencyMatrixSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final CurrencyMatrixSource source = createCurrencyMatrixSource(repo);
+
+    final ComponentInfo info = new ComponentInfo(CurrencyMatrixSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteCurrencyMatrixSource.class);
@@ -76,11 +76,11 @@ public class CurrencyMatrixSourceComponentFactory extends AbstractComponentFacto
 
   /**
    * Creates the currency matrix source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the currency matrix source, not null
    */
-  protected ConfigDBCurrencyMatrixSource createCurrencyMatrixSource(ComponentRepository repo) {
+  protected ConfigDBCurrencyMatrixSource createCurrencyMatrixSource(final ComponentRepository repo) {
     return new ConfigDBCurrencyMatrixSource(getConfigSource());
   }
 

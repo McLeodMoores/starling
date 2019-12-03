@@ -7,8 +7,8 @@ package com.opengamma.analytics.financial.interestrate.payments.derivative;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -49,23 +49,37 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
 
   /**
    * Constructor from all details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param fundingCurveName Name of the funding curve.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param fixingTime Time (in years) up to fixing.
-   * @param index The Ibor-like index on which the coupon fixes.
-   * @param fixingPeriodStartTime The fixing period start time (in years).
-   * @param fixingPeriodEndTime The fixing period end time (in years).
-   * @param fixingYearFraction The year fraction (or accrual factor) for the fixing period.
-   * @param spread The spread.
-   * @param forwardCurveName Name of the forward (or estimation) curve.
+   *
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param fundingCurveName
+   *          Name of the funding curve.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingTime
+   *          Time (in years) up to fixing.
+   * @param index
+   *          The Ibor-like index on which the coupon fixes.
+   * @param fixingPeriodStartTime
+   *          The fixing period start time (in years).
+   * @param fixingPeriodEndTime
+   *          The fixing period end time (in years).
+   * @param fixingYearFraction
+   *          The year fraction (or accrual factor) for the fixing period.
+   * @param spread
+   *          The spread.
+   * @param forwardCurveName
+   *          Name of the forward (or estimation) curve.
    * @deprecated Use the constructor that does not take yield curve names.
    */
   @Deprecated
-  public CouponIborSpread(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction, final double notional, final double fixingTime,
-      final IborIndex index, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingYearFraction, final double spread, final String forwardCurveName) {
+  public CouponIborSpread(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction,
+      final double notional, final double fixingTime, final IborIndex index, final double fixingPeriodStartTime, final double fixingPeriodEndTime,
+      final double fixingYearFraction, final double spread, final String forwardCurveName) {
     super(currency, paymentTime, fundingCurveName, paymentYearFraction, notional, fixingTime);
     ArgumentChecker.isTrue(fixingPeriodStartTime >= fixingTime, "fixing period start < fixing time");
     _fixingPeriodStartTime = fixingPeriodStartTime;
@@ -82,44 +96,70 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
 
   /**
    * Constructor from details with spread defaulted to 0.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param fundingCurveName Name of the funding curve.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param fixingTime Time (in years) up to fixing.
-   * @param index The Ibor-like index on which the coupon fixes.
-   * @param fixingPeriodStartTime The fixing period start time (in years).
-   * @param fixingPeriodEndTime Time (in years) up to the end of the fixing period.
-   * @param fixingYearFraction The year fraction (or accrual factor) for the fixing period.
-   * @param forwardCurveName Name of the forward (or estimation) curve.
+   *
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param fundingCurveName
+   *          Name of the funding curve.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingTime
+   *          Time (in years) up to fixing.
+   * @param index
+   *          The Ibor-like index on which the coupon fixes.
+   * @param fixingPeriodStartTime
+   *          The fixing period start time (in years).
+   * @param fixingPeriodEndTime
+   *          Time (in years) up to the end of the fixing period.
+   * @param fixingYearFraction
+   *          The year fraction (or accrual factor) for the fixing period.
+   * @param forwardCurveName
+   *          Name of the forward (or estimation) curve.
    * @deprecated Use the constructor that does not take yield curve names.
    */
   @Deprecated
-  public CouponIborSpread(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction, final double notional, final double fixingTime,
-      final IborIndex index, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingYearFraction, final String forwardCurveName) {
-    this(currency, paymentTime, fundingCurveName, paymentYearFraction, notional, fixingTime, index, fixingPeriodStartTime, fixingPeriodEndTime, fixingYearFraction, 0.0, forwardCurveName);
+  public CouponIborSpread(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction,
+      final double notional, final double fixingTime, final IborIndex index, final double fixingPeriodStartTime, final double fixingPeriodEndTime,
+      final double fixingYearFraction, final String forwardCurveName) {
+    this(currency, paymentTime, fundingCurveName, paymentYearFraction, notional, fixingTime, index, fixingPeriodStartTime, fixingPeriodEndTime,
+        fixingYearFraction, 0.0, forwardCurveName);
   }
 
   /**
    * Constructor from all details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param fixingTime Time (in years) up to fixing.
-   * @param index The Ibor-like index on which the coupon fixes.
-   * @param fixingPeriodStartTime The fixing period start time (in years).
-   * @param fixingPeriodEndTime The fixing period end time (in years).
-   * @param fixingYearFraction The year fraction (or accrual factor) for the fixing period.
-   * @param spread The spread.
+   *
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingTime
+   *          Time (in years) up to fixing.
+   * @param index
+   *          The Ibor-like index on which the coupon fixes.
+   * @param fixingPeriodStartTime
+   *          The fixing period start time (in years).
+   * @param fixingPeriodEndTime
+   *          The fixing period end time (in years).
+   * @param fixingYearFraction
+   *          The year fraction (or accrual factor) for the fixing period.
+   * @param spread
+   *          The spread.
    */
   public CouponIborSpread(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final double fixingTime,
       final IborIndex index, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingYearFraction, final double spread) {
     super(currency, paymentTime, paymentYearFraction, notional, fixingTime);
     ArgumentChecker.isTrue(fixingPeriodStartTime >= fixingTime, "fixing period start {} < fixing time {}", fixingPeriodStartTime, fixingTime);
     _fixingPeriodStartTime = fixingPeriodStartTime;
-    ArgumentChecker.isTrue(fixingPeriodEndTime >= fixingPeriodStartTime, "fixing period end {} < fixing period start {}", fixingPeriodEndTime, fixingPeriodStartTime);
+    ArgumentChecker.isTrue(fixingPeriodEndTime >= fixingPeriodStartTime, "fixing period end {} < fixing period start {}", fixingPeriodEndTime,
+        fixingPeriodStartTime);
     _fixingPeriodEndTime = fixingPeriodEndTime;
     ArgumentChecker.isTrue(fixingYearFraction >= 0, "fixing year fraction {} < 0", fixingYearFraction);
     _fixingAccrualFactor = fixingYearFraction;
@@ -131,15 +171,25 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
 
   /**
    * Constructor from details with spread defaulted to 0.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param fixingTime Time (in years) up to fixing.
-   * @param index The Ibor-like index on which the coupon fixes.
-   * @param fixingPeriodStartTime The fixing period start time (in years).
-   * @param fixingPeriodEndTime Time (in years) up to the end of the fixing period.
-   * @param fixingYearFraction The year fraction (or accrual factor) for the fixing period.
+   *
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingTime
+   *          Time (in years) up to fixing.
+   * @param index
+   *          The Ibor-like index on which the coupon fixes.
+   * @param fixingPeriodStartTime
+   *          The fixing period start time (in years).
+   * @param fixingPeriodEndTime
+   *          Time (in years) up to the end of the fixing period.
+   * @param fixingYearFraction
+   *          The year fraction (or accrual factor) for the fixing period.
    */
   public CouponIborSpread(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final double fixingTime,
       final IborIndex index, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingYearFraction) {
@@ -148,6 +198,7 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
 
   /**
    * Gets the fixing period start time (in years).
+   *
    * @return The fixing period start time.
    */
   public double getFixingPeriodStartTime() {
@@ -156,6 +207,7 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
 
   /**
    * Gets the fixing period end time (in years).
+   *
    * @return The fixing period end time.
    */
   public double getFixingPeriodEndTime() {
@@ -164,6 +216,7 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
 
   /**
    * Gets the accrual factor for the fixing period.
+   *
    * @return The accrual factor.
    */
   public double getFixingAccrualFactor() {
@@ -172,6 +225,7 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
 
   /**
    * Gets the _spread field.
+   *
    * @return the _spread
    */
   public double getSpread() {
@@ -180,6 +234,7 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
 
   /**
    * Gets the spread amount.
+   *
    * @return The spread amount.
    */
   public double getSpreadAmount() {
@@ -188,8 +243,9 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
 
   /**
    * Gets the forward curve name.
+   *
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getForwardCurveName() {
@@ -201,6 +257,7 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
 
   /**
    * Gets the Ibor-like index.
+   *
    * @return The index.
    */
   @Override
@@ -208,6 +265,11 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
     return _index;
   }
 
+  /**
+   * Copies all the details of this coupon and returns a coupon with zero spread.
+   *
+   * @return a coupon with zero spread
+   */
   public CouponIborSpread withZeroSpread() {
     if (getSpread() == 0.0) {
       return this;
@@ -219,8 +281,8 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
   @Override
   public CouponIborSpread withNotional(final double notional) {
     try {
-      return new CouponIborSpread(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, getFixingTime(), _index, getFixingPeriodStartTime(),
-          getFixingPeriodEndTime(), getFixingAccrualFactor(), getSpread(), getForwardCurveName());
+      return new CouponIborSpread(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, getFixingTime(), _index,
+          getFixingPeriodStartTime(), getFixingPeriodEndTime(), getFixingAccrualFactor(), getSpread(), getForwardCurveName());
     } catch (final IllegalStateException e) {
       return new CouponIborSpread(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getFixingTime(), _index, getFixingPeriodStartTime(),
           getFixingPeriodEndTime(), getFixingAccrualFactor(), getSpread());
@@ -292,11 +354,18 @@ public class CouponIborSpread extends CouponFloating implements DepositIndexCoup
     return true;
   }
 
+  /**
+   * Returns a coupon with the same details as this coupon with the supplied spread.
+   *
+   * @param spread
+   *          the spread
+   * @return a coupon
+   */
   @SuppressWarnings("deprecation")
   public CouponIborSpread withSpread(final double spread) {
     try {
-      return new CouponIborSpread(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), getNotional(), getFixingTime(), _index, getFixingPeriodStartTime(),
-          getFixingPeriodEndTime(), getFixingAccrualFactor(), spread, getForwardCurveName());
+      return new CouponIborSpread(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), getNotional(), getFixingTime(), _index,
+          getFixingPeriodStartTime(), getFixingPeriodEndTime(), getFixingAccrualFactor(), spread, getForwardCurveName());
     } catch (final IllegalStateException e) {
       return new CouponIborSpread(getCurrency(), getPaymentTime(), getPaymentYearFraction(), getNotional(), getFixingTime(), _index, getFixingPeriodStartTime(),
           getFixingPeriodEndTime(), getFixingAccrualFactor(), spread);

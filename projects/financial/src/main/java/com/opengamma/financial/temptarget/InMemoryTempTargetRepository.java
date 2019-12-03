@@ -14,16 +14,16 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdSupplier;
 
 /**
- * In-memory implementation of {@link TempTargetRepository}. This is for testing/debugging purposes only. It is not suitable for production use or large views as data will never be flushed from
- * memory.
+ * In-memory implementation of {@link TempTargetRepository}. This is for testing/debugging purposes only. It is not suitable for production use or large views
+ * as data will never be flushed from memory.
  */
 public class InMemoryTempTargetRepository implements TempTargetRepository {
 
   private final UniqueIdSupplier _uids = new UniqueIdSupplier("TmpMem");
 
-  private final ConcurrentMap<UniqueId, TempTarget> _uid2object = new ConcurrentHashMap<UniqueId, TempTarget>();
+  private final ConcurrentMap<UniqueId, TempTarget> _uid2object = new ConcurrentHashMap<>();
 
-  private final ConcurrentMap<TempTarget, UniqueId> _object2uid = new ConcurrentHashMap<TempTarget, UniqueId>();
+  private final ConcurrentMap<TempTarget, UniqueId> _object2uid = new ConcurrentHashMap<>();
 
   // TempTargetRepository
 

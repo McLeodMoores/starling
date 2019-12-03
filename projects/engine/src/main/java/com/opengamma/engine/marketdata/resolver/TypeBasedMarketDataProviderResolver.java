@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.resolver;
@@ -18,15 +18,15 @@ import com.opengamma.livedata.UserPrincipal;
  */
 public class TypeBasedMarketDataProviderResolver implements MarketDataProviderResolver {
 
-  private final Map<Class<?>, MarketDataProviderFactory> _providerFactoryMap = new HashMap<Class<?>, MarketDataProviderFactory>();
-  
-  public void addProvider(Class<?> marketDataSpecType, MarketDataProviderFactory provider) {
+  private final Map<Class<?>, MarketDataProviderFactory> _providerFactoryMap = new HashMap<>();
+
+  public void addProvider(final Class<?> marketDataSpecType, final MarketDataProviderFactory provider) {
     _providerFactoryMap.put(marketDataSpecType, provider);
   }
-  
+
   @Override
-  public MarketDataProvider resolve(UserPrincipal user, MarketDataSpecification marketDataSpec) {
-    MarketDataProviderFactory providerFactory = _providerFactoryMap.get(marketDataSpec.getClass());
+  public MarketDataProvider resolve(final UserPrincipal user, final MarketDataSpecification marketDataSpec) {
+    final MarketDataProviderFactory providerFactory = _providerFactoryMap.get(marketDataSpec.getClass());
     if (providerFactory == null) {
       return null;
     }

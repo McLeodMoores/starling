@@ -23,41 +23,41 @@ import com.opengamma.util.ArgumentChecker;
  */
 public abstract class BlackVolatilitySurfaceDefaults extends DefaultPropertyFunction {
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-      ValueRequirementNames.BLACK_VOLATILITY_SURFACE_INTERPOLATOR,
-      ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
-      ValueRequirementNames.LOCAL_VOLATILITY_SURFACE,
-      ValueRequirementNames.PURE_VOLATILITY_SURFACE,
-      ValueRequirementNames.FORWARD_DELTA,
-      ValueRequirementNames.DUAL_DELTA,
-      ValueRequirementNames.DUAL_GAMMA,
-      ValueRequirementNames.FORWARD_GAMMA,
-      ValueRequirementNames.FOREX_DOMESTIC_PRICE,
-      ValueRequirementNames.FOREX_PV_QUOTES,
-      ValueRequirementNames.FORWARD_VEGA,
-      ValueRequirementNames.FORWARD_VOMMA,
-      ValueRequirementNames.FORWARD_VANNA,
-      ValueRequirementNames.PRESENT_VALUE,
-      ValueRequirementNames.FX_PRESENT_VALUE,
-      ValueRequirementNames.IMPLIED_VOLATILITY,
-      ValueRequirementNames.GRID_DUAL_DELTA,
-      ValueRequirementNames.GRID_DUAL_GAMMA,
-      ValueRequirementNames.GRID_FORWARD_DELTA,
-      ValueRequirementNames.GRID_FORWARD_GAMMA,
-      ValueRequirementNames.GRID_FORWARD_VEGA,
-      ValueRequirementNames.GRID_FORWARD_VANNA,
-      ValueRequirementNames.GRID_FORWARD_VOMMA,
-      ValueRequirementNames.GRID_IMPLIED_VOLATILITY,
-      ValueRequirementNames.GRID_PRESENT_VALUE,
-      ValueRequirementNames.DELTA,
-      ValueRequirementNames.PNL, // Produced by EquityOption*ScenarioFunction
-      ValueRequirementNames.VALUE_DELTA,
-      ValueRequirementNames.VALUE_GAMMA,
-      ValueRequirementNames.POSITION_DELTA,
-      ValueRequirementNames.POSITION_GAMMA,
-      ValueRequirementNames.POSITION_RHO,
-      ValueRequirementNames.POSITION_THETA,
-      ValueRequirementNames.POSITION_VEGA,
-      ValueRequirementNames.POSITION_WEIGHTED_VEGA
+                ValueRequirementNames.BLACK_VOLATILITY_SURFACE_INTERPOLATOR,
+                ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
+                ValueRequirementNames.LOCAL_VOLATILITY_SURFACE,
+                ValueRequirementNames.PURE_VOLATILITY_SURFACE,
+                ValueRequirementNames.FORWARD_DELTA,
+                ValueRequirementNames.DUAL_DELTA,
+                ValueRequirementNames.DUAL_GAMMA,
+                ValueRequirementNames.FORWARD_GAMMA,
+                ValueRequirementNames.FOREX_DOMESTIC_PRICE,
+                ValueRequirementNames.FOREX_PV_QUOTES,
+                ValueRequirementNames.FORWARD_VEGA,
+                ValueRequirementNames.FORWARD_VOMMA,
+                ValueRequirementNames.FORWARD_VANNA,
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.FX_PRESENT_VALUE,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.GRID_DUAL_DELTA,
+                ValueRequirementNames.GRID_DUAL_GAMMA,
+                ValueRequirementNames.GRID_FORWARD_DELTA,
+                ValueRequirementNames.GRID_FORWARD_GAMMA,
+                ValueRequirementNames.GRID_FORWARD_VEGA,
+                ValueRequirementNames.GRID_FORWARD_VANNA,
+                ValueRequirementNames.GRID_FORWARD_VOMMA,
+                ValueRequirementNames.GRID_IMPLIED_VOLATILITY,
+                ValueRequirementNames.GRID_PRESENT_VALUE,
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.PNL, // Produced by EquityOption*ScenarioFunction
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.POSITION_DELTA,
+                ValueRequirementNames.POSITION_GAMMA,
+                ValueRequirementNames.POSITION_RHO,
+                ValueRequirementNames.POSITION_THETA,
+                ValueRequirementNames.POSITION_VEGA,
+                ValueRequirementNames.POSITION_WEIGHTED_VEGA
   };
   private final String _timeAxis;
   private final String _yAxis;
@@ -101,14 +101,15 @@ public abstract class BlackVolatilitySurfaceDefaults extends DefaultPropertyFunc
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> interpolators = desiredValue.getConstraints().getValues(BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR);
-    if ((interpolators != null) && !interpolators.isEmpty() && !interpolators.contains(_smileInterpolator)) {
+    if (interpolators != null && !interpolators.isEmpty() && !interpolators.contains(_smileInterpolator)) {
       return null;
     }
     return super.getRequirements(context, target, desiredValue);
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_TIME_AXIS.equals(propertyName)) {
       return Collections.singleton(_timeAxis);
     }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.historicaltimeseries2;
@@ -26,7 +26,7 @@ import com.opengamma.util.PublicSPI;
 public interface HistoricalTimeSeriesSource extends ChangeProvider {
 
   /**
-   * Returns the time-series specified by HistoricalDataRequest object
+   * Returns the time-series specified by HistoricalDataRequest object.
    * @param request historical data request object
    * @return the historical time series, null if not found
    */

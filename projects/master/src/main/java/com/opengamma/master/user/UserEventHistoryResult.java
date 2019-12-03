@@ -32,10 +32,10 @@ public class UserEventHistoryResult extends EventHistoryResult {
 
   /**
    * Creates an instance from a collection of events.
-   * 
+   *
    * @param events  the collection of events to add, not null
    */
-  public UserEventHistoryResult(Iterable<HistoryEvent> events) {
+  public UserEventHistoryResult(final Iterable<HistoryEvent> events) {
     super(events);
   }
 

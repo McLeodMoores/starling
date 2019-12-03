@@ -7,7 +7,6 @@ package com.opengamma.analytics.financial.interestrate.bond.definition;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon;
@@ -20,8 +19,11 @@ import com.opengamma.util.tuple.Pairs;
 
 /**
  * Describes a generic single currency bond issue.
- * @param <N> The notional type (usually FixedPayment or CouponInflationZeroCoupon).
- * @param <C> The coupon type.
+ *
+ * @param <N>
+ *          The notional type (usually FixedPayment or CouponInflationZeroCoupon).
+ * @param <C>
+ *          The coupon type.
  */
 public abstract class BondSecurity<N extends Payment, C extends Coupon> implements InstrumentDerivative {
   /**
@@ -29,7 +31,8 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
    */
   private final Annuity<N> _nominal;
   /**
-   * The bond coupons. The coupons notional should be in line with the bond nominal. The discounting curve should be the same for the nominal and the coupons.
+   * The bond coupons. The coupons notional should be in line with the bond nominal. The discounting curve should be the same for the
+   * nominal and the coupons.
    */
   private final Annuity<C> _coupon;
   /**
@@ -51,29 +54,43 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Bond constructor from the bond nominal and coupon.
-   * @param nominal The notional payments.
-   * @param coupon The bond coupons.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param discountingCurveName The name of the curve used for settlement amount discounting.
-   * @param issuer The bond issuer name.
+   *
+   * @param nominal
+   *          The notional payments.
+   * @param coupon
+   *          The bond coupons.
+   * @param settlementTime
+   *          The time (in years) to settlement date.
+   * @param discountingCurveName
+   *          The name of the curve used for settlement amount discounting.
+   * @param issuer
+   *          The bond issuer name.
    * @deprecated Use the constructor that does not take a curve name
    */
   @Deprecated
-  public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final String discountingCurveName, final String issuer) {
+  public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final String discountingCurveName,
+      final String issuer) {
     this(nominal, coupon, settlementTime, discountingCurveName, new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
    * Bond constructor from the bond nominal and coupon.
-   * @param nominal The notional payments.
-   * @param coupon The bond coupons.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param discountingCurveName The name of the curve used for settlement amount discounting.
-   * @param issuer The bond issuer name.
+   *
+   * @param nominal
+   *          The notional payments.
+   * @param coupon
+   *          The bond coupons.
+   * @param settlementTime
+   *          The time (in years) to settlement date.
+   * @param discountingCurveName
+   *          The name of the curve used for settlement amount discounting.
+   * @param issuer
+   *          The bond issuer name.
    * @deprecated Use the constructor that does not take a curve name
    */
   @Deprecated
-  public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final String discountingCurveName, final LegalEntity issuer) {
+  public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final String discountingCurveName,
+      final LegalEntity issuer) {
     ArgumentChecker.notNull(nominal, "Nominal");
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(discountingCurveName, "Repo curve name");
@@ -88,21 +105,33 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Bond constructor from the bond nominal and coupon.
-   * @param nominal The notional payments.
-   * @param coupon The bond coupons.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param issuer The bond issuer name.
+   *
+   * @param nominal
+   *          The notional payments.
+   * @param coupon
+   *          The bond coupons.
+   * @param settlementTime
+   *          The time (in years) to settlement date.
+   * @param issuer
+   *          The bond issuer name.
+   * @deprecated The issuer should be provided. Use {@link #BondSecurity(Annuity, Annuity, double, String, LegalEntity)}.
    */
+  @Deprecated
   public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final String issuer) {
     this(nominal, coupon, settlementTime, new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
    * Bond constructor from the bond nominal and coupon.
-   * @param nominal The notional payments.
-   * @param coupon The bond coupons.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param issuer The bond issuer.
+   *
+   * @param nominal
+   *          The notional payments.
+   * @param coupon
+   *          The bond coupons.
+   * @param settlementTime
+   *          The time (in years) to settlement date.
+   * @param issuer
+   *          The bond issuer.
    */
   public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final LegalEntity issuer) {
     ArgumentChecker.notNull(nominal, "Nominal");
@@ -118,6 +147,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the nominal payments.
+   *
    * @return The nominal payments.
    */
   public Annuity<N> getNominal() {
@@ -126,6 +156,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the coupons.
+   *
    * @return The coupons.
    */
   public Annuity<C> getCoupon() {
@@ -134,6 +165,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the settlement time.
+   *
    * @return The settlement time.
    */
   public double getSettlementTime() {
@@ -142,6 +174,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the bond currency.
+   *
    * @return The bond currency.
    */
   public Currency getCurrency() {
@@ -150,8 +183,9 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the name of the curve used for settlement amount discounting.
+   *
    * @return The curve name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getRepoCurveName() {
@@ -163,6 +197,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the issuer name.
+   *
    * @return The issuer name.
    */
   public String getIssuer() {
@@ -171,6 +206,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the issuer.
+   *
    * @return The issuer
    */
   public LegalEntity getIssuerEntity() {
@@ -179,6 +215,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the bond issuer name and currency.
+   *
    * @return The name/currency.
    * @deprecated This information is no longer used in the curve providers.
    */
@@ -189,8 +226,9 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the name of the curve used for discounting.
+   *
    * @return The curve name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getDiscountingCurveName() {
@@ -205,7 +243,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
     return result;
   }
 
-  //REVIEW emcleod 17-08-2013 why is the settlement time and issuer not used?
+  // REVIEW emcleod 17-08-2013 why is the settlement time and issuer not used?
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -215,7 +253,7 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
     return result;
   }
 
-  //REVIEW emcleod 17-08-2013 why is the settlement time and issuer not used?
+  // REVIEW emcleod 17-08-2013 why is the settlement time and issuer not used?
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {

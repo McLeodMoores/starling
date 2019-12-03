@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -37,7 +37,7 @@ import com.opengamma.engine.value.ValueRequirement;
 
   private void blockOnTask(final DependencyGraphBuilder builder, final ResolvedValueProducer task, final String expected) {
     final CountDownLatch latch = new CountDownLatch(1);
-    final AtomicReference<String> result = new AtomicReference<String>();
+    final AtomicReference<String> result = new AtomicReference<>();
     task.addCallback(builder.getContext(), new ResolvedValueCallback() {
 
       @Override
@@ -47,7 +47,8 @@ import com.opengamma.engine.value.ValueRequirement;
       }
 
       @Override
-      public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
+      public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue,
+          final ResolutionPump pump) {
         result.set("COMPLETE");
         latch.countDown();
         if (pump != null) {
@@ -64,7 +65,7 @@ import com.opengamma.engine.value.ValueRequirement;
     assertTrue(builder.startBackgroundConstructionJob());
     try {
       latch.await(com.opengamma.util.test.Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Assert.fail("Interrupted", e);
     }
     assertEquals(expected, result.get());
@@ -80,9 +81,9 @@ import com.opengamma.engine.value.ValueRequirement;
 
   protected Map<MockFunction, DependencyNode> assertGraphContains(final DependencyGraph graph, final MockFunction... functions) {
     final Collection<DependencyNode> nodes = DependencyGraphImpl.getDependencyNodes(graph);
-    final LinkedList<MockFunction> functionList = new LinkedList<MockFunction>(Arrays.asList(functions));
-    final Map<MockFunction, DependencyNode> result = new HashMap<MockFunction, DependencyNode>();
-    for (DependencyNode node : nodes) {
+    final LinkedList<MockFunction> functionList = new LinkedList<>(Arrays.asList(functions));
+    final Map<MockFunction, DependencyNode> result = new HashMap<>();
+    for (final DependencyNode node : nodes) {
       MockFunction function = null;
       final Iterator<MockFunction> itr = functionList.iterator();
       while (itr.hasNext()) {
@@ -104,7 +105,7 @@ import com.opengamma.engine.value.ValueRequirement;
     return result;
   }
 
-  protected static abstract class TestFunction extends AbstractFunction.NonCompiledInvoker {
+  protected abstract static class TestFunction extends AbstractFunction.NonCompiledInvoker {
 
     @Override
     public ComputationTargetType getTargetType() {

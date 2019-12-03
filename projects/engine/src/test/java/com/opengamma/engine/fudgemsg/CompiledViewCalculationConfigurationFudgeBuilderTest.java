@@ -55,11 +55,13 @@ public class CompiledViewCalculationConfigurationFudgeBuilderTest extends Abstra
     final ValueSpecification dataSpecification3a = new ValueSpecification("Data3a", targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Bar").get());
     final ValueSpecification dataSpecification3b = new ValueSpecification("Data3b", targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Bar").get());
     final ValueSpecification dataSpecification3c = new ValueSpecification("Data3c", targetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "Bar").get());
-    final CompiledViewCalculationConfiguration in = new CompiledViewCalculationConfigurationImpl("2", ImmutableSet.of(ComputationTargetSpecification.NULL, targetSpec),
-        ImmutableMap.<ValueSpecification, Set<ValueRequirement>>of(valueSpecification, ImmutableSet.of(valueRequirement)), ImmutableMap.<ValueSpecification, Collection<ValueSpecification>>of(
-            dataSpecification1, Collections.singleton(dataSpecification1),
-            dataSpecification2a, Collections.singleton(dataSpecification2b),
-            dataSpecification3a, ImmutableSet.of(dataSpecification3a, dataSpecification3b, dataSpecification3c)));
+    final CompiledViewCalculationConfiguration in =
+        new CompiledViewCalculationConfigurationImpl("2", ImmutableSet.of(ComputationTargetSpecification.NULL, targetSpec),
+            ImmutableMap.<ValueSpecification, Set<ValueRequirement>>of(valueSpecification, ImmutableSet.of(valueRequirement)),
+            ImmutableMap.<ValueSpecification, Collection<ValueSpecification>>of(
+              dataSpecification1, Collections.singleton(dataSpecification1),
+              dataSpecification2a, Collections.singleton(dataSpecification2b),
+              dataSpecification3a, ImmutableSet.of(dataSpecification3a, dataSpecification3b, dataSpecification3c)));
     final CompiledViewCalculationConfiguration out = cycleObject(CompiledViewCalculationConfiguration.class, in);
     assertEquals(out.getName(), in.getName());
     assertEquals(out.getComputationTargets(), in.getComputationTargets());

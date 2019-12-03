@@ -9,12 +9,12 @@ import com.opengamma.engine.value.ValueProperties;
 
 public class WithoutAny extends ValuePropertiesModifier {
 
-  public WithoutAny(String propertyName) {
+  public WithoutAny(final String propertyName) {
     super(propertyName);
   }
 
   @Override
-  public ValueProperties.Builder modify(ValueProperties.Builder builder) {
+  public ValueProperties.Builder modify(final ValueProperties.Builder builder) {
     return builder.withoutAny(getPropertyName());
   }
 

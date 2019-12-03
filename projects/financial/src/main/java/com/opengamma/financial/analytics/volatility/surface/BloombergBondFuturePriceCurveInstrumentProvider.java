@@ -33,12 +33,17 @@ public class BloombergBondFuturePriceCurveInstrumentProvider implements FuturePr
   private final String _tickerScheme;
 
   /**
-   * @param futurePrefix Two character string representing future type. e.g US
-   * @param postfix the postfix
-   * @param dataFieldName Expecting MarketDataRequirementNames.MARKET_VALUE
-   * @param tickerScheme Expecting BLOOMBERG_TICKER_WEAK or BLOOMBERG_TICKER
+   * @param futurePrefix
+   *          Two character string representing future type. e.g US
+   * @param postfix
+   *          the postfix
+   * @param dataFieldName
+   *          Expecting MarketDataRequirementNames.MARKET_VALUE
+   * @param tickerScheme
+   *          Expecting BLOOMBERG_TICKER_WEAK or BLOOMBERG_TICKER
    */
-  public BloombergBondFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName, final String tickerScheme) {
+  public BloombergBondFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName,
+      final String tickerScheme) {
     Validate.notNull(futurePrefix, "future option prefix");
     Validate.notNull(postfix, "postfix");
     Validate.notNull(dataFieldName, "data field name");
@@ -50,9 +55,12 @@ public class BloombergBondFuturePriceCurveInstrumentProvider implements FuturePr
   }
 
   /**
-   * @param futurePrefix Two character string representing future type. e.g US
-   * @param postfix the postfix
-   * @param dataFieldName Expecting MarketDataRequirementNames.MARKET_VALUE
+   * @param futurePrefix
+   *          Two character string representing future type. e.g US
+   * @param postfix
+   *          the postfix
+   * @param dataFieldName
+   *          Expecting MarketDataRequirementNames.MARKET_VALUE
    */
   public BloombergBondFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName) {
     Validate.notNull(futurePrefix, "future option prefix");
@@ -71,11 +79,13 @@ public class BloombergBondFuturePriceCurveInstrumentProvider implements FuturePr
 
   @Override
   /**
-   * Provides ExternalID for Bloomberg ticker, eg RXZ3 Comdty,
-   * given a reference date and an integer offset, the n'th subsequent future
-   * The format is _futurePrefix + month + year + _postfix
-   * @param futureNumber n'th future following curve date
-   * @param curveDate date of curve validity; valuation date
+   * Provides ExternalID for Bloomberg ticker, eg RXZ3 Comdty, given a reference date and an integer offset, the n'th subsequent future The format is
+   * _futurePrefix + month + year + _postfix
+   *
+   * @param futureNumber
+   *          n'th future following curve date
+   * @param curveDate
+   *          date of curve validity; valuation date
    */
   public ExternalId getInstrument(final Number futureNumber, final LocalDate curveDate) {
     final StringBuffer ticker = new StringBuffer();
@@ -118,9 +128,9 @@ public class BloombergBondFuturePriceCurveInstrumentProvider implements FuturePr
       return false;
     }
     final BloombergBondFuturePriceCurveInstrumentProvider other = (BloombergBondFuturePriceCurveInstrumentProvider) obj;
-    return getFuturePrefix().equals(other.getFuturePrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getFuturePrefix().equals(other.getFuturePrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 
   @Override

@@ -77,19 +77,29 @@ public class SwapSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private SwapLeg _receiveLeg;
 
-  SwapSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  SwapSecurity() { // For builder
     super(SECURITY_TYPE);
   }
 
   /**
-   * @param tradeDate The trade date, not null
-   * @param effectiveDate The effective date, not null
-   * @param maturityDate The maturity date, not null
-   * @param counterparty The counterparty, not null
-   * @param payLeg The pay leg, not null
-   * @param receiveLeg The receive leg, not null
+   * @param tradeDate
+   *          The trade date, not null
+   * @param effectiveDate
+   *          The effective date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param counterparty
+   *          The counterparty, not null
+   * @param payLeg
+   *          The pay leg, not null
+   * @param receiveLeg
+   *          The receive leg, not null
    */
-  public SwapSecurity(final ZonedDateTime tradeDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final String counterparty, final SwapLeg payLeg, final SwapLeg receiveLeg) {
+  public SwapSecurity(final ZonedDateTime tradeDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final String counterparty,
+      final SwapLeg payLeg, final SwapLeg receiveLeg) {
     super(SECURITY_TYPE);
     setTradeDate(tradeDate);
     setEffectiveDate(effectiveDate);
@@ -103,23 +113,34 @@ public class SwapSecurity extends FinancialSecurity {
 
   /**
    * For the builder - used by subclasses to set the correct security type.
-   * @param securityType The security type, not null
+   *
+   * @param securityType
+   *          The security type, not null
    */
-  /* package */SwapSecurity(final String securityType) {
+  /* package */ SwapSecurity(final String securityType) {
     super(securityType);
   }
+
   /**
    * Used by subclasses to set the correct security type.
-   * @param securityType The security type, not null
-   * @param tradeDate The trade date, not null
-   * @param effectiveDate The effective date, not null
-   * @param maturityDate The maturity date, not null
-   * @param counterparty The counterparty, not null
-   * @param payLeg The pay leg, not null
-   * @param receiveLeg The receive leg, not null
+   *
+   * @param securityType
+   *          The security type, not null
+   * @param tradeDate
+   *          The trade date, not null
+   * @param effectiveDate
+   *          The effective date, not null
+   * @param maturityDate
+   *          The maturity date, not null
+   * @param counterparty
+   *          The counterparty, not null
+   * @param payLeg
+   *          The pay leg, not null
+   * @param receiveLeg
+   *          The receive leg, not null
    */
-  protected SwapSecurity(final String securityType, final ZonedDateTime tradeDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final String counterparty,
-      final SwapLeg payLeg, final SwapLeg receiveLeg) {
+  protected SwapSecurity(final String securityType, final ZonedDateTime tradeDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate,
+      final String counterparty, final SwapLeg payLeg, final SwapLeg receiveLeg) {
     super(securityType);
     setTradeDate(tradeDate);
     setEffectiveDate(effectiveDate);
@@ -131,7 +152,7 @@ public class SwapSecurity extends FinancialSecurity {
     setExchangeFinalNotional(false);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitSwapSecurity(this);

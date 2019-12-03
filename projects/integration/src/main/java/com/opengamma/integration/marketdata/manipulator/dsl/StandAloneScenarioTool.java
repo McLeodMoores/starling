@@ -35,7 +35,7 @@ import com.opengamma.scripts.Scriptable;
 @Scriptable
 public class StandAloneScenarioTool {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(StandAloneScenarioTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StandAloneScenarioTool.class);
 
   private static final Options OPTIONS = createOptions();
 
@@ -45,8 +45,8 @@ public class StandAloneScenarioTool {
 
   private static final String EXTENSION = ".txt";
 
-  public static void main(String[] args) throws IOException {
-    CommandLineParser parser = new PosixParser();
+  public static void main(final String[] args) throws IOException {
+    final CommandLineParser parser = new PosixParser();
     CommandLine commandLine;
 
     try {
@@ -60,26 +60,26 @@ public class StandAloneScenarioTool {
       printUsage();
       return;
     }
-    String logbackResource = commandLine.getOptionValue(LOGBACK_CONFIG, ToolUtils.getDefaultLogbackConfiguration());
+    final String logbackResource = commandLine.getOptionValue(LOGBACK_CONFIG, ToolUtils.getDefaultLogbackConfiguration());
     ToolUtils.initLogback(logbackResource);
 
-    boolean verbose = commandLine.hasOption(VERBOSE_OUTPUT);
+    final boolean verbose = commandLine.hasOption(VERBOSE_OUTPUT);
     List<ScenarioResultModel> results;
     File scriptFile;
 
     try {
       scriptFile = new File((String) commandLine.getArgList().get(0));
       results = StandAloneScenarioRunner.runScenarioScript(scriptFile);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       if (verbose) {
-        s_logger.warn("Failed to run scenario script", e);
+        LOGGER.warn("Failed to run scenario script", e);
       } else {
         System.err.println("Failed to run scenario script. " + e.getMessage());
       }
       System.exit(1);
       return;
     }
-    String resultsFileRoot = FilenameUtils.removeExtension(scriptFile.getName()) + ".results";
+    final String resultsFileRoot = FilenameUtils.removeExtension(scriptFile.getName()) + ".results";
     File resultsFile = new File(resultsFileRoot + EXTENSION);
     int fileSuffix = 1;
 
@@ -100,22 +100,22 @@ public class StandAloneScenarioTool {
   }
 
   private static Options createOptions() {
-    Options options = new Options();
+    final Options options = new Options();
 
-    Option shortFormatOption = new Option(SHORT_FORMAT, "Outputs data in a shorter format");
+    final Option shortFormatOption = new Option(SHORT_FORMAT, "Outputs data in a shorter format");
     options.addOption(shortFormatOption);
 
-    Option verboseOption = new Option(VERBOSE_OUTPUT, "Prints stack traces as well as error messages");
+    final Option verboseOption = new Option(VERBOSE_OUTPUT, "Prints stack traces as well as error messages");
     options.addOption(verboseOption);
 
-    Option logbackConfigOption = new Option(LOGBACK_CONFIG, true, "Logback config for the tool");
+    final Option logbackConfigOption = new Option(LOGBACK_CONFIG, true, "Logback config for the tool");
     options.addOption(logbackConfigOption);
 
     return options;
   }
 
   private static void printUsage() {
-    HelpFormatter formatter = new HelpFormatter();
+    final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("stand-alone-scenario-tool.sh <script>", OPTIONS, true);
   }

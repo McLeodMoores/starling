@@ -20,7 +20,7 @@ import com.opengamma.util.time.Expiry;
  * 
  */
 public class ForwardStartOptionDefinition extends OptionDefinition {
-  private static final Logger s_logger = LoggerFactory.getLogger(ForwardStartOptionDefinition.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForwardStartOptionDefinition.class);
   private final OptionExerciseFunction<StandardOptionDataBundle> _exerciseFunction = new EuropeanExerciseFunction<>();
   private final OptionPayoffFunction<StandardOptionDataBundle> _payoffFunction = new OptionPayoffFunction<StandardOptionDataBundle>() {
 
@@ -56,7 +56,7 @@ public class ForwardStartOptionDefinition extends OptionDefinition {
       throw new IllegalArgumentException("The forward start time must be before the expiry of the option");
     }
     if (moneyness == Moneyness.ATM && percent != 1) {
-      s_logger.info("Option is ATM but percentage is not one; ignoring value for percent");
+      LOGGER.info("Option is ATM but percentage is not one; ignoring value for percent");
     }
     _startTime = startTime;
     _percent = percent;

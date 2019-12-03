@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.fitting;
@@ -24,8 +24,9 @@ import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWit
 import com.opengamma.analytics.math.statistics.leastsquare.NonLinearLeastSquare;
 
 /**
- * 
- * @param <T> The data for the smile model used
+ *
+ * @param <T>
+ *          The data for the smile model used
  */
 public abstract class SmileModelFitter<T extends SmileModelData> {
   private static final MatrixAlgebra MA = new OGMatrixAlgebra();
@@ -44,14 +45,21 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
   private final DoubleMatrix1D _errors;
 
   /**
-   * Attempts to calibrate a model to the implied volatilities of European vanilla options, by minimising the sum of squares between the
-   * market and model implied volatilities. All the options must be for the same expiry and (implicitly) on the same underlying.
-   * @param forward The forward value of the underlying
-   * @param strikes ordered values of strikes
-   * @param timeToExpiry The time-to-expiry
-   * @param impliedVols The market implied volatilities
-   * @param error The 'measurement' error to apply to the market volatility of a particular option TODO: Review should this be part of  EuropeanOptionMarketData?
-   * @param model VolatilityFunctionProvider
+   * Attempts to calibrate a model to the implied volatilities of European vanilla options, by minimising the sum of squares between the market and model
+   * implied volatilities. All the options must be for the same expiry and (implicitly) on the same underlying.
+   *
+   * @param forward
+   *          The forward value of the underlying
+   * @param strikes
+   *          ordered values of strikes
+   * @param timeToExpiry
+   *          The time-to-expiry
+   * @param impliedVols
+   *          The market implied volatilities
+   * @param error
+   *          The 'measurement' error to apply to the market volatility of a particular option TODO: Review should this be part of EuropeanOptionMarketData?
+   * @param model
+   *          VolatilityFunctionProvider
    */
   public SmileModelFitter(final double forward, final double[] strikes, final double timeToExpiry, final double[] impliedVols,
       final double[] error, final VolatilityFunctionProvider<T> model) {
@@ -72,8 +80,10 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
   }
 
   /**
-   * Solve using the default NonLinearParameterTransforms for the concrete implementation
-   * @param start The first guess at the parameter values
+   * Solve using the default NonLinearParameterTransforms for the concrete implementation.
+   *
+   * @param start
+   *          The first guess at the parameter values
    * @return The LeastSquareResults
    */
   public LeastSquareResultsWithTransform solve(final DoubleMatrix1D start) {
@@ -81,10 +91,13 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
   }
 
   /**
-   * Solve using the default NonLinearParameterTransforms for the concrete implementation, but with some parameters fixed to their initial
-   * values (indicated by fixed)
-   * @param start The first guess at the parameter values
-   * @param fixed Indicates which parameters are fixed
+   * Solve using the default NonLinearParameterTransforms for the concrete implementation, but with some parameters fixed to their initial values (indicated by
+   * fixed).
+   *
+   * @param start
+   *          The first guess at the parameter values
+   * @param fixed
+   *          Indicates which parameters are fixed
    * @return The LeastSquareResults
    */
   public LeastSquareResultsWithTransform solve(final DoubleMatrix1D start, final BitSet fixed) {
@@ -93,9 +106,12 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
   }
 
   /**
-   * Solve using a user supplied NonLinearParameterTransforms
-   * @param start The first guess at the parameter values
-   * @param transform Transform from model parameters to fitting parameters, and vice versa
+   * Solve using a user supplied NonLinearParameterTransforms.
+   *
+   * @param start
+   *          The first guess at the parameter values
+   * @param transform
+   *          Transform from model parameters to fitting parameters, and vice versa
    * @return The LeastSquareResults
    */
   public LeastSquareResultsWithTransform solve(final DoubleMatrix1D start, final NonLinearParameterTransforms transform) {
@@ -126,7 +142,7 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
       @Override
       public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
         final T data = toSmileModelData(x);
-        //this thing will be (#strikes/vols) x (# model Params)
+        // this thing will be (#strikes/vols) x (# model Params)
         final double[][] volAdjoint = _volAdjointFunc.evaluate(data);
         return new DoubleMatrix2D(volAdjoint);
       }
@@ -135,11 +151,11 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
 
   protected abstract DoubleMatrix1D getMaximumStep();
 
-  protected abstract NonLinearParameterTransforms getTransform(final DoubleMatrix1D start);
+  protected abstract NonLinearParameterTransforms getTransform(DoubleMatrix1D start);
 
-  protected abstract NonLinearParameterTransforms getTransform(final DoubleMatrix1D start, final BitSet fixed);
+  protected abstract NonLinearParameterTransforms getTransform(DoubleMatrix1D start, BitSet fixed);
 
-  protected abstract T toSmileModelData(final DoubleMatrix1D modelParameters);
+  protected abstract T toSmileModelData(DoubleMatrix1D modelParameters);
 
   protected Function1D<DoubleMatrix1D, Boolean> getConstraintFunction(@SuppressWarnings("unused") final NonLinearParameterTransforms t) {
     return UNCONSTRAINED;

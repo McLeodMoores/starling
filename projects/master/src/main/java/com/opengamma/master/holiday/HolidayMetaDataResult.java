@@ -38,7 +38,7 @@ public class HolidayMetaDataResult extends AbstractMetaDataResult {
    * This is only populated if requested.
    */
   @PropertyDefinition
-  private final List<HolidayType> _holidayTypes = new ArrayList<HolidayType>();
+  private final List<HolidayType> _holidayTypes = new ArrayList<>();
 
   /**
    * Creates an instance.

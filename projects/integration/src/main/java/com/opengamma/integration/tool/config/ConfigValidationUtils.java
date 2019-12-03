@@ -20,31 +20,31 @@ import com.opengamma.master.holiday.HolidaySearchResult;
  * Utility methods for confirming existance of configs.
  */
 public class ConfigValidationUtils {
-  private ConventionSource _conventionSource;
-  private HolidayMaster _holidayMaster;
+  private final ConventionSource _conventionSource;
+  private final HolidayMaster _holidayMaster;
 
-  public ConfigValidationUtils(ConventionSource conventionSource, HolidayMaster holidayMaster) {
+  public ConfigValidationUtils(final ConventionSource conventionSource, final HolidayMaster holidayMaster) {
     _conventionSource = conventionSource;
     _holidayMaster = holidayMaster;
   }
 
-  public boolean conventionExists(ExternalId externalId) {
+  public boolean conventionExists(final ExternalId externalId) {
     return getConvention(externalId) != null;
   }
 
-  ManageableConvention getConvention(ExternalId externalId) {
+  ManageableConvention getConvention(final ExternalId externalId) {
     try {
       return (ManageableConvention) _conventionSource.getSingle(externalId);
-    } catch (DataNotFoundException dnfe) {
+    } catch (final DataNotFoundException dnfe) {
       return null;
-    } catch (Exception e) {
+    } catch (final Exception e) {
       return null;
     }
   }
-  
-  boolean holidayExists(ExternalId customHolidayId) {
-    HolidaySearchRequest searchReq = new HolidaySearchRequest(HolidayType.CUSTOM, Collections.singletonList(customHolidayId));
-    HolidaySearchResult search = _holidayMaster.search(searchReq);
+
+  boolean holidayExists(final ExternalId customHolidayId) {
+    final HolidaySearchRequest searchReq = new HolidaySearchRequest(HolidayType.CUSTOM, Collections.singletonList(customHolidayId));
+    final HolidaySearchResult search = _holidayMaster.search(searchReq);
     return search.getSingleHoliday() != null;
   }
 }

@@ -21,8 +21,8 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class AmericanVanillaOptionFunctionProviderTest {
-  private static final BinomialTreeOptionPricingModel _model = new BinomialTreeOptionPricingModel();
-  private static final TrinomialTreeOptionPricingModel _modelTrinomial = new TrinomialTreeOptionPricingModel();
+  private static final BinomialTreeOptionPricingModel MODEL = new BinomialTreeOptionPricingModel();
+  private static final TrinomialTreeOptionPricingModel TRINOMIAL = new TrinomialTreeOptionPricingModel();
   private static final double SPOT = 105.;
   private static final double[] STRIKES = new double[] {81., 97., 105., 105.1, 114., 138. };
   private static final double TIME = 4.2;
@@ -52,11 +52,11 @@ public class AmericanVanillaOptionFunctionProviderTest {
               final OptionFunctionProvider1D functionS = new AmericanVanillaOptionFunctionProvider(STRIKES[k], TIME, steps, false, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
               final OptionFunctionProvider1D functionCall = new AmericanVanillaOptionFunctionProvider(STRIKES[k], TIME, steps, true);
               final OptionFunctionProvider1D functionSCall = new AmericanVanillaOptionFunctionProvider(STRIKES[k], TIME, steps, true, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
-              final double priceP = _model.getPrice(lattice, function, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
-              final double pricePS = _model.getPrice(lattice, functionS, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
+              final double priceP = MODEL.getPrice(lattice, function, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
+              final double pricePS = MODEL.getPrice(lattice, functionS, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
               assertEquals(priceP, pricePS, 2. * Math.max(0.1, pricePS) / steps);
-              final double priceCall = _model.getPrice(lattice, functionCall, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
-              final double priceSCall = _model.getPrice(lattice, functionSCall, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
+              final double priceCall = MODEL.getPrice(lattice, functionCall, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
+              final double priceSCall = MODEL.getPrice(lattice, functionSCall, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
               assertEquals(priceCall, priceSCall, 2. * Math.max(0.1, priceCall) / steps);
 
               /*
@@ -64,9 +64,9 @@ public class AmericanVanillaOptionFunctionProviderTest {
                */
               final OptionFunctionProvider1D functionTrAc = new AmericanVanillaOptionFunctionProvider(STRIKES[k], TIME, steps, false, VOLS[l], INTERESTS[j], DIVIDENDS[m], 10., true);
               final OptionFunctionProvider1D functionTrAcCall = new AmericanVanillaOptionFunctionProvider(STRIKES[k], TIME, steps, true, VOLS[l], INTERESTS[j], DIVIDENDS[m], 10., true);
-              final double pricePTrAc = _model.getPrice(lattice, functionTrAc, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
+              final double pricePTrAc = MODEL.getPrice(lattice, functionTrAc, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
               assertEquals(pricePS, pricePTrAc, Math.max(.1, pricePS) / Math.sqrt(steps));
-              final double priceTrAcCall = _model.getPrice(lattice, functionTrAcCall, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
+              final double priceTrAcCall = MODEL.getPrice(lattice, functionTrAcCall, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
               assertEquals(priceSCall, priceTrAcCall, Math.max(.1, priceSCall) / Math.sqrt(steps));
             }
           }
@@ -97,11 +97,11 @@ public class AmericanVanillaOptionFunctionProviderTest {
               final OptionFunctionProvider1D functionTr = new AmericanVanillaOptionFunctionProvider(STRIKES[k], TIME, steps, false, VOLS[l], INTERESTS[j], DIVIDENDS[m], 4., false);
               final OptionFunctionProvider1D functionCall = new AmericanVanillaOptionFunctionProvider(STRIKES[k], TIME, steps, true);
               final OptionFunctionProvider1D functionTrCall = new AmericanVanillaOptionFunctionProvider(STRIKES[k], TIME, steps, true, VOLS[l], INTERESTS[j], DIVIDENDS[m], 4.);
-              final double priceP = _model.getPrice(lattice, function, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
-              final double pricePTr = _model.getPrice(lattice, functionTr, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
+              final double priceP = MODEL.getPrice(lattice, function, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
+              final double pricePTr = MODEL.getPrice(lattice, functionTr, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
               assertEquals(pricePTr, priceP, Math.max(0.1, priceP) / steps);
-              final double priceCall = _model.getPrice(lattice, functionCall, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
-              final double priceTrCall = _model.getPrice(lattice, functionTrCall, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
+              final double priceCall = MODEL.getPrice(lattice, functionCall, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
+              final double priceTrCall = MODEL.getPrice(lattice, functionTrCall, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[m]);
               assertEquals(priceTrCall, priceCall, Math.max(0.1, priceCall) / steps);
             }
           }
@@ -128,8 +128,8 @@ public class AmericanVanillaOptionFunctionProviderTest {
         for (final double vol : VOLS) {
           for (final double dividend : DIVIDENDS) {
             for (final LatticeSpecification lattice : lattices) {
-              final GreekResultCollection greekCall = _model.getGreeks(lattice, functionCall, SPOT, vol, interest, dividend);
-              final GreekResultCollection greekPut = _model.getGreeks(lattice, functionPut, SPOT, vol, dividend, interest);
+              final GreekResultCollection greekCall = MODEL.getGreeks(lattice, functionCall, SPOT, vol, interest, dividend);
+              final GreekResultCollection greekPut = MODEL.getGreeks(lattice, functionPut, SPOT, vol, dividend, interest);
               final double priceCall = greekCall.get(Greek.FAIR_PRICE);
               final double thetaCall = greekCall.get(Greek.THETA);
               final double pricePut = greekPut.get(Greek.FAIR_PRICE);
@@ -177,11 +177,11 @@ public class AmericanVanillaOptionFunctionProviderTest {
         for (int k = 0; k < nStrikes; ++k) {
           for (int l = 0; l < nVols; ++l) {
             final OptionFunctionProvider1D function = new AmericanVanillaOptionFunctionProvider(STRIKES[k], TIME, steps, false);
-            final double priceP = _model.getPrice(lattice, function, SPOT, VOLS[l], INTERESTS[j], 0.);
+            final double priceP = MODEL.getPrice(lattice, function, SPOT, VOLS[l], INTERESTS[j], 0.);
             assertEquals(priceP, expected[j][k][l], Math.max(expected[j][k][l], 1.) / Math.sqrt(steps));
             if (lattice instanceof CoxRossRubinsteinLatticeSpecification || lattice instanceof JarrowRuddLatticeSpecification || lattice instanceof TrigeorgisLatticeSpecification ||
                 lattice instanceof TianLatticeSpecification) {
-              final double priceTrinomial = _modelTrinomial.getPrice(lattice, function, SPOT, VOLS[l], INTERESTS[j], 0.);
+              final double priceTrinomial = TRINOMIAL.getPrice(lattice, function, SPOT, VOLS[l], INTERESTS[j], 0.);
               assertEquals(priceTrinomial, expected[j][k][l], Math.max(expected[j][k][l], 1.) * 1.e-2);
             }
           }
@@ -276,7 +276,7 @@ public class AmericanVanillaOptionFunctionProviderTest {
         for (int k = 0; k < nStrikes; ++k) {
           for (int l = 0; l < nVols; ++l) {
             final OptionFunctionProvider1D function = new AmericanVanillaOptionFunctionProvider(STRIKES[k], TIME, steps, false);
-            final GreekResultCollection greeks = _model.getGreeks(lattice, function, SPOT, VOLS[l], INTERESTS[j], 0.);
+            final GreekResultCollection greeks = MODEL.getGreeks(lattice, function, SPOT, VOLS[l], INTERESTS[j], 0.);
             assertEquals(greeks.get(Greek.DELTA), exDelta[j][k][l], Math.max(Math.abs(exDelta[j][k][l]), 1.) / Math.sqrt(steps));
             assertEquals(greeks.get(Greek.GAMMA), exGamma[j][k][l], Math.max(Math.abs(exGamma[j][k][l]), 1.) / Math.sqrt(steps));
             /*
@@ -288,7 +288,7 @@ public class AmericanVanillaOptionFunctionProviderTest {
             }
             if (lattice instanceof CoxRossRubinsteinLatticeSpecification || lattice instanceof JarrowRuddLatticeSpecification || lattice instanceof TrigeorgisLatticeSpecification ||
                 lattice instanceof TianLatticeSpecification) {
-              final GreekResultCollection greeksTrinomial = _modelTrinomial.getGreeks(lattice, function, SPOT, VOLS[l], INTERESTS[j], 0.);
+              final GreekResultCollection greeksTrinomial = TRINOMIAL.getGreeks(lattice, function, SPOT, VOLS[l], INTERESTS[j], 0.);
               assertEquals(greeksTrinomial.get(Greek.DELTA), exDelta[j][k][l], Math.max(Math.abs(exDelta[j][k][l]), 1.) / Math.sqrt(steps));
               assertEquals(greeksTrinomial.get(Greek.GAMMA), exGamma[j][k][l], Math.max(Math.abs(exGamma[j][k][l]), 1.) / Math.sqrt(steps));
               if (exTheta[j][k][l] != -0.01110279072301 && exTheta[j][k][l] != 0.138 && exTheta[j][k][l] != 0.69 && exTheta[j][k][l] != 1.379999999999999) {
@@ -327,7 +327,7 @@ public class AmericanVanillaOptionFunctionProviderTest {
             for (int n = 0; n < nTf; ++n) {
               for (int i = 0; i < nDiv; ++i) {
                 final OptionFunctionProvider1D function = new AmericanVanillaOptionFunctionProvider(STRIKES[k], time, steps, tfSet[n]);
-                final GreekResultCollection resNew = _model.getGreeks(lattice, function, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[i]);
+                final GreekResultCollection resNew = MODEL.getGreeks(lattice, function, SPOT, VOLS[l], INTERESTS[j], DIVIDENDS[i]);
                 final BjerksundStenslandModel bs = new BjerksundStenslandModel();
                 final double[] first = bs.getPriceAdjoint(SPOT, STRIKES[k], INTERESTS[j], INTERESTS[j] - DIVIDENDS[i], time, VOLS[l], tfSet[n]);
                 final double[] deltaGamma = bs.getPriceDeltaGamma(SPOT, STRIKES[k], INTERESTS[j], INTERESTS[j] - DIVIDENDS[i], time, VOLS[l], tfSet[n]);
@@ -395,11 +395,11 @@ public class AmericanVanillaOptionFunctionProviderTest {
           final double volRef = Math.sqrt(constC * constC + 0.5 * constD * constD + 2. * constC * constD / time * (1. - Math.cos(time)) - constD * constD * 0.25 / time * Math.sin(2. * time));
 
           final OptionFunctionProvider1D function = new AmericanVanillaOptionFunctionProvider(strike, time, steps, isCall);
-          final double resPrice = _model.getPrice(function, SPOT, vol, rate, dividend);
-          final GreekResultCollection resGreeks = _model.getGreeks(function, SPOT, vol, rate, dividend);
+          final double resPrice = MODEL.getPrice(function, SPOT, vol, rate, dividend);
+          final GreekResultCollection resGreeks = MODEL.getGreeks(function, SPOT, vol, rate, dividend);
 
-          final double resPriceConst = _model.getPrice(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
-          final GreekResultCollection resGreeksConst = _model.getGreeks(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
+          final double resPriceConst = MODEL.getPrice(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
+          final GreekResultCollection resGreeksConst = MODEL.getGreeks(lattice1, function, SPOT, volRef, rateRef, dividend[0]);
           assertEquals(resPrice, resPriceConst, Math.abs(resPriceConst) * 1.e-1);
           assertEquals(resGreeks.get(Greek.FAIR_PRICE), resGreeksConst.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConst.get(Greek.FAIR_PRICE)), 0.1) * 0.1);
           assertEquals(resGreeks.get(Greek.DELTA), resGreeksConst.get(Greek.DELTA), Math.max(Math.abs(resGreeksConst.get(Greek.DELTA)), 0.1) * 0.1);
@@ -407,9 +407,9 @@ public class AmericanVanillaOptionFunctionProviderTest {
           assertEquals(resGreeks.get(Greek.THETA), resGreeksConst.get(Greek.THETA), Math.max(Math.abs(resGreeksConst.get(Greek.THETA)), 0.1));
 
           final OptionFunctionProvider1D functionTri = new AmericanVanillaOptionFunctionProvider(strike, time, stepsTri, isCall);
-          final double resPriceTrinomial = _modelTrinomial.getPrice(functionTri, SPOT, volTri, rateTri, dividendTri);
+          final double resPriceTrinomial = TRINOMIAL.getPrice(functionTri, SPOT, volTri, rateTri, dividendTri);
           assertEquals(resPriceTrinomial, resPriceConst, Math.max(Math.abs(resPriceConst), .1) * 1.e-1);
-          final GreekResultCollection resGreeksTrinomial = _modelTrinomial.getGreeks(functionTri, SPOT, volTri, rateTri, dividendTri);
+          final GreekResultCollection resGreeksTrinomial = TRINOMIAL.getGreeks(functionTri, SPOT, volTri, rateTri, dividendTri);
           assertEquals(resGreeksTrinomial.get(Greek.FAIR_PRICE), resGreeksConst.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConst.get(Greek.FAIR_PRICE)), 0.1) * 0.1);
           assertEquals(resGreeksTrinomial.get(Greek.DELTA), resGreeksConst.get(Greek.DELTA), Math.max(Math.abs(resGreeksConst.get(Greek.DELTA)), 0.1) * 0.1);
           assertEquals(resGreeksTrinomial.get(Greek.GAMMA), resGreeksConst.get(Greek.GAMMA), Math.max(Math.abs(resGreeksConst.get(Greek.GAMMA)), 0.1) * 0.1);
@@ -445,14 +445,14 @@ public class AmericanVanillaOptionFunctionProviderTest {
                   final double[] cashDividends = cashDividendsMat[j];
                   final OptionFunctionProvider1D function = new AmericanVanillaOptionFunctionProvider(strike, TIME, steps, isCall);
                   final DividendFunctionProvider cashDividend = new CashDividendFunctionProvider(dividendTimes, cashDividends);
-                  double priceDiv = _model.getPrice(model, function, SPOT, vol, interest, cashDividend);
+                  double priceDiv = MODEL.getPrice(model, function, SPOT, vol, interest, cashDividend);
                   double modSpot = SPOT;
                   final int divTimes = cashDividends.length;
                   for (int i = 0; i < divTimes; ++i) {
                     modSpot -= cashDividends[i] * Math.exp(-interest * dividendTimes[i]);
                   }
-                  double priceMod = _model.getPrice(model, function, modSpot, vol, interest, 0.);
-                  double price = _model.getPrice(model, function, SPOT, vol, interest, 0.);
+                  double priceMod = MODEL.getPrice(model, function, modSpot, vol, interest, 0.);
+                  double price = MODEL.getPrice(model, function, SPOT, vol, interest, 0.);
 
                   final double ref = Math.abs(priceDiv - priceMod) > Math.abs(priceDiv - price) ? price : priceMod;
                   assertEquals(priceDiv, ref, Math.max(ref, 1.) * 1.e-1);
@@ -462,7 +462,7 @@ public class AmericanVanillaOptionFunctionProviderTest {
                     final int stepsTri = 71;
                     for (final LatticeSpecification latticeTri : latticesTri) {
                       final OptionFunctionProvider1D functionTri = new AmericanVanillaOptionFunctionProvider(strike, TIME, stepsTri, isCall);
-                      final double priceTrinomial = _modelTrinomial.getPrice(latticeTri, functionTri, SPOT, vol, interest, 0.);
+                      final double priceTrinomial = TRINOMIAL.getPrice(latticeTri, functionTri, SPOT, vol, interest, 0.);
                       assertEquals(priceTrinomial, price, Math.max(price, 1.) * 1.e-2);
                     }
                   }
@@ -503,14 +503,14 @@ public class AmericanVanillaOptionFunctionProviderTest {
                   final OptionFunctionProvider1D function = new AmericanVanillaOptionFunctionProvider(strike, TIME, steps, isCall);
                   final DividendFunctionProvider propDividend = new ProportionalDividendFunctionProvider(dividendTimes, propDividends);
 
-                  double priceDiv = _model.getPrice(model, function, SPOT, vol, interest, propDividend);
+                  double priceDiv = MODEL.getPrice(model, function, SPOT, vol, interest, propDividend);
                   double modSpot = SPOT;
                   final int divTimes = propDividends.length;
                   for (int i = 0; i < divTimes; ++i) {
                     modSpot -= propDividends[i] * Math.exp(-interest * dividendTimes[i]);
                   }
-                  double priceMod = _model.getPrice(model, function, modSpot, vol, interest, 0.);
-                  double price = _model.getPrice(model, function, SPOT, vol, interest, 0.);
+                  double priceMod = MODEL.getPrice(model, function, modSpot, vol, interest, 0.);
+                  double price = MODEL.getPrice(model, function, SPOT, vol, interest, 0.);
                   final double ref = Math.abs(priceDiv - priceMod) > Math.abs(priceDiv - price) ? price : priceMod;
                   assertEquals(priceDiv, ref, Math.max(ref, 1.) * 1.e-1);
 
@@ -520,7 +520,7 @@ public class AmericanVanillaOptionFunctionProviderTest {
                     final int stepsTri = 71;
                     for (final LatticeSpecification latticeTri : latticesTri) {
                       final OptionFunctionProvider1D functionTri = new AmericanVanillaOptionFunctionProvider(strike, TIME, stepsTri, isCall);
-                      final double priceTrinomial = _modelTrinomial.getPrice(latticeTri, functionTri, SPOT, vol, interest, 0.);
+                      final double priceTrinomial = TRINOMIAL.getPrice(latticeTri, functionTri, SPOT, vol, interest, 0.);
                       assertEquals(priceTrinomial, price, Math.max(price, 1.) * 1.e-2);
                     }
                   }
@@ -557,14 +557,14 @@ public class AmericanVanillaOptionFunctionProviderTest {
                   Math.exp(-interest * dividendTimes[2]);
               final OptionFunctionProvider1D function = new AmericanVanillaOptionFunctionProvider(strike, TIME, nSteps, isCall);
 
-              final GreekResultCollection resRes = _model.getGreeks(lattice, function, resSpot, vol, interest, 0.);
-              final GreekResultCollection resMod = _model.getGreeks(lattice, function, modSpot, vol, interest, 0.);
-              final GreekResultCollection resBare = _model.getGreeks(lattice, function, SPOT, vol, interest, 0.);
+              final GreekResultCollection resRes = MODEL.getGreeks(lattice, function, resSpot, vol, interest, 0.);
+              final GreekResultCollection resMod = MODEL.getGreeks(lattice, function, modSpot, vol, interest, 0.);
+              final GreekResultCollection resBare = MODEL.getGreeks(lattice, function, SPOT, vol, interest, 0.);
 
               final DividendFunctionProvider cashDividend = new CashDividendFunctionProvider(dividendTimes, cashDividends);
               final DividendFunctionProvider propDividend = new ProportionalDividendFunctionProvider(dividendTimes, propDividends);
-              final GreekResultCollection resProp = _model.getGreeks(lattice, function, SPOT, vol, interest, propDividend);
-              final GreekResultCollection resCash = _model.getGreeks(lattice, function, SPOT, vol, interest, cashDividend);
+              final GreekResultCollection resProp = MODEL.getGreeks(lattice, function, SPOT, vol, interest, propDividend);
+              final GreekResultCollection resCash = MODEL.getGreeks(lattice, function, SPOT, vol, interest, cashDividend);
 
               final double refPriceProp = Math.abs(resProp.get(Greek.FAIR_PRICE) - resRes.get(Greek.FAIR_PRICE)) > Math.abs(resProp.get(Greek.FAIR_PRICE) - resBare.get(Greek.FAIR_PRICE)) ? resBare
                   .get(Greek.FAIR_PRICE) : resRes.get(Greek.FAIR_PRICE);
@@ -598,8 +598,8 @@ public class AmericanVanillaOptionFunctionProviderTest {
                 final int stepsTri = 11;
                 for (final LatticeSpecification latticeTri : latticesTri) {
                   final OptionFunctionProvider1D functionTri = new AmericanVanillaOptionFunctionProvider(strike, TIME, stepsTri, isCall);
-                  final GreekResultCollection resPropTrinomial = _modelTrinomial.getGreeks(latticeTri, functionTri, SPOT, vol, interest, propDividend);
-                  final GreekResultCollection resCashTrinomial = _modelTrinomial.getGreeks(latticeTri, functionTri, SPOT, vol, interest, cashDividend);
+                  final GreekResultCollection resPropTrinomial = TRINOMIAL.getGreeks(latticeTri, functionTri, SPOT, vol, interest, propDividend);
+                  final GreekResultCollection resCashTrinomial = TRINOMIAL.getGreeks(latticeTri, functionTri, SPOT, vol, interest, cashDividend);
 
                   assertEquals(resPropTrinomial.get(Greek.FAIR_PRICE), resProp.get(Greek.FAIR_PRICE), Math.max(1., Math.abs(resProp.get(Greek.FAIR_PRICE))) * 1.e-1);
                   assertEquals(resPropTrinomial.get(Greek.DELTA), resProp.get(Greek.DELTA), Math.max(1., Math.abs(resProp.get(Greek.DELTA))) * 1.e-1);

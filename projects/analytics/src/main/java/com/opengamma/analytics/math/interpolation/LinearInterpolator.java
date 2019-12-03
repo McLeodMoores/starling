@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -15,9 +15,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
- * Interpolate consecutive two points by a straight line
- * Note that this interpolator is NOT included in {@link Interpolator1DFactory} 
- * Use {@link LinearInterpolator1D} for node sensitivity
+ * Interpolate consecutive two points by a straight line. Note that this interpolator is NOT included in {@link Interpolator1DFactory} Use
+ * {@link LinearInterpolator1D} for node sensitivity
  */
 public class LinearInterpolator extends PiecewisePolynomialInterpolator {
 
@@ -47,8 +46,8 @@ public class LinearInterpolator extends PiecewisePolynomialInterpolator {
       }
     }
 
-    double[] xValuesSrt = Arrays.copyOf(xValues, nDataPts);
-    double[] yValuesSrt = Arrays.copyOf(yValues, nDataPts);
+    final double[] xValuesSrt = Arrays.copyOf(xValues, nDataPts);
+    final double[] yValuesSrt = Arrays.copyOf(yValues, nDataPts);
     ParallelArrayBinarySort.parallelBinarySort(xValuesSrt, yValuesSrt);
 
     final DoubleMatrix2D coefMatrix = solve(xValuesSrt, yValuesSrt);
@@ -102,11 +101,11 @@ public class LinearInterpolator extends PiecewisePolynomialInterpolator {
     }
 
     double[] xValuesSrt = new double[nDataPts];
-    DoubleMatrix2D[] coefMatrix = new DoubleMatrix2D[dim];
+    final DoubleMatrix2D[] coefMatrix = new DoubleMatrix2D[dim];
 
     for (int i = 0; i < dim; ++i) {
       xValuesSrt = Arrays.copyOf(xValues, nDataPts);
-      double[] yValuesSrt = Arrays.copyOf(yValuesMatrix[i], nDataPts);
+      final double[] yValuesSrt = Arrays.copyOf(yValuesMatrix[i], nDataPts);
       ParallelArrayBinarySort.parallelBinarySort(xValuesSrt, yValuesSrt);
 
       coefMatrix[i] = solve(xValuesSrt, yValuesSrt);
@@ -126,7 +125,7 @@ public class LinearInterpolator extends PiecewisePolynomialInterpolator {
 
     final int nIntervals = coefMatrix[0].getNumberOfRows();
     final int nCoefs = coefMatrix[0].getNumberOfColumns();
-    double[][] resMatrix = new double[dim * nIntervals][nCoefs];
+    final double[][] resMatrix = new double[dim * nIntervals][nCoefs];
 
     for (int i = 0; i < nIntervals; ++i) {
       for (int j = 0; j < dim; ++j) {
@@ -143,15 +142,17 @@ public class LinearInterpolator extends PiecewisePolynomialInterpolator {
   }
 
   /**
-   * @param xValues X values of data
-   * @param yValues Y values of data
+   * @param xValues
+   *          X values of data
+   * @param yValues
+   *          Y values of data
    * @return Coefficient matrix whose i-th row vector is {a1, a0} of f(x) = a1 * (x-x_i) + a0 for the i-th interval
    */
   private DoubleMatrix2D solve(final double[] xValues, final double[] yValues) {
 
     final int nDataPts = xValues.length;
 
-    double[][] res = new double[nDataPts - 1][2];
+    final double[][] res = new double[nDataPts - 1][2];
 
     for (int i = 0; i < nDataPts - 1; ++i) {
       res[i][1] = yValues[i];

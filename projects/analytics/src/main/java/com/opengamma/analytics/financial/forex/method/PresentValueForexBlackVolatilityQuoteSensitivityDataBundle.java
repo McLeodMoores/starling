@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.forex.method;
@@ -38,7 +38,8 @@ public class PresentValueForexBlackVolatilityQuoteSensitivityDataBundle {
    * @param delta The deltas for the vega matrix, not null
    * @param vega The initial sensitivity, not null
    */
-  public PresentValueForexBlackVolatilityQuoteSensitivityDataBundle(final Currency ccy1, final Currency ccy2, final double[] expiries, final double[] delta, final double[][] vega) {
+  public PresentValueForexBlackVolatilityQuoteSensitivityDataBundle(final Currency ccy1, final Currency ccy2, final double[] expiries,
+      final double[] delta, final double[][] vega) {
     Validate.notNull(ccy1, "currency 1");
     Validate.notNull(ccy2, "currency 2");
     Validate.notNull(expiries, "expiries");
@@ -88,7 +89,7 @@ public class PresentValueForexBlackVolatilityQuoteSensitivityDataBundle {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -98,7 +99,7 @@ public class PresentValueForexBlackVolatilityQuoteSensitivityDataBundle {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    PresentValueForexBlackVolatilityQuoteSensitivityDataBundle other = (PresentValueForexBlackVolatilityQuoteSensitivityDataBundle) obj;
+    final PresentValueForexBlackVolatilityQuoteSensitivityDataBundle other = (PresentValueForexBlackVolatilityQuoteSensitivityDataBundle) obj;
     if (!ObjectUtils.equals(_currencyPair, other._currencyPair)) {
       return false;
     }

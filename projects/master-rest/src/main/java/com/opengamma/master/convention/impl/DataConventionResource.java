@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.convention.impl;
@@ -53,8 +53,10 @@ public class DataConventionResource extends AbstractDocumentDataResource<Convent
   /**
    * Creates the resource.
    *
-   * @param conventionsResource  the parent resource, not null
-   * @param conventionId  the convention unique identifier, not null
+   * @param conventionsResource
+   *          the parent resource, not null
+   * @param conventionId
+   *          the convention unique identifier, not null
    */
   public DataConventionResource(final DataConventionMasterResource conventionsResource, final ObjectId conventionId) {
     ArgumentChecker.notNull(conventionsResource, "conventionsResource");
@@ -63,7 +65,7 @@ public class DataConventionResource extends AbstractDocumentDataResource<Convent
     _urlResourceId = conventionId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the conventions resource.
    *
@@ -78,66 +80,75 @@ public class DataConventionResource extends AbstractDocumentDataResource<Convent
    *
    * @return the unique identifier, not null
    */
+  @Override
   public ObjectId getUrlId() {
     return _urlResourceId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the convention master.
    *
    * @return the convention master, not null
    */
+  @Override
   public ConventionMaster getMaster() {
     return getConventionsResource().getConventionMaster();
   }
 
   @GET
   @Path("versions")
-  public Response history(@Context UriInfo uriInfo) {
-    ConventionHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, ConventionHistoryRequest.class);
-    if (getUrlId().equals(request.getObjectId()) == false) {
+  public Response history(@Context final UriInfo uriInfo) {
+    final ConventionHistoryRequest request = RestUtils.decodeQueryParams(uriInfo, ConventionHistoryRequest.class);
+    if (!getUrlId().equals(request.getObjectId())) {
       throw new IllegalArgumentException("Document objectId does not match URI");
     }
-    ConventionHistoryResult result = getMaster().history(request);
+    final ConventionHistoryResult result = getMaster().history(request);
     return responseOkObject(result);
   }
 
+  @Override
   @GET
-  public Response get(@QueryParam("versionAsOf") String versionAsOf, @QueryParam("correctedTo") String correctedTo) {
+  public Response get(@QueryParam("versionAsOf") final String versionAsOf, @QueryParam("correctedTo") final String correctedTo) {
     return super.get(versionAsOf, correctedTo);
   }
 
+  @Override
   @POST
-  public Response update(@Context UriInfo uriInfo, ConventionDocument request) {
+  public Response update(@Context final UriInfo uriInfo, final ConventionDocument request) {
     return super.update(uriInfo, request);
   }
 
+  @Override
   @DELETE
   public void remove() {
     super.remove();
   }
 
+  @Override
   @GET
   @Path("versions/{versionId}")
-  public Response getVersioned(@PathParam("versionId") String versionId) {
+  public Response getVersioned(@PathParam("versionId") final String versionId) {
     return super.getVersioned(versionId);
   }
 
+  @Override
   @PUT
   @Path("versions/{versionId}")
-  public Response replaceVersion(@PathParam("versionId") String versionId, List<ConventionDocument> replacementDocuments) {
+  public Response replaceVersion(@PathParam("versionId") final String versionId, final List<ConventionDocument> replacementDocuments) {
     return super.replaceVersion(versionId, replacementDocuments);
   }
 
+  @Override
   @PUT
-  public Response replaceVersions(List<ConventionDocument> replacementDocuments) {
+  public Response replaceVersions(final List<ConventionDocument> replacementDocuments) {
     return super.replaceVersions(replacementDocuments);
   }
 
+  @Override
   @PUT
   @Path("all")
-  public Response replaceAllVersions(List<ConventionDocument> replacementDocuments) {
+  public Response replaceAllVersions(final List<ConventionDocument> replacementDocuments) {
     return super.replaceAllVersions(replacementDocuments);
   }
 

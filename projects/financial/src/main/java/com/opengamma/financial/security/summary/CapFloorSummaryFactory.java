@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.summary;
@@ -18,7 +18,7 @@ public class CapFloorSummaryFactory implements SummaryFactory<CapFloorSecurity> 
   }
 
   @Override
-  public Summary getSummary(CapFloorSecurity security) {
+  public Summary getSummary(final CapFloorSecurity security) {
     return SummaryBuilder.create(security)
         .with(SummaryField.START, security.startDate())
         .with(SummaryField.MATURITY, security.getMaturityDate())

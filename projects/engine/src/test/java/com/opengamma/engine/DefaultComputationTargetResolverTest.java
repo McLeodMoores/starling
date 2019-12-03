@@ -90,7 +90,8 @@ public class DefaultComputationTargetResolverTest {
     final MockPositionSource posSource = new MockPositionSource();
     final SimplePortfolio portfolio = new SimplePortfolio(UniqueId.of("Test", "1"), "Name");
     final SimplePosition position = new SimplePosition(UniqueId.of("Test", "1"), new BigDecimal(1), ExternalIdBundle.EMPTY);
-    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(), new BigDecimal(1), new SimpleCounterparty(ExternalId.of("CPARTY", "C100")), now.toLocalDate(), now.toOffsetTime());
+    final SimpleTrade trade = new SimpleTrade(new SimpleSecurityLink(), new BigDecimal(1),
+        new SimpleCounterparty(ExternalId.of("CPARTY", "C100")), now.toLocalDate(), now.toOffsetTime());
     trade.setUniqueId(UniqueId.of("TradeScheme", "1"));
     position.addTrade(trade);
     portfolio.getRootNode().addPosition(position);
@@ -133,8 +134,10 @@ public class DefaultComputationTargetResolverTest {
     final InMemorySecuritySource secSource = new InMemorySecuritySource();
     final MockPositionSource posSource = new MockPositionSource();
     final DefaultComputationTargetResolver test = new DefaultComputationTargetResolver(secSource, posSource);
-    final ComputationTargetSpecification spec = new ComputationTargetSpecification(ComputationTargetType.UNORDERED_CURRENCY_PAIR, UniqueId.of("UnorderedCurrencyPair", "EURGBP"));
-    final ComputationTarget expected = new ComputationTarget(ComputationTargetType.UNORDERED_CURRENCY_PAIR, UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR));
+    final ComputationTargetSpecification spec =
+        new ComputationTargetSpecification(ComputationTargetType.UNORDERED_CURRENCY_PAIR, UniqueId.of("UnorderedCurrencyPair", "EURGBP"));
+    final ComputationTarget expected =
+        new ComputationTarget(ComputationTargetType.UNORDERED_CURRENCY_PAIR, UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR));
     assertExpected(expected, test.resolve(spec, VersionCorrection.LATEST));
   }
 
@@ -169,11 +172,14 @@ public class DefaultComputationTargetResolverTest {
     assertEquals(test.simplifyType(ComputationTargetType.SECURITY), ComputationTargetType.SECURITY);
     assertEquals(test.simplifyType(ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION).containing(ComputationTargetType.SECURITY)),
         ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION).containing(ComputationTargetType.SECURITY));
-    assertEquals(test.simplifyType(ComputationTargetType.TRADE.or(ComputationTargetType.SECURITY)), ComputationTargetType.TRADE.or(ComputationTargetType.SECURITY));
+    assertEquals(test.simplifyType(ComputationTargetType.TRADE.or(ComputationTargetType.SECURITY)),
+        ComputationTargetType.TRADE.or(ComputationTargetType.SECURITY));
     // Changes
-    assertEquals(test.simplifyType(ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION).containing(ComputationTargetType.of(SimpleSecurity.class))),
+    assertEquals(test.simplifyType(ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION)
+        .containing(ComputationTargetType.of(SimpleSecurity.class))),
         ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION).containing(ComputationTargetType.SECURITY));
-    assertEquals(test.simplifyType(ComputationTargetType.TRADE.or(ComputationTargetType.of(SimpleSecurity.class))), ComputationTargetType.TRADE.or(ComputationTargetType.SECURITY));
+    assertEquals(test.simplifyType(ComputationTargetType.TRADE.or(ComputationTargetType.of(SimpleSecurity.class))),
+        ComputationTargetType.TRADE.or(ComputationTargetType.SECURITY));
   }
 
   public void test_typeProvider_getSimple() {

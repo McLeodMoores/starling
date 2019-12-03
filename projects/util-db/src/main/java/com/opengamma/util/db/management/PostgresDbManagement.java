@@ -23,7 +23,8 @@ public final class PostgresDbManagement extends AbstractDbManagement {
    * SQL to retrieve all the columns.
    */
   private static final String GET_ALL_COLUMNS_SQL =
-    "SELECT column_name AS name,data_type AS datatype,is_nullable AS allowsnull,column_default AS defaultvalue FROM information_schema.columns WHERE table_catalog='";
+    "SELECT column_name AS name,data_type AS datatype,is_nullable AS allowsnull,"
+    + "column_default AS defaultvalue FROM information_schema.columns WHERE table_catalog='";
   /**
    * The Postgres default schema.
    */
@@ -46,7 +47,7 @@ public final class PostgresDbManagement extends AbstractDbManagement {
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static PostgresDbManagement getInstance() {
@@ -75,88 +76,93 @@ public final class PostgresDbManagement extends AbstractDbManagement {
 
   //-------------------------------------------------------------------------
   @Override
-  public String getAllSchemasSQL(String catalog) {
+  public String getAllSchemasSQL(final String catalog) {
     return "SELECT nspname AS name from pg_namespace";
   }
 
   @Override
-  public String getAllForeignKeyConstraintsSQL(String catalog, String schema) {
-    if (schema == null) {
-      schema = POSTGRES_DEFAULT_SCHEMA;
+  public String getAllForeignKeyConstraintsSQL(final String catalog, final String schema) {
+    String constraintSchema = schema;
+    if (constraintSchema == null) {
+      constraintSchema = POSTGRES_DEFAULT_SCHEMA;
     }
-    String sql = "SELECT constraint_name AS name, table_name FROM information_schema.table_constraints WHERE " +
-      "constraint_catalog = '" + catalog + "' AND constraint_schema = '" + schema + "'" + " AND constraint_type = 'FOREIGN KEY'";
+    final String sql = "SELECT constraint_name AS name, table_name FROM information_schema.table_constraints WHERE "
+      + "constraint_catalog = '" + catalog + "' AND constraint_schema = '" + constraintSchema + "'" + " AND constraint_type = 'FOREIGN KEY'";
     return sql;
   }
 
   @Override
-  public String getAllSequencesSQL(String catalog, String schema) {
-    if (schema == null) {
-      schema = POSTGRES_DEFAULT_SCHEMA;
+  public String getAllSequencesSQL(final String catalog, final String schema) {
+    String sequenceSchema = schema;
+    if (sequenceSchema == null) {
+      sequenceSchema = POSTGRES_DEFAULT_SCHEMA;
     }
-    String sql = "SELECT sequence_name AS name FROM information_schema.sequences WHERE " +
-      "sequence_catalog = '" + catalog + "'" + " AND sequence_schema = '" + schema + "'";
+    final String sql = "SELECT sequence_name AS name FROM information_schema.sequences WHERE "
+      + "sequence_catalog = '" + catalog + "'" + " AND sequence_schema = '" + sequenceSchema + "'";
     return sql;
   }
 
   @Override
-  public String getAllTablesSQL(String catalog, String schema) {
-    if (schema == null) {
-      schema = POSTGRES_DEFAULT_SCHEMA;
+  public String getAllTablesSQL(final String catalog, final String schema) {
+    String tableSchema = schema;
+    if (tableSchema == null) {
+      tableSchema = POSTGRES_DEFAULT_SCHEMA;
     }
-    String sql = "SELECT table_name AS name FROM information_schema.tables WHERE " +
-      "table_catalog = '" + catalog + "'" + " AND table_schema = '" + schema + "' AND table_type = 'BASE TABLE'";
+    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE "
+      + "table_catalog = '" + catalog + "'" + " AND table_schema = '" + tableSchema + "' AND table_type = 'BASE TABLE'";
     return sql;
   }
 
   @Override
-  public String getAllViewsSQL(String catalog, String schema) {
-    if (schema == null) {
-      schema = POSTGRES_DEFAULT_SCHEMA;
+  public String getAllViewsSQL(final String catalog, final String schema) {
+    String tableSchema = schema;
+    if (tableSchema == null) {
+      tableSchema = POSTGRES_DEFAULT_SCHEMA;
     }
-    String sql = "SELECT table_name AS name FROM information_schema.tables WHERE " +
-      "table_catalog = '" + catalog + "'" + " AND table_schema = '" + schema + "' AND table_type = 'VIEW'";
+    final String sql = "SELECT table_name AS name FROM information_schema.tables WHERE "
+      + "table_catalog = '" + catalog + "'" + " AND table_schema = '" + tableSchema + "' AND table_type = 'VIEW'";
     return sql;
   }
 
   @Override
-  public String getAllColumnsSQL(String catalog, String schema, String table) {
-    if (schema == null) {
-      schema = POSTGRES_DEFAULT_SCHEMA;
+  public String getAllColumnsSQL(final String catalog, final String schema, final String table) {
+    String tableSchema = schema;
+    if (tableSchema == null) {
+      tableSchema = POSTGRES_DEFAULT_SCHEMA;
     }
-    StringBuilder sql = new StringBuilder(GET_ALL_COLUMNS_SQL);
-    sql.append(catalog).append("' AND table_schema='").append(schema).append("' AND table_name='");
+    final StringBuilder sql = new StringBuilder(GET_ALL_COLUMNS_SQL);
+    sql.append(catalog).append("' AND table_schema='").append(tableSchema).append("' AND table_name='");
     sql.append(table).append("'");
     return sql.toString();
   }
 
   @Override
-  public String getCreateSchemaSQL(String catalog, String schema) {
+  public String getCreateSchemaSQL(final String catalog, final String schema) {
     return "CREATE SCHEMA " + schema;
   }
-  
+
   @Override
-  public String getSchemaVersionTable(String schemaGroupName) {
+  public String getSchemaVersionTable(final String schemaGroupName) {
     return (schemaGroupName + SCHEMA_VERSION_TABLE_SUFFIX).toLowerCase();
   }
 
   @Override
-  public String getSchemaVersionSQL(String catalog, String schemaGroupName) {
+  public String getSchemaVersionSQL(final String catalog, final String schemaGroupName) {
     return "SELECT version_value FROM " + getSchemaVersionTable(schemaGroupName) + " WHERE version_key = 'schema_patch'";
   }
 
   @Override
   public CatalogCreationStrategy getCatalogCreationStrategy() {
     return new SQLCatalogCreationStrategy(
-        this, 
-        getUser(), 
-        getPassword(), 
+        this,
+        getUser(),
+        getPassword(),
         "SELECT datname AS name FROM pg_database",
         "template1");
   }
 
   @Override
-  public void dropSchema(String catalog, String schema) {
+  public void dropSchema(final String catalog, final String schema) {
     if (schema != null) {
       super.dropSchema(catalog, schema);
     } else {
@@ -164,13 +170,13 @@ public final class PostgresDbManagement extends AbstractDbManagement {
         if (!getCatalogCreationStrategy().catalogExists(catalog)) {
           return;
         }
-        Connection conn = connect(catalog);
-        Statement statement = conn.createStatement();
+        final Connection conn = connect(catalog);
+        final Statement statement = conn.createStatement();
         //TODO default schema
         statement.executeUpdate("DROP SCHEMA IF EXISTS public CASCADE;CREATE SCHEMA public;");
         statement.close();
         conn.close();
-      } catch (SQLException se) {
+      } catch (final SQLException se) {
         throw new OpenGammaRuntimeException("Failed to drop the default schema", se);
       }
     }

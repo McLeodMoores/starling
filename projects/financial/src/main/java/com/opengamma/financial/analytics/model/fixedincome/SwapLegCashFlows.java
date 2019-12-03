@@ -6,7 +6,7 @@
 package com.opengamma.financial.analytics.model.fixedincome;
 
 /**
- * Container for the relevant details for pricing a swap leg
+ * Container for the relevant details for pricing a swap leg.
  */
 public interface SwapLegCashFlows {
 

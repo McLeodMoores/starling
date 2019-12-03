@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.convention;
 
@@ -20,8 +20,8 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
 /**
- * Base class for future conventions that contain sufficient meta-data to create a
- * {@link com.opengamma.financial.security.future.FutureSecurity} from Quandl data.
+ * Base class for future conventions that contain sufficient meta-data to create a {@link com.opengamma.financial.security.future.FutureSecurity} from Quandl
+ * data.
  */
 @BeanDefinition
 public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
@@ -79,15 +79,22 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
   }
 
   /**
-   * Creates an instance with the settlement exchange and trading exchange name created by parsing
-   * the Quandl code.
-   * @param name The name of the convention, not null
-   * @param externalIdBundle The ids associated with this convention, not null
-   * @param lastTradeTime The last trade time on the last trade date of the future, not null
-   * @param zoneOffsetId The time zone of the exchange
-   * @param unitAmount The unit amount of the future
-   * @param underlyingConventionId The id of the underlying index convention, not null
-   * @param tradingExchangeCalendarId  the trading exchange holiday calendar id, not null
+   * Creates an instance with the settlement exchange and trading exchange name created by parsing the Quandl code.
+   * 
+   * @param name
+   *          The name of the convention, not null
+   * @param externalIdBundle
+   *          The ids associated with this convention, not null
+   * @param lastTradeTime
+   *          The last trade time on the last trade date of the future, not null
+   * @param zoneOffsetId
+   *          The time zone of the exchange
+   * @param unitAmount
+   *          The unit amount of the future
+   * @param underlyingConventionId
+   *          The id of the underlying index convention, not null
+   * @param tradingExchangeCalendarId
+   *          the trading exchange holiday calendar id, not null
    */
   public QuandlFutureConvention(final String name, final ExternalIdBundle externalIdBundle, final String lastTradeTime, final String zoneOffsetId,
       final double unitAmount, final ExternalId underlyingConventionId, final ExternalId tradingExchangeCalendarId) {
@@ -104,15 +111,25 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
 
   /**
    * Creates an instance.
-   * @param name The name of the convention, not null
-   * @param externalIdBundle The ids associated with this convention, not null
-   * @param lastTradeTime The last trade time on the last trade date of the future, not null
-   * @param zoneOffsetId The time zone of the exchange
-   * @param unitAmount The unit amount of the future
-   * @param underlyingConventionId The id of the underlying index convention, not null
-   * @param tradingExchange The name of the trading exchange, can be null
-   * @param settlementExchange The name of the settlement exchange, can be null
-   * @param tradingExchangeCalendarId  the trading exchange holiday calendar id, not null
+   * 
+   * @param name
+   *          The name of the convention, not null
+   * @param externalIdBundle
+   *          The ids associated with this convention, not null
+   * @param lastTradeTime
+   *          The last trade time on the last trade date of the future, not null
+   * @param zoneOffsetId
+   *          The time zone of the exchange
+   * @param unitAmount
+   *          The unit amount of the future
+   * @param underlyingConventionId
+   *          The id of the underlying index convention, not null
+   * @param tradingExchange
+   *          The name of the trading exchange, can be null
+   * @param settlementExchange
+   *          The name of the settlement exchange, can be null
+   * @param tradingExchangeCalendarId
+   *          the trading exchange holiday calendar id, not null
    */
   public QuandlFutureConvention(final String name, final ExternalIdBundle externalIdBundle, final String lastTradeTime, final String zoneOffsetId,
       final double unitAmount, final ExternalId underlyingConventionId, final String tradingExchange, final String settlementExchange,
@@ -128,9 +145,9 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
   }
 
   /**
-   * Gets the trading exchange. If this has not been supplied, returns the string before
-   * the "/" in the Quandl code, or null if there is no id in the bundle with scheme
-   * {@link QuandlConstants#QUANDL_CODE}.
+   * Gets the trading exchange. If this has not been supplied, returns the string before the "/" in the Quandl code, or null if there is no id in the bundle
+   * with scheme {@link QuandlConstants#QUANDL_CODE}.
+   * 
    * @return The name of the trading exchange
    */
   public String getTradingExchange() {
@@ -141,9 +158,9 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
   }
 
   /**
-   * Gets the settlement exchange. If this has not been supplied, returns the string before
-   * the "/" in the Quandl code, or null if there is no id in the bundle with scheme
-   * {@link QuandlConstants#QUANDL_CODE}.
+   * Gets the settlement exchange. If this has not been supplied, returns the string before the "/" in the Quandl code, or null if there is no id in the bundle
+   * with scheme {@link QuandlConstants#QUANDL_CODE}.
+   * 
    * @return The name of the settlement exchange
    */
   public String getSettlementExchange() {
@@ -154,9 +171,11 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
   }
 
   /**
-   * Returns the string before the first "/" in the Quandl code, which is used as the name of the exchange,
-   * or null if there is no id in the bundle with scheme {@link QuandlConstants#QUANDL_CODE}.
-   * @param idBundle The ids associated with this convention
+   * Returns the string before the first "/" in the Quandl code, which is used as the name of the exchange, or null if there is no id in the bundle with scheme
+   * {@link QuandlConstants#QUANDL_CODE}.
+   * 
+   * @param idBundle
+   *          The ids associated with this convention
    * @return The exchange code
    */
   private static String getExchangeFromCode(final ExternalIdBundle idBundle) {

@@ -36,7 +36,7 @@ public class FxExpiry {
     return _expiryDate;
   }
 
-  public void setExpiryDate(LocalDate expiryDate) {
+  public void setExpiryDate(final LocalDate expiryDate) {
     _expiryDate = expiryDate;
   }
 
@@ -44,7 +44,7 @@ public class FxExpiry {
     return _expiryCutoff;
   }
 
-  public void setExpiryCutoff(String expiryCutoff) {
+  public void setExpiryCutoff(final String expiryCutoff) {
     _expiryCutoff = expiryCutoff;
   }
 
@@ -52,7 +52,7 @@ public class FxExpiry {
     return _expiryCalendars;
   }
 
-  public void setExpiryCalendars(Set<Calendar> expiryCalendars) {
+  public void setExpiryCalendars(final Set<Calendar> expiryCalendars) {
     _expiryCalendars = expiryCalendars;
   }
 }

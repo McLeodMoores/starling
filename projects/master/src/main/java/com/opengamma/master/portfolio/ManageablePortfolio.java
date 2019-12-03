@@ -43,7 +43,7 @@ public class ManageablePortfolio extends DirectBean implements MutableUniqueIden
    * The portfolio tree unique identifier.
    * This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The portfolio tree name.
@@ -61,7 +61,7 @@ public class ManageablePortfolio extends DirectBean implements MutableUniqueIden
    * The general purpose portfolio attributes.
    */
   @PropertyDefinition
-  private final Map<String, String> _attributes = new HashMap<String, String>();
+  private final Map<String, String> _attributes = new HashMap<>();
 
   /**
    * Creates a portfolio.
@@ -71,7 +71,7 @@ public class ManageablePortfolio extends DirectBean implements MutableUniqueIden
 
   /**
    * Creates a portfolio specifying the name.
-   * 
+   *
    * @param name  the name, not null
    */
   public ManageablePortfolio(final String name) {
@@ -81,7 +81,7 @@ public class ManageablePortfolio extends DirectBean implements MutableUniqueIden
 
   /**
    * Creates a portfolio specifying the name and root node.
-   * 
+   *
    * @param name  the name, not null
    * @param rootNode  the root node, not null
    */
@@ -91,15 +91,15 @@ public class ManageablePortfolio extends DirectBean implements MutableUniqueIden
     setName(name);
     setRootNode(rootNode);
   }
-  
+
   //-------------------------------------------------------------------------
   /**
-   * Adds a key value pair to attributes
-   * 
+   * Adds a key value pair to attributes.
+   *
    * @param key  the key to add, not null
    * @param value  the value to add, not null
    */
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
@@ -130,6 +130,7 @@ public class ManageablePortfolio extends DirectBean implements MutableUniqueIden
    * This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -139,6 +140,7 @@ public class ManageablePortfolio extends DirectBean implements MutableUniqueIden
    * This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }

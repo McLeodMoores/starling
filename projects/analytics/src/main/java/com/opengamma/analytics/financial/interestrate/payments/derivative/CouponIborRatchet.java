@@ -14,25 +14,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a Ratchet on Ibor coupon. The coupon payment depends on the
- * previous coupon ($C_{i-1}$), the current Ibor fixing ($L_i$). The pay-off is:
- * $$
- * \begin{equation*}
- * \alpha^M_i C_{i-1} + \beta^M_i L_i + \gamma^M_i
- * \end{equation*}
- * $$
- * subject to the floor:
- * $$
- * \begin{equation*}
- * \alpha^F_i C_{i-1} + \beta^F_i L_i + \gamma^F_i
- * \end{equation*}
- * $$
- * and the cap:
- * $$
- * \begin{equation*}
- * \alpha^C_i C_{i-1} + \beta^C_i L_i + \gamma^C_i
- * \end{equation*}
- * $$
+ * Class describing a Ratchet on Ibor coupon. The coupon payment depends on the previous coupon ($C_{i-1}$), the current Ibor fixing ($L_i$). The pay-off is: $$
+ * \begin{equation*} \alpha^M_i C_{i-1} + \beta^M_i L_i + \gamma^M_i \end{equation*} $$ subject to the floor: $$ \begin{equation*} \alpha^F_i C_{i-1} +
+ * \beta^F_i L_i + \gamma^F_i \end{equation*} $$ and the cap: $$ \begin{equation*} \alpha^C_i C_{i-1} + \beta^C_i L_i + \gamma^C_i \end{equation*} $$
  */
 public class CouponIborRatchet extends CouponIborSpread {
 
@@ -42,45 +26,60 @@ public class CouponIborRatchet extends CouponIborSpread {
   private final IborIndex _index;
   // TODO: move the index to CouponIbor
   /**
-   * The coefficients of the main payment (before floor and cap). Array of length 3. The first coefficient is the previous coupon factor,
-   * the second is the Ibor factor and the third is the additive term.
+   * The coefficients of the main payment (before floor and cap). Array of length 3. The first coefficient is the previous coupon factor, the second is the Ibor
+   * factor and the third is the additive term.
    */
   private final double[] _mainCoefficients;
   /**
-   * The coefficients of the floor. Array of length 3. The first coefficient is the previous coupon factor,
-   * the second is the Ibor factor and the third is the additive term.
+   * The coefficients of the floor. Array of length 3. The first coefficient is the previous coupon factor, the second is the Ibor factor and the third is the
+   * additive term.
    */
   private final double[] _floorCoefficients;
   /**
-   * The coefficients of the cap. Array of length 3. The first coefficient is the previous coupon factor,
-   * the second is the Ibor factor and the third is the additive term.
+   * The coefficients of the cap. Array of length 3. The first coefficient is the previous coupon factor, the second is the Ibor factor and the third is the
+   * additive term.
    */
   private final double[] _capCoefficients;
 
   /**
    * Constructor from all the details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param discountingCurveName The name of the discounting curve.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param fixingTime Time (in years) up to fixing.
-   * @param fixingPeriodStartTime Time (in years) up to the start of the fixing period.
-   * @param fixingPeriodEndTime Time (in years) up to the end of the fixing period.
-   * @param fixingYearFraction The year fraction (or accrual factor) for the fixing period.
-   * @param forwardCurveName The name of the forward curve.
-   * @param index The coupon Ibor index. Should of the same currency as the payment.
-   * @param mainCoefficients The coefficients of the main payment (before floor and cap). Array of length 3.
-   * @param floorCoefficients The coefficients of the floor. Array of length 3.
-   * @param capCoefficients The coefficients of the cap. Array of length 3.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param discountingCurveName
+   *          The name of the discounting curve.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingTime
+   *          Time (in years) up to fixing.
+   * @param fixingPeriodStartTime
+   *          Time (in years) up to the start of the fixing period.
+   * @param fixingPeriodEndTime
+   *          Time (in years) up to the end of the fixing period.
+   * @param fixingYearFraction
+   *          The year fraction (or accrual factor) for the fixing period.
+   * @param forwardCurveName
+   *          The name of the forward curve.
+   * @param index
+   *          The coupon Ibor index. Should of the same currency as the payment.
+   * @param mainCoefficients
+   *          The coefficients of the main payment (before floor and cap). Array of length 3.
+   * @param floorCoefficients
+   *          The coefficients of the floor. Array of length 3.
+   * @param capCoefficients
+   *          The coefficients of the cap. Array of length 3.
    * @deprecated Use the constructor that does not take yield curve names.
    */
   @Deprecated
   public CouponIborRatchet(final Currency currency, final double paymentTime, final String discountingCurveName, final double paymentYearFraction,
-      final double notional, final double fixingTime, final double fixingPeriodStartTime,
-      final double fixingPeriodEndTime, final double fixingYearFraction, final String forwardCurveName, final IborIndex index, final double[] mainCoefficients,
-      final double[] floorCoefficients, final double[] capCoefficients) {
-    super(currency, paymentTime, discountingCurveName, paymentYearFraction, notional, fixingTime, index, fixingPeriodStartTime, fixingPeriodEndTime, fixingYearFraction, 0.0, forwardCurveName);
+      final double notional, final double fixingTime, final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingYearFraction,
+      final String forwardCurveName, final IborIndex index, final double[] mainCoefficients, final double[] floorCoefficients, final double[] capCoefficients) {
+    super(currency, paymentTime, discountingCurveName, paymentYearFraction, notional, fixingTime, index, fixingPeriodStartTime, fixingPeriodEndTime,
+        fixingYearFraction, 0.0, forwardCurveName);
     ArgumentChecker.notNull(index, "Index");
     ArgumentChecker.notNull(mainCoefficients, "Main coefficients");
     ArgumentChecker.notNull(floorCoefficients, "Floor coefficients");
@@ -96,21 +95,35 @@ public class CouponIborRatchet extends CouponIborSpread {
 
   /**
    * Constructor from all the details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param fixingTime Time (in years) up to fixing.
-   * @param fixingPeriodStartTime Time (in years) up to the start of the fixing period.
-   * @param fixingPeriodEndTime Time (in years) up to the end of the fixing period.
-   * @param fixingYearFraction The year fraction (or accrual factor) for the fixing period.
-   * @param index The coupon Ibor index. Should of the same currency as the payment.
-   * @param mainCoefficients The coefficients of the main payment (before floor and cap). Array of length 3.
-   * @param floorCoefficients The coefficients of the floor. Array of length 3.
-   * @param capCoefficients The coefficients of the cap. Array of length 3.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          Coupon notional.
+   * @param fixingTime
+   *          Time (in years) up to fixing.
+   * @param fixingPeriodStartTime
+   *          Time (in years) up to the start of the fixing period.
+   * @param fixingPeriodEndTime
+   *          Time (in years) up to the end of the fixing period.
+   * @param fixingYearFraction
+   *          The year fraction (or accrual factor) for the fixing period.
+   * @param index
+   *          The coupon Ibor index. Should of the same currency as the payment.
+   * @param mainCoefficients
+   *          The coefficients of the main payment (before floor and cap). Array of length 3.
+   * @param floorCoefficients
+   *          The coefficients of the floor. Array of length 3.
+   * @param capCoefficients
+   *          The coefficients of the cap. Array of length 3.
    */
-  public CouponIborRatchet(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final double fixingTime, final double fixingPeriodStartTime,
-      final double fixingPeriodEndTime, final double fixingYearFraction, final IborIndex index, final double[] mainCoefficients, final double[] floorCoefficients, final double[] capCoefficients) {
+  public CouponIborRatchet(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final double fixingTime,
+      final double fixingPeriodStartTime, final double fixingPeriodEndTime, final double fixingYearFraction, final IborIndex index,
+      final double[] mainCoefficients, final double[] floorCoefficients, final double[] capCoefficients) {
     super(currency, paymentTime, paymentYearFraction, notional, fixingTime, index, fixingPeriodStartTime, fixingPeriodEndTime, fixingYearFraction, 0.0);
     ArgumentChecker.notNull(index, "Index");
     ArgumentChecker.notNull(mainCoefficients, "Main coefficients");
@@ -127,6 +140,7 @@ public class CouponIborRatchet extends CouponIborSpread {
 
   /**
    * Gets the coefficients of the main payment (before floor and cap).
+   * 
    * @return The coefficients of the main payment (before floor and cap).
    */
   public double[] getMainCoefficients() {
@@ -135,6 +149,7 @@ public class CouponIborRatchet extends CouponIborSpread {
 
   /**
    * Gets the coefficients of the floor.
+   * 
    * @return The coefficients of the floor.
    */
   public double[] getFloorCoefficients() {
@@ -143,6 +158,7 @@ public class CouponIborRatchet extends CouponIborSpread {
 
   /**
    * Gets the coefficients of the cap.
+   * 
    * @return The coefficients of the cap.
    */
   public double[] getCapCoefficients() {
@@ -153,8 +169,9 @@ public class CouponIborRatchet extends CouponIborSpread {
   @Override
   public CouponIborRatchet withNotional(final double notional) {
     try {
-      return new CouponIborRatchet(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, getFixingTime(), getFixingPeriodStartTime(),
-          getFixingPeriodEndTime(), getFixingAccrualFactor(), getForwardCurveName(), _index, _mainCoefficients, _floorCoefficients, _capCoefficients);
+      return new CouponIborRatchet(getCurrency(), getPaymentTime(), getFundingCurveName(), getPaymentYearFraction(), notional, getFixingTime(),
+          getFixingPeriodStartTime(), getFixingPeriodEndTime(), getFixingAccrualFactor(), getForwardCurveName(), _index, _mainCoefficients, _floorCoefficients,
+          _capCoefficients);
     } catch (final IllegalStateException e) {
       return new CouponIborRatchet(getCurrency(), getPaymentTime(), getPaymentYearFraction(), notional, getFixingTime(), getFixingPeriodStartTime(),
           getFixingPeriodEndTime(), getFixingAccrualFactor(), _index, _mainCoefficients, _floorCoefficients, _capCoefficients);
@@ -167,7 +184,7 @@ public class CouponIborRatchet extends CouponIborSpread {
     int result = super.hashCode();
     result = prime * result + Arrays.hashCode(_capCoefficients);
     result = prime * result + Arrays.hashCode(_floorCoefficients);
-    result = prime * result + ((_index == null) ? 0 : _index.hashCode());
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
     result = prime * result + Arrays.hashCode(_mainCoefficients);
     return result;
   }

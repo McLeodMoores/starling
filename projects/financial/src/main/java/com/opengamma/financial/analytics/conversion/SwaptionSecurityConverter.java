@@ -35,11 +35,13 @@ public class SwaptionSecurityConverter extends FinancialSecurityVisitorAdapter<I
   private final InterestRateSwapSecurityConverter _irsSwapConverter;
 
   /**
-   * @param swapConverter the underlying swap converter (for old-style swaps), not null
-   * @param irsConverter the underlying swap converter (for new-style IRSs), not null
+   * @param swapConverter
+   *          the underlying swap converter (for old-style swaps), not null
+   * @param irsConverter
+   *          the underlying swap converter (for new-style IRSs), not null
    */
   public SwaptionSecurityConverter(final SwapSecurityConverter swapConverter,
-                                   final InterestRateSwapSecurityConverter irsConverter) {
+      final InterestRateSwapSecurityConverter irsConverter) {
 
     _swapConverter = ArgumentChecker.notNull(swapConverter, "swapConverter");
     _irsSwapConverter = ArgumentChecker.notNull(irsConverter, "irsConverter");
@@ -76,27 +78,22 @@ public class SwaptionSecurityConverter extends FinancialSecurityVisitorAdapter<I
 
       if (swapDefinition instanceof SwapFixedCompoundedONCompoundedDefinition) {
 
-        final SwapFixedCompoundedONCompoundedDefinition onSwapDefinition =
-            (SwapFixedCompoundedONCompoundedDefinition) swapDefinition;
-        return isCashSettled ?
-            SwaptionCashFixedCompoundedONCompoundingDefinition.from(expiry, onSwapDefinition, isCall, isLong) :
-            SwaptionPhysicalFixedCompoundedONCompoundedDefinition.from(expiry, onSwapDefinition, isCall, isLong);
+        final SwapFixedCompoundedONCompoundedDefinition onSwapDefinition = (SwapFixedCompoundedONCompoundedDefinition) swapDefinition;
+        return isCashSettled
+            ? SwaptionCashFixedCompoundedONCompoundingDefinition.from(expiry, onSwapDefinition, isCall, isLong)
+            : SwaptionPhysicalFixedCompoundedONCompoundedDefinition.from(expiry, onSwapDefinition, isCall, isLong);
 
-      } else {
-        throw new OpenGammaRuntimeException("Underlying BRL swap must be fixed compounded / overnight compounded - received: " +
-                                                swapDefinition.getClass());
       }
+      throw new OpenGammaRuntimeException("Underlying BRL swap must be fixed compounded / overnight compounded - received: " + swapDefinition.getClass());
     }
 
     if (swapDefinition instanceof SwapFixedIborDefinition) {
 
       final SwapFixedIborDefinition fixedIbor = (SwapFixedIborDefinition) swapDefinition;
-      return isCashSettled ?
-          SwaptionCashFixedIborDefinition.from(expiry, fixedIbor, isCall, isLong) :
-          SwaptionPhysicalFixedIborDefinition.from(expiry, fixedIbor, isCall, isLong);
-    } else {
-      throw new OpenGammaRuntimeException("Underlying swap of a swaption must be a fixed / ibor swap - received: " +
-                                              swapDefinition.getClass());
+      return isCashSettled
+          ? SwaptionCashFixedIborDefinition.from(expiry, fixedIbor, isCall, isLong)
+          : SwaptionPhysicalFixedIborDefinition.from(expiry, fixedIbor, isCall, isLong);
     }
+    throw new OpenGammaRuntimeException("Underlying swap of a swaption must be a fixed / ibor swap - received: " + swapDefinition.getClass());
   }
 }

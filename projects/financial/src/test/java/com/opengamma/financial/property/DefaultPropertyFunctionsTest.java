@@ -64,6 +64,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.engine.view.ViewCalculationConfiguration;
 import com.opengamma.engine.view.ViewDefinition;
+import com.opengamma.financial.analytics.MissingInputsFunction;
 import com.opengamma.financial.analytics.PositionOrTradeScalingFunction;
 import com.opengamma.financial.analytics.PropertyPreservingFunction;
 import com.opengamma.financial.analytics.SummingFunction;
@@ -86,9 +87,14 @@ import com.opengamma.util.test.TestLifecycle;
 /**
  * Tests the functions used to inject default constraints into the dependency graph.
  */
+@SuppressWarnings("deprecation")
 @Test(groups = TestGroup.UNIT)
 public class DefaultPropertyFunctionsTest {
 
+  /**
+   * @deprecated Deprecated
+   */
+  @Deprecated
   public class TradeScalingFunction extends PropertyPreservingFunction {
 
     @Override
@@ -109,10 +115,12 @@ public class DefaultPropertyFunctionsTest {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Trade trade = target.getTrade();
       final Security security = trade.getSecurity();
-      final ValueRequirement requirement = new ValueRequirement(_requirementName, ComputationTargetType.SECURITY, security.getUniqueId(), getInputConstraint(desiredValue));
+      final ValueRequirement requirement = new ValueRequirement(_requirementName, ComputationTargetType.SECURITY,
+          security.getUniqueId(), getInputConstraint(desiredValue));
       return Collections.singleton(requirement);
     }
 
@@ -123,8 +131,10 @@ public class DefaultPropertyFunctionsTest {
     }
 
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-      final ValueSpecification specification = new ValueSpecification(_requirementName, target.toSpecification(), getResultProperties(inputs.keySet().iterator().next()));
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
+      final ValueSpecification specification = new ValueSpecification(_requirementName, target.toSpecification(),
+          getResultProperties(inputs.keySet().iterator().next()));
       return Collections.singleton(specification);
     }
 
@@ -190,7 +200,8 @@ public class DefaultPropertyFunctionsTest {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Set<String> forwardCurves = desiredValue.getConstraints().getValues("ForwardCurve");
       if (forwardCurves == null || forwardCurves.isEmpty()) {
         return null;
@@ -207,7 +218,8 @@ public class DefaultPropertyFunctionsTest {
 
     @Override
     public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-      return Collections.singleton(new ValueSpecification("Present Value", target.toSpecification(), createValueProperties().withAny("ForwardCurve").withAny("FundingCurve")
+      return Collections.singleton(new ValueSpecification("Present Value", target.toSpecification(),
+          createValueProperties().withAny("ForwardCurve").withAny("FundingCurve")
           .with("Currency", "USD").get()));
     }
 
@@ -220,7 +232,7 @@ public class DefaultPropertyFunctionsTest {
     functions.addFunction(new CalcConfigDefaultPropertyFunction.Specific());
     functions.addFunction(new PositionDefaultPropertyFunction());
     functions.addFunction(new AttributableDefaultPropertyFunction());
-    functions.addFunction(new AggregationDefaultPropertyFunction("Present Value", SummingFunction.AGGREGATION_STYLE_FULL));
+    functions.addFunction(new AggregationDefaultPropertyFunction("Present Value", MissingInputsFunction.AGGREGATION_STYLE_FULL));
     // Basic scaling and aggregation
     functions.addFunction(new SummingFunction("Present Value"));
     functions.addFunction(new PositionOrTradeScalingFunction("Present Value"));
@@ -232,7 +244,7 @@ public class DefaultPropertyFunctionsTest {
     return functions;
   }
 
-  private SecuritySource createSecuritySource() {
+  private static SecuritySource createSecuritySource() {
     final InMemorySecuritySource securities = new InMemorySecuritySource();
     final ZonedDateTime zdt = ZonedDateTime.now();
     final SwapLeg leg = new FixedInterestRateLeg(DayCounts.ACT_365, SimpleFrequency.ANNUAL, ExternalId.of("Test", "Region"), BusinessDayConventions.FOLLOWING,
@@ -243,27 +255,27 @@ public class DefaultPropertyFunctionsTest {
     return securities;
   }
 
-  private SecurityLink createSecurityLink(final SecuritySource securities) {
+  private static SecurityLink createSecurityLink(final SecuritySource securities) {
     final SimpleSecurityLink link = new SimpleSecurityLink(ExternalId.of("Security", "Swap"));
     link.resolve(securities);
     return link;
   }
 
-  private SimpleTrade createTrade(final SecuritySource securities) {
+  private static SimpleTrade createTrade(final SecuritySource securities) {
     final SimpleTrade trade = new SimpleTrade();
     trade.setQuantity(BigDecimal.ONE);
     trade.setSecurityLink(createSecurityLink(securities));
     return trade;
   }
 
-  private SimplePosition createPosition(final SecuritySource securities) {
+  private static SimplePosition createPosition(final SecuritySource securities) {
     final SimplePosition position = new SimplePosition();
     position.setQuantity(BigDecimal.ONE);
     position.setSecurityLink(createSecurityLink(securities));
     return position;
   }
 
-  private PositionSource createPositionSource(final SecuritySource securities) {
+  private static PositionSource createPositionSource(final SecuritySource securities) {
     final MockPositionSource positions = new MockPositionSource();
     final SimplePortfolio portfolio = new SimplePortfolio("Test");
     final SimplePortfolioNode root = portfolio.getRootNode();
@@ -300,7 +312,7 @@ public class DefaultPropertyFunctionsTest {
     return positions;
   }
 
-  private PortfolioNode getPortfolioNode(final PositionSource positions, final String name) {
+  private static PortfolioNode getPortfolioNode(final PositionSource positions, final String name) {
     final Portfolio portfolio = positions.getPortfolio(UniqueId.of("Portfolio", "Test"), VersionCorrection.LATEST);
     for (final PortfolioNode node : portfolio.getRootNode().getChildNodes()) {
       if (name.equals(node.getName())) {
@@ -320,7 +332,7 @@ public class DefaultPropertyFunctionsTest {
     return position.getTrades().iterator().next();
   }
 
-  private FunctionCompilationContext createFunctionCompilationContext() {
+  private static FunctionCompilationContext createFunctionCompilationContext() {
     final FunctionCompilationContext context = new FunctionCompilationContext();
     final SecuritySource securities = createSecuritySource();
     final PositionSource positions = createPositionSource(securities);
@@ -331,7 +343,7 @@ public class DefaultPropertyFunctionsTest {
     return context;
   }
 
-  private FunctionPriority createPrioritizer() {
+  private static FunctionPriority createPrioritizer() {
     return new FunctionPriority() {
 
       @Override
@@ -373,7 +385,7 @@ public class DefaultPropertyFunctionsTest {
     return builder;
   }
 
-  private ValueRequirement createValueRequirement(final ComputationTargetSpecification target, final ValueProperties constraints) {
+  private static ValueRequirement createValueRequirement(final ComputationTargetSpecification target, final ValueProperties constraints) {
     return new ValueRequirement("Present Value", target, constraints);
   }
 

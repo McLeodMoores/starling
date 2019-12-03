@@ -41,11 +41,11 @@ public final class CommodityForwardSecurityBeanOperation extends
   @Override
   public CommodityForwardSecurity createSecurity(final OperationContext context,
                                                  final CommodityForwardSecurityBean bean) {
-    CommodityForwardSecurity sec = bean.accept(
+    final CommodityForwardSecurity sec = bean.accept(
       new CommodityForwardSecurityBean.Visitor<CommodityForwardSecurity>() {
 
         @Override
-        public CommodityForwardSecurity visitAgricultureForwardType(AgricultureForwardSecurityBean bean) {
+        public CommodityForwardSecurity visitAgricultureForwardType(final AgricultureForwardSecurityBean bean) {
           final AgricultureForwardSecurity security = new AgricultureForwardSecurity(
             bean.getUnitName().getName(),
             bean.getUnitNumber(),
@@ -61,7 +61,7 @@ public final class CommodityForwardSecurityBeanOperation extends
         }
 
         @Override
-        public CommodityForwardSecurity visitEnergyForwardType(EnergyForwardSecurityBean bean) {
+        public CommodityForwardSecurity visitEnergyForwardType(final EnergyForwardSecurityBean bean) {
           final EnergyForwardSecurity security = new EnergyForwardSecurity(
             bean.getUnitName().getName(),
             bean.getUnitNumber(),
@@ -79,7 +79,7 @@ public final class CommodityForwardSecurityBeanOperation extends
         }
 
         @Override
-        public CommodityForwardSecurity visitMetalForwardType(MetalForwardSecurityBean bean) {
+        public CommodityForwardSecurity visitMetalForwardType(final MetalForwardSecurityBean bean) {
           final MetalForwardSecurity security = new MetalForwardSecurity(
             bean.getUnitName().getName(),
             bean.getUnitNumber(),
@@ -108,17 +108,17 @@ public final class CommodityForwardSecurityBeanOperation extends
       new CommodityForwardSecurityBean.Visitor<CommodityForwardSecurityBean>() {
 
         @Override
-        public CommodityForwardSecurityBean visitAgricultureForwardType(AgricultureForwardSecurityBean bean) {
+        public CommodityForwardSecurityBean visitAgricultureForwardType(final AgricultureForwardSecurityBean bean) {
           return bean;
         }
 
         @Override
-        public CommodityForwardSecurityBean visitEnergyForwardType(EnergyForwardSecurityBean bean) {
+        public CommodityForwardSecurityBean visitEnergyForwardType(final EnergyForwardSecurityBean bean) {
           return bean;
         }
 
         @Override
-        public CommodityForwardSecurityBean visitMetalForwardType(MetalForwardSecurityBean bean) {
+        public CommodityForwardSecurityBean visitMetalForwardType(final MetalForwardSecurityBean bean) {
           return bean;
         }
 
@@ -140,19 +140,19 @@ public final class CommodityForwardSecurityBeanOperation extends
       }
 
       @Override
-      public Object visitAgricultureForwardType(AgricultureForwardSecurityBean bean) {
+      public Object visitAgricultureForwardType(final AgricultureForwardSecurityBean bean) {
         postPersistCommodityForward();
         return null;
       }
 
       @Override
-      public Object visitEnergyForwardType(EnergyForwardSecurityBean bean) {
+      public Object visitEnergyForwardType(final EnergyForwardSecurityBean bean) {
         postPersistCommodityForward();
         return null;
       }
 
       @Override
-      public Object visitMetalForwardType(MetalForwardSecurityBean bean) {
+      public Object visitMetalForwardType(final MetalForwardSecurityBean bean) {
         postPersistCommodityForward();
         return null;
       }
@@ -192,15 +192,15 @@ public final class CommodityForwardSecurityBeanOperation extends
 
       @Override
       public AgricultureForwardSecurityBean visitAgricultureForwardSecurity(
-        AgricultureForwardSecurity security) {
+        final AgricultureForwardSecurity security) {
         return createCommodityForwardSecurityBean(new AgricultureForwardSecurityBean(), security);
       }
 
       @Override
       public EnergyForwardSecurityBean visitEnergyForwardSecurity(
-        EnergyForwardSecurity security) {
+        final EnergyForwardSecurity security) {
         final EnergyForwardSecurityBean bean = createCommodityForwardSecurityBean(new EnergyForwardSecurityBean(), security);
-        ExternalId underlying = security.getUnderlyingId();
+        final ExternalId underlying = security.getUnderlyingId();
         if (underlying != null) {
           bean.setUnderlying(externalIdToExternalIdBean(underlying));
         }
@@ -209,9 +209,9 @@ public final class CommodityForwardSecurityBeanOperation extends
 
       @Override
       public MetalForwardSecurityBean visitMetalForwardSecurity(
-        MetalForwardSecurity security) {
+        final MetalForwardSecurity security) {
         final MetalForwardSecurityBean bean = createCommodityForwardSecurityBean(new MetalForwardSecurityBean(), security);
-        ExternalId underlying = security.getUnderlyingId();
+        final ExternalId underlying = security.getUnderlyingId();
         if (underlying != null) {
           bean.setUnderlying(externalIdToExternalIdBean(security.getUnderlyingId()));
         }

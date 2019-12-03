@@ -33,10 +33,10 @@ import com.opengamma.util.tuple.Pair;
  *
  */
 public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProviderDiscount> {
-  private static final ParSpreadMarketQuoteIssuerDiscountingCalculator CALCULATOR =
-      ParSpreadMarketQuoteIssuerDiscountingCalculator.getInstance();
-  private static final ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator SENSITIVITY_CALCULATOR =
-      ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteIssuerDiscountingCalculator CALCULATOR = ParSpreadMarketQuoteIssuerDiscountingCalculator
+      .getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator SENSITIVITY_CALCULATOR = ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator
+      .getInstance();
   private final IssuerDiscountBuildingRepository _curveBuildingRepository;
   private final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> _issuerCurves;
   private final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> _knownIssuerCurves;
@@ -108,7 +108,8 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
       }
       convertedOvernightCurves.put(entry.getKey(), converted);
     }
-    final IssuerProviderDiscount knownData = new IssuerProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, fxMatrix);
+    final IssuerProviderDiscount knownData = new IssuerProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves,
+        fxMatrix);
     if (knownBundle != null) {
       return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, convertedDiscountingCurves,
           convertedIborCurves, convertedOvernightCurves, _issuerCurves, CALCULATOR,

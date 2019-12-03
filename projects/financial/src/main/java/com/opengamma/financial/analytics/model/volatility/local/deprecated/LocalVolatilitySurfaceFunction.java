@@ -43,7 +43,8 @@ import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePr
 public abstract class LocalVolatilitySurfaceFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String surfaceName = desiredValue.getConstraint(ValuePropertyNames.SURFACE);
     final String surfaceType = desiredValue.getConstraint(PROPERTY_SURFACE_TYPE);
@@ -54,8 +55,9 @@ public abstract class LocalVolatilitySurfaceFunction extends AbstractFunction.No
     final String forwardCurveName = desiredValue.getConstraint(CURVE);
     final String hName = desiredValue.getConstraint(PROPERTY_H);
     final double h = Double.parseDouble(hName);
-    final Object impliedVolatilitySurfaceObject = inputs.getValue(getVolatilitySurfaceRequirement(target, surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod,
-        forwardCurveName));
+    final Object impliedVolatilitySurfaceObject = inputs
+        .getValue(getVolatilitySurfaceRequirement(target, surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod,
+            forwardCurveName));
     if (impliedVolatilitySurfaceObject == null) {
       throw new OpenGammaRuntimeException("Volatility surface was null");
     }
@@ -65,7 +67,8 @@ public abstract class LocalVolatilitySurfaceFunction extends AbstractFunction.No
     }
     final ForwardCurve forwardCurve = (ForwardCurve) forwardCurveObject;
     final BlackVolatilitySurface<?> impliedVolatilitySurface = (BlackVolatilitySurface<?>) impliedVolatilitySurfaceObject;
-    final ValueProperties properties = getResultProperties(surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, forwardCurveName, hName);
+    final ValueProperties properties = getResultProperties(surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, forwardCurveName,
+        hName);
     final DupireLocalVolatilityCalculator calculator = new DupireLocalVolatilityCalculator(h);
     final LocalVolatilitySurface<?> localVolatilitySurface = calculator.getLocalVolatilitySurface(impliedVolatilitySurface, forwardCurve);
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.LOCAL_VOLATILITY_SURFACE, target.toSpecification(), properties);
@@ -126,7 +129,8 @@ public abstract class LocalVolatilitySurfaceFunction extends AbstractFunction.No
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     String surfaceName = null;
     String surfaceType = null;
     String xAxis = null;
@@ -138,7 +142,8 @@ public abstract class LocalVolatilitySurfaceFunction extends AbstractFunction.No
       final ValueProperties constraints = input.getValue().getConstraints();
       if (input.getValue().getValueName().equals(ValueRequirementNames.FORWARD_CURVE)) {
         if (constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD) != null) {
-          final Set<String> forwardCurveCalculationMethodNames = constraints.getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
+          final Set<String> forwardCurveCalculationMethodNames = constraints
+              .getValues(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
           if (forwardCurveCalculationMethodNames == null || forwardCurveCalculationMethodNames.size() != 1) {
             throw new OpenGammaRuntimeException("Missing or non-unique forward curve calculation method name");
           }
@@ -202,14 +207,14 @@ public abstract class LocalVolatilitySurfaceFunction extends AbstractFunction.No
 
   protected abstract ValueProperties getResultProperties();
 
-  protected abstract ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
-      final String yAxisType, final String forwardCurveCalculationMethod, final String forwardCurveName);
+  protected abstract ValueProperties getResultProperties(String surfaceName, String surfaceType, String xAxis, String yAxis,
+      String yAxisType, String forwardCurveCalculationMethod, String forwardCurveName);
 
-  protected abstract ValueProperties getResultProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
-      final String yAxisType, final String forwardCurveCalculationMethod, final String forwardCurveName, final String h);
+  protected abstract ValueProperties getResultProperties(String surfaceName, String surfaceType, String xAxis, String yAxis,
+      String yAxisType, String forwardCurveCalculationMethod, String forwardCurveName, String h);
 
-  protected abstract ValueProperties getSurfaceProperties(final String surfaceName, final String surfaceType, final String xAxis, final String yAxis,
-      final String yAxisType, final String forwardCurveCalculationMethod, final String forwardCurveName);
+  protected abstract ValueProperties getSurfaceProperties(String surfaceName, String surfaceType, String xAxis, String yAxis,
+      String yAxisType, String forwardCurveCalculationMethod, String forwardCurveName);
 
   private ValueRequirement getForwardCurveRequirement(final ComputationTarget target, final String calculationMethod, final String curveName) {
     final ValueProperties properties = ValueProperties.builder()
@@ -218,9 +223,11 @@ public abstract class LocalVolatilitySurfaceFunction extends AbstractFunction.No
     return new ValueRequirement(ValueRequirementNames.FORWARD_CURVE, target.toSpecification(), properties);
   }
 
-  private ValueRequirement getVolatilitySurfaceRequirement(final ComputationTarget target, final String definitionName, final String surfaceType, final String xAxis, final String yAxis,
+  private ValueRequirement getVolatilitySurfaceRequirement(final ComputationTarget target, final String definitionName, final String surfaceType,
+      final String xAxis, final String yAxis,
       final String yAxisType, final String forwardCurveCalculationMethod, final String forwardCurveName) {
-    final ValueProperties properties = getSurfaceProperties(definitionName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, forwardCurveName);
+    final ValueProperties properties = getSurfaceProperties(definitionName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod,
+        forwardCurveName);
     return new ValueRequirement(ValueRequirementNames.PIECEWISE_SABR_VOL_SURFACE, target.toSpecification(), properties);
   }
 }

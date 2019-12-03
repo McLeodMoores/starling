@@ -20,7 +20,7 @@ public class WebFreemarkerResource extends AbstractWebBundleResource {
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent  the parent resource, not null
    */
   public WebFreemarkerResource(final AbstractWebBundleResource parent) {
@@ -30,7 +30,7 @@ public class WebFreemarkerResource extends AbstractWebBundleResource {
   //-------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
-  public String get(@PathParam("file") String freemarkerFile) {
+  public String get(@PathParam("file") final String freemarkerFile) {
     return getFreemarker().build(freemarkerFile, createRootData());
   }
 

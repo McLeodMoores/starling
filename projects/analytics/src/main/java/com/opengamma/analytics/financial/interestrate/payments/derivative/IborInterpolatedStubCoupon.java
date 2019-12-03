@@ -9,36 +9,38 @@ import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.provider.calculator.discounting.InterpolatedStubCouponVisitor;
 
 /**
- * 
+ *
  */
-public final class IborInterpolatedStubCoupon extends InterpolatedStubCoupon<DepositIndexCoupon<IborIndex>, IborIndex> implements DepositIndexCoupon<IborIndex> {
-   
+public final class IborInterpolatedStubCoupon extends InterpolatedStubCoupon<DepositIndexCoupon<IborIndex>, IborIndex>
+    implements DepositIndexCoupon<IborIndex> {
+
   private IborInterpolatedStubCoupon(
-      DepositIndexCoupon<IborIndex> fullCoupon,
-      double firstInterpolatedTime,
-      double firstInterpolatedYearFraction,
-      double secondInterpolatedTime,
-      double secondInterpolatedYearFraction) {
+      final DepositIndexCoupon<IborIndex> fullCoupon,
+      final double firstInterpolatedTime,
+      final double firstInterpolatedYearFraction,
+      final double secondInterpolatedTime,
+      final double secondInterpolatedYearFraction) {
     super(fullCoupon, firstInterpolatedTime, firstInterpolatedYearFraction, secondInterpolatedTime, secondInterpolatedYearFraction);
   }
-  
+
   public static IborInterpolatedStubCoupon from(
       final DepositIndexCoupon<IborIndex> fullCoupon,
       final double firstInterpolatedTime,
       final double firstInterpolatedYearFraction,
       final double secondInterpolatedTime,
       final double secondInterpolatedYearFraction) {
-    return new IborInterpolatedStubCoupon(fullCoupon, firstInterpolatedTime, firstInterpolatedYearFraction, secondInterpolatedTime, secondInterpolatedYearFraction);
+    return new IborInterpolatedStubCoupon(fullCoupon, firstInterpolatedTime, firstInterpolatedYearFraction, secondInterpolatedTime,
+        secondInterpolatedYearFraction);
   }
-  
+
   @Override
-  public Coupon withNotional(double notional) {
+  public Coupon withNotional(final double notional) {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public <S> S accept(InterpolatedStubCouponVisitor<S> visitor) {
+  public <S> S accept(final InterpolatedStubCouponVisitor<S> visitor) {
     return visitor.visitIborInterpolatedStub(this);
   }
 }

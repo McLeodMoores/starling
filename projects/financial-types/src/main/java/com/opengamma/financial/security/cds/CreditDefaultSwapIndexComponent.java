@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.cds;
@@ -25,7 +25,7 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Represents a member of a Credit Default Swap Index
+ * Represents a member of a Credit Default Swap Index.
  */
 @BeanDefinition
 public class CreditDefaultSwapIndexComponent extends DirectBean implements Comparable<CreditDefaultSwapIndexComponent>, Serializable {
@@ -34,59 +34,63 @@ public class CreditDefaultSwapIndexComponent extends DirectBean implements Compa
   private static final long serialVersionUID = 2138042002689914578L;
 
   /**
-   * The obligor red code identifier
+   * The obligor red code identifier.
    */
   @PropertyDefinition(validate = "notNull")
   private ExternalId _obligorRedCode;
   /**
-   * The weight
+   * The weight.
    */
   @PropertyDefinition(validate = "notNull")
   private Double _weight;
   /**
-   * The optional bond identifier;
+   * The optional bond identifier.
    */
   @PropertyDefinition
   private ExternalId _bondId;
   /**
-   * The entity name
+   * The entity name.
    */
   @PropertyDefinition(validate = "notNull")
   private String _name;
-  
+
   /**
-   * Creates an instance
-   * 
-   * @param name the entity name, not null
-   * @param obligorId the obligor red code, not null
-   * @param weight the index weight, not null
-   * @param bondId the option bond identifer
+   * Creates an instance.
+   *
+   * @param name
+   *          the entity name, not null
+   * @param obligorId
+   *          the obligor red code, not null
+   * @param weight
+   *          the index weight, not null
+   * @param bondId
+   *          the option bond identifier
    */
-  public CreditDefaultSwapIndexComponent(final String name, final ExternalId obligorId, final Double weight, ExternalId bondId) {
+  public CreditDefaultSwapIndexComponent(final String name, final ExternalId obligorId, final Double weight, final ExternalId bondId) {
     setName(name);
     setObligorRedCode(obligorId);
     setWeight(weight);
     setBondId(bondId);
   }
-  
+
   /**
-   * Default constructor for Bean builder
+   * Default constructor for Bean builder.
    */
   CreditDefaultSwapIndexComponent() {
   }
-  
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Compares the cdsIndex component, sorting by weight followed by name alphabetically.
-   * 
-   * @param other  the other cdsIndex component, not null
+   *
+   * @param other
+   *          the other cdsIndex component, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(CreditDefaultSwapIndexComponent other) {
+  public int compareTo(final CreditDefaultSwapIndexComponent other) {
     ArgumentChecker.notNull(other, "creditswapindex component");
-    int cmp = _weight.compareTo(other._weight);
+    final int cmp = _weight.compareTo(other._weight);
     if (cmp != 0) {
       return cmp;
     }
@@ -114,7 +118,7 @@ public class CreditDefaultSwapIndexComponent extends DirectBean implements Compa
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the obligor red code identifier
+   * Gets the obligor red code identifier.
    * @return the value of the property, not null
    */
   public ExternalId getObligorRedCode() {
@@ -122,7 +126,7 @@ public class CreditDefaultSwapIndexComponent extends DirectBean implements Compa
   }
 
   /**
-   * Sets the obligor red code identifier
+   * Sets the obligor red code identifier.
    * @param obligorRedCode  the new value of the property, not null
    */
   public void setObligorRedCode(ExternalId obligorRedCode) {
@@ -140,7 +144,7 @@ public class CreditDefaultSwapIndexComponent extends DirectBean implements Compa
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the weight
+   * Gets the weight.
    * @return the value of the property, not null
    */
   public Double getWeight() {
@@ -148,7 +152,7 @@ public class CreditDefaultSwapIndexComponent extends DirectBean implements Compa
   }
 
   /**
-   * Sets the weight
+   * Sets the weight.
    * @param weight  the new value of the property, not null
    */
   public void setWeight(Double weight) {
@@ -166,7 +170,7 @@ public class CreditDefaultSwapIndexComponent extends DirectBean implements Compa
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the optional bond identifier;
+   * Gets the optional bond identifier.
    * @return the value of the property
    */
   public ExternalId getBondId() {
@@ -174,7 +178,7 @@ public class CreditDefaultSwapIndexComponent extends DirectBean implements Compa
   }
 
   /**
-   * Sets the optional bond identifier;
+   * Sets the optional bond identifier.
    * @param bondId  the new value of the property
    */
   public void setBondId(ExternalId bondId) {
@@ -191,7 +195,7 @@ public class CreditDefaultSwapIndexComponent extends DirectBean implements Compa
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the entity name
+   * Gets the entity name.
    * @return the value of the property, not null
    */
   public String getName() {
@@ -199,7 +203,7 @@ public class CreditDefaultSwapIndexComponent extends DirectBean implements Compa
   }
 
   /**
-   * Sets the entity name
+   * Sets the entity name.
    * @param name  the new value of the property, not null
    */
   public void setName(String name) {

@@ -5,16 +5,18 @@
  */
 package com.opengamma.financial.livedata.rest;
 
-import com.opengamma.engine.marketdata.MarketDataInjector;
-
 /**
- * RESTful URIs for {@link MarketDataInjector}.
+ * RESTful URIs for {@link com.opengamma.engine.marketdata.MarketDataInjector}.
  */
 public class DataLiveDataInjectorUris {
 
-  //CSOFF: just constants
+  /**
+   * The URI path to add market data.
+   */
   public static final String PATH_ADD = "add";
+  /**
+   * The URI path to remove market data.
+   */
   public static final String PATH_REMOVE = "remove";
-  //CSON: just constants
 
 }

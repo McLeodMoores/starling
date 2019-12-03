@@ -14,8 +14,11 @@ import com.opengamma.engine.marketdata.NamedMarketDataSpecificationRepository;
 import com.opengamma.util.rest.AbstractDataResource;
 
 /**
- * RESTful resource for {@link NamedMarketDataSpecificationRepository}
+ * RESTful resource for {@link NamedMarketDataSpecificationRepository}.
+ *
+ * @deprecated {@link NamedMarketDataSpecificationRepository} is deprecated
  */
+@Deprecated
 public class DataNamedMarketDataSpecificationRepositoryResource extends AbstractDataResource {
 
   private static final String PATH_NAMES = "names";
@@ -39,7 +42,7 @@ public class DataNamedMarketDataSpecificationRepositoryResource extends Abstract
     return responseOkObject(getNamedMarketDataSpecificationRepository().getSpecification(name));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private NamedMarketDataSpecificationRepository getNamedMarketDataSpecificationRepository() {
     return _repository;
   }

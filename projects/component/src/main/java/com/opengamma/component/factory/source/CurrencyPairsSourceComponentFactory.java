@@ -56,21 +56,21 @@ public class CurrencyPairsSourceComponentFactory extends AbstractComponentFactor
   /**
    * Initializes the currency pairs source, setting up component information and REST.
    * Override using {@link #createCurrencyPairsSource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    CurrencyPairsSource source = createCurrencyPairsSource(repo);
-    ComponentInfo info = new ComponentInfo(CurrencyPairsSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final CurrencyPairsSource source = createCurrencyPairsSource(repo);
+    final ComponentInfo info = new ComponentInfo(CurrencyPairsSource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteCurrencyPairsSource.class);
     }
 
     // This is here so that the dependency graph resolver can pick up a versioned currency pairs source
-    ComponentInfo infoVersioned = new ComponentInfo(VersionedCurrencyPairsSource.class, getClassifier());
+    final ComponentInfo infoVersioned = new ComponentInfo(VersionedCurrencyPairsSource.class, getClassifier());
     infoVersioned.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       infoVersioned.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteCurrencyPairsSource.class);
@@ -86,11 +86,11 @@ public class CurrencyPairsSourceComponentFactory extends AbstractComponentFactor
 
   /**
    * Creates the currency pairs source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the currency pairs source, not null
    */
-  protected ConfigDBCurrencyPairsSource createCurrencyPairsSource(ComponentRepository repo) {
+  protected ConfigDBCurrencyPairsSource createCurrencyPairsSource(final ComponentRepository repo) {
     return new ConfigDBCurrencyPairsSource(getConfigSource());
   }
 

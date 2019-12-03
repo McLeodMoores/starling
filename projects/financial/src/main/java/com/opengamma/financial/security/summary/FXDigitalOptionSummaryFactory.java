@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.summary;
@@ -18,7 +18,7 @@ public class FXDigitalOptionSummaryFactory implements SummaryFactory<FXDigitalOp
   }
 
   @Override
-  public Summary getSummary(FXDigitalOptionSecurity security) {
+  public Summary getSummary(final FXDigitalOptionSecurity security) {
     return SummaryBuilder.create(security)
         .with(SummaryField.DESCRIPTION, security.getPutCurrency() + "/" + security.getCallCurrency())
         .with(SummaryField.NOTIONAL, security.getPutAmount() + "/" + security.getCallAmount())

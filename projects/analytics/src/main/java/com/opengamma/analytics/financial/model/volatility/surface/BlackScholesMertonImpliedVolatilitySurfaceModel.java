@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -23,10 +23,10 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public class BlackScholesMertonImpliedVolatilitySurfaceModel implements VolatilitySurfaceModel<Map<OptionDefinition, Double>, StandardOptionDataBundle> {
-  private static final Logger s_logger = LoggerFactory.getLogger(BlackScholesMertonImpliedVolatilitySurfaceModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlackScholesMertonImpliedVolatilitySurfaceModel.class);
   private final AnalyticOptionModel<OptionDefinition, StandardOptionDataBundle> _bsm = new BlackScholesMertonModel();
   private SingleRootFinder<StandardOptionDataBundle, Double> _rootFinder;
 
@@ -36,7 +36,7 @@ public class BlackScholesMertonImpliedVolatilitySurfaceModel implements Volatili
     ArgumentChecker.notEmpty(optionPrices, "option prices");
     Validate.notNull(optionDataBundle);
     if (optionPrices.size() > 1) {
-      s_logger.info("Option price map had more than one entry: using the first pair to imply volatility");
+      LOGGER.info("Option price map had more than one entry: using the first pair to imply volatility");
     }
     final Map.Entry<OptionDefinition, Double> entry = optionPrices.entrySet().iterator().next();
     final Double price = entry.getValue();
@@ -53,7 +53,7 @@ public class BlackScholesMertonImpliedVolatilitySurfaceModel implements Volatili
     private static final double ACCURACY = 1e-12;
     private static final int MAX_ATTEMPTS = 10000;
 
-    public MyBisectionSingleRootFinder(final StandardOptionDataBundle data, final double price) {
+    MyBisectionSingleRootFinder(final StandardOptionDataBundle data, final double price) {
       _data = data;
       _price = price;
     }
@@ -84,13 +84,13 @@ public class BlackScholesMertonImpliedVolatilitySurfaceModel implements Volatili
       for (int i = 0; i < MAX_ATTEMPTS; i++) {
         dVol *= 0.5;
         midVol = rootVol + dVol;
-        midVolData = _data.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from((midVol))));
+        midVolData = _data.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(midVol)));
         highPrice = function.evaluate(midVolData) - _price;
         if (highPrice <= 0) {
           rootVol = midVol;
         }
         if (Math.abs(dVol) < ACCURACY) {
-          return _data.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from((midVol))));
+          return _data.withVolatilitySurface(new VolatilitySurface(ConstantDoublesSurface.from(midVol)));
         }
       }
       throw new OptionPricingException("Could not find volatility in " + MAX_ATTEMPTS + " attempts");

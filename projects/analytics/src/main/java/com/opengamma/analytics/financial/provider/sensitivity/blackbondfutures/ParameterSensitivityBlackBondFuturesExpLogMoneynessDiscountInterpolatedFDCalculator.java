@@ -30,10 +30,10 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve.
- * The computation is done by shifting each node point in each curve; the curves must be interpolated yield curves for discounting and forward curves.
- * The return format is ParameterSensitivity object.
- * This is a very inefficient way to compute the sensitivities. It should be used only for tests purposes or when speed is irrelevant.
+ * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve. The computation is done
+ * by shifting each node point in each curve; the curves must be interpolated yield curves for discounting and forward curves. The return format is
+ * ParameterSensitivity object. This is a very inefficient way to compute the sensitivities. It should be used only for tests purposes or when speed is
+ * irrelevant.
  */
 public class ParameterSensitivityBlackBondFuturesExpLogMoneynessDiscountInterpolatedFDCalculator {
 
@@ -47,9 +47,12 @@ public class ParameterSensitivityBlackBondFuturesExpLogMoneynessDiscountInterpol
   private final double _shift;
 
   /**
-   * Constructor
-   * @param valueCalculator The value calculator.
-   * @param shift The shift used for finite difference.
+   * Constructor.
+   *
+   * @param valueCalculator
+   *          The value calculator.
+   * @param shift
+   *          The shift used for finite difference.
    */
   public ParameterSensitivityBlackBondFuturesExpLogMoneynessDiscountInterpolatedFDCalculator(
       final InstrumentDerivativeVisitor<BlackBondFuturesProviderInterface, MultipleCurrencyAmount> valueCalculator, final double shift) {
@@ -59,13 +62,17 @@ public class ParameterSensitivityBlackBondFuturesExpLogMoneynessDiscountInterpol
   }
 
   /**
-   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves.
-   * Only the discounting and forward curves sensitivity is computed.
-   * @param instrument The instrument.
-   * @param black The market (all discounting and forward curves should be of the type YieldCurve with InterpolatedDoublesCurve.
+   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves. Only the discounting and forward curves
+   * sensitivity is computed.
+   *
+   * @param instrument
+   *          The instrument.
+   * @param black
+   *          The market (all discounting and forward curves should be of the type YieldCurve with InterpolatedDoublesCurve.
    * @return The parameter sensitivity.
    */
-  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final BlackBondFuturesExpLogMoneynessProviderDiscount black) {
+  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument,
+      final BlackBondFuturesExpLogMoneynessProviderDiscount black) {
     MultipleCurrencyParameterSensitivity result = new MultipleCurrencyParameterSensitivity();
     final MultipleCurrencyAmount pvInit = instrument.accept(_valueCalculator, black);
     final int nbCcy = pvInit.size();
@@ -86,8 +93,9 @@ public class ParameterSensitivityBlackBondFuturesExpLogMoneynessDiscountInterpol
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumpedPlus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedPlus[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus,
-            curveInt.getInterpolator(), true));
+        final YieldAndDiscountCurve dscBumpedPlus = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus,
+                curveInt.getInterpolator(), true));
         final BlackBondFuturesExpLogMoneynessProviderDiscount marketDscBumpedPlus = new BlackBondFuturesExpLogMoneynessProviderDiscount(
             new IssuerProviderDiscount(black.getMulticurveProvider().withDiscountFactor(ccy, dscBumpedPlus), black.getIssuerProvider().getIssuerCurves()),
             black.getBlackParameters(), black.getLegalEntity());
@@ -160,8 +168,9 @@ public class ParameterSensitivityBlackBondFuturesExpLogMoneynessDiscountInterpol
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumpedPlus = curveInt.getYDataAsPrimitive().clone();
         yieldBumpedPlus[loopnode] += _shift;
-        final YieldAndDiscountCurve fwdBumpedPlus = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus,
-            curveInt.getInterpolator(), true));
+        final YieldAndDiscountCurve fwdBumpedPlus = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumpedPlus,
+                curveInt.getInterpolator(), true));
         final BlackBondFuturesExpLogMoneynessProviderDiscount marketFwdBumpedPlus = new BlackBondFuturesExpLogMoneynessProviderDiscount(
             new IssuerProviderDiscount(black.getMulticurveProvider().withForward(index, fwdBumpedPlus), black.getIssuerProvider().getIssuerCurves()),
             black.getBlackParameters(), black.getLegalEntity());

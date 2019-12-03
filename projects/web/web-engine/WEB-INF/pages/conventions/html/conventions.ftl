@@ -44,7 +44,7 @@
     <@rowin>
       <div id="ace-xml-editor"></div>
     </@rowin>
-    <input type="hidden" name="conventionxml" id="convention-xml"/>
+    <input type="hidden" name="conventionXML" id="convention-xml"/>
     <@rowin><input type="submit" value="Add" /></@rowin>
     
     <#noescape><@xmlEditorScript formId="addForm" inputId="convention-xml"></@xmlEditorScript></#noescape>  

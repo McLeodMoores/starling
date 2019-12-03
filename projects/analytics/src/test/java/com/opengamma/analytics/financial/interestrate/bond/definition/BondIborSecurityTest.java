@@ -38,10 +38,11 @@ import com.opengamma.util.time.DateUtils;
 /**
  * Test.
  */
+@SuppressWarnings("unchecked")
 @Test(groups = TestGroup.UNIT)
 public class BondIborSecurityTest {
 
-  //Quarterly Libor6m 2Y
+  // Quarterly Libor6m 2Y
   private static final Currency CUR = Currency.EUR;
   private static final Calendar CALENDAR = new MondayToFridayCalendar("A");
   private static final BusinessDayConvention BUSINESS_DAY = BusinessDayConventions.FOLLOWING;
@@ -55,9 +56,10 @@ public class BondIborSecurityTest {
   private static final int SETTLEMENT_DAYS = 3; // Standard for euro-bonds.
   private static final ZonedDateTime START_ACCRUAL_DATE = DateUtils.getUTCDate(2011, 7, 13);
   private static final ZonedDateTime MATURITY_DATE = START_ACCRUAL_DATE.plus(BOND_TENOR);
-  private static final AnnuityCouponIborDefinition COUPON_DEFINITION = AnnuityCouponIborDefinition.fromAccrualUnadjusted(START_ACCRUAL_DATE, MATURITY_DATE, 1.0, IBOR_INDEX, false, CALENDAR);
-  private static final AnnuityPaymentFixedDefinition NOMINAL_DEFINITION = new AnnuityPaymentFixedDefinition(new PaymentFixedDefinition[] {new PaymentFixedDefinition(CUR, BUSINESS_DAY.adjustDate(
-      CALENDAR, MATURITY_DATE), 1.0)}, CALENDAR);
+  private static final AnnuityCouponIborDefinition COUPON_DEFINITION = AnnuityCouponIborDefinition.fromAccrualUnadjusted(START_ACCRUAL_DATE, MATURITY_DATE, 1.0,
+      IBOR_INDEX, false, CALENDAR);
+  private static final AnnuityPaymentFixedDefinition NOMINAL_DEFINITION = new AnnuityPaymentFixedDefinition(
+      new PaymentFixedDefinition[] { new PaymentFixedDefinition(CUR, BUSINESS_DAY.adjustDate(CALENDAR, MATURITY_DATE), 1.0) }, CALENDAR);
   // to derivatives
   private static final DayCount ACT_ACT = DayCounts.ACT_ACT_ISDA;
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2011, 8, 18);

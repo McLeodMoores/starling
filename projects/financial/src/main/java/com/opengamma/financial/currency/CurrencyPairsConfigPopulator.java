@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.currency;
@@ -27,7 +27,7 @@ import com.opengamma.master.config.ConfigMasterUtils;
 public class CurrencyPairsConfigPopulator {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(CurrencyPairsConfigPopulator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyPairsConfigPopulator.class);
 
   public static ConfigMaster populateCurrencyPairsConfigMaster(final ConfigMaster cfgMaster) {
     storeCurrencyPairs(cfgMaster, CurrencyPairs.DEFAULT_CURRENCY_PAIRS, createCurrencyPairs());
@@ -38,14 +38,14 @@ public class CurrencyPairsConfigPopulator {
     final InputStream inputStream = CurrencyPairsConfigPopulator.class.getResourceAsStream("market-convention-currency-pairs.csv");
     final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
     String pairStr;
-    final Set<CurrencyPair> pairs = new HashSet<CurrencyPair>();
+    final Set<CurrencyPair> pairs = new HashSet<>();
     try {
       while ((pairStr = reader.readLine()) != null) {
         try {
           final CurrencyPair pair = CurrencyPair.parse(pairStr.trim());
           pairs.add(pair);
         } catch (final IllegalArgumentException e) {
-          s_logger.debug/*warn*/("Unable to create currency pair from " + pairStr, e);
+          LOGGER.debug/*warn*/("Unable to create currency pair from " + pairStr, e);
         }
       }
     } catch (final IOException ex) {

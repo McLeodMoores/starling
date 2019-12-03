@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -29,13 +29,14 @@ public final class EmptyAggregatedExecutionLog implements AggregatedExecutionLog
    */
   private EmptyAggregatedExecutionLog() {
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   public EnumSet<LogLevel> getLogLevels() {
     return _levels;
   }
-  
+
+  @Override
   public ExecutionLogWithContext getRootLog() {
     return null;
   }
@@ -44,7 +45,7 @@ public final class EmptyAggregatedExecutionLog implements AggregatedExecutionLog
   public List<ExecutionLogWithContext> getLogs() {
     return null;
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   public int hashCode() {
@@ -52,7 +53,7 @@ public final class EmptyAggregatedExecutionLog implements AggregatedExecutionLog
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     return obj instanceof EmptyAggregatedExecutionLog;
   }
 
@@ -60,5 +61,5 @@ public final class EmptyAggregatedExecutionLog implements AggregatedExecutionLog
   public String toString() {
     return "AggregatedExecutionLog[]";
   }
-  
+
 }

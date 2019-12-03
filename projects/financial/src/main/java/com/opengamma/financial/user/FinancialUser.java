@@ -25,11 +25,11 @@ public class FinancialUser {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param manager  the user manager, not null
    * @param userName  the user name, not null
    */
-  public FinancialUser(FinancialUserManager manager, String userName) {
+  public FinancialUser(final FinancialUserManager manager, final String userName) {
     _manager = manager;
     _userName = userName;
     _clientManager = new FinancialClientManager(this);
@@ -38,7 +38,7 @@ public class FinancialUser {
   //-------------------------------------------------------------------------
   /**
    * Gets the user name.
-   * 
+   *
    * @return the user name, not null
    */
   public String getUserName() {
@@ -47,7 +47,7 @@ public class FinancialUser {
 
   /**
    * Gets the services.
-   * 
+   *
    * @return the services, not null
    */
   public FinancialUserManager getUserManager() {
@@ -56,7 +56,7 @@ public class FinancialUser {
 
   /**
    * Gets the client manager.
-   * 
+   *
    * @return the client manager, not null
    */
   public FinancialClientManager getClientManager() {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.summary;
@@ -9,7 +9,7 @@ import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 import com.opengamma.financial.security.option.NonDeliverableFXOptionSecurity;
 
 /**
- * 
+ *
  */
 public class NonDeliverableFXOptionSummaryFactory implements SummaryFactory<NonDeliverableFXOptionSecurity> {
 
@@ -19,7 +19,7 @@ public class NonDeliverableFXOptionSummaryFactory implements SummaryFactory<NonD
   }
 
   @Override
-  public Summary getSummary(NonDeliverableFXOptionSecurity security) {
+  public Summary getSummary(final NonDeliverableFXOptionSecurity security) {
     return SummaryBuilder.create(security)
         .with(SummaryField.MATURITY, security.getExpiry())
         .with(SummaryField.DESCRIPTION, security.getPutCurrency() + "/" + security.getCallCurrency())

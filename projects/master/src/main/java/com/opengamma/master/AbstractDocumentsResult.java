@@ -27,7 +27,7 @@ import com.opengamma.util.paging.Paging;
 
 /**
  * Result providing a list of documents with paging.
- * 
+ *
  * @param <D>  the type of the document
  */
 @PublicSPI
@@ -43,7 +43,7 @@ public abstract class AbstractDocumentsResult<D extends AbstractDocument> extend
    * The documents, not null.
    */
   @PropertyDefinition
-  private final List<D> _documents = new ArrayList<D>();
+  private final List<D> _documents = new ArrayList<>();
 
   /**
    * Creates an instance.
@@ -55,7 +55,7 @@ public abstract class AbstractDocumentsResult<D extends AbstractDocument> extend
    * Creates an instance.
    * @param coll  the collection of documents to add, not null
    */
-  public AbstractDocumentsResult(Collection<D> coll) {
+  public AbstractDocumentsResult(final Collection<D> coll) {
     _documents.addAll(coll);
     _paging = Paging.ofAll(coll);
   }

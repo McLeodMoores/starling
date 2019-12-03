@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.source;
@@ -24,26 +24,26 @@ import com.opengamma.core.position.impl.NonVersionedRedisPositionSource;
 import com.opengamma.core.position.impl.RemotePositionSource;
 
 /**
- * 
+ *
  */
 @BeanDefinition
 public class NonVersionedRedisPositionSourceComponentFactory extends AbstractNonVersionedRedisSourceComponentFactory {
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    NonVersionedRedisPositionSource source = new NonVersionedRedisPositionSource(getRedisConnector().getJedisPool(), getRedisPrefix());
-    
-    ComponentInfo positionSourceInfo = new ComponentInfo(PositionSource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final NonVersionedRedisPositionSource source = new NonVersionedRedisPositionSource(getRedisConnector().getJedisPool(), getRedisPrefix());
+
+    final ComponentInfo positionSourceInfo = new ComponentInfo(PositionSource.class, getClassifier());
     positionSourceInfo.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       positionSourceInfo.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemotePositionSource.class);
     }
     repo.registerComponent(positionSourceInfo, source);
 
-    ComponentInfo redisSourceInfo = new ComponentInfo(NonVersionedRedisPositionSource.class, getClassifier());
+    final ComponentInfo redisSourceInfo = new ComponentInfo(NonVersionedRedisPositionSource.class, getClassifier());
     redisSourceInfo.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     repo.registerComponent(redisSourceInfo, source);
-    
+
     if (isPublishRest()) {
       repo.getRestComponents().publish(positionSourceInfo, new DataPositionSourceResource(source));
     }

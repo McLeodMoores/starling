@@ -57,16 +57,12 @@ import com.opengamma.util.paging.Paging;
 /**
  * A time-series master implementation using a database for persistence.
  * <p>
- * This is a full implementation of the time-series master using an SQL database.
- * Full details of the API are in {@link HistoricalTimeSeriesMaster}.
+ * This is a full implementation of the time-series master using an SQL database. Full details of the API are in {@link HistoricalTimeSeriesMaster}.
  * <p>
- * This implementation uses two linked unique identifiers, one for the document
- * and one for the time-series. They share the same scheme, but have different values
- * and versions. All the methods accept both formats although where possible they
- * should be treated separately. 
+ * This implementation uses two linked unique identifiers, one for the document and one for the time-series. They share the same scheme, but have different
+ * values and versions. All the methods accept both formats although where possible they should be treated separately.
  * <p>
- * The SQL is stored externally in {@code DbHistoricalTimeSeriesMaster.elsql}.
- * Alternate databases or specific SQL requirements can be handled using database
+ * The SQL is stored externally in {@code DbHistoricalTimeSeriesMaster.elsql}. Alternate databases or specific SQL requirements can be handled using database
  * specific overrides, such as {@code DbHistoricalTimeSeriesMaster-MySpecialDB.elsql}.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
@@ -74,7 +70,7 @@ import com.opengamma.util.paging.Paging;
 public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<HistoricalTimeSeriesInfoDocument> implements HistoricalTimeSeriesMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbHistoricalTimeSeriesMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbHistoricalTimeSeriesMaster.class);
 
   /**
    * The default scheme for unique identifiers.
@@ -122,11 +118,12 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
   private Timer _updatePointsTimer = new Timer();
   private Timer _correctPointsTimer = new Timer();
   private Timer _removePointsTimer = new Timer();
-  
+
   /**
    * Creates an instance.
    *
-   * @param dbConnector  the database connector, not null
+   * @param dbConnector
+   *          the database connector, not null
    */
   public DbHistoricalTimeSeriesMaster(final DbConnector dbConnector) {
     super(dbConnector, IDENTIFIER_SCHEME_DEFAULT);
@@ -140,7 +137,7 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
   }
 
   @Override
-  public void registerMetrics(MetricRegistry summaryRegistry, MetricRegistry detailedRegistry, String namePrefix) {
+  public void registerMetrics(final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry, final String namePrefix) {
     super.registerMetrics(summaryRegistry, detailedRegistry, namePrefix);
     _metaDataTimer = summaryRegistry.timer(namePrefix + ".metaData");
     _insertTimer = summaryRegistry.timer(namePrefix + ".insert");
@@ -151,7 +148,7 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     _removePointsTimer = summaryRegistry.timer(namePrefix + ".removePoints");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Gets the dimension table helper.
@@ -207,12 +204,12 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     return _dataPointsWorker;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesInfoMetaDataResult metaData(HistoricalTimeSeriesInfoMetaDataRequest request) {
+  public HistoricalTimeSeriesInfoMetaDataResult metaData(final HistoricalTimeSeriesInfoMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
     try (Timer.Context context = _metaDataTimer.time()) {
-      HistoricalTimeSeriesInfoMetaDataResult result = new HistoricalTimeSeriesInfoMetaDataResult();
+      final HistoricalTimeSeriesInfoMetaDataResult result = new HistoricalTimeSeriesInfoMetaDataResult();
       if (request.isDataFields()) {
         result.setDataFields(getDataFieldTable().names());
       }
@@ -229,25 +226,25 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoSearchResult search(final HistoricalTimeSeriesInfoSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
-    s_logger.debug("search {}", request);
-    
+    LOGGER.debug("search {}", request);
+
     final VersionCorrection vc = request.getVersionCorrection().withLatestFixed(now());
     final HistoricalTimeSeriesInfoSearchResult result = new HistoricalTimeSeriesInfoSearchResult(vc);
-    
+
     final List<ObjectId> objectIds = request.getObjectIds();
     final ExternalIdSearch externalIdSearch = request.getExternalIdSearch();
-    if ((objectIds != null && objectIds.size() == 0) ||
-      (ExternalIdSearch.canMatch(externalIdSearch) == false)) {
+    if (objectIds != null && objectIds.size() == 0
+        || !ExternalIdSearch.canMatch(externalIdSearch)) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
-    
+
     final DbMapSqlParameterSource args = createParameterSource();
     args.addTimestamp("version_as_of_instant", vc.getVersionAsOf());
     args.addTimestamp("corrected_to_instant", vc.getCorrectedTo());
@@ -260,15 +257,15 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     args.addValueNullIgnored("external_id_value", getDialect().sqlWildcardAdjustValue(request.getExternalIdValue()));
     if (externalIdSearch != null) {
       int i = 0;
-      for (ExternalId id : externalIdSearch) {
+      for (final ExternalId id : externalIdSearch) {
         args.addValue("key_scheme" + i, id.getScheme().getName());
         args.addValue("key_value" + i, id.getValue());
         i++;
       }
     }
-    if (externalIdSearch != null && externalIdSearch.alwaysMatches() == false) {
+    if (externalIdSearch != null && !externalIdSearch.alwaysMatches()) {
       int i = 0;
-      for (ExternalId id : externalIdSearch) {
+      for (final ExternalId id : externalIdSearch) {
         args.addValue("key_scheme" + i, id.getScheme().getName());
         args.addValue("key_value" + i, id.getValue());
         i++;
@@ -278,8 +275,8 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
       args.addValue("id_search_size", externalIdSearch.getExternalIds().size());
     }
     if (objectIds != null) {
-      StringBuilder buf = new StringBuilder(objectIds.size() * 10);
-      for (ObjectId objectId : objectIds) {
+      final StringBuilder buf = new StringBuilder(objectIds.size() * 10);
+      for (final ObjectId objectId : objectIds) {
         checkScheme(objectId);
         buf.append(extractOid(objectId)).append(", ");
       }
@@ -288,7 +285,7 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     }
     args.addValue("paging_offset", request.getPagingRequest().getFirstItem());
     args.addValue("paging_fetch", request.getPagingRequest().getPagingSize());
-    String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
+    final String[] sql = { getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args) };
     doSearch(request.getPagingRequest(), sql, args, new HistoricalTimeSeriesDocumentExtractor(), result);
     return result;
   }
@@ -298,44 +295,45 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
    * <p>
    * This is too complex for the elsql mechanism.
    *
-   * @param idSearch  the identifier search, not null
+   * @param idSearch
+   *          the identifier search, not null
    * @return the SQL, not null
    */
   protected String sqlSelectIdKeys(final ExternalIdSearch idSearch) {
-    List<String> list = new ArrayList<String>();
+    final List<String> list = new ArrayList<>();
     for (int i = 0; i < idSearch.size(); i++) {
       list.add("(key_scheme = :key_scheme" + i + " AND key_value = :key_value" + i + ") ");
     }
     return StringUtils.join(list, "OR ");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesInfoDocument get(UniqueId uniqueId) {
+  public HistoricalTimeSeriesInfoDocument get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     if (uniqueId.getVersion() != null && uniqueId.getVersion().contains("P")) {
-      VersionCorrection vc = extractTimeSeriesInstants(uniqueId);
+      final VersionCorrection vc = extractTimeSeriesInstants(uniqueId);
       return get(uniqueId.getObjectId(), vc);
     }
     return doGet(uniqueId, new HistoricalTimeSeriesDocumentExtractor(), "HistoricalTimeSeries");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     checkScheme(objectId.getObjectId());
     return doGetByOidInstants(objectId, versionCorrection, new HistoricalTimeSeriesDocumentExtractor(), "HistoricalTimeSeries");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoHistoryResult history(final HistoricalTimeSeriesInfoHistoryRequest request) {
     return doHistory(request, new HistoricalTimeSeriesInfoHistoryResult(), new HistoricalTimeSeriesDocumentExtractor());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesInfoDocument add(HistoricalTimeSeriesInfoDocument document) {
+  public HistoricalTimeSeriesInfoDocument add(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getInfo(), "document.info");
     ArgumentChecker.notNull(document.getInfo().getName(), "document.info.name");
@@ -344,17 +342,18 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     ArgumentChecker.notNull(document.getInfo().getDataProvider(), "document.info.dataProvider");
     ArgumentChecker.notNull(document.getInfo().getObservationTime(), "document.info.observationTime");
     ArgumentChecker.notNull(document.getInfo().getExternalIdBundle(), "document.info.externalIdBundle");
-    
+
     try (Timer.Context context = _htsAddTimer.time()) {
-      HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+      final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
       request.setDataField(document.getInfo().getDataField());
       request.setDataSource(document.getInfo().getDataSource());
       request.setDataProvider(document.getInfo().getDataProvider());
       request.setObservationTime(document.getInfo().getObservationTime());
       request.setExternalIdSearch(ExternalIdSearch.of(ExternalIdSearchType.EXACT, document.getInfo().getExternalIdBundle().toBundle()));
-      HistoricalTimeSeriesInfoSearchResult result = search(request);
+      final HistoricalTimeSeriesInfoSearchResult result = search(request);
       if (result.getDocuments().size() > 0) {
-        throw new DataDuplicationException("Unable to add as similar row exists already: " + result.getDocuments().get(0).getObjectId() + " matched " + request);
+        throw new DataDuplicationException("Unable to add as similar row exists already: "
+            + result.getDocuments().get(0).getObjectId() + " matched " + request);
       }
       return super.add(document);
     }
@@ -363,7 +362,8 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
   /**
    * Inserts a new document.
    *
-   * @param document  the document, not null
+   * @param document
+   *          the document, not null
    * @return the new document, not null
    */
   @Override
@@ -375,49 +375,49 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     ArgumentChecker.notNull(document.getInfo().getDataProvider(), "document.info.dataProvider");
     ArgumentChecker.notNull(document.getInfo().getObservationTime(), "document.info.observationTime");
     ArgumentChecker.notNull(document.getInfo().getExternalIdBundle(), "document.info.externalIdBundle");
-    
+
     try (Timer.Context context = _insertTimer.time()) {
       final long docId = nextId("hts_master_seq");
-      final long docOid = (document.getUniqueId() != null ? extractOid(document.getUniqueId()) : docId);
+      final long docOid = document.getUniqueId() != null ? extractOid(document.getUniqueId()) : docId;
       // the arguments for inserting into the table
       final ManageableHistoricalTimeSeriesInfo info = document.getInfo();
       final DbMapSqlParameterSource docArgs = createParameterSource()
-        .addValue("doc_id", docId)
-        .addValue("doc_oid", docOid)
-        .addTimestamp("ver_from_instant", document.getVersionFromInstant())
-        .addTimestampNullFuture("ver_to_instant", document.getVersionToInstant())
-        .addTimestamp("corr_from_instant", document.getCorrectionFromInstant())
-        .addTimestampNullFuture("corr_to_instant", document.getCorrectionToInstant())
-        .addValue("name_id", getNameTable().ensure(info.getName()))
-        .addValue("data_field_id", getDataFieldTable().ensure(info.getDataField()))
-        .addValue("data_source_id", getDataSourceTable().ensure(info.getDataSource()))
-        .addValue("data_provider_id", getDataProviderTable().ensure(info.getDataProvider()))
-        .addValue("observation_time_id", getObservationTimeTable().ensure(info.getObservationTime()));
-      // the arguments for inserting into the idkey tables
-      final List<DbMapSqlParameterSource> assocList = new ArrayList<DbMapSqlParameterSource>();
-      final List<DbMapSqlParameterSource> idKeyList = new ArrayList<DbMapSqlParameterSource>();
-      final String sqlSelectIdKey = getElSqlBundle().getSql("SelectIdKey");
-      for (ExternalIdWithDates id : info.getExternalIdBundle()) {
-        final DbMapSqlParameterSource assocArgs = createParameterSource()
           .addValue("doc_id", docId)
-          .addValue("key_scheme", id.getExternalId().getScheme().getName())
-          .addValue("key_value", id.getExternalId().getValue())
-          .addValue("valid_from", DbDateUtils.toSqlDateNullFarPast(id.getValidFrom()))
-          .addValue("valid_to", DbDateUtils.toSqlDateNullFarFuture(id.getValidTo()));
+          .addValue("doc_oid", docOid)
+          .addTimestamp("ver_from_instant", document.getVersionFromInstant())
+          .addTimestampNullFuture("ver_to_instant", document.getVersionToInstant())
+          .addTimestamp("corr_from_instant", document.getCorrectionFromInstant())
+          .addTimestampNullFuture("corr_to_instant", document.getCorrectionToInstant())
+          .addValue("name_id", getNameTable().ensure(info.getName()))
+          .addValue("data_field_id", getDataFieldTable().ensure(info.getDataField()))
+          .addValue("data_source_id", getDataSourceTable().ensure(info.getDataSource()))
+          .addValue("data_provider_id", getDataProviderTable().ensure(info.getDataProvider()))
+          .addValue("observation_time_id", getObservationTimeTable().ensure(info.getObservationTime()));
+      // the arguments for inserting into the idkey tables
+      final List<DbMapSqlParameterSource> assocList = new ArrayList<>();
+      final List<DbMapSqlParameterSource> idKeyList = new ArrayList<>();
+      final String sqlSelectIdKey = getElSqlBundle().getSql("SelectIdKey");
+      for (final ExternalIdWithDates id : info.getExternalIdBundle()) {
+        final DbMapSqlParameterSource assocArgs = createParameterSource()
+            .addValue("doc_id", docId)
+            .addValue("key_scheme", id.getExternalId().getScheme().getName())
+            .addValue("key_value", id.getExternalId().getValue())
+            .addValue("valid_from", DbDateUtils.toSqlDateNullFarPast(id.getValidFrom()))
+            .addValue("valid_to", DbDateUtils.toSqlDateNullFarFuture(id.getValidTo()));
         assocList.add(assocArgs);
         if (getJdbcTemplate().queryForList(sqlSelectIdKey, assocArgs).isEmpty()) {
           // select avoids creating unecessary id, but id may still not be used
           final long idKeyId = nextId("hts_idkey_seq");
           final DbMapSqlParameterSource idkeyArgs = createParameterSource()
-            .addValue("idkey_id", idKeyId)
-            .addValue("key_scheme", id.getExternalId().getScheme().getName())
-            .addValue("key_value", id.getExternalId().getValue());
+              .addValue("idkey_id", idKeyId)
+              .addValue("key_scheme", id.getExternalId().getScheme().getName())
+              .addValue("key_value", id.getExternalId().getValue());
           idKeyList.add(idkeyArgs);
         }
       }
       // the arguments for inserting into permission table
-      final List<DbMapSqlParameterSource> permissionList = new ArrayList<DbMapSqlParameterSource>();
-      for (String permission : info.getRequiredPermissions()) {
+      final List<DbMapSqlParameterSource> permissionList = new ArrayList<>();
+      for (final String permission : info.getRequiredPermissions()) {
         final DbMapSqlParameterSource permissionArgs = createParameterSource().addValue("doc_id", docId).addValue("permission", permission);
         permissionList.add(permissionArgs);
       }
@@ -443,9 +443,10 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
-  public ManageableHistoricalTimeSeries getTimeSeries(UniqueId uniqueId) {
+  @Override
+  public ManageableHistoricalTimeSeries getTimeSeries(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     checkScheme(uniqueId);
 
@@ -458,12 +459,14 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     return getTimeSeries(uniqueId.getObjectId(), vc);
   }
 
-  public ManageableHistoricalTimeSeries getTimeSeries(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
-    HistoricalTimeSeriesGetFilter filter = HistoricalTimeSeriesGetFilter.ofRange(null, null);
+  @Override
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
+    final HistoricalTimeSeriesGetFilter filter = HistoricalTimeSeriesGetFilter.ofRange(null, null);
     return getTimeSeries(objectId, versionCorrection, filter);
   }
 
-  public ManageableHistoricalTimeSeries getTimeSeries(UniqueId uniqueId, HistoricalTimeSeriesGetFilter filter) {
+  @Override
+  public ManageableHistoricalTimeSeries getTimeSeries(final UniqueId uniqueId, final HistoricalTimeSeriesGetFilter filter) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     checkScheme(uniqueId);
 
@@ -476,13 +479,15 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     return getTimeSeries(uniqueId.getObjectId(), vc, filter);
   }
 
-  public ManageableHistoricalTimeSeries getTimeSeries(ObjectIdentifiable objectId, VersionCorrection versionCorrection, HistoricalTimeSeriesGetFilter filter) {
+  @Override
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection,
+      final HistoricalTimeSeriesGetFilter filter) {
     try (Timer.Context context = _getTimeSeriesTimer.time()) {
       return getDataPointsWorker().getTimeSeries(objectId, versionCorrection, filter);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   @Override
   public UniqueId updateTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDateDoubleTimeSeries series) {
@@ -505,23 +510,24 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Extracts the object row id from the object identifier.
    *
-   * @param objectId  the object identifier, not null
+   * @param objectId
+   *          the object identifier, not null
    * @return the date, null if no point date
    */
   @Override
-  protected long extractOid(ObjectIdentifiable objectId) {
+  protected long extractOid(final ObjectIdentifiable objectId) {
     String value = objectId.getObjectId().getValue();
     if (value.startsWith(DATA_POINT_PREFIX)) {
       value = value.substring(DATA_POINT_PREFIX.length());
     }
     try {
       return Long.parseLong(value);
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new IllegalArgumentException("UniqueId is not from this master (non-numeric object id): " + objectId, ex);
     }
   }
@@ -529,23 +535,24 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
   /**
    * Extracts the instants from the unique identifier.
    *
-   * @param uniqueId  the unique identifier, not null
+   * @param uniqueId
+   *          the unique identifier, not null
    * @return the instants, version, correction, not null
    */
-  protected VersionCorrection extractTimeSeriesInstants(UniqueId uniqueId) {
+  protected VersionCorrection extractTimeSeriesInstants(final UniqueId uniqueId) {
     try {
-      int pos = uniqueId.getVersion().indexOf('P');
-      String verStr = uniqueId.getVersion().substring(0, pos);
-      String corrStr = uniqueId.getVersion().substring(pos);
-      Instant ver = Instant.parse(verStr);
-      Instant corr = ver.plus(Duration.parse(corrStr));
+      final int pos = uniqueId.getVersion().indexOf('P');
+      final String verStr = uniqueId.getVersion().substring(0, pos);
+      final String corrStr = uniqueId.getVersion().substring(pos);
+      final Instant ver = Instant.parse(verStr);
+      final Instant corr = ver.plus(Duration.parse(corrStr));
       return VersionCorrection.of(ver, corr);
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new IllegalArgumentException("UniqueId is not from this master (invalid version): " + uniqueId, ex);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
   /**
    * Mapper from SQL rows to a HistoricalTimeSeriesInfoDocument.
@@ -553,7 +560,7 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
   protected final class HistoricalTimeSeriesDocumentExtractor implements ResultSetExtractor<List<HistoricalTimeSeriesInfoDocument>> {
     private long _lastDocId = -1;
     private ManageableHistoricalTimeSeriesInfo _info;
-    private List<HistoricalTimeSeriesInfoDocument> _documents = new ArrayList<HistoricalTimeSeriesInfoDocument>();
+    private final List<HistoricalTimeSeriesInfoDocument> _documents = new ArrayList<>();
 
     @Override
     public List<HistoricalTimeSeriesInfoDocument> extractData(final ResultSet rs) throws SQLException, DataAccessException {
@@ -568,7 +575,7 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
         if (idScheme != null && idValue != null) {
           final LocalDate validFrom = DbDateUtils.fromSqlDateNullFarPast(rs.getDate("KEY_VALID_FROM"));
           final LocalDate validTo = DbDateUtils.fromSqlDateNullFarFuture(rs.getDate("KEY_VALID_TO"));
-          ExternalIdWithDates id = ExternalIdWithDates.of(ExternalId.of(idScheme, idValue), validFrom, validTo);
+          final ExternalIdWithDates id = ExternalIdWithDates.of(ExternalId.of(idScheme, idValue), validFrom, validTo);
           _info.setExternalIdBundle(_info.getExternalIdBundle().withExternalId(id));
         }
         final String permission = rs.getString("PERMISSION");
@@ -591,7 +598,7 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
       final String dataProvider = rs.getString("DATA_PROVIDER");
       final String observationTime = rs.getString("OBSERVATION_TIME");
 
-      UniqueId uniqueId = createUniqueId(docOid, docId);
+      final UniqueId uniqueId = createUniqueId(docOid, docId);
       _info = new ManageableHistoricalTimeSeriesInfo();
       _info.setUniqueId(uniqueId);
       _info.setName(name);
@@ -602,7 +609,7 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
       _info.setExternalIdBundle(ExternalIdBundleWithDates.EMPTY);
       _info.setTimeSeriesObjectId(uniqueId.getObjectId().withValue(DATA_POINT_PREFIX + uniqueId.getValue()));
 
-      HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument(_info);
+      final HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument(_info);
       doc.setVersionFromInstant(DbDateUtils.fromSqlTimestamp(versionFrom));
       doc.setVersionToInstant(DbDateUtils.fromSqlTimestampNullFarFuture(versionTo));
       doc.setCorrectionFromInstant(DbDateUtils.fromSqlTimestamp(correctionFrom));
@@ -612,8 +619,8 @@ public class DbHistoricalTimeSeriesMaster extends AbstractDocumentDbMaster<Histo
   }
 
   @Override
-  protected AbstractHistoryResult<HistoricalTimeSeriesInfoDocument> historyByVersionsCorrections(AbstractHistoryRequest request) {
-    HistoricalTimeSeriesInfoHistoryRequest historyRequest = new HistoricalTimeSeriesInfoHistoryRequest();
+  protected AbstractHistoryResult<HistoricalTimeSeriesInfoDocument> historyByVersionsCorrections(final AbstractHistoryRequest request) {
+    final HistoricalTimeSeriesInfoHistoryRequest historyRequest = new HistoricalTimeSeriesInfoHistoryRequest();
     historyRequest.setCorrectionsFromInstant(request.getCorrectionsFromInstant());
     historyRequest.setCorrectionsToInstant(request.getCorrectionsToInstant());
     historyRequest.setVersionsFromInstant(request.getVersionsFromInstant());

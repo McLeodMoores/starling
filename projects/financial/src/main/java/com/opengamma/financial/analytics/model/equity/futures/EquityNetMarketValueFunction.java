@@ -31,8 +31,7 @@ import com.opengamma.financial.security.option.EquityOptionSecurity;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Prototype - Takes {@link ValueRequirementNames#NET_MARKET_VALUE} as input requirement, 
- * and filters out all but those Security Types that are Equity based. <p>
+ * Prototype - Takes {@link ValueRequirementNames#NET_MARKET_VALUE} as input requirement, and filters out all but those Security Types that are Equity based.
  * <p>
  * Applies only to Equity Security Types
  */
@@ -41,27 +40,29 @@ public class EquityNetMarketValueFunction extends AbstractFunction.NonCompiledIn
   private String getOutputName() {
     return ValueRequirementNames.EQUITY_NET_MARKET_VALUE;
   }
-  
+
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    Security security = target.getPositionOrTrade().getSecurity();
-    if ((security instanceof EquitySecurity) || 
-        (security instanceof EquityOptionSecurity) || 
-        (security instanceof EquityIndexOptionSecurity)) {
+    final Security security = target.getPositionOrTrade().getSecurity();
+    if (security instanceof EquitySecurity
+        || security instanceof EquityOptionSecurity
+        || security instanceof EquityIndexOptionSecurity) {
       return true;
     }
     return false;
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
     // Get Net Market Value requirement
     Double netMarketValue = null;
     final ComputedValue inputVal = inputs.getComputedValue(ValueRequirementNames.NET_MARKET_VALUE);
     if (inputVal != null) { // Ensure the value was successfully obtained
       netMarketValue = (Double) inputVal.getValue();
     } else {
-      throw new OpenGammaRuntimeException("Did not satisfy requirement," + ValueRequirementNames.NET_MARKET_VALUE + ", for trade " + target.getPositionOrTrade().getUniqueId());
+      throw new OpenGammaRuntimeException(
+          "Did not satisfy requirement," + ValueRequirementNames.NET_MARKET_VALUE + ", for trade " + target.getPositionOrTrade().getUniqueId());
     }
     // 3. Create specification and return
     final ValueRequirement desiredValue = desiredValues.iterator().next();
@@ -75,12 +76,13 @@ public class EquityNetMarketValueFunction extends AbstractFunction.NonCompiledIn
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
-    return Collections.singleton(new ValueSpecification(getOutputName() , target.toSpecification(), ValueProperties.all()));
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
+    return Collections.singleton(new ValueSpecification(getOutputName(), target.toSpecification(), ValueProperties.all()));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     // inputs provide the properties of the required security greek. These we pass through to the position
     final ValueSpecification netMarketValueSpec = inputs.keySet().iterator().next();
     if (netMarketValueSpec.getValueName() != ValueRequirementNames.NET_MARKET_VALUE) {
@@ -92,16 +94,16 @@ public class EquityNetMarketValueFunction extends AbstractFunction.NonCompiledIn
         .withoutAny(ValuePropertyNames.FUNCTION).with(ValuePropertyNames.FUNCTION, getUniqueId())
         .withoutAny(ValuePropertyNames.CURRENCY).with(ValuePropertyNames.CURRENCY, currency)
         .get();
-    return Collections.singleton(new ValueSpecification(getOutputName() , target.toSpecification(), properties));
+    return Collections.singleton(new ValueSpecification(getOutputName(), target.toSpecification(), properties));
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     if (!desiredValue.getValueName().equals(getOutputName())) {
       return null;
     }
     return Collections.singleton(new ValueRequirement(ValueRequirementNames.NET_MARKET_VALUE, target.toSpecification(),
-          desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION)));
+        desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION)));
   }
 
 }

@@ -1,14 +1,15 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.description;
 
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 
 /**
@@ -16,8 +17,8 @@ import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
  */
 public class NormalDataSets {
 
-  private static final Interpolator1D LINEAR_FLAT = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D LINEAR_FLAT = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
   private static final GridInterpolator2D INTERPOLATOR_2D = new GridInterpolator2D(LINEAR_FLAT, LINEAR_FLAT);
 
   private static final double[] VOLATILITIES = new double[] {0.0100, 0.0110, 0.0120, 0.0090, 0.0100, 0.0100};
@@ -30,7 +31,7 @@ public class NormalDataSets {
   }
 
   public static InterpolatedDoublesSurface createNormalSurfaceFuturesPricesShift(final double shift) {
-    double[] shiftedVol = VOLATILITIES.clone();
+    final double[] shiftedVol = VOLATILITIES.clone();
     for (int loopvol = 0; loopvol < shiftedVol.length; loopvol++) {
       shiftedVol[loopvol] += shift;
     }

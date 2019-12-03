@@ -5,28 +5,38 @@
  */
 package com.opengamma.util.result;
 
-import org.joda.beans.BeanDefinition;
-import org.joda.beans.ImmutableBean;
-import org.joda.beans.PropertyDefinition;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+
 import org.joda.beans.Bean;
+import org.joda.beans.BeanDefinition;
+import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
+import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+/**
+ * Container for {@link Result}s for use in tests.
+ */
 @BeanDefinition
 public final class ResultContainer implements ImmutableBean {
 
   @PropertyDefinition(validate = "notNull")
   private final Result<?> _result;
 
-  public static ResultContainer of(Result<?> result) {
+  /**
+   * Constructs the container.
+   *
+   * @param result  the result, not null
+   * @return  the container
+   */
+  public static ResultContainer of(final Result<?> result) {
     return new ResultContainer(result);
   }
 
@@ -98,7 +108,7 @@ public final class ResultContainer implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ResultContainer other = (ResultContainer) obj;
-      return JodaBeanUtils.equal(getResult(), other.getResult());
+      return JodaBeanUtils.equal(_result, other._result);
     }
     return false;
   }
@@ -106,7 +116,7 @@ public final class ResultContainer implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getResult());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_result);
     return hash;
   }
 
@@ -114,7 +124,7 @@ public final class ResultContainer implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("ResultContainer{");
-    buf.append("result").append('=').append(JodaBeanUtils.toString(getResult()));
+    buf.append("result").append('=').append(JodaBeanUtils.toString(_result));
     buf.append('}');
     return buf.toString();
   }
@@ -253,19 +263,31 @@ public final class ResultContainer implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

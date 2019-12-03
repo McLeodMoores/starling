@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.value;
@@ -11,16 +11,20 @@ import java.util.Set;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Utilities classes for {@link ValueProperties}
+ * Utilities classes for {@link ValueProperties}.
  */
 public class ValuePropertiesUtils {
 
   /**
-   * Returns a copy of the original properties with the given property added and set to optional. If the new property is already present 
-   * in the original and the property value is not equal to that in the original, throws an exception.
-   * @param originalProperties The original properties, not null
-   * @param propertyName The property name to add, not null
-   * @param propertyValue The property value, not null
+   * Returns a copy of the original properties with the given property added and set to optional. If the new property is already present in the original and the
+   * property value is not equal to that in the original, throws an exception.
+   *
+   * @param originalProperties
+   *          The original properties, not null
+   * @param propertyName
+   *          The property name to add, not null
+   * @param propertyValue
+   *          The property value, not null
    * @return The new properties
    */
   public static ValueProperties.Builder addOptional(final ValueProperties originalProperties, final String propertyName, final String propertyValue) {
@@ -29,24 +33,27 @@ public class ValuePropertiesUtils {
     ArgumentChecker.notNull(propertyValue, "property value");
     final Set<String> originalPropertyValues = originalProperties.getValues(propertyName);
     if (originalPropertyValues != null && !originalPropertyValues.equals(Collections.singleton(propertyValue))) {
-      throw new IllegalStateException("Property " + propertyName + " already present, but value " + 
-          propertyValue + " not equal to " + originalProperties.getValues(propertyName));
+      throw new IllegalStateException("Property " + propertyName + " already present, but value "
+          + propertyValue + " not equal to " + originalProperties.getValues(propertyName));
     }
     final ValueProperties.Builder newProperties = originalProperties.copy()
         .with(propertyName, propertyValue)
         .withOptional(propertyName);
     return newProperties;
   }
-  
+
   /**
-   * Returns a copy of the original properties with all new properties added and set to optional. If the properties to add input
-   * is null or empty, returns an unchanged copy of the original. If the new properties contain a value for a property that is 
-   * already present in the original and the property value is not equal to that in the original, throws an exception.
-   * @param originalProperties The original properties, not null
-   * @param propertiesToAdd The properties to add
+   * Returns a copy of the original properties with all new properties added and set to optional. If the properties to add input is null or empty, returns an
+   * unchanged copy of the original. If the new properties contain a value for a property that is already present in the original and the property value is not
+   * equal to that in the original, throws an exception.
+   *
+   * @param originalProperties
+   *          The original properties, not null
+   * @param propertiesToAdd
+   *          The properties to add
    * @return The new properties
-   * @throws IllegalStateException If the properties to add contains a value for a property name that is present in the original
-   * properties but that is not equal to its value(s)
+   * @throws IllegalStateException
+   *           If the properties to add contains a value for a property name that is present in the original properties but that is not equal to its value(s)
    */
   public static ValueProperties.Builder addAllOptional(final ValueProperties originalProperties, final ValueProperties propertiesToAdd) {
     ArgumentChecker.notNull(originalProperties, "original properties");
@@ -57,8 +64,8 @@ public class ValuePropertiesUtils {
     for (final String propertyName : propertiesToAdd.getProperties()) {
       final Set<String> propertyValue = propertiesToAdd.getValues(propertyName);
       if (originalProperties.getValues(propertyName) != null && !propertyValue.equals(originalProperties.getValues(propertyName))) {
-        throw new IllegalStateException("Property " + propertyName + " already present, but value " + 
-            propertyValue + " not equal to " + originalProperties.getValues(propertyName));
+        throw new IllegalStateException("Property " + propertyName + " already present, but value "
+            + propertyValue + " not equal to " + originalProperties.getValues(propertyName));
       }
       if (propertyValue == null || propertyValue.isEmpty()) {
         newProperties.withAny(propertyName).withOptional(propertyName);
@@ -68,15 +75,18 @@ public class ValuePropertiesUtils {
     }
     return newProperties;
   }
-  
+
   /**
-   * Adds all new properties to the original properties and sets them to optional. If the properties to add input
-   * is null or empty, the original properties are unchanged. If the new properties contain a value for a property that is 
-   * already present in the original and the property value is not equal to that in the original, throws an exception.
-   * @param properties The original properties, not null
-   * @param propertiesToAdd The properties to add
-   * @throws IllegalStateException If the properties to add contains a value for a property name that is present in the original
-   * properties but that is not equal to its value(s)
+   * Adds all new properties to the original properties and sets them to optional. If the properties to add input is null or empty, the original properties are
+   * unchanged. If the new properties contain a value for a property that is already present in the original and the property value is not equal to that in the
+   * original, throws an exception.
+   *
+   * @param properties
+   *          The original properties, not null
+   * @param propertiesToAdd
+   *          The properties to add
+   * @throws IllegalStateException
+   *           If the properties to add contains a value for a property name that is present in the original properties but that is not equal to its value(s)
    */
   public static void withAllOptional(final ValueProperties.Builder properties, final ValueProperties propertiesToAdd) {
     ArgumentChecker.notNull(properties, "properties");
@@ -87,8 +97,8 @@ public class ValuePropertiesUtils {
     for (final String propertyName : propertiesToAdd.getProperties()) {
       final Set<String> propertyValue = propertiesToAdd.getValues(propertyName);
       if (originalProperties.getValues(propertyName) != null && !propertyValue.equals(originalProperties.getValues(propertyName))) {
-        throw new IllegalStateException("Property " + propertyName + " already present, but value " + 
-          propertyValue + " not equal to " + originalProperties.getValues(propertyName));
+        throw new IllegalStateException("Property " + propertyName + " already present, but value "
+            + propertyValue + " not equal to " + originalProperties.getValues(propertyName));
       }
       if (propertyValue == null || propertyValue.isEmpty()) {
         properties.withAny(propertyName).withOptional(propertyName);
@@ -98,11 +108,14 @@ public class ValuePropertiesUtils {
     }
     return;
   }
-  
+
   /**
    * Returns a copy of the original properties with all of the given properties removed if present.
-   * @param originalProperties The original properties, not null
-   * @param propertiesToRemove The properties to remove
+   *
+   * @param originalProperties
+   *          The original properties, not null
+   * @param propertiesToRemove
+   *          The properties to remove
    * @return A copy of the original properties with all given properties removed
    */
   public static ValueProperties.Builder removeAll(final ValueProperties originalProperties, final String... propertiesToRemove) {
@@ -116,16 +129,18 @@ public class ValuePropertiesUtils {
     }
     return newProperties;
   }
-  
+
   /**
    * Returns properties that contain all of the properties that were set to optional in the original properties.
-   * @param originalProperties The original properties, not null
+   *
+   * @param originalProperties
+   *          The original properties, not null
    * @return Properties that contain only those values that were set to optional in the original properties
    */
   public static ValueProperties.Builder getAllOptional(final ValueProperties originalProperties) {
     ArgumentChecker.notNull(originalProperties, "original properties");
     final ValueProperties.Builder optionalProperties = ValueProperties.builder();
-    for (String propertyName : originalProperties.getProperties()) {
+    for (final String propertyName : originalProperties.getProperties()) {
       if (originalProperties.isOptional(propertyName)) {
         final Set<String> propertyValues = originalProperties.getValues(propertyName);
         if (propertyValues == null || propertyValues.isEmpty()) {

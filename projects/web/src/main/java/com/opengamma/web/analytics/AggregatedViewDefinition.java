@@ -22,7 +22,7 @@ import com.opengamma.web.server.AggregatedViewDefinitionManager;
   private final List<String> _aggregatorNames;
   private final UniqueId _id;
 
-  /* package */ AggregatedViewDefinition(AggregatedViewDefinitionManager aggregatedViewDefManager, ViewRequest viewRequest) {
+  /* package */ AggregatedViewDefinition(final AggregatedViewDefinitionManager aggregatedViewDefManager, final ViewRequest viewRequest) {
     ArgumentChecker.notNull(aggregatedViewDefManager, "aggregatedViewDefManager");
     ArgumentChecker.notNull(viewRequest, "viewRequest");
     _aggregatedViewDefManager = aggregatedViewDefManager;
@@ -30,7 +30,7 @@ import com.opengamma.web.server.AggregatedViewDefinitionManager;
     _aggregatorNames = viewRequest.getAggregators();
     try {
       _id = _aggregatedViewDefManager.getViewDefinitionId(_baseViewDefId, _aggregatorNames);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       close();
       throw new OpenGammaRuntimeException("Failed to get aggregated view definition", e);
     }

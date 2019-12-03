@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.holiday.impl;
@@ -63,37 +63,37 @@ public class DataHolidayMasterResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @GET
   @Path("metaData")
-  public Response metaData(@Context UriInfo uriInfo) {
-    HolidayMetaDataRequest request = RestUtils.decodeQueryParams(uriInfo, HolidayMetaDataRequest.class);
-    HolidayMetaDataResult result = getHolidayMaster().metaData(request);
+  public Response metaData(@Context final UriInfo uriInfo) {
+    final HolidayMetaDataRequest request = RestUtils.decodeQueryParams(uriInfo, HolidayMetaDataRequest.class);
+    final HolidayMetaDataResult result = getHolidayMaster().metaData(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("holidaySearches")
-  public Response search(HolidaySearchRequest request) {
-    HolidaySearchResult result = getHolidayMaster().search(request);
+  public Response search(final HolidaySearchRequest request) {
+    final HolidaySearchResult result = getHolidayMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("holidays")
-  public Response add(@Context UriInfo uriInfo, HolidayDocument request) {
-    HolidayDocument result = getHolidayMaster().add(request);
-    URI createdUri = (new DataHolidayResource()).uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response add(@Context final UriInfo uriInfo, final HolidayDocument request) {
+    final HolidayDocument result = getHolidayMaster().add(request);
+    final URI createdUri = new DataHolidayResource().uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @Path("holidays/{holidayId}")
-  public DataHolidayResource findHoliday(@PathParam("holidayId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataHolidayResource findHoliday(@PathParam("holidayId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataHolidayResource(this, id);
   }
 

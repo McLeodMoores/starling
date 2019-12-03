@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -16,7 +16,6 @@ import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.Lifecycle;
 
 import com.opengamma.engine.cache.AbstractIdentifierMap;
 import com.opengamma.engine.cache.IdentifierMap;
@@ -39,12 +38,13 @@ import com.opengamma.transport.FudgeMessageReceiver;
 import com.opengamma.transport.FudgeMessageSender;
 
 /**
- * Client end to RemoteNodeServer for registering one or more AbstractCalculationNodes with a remote job dispatcher. The connection must deliver messages in network order (i.e. not use an executor
+ * Client end to RemoteNodeServer for registering one or more AbstractCalculationNodes with a remote job dispatcher.
+ * The connection must deliver messages in network order (i.e. not use an executor
  * service).
  */
-public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer implements FudgeMessageReceiver, Lifecycle, FudgeConnectionStateListener {
+public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer implements FudgeMessageReceiver, FudgeConnectionStateListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteNodeClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteNodeClient.class);
 
   private final FudgeConnection _connection;
   private final CompiledFunctionService _functionCompilationService;
@@ -56,12 +56,12 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
 
     @Override
     protected void visitUnexpectedMessage(final RemoteCalcNodeMessage message) {
-      s_logger.warn("Unexpected message - {}", message);
+      LOGGER.warn("Unexpected message - {}", message);
     }
 
     @Override
     protected void visitCancelMessage(final Cancel message) {
-      for (CalculationJobSpecification job : message.getJob()) {
+      for (final CalculationJobSpecification job : message.getJob()) {
         cancel(job);
       }
     }
@@ -82,7 +82,7 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
 
         @Override
         public void executionFailed(final SimpleCalculationNode node, final Exception exception) {
-          s_logger.warn("Exception thrown by job execution", exception);
+          LOGGER.warn("Exception thrown by job execution", exception);
           sendMessage(new Failure(job.getSpecification(), exception.getMessage(), node.getNodeId()));
         }
 
@@ -97,7 +97,7 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
 
     @Override
     protected void visitIsAliveMessage(final IsAlive message) {
-      for (CalculationJobSpecification job : message.getJob()) {
+      for (final CalculationJobSpecification job : message.getJob()) {
         if (!isAlive(job)) {
           sendMessage(new Failure(job, "isAlive returned false", ""));
         }
@@ -106,7 +106,7 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
 
     @Override
     protected void visitScalingMessage(final Scaling message) {
-      s_logger.info("Scaling data received {}", message);
+      LOGGER.info("Scaling data received {}", message);
       getStatistics().setScaling(message.getInvocation());
     }
 
@@ -123,7 +123,7 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
     connection.setFudgeMessageReceiver(this);
     try {
       setHostId(Inet4Address.getLocalHost().getHostName());
-    } catch (UnknownHostException e) {
+    } catch (final UnknownHostException e) {
       setHostId("ANONYMOUS");
     }
   }
@@ -175,7 +175,7 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
     final FudgeMessageSender sender = getConnection().getFudgeMessageSender();
     final FudgeSerializer serializer = new FudgeSerializer(sender.getFudgeContext());
     final FudgeMsg msg = FudgeSerializer.addClassHeader(serializer.objectToFudgeMsg(message), message.getClass(), RemoteCalcNodeMessage.class);
-    s_logger.debug("Sending message ({} fields) to {}", msg.getNumFields(), _connection);
+    LOGGER.debug("Sending message ({} fields) to {}", msg.getNumFields(), _connection);
     sender.send(msg);
   }
 
@@ -193,14 +193,14 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
 
   /**
    * Needs to run sequentially, preserving network message order.
-   * 
+   *
    * @param fudgeContext the Fudge context for processing the message
    * @param msgEnvelope the received message
    */
   @Override
-  public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
+  public void messageReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope msgEnvelope) {
     final FudgeMsg msg = msgEnvelope.getMessage();
-    s_logger.debug("Received ({} fields) from {}", msg.getNumFields(), _connection);
+    LOGGER.debug("Received ({} fields) from {}", msg.getNumFields(), _connection);
     final FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);
     final RemoteCalcNodeMessage message = deserializer.fudgeMsgToObject(RemoteCalcNodeMessage.class, msgEnvelope.getMessage());
     message.accept(_messageVisitor);
@@ -221,14 +221,14 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
     super.start();
     synchronized (this) {
       if (!_started) {
-        s_logger.info("Client starting");
+        LOGGER.info("Client starting");
         sendCapabilities();
         sendStaleCacheQuery();
         _started = true;
-        s_logger.info("Client started for {}", _connection);
+        LOGGER.info("Client started for {}", _connection);
         _connection.setConnectionStateListener(this);
       } else {
-        s_logger.warn("Client already started");
+        LOGGER.warn("Client already started");
       }
     }
   }
@@ -237,11 +237,11 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
   public void stop() {
     synchronized (this) {
       if (_started) {
-        s_logger.info("Client stopped");
+        LOGGER.info("Client stopped");
         _connection.setConnectionStateListener(null);
         _started = false;
       } else {
-        s_logger.warn("Client already stopped");
+        LOGGER.warn("Client already stopped");
       }
     }
     super.stop();
@@ -249,7 +249,7 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
 
   @Override
   public void connectionFailed(final FudgeConnection connection, final Exception cause) {
-    s_logger.warn("Underlying connection failed - client cannot run", cause);
+    LOGGER.warn("Underlying connection failed - client cannot run", cause);
     if (_started) {
       stop();
     }
@@ -257,10 +257,10 @@ public class RemoteNodeClient extends SimpleCalculationNodeInvocationContainer i
 
   @Override
   public void connectionReset(final FudgeConnection connection) {
-    s_logger.info("Underlying connection reset - resending capabilities & querying for stale caches");
+    LOGGER.info("Underlying connection reset - resending capabilities & querying for stale caches");
     sendCapabilities();
     sendStaleCacheQuery();
-    s_logger.debug("Capabilities sent");
+    LOGGER.debug("Capabilities sent");
   }
 
 }

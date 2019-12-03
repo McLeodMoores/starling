@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.credit.isda;
@@ -22,24 +22,24 @@ import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ISDADateCurveDefaults extends DefaultPropertyFunction {
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-    ValueRequirementNames.CS01,
-    ValueRequirementNames.BUCKETED_CS01,
-    ValueRequirementNames.GAMMA_CS01,
-    ValueRequirementNames.BUCKETED_GAMMA_CS01,
-    ValueRequirementNames.RR01,
-    ValueRequirementNames.IR01,
-    ValueRequirementNames.BUCKETED_IR01,
-    ValueRequirementNames.JUMP_TO_DEFAULT,
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.HAZARD_RATE_CURVE,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.PAR_SPREAD,
-    ValueRequirementNames.HEDGE_NOTIONAL,
-    ValueRequirementNames.NET_MARKET_VALUE
+                ValueRequirementNames.CS01,
+                ValueRequirementNames.BUCKETED_CS01,
+                ValueRequirementNames.GAMMA_CS01,
+                ValueRequirementNames.BUCKETED_GAMMA_CS01,
+                ValueRequirementNames.RR01,
+                ValueRequirementNames.IR01,
+                ValueRequirementNames.BUCKETED_IR01,
+                ValueRequirementNames.JUMP_TO_DEFAULT,
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.HAZARD_RATE_CURVE,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.PAR_SPREAD,
+                ValueRequirementNames.HEDGE_NOTIONAL,
+                ValueRequirementNames.NET_MARKET_VALUE
   };
   private final PriorityClass _priority;
   private final Map<String, String> _currencyToYieldCurveName;
@@ -53,8 +53,8 @@ public class ISDADateCurveDefaults extends DefaultPropertyFunction {
         .or(FinancialSecurityTypes.CREDIT_DEFAULT_SWAP_INDEX_SECURITY), true);
     ArgumentChecker.notNull(priority, "priority");
     ArgumentChecker.notNull(perCurrencyDefaults, "per currency defaults");
-    ArgumentChecker.isTrue(perCurrencyDefaults.length % 4 == 0, "must have one yield curve name, yield curve calculation config and" +
-        "yield curve calculation method per currency");
+    ArgumentChecker.isTrue(perCurrencyDefaults.length % 4 == 0, "must have one yield curve name, yield curve calculation config and"
+        + "yield curve calculation method per currency");
     _priority = PriorityClass.valueOf(priority);
     _currencyToYieldCurveName = new HashMap<>();
     _currencyToYieldCurveConfigName = new HashMap<>();
@@ -83,7 +83,8 @@ public class ISDADateCurveDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String currency = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     if (CreditInstrumentPropertyNamesAndValues.PROPERTY_YIELD_CURVE.equals(propertyName)) {
       return Collections.singleton(_currencyToYieldCurveName.get(currency));

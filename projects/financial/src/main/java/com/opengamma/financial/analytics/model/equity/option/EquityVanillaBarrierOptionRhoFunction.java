@@ -21,16 +21,14 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the rho (first order sensitivity of price with respect to the interest rate) of a vanilla equity barrier option
- * using the Black formula.
+ * Calculates the rho (first order sensitivity of price with respect to the interest rate) of a vanilla equity barrier option using the Black formula.
  */
 public class EquityVanillaBarrierOptionRhoFunction extends EquityVanillaBarrierOptionBlackFunction {
 
-  
   private static final InstrumentDerivativeVisitor<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackRhoCalculator.getInstance();
-  
+
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityVanillaBarrierOptionRhoFunction() {
     super(ValueRequirementNames.VALUE_RHO);
@@ -42,7 +40,7 @@ public class EquityVanillaBarrierOptionRhoFunction extends EquityVanillaBarrierO
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
     double rho = 0.0;
     for (final EquityIndexOption derivative : vanillaOptions) {
-      rho += derivative.accept(CALCULATOR, market); 
+      rho += derivative.accept(CALCULATOR, market);
     }
     return Collections.singleton(new ComputedValue(resultSpec, rho));
   }

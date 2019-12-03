@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.volatility.surface;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,11 +42,13 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  */
 public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(CommodityOptionVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CommodityOptionVolatilitySurfaceDataFunction.class);
 
   private ConfigDBVolatilitySurfaceSpecificationSource _volatilitySurfaceSpecificationSource;
 
@@ -59,11 +59,15 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
 
   @Override
   /**
-   * {@inheritDoc} <p>
-   * INPUT: We are taking a VolatilitySurfaceData object, which contains all number of missing data, plus strikes and vols are in percentages <p>
-   * OUTPUT: and converting this into a StandardVolatilitySurfaceData object, which has no empty values, expiry is in years, and the strike and vol scale is without unit (35% -> 0.35)
+   * {@inheritDoc}
+   * <p>
+   * INPUT: We are taking a VolatilitySurfaceData object, which contains all number of missing data, plus strikes and vols are in percentages
+   * <p>
+   * OUTPUT: and converting this into a StandardVolatilitySurfaceData object, which has no empty values, expiry is in years, and the strike and vol scale is
+   * without unit (35% -> 0.35)
    */
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
 
     final ZonedDateTime valTime = ZonedDateTime.now(executionContext.getValuationClock());
     final LocalDate valDate = valTime.toLocalDate();
@@ -83,7 +87,7 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
     @SuppressWarnings("unchecked")
     final VolatilitySurfaceData<Number, Double> rawSurface = (VolatilitySurfaceData<Number, Double>) rawSurfaceObject;
 
-    //2a Get forward curve
+    // 2a Get forward curve
     final Object forwardCurveObject = inputs.getValue(ValueRequirementNames.FORWARD_CURVE);
     if (forwardCurveObject == null) {
       throw new OpenGammaRuntimeException("Could not get forward curve");
@@ -91,13 +95,14 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
     final ForwardCurve forwardCurve = (ForwardCurve) forwardCurveObject;
 
     // 3. Remove empties, convert expiries from number to years, and scale vols
-    final Map<Pair<Double, Double>, Double> volValues = new HashMap<Pair<Double, Double>, Double>();
+    final Map<Pair<Double, Double>, Double> volValues = new HashMap<>();
     final DoubleArrayList tList = new DoubleArrayList();
     final DoubleArrayList kList = new DoubleArrayList();
     // SurfaceInstrumentProvider just used to get expiry calculator - find a better way as this is quite ugly.
     final String surfacePrefix = surfaceName.split("\\_")[1];
-    final ExchangeTradedInstrumentExpiryCalculator expiryCalculator = new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(surfacePrefix, "Comdty", "", 0., "")
-        .getExpiryRuleCalculator();
+    final ExchangeTradedInstrumentExpiryCalculator expiryCalculator = new BloombergCommodityFutureOptionVolatilitySurfaceInstrumentProvider(surfacePrefix,
+        "Comdty", "", 0., "")
+            .getExpiryRuleCalculator();
     for (final Number nthExpiry : rawSurface.getXs()) {
       final double t = TimeCalculator.getTimeBetween(valDate, expiryCalculator.getExpiryDate(nthExpiry.intValue(), valDate, calendar));
 
@@ -116,19 +121,20 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
         }
       }
     }
-    final VolatilitySurfaceData<Double, Double> stdVolSurface = new VolatilitySurfaceData<Double, Double>(rawSurface.getDefinitionName(), rawSurface.getSpecificationName(),
+    final VolatilitySurfaceData<Double, Double> stdVolSurface = new VolatilitySurfaceData<>(rawSurface.getDefinitionName(), rawSurface.getSpecificationName(),
         rawSurface.getTarget(), tList.toArray(new Double[0]), kList.toArray(new Double[0]), volValues);
 
     // 4. Return
     final ValueProperties stdVolProperties = createValueProperties().with(ValuePropertyNames.SURFACE, surfaceName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.COMMODITY_FUTURE_OPTION).get();
-    final ValueSpecification stdVolSpec = new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(), stdVolProperties);
+    final ValueSpecification stdVolSpec = new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(),
+        stdVolProperties);
     return Collections.singleton(new ComputedValue(stdVolSpec, stdVolSurface));
   }
 
   /**
    * Some strikes blow up the black function - strip them out
-   * 
+   *
    * @return true if strike works with black function
    */
   private boolean isValidStrike(final ForwardCurve forwardCurve, final VolatilitySurfaceData<Number, Double> rawSurface, final double t, final Number nExpiry) {
@@ -151,7 +157,7 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
         break;
       }
     }
-    if ((low == null) || (high == null) || (low > forward) || (high < forward)) {
+    if (low == null || high == null || low > forward || high < forward) {
       return false;
     }
     return true;
@@ -164,8 +170,10 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(), createValueProperties()
-        .withAny(ValuePropertyNames.SURFACE).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.COMMODITY_FUTURE_OPTION).get());
+    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.STANDARD_VOLATILITY_SURFACE_DATA, target.toSpecification(),
+        createValueProperties()
+            .withAny(ValuePropertyNames.SURFACE)
+            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.COMMODITY_FUTURE_OPTION).get());
     return Collections.singleton(spec);
   }
 
@@ -181,9 +189,10 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
     final String fullName = givenName + "_" + target.getUniqueId().getValue();
 
     // 2. Look up the specification
-    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullName, InstrumentTypeProperties.COMMODITY_FUTURE_OPTION);
+    final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullName,
+        InstrumentTypeProperties.COMMODITY_FUTURE_OPTION);
     if (specification == null) {
-      s_logger.error("Could not get volatility surface specification with name " + fullName);
+      LOGGER.error("Could not get volatility surface specification with name " + fullName);
       return null;
     }
 
@@ -198,7 +207,7 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
         .with(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS, specification.getQuoteUnits()).get();
     // 4. Return
     final ValueRequirement surfaceReq = new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), constraints);
-    //return Collections.singleton(surfaceReq);
+    // return Collections.singleton(surfaceReq);
     return Sets.newHashSet(forwardRequirement, surfaceReq);
   }
 

@@ -19,15 +19,16 @@ import com.opengamma.engine.target.ComputationTargetTypeMap;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Run queue implementation based on sorting the runnable tasks. When the run queue is small, this is comparable to {@link ConcurrentLinkedQueueRunQueue} or {@link StackRunQueue} implementations as
- * the sorting operation is not performed. As the run queue length grows and exceeds the capacity of the target resolution cache, the cost of ordering the operations may be offset by better use of the
- * cache. Some function repositories and graph structures may still benefit from the simpler {@link StackRunQueue} implementation which can give good cache performance without any ordering costs.
+ * Run queue implementation based on sorting the runnable tasks. When the run queue is small, this is comparable to {@link ConcurrentLinkedQueueRunQueue} or
+ * {@link StackRunQueue} implementations as the sorting operation is not performed. As the run queue length grows and exceeds the capacity of the target
+ * resolution cache, the cost of ordering the operations may be offset by better use of the cache. Some function repositories and graph structures may still
+ * benefit from the simpler {@link StackRunQueue} implementation which can give good cache performance without any ordering costs.
  */
 /* package */final class OrderedRunQueue implements RunQueue, Comparator<ContextRunnable> {
 
-  // TODO: Note that this might not be correct with regard to the Java Memory Model. 
+  // TODO: Note that this might not be correct with regard to the Java Memory Model.
 
-  private static final ComputationTargetTypeMap<Integer> s_priority;
+  private static final ComputationTargetTypeMap<Integer> PRIORITY;
 
   private final int _maxUnsorted;
   private ContextRunnable[] _buffer;
@@ -37,20 +38,20 @@ import com.opengamma.util.ArgumentChecker;
   private final Object _sortingLock = new Object();
 
   static {
-    s_priority = new ComputationTargetTypeMap<Integer>();
-    s_priority.put(ComputationTargetType.PORTFOLIO_NODE, 1);
-    s_priority.put(ComputationTargetType.NULL, 2);
-    s_priority.put(ComputationTargetType.ANYTHING, 3);
-    s_priority.put(ComputationTargetType.SECURITY, 4);
-    s_priority.put(ComputationTargetType.TRADE, 5);
-    s_priority.put(ComputationTargetType.POSITION, 6);
+    PRIORITY = new ComputationTargetTypeMap<>();
+    PRIORITY.put(ComputationTargetType.PORTFOLIO_NODE, 1);
+    PRIORITY.put(ComputationTargetType.NULL, 2);
+    PRIORITY.put(ComputationTargetType.ANYTHING, 3);
+    PRIORITY.put(ComputationTargetType.SECURITY, 4);
+    PRIORITY.put(ComputationTargetType.TRADE, 5);
+    PRIORITY.put(ComputationTargetType.POSITION, 6);
   }
 
-  public OrderedRunQueue(final int initialBuffer, final int maxUnsorted) {
+  OrderedRunQueue(final int initialBuffer, final int maxUnsorted) {
     ArgumentChecker.isTrue(initialBuffer > 0, "initialBuffer");
     ArgumentChecker.isTrue(maxUnsorted > 0, "maxUnsorted");
     _maxUnsorted = maxUnsorted;
-    _buffer = new ContextRunnable[(initialBuffer < 2) ? 2 : initialBuffer];
+    _buffer = new ContextRunnable[initialBuffer < 2 ? 2 : initialBuffer];
   }
 
   @Override
@@ -80,9 +81,8 @@ import com.opengamma.util.ArgumentChecker;
         final int count = _count++;
         if (count < buffer.length) {
           return buffer[count];
-        } else {
-          return null;
         }
+        return null;
       }
 
       @Override
@@ -105,11 +105,11 @@ import com.opengamma.util.ArgumentChecker;
         }
       }
       _buffer[_length++] = runnable;
-      if ((_sorting) || (_length - _sorted <= _maxUnsorted)) {
+      if (_sorting || _length - _sorted <= _maxUnsorted) {
         return;
       }
       sorted = _sorted;
-      _sorted = (_length + _sorted) >> 1;
+      _sorted = _length + _sorted >> 1;
       _sorting = true;
     }
     synchronized (_sortingLock) {
@@ -119,7 +119,7 @@ import com.opengamma.util.ArgumentChecker;
           // We now have two sorted fragments; merge them together
           final ContextRunnable[] newBuffer = new ContextRunnable[_sorted];
           int i = 0, j = sorted, n = 0;
-          while ((i < sorted) && (j < _sorted)) {
+          while (i < sorted && j < _sorted) {
             final int c = compare(_buffer[i], _buffer[j]);
             if (c < 0) {
               newBuffer[n++] = _buffer[i++];
@@ -156,7 +156,7 @@ import com.opengamma.util.ArgumentChecker;
     }
     final int index = --_length;
     final ContextRunnable runnable;
-    if (!_sorting && (index < _sorted)) {
+    if (!_sorting && index < _sorted) {
       _sorted = index;
     }
     if (index >= _sorted) {
@@ -184,10 +184,10 @@ import com.opengamma.util.ArgumentChecker;
    * <li>TRADE</li>
    * <li>POSITION</li>
    * </ul>
-   * Within a given computation target type, ordering is based on the unique identifier. The aim is to get tasks that will "complete" running sooner (i.e. the primitive and security level functions)
-   * to reduce the live memory footprint during a graph build. Portfolio node targets are performed at a high priority so that if individual positions are also requested then the graph build for both
-   * should run in parallel if the node function is a basic aggregation. Ordering the unique identifiers should group values on the same target to give better utilization of the computation target
-   * resolver cache.
+   * Within a given computation target type, ordering is based on the unique identifier. The aim is to get tasks that will "complete" running sooner (i.e. the
+   * primitive and security level functions) to reduce the live memory footprint during a graph build. Portfolio node targets are performed at a high priority
+   * so that if individual positions are also requested then the graph build for both should run in parallel if the node function is a basic aggregation.
+   * Ordering the unique identifiers should group values on the same target to give better utilization of the computation target resolver cache.
    * <p>
    * Note this sorts into reverse order so that the most preferable to run are at the end of the array.
    */
@@ -199,8 +199,8 @@ import com.opengamma.util.ArgumentChecker;
         final ResolveTask rt2 = (ResolveTask) r2;
         final ComputationTargetReference ctr1 = rt1.getValueRequirement().getTargetReference();
         final ComputationTargetReference ctr2 = rt2.getValueRequirement().getTargetReference();
-        final Integer p1 = s_priority.get(ctr1.getType());
-        final Integer p2 = s_priority.get(ctr2.getType());
+        final Integer p1 = PRIORITY.get(ctr1.getType());
+        final Integer p2 = PRIORITY.get(ctr2.getType());
         if (p1.intValue() < p2.intValue()) {
           return 1;
         } else if (p1.intValue() > p2.intValue()) {
@@ -209,32 +209,26 @@ import com.opengamma.util.ArgumentChecker;
           if (ctr1 instanceof ComputationTargetSpecification) {
             if (ctr2 instanceof ComputationTargetSpecification) {
               return ObjectUtils.compare(ctr2.getSpecification().getUniqueId(), ctr1.getSpecification().getUniqueId());
-            } else {
-              // Do requirement -> specification resolution (r2) first
-              return -1;
             }
-          } else {
-            if (ctr2 instanceof ComputationTargetRequirement) {
-              return ctr2.getRequirement().getIdentifiers().compareTo(ctr1.getRequirement().getIdentifiers());
-            } else {
-              // Do requirement -> specification resolution (r1) first
-              return 1;
-            }
+            // Do requirement -> specification resolution (r2) first
+            return -1;
           }
+          if (ctr2 instanceof ComputationTargetRequirement) {
+            return ctr2.getRequirement().getIdentifiers().compareTo(ctr1.getRequirement().getIdentifiers());
+          }
+          // Do requirement -> specification resolution (r1) first
+          return 1;
         }
-      } else {
-        // Do non-ResolveTask (r2) first
-        return -1;
       }
-    } else {
-      if (r2 instanceof ResolveTask) {
-        // Do non-ResolveTask (r1) first
-        return 1;
-      } else {
-        // Don't care
-        return 0;
-      }
+      // Do non-ResolveTask (r2) first
+      return -1;
     }
+    if (r2 instanceof ResolveTask) {
+      // Do non-ResolveTask (r1) first
+      return 1;
+    }
+    // Don't care
+    return 0;
   }
 
 }

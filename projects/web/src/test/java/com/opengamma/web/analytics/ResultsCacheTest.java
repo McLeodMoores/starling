@@ -59,14 +59,14 @@ public class ResultsCacheTest {
     final ResultsCache cache = new ResultsCache();
     cache.put(results1);
 
-    final ResultsCache.Result result1_1 = cache.getResult(CALC_CONFIG, _spec1, String.class);
-    final ResultsCache.Result result2_1 = cache.getResult(CALC_CONFIG, _spec2, String.class);
-    assertEquals(spec1value1, result1_1.getValue());
-    assertEquals(spec2value1, result2_1.getValue());
-    assertNull(result1_1.getHistory());
-    assertNull(result2_1.getHistory());
-    assertTrue(result1_1.isUpdated());
-    assertTrue(result2_1.isUpdated());
+    final ResultsCache.Result result11 = cache.getResult(CALC_CONFIG, _spec1, String.class);
+    final ResultsCache.Result result21 = cache.getResult(CALC_CONFIG, _spec2, String.class);
+    assertEquals(spec1value1, result11.getValue());
+    assertEquals(spec2value1, result21.getValue());
+    assertNull(result11.getHistory());
+    assertNull(result21.getHistory());
+    assertTrue(result11.isUpdated());
+    assertTrue(result21.isUpdated());
 
     final String spec1value2 = "spec1value2";
     final InMemoryViewComputationResultModel results2 = new InMemoryViewComputationResultModel();
@@ -74,14 +74,14 @@ public class ResultsCacheTest {
     results2.addValue(CALC_CONFIG, new ComputedValueResult(_spec1, spec1value2, AggregatedExecutionLog.EMPTY));
     cache.put(results2);
 
-    final ResultsCache.Result result1_2 = cache.getResult(CALC_CONFIG, _spec1, String.class);
-    final ResultsCache.Result result2_2 = cache.getResult(CALC_CONFIG, _spec2, String.class);
-    assertEquals(spec1value2, result1_2.getValue());
-    assertEquals(spec2value1, result2_2.getValue());
-    assertNull(result1_2.getHistory());
-    assertNull(result2_2.getHistory());
-    assertTrue(result1_2.isUpdated());
-    assertFalse(result2_2.isUpdated());
+    final ResultsCache.Result result12 = cache.getResult(CALC_CONFIG, _spec1, String.class);
+    final ResultsCache.Result result22 = cache.getResult(CALC_CONFIG, _spec2, String.class);
+    assertEquals(spec1value2, result12.getValue());
+    assertEquals(spec2value1, result22.getValue());
+    assertNull(result12.getHistory());
+    assertNull(result22.getHistory());
+    assertTrue(result12.isUpdated());
+    assertFalse(result22.isUpdated());
   }
 
   @Test
@@ -105,7 +105,7 @@ public class ResultsCacheTest {
     final ResultsCache.Result result2 = cache.getResult(CALC_CONFIG, _spec1, Double.class);
     assertEquals(2d, result2.getValue());
     assertEquals(2, result2.getHistory().size());
-    final List<Object> history = new ArrayList<Object>(result2.getHistory());
+    final List<Object> history = new ArrayList<>(result2.getHistory());
     assertEquals(1d, history.get(0));
     assertEquals(2d, history.get(1));
   }

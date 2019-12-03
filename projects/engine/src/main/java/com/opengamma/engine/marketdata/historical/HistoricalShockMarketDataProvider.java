@@ -30,9 +30,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Provider for market data derived from 3 underlying providers. This provider's values are derived by finding the
- * difference between values in the first two providers and applying it to the value from the third provider.
- * The change applied to the base value can be the proportional or absolute difference between the two other values.
+ * Provider for market data derived from 3 underlying providers. This provider's values are derived by finding the difference between values in the first two
+ * providers and applying it to the value from the third provider. The change applied to the base value can be the proportional or absolute difference between
+ * the two other values.
  */
 public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvider {
 
@@ -41,51 +41,51 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
   private final MarketDataProvider _baseProvider;
   private final MarketDataPermissionProvider _permissionProvider = new PermissionProvider();
 
-  public HistoricalShockMarketDataProvider(MarketDataProvider historicalProvider1,
-                                           MarketDataProvider historicalProvider2,
-                                           MarketDataProvider baseProvider) {
+  public HistoricalShockMarketDataProvider(final MarketDataProvider historicalProvider1,
+      final MarketDataProvider historicalProvider2,
+      final MarketDataProvider baseProvider) {
     ArgumentChecker.notNull(historicalProvider1, "historicalProvider1");
     ArgumentChecker.notNull(historicalProvider2, "historicalProvider2");
     ArgumentChecker.notNull(baseProvider, "baseProvider");
     _historicalProvider1 = historicalProvider1;
     _historicalProvider2 = historicalProvider2;
     _baseProvider = baseProvider;
-    Listener listener = new Listener();
+    final Listener listener = new Listener();
     historicalProvider1.addListener(listener);
     historicalProvider2.addListener(listener);
     baseProvider.addListener(listener);
   }
 
   @Override
-  public void subscribe(ValueSpecification valueSpecification) {
+  public void subscribe(final ValueSpecification valueSpecification) {
     _historicalProvider1.subscribe(valueSpecification);
     _historicalProvider2.subscribe(valueSpecification);
     _baseProvider.subscribe(valueSpecification);
   }
 
   @Override
-  public void subscribe(Set<ValueSpecification> valueSpecifications) {
+  public void subscribe(final Set<ValueSpecification> valueSpecifications) {
     _historicalProvider1.subscribe(valueSpecifications);
     _historicalProvider2.subscribe(valueSpecifications);
     _baseProvider.subscribe(valueSpecifications);
   }
 
   @Override
-  public void unsubscribe(ValueSpecification valueSpecification) {
+  public void unsubscribe(final ValueSpecification valueSpecification) {
     _historicalProvider1.unsubscribe(valueSpecification);
     _historicalProvider2.unsubscribe(valueSpecification);
     _baseProvider.unsubscribe(valueSpecification);
   }
 
   @Override
-  public void unsubscribe(Set<ValueSpecification> valueSpecifications) {
+  public void unsubscribe(final Set<ValueSpecification> valueSpecifications) {
     _historicalProvider1.unsubscribe(valueSpecifications);
     _historicalProvider2.unsubscribe(valueSpecifications);
     _baseProvider.unsubscribe(valueSpecifications);
   }
 
   @Override
-  public MarketDataAvailabilityProvider getAvailabilityProvider(MarketDataSpecification marketDataSpec) {
+  public MarketDataAvailabilityProvider getAvailabilityProvider(final MarketDataSpecification marketDataSpec) {
     return new AvailabilityProvider((HistoricalShockMarketDataSpecification) marketDataSpec);
   }
 
@@ -96,23 +96,25 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
 
   /**
    * Returns true if marketDataSpec is equal to this object. This method isn't used anyway so it's academic.
-   * @param marketDataSpec describes the market data, not null
+   *
+   * @param marketDataSpec
+   *          describes the market data, not null
    * @return true if marketDataSpec is equal to this object
    */
   @Override
-  public boolean isCompatible(MarketDataSpecification marketDataSpec) {
-    return equals(marketDataSpec);
+  public boolean isCompatible(final MarketDataSpecification marketDataSpec) {
+    return false;
   }
 
   @Override
-  public HistoricalShockMarketDataSnapshot snapshot(MarketDataSpecification marketDataSpec) {
+  public HistoricalShockMarketDataSnapshot snapshot(final MarketDataSpecification marketDataSpec) {
     if (!(marketDataSpec instanceof HistoricalShockMarketDataSpecification)) {
       throw new IllegalArgumentException("Market data spec not HistoricalShockMarketDataSpecification: " + marketDataSpec);
     }
-    HistoricalShockMarketDataSpecification shockSpec = (HistoricalShockMarketDataSpecification) marketDataSpec;
-    MarketDataSnapshot snapshot1 = _historicalProvider1.snapshot(shockSpec.getHistoricalSpecification1());
-    MarketDataSnapshot snapshot2 = _historicalProvider2.snapshot(shockSpec.getHistoricalSpecification2());
-    MarketDataSnapshot baseSnapshot = _baseProvider.snapshot(shockSpec.getBaseSpecification());
+    final HistoricalShockMarketDataSpecification shockSpec = (HistoricalShockMarketDataSpecification) marketDataSpec;
+    final MarketDataSnapshot snapshot1 = _historicalProvider1.snapshot(shockSpec.getHistoricalSpecification1());
+    final MarketDataSnapshot snapshot2 = _historicalProvider2.snapshot(shockSpec.getHistoricalSpecification2());
+    final MarketDataSnapshot baseSnapshot = _baseProvider.snapshot(shockSpec.getBaseSpecification());
     return new HistoricalShockMarketDataSnapshot(shockSpec.getShockType(), snapshot1, snapshot2, baseSnapshot);
   }
 
@@ -122,7 +124,7 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -130,21 +132,18 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
       return false;
     }
     final HistoricalShockMarketDataProvider other = (HistoricalShockMarketDataProvider) obj;
-    return Objects.equals(this._historicalProvider1, other._historicalProvider1) &&
-        Objects.equals(this._historicalProvider2, other._historicalProvider2) &&
-        Objects.equals(this._baseProvider, other._baseProvider);
+    return Objects.equals(this._historicalProvider1, other._historicalProvider1)
+        && Objects.equals(this._historicalProvider2, other._historicalProvider2)
+        && Objects.equals(this._baseProvider, other._baseProvider);
   }
 
   private class PermissionProvider implements MarketDataPermissionProvider {
 
     @Override
-    public Set<ValueSpecification> checkMarketDataPermissions(UserPrincipal user, Set<ValueSpecification> specifications) {
-      Set<ValueSpecification> failedSpecs1 =
-          _historicalProvider1.getPermissionProvider().checkMarketDataPermissions(user, specifications);
-      Set<ValueSpecification> failedSpecs2 =
-          _historicalProvider2.getPermissionProvider().checkMarketDataPermissions(user, specifications);
-      Set<ValueSpecification> failedSpecs3 =
-          _baseProvider.getPermissionProvider().checkMarketDataPermissions(user, specifications);
+    public Set<ValueSpecification> checkMarketDataPermissions(final UserPrincipal user, final Set<ValueSpecification> specifications) {
+      final Set<ValueSpecification> failedSpecs1 = _historicalProvider1.getPermissionProvider().checkMarketDataPermissions(user, specifications);
+      final Set<ValueSpecification> failedSpecs2 = _historicalProvider2.getPermissionProvider().checkMarketDataPermissions(user, specifications);
+      final Set<ValueSpecification> failedSpecs3 = _baseProvider.getPermissionProvider().checkMarketDataPermissions(user, specifications);
       // if a value fails permission checking in any of the providers then it fails
       return Sets.union(Sets.union(failedSpecs1, failedSpecs2), failedSpecs3);
     }
@@ -154,26 +153,25 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
 
     private final HistoricalShockMarketDataSpecification _marketDataSpec;
 
-    private AvailabilityProvider(HistoricalShockMarketDataSpecification marketDataSpec) {
+    private AvailabilityProvider(final HistoricalShockMarketDataSpecification marketDataSpec) {
       ArgumentChecker.notNull(marketDataSpec, "marketDataSpecification");
       _marketDataSpec = marketDataSpec;
     }
 
     @Override
-    public ValueSpecification getAvailability(ComputationTargetSpecification targetSpec,
-                                              Object target,
-                                              ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
-      ValueSpecification spec1 =
-          _historicalProvider1.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification1()).getAvailability(targetSpec, target, desiredValue);
-      ValueSpecification spec2 =
-          _historicalProvider2.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification2()).getAvailability(targetSpec, target, desiredValue);
-      ValueSpecification spec3 =
-          _baseProvider.getAvailabilityProvider(_marketDataSpec.getBaseSpecification()).getAvailability(targetSpec, target, desiredValue);
+    public ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec,
+        final Object target,
+        final ValueRequirement desiredValue) throws MarketDataNotSatisfiableException {
+      final ValueSpecification spec1 = _historicalProvider1.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification1()).getAvailability(targetSpec,
+          target, desiredValue);
+      final ValueSpecification spec2 = _historicalProvider2.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification2()).getAvailability(targetSpec,
+          target, desiredValue);
+      final ValueSpecification spec3 = _baseProvider.getAvailabilityProvider(_marketDataSpec.getBaseSpecification()).getAvailability(targetSpec, target,
+          desiredValue);
       if (Objects.equals(spec1, spec2) && Objects.equals(spec2, spec3)) {
         return spec1;
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override
@@ -184,30 +182,30 @@ public class HistoricalShockMarketDataProvider extends AbstractMarketDataProvide
     @Override
     public Serializable getAvailabilityHintKey() {
       return Triple.of(_historicalProvider1.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification1()).getAvailabilityHintKey(),
-                       _historicalProvider2.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification2()).getAvailabilityHintKey(),
-                       _baseProvider.getAvailabilityProvider(_marketDataSpec.getBaseSpecification()).getAvailabilityHintKey());
+          _historicalProvider2.getAvailabilityProvider(_marketDataSpec.getHistoricalSpecification2()).getAvailabilityHintKey(),
+          _baseProvider.getAvailabilityProvider(_marketDataSpec.getBaseSpecification()).getAvailabilityHintKey());
     }
   }
 
   private class Listener implements MarketDataListener {
 
     @Override
-    public void subscriptionsSucceeded(Collection<ValueSpecification> specifications) {
+    public void subscriptionsSucceeded(final Collection<ValueSpecification> specifications) {
       HistoricalShockMarketDataProvider.this.subscriptionsSucceeded(specifications);
     }
 
     @Override
-    public void subscriptionFailed(ValueSpecification specification, String msg) {
+    public void subscriptionFailed(final ValueSpecification specification, final String msg) {
       HistoricalShockMarketDataProvider.this.subscriptionFailed(specification, msg);
     }
 
     @Override
-    public void subscriptionStopped(ValueSpecification specification) {
+    public void subscriptionStopped(final ValueSpecification specification) {
       HistoricalShockMarketDataProvider.this.subscriptionStopped(specification);
     }
 
     @Override
-    public void valuesChanged(Collection<ValueSpecification> specifications) {
+    public void valuesChanged(final Collection<ValueSpecification> specifications) {
       HistoricalShockMarketDataProvider.this.valuesChanged(specifications);
     }
   }

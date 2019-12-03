@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.swaption.provider;
@@ -23,8 +23,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Method to compute the present value of Bermuda swaptions with the Hull-White one factor model by numerical integration.
- * Reference: Henrard, M. Bermudan Swaptions in Gaussian HJM One-Factor Model: Analytical and Numerical Approaches. SSRN, October 2008. Available at SSRN: http://ssrn.com/abstract=1287982
+ * Method to compute the present value of Bermuda swaptions with the Hull-White one factor model by numerical integration. Reference: Henrard, M. Bermudan
+ * Swaptions in Gaussian HJM One-Factor Model: Analytical and Numerical Approaches. SSRN, October 2008. Available at SSRN: http://ssrn.com/abstract=1287982
  */
 public final class SwaptionBermudaFixedIborHullWhiteNumericalIntegrationMethod {
 
@@ -35,6 +35,7 @@ public final class SwaptionBermudaFixedIborHullWhiteNumericalIntegrationMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static SwaptionBermudaFixedIborHullWhiteNumericalIntegrationMethod getInstance() {
@@ -67,16 +68,19 @@ public final class SwaptionBermudaFixedIborHullWhiteNumericalIntegrationMethod {
 
   /**
    * Computes the present value of the Physical delivery swaption.
-   * @param swaption The swaption.
-   * @param hullWhite The Hull-White parameters and the curves.
+   * 
+   * @param swaption
+   *          The swaption.
+   * @param hullWhite
+   *          The Hull-White parameters and the curves.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final SwaptionBermudaFixedIbor swaption, final HullWhiteOneFactorProviderInterface hullWhite) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(hullWhite, "Hull-White provider");
-    MulticurveProviderInterface multicurves = hullWhite.getMulticurveProvider();
-    HullWhiteOneFactorPiecewiseConstantParameters parameters = hullWhite.getHullWhiteParameters();
-    Currency ccy = swaption.getCurrency();
+    final MulticurveProviderInterface multicurves = hullWhite.getMulticurveProvider();
+    final HullWhiteOneFactorPiecewiseConstantParameters parameters = hullWhite.getHullWhiteParameters();
+    final Currency ccy = swaption.getCurrency();
     final int nbExpiry = swaption.getExpiryTime().length;
     Validate.isTrue(nbExpiry > 1, "At least two expiry dates required for this method");
 
@@ -311,7 +315,7 @@ public final class SwaptionBermudaFixedIborHullWhiteNumericalIntegrationMethod {
           ncdf1x = -Math.exp(-(tmpdb * tmpdb) / 2) * c1sqrt2pi;
           ncdf2x = ncdf1x * tmpdb + ncdf0x;
           for (int k = 0; k < 3; k++) {
-            //            System.arraycopy(rabcM[k], j, xabc[k], 0, 2 * _nbPoint + 1); // Swap
+            // System.arraycopy(rabcM[k], j, xabc[k], 0, 2 * _nbPoint + 1); // Swap
             System.arraycopy(labcM[k], j, xabc[k], 0, 2 * NB_POINT + 1);
             System.arraycopy(rabcM[k], indSwap[i] + 1, xabc[k], indSwap[i] + 1 - j, j + 2 * NB_POINT - indSwap[i]);
           }
@@ -335,7 +339,7 @@ public final class SwaptionBermudaFixedIborHullWhiteNumericalIntegrationMethod {
           final double[][] xabc = new double[3][2 * NB_POINT];
           for (int k = 0; k < 3; k++) {
             System.arraycopy(rabcM[k], j + 1, xabc[k], 0, 2 * NB_POINT);
-            //            System.arraycopy(labcM[k], j + 1, xabc[k], 0, 2 * _nbPoint); // Swaption
+            // System.arraycopy(labcM[k], j + 1, xabc[k], 0, 2 * _nbPoint); // Swaption
           }
           for (int looppt = 0; looppt < 2 * NB_POINT; looppt++) {
             xabc[1][looppt] = xabc[1][looppt] + xabc[0][looppt] * 2 * xN[i][j];
@@ -357,8 +361,11 @@ public final class SwaptionBermudaFixedIborHullWhiteNumericalIntegrationMethod {
 
   /**
    * Fit the parabolas.
-   * @param dx Distance between the x values.
-   * @param y The y values.
+   * 
+   * @param dx
+   *          Distance between the x values.
+   * @param y
+   *          The y values.
    * @return The parabolas coefficients.
    */
   private static double[][] parafit(final double dx, final double[] y) {
@@ -389,10 +396,15 @@ public final class SwaptionBermudaFixedIborHullWhiteNumericalIntegrationMethod {
 
   /**
    * Numerical integration of the parabolas against the normal distribution.
-   * @param n2 Second order integrals.
-   * @param n1 First order integrals.
-   * @param n0 Order 0 integrals.
-   * @param abc The parabolas coefficients.
+   * 
+   * @param n2
+   *          Second order integrals.
+   * @param n1
+   *          First order integrals.
+   * @param n0
+   *          Order 0 integrals.
+   * @param abc
+   *          The parabolas coefficients.
    * @return The integral.
    */
   private static double ni2ncdf(final double[] n2, final double[] n1, final double[] n0, final double[][] abc) {

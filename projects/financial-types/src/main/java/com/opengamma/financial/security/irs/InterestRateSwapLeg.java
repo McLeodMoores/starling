@@ -43,7 +43,7 @@ public abstract class InterestRateSwapLeg extends DirectBean {
   private InterestRateSwapNotional _notional;
 
   /**
-   * Whether this is a pay or receive leg
+   * Whether this is a pay or receive leg.
    */
   @PropertyDefinition(validate = "notNull")
   private PayReceiveType _payReceiveType;
@@ -53,97 +53,98 @@ public abstract class InterestRateSwapLeg extends DirectBean {
    */
   @PropertyDefinition
   private StubCalculationMethod _stubCalculationMethod;
-  
+
   /**
    * The day count.
    */
   @PropertyDefinition(validate = "notNull")
   private DayCount _dayCountConvention;
-  
+
   /**
    * The roll convention used for adjusting dates.
    */
   @PropertyDefinition(validate = "notNull")
   private RollConvention _rollConvention = RollConvention.NONE;
-  
-  
+
   /*
    * Maturity date parameters
    */
-  
+
   @PropertyDefinition
   private Set<ExternalId> _maturityDateCalendars = Sets.newHashSet();
-  
+
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _maturityDateBusinessDayConvention;
-  
+
   /*
    * Payment date parameters
    */
-  
+
   /**
    * The calendars used to adjust the payment dates.
    */
   @PropertyDefinition
   private Set<ExternalId> _paymentDateCalendars = Sets.newHashSet();
-  
+
   /**
    * The business day convention used to adjust the payment dates.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _paymentDateBusinessDayConvention;
-  
+
   /**
    * The frequency of the payment dates.
    */
   @PropertyDefinition(validate = "notNull")
   private Frequency _paymentDateFrequency;
-  
+
   /**
    * Flag that describes whether the payment date is relative to the start or end of the accrual period.
    */
   @PropertyDefinition(validate = "notNull")
   private DateRelativeTo _paymentDateRelativeTo = DateRelativeTo.END;
-  
+
   /**
    * The number of days offset of the payment dates, relative to the accrual periods.
    */
   @PropertyDefinition
   private int _paymentOffset;
-  
+
   /*
    * Accrual period parameters
    */
-  
+
   /**
    * The calendar used to adjust the accrual period dates.
    */
   @PropertyDefinition
   private Set<ExternalId> _accrualPeriodCalendars = Sets.newHashSet();
-  
+
   /**
    * The business day convention used to adjust the accrual period dates.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _accrualPeriodBusinessDayConvention;
-  
+
   /**
    * The frequency of the accrual periods.
    */
   @PropertyDefinition(validate = "notNull")
   private Frequency _accrualPeriodFrequency;
-  
+
   /**
    * The compounding method used when the reset frequency is higher than the payment frequency.
    */
   @PropertyDefinition(validate = "notNull")
   private CompoundingMethod _compoundingMethod = CompoundingMethod.NONE;
-  
+
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T> the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   public abstract <T> T accept(InterestRateSwapLegVisitor<T> visitor);
@@ -194,7 +195,7 @@ public abstract class InterestRateSwapLeg extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets whether this is a pay or receive leg
+   * Gets whether this is a pay or receive leg.
    * @return the value of the property, not null
    */
   public PayReceiveType getPayReceiveType() {
@@ -202,7 +203,7 @@ public abstract class InterestRateSwapLeg extends DirectBean {
   }
 
   /**
-   * Sets whether this is a pay or receive leg
+   * Sets whether this is a pay or receive leg.
    * @param payReceiveType  the new value of the property, not null
    */
   public void setPayReceiveType(PayReceiveType payReceiveType) {

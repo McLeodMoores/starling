@@ -12,13 +12,13 @@ import groovy.lang.Closure;
  */
 /* package */ final class DslYieldCurveSelectorBuilder extends YieldCurveSelector.Builder {
 
-  /* package */ DslYieldCurveSelectorBuilder(Scenario scenario) {
+  /* package */ DslYieldCurveSelectorBuilder(final Scenario scenario) {
     super(scenario);
   }
 
   @SuppressWarnings("unused")
-  public void apply(Closure<?> body) {
-    YieldCurveManipulatorBuilder builder = new DslYieldCurveManipulatorBuilder(getSelector(), getScenario());
+  public void apply(final Closure<?> body) {
+    final YieldCurveManipulatorBuilder builder = new DslYieldCurveManipulatorBuilder(getSelector(), getScenario());
     body.setDelegate(builder);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
     body.call();

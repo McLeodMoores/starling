@@ -12,10 +12,8 @@ package com.opengamma.financial.analytics.conversion;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.testng.Assert;
@@ -71,14 +69,10 @@ public class InterestRateSwapSecurityConverterTest {
   private static final ExternalId US = ExternalSchemes.financialRegionId("US");
   private static final ExternalId NYLON = ExternalSchemes.financialRegionId("US+GB");
   private static final String TICKER = "TICKER";
-  private static final ExternalId FIXED_LEG_ID = ExternalId.of(SCHEME, "USD Swap Fixed Leg");
-  private static final ExternalId FIXED_LEG_PAY_LAG_ID = ExternalId.of(SCHEME, "USD Swap Fixed Leg Pay Lag");
   private static final String USDLIBOR_ACT_360_CONVENTION_NAME = "USD Libor ACT/360";
   private static final ExternalId USDLIBOR_ACT_360_CONVENTION_ID = ExternalId.of(SCHEME, USDLIBOR_ACT_360_CONVENTION_NAME);
   private static final String USDLIBOR_30_360_CONVENTION_NAME = "USD Libor 30/360";
   private static final ExternalId USDLIBOR_30_360_ID = ExternalId.of(SCHEME, USDLIBOR_30_360_CONVENTION_NAME);
-  private static final ExternalId LEG_USDLIBOR3M_ID = ExternalId.of(SCHEME, "USD 3m Floating Leg");
-  private static final ExternalId LEG_USDLIBOR6M_ID = ExternalId.of(SCHEME, "USD 6m Floating Leg");
 
   // LIBOR Index
   private static final String USDLIBOR1M_NAME = "USDLIBOR1M";
@@ -95,23 +89,22 @@ public class InterestRateSwapSecurityConverterTest {
       new com.opengamma.financial.security.index.IborIndex(USDLIBOR6M_NAME, "ICE LIBOR 6M - USD", Tenor.SIX_MONTHS, USDLIBOR_ACT_360_CONVENTION_ID);
   private static final SwapFixedLegConvention FIXED_LEG =
       new SwapFixedLegConvention("USD Swap Fixed Leg", ExternalIdBundle.of(ExternalId.of(SCHEME, "USD Swap Fixed Leg")),
-      Tenor.SIX_MONTHS, ACT_360, MODIFIED_FOLLOWING, Currency.USD, NYLON, 2, false, StubType.NONE, false, 0);
+          Tenor.SIX_MONTHS, ACT_360, MODIFIED_FOLLOWING, Currency.USD, NYLON, 2, false, StubType.NONE, false, 0);
   private static final SwapFixedLegConvention FIXED_LEG_PAY_LAG =
       new SwapFixedLegConvention("USD Swap Fixed Leg Pay Lag", ExternalIdBundle.of(ExternalId.of(SCHEME, "USD Swap Fixed Leg")),
-      Tenor.SIX_MONTHS, ACT_360, MODIFIED_FOLLOWING, Currency.USD, NYLON, 2, false, StubType.NONE, false, 2);
+          Tenor.SIX_MONTHS, ACT_360, MODIFIED_FOLLOWING, Currency.USD, NYLON, 2, false, StubType.NONE, false, 2);
   private static final VanillaIborLegConvention LEG_USDLIBOR3M =
       new VanillaIborLegConvention("USD 3m Floating Leg", ExternalIdBundle.of(ExternalId.of(SCHEME, "USD 3m Floating Leg")),
-      USDLIBOR3M_ID, false, SCHEME, Tenor.THREE_MONTHS, 2, false, StubType.NONE, false, 2);
+          USDLIBOR3M_ID, false, SCHEME, Tenor.THREE_MONTHS, 2, false, StubType.NONE, false, 2);
   private static final VanillaIborLegConvention LEG_USDLIBOR6M =
       new VanillaIborLegConvention("USD 6m Floating Leg", ExternalIdBundle.of(ExternalId.of(SCHEME, "USD 6m Floating Leg")),
-      USDLIBOR6M_ID, false, SCHEME, Tenor.SIX_MONTHS, 2, false, StubType.LONG_END, false, 2);
+          USDLIBOR6M_ID, false, SCHEME, Tenor.SIX_MONTHS, 2, false, StubType.LONG_END, false, 2);
   private static final IborIndexConvention USDLIBOR_ACT_360 =
       new IborIndexConvention(USDLIBOR_ACT_360_CONVENTION_NAME, ExternalIdBundle.of(USDLIBOR_ACT_360_CONVENTION_ID),
-      ACT_360, MODIFIED_FOLLOWING, 2, false, Currency.USD, LocalTime.of(11, 0), "US", US, US, "Page");
+          ACT_360, MODIFIED_FOLLOWING, 2, false, Currency.USD, LocalTime.of(11, 0), "US", US, US, "Page");
   private static final IborIndexConvention LIBOR_30_360 = new IborIndexConvention(USDLIBOR_30_360_CONVENTION_NAME, ExternalIdBundle.of(USDLIBOR_30_360_ID),
       THIRTY_360, MODIFIED_FOLLOWING, 2, false, Currency.USD, LocalTime.of(11, 0), "US", US, US, "Page");
 
-  private static final Map<ExternalIdBundle, Security> SECURITY_MAP = new HashMap<>();
   private static final InMemorySecuritySource SECURITY_SOURCE = new InMemorySecuritySource();
   private static final InMemoryConventionSource CONVENTION_SOURCE = new InMemoryConventionSource();
   private static final InMemoryHolidaySource HOLIDAY_SOURCE = new InMemoryHolidaySource();
@@ -369,7 +362,7 @@ public class InterestRateSwapSecurityConverterTest {
 
     final StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
         .type(StubType.BOTH)
-        .firstStubEndDate(LocalDate.of(2014,6,18))
+        .firstStubEndDate(LocalDate.of(2014, 6, 18))
         .firstStubStartReferenceRateId(ExternalId.of(TICKER, USDLIBOR1M_NAME))
         .firstStubEndReferenceRateId(ExternalId.of(TICKER, USDLIBOR6M_NAME))
         .lastStubEndDate(LocalDate.of(2014, 6, 18))
@@ -579,7 +572,7 @@ public class InterestRateSwapSecurityConverterTest {
     final Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
   }
 
-  private IndexDeposit getIborIndex(final ExternalId indexId, final SecuritySource securitySource, final ConventionSource conventionSource) {
+  private static IndexDeposit getIborIndex(final ExternalId indexId, final SecuritySource securitySource, final ConventionSource conventionSource) {
     // try security lookup
     final Security sec = securitySource.getSingle(indexId.toBundle());
     if (sec != null) {

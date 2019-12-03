@@ -8,6 +8,8 @@ package com.opengamma.analytics.financial.instrument.index;
 import org.apache.commons.lang.ObjectUtils;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -48,13 +50,21 @@ public class GeneratorDeposit extends GeneratorInstrument<GeneratorAttributeIR> 
 
   /**
    * Deposit generator from all the financial details.
-   * @param name The generator name. Not null.
-   * @param currency The index currency. Not null.
-   * @param calendar The calendar associated to the index. Not null.
-   * @param spotLag The index spot lag in days between trade and settlement date (usually 2 or 0).
-   * @param dayCount The day count convention associated to the index.
-   * @param businessDayConvention The business day convention associated to the index.
-   * @param endOfMonth Flag indicating if the end-of-month rule is used.
+   * 
+   * @param name
+   *          The generator name. Not null.
+   * @param currency
+   *          The index currency. Not null.
+   * @param calendar
+   *          The calendar associated to the index. Not null.
+   * @param spotLag
+   *          The index spot lag in days between trade and settlement date (usually 2 or 0).
+   * @param dayCount
+   *          The day count convention associated to the index.
+   * @param businessDayConvention
+   *          The business day convention associated to the index.
+   * @param endOfMonth
+   *          Flag indicating if the end-of-month rule is used.
    */
   public GeneratorDeposit(final String name, final Currency currency, final Calendar calendar, final int spotLag, final DayCount dayCount,
       final BusinessDayConvention businessDayConvention, final boolean endOfMonth) {
@@ -72,7 +82,42 @@ public class GeneratorDeposit extends GeneratorInstrument<GeneratorAttributeIR> 
   }
 
   /**
+   * Deposit generator from all the financial details.
+   * 
+   * @param name
+   *          The generator name. Not null.
+   * @param currency
+   *          The index currency. Not null.
+   * @param calendar
+   *          The calendar associated to the index. Not null.
+   * @param spotLag
+   *          The index spot lag in days between trade and settlement date (usually 2 or 0).
+   * @param dayCount
+   *          The day count convention associated to the index.
+   * @param businessDayConvention
+   *          The business day convention associated to the index.
+   * @param endOfMonth
+   *          Flag indicating if the end-of-month rule is used.
+   */
+  public GeneratorDeposit(final String name, final Currency currency, final WorkingDayCalendar calendar, final int spotLag,
+      final DayCount dayCount,
+      final BusinessDayConvention businessDayConvention, final boolean endOfMonth) {
+    super(name);
+    ArgumentChecker.notNull(currency, "Currency");
+    ArgumentChecker.notNull(calendar, "Calendar");
+    ArgumentChecker.notNull(dayCount, "Day count");
+    ArgumentChecker.notNull(businessDayConvention, "Business day convention");
+    _currency = currency;
+    _calendar = CalendarAdapter.of(calendar);
+    _spotLag = spotLag;
+    _dayCount = dayCount;
+    _businessDayConvention = businessDayConvention;
+    _endOfMonth = endOfMonth;
+  }
+
+  /**
    * Gets the index currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -81,6 +126,7 @@ public class GeneratorDeposit extends GeneratorInstrument<GeneratorAttributeIR> 
 
   /**
    * Gets the calendar associated to the index.
+   * 
    * @return The calendar.
    */
   public Calendar getCalendar() {
@@ -89,6 +135,7 @@ public class GeneratorDeposit extends GeneratorInstrument<GeneratorAttributeIR> 
 
   /**
    * Gets the index spot lag in days between trade and settlement date.
+   * 
    * @return The spot lag in days.
    */
   public int getSpotLag() {
@@ -97,6 +144,7 @@ public class GeneratorDeposit extends GeneratorInstrument<GeneratorAttributeIR> 
 
   /**
    * Gets the day count convention associated to the index.
+   * 
    * @return The day count convention.
    */
   public DayCount getDayCount() {
@@ -105,6 +153,7 @@ public class GeneratorDeposit extends GeneratorInstrument<GeneratorAttributeIR> 
 
   /**
    * Gets the business day convention associated to the index.
+   * 
    * @return The business day convention.
    */
   public BusinessDayConvention getBusinessDayConvention() {
@@ -113,6 +162,7 @@ public class GeneratorDeposit extends GeneratorInstrument<GeneratorAttributeIR> 
 
   /**
    * Gets the flag indicating if the end-of-month rule is used.
+   * 
    * @return The EOM flag.
    */
   public boolean isEndOfMonth() {
@@ -120,11 +170,11 @@ public class GeneratorDeposit extends GeneratorInstrument<GeneratorAttributeIR> 
   }
 
   /**
-   * {@inheritDoc}
-   * The deposit start at spot+start tenor and end at spot+end tenor.
+   * {@inheritDoc} The deposit start at spot+start tenor and end at spot+end tenor.
    */
   @Override
-  public CashDefinition generateInstrument(final ZonedDateTime date, final double rate, final double notional, final GeneratorAttributeIR attribute) {
+  public CashDefinition generateInstrument(final ZonedDateTime date, final double rate, final double notional,
+      final GeneratorAttributeIR attribute) {
     ArgumentChecker.notNull(date, "Reference date");
     ArgumentChecker.notNull(attribute, "Attributes");
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, _spotLag, _calendar);

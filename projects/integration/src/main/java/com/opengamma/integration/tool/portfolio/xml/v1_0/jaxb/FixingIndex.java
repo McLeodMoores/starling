@@ -34,24 +34,24 @@ public class FixingIndex {
   }
 
   @XmlElement(name = "id")
-  private ExtId index;  // CSIGNORE
+  private ExtId _index;  // CSIGNORE
 
   @XmlElement(name = "rateType")
   private RateType _rateType;
 
   public ExtId getIndex() {
-    return index;
+    return _index;
   }
 
-  public void setIndex(ExtId index) {
-    this.index = index;
+  public void setIndex(final ExtId index) {
+    this._index = index;
   }
 
   public RateType getRateType() {
     return _rateType;
   }
 
-  public void setRateType(RateType rateType) {
+  public void setRateType(final RateType rateType) {
     _rateType = rateType;
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.server;
@@ -40,17 +40,17 @@ import com.opengamma.util.monitor.OperationTimer;
  * the server is down, these changes will be reflected on the server the next
  * time it starts.
  * <p>
- * This beans depends-on the Live Data Server, and any Spring configuration must reflect 
+ * This beans depends-on the Live Data Server, and any Spring configuration must reflect
  * this. See <a href="http://jira.springframework.org/browse/SPR-2325">http://jira.springframework.org/browse/SPR-2325</a>.
- * 
+ *
  */
 public abstract class AbstractPersistentSubscriptionManager implements Lifecycle {
 
-  private static final Logger s_logger = LoggerFactory
+  private static final Logger LOGGER = LoggerFactory
       .getLogger(AbstractPersistentSubscriptionManager.class);
 
   /**
-   * Default how often to save the persistent subscriptions to the database, milliseconds
+   * Default how often to save the persistent subscriptions to the database, milliseconds.
    */
   public static final long DEFAULT_SAVE_PERIOD = 60000L;
 
@@ -60,21 +60,21 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
   private volatile SaveTask _saveTask;
 
   private Set<PersistentSubscription> _previousSavedState;
-  private Set<PersistentSubscription> _persistentSubscriptions = new HashSet<PersistentSubscription>();
+  private final Set<PersistentSubscription> _persistentSubscriptions = new HashSet<>();
 
-  public AbstractPersistentSubscriptionManager(StandardLiveDataServer server) {
+  public AbstractPersistentSubscriptionManager(final StandardLiveDataServer server) {
     this(server, new Timer("PersistentSubscriptionManager Timer"),
         DEFAULT_SAVE_PERIOD);
   }
 
-  public AbstractPersistentSubscriptionManager(StandardLiveDataServer server,
-      Timer timer, long savePeriod) {
+  public AbstractPersistentSubscriptionManager(final StandardLiveDataServer server,
+      final Timer timer, final long savePeriod) {
     ArgumentChecker.notNull(server, "Live Data Server");
     ArgumentChecker.notNull(timer, "Timer");
     if (savePeriod <= 0) {
       throw new IllegalArgumentException("Please give positive save period");
     }
-    
+
     _server = server;
     _timer = timer;
     _savePeriod = savePeriod;
@@ -85,13 +85,13 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
     public void run() {
       try {
         save();
-      } catch (RuntimeException e) {
-        s_logger.error("Saving persistent subscriptions to storage failed", e);
+      } catch (final RuntimeException e) {
+        LOGGER.error("Saving persistent subscriptions to storage failed", e);
       }
     }
   }
-  
-  
+
+
   @Override
   public boolean isRunning() {
     return _saveTask != null;
@@ -114,7 +114,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
 
   private void waitForIdleTimer() {
     final CountDownLatch countDownLatch = new CountDownLatch(1);;
-    s_logger.info("Waiting for timer to be idle");
+    LOGGER.info("Waiting for timer to be idle");
     try {
       _timer.schedule(new TimerTask() {
         @Override
@@ -123,14 +123,14 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
         }
       }, 0);
       countDownLatch.await();
-      s_logger.info("Timer idle");
-    } catch (Exception ex) {
-      s_logger.error("Couldn't waiting for timer to be idle", ex);
+      LOGGER.info("Timer idle");
+    } catch (final Exception ex) {
+      LOGGER.error("Couldn't waiting for timer to be idle", ex);
     }
   }
 
   /**
-   * This should mean that all the subscriptions become persistent eventually, 
+   * This should mean that all the subscriptions become persistent eventually,
    *  and (importantly) none of them expire in the mean time.
    * Because of the implementation of updateServer.
    */
@@ -145,7 +145,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
       }
     }, 0);
   }
-  
+
   public synchronized void refresh() {
     refreshState();
 
@@ -156,13 +156,13 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
    * Reads from all sources to our private state
    */
   private synchronized void refreshState() {
-    s_logger.debug("Refreshing persistent subscriptions from storage");
+    LOGGER.debug("Refreshing persistent subscriptions from storage");
 
     clear();
     readFromStorage();
     readFromServer();
-    
-    s_logger.info("Refreshed persistent subscriptions from storage. There are currently "
+
+    LOGGER.info("Refreshed persistent subscriptions from storage. There are currently "
         + _persistentSubscriptions.size() + " persistent subscriptions.");
   }
 
@@ -170,99 +170,99 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
    * Creates a persistent subscription on the server for any persistent
    * subscriptions which are not yet there.
    */
-  private synchronized void updateServer(boolean catchExceptions) {
-    Collection<LiveDataSpecification> specs = getSpecs(_persistentSubscriptions);
-    Set<LiveDataSpecification> persistentSubscriptionsToMake = new HashSet<LiveDataSpecification>(specs);
-    
-    OperationTimer operationTimer = new OperationTimer(s_logger, "Updating server's persistent subscriptions {}", persistentSubscriptionsToMake.size());
-    
-    int partitionSize = 50; //Aim is to make sure we can convert subscriptions quickly enough that nothing expires, and to leave the server responsive, and make retrys not take too long
+  private synchronized void updateServer(final boolean catchExceptions) {
+    final Collection<LiveDataSpecification> specs = getSpecs(_persistentSubscriptions);
+    final Set<LiveDataSpecification> persistentSubscriptionsToMake = new HashSet<>(specs);
 
-    List<List<LiveDataSpecification>> partitions = Lists.partition(Lists.newArrayList(persistentSubscriptionsToMake), partitionSize);
-    for (List<LiveDataSpecification> partition : partitions) {
-      
-      Map<LiveDataSpecification, MarketDataDistributor> marketDataDistributors = _server.getMarketDataDistributors(persistentSubscriptionsToMake);
-      for (Entry<LiveDataSpecification, MarketDataDistributor> distrEntry : marketDataDistributors.entrySet()) {
+    final OperationTimer operationTimer = new OperationTimer(LOGGER, "Updating server's persistent subscriptions {}", persistentSubscriptionsToMake.size());
+
+    final int partitionSize = 50; //Aim is to make sure we can convert subscriptions quickly enough that nothing expires,
+    // and to leave the server responsive, and make retrys not take too long
+
+    final List<List<LiveDataSpecification>> partitions = Lists.partition(Lists.newArrayList(persistentSubscriptionsToMake), partitionSize);
+    for (final List<LiveDataSpecification> partition : partitions) {
+
+      final Map<LiveDataSpecification, MarketDataDistributor> marketDataDistributors = _server.getMarketDataDistributors(persistentSubscriptionsToMake);
+      for (final Entry<LiveDataSpecification, MarketDataDistributor> distrEntry : marketDataDistributors.entrySet()) {
         if (distrEntry.getValue() != null) {
           //Upgrade or no/op should be fast, lets do it to avoid expiry
           createPersistentSubscription(catchExceptions, distrEntry.getKey());
           persistentSubscriptionsToMake.remove(distrEntry.getKey());
         }
       }
-      
-      
-      SetView<LiveDataSpecification> toMake = Sets.intersection(new HashSet<LiveDataSpecification>(partition), persistentSubscriptionsToMake);
+
+
+      final SetView<LiveDataSpecification> toMake = Sets.intersection(new HashSet<>(partition), persistentSubscriptionsToMake);
       if (!toMake.isEmpty()) {
-        createPersistentSubscription(catchExceptions, toMake); //PLAT-1632 
+        createPersistentSubscription(catchExceptions, toMake); //PLAT-1632
         persistentSubscriptionsToMake.removeAll(toMake);
       }
     }
     operationTimer.finished();
-    s_logger.info("Server updated");
+    LOGGER.info("Server updated");
   }
 
-  private void createPersistentSubscription(boolean catchExceptions, LiveDataSpecification sub) {
+  private void createPersistentSubscription(final boolean catchExceptions, final LiveDataSpecification sub) {
     createPersistentSubscription(catchExceptions, Collections.singleton(sub));
   }
-  
-  private void createPersistentSubscription(boolean catchExceptions, Set<LiveDataSpecification> specs) {
+
+  private void createPersistentSubscription(final boolean catchExceptions, final Set<LiveDataSpecification> specs) {
     if (specs.isEmpty()) {
       return;
     }
-    s_logger.info("Creating {}", specs);
+    LOGGER.info("Creating {}", specs);
     try {
-      Collection<LiveDataSubscriptionResponse> results = _server.subscribe(specs, true);
-      for (LiveDataSubscriptionResponse liveDataSubscriptionResponse : results) {
-        if (liveDataSubscriptionResponse.getSubscriptionResult() != LiveDataSubscriptionResult.SUCCESS)
-        {
-          s_logger.warn("Failed to create persistent subscription {}", liveDataSubscriptionResponse);
+      final Collection<LiveDataSubscriptionResponse> results = _server.subscribe(specs, true);
+      for (final LiveDataSubscriptionResponse liveDataSubscriptionResponse : results) {
+        if (liveDataSubscriptionResponse.getSubscriptionResult() != LiveDataSubscriptionResult.SUCCESS) {
+          LOGGER.warn("Failed to create persistent subscription {}", liveDataSubscriptionResponse);
         }
       }
-    } catch (RuntimeException e) {
+    } catch (final RuntimeException e) {
       if (catchExceptions) {
         //This should be rare
-        s_logger.error("Creating a persistent subscription failed for " + specs, e);
+        LOGGER.error("Creating a persistent subscription failed for " + specs, e);
         if (specs.size() > 1) {
           //  NOTE: have to retry here since _all_ of the subs will have failed
-          for (LiveDataSpecification spec : specs) {
+          for (final LiveDataSpecification spec : specs) {
             createPersistentSubscription(catchExceptions, spec);
           }
         }
       } else {
-        throw e;            
+        throw e;
       }
     }
   }
 
-  private Collection<LiveDataSpecification> getSpecs(Set<PersistentSubscription> subs) {
-    Collection<LiveDataSpecification> specs = new ArrayList<LiveDataSpecification>();
-    for (PersistentSubscription sub : subs) {
+  private static Collection<LiveDataSpecification> getSpecs(final Set<PersistentSubscription> subs) {
+    final Collection<LiveDataSpecification> specs = new ArrayList<>();
+    for (final PersistentSubscription sub : subs) {
       specs.add(sub.getFullyQualifiedSpec());
     }
     return specs;
   }
 
   public synchronized void save() {
-    s_logger.debug("Dumping persistent subscriptions to storage");
+    LOGGER.debug("Dumping persistent subscriptions to storage");
 
     clear();
     readFromServer();
 
     // Only save if changed
     if (_previousSavedState == null || !_previousSavedState.equals(_persistentSubscriptions)) {
-   
-      s_logger.info("A change to persistent subscriptions detected, saving "
+
+      LOGGER.info("A change to persistent subscriptions detected, saving "
           + _persistentSubscriptions.size() + " subscriptions to storage.");
       saveToStorage(_persistentSubscriptions);
-      _previousSavedState = new HashSet<PersistentSubscription>(_persistentSubscriptions);
+      _previousSavedState = new HashSet<>(_persistentSubscriptions);
 
     } else {
-      s_logger.debug("No changes to persistent subscriptions detected.");      
+      LOGGER.debug("No changes to persistent subscriptions detected.");
     }
 
-    s_logger.debug("Dumped persistent subscriptions to storage");
+    LOGGER.debug("Dumped persistent subscriptions to storage");
   }
-  
+
   public synchronized long getApproximateNumberOfPersistentSubscriptions() {
     return _persistentSubscriptions.size();
   }
@@ -270,29 +270,29 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
     clear();
     readFromServer();
 
-    HashSet<String> returnValue = new HashSet<String>();
-    for (PersistentSubscription ps : _persistentSubscriptions) {
+    final HashSet<String> returnValue = new HashSet<>();
+    for (final PersistentSubscription ps : _persistentSubscriptions) {
       returnValue.add(ps.getFullyQualifiedSpec().toString());
     }
 
     return returnValue;
   }
 
-  public synchronized void addPersistentSubscription(String securityUniqueId) {
-    LiveDataSpecification spec = getFullyQualifiedLiveDataSpec(securityUniqueId);
+  public synchronized void addPersistentSubscription(final String securityUniqueId) {
+    final LiveDataSpecification spec = getFullyQualifiedLiveDataSpec(securityUniqueId);
     addPersistentSubscription(new PersistentSubscription(spec));
     updateServer(false);
   }
 
   public synchronized boolean removePersistentSubscription(
-      String securityUniqueId) {
-    Subscription sub = _server.getSubscription(securityUniqueId);
+      final String securityUniqueId) {
+    final Subscription sub = _server.getSubscription(securityUniqueId);
     if (sub == null) {
       return false;
     }
-    
+
     boolean removed = false;
-    for (MarketDataDistributor distributor : sub.getDistributors()) {
+    for (final MarketDataDistributor distributor : sub.getDistributors()) {
       removed = true;
       distributor.setPersistent(false);
     }
@@ -300,8 +300,8 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
     save();
     return removed;
   }
-  
-  public LiveDataSpecification getFullyQualifiedLiveDataSpec(String securityUniqueId) {
+
+  public LiveDataSpecification getFullyQualifiedLiveDataSpec(final String securityUniqueId) {
     return _server.getLiveDataSpecification(securityUniqueId);
   }
 
@@ -309,7 +309,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
     _persistentSubscriptions.clear();
   }
 
-  protected void addPersistentSubscription(PersistentSubscription sub) {
+  protected void addPersistentSubscription(final PersistentSubscription sub) {
     _persistentSubscriptions.add(sub);
   }
 
@@ -317,10 +317,10 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
    * Refreshes persistent subscriptions from the latest status on the server.
    */
   private void readFromServer() {
-    for (Subscription sub : _server.getSubscriptions()) {
-      for (MarketDataDistributor distributor : sub.getDistributors()) {
+    for (final Subscription sub : _server.getSubscriptions()) {
+      for (final MarketDataDistributor distributor : sub.getDistributors()) {
         if (distributor.isPersistent()) {
-          PersistentSubscription ps = new PersistentSubscription(
+          final PersistentSubscription ps = new PersistentSubscription(
               distributor.getFullyQualifiedLiveDataSpecification());
           addPersistentSubscription(ps);
         }
@@ -335,8 +335,8 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
   protected abstract void readFromStorage();
 
   /**
-   * Saves entries to persistent storage (DB, flat file, ...)
-   * 
+   * Saves entries to persistent storage (DB, flat file, ...).
+   *
    * @param newState Entries to be saved
    */
   public abstract void saveToStorage(Set<PersistentSubscription> newState);

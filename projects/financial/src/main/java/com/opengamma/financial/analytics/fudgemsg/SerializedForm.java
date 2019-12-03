@@ -15,7 +15,6 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import org.fudgemsg.types.IndicatorType;
 import org.fudgemsg.wire.types.FudgeWireType;
 
-import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.util.serialization.InvokedSerializedForm;
 import com.opengamma.util.ClassUtils;
 
@@ -28,7 +27,7 @@ import com.opengamma.util.ClassUtils;
   }
 
   /**
-   * Fudge builder for {@link InvokedSerializedForm}
+   * Fudge builder for {@link InvokedSerializedForm}.
    */
   @FudgeBuilderFor(InvokedSerializedForm.class)
   public static final class InvokedSerializedFormBuilder extends AbstractFudgeMessageBuilder<InvokedSerializedForm> implements FudgeObjectBuilder<Object> {

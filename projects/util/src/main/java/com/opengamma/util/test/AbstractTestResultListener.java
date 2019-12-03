@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.test;
@@ -19,14 +19,14 @@ import com.opengamma.OpenGammaRuntimeException;
  */
 public abstract class AbstractTestResultListener {
 
-  private final BlockingQueue<Object> _callsReceived = new LinkedBlockingQueue<Object>();
-  
+  private final BlockingQueue<Object> _callsReceived = new LinkedBlockingQueue<>();
+
   private long _lastResultReceived;
   private long _shortestDelay;
-  
+
   @SuppressWarnings("unchecked")
-  public <T> T expectNextCall(Class<T> expectedResultType, long timeoutMillis) throws InterruptedException {
-    Object result = _callsReceived.poll(timeoutMillis, TimeUnit.MILLISECONDS);
+  public <T> T expectNextCall(final Class<T> expectedResultType, final long timeoutMillis) throws InterruptedException {
+    final Object result = _callsReceived.poll(timeoutMillis, TimeUnit.MILLISECONDS);
     if (result == null) {
       throw new OpenGammaRuntimeException("Timed out after " + timeoutMillis + " ms waiting for result");
     }
@@ -35,19 +35,19 @@ public abstract class AbstractTestResultListener {
     }
     return (T) result;
   }
-  
+
   //-------------------------------------------------------------------------
   public void assertNoCalls() {
     assertNoCalls(0);
   }
-  
-  public void assertNoCalls(long timeoutMillis) {
-    long tNow = System.currentTimeMillis();
+
+  public void assertNoCalls(final long timeoutMillis) {
+    final long tNow = System.currentTimeMillis();
     Object result;
     try {
       result = _callsReceived.poll(timeoutMillis, TimeUnit.MILLISECONDS);
-    } catch (Exception e) {
-      throw new AssertionError("Error while waiting to ensure no further calls: " + e.getMessage()); 
+    } catch (final Exception e) {
+      throw new AssertionError("Error while waiting to ensure no further calls: " + e.getMessage());
     }
     if (result != null) {
       throw new AssertionError("Call received after " + (System.currentTimeMillis() - tNow) + "ms, during " + timeoutMillis + "ms wait: " + result);
@@ -72,14 +72,14 @@ public abstract class AbstractTestResultListener {
   }
 
   //-------------------------------------------------------------------------
-  protected void callReceived(Object call) {
+  protected void callReceived(final Object call) {
     callReceived(call, false);
   }
 
-  protected void callReceived(Object call, boolean recordTime) {
+  protected void callReceived(final Object call, final boolean recordTime) {
     _callsReceived.add(call);
-    long now = System.currentTimeMillis();
-    long delay = now - _lastResultReceived;
+    final long now = System.currentTimeMillis();
+    final long delay = now - _lastResultReceived;
     _lastResultReceived = now;
     if (delay < _shortestDelay) {
       _shortestDelay = delay;

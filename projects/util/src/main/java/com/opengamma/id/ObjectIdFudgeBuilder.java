@@ -27,12 +27,19 @@ public final class ObjectIdFudgeBuilder extends AbstractFudgeBuilder implements 
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ObjectId object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ObjectId object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
+  /**
+   * Converts an {@link ObjectId} to a mutable Fudge message. Returns null if the id is null.
+   *
+   * @param serializer  the Fudge serializer
+   * @param object  the id
+   * @return  the message
+   */
   public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final ObjectId object) {
     if (object == null) {
       return null;
@@ -42,6 +49,13 @@ public final class ObjectIdFudgeBuilder extends AbstractFudgeBuilder implements 
     return msg;
   }
 
+  /**
+   * Adds an {@link ObjectId} to a message.
+   *
+   * @param serializer  the Fudge serializer
+   * @param object  the id
+   * @param msg  the message, not null
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final ObjectId object, final MutableFudgeMsg msg) {
     addToMessage(msg, SCHEME_FIELD_NAME, object.getScheme());
     addToMessage(msg, VALUE_FIELD_NAME, object.getValue());
@@ -53,6 +67,13 @@ public final class ObjectIdFudgeBuilder extends AbstractFudgeBuilder implements 
     return fromFudgeMsg(msg);
   }
 
+  /**
+   * Converts a Fudge message to an {@link ObjectId}. Returns null if the message is null.
+   *
+   * @param deserializer  the Fudge deserializer
+   * @param msg  the message
+   * @return  the id
+   */
   public static ObjectId fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg == null) {
       return null;
@@ -60,9 +81,15 @@ public final class ObjectIdFudgeBuilder extends AbstractFudgeBuilder implements 
     return fromFudgeMsg(msg);
   }
 
+  /**
+   * Converts a Fudge message to an {@link ObjectId}.
+   *
+   * @param msg  the message, not null
+   * @return  the id
+   */
   public static ObjectId fromFudgeMsg(final FudgeMsg msg) {
-    String scheme = msg.getString(SCHEME_FIELD_NAME);
-    String value = msg.getString(VALUE_FIELD_NAME);
+    final String scheme = msg.getString(SCHEME_FIELD_NAME);
+    final String value = msg.getString(VALUE_FIELD_NAME);
     return ObjectId.of(scheme, value);
   }
 

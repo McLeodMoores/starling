@@ -42,7 +42,7 @@ public class CurveNodeWithIdentifier extends DirectBean implements Comparable<Cu
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param node  the curve node, not null
    * @param id  the market data id, not null
    * @param dataField  the data field, not null

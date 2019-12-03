@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.livedata.impl;
@@ -24,7 +24,7 @@ public class RemoteLiveDataMetaDataProvider extends AbstractRemoteClient impleme
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteLiveDataMetaDataProvider(final URI baseUri) {
@@ -38,10 +38,10 @@ public class RemoteLiveDataMetaDataProvider extends AbstractRemoteClient impleme
   }
 
   @Override
-  public LiveDataMetaDataProviderResult metaData(LiveDataMetaDataProviderRequest request) {
+  public LiveDataMetaDataProviderResult metaData(final LiveDataMetaDataProviderRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
-    URI uri = DataLiveDataMetaDataProviderUris.uriMetaData(getBaseUri(), request);
+
+    final URI uri = DataLiveDataMetaDataProviderUris.uriMetaData(getBaseUri(), request);
     return accessRemote(uri).get(LiveDataMetaDataProviderResult.class);
   }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.generator;
 
@@ -31,10 +31,9 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Generates bill and bond securities that are required for construction of curves containing
- * {@link com.opengamma.financial.analytics.ircurve.strips.BillNode} and
- * {@link com.opengamma.financial.analytics.ircurve.strips.BondNode}. These securities must be
- * present in the security database for successful curve construction.
+ * Generates bill and bond securities that are required for construction of curves containing {@link com.opengamma.financial.analytics.ircurve.strips.BillNode}
+ * and {@link com.opengamma.financial.analytics.ircurve.strips.BondNode}. These securities must be present in the security database for successful curve
+ * construction.
  */
 public class ExampleBondCurveSecuritiesGeneratorTool extends AbstractSecuritiesGeneratorTool {
   /** The bills and bonds */
@@ -48,8 +47,8 @@ public class ExampleBondCurveSecuritiesGeneratorTool extends AbstractSecuritiesG
     final ZonedDateTime referenceDate = LocalDate.now().atStartOfDay(ZoneOffset.UTC);
     for (int i = 6; i <= 18; i += 6) {
       final Tenor tenor = Tenor.ofMonths(i);
-      final BillSecurity bill = new BillSecurity(Currency.USD, new Expiry(referenceDate.plus(tenor.getPeriod())), referenceDate,
-          100, 2, region, SimpleYieldConvention.INTERESTATMTY, dayCount, legalEntityId);
+      final BillSecurity bill = new BillSecurity(Currency.USD, new Expiry(referenceDate.plus(tenor.getPeriod())), referenceDate, 100, 2, region,
+          SimpleYieldConvention.INTERESTATMTY, dayCount, legalEntityId);
       String suffix;
       if (i < 10) {
         suffix = "00" + Integer.toString(i);
@@ -63,7 +62,7 @@ public class ExampleBondCurveSecuritiesGeneratorTool extends AbstractSecuritiesG
     }
     final Random rng = new Random(457);
     dayCount = DayCounts.ACT_ACT_ICMA;
-    for (final int i : new int[] {2, 3, 5, 7, 10, 20, 30 }) {
+    for (final int i : new int[] { 2, 3, 5, 7, 10, 20, 30 }) {
       final double coupon = (i > 7 ? 0.5 * i : 0.2 * i) + rng.nextDouble();
       final Tenor tenor = Tenor.ofYears(i);
       final BondSecurity bond = new GovernmentBondSecurity("US TREASURY N/B", "Sovereign", "US", "US GOVERNMENT", Currency.USD, SimpleYieldConvention.US_STREET,

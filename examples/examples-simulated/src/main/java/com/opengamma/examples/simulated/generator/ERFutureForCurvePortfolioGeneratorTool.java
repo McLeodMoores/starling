@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.generator;
@@ -84,14 +84,16 @@ public class ERFutureForCurvePortfolioGeneratorTool extends AbstractPortfolioGen
       security.setExternalIdBundle(ExternalIdBundle.of(ExternalSchemes.syntheticSecurityId(code)));
       securities[i] = security;
       amounts[i] = 1;
-      prices[i] = 1 - ((i + 1) * 0.001);
+      prices[i] = 1 - (i + 1) * 0.001;
     }
     return new FutureSecurityGenerator<>(securities, amounts, prices, tradeDate, "Euribor futures");
   }
 
   /**
    * Generates future trades and adds them to a portfolio.
-   * @param <T> The type of the security
+   * 
+   * @param <T>
+   *          The type of the security
    */
   private class FutureSecurityGenerator<T extends ManageableSecurity> extends SecurityGenerator<T> implements PortfolioNodeGenerator {
     /** The securities */
@@ -106,13 +108,19 @@ public class ERFutureForCurvePortfolioGeneratorTool extends AbstractPortfolioGen
     private final String _name;
 
     /**
-     * @param securities The futures
-     * @param amounts The amounts of each future
-     * @param prices The price of each future
-     * @param tradeDate The trade date
-     * @param name The portfolio node name
+     * @param securities
+     *          The futures
+     * @param amounts
+     *          The amounts of each future
+     * @param prices
+     *          The price of each future
+     * @param tradeDate
+     *          The trade date
+     * @param name
+     *          The portfolio node name
      */
-    public FutureSecurityGenerator(final ManageableSecurity[] securities, final int[] amounts, final double[] prices, final ZonedDateTime tradeDate, final String name) {
+    FutureSecurityGenerator(final ManageableSecurity[] securities, final int[] amounts, final double[] prices, final ZonedDateTime tradeDate,
+        final String name) {
       _securities = securities;
       _amounts = amounts;
       _prices = prices;

@@ -22,7 +22,7 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
+ *
  */
 public class EuropeanOptionOnEuropeanVanillaOptionModel extends AnalyticOptionModel<EuropeanOptionOnEuropeanVanillaOptionDefinition, StandardOptionDataBundle> {
   private static final BlackScholesMertonModel BSM = new BlackScholesMertonModel();
@@ -47,10 +47,12 @@ public class EuropeanOptionOnEuropeanVanillaOptionModel extends AnalyticOptionMo
         final double t1 = definition.getTimeToExpiry(date);
         final double t2 = definition.getUnderlyingOption().getTimeToExpiry(date);
         final double deltaT = t2 - t1;
-        final double sigma = data.getVolatility(t1, k1); //REVIEW emcleod 20-7-10 This will work with a flat volatility surface but otherwise will give odd results
+        final double sigma = data.getVolatility(t1, k1); // REVIEW emcleod 20-7-10 This will work with a flat volatility surface but otherwise will give odd
+                                                         // results
         final double r = data.getInterestRate(t1);
         final double b = data.getCostOfCarry();
-        final double criticalValue = getCriticalValue(new EuropeanVanillaOptionDefinition(k2, new Expiry(DateUtils.getDateOffsetWithYearFraction(date, deltaT)), underlying.isCall()), data, k1);
+        final double criticalValue = getCriticalValue(
+            new EuropeanVanillaOptionDefinition(k2, new Expiry(DateUtils.getDateOffsetWithYearFraction(date, deltaT)), underlying.isCall()), data, k1);
         final double d1 = getD1(s, criticalValue, t1, sigma, b);
         final double d2 = getD2(d1, sigma, t1);
         final double d3 = getD1(s, k2, t2, sigma, b);
@@ -58,19 +60,23 @@ public class EuropeanOptionOnEuropeanVanillaOptionModel extends AnalyticOptionMo
         if (definition.isCall()) {
           final double rho = Math.sqrt(t1 / t2);
           if (underlying.isCall()) {
-            return s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] {d3, d1, rho}) - k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] {d4, d2, rho}) - k1 * Math.exp(-r * t1)
-                * NORMAL.getCDF(d2);
+            return s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] { d3, d1, rho })
+                - k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] { d4, d2, rho }) - k1 * Math.exp(-r * t1)
+                    * NORMAL.getCDF(d2);
           }
-          return k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] {-d4, -d2, rho}) - s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] {-d3, -d1, rho}) - k1 * Math.exp(-r * t1)
-              * NORMAL.getCDF(-d2);
+          return k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] { -d4, -d2, rho })
+              - s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] { -d3, -d1, rho }) - k1 * Math.exp(-r * t1)
+                  * NORMAL.getCDF(-d2);
         }
         final double rho = -Math.sqrt(t1 / t2);
         if (underlying.isCall()) {
-          return k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] {d4, -d2, rho}) - s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] {d3, -d1, rho}) + k1 * Math.exp(-r * t1)
-              * NORMAL.getCDF(-d2);
+          return k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] { d4, -d2, rho })
+              - s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] { d3, -d1, rho }) + k1 * Math.exp(-r * t1)
+                  * NORMAL.getCDF(-d2);
         }
-        return s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] {-d3, d1, rho}) - k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] {-d4, d2, rho}) + k1 * Math.exp(-r * t1)
-            * NORMAL.getCDF(d2);
+        return s * Math.exp(t2 * (b - r)) * BIVARIATE.getCDF(new double[] { -d3, d1, rho })
+            - k2 * Math.exp(-r * t2) * BIVARIATE.getCDF(new double[] { -d4, d2, rho }) + k1 * Math.exp(-r * t1)
+                * NORMAL.getCDF(d2);
       }
 
     };

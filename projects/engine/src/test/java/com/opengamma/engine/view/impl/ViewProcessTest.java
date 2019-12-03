@@ -149,29 +149,32 @@ public class ViewProcessTest {
 
       final Instant time0 = Instant.now();
       final ViewCycleExecutionOptions defaultCycleOptions = ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live()).create();
-      final ViewExecutionOptions executionOptions = new ExecutionOptions(ArbitraryViewCycleExecutionSequence.of(time0, time0.plusMillis(10), time0.plusMillis(20), time0.plusMillis(30)),
-          ExecutionFlags.none().get(), defaultCycleOptions);
+      final ViewExecutionOptions executionOptions =
+          new ExecutionOptions(ArbitraryViewCycleExecutionSequence.of(time0, time0.plusMillis(10), time0.plusMillis(20), time0.plusMillis(30)),
+              ExecutionFlags.none().get(), defaultCycleOptions);
 
       client.attachToViewProcess(env.getViewDefinition().getUniqueId(), executionOptions);
 
       final ViewProcessImpl viewProcess = env.getViewProcess(vp, client.getUniqueId());
       final ViewProcessWorker worker = env.getCurrentWorker(viewProcess);
 
-      final CompiledViewDefinitionWithGraphsImpl compilationModel1 = (CompiledViewDefinitionWithGraphsImpl) resultListener.getViewDefinitionCompiled(Timeout.standardTimeoutMillis())
-          .getCompiledViewDefinition();
+      final CompiledViewDefinitionWithGraphsImpl compilationModel1 =
+          (CompiledViewDefinitionWithGraphsImpl) resultListener.getViewDefinitionCompiled(Timeout.standardTimeoutMillis()).getCompiledViewDefinition();
 
-      assertEquals(time0, resultListener.getCycleCompleted(10 * Timeout.standardTimeoutMillis()).getFullResult().getViewCycleExecutionOptions().getValuationTime());
+      assertEquals(time0,
+          resultListener.getCycleCompleted(10 * Timeout.standardTimeoutMillis()).getFullResult().getViewCycleExecutionOptions().getValuationTime());
 
       worker.requestCycle();
-      assertEquals(time0.plusMillis(10), resultListener.getCycleCompleted(10 * Timeout.standardTimeoutMillis()).getFullResult().getViewCycleExecutionOptions().getValuationTime());
+      assertEquals(time0.plusMillis(10),
+          resultListener.getCycleCompleted(10 * Timeout.standardTimeoutMillis()).getFullResult().getViewCycleExecutionOptions().getValuationTime());
       resultListener.assertNoCalls(Timeout.standardTimeoutMillis());
 
       // TODO: This test doesn't belong here; it is specific to the SingleThreadViewComputationJob.
 
       // Trick the compilation job into thinking it needs to rebuilt after time0 + 20
       final Collection<DependencyGraph> graphs = CompiledViewDefinitionWithGraphsImpl.getDependencyGraphs(compilationModel1);
-      final Collection<CompiledViewCalculationConfiguration> configs = new ArrayList<CompiledViewCalculationConfiguration>(graphs.size());
-      for (DependencyGraph graph : graphs) {
+      final Collection<CompiledViewCalculationConfiguration> configs = new ArrayList<>(graphs.size());
+      for (final DependencyGraph graph : graphs) {
         configs.add(CompiledViewCalculationConfigurationImpl.of(graph));
       }
       final CompiledViewDefinitionWithGraphsImpl compiledViewDefinition = new CompiledViewDefinitionWithGraphsImpl(VersionCorrection.of(time0, time0), "",
@@ -186,7 +189,8 @@ public class ViewProcessTest {
 
       // Running at time0 + 20 doesn't require a rebuild - should still use our dummy
       worker.requestCycle();
-      assertEquals(time0.plusMillis(20), resultListener.getCycleCompleted(10 * Timeout.standardTimeoutMillis()).getFullResult().getViewCycleExecutionOptions().getValuationTime());
+      assertEquals(time0.plusMillis(20),
+          resultListener.getCycleCompleted(10 * Timeout.standardTimeoutMillis()).getFullResult().getViewCycleExecutionOptions().getValuationTime());
       resultListener.assertNoCalls();
 
       // time0 + 30 requires a rebuild
@@ -194,7 +198,8 @@ public class ViewProcessTest {
       final CompiledViewDefinition compilationModel2 = resultListener.getViewDefinitionCompiled(Timeout.standardTimeoutMillis()).getCompiledViewDefinition();
       assertNotSame(compilationModel1, compilationModel2);
       assertNotSame(compiledViewDefinition, compilationModel2);
-      assertEquals(time0.plusMillis(30), resultListener.getCycleCompleted(Timeout.standardTimeoutMillis()).getFullResult().getViewCycleExecutionOptions().getValuationTime());
+      assertEquals(time0.plusMillis(30),
+          resultListener.getCycleCompleted(Timeout.standardTimeoutMillis()).getFullResult().getViewCycleExecutionOptions().getValuationTime());
       resultListener.assertProcessCompleted(Timeout.standardTimeoutMillis());
 
       resultListener.assertNoCalls(Timeout.standardTimeoutMillis());
@@ -227,7 +232,8 @@ public class ViewProcessTest {
 
       final Instant time0 = Instant.now();
       final ViewCycleExecutionOptions defaultCycleOptions = ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live()).create();
-      final ViewExecutionOptions executionOptions = new ExecutionOptions(ArbitraryViewCycleExecutionSequence.of(time0), ExecutionFlags.none().get(), defaultCycleOptions);
+      final ViewExecutionOptions executionOptions =
+          new ExecutionOptions(ArbitraryViewCycleExecutionSequence.of(time0), ExecutionFlags.none().get(), defaultCycleOptions);
 
       client.attachToViewProcess(env.getViewDefinition().getUniqueId(), executionOptions);
 
@@ -241,7 +247,8 @@ public class ViewProcessTest {
       resultListener.expectNextCall(CycleFragmentCompletedCall.class, 10 * Timeout.standardTimeoutMillis());
       resultListener.expectNextCall(CycleFragmentCompletedCall.class, 10 * Timeout.standardTimeoutMillis());
 
-      assertEquals(time0, resultListener.getCycleCompleted(10 * Timeout.standardTimeoutMillis()).getFullResult().getViewCycleExecutionOptions().getValuationTime());
+      assertEquals(time0,
+          resultListener.getCycleCompleted(10 * Timeout.standardTimeoutMillis()).getFullResult().getViewCycleExecutionOptions().getValuationTime());
 
       resultListener.assertProcessCompleted(Timeout.standardTimeoutMillis());
       resultListener.assertNoCalls(Timeout.standardTimeoutMillis());

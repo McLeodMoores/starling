@@ -15,8 +15,8 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * A simple implementation of {@link MarketDataSender} that sends
- * market data to a {@link FudgeMessageSender}. 
- * Useful in tests. 
+ * market data to a {@link FudgeMessageSender}.
+ * Useful in tests.
  */
 public class FudgeSender implements MarketDataSender {
 
@@ -31,11 +31,11 @@ public class FudgeSender implements MarketDataSender {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param fudgeMessageSender  the sender, not null
    * @param distributor  the distributor, not null
    */
-  public FudgeSender(FudgeMessageSender fudgeMessageSender, MarketDataDistributor distributor) {
+  public FudgeSender(final FudgeMessageSender fudgeMessageSender, final MarketDataDistributor distributor) {
     ArgumentChecker.notNull(fudgeMessageSender, "Fudge Message Sender");
     ArgumentChecker.notNull(distributor, "Market Data Distributor");
     _fudgeMessageSender = fudgeMessageSender;
@@ -45,7 +45,7 @@ public class FudgeSender implements MarketDataSender {
   //-------------------------------------------------------------------------
   /**
    * Gets the Fudge sender.
-   * 
+   *
    * @return the sender, not null
    */
   public FudgeMessageSender getFudgeMessageSender() {
@@ -54,7 +54,7 @@ public class FudgeSender implements MarketDataSender {
 
   /**
    * Gets the distributor.
-   * 
+   *
    * @return the distributor, not null
    */
   @Override
@@ -64,9 +64,9 @@ public class FudgeSender implements MarketDataSender {
 
   //-------------------------------------------------------------------------
   @Override
-  public void sendMarketData(LiveDataValueUpdateBean data) {
-    FudgeSerializer serializer = new FudgeSerializer(getFudgeMessageSender().getFudgeContext());
-    FudgeMsg fudgeMsg = LiveDataValueUpdateBeanFudgeBuilder.toFudgeMsg(serializer, data);
+  public void sendMarketData(final LiveDataValueUpdateBean data) {
+    final FudgeSerializer serializer = new FudgeSerializer(getFudgeMessageSender().getFudgeContext());
+    final FudgeMsg fudgeMsg = LiveDataValueUpdateBeanFudgeBuilder.toFudgeMsg(serializer, data);
     getFudgeMessageSender().send(fudgeMsg);
   }
 

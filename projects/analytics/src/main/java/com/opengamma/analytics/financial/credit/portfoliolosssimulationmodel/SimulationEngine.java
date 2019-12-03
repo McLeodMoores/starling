@@ -1,13 +1,15 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.portfoliolosssimulationmodel;
 
 /**
  * Class to call the different steps of the simulation engine e.g. generate scenarios, reval positions and compute statistics
+ * @deprecated Deprecated
  */
+@Deprecated
 public class SimulationEngine {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -17,7 +19,7 @@ public class SimulationEngine {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
-  private static final StatisticsCalculator statisticsCalculator = new StatisticsCalculator();
+  private static final StatisticsCalculator STATISTICS_CALCULATOR = new StatisticsCalculator();
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -55,7 +57,7 @@ public class SimulationEngine {
     // Compute the simulated P/L statistics
 
     // Compute the number of simulated defaults per scenario
-    final int[] numberOfDefaultsPerScenario = statisticsCalculator.getNumberOfDefaultsPerScenario(scenarioGenerator, simulatedDefaultScenarios);
+    final int[] numberOfDefaultsPerScenario = STATISTICS_CALCULATOR.getNumberOfDefaultsPerScenario(scenarioGenerator, simulatedDefaultScenarios);
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
 

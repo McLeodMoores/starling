@@ -32,34 +32,34 @@ public class SingleNameIdentifiable implements UniqueIdentifiable, ObjectIdentif
   /**
    * The separator.
    */
-  private static final String SEPERATOR = "-";
+  private static final String SEPARATOR = "-";
 
-  private String name;
-  private UniqueId id;
-  private ExternalId referenceEntity;
-  private BusinessDayConvention badDayConvention;
-  private DayCount daycount;
-  private Period couponFrequency;
-  private StubType stubType;
+  private final String _name;
+  private final UniqueId _id;
+  private final ExternalId _referenceEntity;
+  private final BusinessDayConvention _badDayConvention;
+  private final DayCount _daycount;
+  private final Period _couponFrequency;
+  private final StubType _stubType;
 
-  public SingleNameIdentifiable(String name,
-                                ExternalId referenceEntity,
-                                BusinessDayConvention badDayConvention,
-                                DayCount daycount,
-                                Period couponFrequency,
-                                StubType stubType) {
-    this.name = name;
-    this.referenceEntity = referenceEntity;
-    this.badDayConvention = badDayConvention;
-    this.daycount = daycount;
-    this.couponFrequency = couponFrequency;
-    this.stubType = stubType;
-    this.id = UniqueId.of(SCHEME, name + SEPERATOR + referenceEntity.getScheme() + SEPERATOR + badDayConvention.getName()
-        + SEPERATOR + daycount.getName() + SEPERATOR + couponFrequency + SEPERATOR + stubType);
+  public SingleNameIdentifiable(final String name,
+                                final ExternalId referenceEntity,
+                                final BusinessDayConvention badDayConvention,
+                                final DayCount daycount,
+                                final Period couponFrequency,
+                                final StubType stubType) {
+    _name = name;
+    _referenceEntity = referenceEntity;
+    _badDayConvention = badDayConvention;
+    _daycount = daycount;
+    _couponFrequency = couponFrequency;
+    _stubType = stubType;
+    _id = UniqueId.of(SCHEME, name + SEPARATOR + referenceEntity.getScheme() + SEPARATOR + badDayConvention.getName()
+        + SEPARATOR + daycount.getName() + SEPARATOR + couponFrequency + SEPARATOR + stubType);
   }
 
   public static SingleNameIdentifiable of(final UniqueId id) {
-    String[] tokens = id.getValue().split(SEPERATOR);
+    final String[] tokens = id.getValue().split(SEPARATOR);
     ArgumentChecker.isTrue(tokens.length == 6, "Incorrect number of params for SingleNameIdentifiable");
     final String name = tokens[0];
     final ExternalId reference = ExternalId.of(tokens[1], name);
@@ -72,7 +72,7 @@ public class SingleNameIdentifiable implements UniqueIdentifiable, ObjectIdentif
 
   @Override
   public UniqueId getUniqueId() {
-    return id;
+    return _id;
   }
 
   @Override
@@ -81,31 +81,31 @@ public class SingleNameIdentifiable implements UniqueIdentifiable, ObjectIdentif
   }
 
   public String getName() {
-    return name;
+    return _name;
   }
 
   public ExternalId getReferenceEntity() {
-    return referenceEntity;
+    return _referenceEntity;
   }
 
   public BusinessDayConvention getBadDayConvention() {
-    return badDayConvention;
+    return _badDayConvention;
   }
 
   public DayCount getDaycount() {
-    return daycount;
+    return _daycount;
   }
 
   public Period getCouponFrequency() {
-    return couponFrequency;
+    return _couponFrequency;
   }
 
   public StubType getStubType() {
-    return stubType;
+    return _stubType;
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
@@ -113,27 +113,27 @@ public class SingleNameIdentifiable implements UniqueIdentifiable, ObjectIdentif
       return false;
     }
 
-    SingleNameIdentifiable that = (SingleNameIdentifiable) o;
+    final SingleNameIdentifiable that = (SingleNameIdentifiable) o;
 
-    if (badDayConvention != null ? !badDayConvention.equals(that.badDayConvention) : that.badDayConvention != null) {
+    if (_badDayConvention != null ? !_badDayConvention.equals(that._badDayConvention) : that._badDayConvention != null) {
       return false;
     }
-    if (couponFrequency != null ? !couponFrequency.equals(that.couponFrequency) : that.couponFrequency != null) {
+    if (_couponFrequency != null ? !_couponFrequency.equals(that._couponFrequency) : that._couponFrequency != null) {
       return false;
     }
-    if (daycount != null ? !daycount.equals(that.daycount) : that.daycount != null) {
+    if (_daycount != null ? !_daycount.equals(that._daycount) : that._daycount != null) {
       return false;
     }
-    if (id != null ? !id.equals(that.id) : that.id != null) {
+    if (_id != null ? !_id.equals(that._id) : that._id != null) {
       return false;
     }
-    if (name != null ? !name.equals(that.name) : that.name != null) {
+    if (_name != null ? !_name.equals(that._name) : that._name != null) {
       return false;
     }
-    if (referenceEntity != null ? !referenceEntity.equals(that.referenceEntity) : that.referenceEntity != null) {
+    if (_referenceEntity != null ? !_referenceEntity.equals(that._referenceEntity) : that._referenceEntity != null) {
       return false;
     }
-    if (stubType != that.stubType) {
+    if (_stubType != that._stubType) {
       return false;
     }
 
@@ -143,13 +143,13 @@ public class SingleNameIdentifiable implements UniqueIdentifiable, ObjectIdentif
   @Override
   public int hashCode() {
     int result;
-    result = name != null ? name.hashCode() : 0;
-    result = 31 * result + (id != null ? id.hashCode() : 0);
-    result = 31 * result + (referenceEntity != null ? referenceEntity.hashCode() : 0);
-    result = 31 * result + (badDayConvention != null ? badDayConvention.hashCode() : 0);
-    result = 31 * result + (daycount != null ? daycount.hashCode() : 0);
-    result = 31 * result + (couponFrequency != null ? couponFrequency.hashCode() : 0);
-    result = 31 * result + (stubType != null ? stubType.hashCode() : 0);
+    result = _name != null ? _name.hashCode() : 0;
+    result = 31 * result + (_id != null ? _id.hashCode() : 0);
+    result = 31 * result + (_referenceEntity != null ? _referenceEntity.hashCode() : 0);
+    result = 31 * result + (_badDayConvention != null ? _badDayConvention.hashCode() : 0);
+    result = 31 * result + (_daycount != null ? _daycount.hashCode() : 0);
+    result = 31 * result + (_couponFrequency != null ? _couponFrequency.hashCode() : 0);
+    result = 31 * result + (_stubType != null ? _stubType.hashCode() : 0);
     return result;
   }
 }

@@ -16,17 +16,17 @@ public class SpringJmsTopicContainerFactory extends AbstractSpringContainerFacto
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param connectionFactory  the JMS connection factory, not null
    */
-  public SpringJmsTopicContainerFactory(ConnectionFactory connectionFactory) {
+  public SpringJmsTopicContainerFactory(final ConnectionFactory connectionFactory) {
     super(connectionFactory);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public JmsTopicContainer create(String topicName, Object listener) {
-    AbstractMessageListenerContainer jmsContainer = doCreate(getConnectionFactory(), topicName, true, listener);
+  public JmsTopicContainer create(final String topicName, final Object listener) {
+    final AbstractMessageListenerContainer jmsContainer = doCreate(getConnectionFactory(), topicName, true, listener);
     return new OpenGammaSpringJmsContainer(jmsContainer);
   }
 

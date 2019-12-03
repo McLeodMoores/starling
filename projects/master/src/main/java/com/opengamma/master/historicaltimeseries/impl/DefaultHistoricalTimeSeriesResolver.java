@@ -25,7 +25,6 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesInfoSearchR
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesInfoSearchResult;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolutionResult;
-import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolverWithBasicChangeManager;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesSelector;
 import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeriesInfo;
@@ -33,11 +32,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.paging.PagingRequest;
 
 /**
- * Simple implementation of {@link HistoricalTimeSeriesResolver} which backs directly onto retrieves candidates from an underlying master.
+ * Simple implementation of {@link com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver} which backs directly onto retrieves candidates from
+ * an underlying master.
  */
 public class DefaultHistoricalTimeSeriesResolver extends HistoricalTimeSeriesResolverWithBasicChangeManager {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultHistoricalTimeSeriesResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultHistoricalTimeSeriesResolver.class);
 
   private final HistoricalTimeSeriesSelector _selector;
   private final HistoricalTimeSeriesMaster _master;
@@ -61,13 +61,15 @@ public class DefaultHistoricalTimeSeriesResolver extends HistoricalTimeSeriesRes
   }
 
   @Override
-  public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider,
+  public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String dataSource, final String dataProvider,
       final String dataField, final String resolutionKey) {
     if (identifierBundle != null) {
-      final Collection<ManageableHistoricalTimeSeriesInfo> timeSeriesCandidates = search(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField);
+      final Collection<ManageableHistoricalTimeSeriesInfo> timeSeriesCandidates = search(identifierBundle, identifierValidityDate,
+          dataSource, dataProvider, dataField);
       final ManageableHistoricalTimeSeriesInfo selectedResult = select(timeSeriesCandidates, resolutionKey);
       if (selectedResult == null) {
-        s_logger.warn("Resolver failed to find any time-series for {} using {}/{}", new Object[] {identifierBundle, dataField, resolutionKey });
+        LOGGER.warn("Resolver failed to find any time-series for {} using {}/{}", new Object[] {identifierBundle, dataField, resolutionKey });
         return null;
       }
       return new HistoricalTimeSeriesResolutionResult(selectedResult);
@@ -79,8 +81,8 @@ public class DefaultHistoricalTimeSeriesResolver extends HistoricalTimeSeriesRes
     return getSelector().select(timeSeriesCandidates, resolutionKey);
   }
 
-  protected Collection<ManageableHistoricalTimeSeriesInfo> search(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
-      final String dataProvider, final String dataField) {
+  protected Collection<ManageableHistoricalTimeSeriesInfo> search(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String dataSource, final String dataProvider, final String dataField) {
     final HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest(identifierBundle);
     searchRequest.setValidityDate(identifierValidityDate);
     searchRequest.setDataSource(dataSource);

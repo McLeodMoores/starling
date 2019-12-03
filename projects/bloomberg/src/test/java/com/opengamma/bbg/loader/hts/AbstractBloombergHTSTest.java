@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.loader.hts;
@@ -52,17 +52,17 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 public abstract class AbstractBloombergHTSTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractBloombergHTSTest.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBloombergHTSTest.class);
+
   protected static final String[] DATA_FIELDS = new String[] {"PX_LAST", "VOLUME"};
   protected static final String[] DATA_PROVIDERS = new String[] {"UNKNOWN", "CMPL", "CMPT", "DEFAULT"};
   protected static final String[] DATA_SOURCES = new String[] {BLOOMBERG_DATA_SOURCE_NAME, "REUTERS", "JPM"};
   protected static final int TS_DATASET_SIZE = 2;
-  protected static final Map<String, String> s_provider2ObservationTime = ImmutableMap.of("UNKNOWN", "UNKNOWN",
+  protected static final Map<String, String> PROVIDER_TO_OBSERVATION_TIME = ImmutableMap.of("UNKNOWN", "UNKNOWN",
       "CMPL", "LONDON_CLOSE",
       "CMPT", "TOKYO_CLOSE",
       "DEFAULT", "DEFAULT");
@@ -84,7 +84,7 @@ public abstract class AbstractBloombergHTSTest {
   protected void doSetUp() {
     _htsMaster = new InMemoryHistoricalTimeSeriesMaster();
     _historicalTimeSeriesProvider = new UnitTestHistoricalTimeSeriesProvider();
-    BloombergIdentifierProvider idProvider = new BloombergIdentifierProvider(new MockReferenceDataProvider());
+    final BloombergIdentifierProvider idProvider = new BloombergIdentifierProvider(new MockReferenceDataProvider());
     _htsMasterUpdater = new BloombergHTSMasterUpdater(_htsMaster, _historicalTimeSeriesProvider, idProvider);
     _loader = new BloombergHistoricalTimeSeriesLoader(_htsMaster, _historicalTimeSeriesProvider, idProvider);
   }
@@ -97,16 +97,16 @@ public abstract class AbstractBloombergHTSTest {
   //-------------------------------------------------------------------------
   private static class UnitTestHistoricalTimeSeriesProvider extends AbstractHistoricalTimeSeriesProvider {
     //keep track of start date to use the same for reloading
-    Map<ExternalIdBundle, LocalDate> _startDateMap = new HashMap<ExternalIdBundle, LocalDate>();
+    Map<ExternalIdBundle, LocalDate> _startDateMap = new HashMap<>();
 
     @Override
-    protected HistoricalTimeSeriesProviderGetResult doBulkGet(HistoricalTimeSeriesProviderGetRequest request) {
-      Map<ExternalIdBundle, LocalDateDoubleTimeSeries> tsMap = Maps.newHashMap();
+    protected HistoricalTimeSeriesProviderGetResult doBulkGet(final HistoricalTimeSeriesProviderGetRequest request) {
+      final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> tsMap = Maps.newHashMap();
       LocalDate start = request.getDateRange().getStartDateInclusive();
       LocalDate end = request.getDateRange().getEndDateInclusive();
-      s_logger.debug("producing TS for startDate={} endDate={}", start, end);
-      for (ExternalIdBundle identifiers : request.getExternalIdBundles()) {
-        LocalDate cachedStart = MapUtils.putIfAbsentGet(_startDateMap, identifiers, start);
+      LOGGER.debug("producing TS for startDate={} endDate={}", start, end);
+      for (final ExternalIdBundle identifiers : request.getExternalIdBundles()) {
+        final LocalDate cachedStart = MapUtils.putIfAbsentGet(_startDateMap, identifiers, start);
 
         if (start.isBefore(cachedStart)) {
           start = cachedStart;
@@ -114,14 +114,14 @@ public abstract class AbstractBloombergHTSTest {
         if (end.equals(LocalDate.MAX)) {
           end = previousWeekDay();
         }
-        LocalDateDoubleTimeSeries timeSeries = makeRandomTimeSeries(start, end);
+        final LocalDateDoubleTimeSeries timeSeries = makeRandomTimeSeries(start, end);
         tsMap.put(identifiers, timeSeries);
       }
       return new HistoricalTimeSeriesProviderGetResult(tsMap);
     }
 
-    private LocalDateDoubleTimeSeries makeRandomTimeSeries(LocalDate start, LocalDate end) {
-      LocalDateDoubleTimeSeriesBuilder tsMap = ImmutableLocalDateDoubleTimeSeries.builder();
+    private LocalDateDoubleTimeSeries makeRandomTimeSeries(final LocalDate start, final LocalDate end) {
+      final LocalDateDoubleTimeSeriesBuilder tsMap = ImmutableLocalDateDoubleTimeSeries.builder();
       LocalDate current = start;
       tsMap.put(current, Math.random());
       while (current.isBefore(end)) {
@@ -133,43 +133,43 @@ public abstract class AbstractBloombergHTSTest {
       return tsMap.build();
     }
 
-    private boolean isWeekday(LocalDate day) {
-      return (day.getDayOfWeek() != DayOfWeek.SATURDAY && day.getDayOfWeek() != DayOfWeek.SUNDAY);
+    private boolean isWeekday(final LocalDate day) {
+      return day.getDayOfWeek() != DayOfWeek.SATURDAY && day.getDayOfWeek() != DayOfWeek.SUNDAY;
     }
-  } 
-  
+  }
+
   protected List<Pair<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeries>> addTimeSeries() {
-    List<Pair<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeries>> result = Lists.newArrayList();
+    final List<Pair<HistoricalTimeSeriesInfoDocument, HistoricalTimeSeries>> result = Lists.newArrayList();
     for (int i = 0; i < TS_DATASET_SIZE; i++) {
 
-      LocalDate end = previousWeekDay().minusWeeks(1);
-      LocalDate start = end.minusWeeks(2);
-      
-      for (String dataSource : DATA_SOURCES) {
-        for (String dataProvider : DATA_PROVIDERS) {
-          for (String dataField : DATA_FIELDS) {
-            ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();
+      final LocalDate end = previousWeekDay().minusWeeks(1);
+      final LocalDate start = end.minusWeeks(2);
+
+      for (final String dataSource : DATA_SOURCES) {
+        for (final String dataProvider : DATA_PROVIDERS) {
+          for (final String dataField : DATA_FIELDS) {
+            final ManageableHistoricalTimeSeriesInfo info = new ManageableHistoricalTimeSeriesInfo();
             info.setName(dataField + " " + dataSource);
             info.setDataField(dataField);
             info.setDataProvider(dataProvider);
             info.setDataSource(dataSource);
-            info.setObservationTime(s_provider2ObservationTime.get(dataProvider));
-            
-            ExternalId ticker = ExternalSchemes.bloombergTickerSecurityId("ticker" + i);
-            ExternalId buid = ExternalSchemes.bloombergBuidSecurityId("buid" + i);
-            final ExternalIdBundleWithDates bundleWithDates = ExternalIdBundleWithDates.of(ExternalIdWithDates.of(ticker), 
+            info.setObservationTime(PROVIDER_TO_OBSERVATION_TIME.get(dataProvider));
+
+            final ExternalId ticker = ExternalSchemes.bloombergTickerSecurityId("ticker" + i);
+            final ExternalId buid = ExternalSchemes.bloombergBuidSecurityId("buid" + i);
+            final ExternalIdBundleWithDates bundleWithDates = ExternalIdBundleWithDates.of(ExternalIdWithDates.of(ticker),
                 ExternalIdWithDates.of(buid));
             info.setExternalIdBundle(bundleWithDates);
-            HistoricalTimeSeriesInfoDocument added = _htsMaster.add(new HistoricalTimeSeriesInfoDocument(info));
+            final HistoricalTimeSeriesInfoDocument added = _htsMaster.add(new HistoricalTimeSeriesInfoDocument(info));
             assertNotNull(added);
             assertNotNull(added.getUniqueId());
-            
-            Map<ExternalIdBundle, LocalDateDoubleTimeSeries> resultMap = _historicalTimeSeriesProvider.getHistoricalTimeSeries(
+
+            final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> resultMap = _historicalTimeSeriesProvider.getHistoricalTimeSeries(
                 Collections.singleton(bundleWithDates.toBundle()), BloombergConstants.BLOOMBERG_DATA_SOURCE_NAME, dataProvider, dataField, LocalDateRange.of(start, end, true));
-            LocalDateDoubleTimeSeries timeSeries = resultMap.get(bundleWithDates.toBundle());
-            UniqueId tsUid = _htsMaster.updateTimeSeriesDataPoints(added.getInfo().getTimeSeriesObjectId(), timeSeries);
-            
-            HistoricalTimeSeries hts = _htsMaster.getTimeSeries(tsUid);
+            final LocalDateDoubleTimeSeries timeSeries = resultMap.get(bundleWithDates.toBundle());
+            final UniqueId tsUid = _htsMaster.updateTimeSeriesDataPoints(added.getInfo().getTimeSeriesObjectId(), timeSeries);
+
+            final HistoricalTimeSeries hts = _htsMaster.getTimeSeries(tsUid);
             assertNotNull(hts);
             assertEquals(timeSeries, hts.getTimeSeries());
             result.add(Pairs.of(added, hts));
@@ -179,7 +179,7 @@ public abstract class AbstractBloombergHTSTest {
     }
     return result;
   }
-  
+
   /**
    * Gets the htsMasterUpdater.
    * @return the htsMasterUpdater

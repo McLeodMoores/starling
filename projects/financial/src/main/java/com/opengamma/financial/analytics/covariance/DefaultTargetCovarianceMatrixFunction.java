@@ -25,7 +25,8 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Acts on a target of {@link ComputationTarget#NULL} to mean the view's portfolio. This is a convenience function to allow this to be more easily added as a specific requirement to a view.
+ * Acts on a target of {@link ComputationTarget#NULL} to mean the view's portfolio. This is a convenience function to allow this to be more easily added as a
+ * specific requirement to a view.
  */
 public class DefaultTargetCovarianceMatrixFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -49,15 +50,17 @@ public class DefaultTargetCovarianceMatrixFunction extends AbstractFunction.NonC
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
-    return Collections.singleton(new ValueRequirement(desiredValue.getValueName(), new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, context.getPortfolio()
-        .getUniqueId()), desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION)));
+    return Collections
+        .singleton(new ValueRequirement(desiredValue.getValueName(), new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, context.getPortfolio()
+            .getUniqueId()), desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION)));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     final ValueProperties.Builder properties = createValueProperties();
-    for (String property : input.getProperties().getProperties()) {
+    for (final String property : input.getProperties().getProperties()) {
       if (!ValuePropertyNames.FUNCTION.equals(property)) {
         final Set<String> values = input.getProperties().getValues(property);
         if (values.isEmpty()) {
@@ -73,7 +76,8 @@ public class DefaultTargetCovarianceMatrixFunction extends AbstractFunction.NonC
   // FunctionInvoker
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext context, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext context, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final Object value = inputs.getValue(desiredValue.getValueName());
     final ValueRequirement resultReq = desiredValues.iterator().next();

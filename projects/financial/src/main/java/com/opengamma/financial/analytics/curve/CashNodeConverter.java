@@ -72,8 +72,6 @@ import com.opengamma.util.time.Tenor;
  *  <li> The end date is computed from the start date by adding the maturity tenor (overnight or tom/next) of the node and using the following
  *  business day convention and calendar to adjust to the appropriate business day.
  * </ul>
- * <p>
- * <p>
  * The notional in all cases is one.
  */
 public class CashNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinition<?>> {

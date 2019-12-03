@@ -19,14 +19,14 @@ public class MarkToMarketPV01FuturesFunction extends MarkToMarketFuturesFunction
    * @param costOfCarryField The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY". Set in *FunctionConfiguration
    * @param resolutionKey The key defining how the time series resolution is to occur e.g. "DEFAULT_TSS_CONFIG"
    */
-  public MarkToMarketPV01FuturesFunction(String closingPriceField, String costOfCarryField, String resolutionKey) {
+  public MarkToMarketPV01FuturesFunction(final String closingPriceField, final String costOfCarryField, final String resolutionKey) {
     super(ValueRequirementNames.PV01, MarkToMarketFuturesCalculator.PV01Calculator.getInstance(), closingPriceField, costOfCarryField, resolutionKey);
   }
-  
+
   @Override
-  protected Double applyTradeScaling(final Trade trade, Double value) {
+  protected Double applyTradeScaling(final Trade trade, final Double value) {
     final double quantity = trade.getQuantity().doubleValue();
     return value * quantity;
   }
-  
+
 }

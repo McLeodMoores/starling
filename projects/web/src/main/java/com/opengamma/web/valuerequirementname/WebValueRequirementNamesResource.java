@@ -35,7 +35,7 @@ import com.opengamma.web.AbstractWebResource;
 public class WebValueRequirementNamesResource extends AbstractWebResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebValueRequirementNamesResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebValueRequirementNamesResource.class);
 
   /**
    * Configuration key.
@@ -47,47 +47,44 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
    */
   private final Set<String> _valueRequirementNames;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the resource.
    */
   public WebValueRequirementNamesResource() {
-    final List<String> list = new ArrayList<String>();
-    for (Field field : ValueRequirementNames.class.getDeclaredFields()) {
-      try {
-        list.add((String) field.get(null));
-      } catch (Exception ex) {
-        s_logger.warn("Could not read in value requirement names: " + ex.getMessage());
-      }
-    }
-    Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
-    _valueRequirementNames = new LinkedHashSet<String>(list);
+    this(new String[] { ValueRequirementNames.class.getName() });
   }
 
   /**
    * Creates an instance.
-   * 
-   * @param valueRequirementNameClasses  the classes, not null
+   *
+   * @param valueRequirementNameClasses
+   *          the classes, not null
    */
-  public WebValueRequirementNamesResource(String[] valueRequirementNameClasses) {
+  public WebValueRequirementNamesResource(final String[] valueRequirementNameClasses) {
     ArgumentChecker.notEmpty(valueRequirementNameClasses, "valueRequirementNameClasses");
-    final List<String> list = new ArrayList<String>();
-    for (String className : valueRequirementNameClasses) {
+    final List<String> list = new ArrayList<>();
+    for (final String className : valueRequirementNameClasses) {
       try {
-        for (Field field : Class.forName(className.trim()).getDeclaredFields()) {
-          if (Modifier.isPublic(field.getModifiers()) && field.isSynthetic() == false) {
+        for (final Field field : Class.forName(className.trim()).getDeclaredFields()) {
+          if (Modifier.isPublic(field.getModifiers()) && !field.isSynthetic()) {
             list.add((String) field.get(null));
           }
         }
-      } catch (Exception ex) {
-        s_logger.info("Could not read in value requirement names: " + ex.getMessage());
+      } catch (final Exception ex) {
+        LOGGER.info("Could not read in value requirement names: " + ex.getMessage());
       }
     }
     Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
-    _valueRequirementNames = new LinkedHashSet<String>(list);
+    _valueRequirementNames = new LinkedHashSet<>(list);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   * Gets the value requirement names as JSON. The key is "types" and the values are stored in a JSONArray.
+   *
+   * @return the values as JSON
+   */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public String getJSON() {
@@ -99,8 +96,8 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
           .value(new JSONArray(_valueRequirementNames))
           .endObject()
           .toString();
-    } catch (JSONException ex) {
-      s_logger.warn("error creating json document for valueRequirementNames");
+    } catch (final JSONException ex) {
+      LOGGER.warn("error creating json document for valueRequirementNames: ", ex.getMessage());
     }
     return result;
   }

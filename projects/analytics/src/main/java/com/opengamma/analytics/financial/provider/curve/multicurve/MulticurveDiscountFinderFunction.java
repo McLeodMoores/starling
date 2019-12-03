@@ -28,10 +28,14 @@ public class MulticurveDiscountFinderFunction extends Function1D<DoubleMatrix1D,
 
   /**
    * Constructor.
-   * @param calculator The instrument value calculator.
-   * @param data The data required for curve building.
+   *
+   * @param calculator
+   *          The instrument value calculator.
+   * @param data
+   *          The data required for curve building.
    */
-  public MulticurveDiscountFinderFunction(final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> calculator, final MulticurveDiscountBuildingData data) {
+  public MulticurveDiscountFinderFunction(final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> calculator,
+      final MulticurveDiscountBuildingData data) {
     ArgumentChecker.notNull(calculator, "Calculator");
     ArgumentChecker.notNull(data, "Data");
     _calculator = calculator;

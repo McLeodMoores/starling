@@ -20,27 +20,27 @@ import com.opengamma.master.convention.ConventionSearchResult;
  */
 public class DataTrackingConventionMaster extends AbstractDataTrackingMaster<ConventionDocument, ConventionMaster> implements ConventionMaster {
 
-  public DataTrackingConventionMaster(ConventionMaster delegate) {
+  public DataTrackingConventionMaster(final ConventionMaster delegate) {
     super(delegate);
   }
 
   @Override
-  public ConventionSearchResult search(ConventionSearchRequest request) {
-    ConventionSearchResult searchResult = delegate().search(request);
+  public ConventionSearchResult search(final ConventionSearchRequest request) {
+    final ConventionSearchResult searchResult = delegate().search(request);
     trackDocs(searchResult.getDocuments());
     return searchResult;
   }
 
   @Override
-  public ConventionHistoryResult history(ConventionHistoryRequest request) {
-    ConventionHistoryResult historyResult = delegate().history(request);
+  public ConventionHistoryResult history(final ConventionHistoryRequest request) {
+    final ConventionHistoryResult historyResult = delegate().history(request);
     trackDocs(historyResult.getDocuments());
     return historyResult;
   }
 
-  
+
   @Override
-  public ConventionMetaDataResult metaData(ConventionMetaDataRequest request) {
+  public ConventionMetaDataResult metaData(final ConventionMetaDataRequest request) {
     return delegate().metaData(request);
   }
 }

@@ -41,13 +41,13 @@ public class CashSecurityFudgeBuilder extends AbstractFudgeBuilder implements Fu
   public static final String AMOUNT_FIELD_NAME = "amount";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CashSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final CashSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     CashSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, CashSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final CashSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, CURRENCY_FIELD_NAME, object.getCurrency());
     addToMessage(msg, REGION_FIELD_NAME, ExternalIdFudgeBuilder.toFudgeMsg(serializer, object.getRegionId()));
@@ -59,13 +59,13 @@ public class CashSecurityFudgeBuilder extends AbstractFudgeBuilder implements Fu
   }
 
   @Override
-  public CashSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    CashSecurity object = new CashSecurity();
+  public CashSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final CashSecurity object = new CashSecurity();
     CashSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, CashSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final CashSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setCurrency(msg.getValue(Currency.class, CURRENCY_FIELD_NAME));
     object.setRegionId(ExternalIdFudgeBuilder.fromFudgeMsg(deserializer, msg.getMessage(REGION_FIELD_NAME)));

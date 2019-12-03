@@ -17,12 +17,11 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BondFixedSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.payment.PaymentFixedDefinition;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.region.RegionSource;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
+import com.opengamma.financial.convention.BondConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -35,46 +34,44 @@ import com.opengamma.financial.security.bond.GovernmentBondSecurity;
 import com.opengamma.financial.security.bond.MunicipalBondSecurity;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts {@link BondSecurity} to the equivalent {@BondFixedSecurityDefinition} or
- * {@link PaymentFixedDefinition} (for zero-coupons) for use in pricing.
+ * Converts {@link BondSecurity} to the equivalent {@link BondFixedSecurityDefinition} or {@link PaymentFixedDefinition} (for zero-coupons) for use in pricing.
  */
 public class BondSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
   /** Excluded coupon types */
   private static final Set<String> EXCLUDED_TYPES = Sets.newHashSet("FLOAT RATE NOTE", "TOGGLE PIK NOTES");
   /** The holiday source */
   private final HolidaySource _holidaySource;
-  /** The convention bundle source */
-  private final ConventionBundleSource _conventionSource;
+  /** The convention source */
+  private final ConventionSource _conventionSource;
   /** The region source */
   private final RegionSource _regionSource;
 
   /**
-   * @param holidaySource The holiday source, not null
-   * @param conventionSource The convention source, not null
-   * @param regionSource The region source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param regionSource
+   *          The region source, not null
    */
-  public BondSecurityConverter(final HolidaySource holidaySource, final ConventionBundleSource conventionSource, final RegionSource regionSource) {
-    ArgumentChecker.notNull(holidaySource, "holiday source");
-    ArgumentChecker.notNull(conventionSource, "convention source");
-    ArgumentChecker.notNull(regionSource, "region source");
-    _holidaySource = holidaySource;
-    _conventionSource = conventionSource;
-    _regionSource = regionSource;
+  public BondSecurityConverter(final HolidaySource holidaySource, final ConventionSource conventionSource, final RegionSource regionSource) {
+    _holidaySource = ArgumentChecker.notNull(holidaySource, "holidaySource");
+    _conventionSource = ArgumentChecker.notNull(conventionSource, "conventionSource");
+    _regionSource = ArgumentChecker.notNull(regionSource, "regionSource");
   }
 
   @Override
   public InstrumentDefinition<?> visitCorporateBondSecurity(final CorporateBondSecurity security) {
     final String domicile = security.getIssuerDomicile();
-    ArgumentChecker.notNull(domicile, "bond security domicile cannot be null");
-    final String conventionName = domicile + "_CORPORATE_BOND_CONVENTION";
-    final ConventionBundle convention = _conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, conventionName));
-    if (convention == null) {
-      throw new OpenGammaRuntimeException("No corporate bond convention found for domicile " + domicile);
+    if (domicile == null) {
+      throw new OpenGammaRuntimeException("bond security domicile cannot be null");
     }
-    return visitBondSecurity(security, convention, conventionName);
+    final BondConvention convention = _conventionSource.getSingle(ExternalSchemes.countryRegionId(Country.of(domicile)), BondConvention.class);
+    return visitBondSecurity(security, convention);
   }
 
   @Override
@@ -83,24 +80,22 @@ public class BondSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
     if (domicile == null) {
       throw new OpenGammaRuntimeException("bond security domicile cannot be null");
     }
-    final String conventionName = domicile + "_TREASURY_BOND_CONVENTION";
-    final ConventionBundle convention = _conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, conventionName));
-    if (convention == null) {
-      throw new OpenGammaRuntimeException("Convention called " + conventionName + " was null");
-    }
-    return visitBondSecurity(security, convention, conventionName);
+    final BondConvention convention = _conventionSource.getSingle(ExternalSchemes.countryRegionId(Country.of(domicile)), BondConvention.class);
+    return visitBondSecurity(security, convention);
   }
 
   /**
-   * Creates {@link BondFixedSecurityDefinition} for fixed-coupon bonds or {@link PaymentFixedDefinition}
-   * for zero-coupon bonds.
-   * @param security The security
-   * @param convention The convention
-   * @param conventionName The convention name
+   * Creates {@link BondFixedSecurityDefinition} for fixed-coupon bonds or {@link PaymentFixedDefinition} for zero-coupon bonds.
+   *
+   * @param security
+   *          The security
+   * @param convention
+   *          The convention
+   * @param conventionName
+   *          The convention name
    * @return The definition
    */
-  private InstrumentDefinition<?> visitBondSecurity(final BondSecurity security, final ConventionBundle convention,
-      final String conventionName) {
+  private InstrumentDefinition<?> visitBondSecurity(final BondSecurity security, final BondConvention convention) {
     if (EXCLUDED_TYPES.contains(security.getCouponType())) {
       throw new UnsupportedOperationException("Cannot support bonds with coupon of type " + security.getCouponType());
     }
@@ -116,22 +111,16 @@ public class BondSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
     final double rate = security.getCouponRate() / 100;
     final DayCount dayCount = security.getDayCount();
     final BusinessDayConvention businessDay = BusinessDayConventions.FOLLOWING;
-    if (convention.isEOMConvention() == null) {
-      throw new OpenGammaRuntimeException("Could not get EOM convention information from " + conventionName);
-    }
-    final boolean isEOM = convention.isEOMConvention();
+    final boolean isEOM = convention.isIsEOM();
     final YieldConvention yieldConvention = security.getYieldConvention();
-    if (security.getCouponType().equals("NONE") || security.getCouponType().equals("ZERO COUPON")) { //TODO find where string is
+    if (security.getCouponType().equals("NONE") || security.getCouponType().equals("ZERO COUPON")) { // TODO find where string is
       return new PaymentFixedDefinition(currency, maturityDate, 1);
     }
-    if (convention.getBondSettlementDays(firstAccrualDate, maturityDate) == null) {
-      throw new OpenGammaRuntimeException("Could not get bond settlement days from " + conventionName);
-    }
-    final int settlementDays = convention.getBondSettlementDays(firstAccrualDate, maturityDate);
+    final int settlementDays = convention.getSettlementDays();
     final Period paymentPeriod = ConversionUtils.getTenor(security.getCouponFrequency());
     final ZonedDateTime firstCouponDate = ZonedDateTime.of(security.getFirstCouponDate().toLocalDate().atStartOfDay(), zone);
-    return BondFixedSecurityDefinition.from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays, calendar, dayCount, businessDay,
-        yieldConvention, isEOM, security.getIssuerName());
+    return BondFixedSecurityDefinition.from(currency, firstAccrualDate, firstCouponDate, maturityDate, paymentPeriod, rate, settlementDays, calendar, dayCount,
+        businessDay, yieldConvention, isEOM, security.getIssuerName());
   }
 
   @Override

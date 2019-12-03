@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.depgraph.provider;
@@ -17,7 +17,7 @@ public class LocalDependencyGraphTraceProvider implements DependencyGraphTracePr
 
   private final DependencyGraphTraceBuilder _traceBuilder;
 
-  public LocalDependencyGraphTraceProvider(DependencyGraphTraceBuilder traceBuilder) {
+  public LocalDependencyGraphTraceProvider(final DependencyGraphTraceBuilder traceBuilder) {
     _traceBuilder = traceBuilder;
   }
 
@@ -27,7 +27,7 @@ public class LocalDependencyGraphTraceProvider implements DependencyGraphTracePr
   }
 
   @Override
-  public DependencyGraphBuildTrace getTrace(DependencyGraphTraceBuilderProperties properties) {
+  public DependencyGraphBuildTrace getTrace(final DependencyGraphTraceBuilderProperties properties) {
     return _traceBuilder.build(properties);
   }
 

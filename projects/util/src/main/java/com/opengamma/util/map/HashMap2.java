@@ -15,7 +15,7 @@ import com.google.common.collect.MapMaker;
 
 /**
  * Implementation of {@link Map2} backed by a standard {@link ConcurrentHashMap}.
- * 
+ *
  * @param <K1> key 1 type
  * @param <K2> key 2 type
  * @param <V> value type
@@ -29,9 +29,9 @@ public class HashMap2<K1, K2, V> implements Map2<K1, K2, V> {
 
     protected abstract <K1, K2, V> ConcurrentMap<K1, ConcurrentMap<K2, V>> createBaseMap();
 
-    protected abstract <K> K getKey(final Object reference);
+    protected abstract <K> K getKey(Object reference);
 
-    protected abstract <K> Object createReference(final K key);
+    protected abstract <K> Object createReference(K key);
 
   }
 
@@ -42,7 +42,7 @@ public class HashMap2<K1, K2, V> implements Map2<K1, K2, V> {
 
     @Override
     protected <K1, K2, V> ConcurrentMap<K1, ConcurrentMap<K2, V>> createBaseMap() {
-      return new ConcurrentHashMap<K1, ConcurrentMap<K2, V>>();
+      return new ConcurrentHashMap<>();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class HashMap2<K1, K2, V> implements Map2<K1, K2, V> {
 
     @Override
     protected <K> Object createReference(final K key) {
-      return new WeakReference<K>(key);
+      return new WeakReference<>(key);
     }
 
   };
@@ -131,9 +131,8 @@ public class HashMap2<K1, K2, V> implements Map2<K1, K2, V> {
     final ConcurrentMap<K2, V> values = _values.get(key1);
     if (values != null) {
       return values.get(key2);
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -166,9 +165,8 @@ public class HashMap2<K1, K2, V> implements Map2<K1, K2, V> {
     final ConcurrentMap<K2, V> values = _values.get(key1);
     if (values != null) {
       return values.containsKey(key2);
-    } else {
-      return false;
     }
+    return false;
   }
 
   @Override

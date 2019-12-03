@@ -30,7 +30,7 @@ import com.opengamma.provider.security.SecurityProvider;
  */
 @BeanDefinition
 public class ExampleSecurityLoaderComponentFactory extends AbstractSecurityLoaderComponentFactory {
-  
+
   /**
    * The security provider.
    */
@@ -44,7 +44,7 @@ public class ExampleSecurityLoaderComponentFactory extends AbstractSecurityLoade
 
   //-------------------------------------------------------------------------
   @Override
-  protected SecurityLoader createSecurityLoader(ComponentRepository repo) {
+  protected SecurityLoader createSecurityLoader(final ComponentRepository repo) {
     return new DefaultSecurityLoader(getSecurityMaster(), getSecurityProvider());
   }
 

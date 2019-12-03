@@ -29,11 +29,11 @@ import com.opengamma.util.metric.MetricProducer;
  * Data is stored based on the Joda-Beans API.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
- * 
+ *
  * @param <D>  the document type
  * @param <V>  the bean type
  */
-public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends Bean> 
+public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends Bean>
     implements AbstractChangeProvidingMaster<D>, MetricProducer {
 
   /**
@@ -43,7 +43,7 @@ public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends 
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param delegate  the delegate master, not null
    */
   public AbstractDelegatingBeanMaster(final DbBeanMaster<D, V> delegate) {
@@ -51,14 +51,14 @@ public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends 
   }
 
   @Override
-  public void registerMetrics(MetricRegistry summaryRegistry, MetricRegistry detailedRegistry, String namePrefix) {
+  public void registerMetrics(final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry, final String namePrefix) {
     _delegate.registerMetrics(summaryRegistry, detailedRegistry, namePrefix);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the delegated {@code DbBeanMaster}.
-   * 
+   *
    * @return the delegated master, not null
    */
   protected DbBeanMaster<D, V> getDelegate() {
@@ -89,7 +89,7 @@ public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends 
   //-------------------------------------------------------------------------
   /**
    * Gets the database connector.
-   * 
+   *
    * @return the database connector, not null
    */
   public DbConnector getDbConnector() {
@@ -99,7 +99,7 @@ public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends 
   //-------------------------------------------------------------------------
   /**
    * Gets the external SQL bundle.
-   * 
+   *
    * @return the external SQL bundle, not null
    */
   public ElSqlBundle getElSqlBundle() {
@@ -108,17 +108,17 @@ public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends 
 
   /**
    * Sets the external SQL bundle.
-   * 
+   *
    * @param bundle  the external SQL bundle, not null
    */
-  public void setElSqlBundle(ElSqlBundle bundle) {
+  public void setElSqlBundle(final ElSqlBundle bundle) {
     _delegate.setElSqlBundle(bundle);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the clock that determines the current time.
-   * 
+   *
    * @return the clock, not null
    */
   public Clock getClock() {
@@ -127,7 +127,7 @@ public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends 
 
   /**
    * Sets the clock that determines the current time.
-   * 
+   *
    * @param clock  the clock, not null
    */
   public void setClock(final Clock clock) {
@@ -144,7 +144,7 @@ public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends 
   //-------------------------------------------------------------------------
   /**
    * Gets the scheme in use for unique identifier.
-   * 
+   *
    * @return the scheme, not null
    */
   public String getUniqueIdScheme() {
@@ -153,7 +153,7 @@ public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends 
 
   /**
    * Sets the scheme in use for unique identifier.
-   * 
+   *
    * @param scheme  the scheme for unique identifier, not null
    */
   public void setUniqueIdScheme(final String scheme) {
@@ -186,74 +186,74 @@ public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends 
 
   //-------------------------------------------------------------------------
   @Override
-  public D get(UniqueId uniqueId) {
+  public D get(final UniqueId uniqueId) {
     return _delegate.get(uniqueId);
   }
 
   @Override
-  public D get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public D get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     return _delegate.get(objectId, versionCorrection);
   }
 
   @Override
-  public Map<UniqueId, D> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, D> get(final Collection<UniqueId> uniqueIds) {
     return _delegate.get(uniqueIds);
   }
 
   @Override
-  public D add(D document) {
+  public D add(final D document) {
     return _delegate.add(document);
   }
 
   @Override
-  public D update(D document) {
+  public D update(final D document) {
     return _delegate.update(document);
   }
 
   @Override
-  public void remove(ObjectIdentifiable oid) {
+  public void remove(final ObjectIdentifiable oid) {
     _delegate.remove(oid);
   }
 
   @Override
-  public D correct(D document) {
+  public D correct(final D document) {
     return _delegate.correct(document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<D> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<D> replacementDocuments) {
     return _delegate.replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<D> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<D> replacementDocuments) {
     return _delegate.replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<D> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<D> replacementDocuments) {
     return _delegate.replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(D replacementDocument) {
+  public UniqueId replaceVersion(final D replacementDocument) {
     return _delegate.replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     _delegate.removeVersion(uniqueId);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, D documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final D documentToAdd) {
     return _delegate.addVersion(objectId, documentToAdd);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Retrieves the version of the master schema from the database.
-   *  
+   *
    * @return the schema version, or null if not found
    */
   public Integer getSchemaVersion() {
@@ -263,7 +263,7 @@ public class AbstractDelegatingBeanMaster<D extends AbstractDocument, V extends 
   //-------------------------------------------------------------------------
   /**
    * Returns a string summary of this master.
-   * 
+   *
    * @return the string summary, not null
    */
   @Override

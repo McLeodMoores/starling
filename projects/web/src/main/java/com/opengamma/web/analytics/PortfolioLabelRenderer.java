@@ -24,26 +24,26 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   private final List<PortfolioGridRow> _rows;
 
   // TODO it would be better to pass in an interface so the renderers don't have to be rebuilt when the rows change
-  /* package */ PortfolioLabelRenderer(List<PortfolioGridRow> rows) {
+  /* package */ PortfolioLabelRenderer(final List<PortfolioGridRow> rows) {
     ArgumentChecker.notNull(rows, "rows");
     _rows = rows;
   }
 
   @Override
-  public ResultsCell getResults(int rowIndex,
-                                TypeFormatter.Format format,
-                                ResultsCache cache,
-                                Class<?> columnType,
-                                Object inlineKey) {
-    PortfolioGridRow row = _rows.get(rowIndex);
-    ComputationTargetReference target = row.getTarget();
-    ComputationTargetType targetType = target.getType();
+  public ResultsCell getResults(final int rowIndex,
+      final TypeFormatter.Format format,
+      final ResultsCache cache,
+      final Class<?> columnType,
+      final Object inlineKey) {
+    final PortfolioGridRow row = _rows.get(rowIndex);
+    final ComputationTargetReference target = row.getTarget();
+    final ComputationTargetType targetType = target.getType();
     // TODO do I need to use the target type to figure out the row type? can I just have different row types?
     if (targetType.isTargetType(ComputationTargetType.POSITION)) {
       RowTarget rowTarget;
-      UniqueId securityId = row.getSecurityId();
-      ResultsCache.Result securityResult = cache.getEntity(securityId.getObjectId());
-      Security security = (Security) securityResult.getValue();
+      final UniqueId securityId = row.getSecurityId();
+      final ResultsCache.Result securityResult = cache.getEntity(securityId.getObjectId());
+      final Security security = (Security) securityResult.getValue();
       if (isOtc(security)) {
         // TODO different type for OTC positions with no trades? they are effecively the same but the client
         // needs to know when a position has no trades because it will be a different endpoint to trigger editing
@@ -60,7 +60,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
       return ResultsCell.forStaticValue(new NodeTarget(row.getName(), row.getNodeId()), columnType, format);
     } else if (targetType.isTargetType(ComputationTargetType.TRADE)) {
       // only fungible trades have their own row, OTC trades are shown on the same row as their parent position
-      FungibleTradeTarget tradeTarget =
+      final FungibleTradeTarget tradeTarget =
           new FungibleTradeTarget(row.getName(), row.getNodeId(), row.getPositionId(), row.getTradeId());
       // TODO check cache item for trade to see if it's been updated
       return ResultsCell.forStaticValue(tradeTarget, columnType, format);
@@ -68,11 +68,10 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
     throw new IllegalArgumentException("Unexpected target type for row: " + targetType);
   }
 
-  private static boolean isOtc(Security security) {
+  private static boolean isOtc(final Security security) {
     if (security instanceof FinancialSecurity) {
       return ((FinancialSecurity) security).accept(new OtcSecurityVisitor());
-    } else {
-      return false;
     }
+    return false;
   }
 }

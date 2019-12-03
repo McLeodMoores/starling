@@ -60,17 +60,17 @@ public class BlotterLookupResource {
 
   private final StringConvert _stringConvert;
 
-  /* package */ BlotterLookupResource(StringConvert stringConvert) {
+  /* package */ BlotterLookupResource(final StringConvert stringConvert) {
     ArgumentChecker.notNull(stringConvert, "stringConvert");
     _stringConvert = stringConvert;
   }
 
   @SuppressWarnings("unchecked")
-  private String convertToJsonArray(Class<?> type, Iterator<?> it) {
-    StringConverter<Object> converter = (StringConverter<Object>) _stringConvert.findConverter(type);
-    List<String> results = Lists.newArrayList();
+  private String convertToJsonArray(final Class<?> type, final Iterator<?> it) {
+    final StringConverter<Object> converter = (StringConverter<Object>) _stringConvert.findConverter(type);
+    final List<String> results = Lists.newArrayList();
     while (it.hasNext()) {
-      Object item = it.next();
+      final Object item = it.next();
       results.add(converter.convertToString(item));
     }
     return new JSONArray(results).toString();
@@ -89,7 +89,7 @@ public class BlotterLookupResource {
   @Path("exercisetypes")
   @Produces(MediaType.APPLICATION_JSON)
   public String getExerciseTypes() {
-    ImmutableList<ExerciseType> exerciseTypes = ImmutableList.<ExerciseType>of(/*new AmericanExerciseType(),
+    final ImmutableList<ExerciseType> exerciseTypes = ImmutableList.<ExerciseType>of(/*new AmericanExerciseType(),
                                                                  new AsianExerciseType(),
                                                                  new BermudanExerciseType(),*/
                                                                  new EuropeanExerciseType());
@@ -173,7 +173,7 @@ public class BlotterLookupResource {
   public String getMonitoringType() {
     return convertToJsonArray(MonitoringType.class, Arrays.asList(MonitoringType.values()).iterator());
   }
-  
+
   @GET
   @Path("interpolationmethods")
   @Produces(MediaType.APPLICATION_JSON)
@@ -186,7 +186,7 @@ public class BlotterLookupResource {
   @Produces(MediaType.APPLICATION_JSON)
   @SuppressWarnings("deprecation")
   public String getIdSchemes() {
-    Map<String, ExternalScheme> schemes = Maps.newHashMap();
+    final Map<String, ExternalScheme> schemes = Maps.newHashMap();
     schemes.put("ISIN", ExternalSchemes.ISIN);
     schemes.put("CUSIP", ExternalSchemes.CUSIP);
     schemes.put("SEDOL1", ExternalSchemes.SEDOL1);
@@ -208,7 +208,7 @@ public class BlotterLookupResource {
   @Path("regions")
   @Produces(MediaType.APPLICATION_JSON)
   public String getRegions() {
-    List<Country> countryList = Lists.newArrayList(Country.getAvailableCountries());
+    final List<Country> countryList = Lists.newArrayList(Country.getAvailableCountries());
     Collections.sort(countryList);
     return convertToJsonArray(Country.class, countryList.iterator());
   }

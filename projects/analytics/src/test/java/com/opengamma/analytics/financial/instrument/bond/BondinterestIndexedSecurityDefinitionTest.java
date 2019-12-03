@@ -45,7 +45,7 @@ import com.opengamma.util.time.DateUtils;
  */
 @Test(groups = TestGroup.UNIT)
 public class BondinterestIndexedSecurityDefinitionTest {
-  //Index-Linked Gilt 2% Index-linked Treasury Stock 2035 - GB0031790826
+  // Index-Linked Gilt 2% Index-linked Treasury Stock 2035 - GB0031790826
   private static final String NAME_INDEX_UK = "UK RPI";
   private static final IndexPrice PRICE_INDEX_UKRPI = new IndexPrice(NAME_INDEX_UK, Currency.GBP);
   private static final Calendar CALENDAR_GBP = new MondayToFridayCalendar("GBP");
@@ -65,8 +65,8 @@ public class BondinterestIndexedSecurityDefinitionTest {
   private static final double FACTOR = 0.02;
   private static final String ISSUER_UK = "UK GOVT";
   private static final BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationYearOnYearMonthlyWithMarginDefinition> BOND_SECURITY_DEFINITION = BondInterestIndexedSecurityDefinition
-      .fromMonthly(PRICE_INDEX_UKRPI, MONTH_LAG_1, START_DATE_1, FIRST_COUPON_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1,
-          NOTIONAL_1, REAL_RATE_1, BUSINESS_DAY_GBP, SETTLEMENT_DAYS_1, CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1, IS_EOM_1, ISSUER_UK);
+      .fromMonthly(PRICE_INDEX_UKRPI, MONTH_LAG_1, START_DATE_1, FIRST_COUPON_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1, NOTIONAL_1, REAL_RATE_1,
+          BUSINESS_DAY_GBP, SETTLEMENT_DAYS_1, CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1, IS_EOM_1, ISSUER_UK);
 
   @Test
   public void getter() {
@@ -86,28 +86,28 @@ public class BondinterestIndexedSecurityDefinitionTest {
    */
   public void constructorBondsWithFirstCouponDate() {
     // Nominal construction
-    final PaymentFixedDefinition nominalPayment = new PaymentFixedDefinition(PRICE_INDEX_UKRPI.getCurrency(), BUSINESS_DAY_GBP.adjustDate(CALENDAR_GBP, MATURITY_DATE_1), NOTIONAL_1);
-    final AnnuityDefinition<PaymentFixedDefinition> nominalAnnuity = new AnnuityDefinition<>(new PaymentFixedDefinition[] {nominalPayment }, CALENDAR_GBP);
+    final PaymentFixedDefinition nominalPayment = new PaymentFixedDefinition(PRICE_INDEX_UKRPI.getCurrency(),
+        BUSINESS_DAY_GBP.adjustDate(CALENDAR_GBP, MATURITY_DATE_1), NOTIONAL_1);
+    final AnnuityDefinition<PaymentFixedDefinition> nominalAnnuity = new AnnuityDefinition<>(new PaymentFixedDefinition[] { nominalPayment }, CALENDAR_GBP);
     // Coupon construction
-    final ZonedDateTime[] paymentDatesUnadjusted = ScheduleCalculator.getUnadjustedDateSchedule(FIRST_COUPON_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1,
-        true, false);
+    final ZonedDateTime[] paymentDatesUnadjusted = ScheduleCalculator.getUnadjustedDateSchedule(FIRST_COUPON_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1, true,
+        false);
     final ZonedDateTime[] paymentDates = ScheduleCalculator.getAdjustedDateSchedule(paymentDatesUnadjusted, BUSINESS_DAY_GBP, CALENDAR_GBP, false);
     final CouponInflationYearOnYearMonthlyWithMarginDefinition[] coupons = new CouponInflationYearOnYearMonthlyWithMarginDefinition[paymentDates.length + 1];
     coupons[0] = CouponInflationYearOnYearMonthlyWithMarginDefinition.from(FACTOR, START_DATE_1,
         ScheduleCalculator.getAdjustedDate(FIRST_COUPON_DATE_1, 0, CALENDAR_GBP), NOTIONAL_1, PRICE_INDEX_UKRPI, MONTH_LAG_1, true);
-    coupons[1] = CouponInflationYearOnYearMonthlyWithMarginDefinition.from(FACTOR, FIRST_COUPON_DATE_1, paymentDates[0], NOTIONAL_1,
-        PRICE_INDEX_UKRPI, MONTH_LAG_1, true);
+    coupons[1] = CouponInflationYearOnYearMonthlyWithMarginDefinition.from(FACTOR, FIRST_COUPON_DATE_1, paymentDates[0], NOTIONAL_1, PRICE_INDEX_UKRPI,
+        MONTH_LAG_1, true);
     for (int loopcpn = 1; loopcpn < paymentDates.length; loopcpn++) {
       coupons[loopcpn + 1] = CouponInflationYearOnYearMonthlyWithMarginDefinition.from(FACTOR, paymentDatesUnadjusted[loopcpn - 1], paymentDates[loopcpn],
           NOTIONAL_1, PRICE_INDEX_UKRPI, MONTH_LAG_1, true);
     }
-    final AnnuityDefinition<CouponInflationYearOnYearMonthlyWithMarginDefinition> couponAnnuity = new AnnuityDefinition<>(
-        coupons, CALENDAR_GBP);
+    final AnnuityDefinition<CouponInflationYearOnYearMonthlyWithMarginDefinition> couponAnnuity = new AnnuityDefinition<>(coupons, CALENDAR_GBP);
     final BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationYearOnYearMonthlyWithMarginDefinition> bond = new BondInterestIndexedSecurityDefinition<>(
         nominalAnnuity, couponAnnuity, 0, 2, CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1, IS_EOM_1, MONTH_LAG_1, ISSUER_UK);
-    final BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationYearOnYearMonthlyWithMarginDefinition> bondFrom = BondInterestIndexedSecurityDefinition.fromMonthly(
-        PRICE_INDEX_UKRPI, MONTH_LAG_1, START_DATE_1, FIRST_COUPON_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1,
-        NOTIONAL_1, FACTOR, BUSINESS_DAY_GBP, SETTLEMENT_DAYS_1, CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1, IS_EOM_1, ISSUER_UK);
+    final BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationYearOnYearMonthlyWithMarginDefinition> bondFrom = BondInterestIndexedSecurityDefinition
+        .fromMonthly(PRICE_INDEX_UKRPI, MONTH_LAG_1, START_DATE_1, FIRST_COUPON_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1, NOTIONAL_1, FACTOR, BUSINESS_DAY_GBP,
+            SETTLEMENT_DAYS_1, CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1, IS_EOM_1, ISSUER_UK);
     assertEquals("Interest Index Bond: constructor", bond, bondFrom);
   }
 
@@ -117,30 +117,30 @@ public class BondinterestIndexedSecurityDefinitionTest {
    */
   public void constructorBondsWithoutFirstCouponDate() {
     // Nominal construction
-    final PaymentFixedDefinition nominalPayment = new PaymentFixedDefinition(PRICE_INDEX_UKRPI.getCurrency(), BUSINESS_DAY_GBP.adjustDate(CALENDAR_GBP, MATURITY_DATE_1), NOTIONAL_1);
-    final AnnuityDefinition<PaymentFixedDefinition> nominalAnnuity = new AnnuityDefinition<>(new PaymentFixedDefinition[] {nominalPayment }, CALENDAR_GBP);
+    final PaymentFixedDefinition nominalPayment = new PaymentFixedDefinition(PRICE_INDEX_UKRPI.getCurrency(),
+        BUSINESS_DAY_GBP.adjustDate(CALENDAR_GBP, MATURITY_DATE_1), NOTIONAL_1);
+    final AnnuityDefinition<PaymentFixedDefinition> nominalAnnuity = new AnnuityDefinition<>(new PaymentFixedDefinition[] { nominalPayment }, CALENDAR_GBP);
     // Coupon construction
-    final ZonedDateTime[] paymentDatesUnadjusted = ScheduleCalculator.getUnadjustedDateSchedule(START_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1,
-        true, false);
+    final ZonedDateTime[] paymentDatesUnadjusted = ScheduleCalculator.getUnadjustedDateSchedule(START_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1, true, false);
     final ZonedDateTime[] paymentDates = ScheduleCalculator.getAdjustedDateSchedule(paymentDatesUnadjusted, BUSINESS_DAY_GBP, CALENDAR_GBP, false);
     final CouponInflationYearOnYearMonthlyWithMarginDefinition[] coupons = new CouponInflationYearOnYearMonthlyWithMarginDefinition[paymentDates.length];
 
-    coupons[0] = CouponInflationYearOnYearMonthlyWithMarginDefinition.from(FACTOR, START_DATE_1, paymentDates[0], NOTIONAL_1,
-        PRICE_INDEX_UKRPI, MONTH_LAG_1, true);
+    coupons[0] = CouponInflationYearOnYearMonthlyWithMarginDefinition.from(FACTOR, START_DATE_1, paymentDates[0], NOTIONAL_1, PRICE_INDEX_UKRPI, MONTH_LAG_1,
+        true);
     for (int loopcpn = 1; loopcpn < paymentDates.length; loopcpn++) {
       coupons[loopcpn] = CouponInflationYearOnYearMonthlyWithMarginDefinition.from(FACTOR, paymentDatesUnadjusted[loopcpn - 1], paymentDates[loopcpn],
           NOTIONAL_1, PRICE_INDEX_UKRPI, MONTH_LAG_1, true);
     }
-    final AnnuityDefinition<CouponInflationYearOnYearMonthlyWithMarginDefinition> couponAnnuity = new AnnuityDefinition<>(
-        coupons, CALENDAR_GBP);
+    final AnnuityDefinition<CouponInflationYearOnYearMonthlyWithMarginDefinition> couponAnnuity = new AnnuityDefinition<>(coupons, CALENDAR_GBP);
     final BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationYearOnYearMonthlyWithMarginDefinition> bond = new BondInterestIndexedSecurityDefinition<>(
         nominalAnnuity, couponAnnuity, 0, 2, CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1, IS_EOM_1, MONTH_LAG_1, ISSUER_UK);
-    final BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationYearOnYearMonthlyWithMarginDefinition> bondFrom = BondInterestIndexedSecurityDefinition.fromMonthly(
-        PRICE_INDEX_UKRPI, MONTH_LAG_1, START_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1, NOTIONAL_1, FACTOR, BUSINESS_DAY_GBP, SETTLEMENT_DAYS_1, CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1,
-        IS_EOM_1, ISSUER_UK);
+    final BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationYearOnYearMonthlyWithMarginDefinition> bondFrom = BondInterestIndexedSecurityDefinition
+        .fromMonthly(PRICE_INDEX_UKRPI, MONTH_LAG_1, START_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1, NOTIONAL_1, FACTOR, BUSINESS_DAY_GBP, SETTLEMENT_DAYS_1,
+            CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1, IS_EOM_1, ISSUER_UK);
     assertEquals("Interest Index Bond: constructor", bond, bondFrom);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   /**
    * Tests the toDerivative method.
@@ -148,9 +148,9 @@ public class BondinterestIndexedSecurityDefinitionTest {
   public void toDerivative1Coupon() {
     final DoubleTimeSeries<ZonedDateTime> ukRpi = MulticurveProviderDiscountDataSets.ukRpiFrom2010();
     final ZonedDateTime pricingDate = DateUtils.getUTCDate(2011, 8, 3); // One coupon fixed
-    final BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationYearOnYearMonthlyWithMarginDefinition> bondFromDefinition = BondInterestIndexedSecurityDefinition.fromMonthly(
-        PRICE_INDEX_UKRPI, MONTH_LAG_1, START_DATE_1, FIRST_COUPON_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1,
-        NOTIONAL_1, FACTOR, BUSINESS_DAY_GBP, SETTLEMENT_DAYS_1, CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1, IS_EOM_1, ISSUER_UK);
+    final BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationYearOnYearMonthlyWithMarginDefinition> bondFromDefinition = BondInterestIndexedSecurityDefinition
+        .fromMonthly(PRICE_INDEX_UKRPI, MONTH_LAG_1, START_DATE_1, FIRST_COUPON_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1, NOTIONAL_1, FACTOR, BUSINESS_DAY_GBP,
+            SETTLEMENT_DAYS_1, CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1, IS_EOM_1, ISSUER_UK);
     final BondInterestIndexedSecurity<PaymentFixed, Coupon> bond = bondFromDefinition.toDerivative(pricingDate, ukRpi);
     final ZonedDateTime referenceDateNextCoupon = DateUtils.getUTCDate(2011, 5, 31); // May 11
     final double referenceIndexNextCoupon = ukRpi.getValue(referenceDateNextCoupon);
@@ -159,7 +159,7 @@ public class BondinterestIndexedSecurityDefinitionTest {
     final double amountNextCoupon = (referenceIndexNextCoupon / referenceStartIndexNextCoupon + FACTOR) * NOTIONAL_1;
     assertEquals("Interest Index Bond: toDerivative", amountNextCoupon, ((CouponFixed) bond.getCoupon().getNthPayment(0)).getAmount());
     for (int loopcpn = 1; loopcpn < bond.getCoupon().getNumberOfPayments(); loopcpn++) {
-      assertTrue("Interest Index Bond: toDerivative", (bond.getCoupon().getNthPayment(loopcpn) instanceof CouponInflationYearOnYearMonthlyWithMargin));
+      assertTrue("Interest Index Bond: toDerivative", bond.getCoupon().getNthPayment(loopcpn) instanceof CouponInflationYearOnYearMonthlyWithMargin);
       assertEquals("Interest Index Bond: toDerivative", ((CouponInflationYearOnYearMonthlyWithMargin) bond.getCoupon().getNthPayment(loopcpn)).getPriceIndex(),
           PRICE_INDEX_UKRPI);
     }
@@ -169,18 +169,18 @@ public class BondinterestIndexedSecurityDefinitionTest {
     final double settleTime = TimeCalculator.getTimeBetween(pricingDate, spot);
     final AnnuityDefinition<CouponDefinition> couponDefinition = (AnnuityDefinition<CouponDefinition>) bondFromDefinition.getCoupons().trimBefore(spot);
     final double accruedInterest = bondFromDefinition.accruedInterest(spot);
-    final double factorSpot = DAY_COUNT_1.getAccruedInterest(couponDefinition.getNthPayment(0).getAccrualStartDate(), spot, couponDefinition.getNthPayment(0)
-        .getAccrualEndDate(), 1.0, COUPON_PER_YEAR_1);
-    final double factorPeriod = DAY_COUNT_1.getAccruedInterest(couponDefinition.getNthPayment(0).getAccrualStartDate(), couponDefinition.getNthPayment(0)
-        .getAccrualEndDate(), couponDefinition.getNthPayment(0).getAccrualEndDate(), 1.0, COUPON_PER_YEAR_1);
+    final double factorSpot = DAY_COUNT_1.getAccruedInterest(couponDefinition.getNthPayment(0).getAccrualStartDate(), spot,
+        couponDefinition.getNthPayment(0).getAccrualEndDate(), 1.0, COUPON_PER_YEAR_1);
+    final double factorPeriod = DAY_COUNT_1.getAccruedInterest(couponDefinition.getNthPayment(0).getAccrualStartDate(),
+        couponDefinition.getNthPayment(0).getAccrualEndDate(), couponDefinition.getNthPayment(0).getAccrualEndDate(), 1.0, COUPON_PER_YEAR_1);
     final double factorToNextCoupon = (factorPeriod - factorSpot) / factorPeriod;
     final PaymentFixedDefinition nominalLast = bondFromDefinition.getNominal().getNthPayment(bondFromDefinition.getNominal().getNumberOfPayments() - 1);
     final ZonedDateTime settlementDate2 = spot;
     final double notional = 1.0;
     final PaymentFixedDefinition settlementDefinition = new PaymentFixedDefinition(nominalLast.getCurrency(), settlementDate2, notional);
     final PaymentFixed settlement = settlementDefinition.toDerivative(pricingDate);
-    final BondInterestIndexedSecurity<PaymentFixed, Coupon> bondSecurityExpected = new BondInterestIndexedSecurity<>(nominal, coupon, settleTime, accruedInterest,
-        factorToNextCoupon, YIELD_CONVENTION_1, COUPON_PER_YEAR_1, settlement, ISSUER_UK, PRICE_INDEX_UKRPI);
+    final BondInterestIndexedSecurity<PaymentFixed, Coupon> bondSecurityExpected = new BondInterestIndexedSecurity<>(nominal, coupon, settleTime,
+        accruedInterest, factorToNextCoupon, YIELD_CONVENTION_1, COUPON_PER_YEAR_1, settlement, ISSUER_UK, PRICE_INDEX_UKRPI);
     assertEquals("Interest Index Bond: toDerivative", bondSecurityExpected, bond);
   }
 
@@ -191,18 +191,20 @@ public class BondinterestIndexedSecurityDefinitionTest {
   public void toDerivative2Coupon() {
     final DoubleTimeSeries<ZonedDateTime> ukRpi = MulticurveProviderDiscountDataSets.ukRpiFrom2010();
     final ZonedDateTime pricingDate = DateUtils.getUTCDate(2011, 7, 15); // Two coupons fixed
-    final BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationYearOnYearMonthlyWithMarginDefinition> bondFromDefinition = BondInterestIndexedSecurityDefinition.fromMonthly(
-        PRICE_INDEX_UKRPI, MONTH_LAG_1, START_DATE_1, FIRST_COUPON_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1,
-        NOTIONAL_1, FACTOR, BUSINESS_DAY_GBP, SETTLEMENT_DAYS_1, CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1, IS_EOM_1, ISSUER_UK);
+    final BondInterestIndexedSecurityDefinition<PaymentFixedDefinition, CouponInflationYearOnYearMonthlyWithMarginDefinition> bondFromDefinition = BondInterestIndexedSecurityDefinition
+        .fromMonthly(PRICE_INDEX_UKRPI, MONTH_LAG_1, START_DATE_1, FIRST_COUPON_DATE_1, MATURITY_DATE_1, COUPON_PERIOD_1, NOTIONAL_1, FACTOR, BUSINESS_DAY_GBP,
+            SETTLEMENT_DAYS_1, CALENDAR_GBP, DAY_COUNT_1, YIELD_CONVENTION_1, IS_EOM_1, ISSUER_UK);
     final BondInterestIndexedSecurity<PaymentFixed, Coupon> bond = bondFromDefinition.toDerivative(pricingDate, ukRpi);
-    final ZonedDateTime[] referenceDateNextCoupon = new ZonedDateTime[] {DateUtils.getUTCDate(2010, 5, 31), DateUtils.getUTCDate(2010, 11, 30), DateUtils.getUTCDate(2011, 5, 31) }; // Nov 10, May 11
-    final double[] referenceIndexNextCoupon = new double[] {ukRpi.getValue(referenceDateNextCoupon[0]), ukRpi.getValue(referenceDateNextCoupon[1]), ukRpi.getValue(referenceDateNextCoupon[2]) };
+    final ZonedDateTime[] referenceDateNextCoupon = new ZonedDateTime[] { DateUtils.getUTCDate(2010, 5, 31), DateUtils.getUTCDate(2010, 11, 30),
+        DateUtils.getUTCDate(2011, 5, 31) }; // Nov 10, May 11
+    final double[] referenceIndexNextCoupon = new double[] { ukRpi.getValue(referenceDateNextCoupon[0]), ukRpi.getValue(referenceDateNextCoupon[1]),
+        ukRpi.getValue(referenceDateNextCoupon[2]) };
     for (int loopcpn = 0; loopcpn < 2; loopcpn++) {
       final double amountNextCoupon = (referenceIndexNextCoupon[loopcpn + 1] / referenceIndexNextCoupon[loopcpn] + FACTOR) * NOTIONAL_1;
       assertEquals("Capital Index Bond: toDerivative", amountNextCoupon, ((CouponFixed) bond.getCoupon().getNthPayment(loopcpn)).getAmount());
     }
     for (int loopcpn = 2; loopcpn < bond.getCoupon().getNumberOfPayments(); loopcpn++) {
-      assertTrue("Capital Index Bond: toDerivative", (bond.getCoupon().getNthPayment(loopcpn) instanceof CouponInflationZeroCouponMonthlyGearing));
+      assertTrue("Capital Index Bond: toDerivative", bond.getCoupon().getNthPayment(loopcpn) instanceof CouponInflationZeroCouponMonthlyGearing);
       assertEquals("Capital Index Bond: toDerivative", ((CouponInflationYearOnYearMonthlyWithMargin) bond.getCoupon().getNthPayment(loopcpn)).getPriceIndex(),
           PRICE_INDEX_UKRPI);
     }

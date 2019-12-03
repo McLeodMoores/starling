@@ -64,7 +64,7 @@ public class LiveDataClientTestUtils {
 
   /**
    * Creates a test client connected to the server.
-   * 
+   *
    * @param server the test server, not null
    * @param threads the number of communication threads, or 0 for direct/inline calls to the server
    * @return the client
@@ -74,7 +74,8 @@ public class LiveDataClientTestUtils {
     final FudgeRequestSender subscriptionRequestSender = getSubscriptionRequestSender(server, executor);
     final FudgeRequestSender entitlementRequestSender = getEntitlementRequestSender(server, executor);
     final DistributedLiveDataClient liveDataClient = new DistributedLiveDataClient(subscriptionRequestSender, entitlementRequestSender);
-    final FudgeSenderFactory factory = new FudgeSenderFactory(new ByteArrayFudgeMessageSender(new DirectInvocationByteArrayMessageSender(new ByteArrayFudgeMessageReceiver(liveDataClient))));
+    final FudgeSenderFactory factory =
+        new FudgeSenderFactory(new ByteArrayFudgeMessageSender(new DirectInvocationByteArrayMessageSender(new ByteArrayFudgeMessageReceiver(liveDataClient))));
     server.setMarketDataSenderFactory(factory);
     liveDataClient.setFudgeContext(liveDataClient.getFudgeContext());
     return liveDataClient;
@@ -86,7 +87,7 @@ public class LiveDataClientTestUtils {
 
   /**
    * Creates a test client connected to the server.
-   * 
+   *
    * @param server the test server, not null
    * @param threads the number of communication threads, or 0 for direct/inline calls to the server
    * @return the client
@@ -112,38 +113,39 @@ public class LiveDataClientTestUtils {
   private static FudgeRequestSender sender(final FudgeRequestSender sender, final ExecutorService executor) {
     if (executor == null) {
       return sender;
-    } else {
-      return new FudgeRequestSender() {
-
-        @Override
-        public FudgeContext getFudgeContext() {
-          return sender.getFudgeContext();
-        }
-
-        @Override
-        public void sendRequest(final FudgeMsg request, final FudgeMessageReceiver responseReceiver) {
-          executor.execute(new Runnable() {
-            @Override
-            public void run() {
-              try {
-                sender.sendRequest(request, responseReceiver);
-              } catch (Throwable t) {
-                t.printStackTrace();
-              }
-            }
-          });
-        }
-
-      };
     }
+    return new FudgeRequestSender() {
+
+      @Override
+      public FudgeContext getFudgeContext() {
+        return sender.getFudgeContext();
+      }
+
+      @Override
+      public void sendRequest(final FudgeMsg request, final FudgeMessageReceiver responseReceiver) {
+        executor.execute(new Runnable() {
+          @Override
+          public void run() {
+            try {
+              sender.sendRequest(request, responseReceiver);
+            } catch (final Throwable t) {
+              t.printStackTrace();
+            }
+          }
+        });
+      }
+
+    };
   }
 
   private static FudgeRequestSender getEntitlementRequestSender(final StandardLiveDataServer server, final ExecutorService executor) {
-    return sender(new ByteArrayFudgeRequestSender(new InMemoryByteArrayRequestConduit(new FudgeRequestDispatcher(new EntitlementServer(server.getEntitlementChecker())))), executor);
+    return sender(new ByteArrayFudgeRequestSender(
+        new InMemoryByteArrayRequestConduit(new FudgeRequestDispatcher(new EntitlementServer(server.getEntitlementChecker())))), executor);
   }
 
   private static FudgeRequestSender getSubscriptionRequestSender(final StandardLiveDataServer server, final ExecutorService executor) {
-    return sender(new ByteArrayFudgeRequestSender(new InMemoryByteArrayRequestConduit(new FudgeRequestDispatcher(new SubscriptionRequestReceiver(server)))), executor);
+    return sender(new ByteArrayFudgeRequestSender(
+        new InMemoryByteArrayRequestConduit(new FudgeRequestDispatcher(new SubscriptionRequestReceiver(server)))), executor);
   }
 
 }

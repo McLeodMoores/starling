@@ -49,9 +49,11 @@ public class FixedIncomeDataProvider implements FxDataProvider, DiscountingCurve
       final Map<Index, YieldAndDiscountCurve> indexCurves,
       final FXMatrix fxMatrix) {
     _discountingCurves = discountingCurves == null
-        ? Collections.<UniqueIdentifiable, YieldAndDiscountCurve>emptyMap() : Collections.unmodifiableMap(new HashMap<>(discountingCurves));
+        ? Collections.<UniqueIdentifiable, YieldAndDiscountCurve> emptyMap()
+        : Collections.unmodifiableMap(new HashMap<>(discountingCurves));
     _indexCurves = indexCurves == null
-        ? Collections.<Index, YieldAndDiscountCurve>emptyMap() : Collections.unmodifiableMap(new HashMap<>(indexCurves));
+        ? Collections.<Index, YieldAndDiscountCurve> emptyMap()
+        : Collections.unmodifiableMap(new HashMap<>(indexCurves));
     final double[][] rates = fxMatrix.getRates();
     final double[][] copy = new double[rates.length][];
     int i = 0;
@@ -224,9 +226,9 @@ public class FixedIncomeDataProvider implements FxDataProvider, DiscountingCurve
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       FixedIncomeDataProvider other = (FixedIncomeDataProvider) obj;
-      return JodaBeanUtils.equal(getDiscountingCurves(), other.getDiscountingCurves()) &&
-          JodaBeanUtils.equal(getIndexCurves(), other.getIndexCurves()) &&
-          JodaBeanUtils.equal(getFxMatrix(), other.getFxMatrix());
+      return JodaBeanUtils.equal(_discountingCurves, other._discountingCurves) &&
+          JodaBeanUtils.equal(_indexCurves, other._indexCurves) &&
+          JodaBeanUtils.equal(_fxMatrix, other._fxMatrix);
     }
     return false;
   }
@@ -234,9 +236,9 @@ public class FixedIncomeDataProvider implements FxDataProvider, DiscountingCurve
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDiscountingCurves());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getIndexCurves());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFxMatrix());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_discountingCurves);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_indexCurves);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fxMatrix);
     return hash;
   }
 
@@ -254,9 +256,9 @@ public class FixedIncomeDataProvider implements FxDataProvider, DiscountingCurve
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("discountingCurves").append('=').append(JodaBeanUtils.toString(getDiscountingCurves())).append(',').append(' ');
-    buf.append("indexCurves").append('=').append(JodaBeanUtils.toString(getIndexCurves())).append(',').append(' ');
-    buf.append("fxMatrix").append('=').append(JodaBeanUtils.toString(getFxMatrix())).append(',').append(' ');
+    buf.append("discountingCurves").append('=').append(JodaBeanUtils.toString(_discountingCurves)).append(',').append(' ');
+    buf.append("indexCurves").append('=').append(JodaBeanUtils.toString(_indexCurves)).append(',').append(' ');
+    buf.append("fxMatrix").append('=').append(JodaBeanUtils.toString(_fxMatrix)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -445,19 +447,31 @@ public class FixedIncomeDataProvider implements FxDataProvider, DiscountingCurve
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

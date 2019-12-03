@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.server;
@@ -36,7 +36,7 @@ import com.opengamma.util.metric.MetricProducer;
  * Listens to a channel of raw data updates, normalizes, writes to the LKV store, and then
  * publishes all value updates (for the normalized results) to a different channel
  * for detection by the data servers.
- * <p/>
+ * <p>
  * It has three ways that the list of active subscriptions can be built:
  * <ol>
  *   <li>You can just wait for updates to come through. Whenever an update is received
@@ -45,44 +45,44 @@ import com.opengamma.util.metric.MetricProducer;
  *   <li>You can explicitly add them (perhaps via startup configuration)
  *       via calls to {@link #addDistribution(String)}.</li>
  * </ol>
- * <p/>
+ * <p>
  * In general, if not bootstrapping for the first time, the first and second ways should be
  * sufficient.
  */
 public abstract class CogdaDataDistributor implements Lifecycle, MetricProducer {
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaDataDistributor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaDataDistributor.class);
   // Constructor injectors:
   private final String _externalIdScheme;
   private final LastKnownValueStoreProvider _lastKnownValueStoreProvider;
   private final Map<String, NormalizationRuleSet> _normalization;
-  
+
   // TODO kirk 2012-08-13 -- Have support for multiple senders, one per normalization
   // rule. Otherwise there's way too much filtering. But that's a second-order effect.
   private FudgeMessageSender _normalizedMessageSender;
-  
+
   // Internal state:
   private final ConcurrentMap<LiveDataSpecification, LastKnownValueStore> _valueStores =
-      new ConcurrentHashMap<LiveDataSpecification, LastKnownValueStore>();
+      new ConcurrentHashMap<>();
   private final ConcurrentMap<LiveDataSpecification, FieldHistoryStore> _normalizationState =
-      new ConcurrentHashMap<LiveDataSpecification, FieldHistoryStore>();
-  
+      new ConcurrentHashMap<>();
+
   // Metrics:
   private Meter _tickMeter = new Meter();
-  
+
   public CogdaDataDistributor(
-      String externalIdScheme,
-      LastKnownValueStoreProvider lastKnownValueStoreProvider,
-      String... normalizationSchemes) {
+      final String externalIdScheme,
+      final LastKnownValueStoreProvider lastKnownValueStoreProvider,
+      final String... normalizationSchemes) {
     ArgumentChecker.notNull(externalIdScheme, "externalIdScheme");
     ArgumentChecker.notNull(lastKnownValueStoreProvider, "lastKnownValueStoreProvider");
-    
+
     _externalIdScheme = externalIdScheme;
     _lastKnownValueStoreProvider = lastKnownValueStoreProvider;
     _normalization = Collections.unmodifiableMap(constructNormalizationRules(normalizationSchemes));
   }
-  
+
   @Override
-  public synchronized void registerMetrics(MetricRegistry summaryRegistry, MetricRegistry detailedRegistry, String namePrefix) {
+  public synchronized void registerMetrics(final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry, final String namePrefix) {
     _tickMeter = summaryRegistry.meter(namePrefix + ".ticks");
   }
 
@@ -106,7 +106,7 @@ public abstract class CogdaDataDistributor implements Lifecycle, MetricProducer 
    * Sets the normalizedMessageSender.
    * @param normalizedMessageSender  the normalizedMessageSender
    */
-  public void setNormalizedMessageSender(FudgeMessageSender normalizedMessageSender) {
+  public void setNormalizedMessageSender(final FudgeMessageSender normalizedMessageSender) {
     _normalizedMessageSender = normalizedMessageSender;
   }
 
@@ -114,9 +114,9 @@ public abstract class CogdaDataDistributor implements Lifecycle, MetricProducer 
    * @param normalizationSchemes
    * @return
    */
-  private Map<String, NormalizationRuleSet> constructNormalizationRules(String[] normalizationSchemes) {
-    Map<String, NormalizationRuleSet> normalization = new TreeMap<String, NormalizationRuleSet>();
-    for (String normalizationScheme : normalizationSchemes) {
+  private Map<String, NormalizationRuleSet> constructNormalizationRules(final String[] normalizationSchemes) {
+    final Map<String, NormalizationRuleSet> normalization = new TreeMap<>();
+    for (final String normalizationScheme : normalizationSchemes) {
       normalization.put(normalizationScheme, constructNormalizationRuleSet(normalizationScheme));
     }
     return normalization;
@@ -128,11 +128,11 @@ public abstract class CogdaDataDistributor implements Lifecycle, MetricProducer 
    */
   protected abstract NormalizationRuleSet constructNormalizationRuleSet(String normalizationScheme);
 
-  public void addDistribution(String uniqueIdentifier) {
-    for (String normalizationScheme : _normalization.keySet()) {
+  public void addDistribution(final String uniqueIdentifier) {
+    for (final String normalizationScheme : _normalization.keySet()) {
       ensureLastKnownValueStore(ExternalId.of(_externalIdScheme, uniqueIdentifier), normalizationScheme);
     }
-    
+
   }
 
   @Override
@@ -150,38 +150,38 @@ public abstract class CogdaDataDistributor implements Lifecycle, MetricProducer 
   }
 
   /**
-   * 
+   *
    */
   protected void scanAllKeys() {
     Set<String> allIdentifiers = null;
     try {
       allIdentifiers = _lastKnownValueStoreProvider.getAllIdentifiers(_externalIdScheme);
-    } catch (UnsupportedOperationException uoe) {
+    } catch (final UnsupportedOperationException uoe) {
       return;
     }
-    
-    for (String id: allIdentifiers) {
-      for (String normalizationScheme : _normalization.keySet()) {
+
+    for (final String id: allIdentifiers) {
+      for (final String normalizationScheme : _normalization.keySet()) {
         ensureLastKnownValueStore(ExternalId.of(_externalIdScheme, id), normalizationScheme);
       }
     }
   }
-  
+
   /**
    * Prepare the LKV store for the given specification and populate the normalization
    * state.
-   * 
+   *
    * @param id identifier for which to create store
    * @param normalizationScheme normalization scheme of store
    * @return The value store
    */
-  protected LastKnownValueStore ensureLastKnownValueStore(ExternalId id, String normalizationScheme) {
-    LastKnownValueStore lkvStore = _lastKnownValueStoreProvider.newInstance(id, normalizationScheme);
-    LiveDataSpecification ldspec = new LiveDataSpecification(normalizationScheme, id);
+  protected LastKnownValueStore ensureLastKnownValueStore(final ExternalId id, final String normalizationScheme) {
+    final LastKnownValueStore lkvStore = _lastKnownValueStoreProvider.newInstance(id, normalizationScheme);
+    final LiveDataSpecification ldspec = new LiveDataSpecification(normalizationScheme, id);
     if (_valueStores.putIfAbsent(ldspec, lkvStore) == null) {
-      s_logger.debug("Created new LKV store and history state for {}", ldspec);
+      LOGGER.debug("Created new LKV store and history state for {}", ldspec);
       // We actually did the creation. Also create the field history map.
-      FieldHistoryStore historyStore = new FieldHistoryStore(lkvStore.getFields());
+      final FieldHistoryStore historyStore = new FieldHistoryStore(lkvStore.getFields());
       _normalizationState.put(ldspec, historyStore);
       return lkvStore;
     }
@@ -192,11 +192,11 @@ public abstract class CogdaDataDistributor implements Lifecycle, MetricProducer 
    * Received raw, unnormalized values.
    * Will apply normalization, store results in the LKV store, and then rebroadcast
    * the normalized values.
-   * 
+   *
    * @param uniqueId  the identifier for the updates
    * @param fields    updated fields
    */
-  public void updateReceived(String uniqueId, FudgeMsg fields) {
+  public void updateReceived(final String uniqueId, final FudgeMsg fields) {
     updateReceived(ExternalId.of(_externalIdScheme, uniqueId), fields);
   }
 
@@ -204,25 +204,25 @@ public abstract class CogdaDataDistributor implements Lifecycle, MetricProducer 
    * Received raw, unnormalized values.
    * Will apply normalization, store results in the LKV store, and then rebroadcast
    * the normalized values.
-   * 
+   *
    * @param id     the identifier for the updates
    * @param fields updated fields
    */
-  public void updateReceived(ExternalId id, FudgeMsg fields) {
+  public void updateReceived(final ExternalId id, final FudgeMsg fields) {
     _tickMeter.mark();
     // Iterate over all normalization schemes.
-    for (Map.Entry<String, NormalizationRuleSet> normalizationEntry : _normalization.entrySet()) {
-      LiveDataSpecification ldspec = new LiveDataSpecification(normalizationEntry.getKey(), id);
-      LastKnownValueStore lkvStore = ensureLastKnownValueStore(id, normalizationEntry.getKey());
-      
-      NormalizationRuleSet ruleSet = normalizationEntry.getValue();
-      FudgeMsg normalizedFields = ruleSet.getNormalizedMessage(fields, id.getValue(), _normalizationState.get(ldspec));
-      
+    for (final Map.Entry<String, NormalizationRuleSet> normalizationEntry : _normalization.entrySet()) {
+      final LiveDataSpecification ldspec = new LiveDataSpecification(normalizationEntry.getKey(), id);
+      final LastKnownValueStore lkvStore = ensureLastKnownValueStore(id, normalizationEntry.getKey());
+
+      final NormalizationRuleSet ruleSet = normalizationEntry.getValue();
+      final FudgeMsg normalizedFields = ruleSet.getNormalizedMessage(fields, id.getValue(), _normalizationState.get(ldspec));
+
       // If nothing to update, this returns null.
-      if ((normalizedFields != null) && !normalizedFields.isEmpty()) {
+      if (normalizedFields != null && !normalizedFields.isEmpty()) {
         // update the LKV store
         lkvStore.updateFields(normalizedFields);
-        
+
         // Blast them out.
         distributeNormalizedUpdate(ldspec, normalizedFields);
       }
@@ -231,19 +231,19 @@ public abstract class CogdaDataDistributor implements Lifecycle, MetricProducer 
 
   /**
    * Distribute results, after normalization and LKV storage, to downstream channels.
-   * 
+   *
    * @param ldspec           Specification of the data
    * @param normalizedFields Fully normalized field data for that specification
    */
-  protected void distributeNormalizedUpdate(LiveDataSpecification ldspec, FudgeMsg normalizedFields) {
+  protected void distributeNormalizedUpdate(final LiveDataSpecification ldspec, final FudgeMsg normalizedFields) {
     if (getNormalizedMessageSender() == null) {
       // Nothing to do here.
       return;
     }
-    FudgeSerializer serializer = new FudgeSerializer(getNormalizedMessageSender().getFudgeContext());
-    LiveDataValueUpdateBean updateBean = new LiveDataValueUpdateBean(0, ldspec, normalizedFields);
-    FudgeMsg msg = LiveDataValueUpdateBeanFudgeBuilder.toFudgeMsg(serializer, updateBean);
+    final FudgeSerializer serializer = new FudgeSerializer(getNormalizedMessageSender().getFudgeContext());
+    final LiveDataValueUpdateBean updateBean = new LiveDataValueUpdateBean(0, ldspec, normalizedFields);
+    final FudgeMsg msg = LiveDataValueUpdateBeanFudgeBuilder.toFudgeMsg(serializer, updateBean);
     getNormalizedMessageSender().send(msg);
   }
-  
+
 }

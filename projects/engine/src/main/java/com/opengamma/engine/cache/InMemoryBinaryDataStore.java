@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -13,8 +13,8 @@ import java.util.concurrent.ConcurrentMap;
  * {@link ConcurrentMap}.
  * This class is internally synchronized.
  */
-public class InMemoryBinaryDataStore extends AbstractBinaryDataStore implements BinaryDataStore {
-  private final ConcurrentMap<Long, byte[]> _underlyingMap = new ConcurrentHashMap<Long, byte[]>();
+public class InMemoryBinaryDataStore extends AbstractBinaryDataStore {
+  private final ConcurrentMap<Long, byte[]> _underlyingMap = new ConcurrentHashMap<>();
 
   @Override
   public void delete() {
@@ -25,12 +25,12 @@ public class InMemoryBinaryDataStore extends AbstractBinaryDataStore implements 
   }
 
   @Override
-  public byte[] get(long identifier) {
+  public byte[] get(final long identifier) {
     return _underlyingMap.get(identifier);
   }
 
   @Override
-  public void put(long identifier, byte[] data) {
+  public void put(final long identifier, final byte[] data) {
     _underlyingMap.put(identifier, data);
   }
 

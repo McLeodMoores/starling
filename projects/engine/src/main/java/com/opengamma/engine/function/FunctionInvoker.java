@@ -25,26 +25,30 @@ import com.opengamma.util.async.AsynchronousExecution;
 public interface FunctionInvoker {
 
   /**
-   * Execute on the specified target, producing the values desired.
-   * Exceptions thrown will result in a failure of this node.
-   * 
-   * @param executionContext The execution-time configuration for this invocation.
-   * @param inputs All required inputs pre-packaged for this function invocation.
-   * @param target The target on which calculation should be performed.
-   * @param desiredValues The only values that should be computed by this invocation.
+   * Execute on the specified target, producing the values desired. Exceptions thrown will result in a failure of this node.
+   *
+   * @param executionContext
+   *          The execution-time configuration for this invocation.
+   * @param inputs
+   *          All required inputs pre-packaged for this function invocation.
+   * @param target
+   *          The target on which calculation should be performed.
+   * @param desiredValues
+   *          The only values that should be computed by this invocation.
    * @return All values that were computed by this invocation.
+   * @throws AsynchronousExecution
+   *           if there is a problem
    */
   Set<ComputedValue> execute(
       FunctionExecutionContext executionContext,
       FunctionInputs inputs,
       ComputationTarget target,
-      //Set<ValueSpecification> outputs // PLAT-2290
       Set<ValueRequirement> desiredValues) throws AsynchronousExecution;
 
   /**
    * Tests whether the function should be executed when one or more of its expected input values
    * have not been calculated (perhaps due to an execution fault or missing market data).
-   * 
+   *
    * @return true to always execute the function, false to execute even if there are missing
    *         input values
    */

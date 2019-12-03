@@ -29,33 +29,33 @@ import com.google.common.collect.Maps;
  */
 public class ValueTypes {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ValueTypes.class);
-  private static final Map<String, Class<?>> s_valueNameToType = Maps.newHashMap();
+  private static final Logger LOGGER = LoggerFactory.getLogger(ValueTypes.class);
+  private static final Map<String, Class<?>> VALUE_NAME_TO_TYPE = Maps.newHashMap();
 
   static {
     BufferedReader reader = null;
     try {
       reader = new BufferedReader(new InputStreamReader(ValueTypes.class.getResourceAsStream("ValueTypes.txt")));
       String line;
-      Pattern pattern = Pattern.compile("'(.*)' (.*)");
+      final Pattern pattern = Pattern.compile("'(.*)' (.*)");
       while ((line = reader.readLine()) != null) {
-        Matcher matcher = pattern.matcher(line);
+        final Matcher matcher = pattern.matcher(line);
         if (!matcher.matches()) {
           throw new RuntimeException(line);
         }
-        String valueName = matcher.group(1);
-        String className = matcher.group(2);
+        final String valueName = matcher.group(1);
+        final String className = matcher.group(2);
         Class<?> valueType;
         try {
           valueType = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-          s_logger.warn("Failed to load class " + className, e);
+        } catch (final ClassNotFoundException e) {
+          LOGGER.warn("Failed to load class " + className, e);
           continue;
         }
-        s_valueNameToType.put(valueName, valueType);
+        VALUE_NAME_TO_TYPE.put(valueName, valueType);
       }
-    } catch (IOException e) {
-      s_logger.warn("Failed to load type mappings for value names", e);
+    } catch (final IOException e) {
+      LOGGER.warn("Failed to load type mappings for value names", e);
     } finally {
       IOUtils.closeQuietly(reader);
     }
@@ -94,7 +94,7 @@ public class ValueTypes {
     }
   }*/
 
-  public static Class<?> getTypeForValueName(String valueName) {
-    return s_valueNameToType.get(valueName);
+  public static Class<?> getTypeForValueName(final String valueName) {
+    return VALUE_NAME_TO_TYPE.get(valueName);
   }
 }

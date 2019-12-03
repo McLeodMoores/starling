@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.financial.function.trade;
 
 import java.util.Map;
@@ -167,10 +170,10 @@ public class DiscountBondCashFlows implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       DiscountBondCashFlows other = (DiscountBondCashFlows) obj;
-      return JodaBeanUtils.equal(getMaturity(), other.getMaturity()) &&
-          JodaBeanUtils.equal(getNominalAmount(), other.getNominalAmount()) &&
-          JodaBeanUtils.equal(getPaymentTime(), other.getPaymentTime()) &&
-          JodaBeanUtils.equal(getDiscountFactor(), other.getDiscountFactor());
+      return JodaBeanUtils.equal(_maturity, other._maturity) &&
+          JodaBeanUtils.equal(_nominalAmount, other._nominalAmount) &&
+          JodaBeanUtils.equal(_paymentTime, other._paymentTime) &&
+          JodaBeanUtils.equal(_discountFactor, other._discountFactor);
     }
     return false;
   }
@@ -178,16 +181,16 @@ public class DiscountBondCashFlows implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMaturity());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getNominalAmount());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentTime());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDiscountFactor());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_maturity);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_nominalAmount);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_paymentTime);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_discountFactor);
     return hash;
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(192);
+    StringBuilder buf = new StringBuilder(160);
     buf.append("DiscountBondCashFlows{");
     int len = buf.length();
     toString(buf);
@@ -199,11 +202,10 @@ public class DiscountBondCashFlows implements ImmutableBean {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("maturity").append('=').append(JodaBeanUtils.toString(getMaturity())).append(',').append(' ');
-    buf.append("nominalAmount").append('=').append(JodaBeanUtils.toString(getNominalAmount())).append(',').append(' ');
-    buf.append("paymentTime").append('=').append(JodaBeanUtils.toString(getPaymentTime())).append(',').append(' ');
-    buf.append("discountFactor").append('=').append(JodaBeanUtils.toString(getDiscountFactor())).append(',').append(' ');
-    buf.append("discountedPaymentAmount").append('=').append(JodaBeanUtils.toString(getDiscountedPaymentAmount())).append(',').append(' ');
+    buf.append("maturity").append('=').append(JodaBeanUtils.toString(_maturity)).append(',').append(' ');
+    buf.append("nominalAmount").append('=').append(JodaBeanUtils.toString(_nominalAmount)).append(',').append(' ');
+    buf.append("paymentTime").append('=').append(JodaBeanUtils.toString(_paymentTime)).append(',').append(' ');
+    buf.append("discountFactor").append('=').append(JodaBeanUtils.toString(_discountFactor)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -432,19 +434,31 @@ public class DiscountBondCashFlows implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

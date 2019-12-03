@@ -57,7 +57,8 @@ public class SimpleFuturePresentValueFunctionDeprecated extends AbstractFunction
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final FutureSecurity security = (FutureSecurity) target.getSecurity();
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
@@ -67,7 +68,8 @@ public class SimpleFuturePresentValueFunctionDeprecated extends AbstractFunction
       throw new OpenGammaRuntimeException("Could not get " + _curveName + " curve");
     }
     final ExternalId underlyingIdentifier = getUnderlyingIdentifier(security);
-    final Object spotObject = inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, underlyingIdentifier));
+    final Object spotObject = inputs
+        .getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, underlyingIdentifier));
     if (spotObject == null) {
       throw new OpenGammaRuntimeException("Could not get market data for " + underlyingIdentifier);
     }

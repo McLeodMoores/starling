@@ -77,7 +77,7 @@ public abstract class SwapLeg {
     return _direction;
   }
 
-  public void setDirection(Direction direction) {
+  public void setDirection(final Direction direction) {
     this._direction = direction;
   }
 
@@ -85,7 +85,7 @@ public abstract class SwapLeg {
     return _currency;
   }
 
-  public void setCurrency(Currency currency) {
+  public void setCurrency(final Currency currency) {
     this._currency = currency;
   }
 
@@ -93,7 +93,7 @@ public abstract class SwapLeg {
     return _notional;
   }
 
-  public void setNotional(BigDecimal notional) {
+  public void setNotional(final BigDecimal notional) {
     this._notional = notional;
   }
 
@@ -101,7 +101,7 @@ public abstract class SwapLeg {
     return _frequency;
   }
 
-  public void setFrequency(String frequency) {
+  public void setFrequency(final String frequency) {
     this._frequency = frequency;
   }
 
@@ -109,7 +109,7 @@ public abstract class SwapLeg {
     return _dayCount;
   }
 
-  public void setDayCount(String dayCount) {
+  public void setDayCount(final String dayCount) {
     this._dayCount = dayCount;
   }
 
@@ -117,7 +117,7 @@ public abstract class SwapLeg {
     return _interestCalculation;
   }
 
-  public void setInterestCalculation(InterestCalculation interestCalculation) {
+  public void setInterestCalculation(final InterestCalculation interestCalculation) {
     _interestCalculation = interestCalculation;
   }
 
@@ -125,7 +125,7 @@ public abstract class SwapLeg {
     return _businessDayConvention;
   }
 
-  public void setBusinessDayConvention(String businessDayConvention) {
+  public void setBusinessDayConvention(final String businessDayConvention) {
     this._businessDayConvention = businessDayConvention;
   }
 
@@ -133,7 +133,7 @@ public abstract class SwapLeg {
     return _scheduleGenerationDirection;
   }
 
-  public void setScheduleGenerationDirection(ScheduleGenerationDirection scheduleGenerationDirection) {
+  public void setScheduleGenerationDirection(final ScheduleGenerationDirection scheduleGenerationDirection) {
     this._scheduleGenerationDirection = scheduleGenerationDirection;
   }
 
@@ -141,7 +141,7 @@ public abstract class SwapLeg {
     return _isEndOfMonth;
   }
 
-  public void setEndOfMonth(boolean endOfMonth) {
+  public void setEndOfMonth(final boolean endOfMonth) {
     _isEndOfMonth = endOfMonth;
   }
 
@@ -149,7 +149,7 @@ public abstract class SwapLeg {
     return _isImm;
   }
 
-  public void setImm(boolean imm) {
+  public void setImm(final boolean imm) {
     _isImm = imm;
   }
 
@@ -157,7 +157,7 @@ public abstract class SwapLeg {
     return _paymentCalendars;
   }
 
-  public void setPaymentCalendars(Set<Calendar> paymentCalendars) {
+  public void setPaymentCalendars(final Set<Calendar> paymentCalendars) {
     this._paymentCalendars = paymentCalendars;
   }
 
@@ -165,7 +165,7 @@ public abstract class SwapLeg {
     return _stubPeriodType;
   }
 
-  public void setStubPeriodType(StubPeriodType stubPeriodType) {
+  public void setStubPeriodType(final StubPeriodType stubPeriodType) {
     _stubPeriodType = stubPeriodType;
   }
 }

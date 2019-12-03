@@ -28,12 +28,19 @@ public final class LocalDateRangeFudgeBuilder extends AbstractFudgeBuilder imple
 
   //-------------------------------------------------------------------------
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, LocalDateRange object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final LocalDateRange object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
+  /**
+   * Serializes an object. Returns null if the input is null.
+   *
+   * @param serializer  the serializer
+   * @param object  the object
+   * @return  a message or null
+   */
   public static MutableFudgeMsg toFudgeMsg(final FudgeSerializer serializer, final LocalDateRange object) {
     if (object == null) {
       return null;
@@ -43,6 +50,13 @@ public final class LocalDateRangeFudgeBuilder extends AbstractFudgeBuilder imple
     return msg;
   }
 
+  /**
+   * Serializes an object and adds it to a message.
+   *
+   * @param serializer  the serializer
+   * @param object  the object
+   * @param msg  the message
+   */
   public static void toFudgeMsg(final FudgeSerializer serializer, final LocalDateRange object, final MutableFudgeMsg msg) {
     addToMessage(msg, START_FIELD_NAME, object.getStartDateInclusive());
     addToMessage(msg, END_FIELD_NAME, object.getEndDateInclusive());
@@ -54,6 +68,13 @@ public final class LocalDateRangeFudgeBuilder extends AbstractFudgeBuilder imple
     return fromFudgeMsg(deserializer, msg);
   }
 
+  /**
+   * Deserializes a message. Returns null if the message is null.
+   *
+   * @param deserializer  the deserializer
+   * @param msg  the message
+   * @return  the object or null
+   */
   public static LocalDateRange fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     if (msg == null) {
       return null;

@@ -33,8 +33,10 @@ public class ConstantSurfaceMultiplicativeShiftFunction implements SurfaceShiftF
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public ConstantDoublesSurface evaluate(final ConstantDoublesSurface surface, final double x, final double y, final double shift) {
@@ -43,8 +45,10 @@ public class ConstantSurfaceMultiplicativeShiftFunction implements SurfaceShiftF
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public ConstantDoublesSurface evaluate(final ConstantDoublesSurface surface, final double x, final double y, final double percentage, final String newName) {
@@ -53,8 +57,10 @@ public class ConstantSurfaceMultiplicativeShiftFunction implements SurfaceShiftF
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
   public ConstantDoublesSurface evaluate(final ConstantDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] percentage) {
@@ -63,11 +69,14 @@ public class ConstantSurfaceMultiplicativeShiftFunction implements SurfaceShiftF
 
   /**
    * {@inheritDoc}
+   *
    * @return Not supported
    * @throws UnsupportedOperationException
+   *           in all cases
    */
   @Override
-  public ConstantDoublesSurface evaluate(final ConstantDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] percentage, final String newName) {
+  public ConstantDoublesSurface evaluate(final ConstantDoublesSurface surface, final double[] xShift, final double[] yShift, final double[] percentage,
+      final String newName) {
     throw new UnsupportedOperationException();
   }
 

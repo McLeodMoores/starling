@@ -27,13 +27,11 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the currency exposure of FX options using a Black surface and
- * curves constructed using the discounting method.
+ * Calculates the currency exposure of FX options using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingCurrencyExposureFXOptionFunction extends BlackDiscountingFXOptionFunction {
   /** The present value calculator */
@@ -41,7 +39,7 @@ public class BlackDiscountingCurrencyExposureFXOptionFunction extends BlackDisco
       CurrencyExposureForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#FX_CURRENCY_EXPOSURE}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#FX_CURRENCY_EXPOSURE}.
    */
   public BlackDiscountingCurrencyExposureFXOptionFunction() {
     super(FX_CURRENCY_EXPOSURE);

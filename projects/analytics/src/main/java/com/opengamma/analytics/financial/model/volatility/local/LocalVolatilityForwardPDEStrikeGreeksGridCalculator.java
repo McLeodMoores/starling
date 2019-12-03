@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.local;
@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * 
+ *
  */
 public abstract class LocalVolatilityForwardPDEStrikeGreeksGridCalculator implements PDELocalVolatilityCalculator<Interpolator1DDataBundle> {
   private final LocalVolatilityForwardPDECalculator _pdeCalculator;
@@ -25,7 +25,8 @@ public abstract class LocalVolatilityForwardPDEStrikeGreeksGridCalculator implem
   }
 
   @Override
-  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option,
+  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve,
+      final EuropeanVanillaOption option,
       final YieldAndDiscountCurve discountingCurve) {
     final double expiry = option.getTimeToExpiry();
     final double forward = forwardCurve.getForward(expiry);
@@ -44,20 +45,21 @@ public abstract class LocalVolatilityForwardPDEStrikeGreeksGridCalculator implem
   }
 
   @Override
-  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option,
+  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve,
+      final EuropeanVanillaOption option,
       final YieldAndDiscountCurve discountingCurve) {
     return getResult(LocalVolatilitySurfaceConverter.toMoneynessSurface(localVolatility, forwardCurve), forwardCurve, option, discountingCurve);
   }
 
-  protected abstract double getResultForMoneyness(final PDETerminalResults1D pdeGrid, final PDETerminalResults1D pdeGridUp, final PDETerminalResults1D pdeGridDown,
-      final int index, final double forward, final EuropeanVanillaOption option);
+  protected abstract double getResultForMoneyness(PDETerminalResults1D pdeGrid, PDETerminalResults1D pdeGridUp, PDETerminalResults1D pdeGridDown,
+      int index, double forward, EuropeanVanillaOption option);
 
   public Interpolator1D getInterpolator() {
     return _interpolator;
   }
 
   /**
-   * Calculates the dual delta (a.k.a. strike delta)
+   * Calculates the dual delta (a.k.a. strike delta).
    */
   public static class DualDeltaCalculator extends LocalVolatilityForwardPDEStrikeGreeksGridCalculator {
 
@@ -73,7 +75,7 @@ public abstract class LocalVolatilityForwardPDEStrikeGreeksGridCalculator implem
   }
 
   /**
-   * Calculates the dual gamma (a.k.a. strike gamma)
+   * Calculates the dual gamma (a.k.a. strike gamma).
    */
   public static class DualGammaCalculator extends LocalVolatilityForwardPDEStrikeGreeksGridCalculator {
 

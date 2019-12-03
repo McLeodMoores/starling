@@ -32,7 +32,7 @@ import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldA
 @BeanDefinition
 public class QuandlFieldMappingHistoricalTimeSeriesSourceComponentFactory extends HistoricalTimeSeriesSourceComponentFactory {
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   protected HistoricalTimeSeriesResolver createResolver(final ComponentRepository repo) {
     final Collection<HistoricalTimeSeriesFieldAdjustmentMap> fieldAdjustmentMaps = QuandlDataUtils.createFieldAdjustmentMap(getCacheManager());

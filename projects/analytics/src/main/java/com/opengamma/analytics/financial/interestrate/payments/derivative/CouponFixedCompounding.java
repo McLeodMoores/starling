@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -13,21 +13,13 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a fixed compounded coupon. 
- * The amount paid is equal to
- * $$
- * \begin{equation*}
- * \left(\prod_{i=1}^n (1+\delta_i r) \right)-1
- * \end{equation*}
- * $$
- * where the $\delta_i$ are the accrual factors of the sub periods and the $r$ the fixed rate.
- * dates used to compute the coupon accrual factors.
+ * Class describing a fixed compounded coupon. The amount paid is equal to $$ \begin{equation*} \left(\prod_{i=1}^n (1+\delta_i r) \right)-1 \end{equation*} $$
+ * where the $\delta_i$ are the accrual factors of the sub periods and the $r$ the fixed rate. dates used to compute the coupon accrual factors.
  */
 public class CouponFixedCompounding extends Coupon {
 
   /**
-   * The fixed rate.
-   * All the coupon sub-periods use the same fixed rate.
+   * The fixed rate. All the coupon sub-periods use the same fixed rate.
    */
   private final double _fixedRate;
 
@@ -37,23 +29,25 @@ public class CouponFixedCompounding extends Coupon {
   private final double[] _paymentAccrualFactors;
 
   /**
-   * The notional accrued is the amount equal to
-  * $$
-  * \begin{equation*}
-  * \notional \left(\prod_{i=1}^n (1+\delta_i r) \right)
-  * \end{equation*}
-  * $$
+   * The notional accrued is the amount equal to $$ \begin{equation*} \notional \left(\prod_{i=1}^n (1+\delta_i r) \right) \end{equation*} $$
    */
   private final double _notionalAccrued;
 
   /**
    * Constructor.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional The coupon notional.
-   * @param paymentAccrualFactors The accrual factors (or year fraction) associated to the sub-periods not yet fixed.
-   * @param rate the fixed rate. 
+   *
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param paymentYearFraction
+   *          The year fraction (or accrual factor) for the coupon payment.
+   * @param notional
+   *          The coupon notional.
+   * @param paymentAccrualFactors
+   *          The accrual factors (or year fraction) associated to the sub-periods not yet fixed.
+   * @param rate
+   *          the fixed rate.
    */
   public CouponFixedCompounding(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional,
       final double[] paymentAccrualFactors, final double rate) {
@@ -69,14 +63,29 @@ public class CouponFixedCompounding extends Coupon {
     _notionalAccrued = notionalAccrued;
   }
 
+  /**
+   * Gets the fixed rate.
+   *
+   * @return the fixed rate
+   */
   public double getFixedRate() {
     return _fixedRate;
   }
 
+  /**
+   * Gets the sub-period accrual factors.
+   *
+   * @return the accrual factors
+   */
   public double[] getPaymentAccrualFactors() {
     return _paymentAccrualFactors;
   }
 
+  /**
+   * Gets the accrued notional.
+   * 
+   * @return the accrued notional
+   */
   public double getNotionalAccrued() {
     return _notionalAccrued;
   }
@@ -105,7 +114,7 @@ public class CouponFixedCompounding extends Coupon {
     result = prime * result + Arrays.hashCode(_paymentAccrualFactors);
     long temp;
     temp = Double.doubleToLongBits(_fixedRate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

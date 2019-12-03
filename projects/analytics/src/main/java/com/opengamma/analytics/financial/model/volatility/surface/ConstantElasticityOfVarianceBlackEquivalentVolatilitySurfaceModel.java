@@ -17,10 +17,11 @@ import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
-public class ConstantElasticityOfVarianceBlackEquivalentVolatilitySurfaceModel implements VolatilitySurfaceModel<Map<OptionDefinition, Double>, ConstantElasticityOfVarianceModelDataBundle> {
-  private static final Logger s_logger = LoggerFactory.getLogger(ConstantElasticityOfVarianceBlackEquivalentVolatilitySurfaceModel.class);
+public class ConstantElasticityOfVarianceBlackEquivalentVolatilitySurfaceModel
+implements VolatilitySurfaceModel<Map<OptionDefinition, Double>, ConstantElasticityOfVarianceModelDataBundle> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConstantElasticityOfVarianceBlackEquivalentVolatilitySurfaceModel.class);
 
   @Override
   public VolatilitySurface getSurface(final Map<OptionDefinition, Double> optionData, final ConstantElasticityOfVarianceModelDataBundle data) {
@@ -28,7 +29,7 @@ public class ConstantElasticityOfVarianceBlackEquivalentVolatilitySurfaceModel i
     ArgumentChecker.notEmpty(optionData, "option data");
     Validate.notNull(data, "data");
     if (optionData.size() > 1) {
-      s_logger.warn("Have more than one option: only using the first");
+      LOGGER.warn("Have more than one option: only using the first");
     }
     final OptionDefinition option = optionData.keySet().iterator().next();
     final double k = option.getStrike();
@@ -38,7 +39,8 @@ public class ConstantElasticityOfVarianceBlackEquivalentVolatilitySurfaceModel i
     final double forward = data.getSpot();
     final double f = 0.5 * (forward + k);
     final double beta1 = 1 - beta;
-    final double sigmaAdjusted = sigma * (1 + beta1 * (2 + beta) * (f - k) * (f - k) / 24 / f / f + beta1 * beta1 * sigma * sigma * t / 24 / Math.pow(f, 2 * beta1)) / Math.pow(f, beta1);
+    final double sigmaAdjusted = sigma
+        * (1 + beta1 * (2 + beta) * (f - k) * (f - k) / 24 / f / f + beta1 * beta1 * sigma * sigma * t / 24 / Math.pow(f, 2 * beta1)) / Math.pow(f, beta1);
     return new VolatilitySurface(ConstantDoublesSurface.from(sigmaAdjusted));
   }
 

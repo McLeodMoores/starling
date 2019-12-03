@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * <p/>
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.legalentity;
@@ -23,7 +23,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.core.obligor.CreditRating;
 
 /**
- * Legal Entity Rating
+ * Legal Entity Rating.
  */
 @BeanDefinition
 public class Rating implements Bean {
@@ -37,10 +37,20 @@ public class Rating implements Bean {
   @PropertyDefinition
   private SeniorityLevel _seniorityLevel;
 
+  /**
+   * Constructor required for bean.
+   */
   public Rating() {
   }
 
-  public Rating(String rater, CreditRating score, SeniorityLevel seniorityLevel) {
+  /**
+   * Constructs a rating.
+   *
+   * @param rater  the name of the rater
+   * @param score  the credit rating of the reference entity
+   * @param seniorityLevel  the seniority level of the debt
+   */
+  public Rating(final String rater, final CreditRating score, final SeniorityLevel seniorityLevel) {
     _rater = rater;
     _score = score;
     _seniorityLevel = seniorityLevel;

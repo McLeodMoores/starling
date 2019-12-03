@@ -18,8 +18,8 @@ import com.opengamma.engine.value.ValueProperties;
  */
 public class AvailableOutputsImpl implements AvailableOutputs {
 
-  private final Set<String> _securityTypes = new HashSet<String>();
-  private final Map<String, AvailableOutputImpl> _outputs = new HashMap<String, AvailableOutputImpl>();
+  private final Set<String> _securityTypes = new HashSet<>();
+  private final Map<String, AvailableOutputImpl> _outputs = new HashMap<>();
 
   public AvailableOutputsImpl() {
   }
@@ -55,8 +55,8 @@ public class AvailableOutputsImpl implements AvailableOutputs {
 
   @Override
   public Set<AvailableOutput> getPositionOutputs(final String securityType) {
-    final Set<AvailableOutput> result = new HashSet<AvailableOutput>();
-    for (AvailableOutputImpl output : _outputs.values()) {
+    final Set<AvailableOutput> result = new HashSet<>();
+    for (final AvailableOutputImpl output : _outputs.values()) {
       if (output.isAvailableOn(securityType)) {
         result.add(AvailableOutputImpl.ofPosition(output, securityType));
       }
@@ -66,8 +66,8 @@ public class AvailableOutputsImpl implements AvailableOutputs {
 
   @Override
   public Set<AvailableOutput> getPortfolioNodeOutputs() {
-    final Set<AvailableOutput> result = new HashSet<AvailableOutput>();
-    for (AvailableOutputImpl output : _outputs.values()) {
+    final Set<AvailableOutput> result = new HashSet<>();
+    for (final AvailableOutputImpl output : _outputs.values()) {
       if (output.isAvailableOnPortfolioNode()) {
         result.add(AvailableOutputImpl.ofPortfolioNode(output));
       }
@@ -77,8 +77,8 @@ public class AvailableOutputsImpl implements AvailableOutputs {
 
   @Override
   public Set<AvailableOutput> getPositionOutputs() {
-    final Set<AvailableOutput> result = new HashSet<AvailableOutput>();
-    for (AvailableOutputImpl output : _outputs.values()) {
+    final Set<AvailableOutput> result = new HashSet<>();
+    for (final AvailableOutputImpl output : _outputs.values()) {
       if (output.isAvailableOnPosition()) {
         result.add(AvailableOutputImpl.ofPosition(output));
       }

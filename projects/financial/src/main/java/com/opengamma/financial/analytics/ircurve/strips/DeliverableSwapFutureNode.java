@@ -75,15 +75,23 @@ public class DeliverableSwapFutureNode extends CurveNode {
   }
 
   /**
-   * @param futureNumber The future number, not null, greater than zero
-   * @param startTenor The start tenor, not null
-   * @param futureTenor The future tenor, not null
-   * @param underlyingTenor The underlying tenor, not null
-   * @param futureConvention The future convention, not null
-   * @param underlyingConvention The underlying convention, not null
-   * @param curveNodeIdMapperName The curve node id mapper name, not null
+   * @param futureNumber
+   *          The future number, not null, greater than zero
+   * @param startTenor
+   *          The start tenor, not null
+   * @param futureTenor
+   *          The future tenor, not null
+   * @param underlyingTenor
+   *          The underlying tenor, not null
+   * @param futureConvention
+   *          The future convention, not null
+   * @param underlyingConvention
+   *          The underlying convention, not null
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name, not null
    */
-  public DeliverableSwapFutureNode(final int futureNumber, final Tenor startTenor, final Tenor futureTenor, final Tenor underlyingTenor, final ExternalId futureConvention,
+  public DeliverableSwapFutureNode(final int futureNumber, final Tenor startTenor, final Tenor futureTenor, final Tenor underlyingTenor,
+      final ExternalId futureConvention,
       final ExternalId underlyingConvention, final String curveNodeIdMapperName) {
     super(curveNodeIdMapperName);
     ArgumentChecker.notNegativeOrZero(futureNumber, "future number");
@@ -96,16 +104,25 @@ public class DeliverableSwapFutureNode extends CurveNode {
   }
 
   /**
-   * @param futureNumber The future number, not null, greater than zero
-   * @param startTenor The start tenor, not null
-   * @param futureTenor The future tenor, not null
-   * @param underlyingTenor The underlying tenor, not null
-   * @param futureConvention The future convention, not null
-   * @param underlyingConvention The underlying convention, not null
-   * @param curveNodeIdMapperName The curve node id mapper name, not null
-   * @param name The node name
+   * @param futureNumber
+   *          The future number, not null, greater than zero
+   * @param startTenor
+   *          The start tenor, not null
+   * @param futureTenor
+   *          The future tenor, not null
+   * @param underlyingTenor
+   *          The underlying tenor, not null
+   * @param futureConvention
+   *          The future convention, not null
+   * @param underlyingConvention
+   *          The underlying convention, not null
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name, not null
+   * @param name
+   *          The node name
    */
-  public DeliverableSwapFutureNode(final int futureNumber, final Tenor startTenor, final Tenor futureTenor, final Tenor underlyingTenor, final ExternalId futureConvention,
+  public DeliverableSwapFutureNode(final int futureNumber, final Tenor startTenor, final Tenor futureTenor, final Tenor underlyingTenor,
+      final ExternalId futureConvention,
       final ExternalId underlyingConvention, final String curveNodeIdMapperName, final String name) {
     super(curveNodeIdMapperName, name);
     ArgumentChecker.notNegativeOrZero(futureNumber, "future number");

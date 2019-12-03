@@ -15,11 +15,11 @@ import com.opengamma.util.test.Profiler;
  */
 public final class DebugUtils {
 
-  private static final Profiler s_canApplyTo = Profiler.create(DebugUtils.class, "canApplyTo");
-  private static final Profiler s_getResults1 = Profiler.create(DebugUtils.class, "getResults1");
-  private static final Profiler s_getRequirements = Profiler.create(DebugUtils.class, "getRequirements");
-  private static final Profiler s_getResults2 = Profiler.create(DebugUtils.class, "getResults2");
-  private static final Profiler s_getAdditionalRequirements = Profiler.create(DebugUtils.class, "getAdditionalRequirements");
+  private static final Profiler CAN_APPLY_TO = Profiler.create(DebugUtils.class, "canApplyTo");
+  private static final Profiler GET_RESULTS_1 = Profiler.create(DebugUtils.class, "getResults1");
+  private static final Profiler GET_REQUIREMENTS = Profiler.create(DebugUtils.class, "getRequirements");
+  private static final Profiler GET_RESULTS_2 = Profiler.create(DebugUtils.class, "getResults2");
+  private static final Profiler GET_ADDITIONAL_REQUIREMENTS = Profiler.create(DebugUtils.class, "getAdditionalRequirements");
 
   private DebugUtils() {
   }
@@ -28,70 +28,70 @@ public final class DebugUtils {
    * Records entry to {@link CompiledFunctionDefinition#canApplyTo}.
    */
   public static void canApplyTo_enter() { //CSIGNORE
-    s_canApplyTo.begin();
+    CAN_APPLY_TO.begin();
   }
 
   /**
    * Records exit from {@link CompiledFunctionDefinition#canApplyTo}.
    */
   public static void canApplyTo_leave() { //CSIGNORE
-    s_canApplyTo.end();
+    CAN_APPLY_TO.end();
   }
 
   /**
    * Records entry to {@link CompiledFunctionDefinition#getResults(FunctionCompilationContext,ComputationTarget)}.
    */
   public static void getResults1_enter() { //CSIGNORE
-    s_getResults1.begin();
+    GET_RESULTS_1.begin();
   }
 
   /**
    * Records exit from {@link CompiledFunctionDefinition#getResults(FunctionCompilationContext,ComputationTarget)}.
    */
   public static void getResults1_leave() { //CSIGNORE
-    s_getResults1.end();
+    GET_RESULTS_1.end();
   }
 
   /**
    * Records entry to {@link CompiledFunctionDefinition#getRequirements}.
    */
   public static void getRequirements_enter() { //CSIGNORE
-    s_getRequirements.begin();
+    GET_REQUIREMENTS.begin();
   }
 
   /**
    * Records exit from {@link CompiledFunctionDefinition#getRequirements}.
    */
   public static void getRequirements_leave() { //CSIGNORE
-    s_getRequirements.end();
+    GET_REQUIREMENTS.end();
   }
 
   /**
    * Records entry to {@link CompiledFunctionDefinition#getResults(FunctionCompilationContext,ComputationTarget,Map)}.
    */
   public static void getResults2_enter() { //CSIGNORE
-    s_getResults2.begin();
+    GET_RESULTS_2.begin();
   }
 
   /**
    * Records exit from {@link CompiledFunctionDefinition#getResults(FunctionCompilationContext,ComputationTarget,Map)}.
    */
   public static void getResults2_leave() { //CSIGNORE
-    s_getResults2.end();
+    GET_RESULTS_2.end();
   }
 
   /**
    * Records entry to {@link CompiledFunctionDefinition#getAdditionalRequirements}.
    */
   public static void getAdditionalRequirements_enter() { //CSIGNORE
-    s_getAdditionalRequirements.begin();
+    GET_ADDITIONAL_REQUIREMENTS.begin();
   }
 
   /**
    * Records exit from {@link CompiledFunctionDefinition#getAdditionalRequirements}.
    */
   public static void getAdditionalRequirements_leave() { //CSIGNORE
-    s_getAdditionalRequirements.end();
+    GET_ADDITIONAL_REQUIREMENTS.end();
   }
 
 }

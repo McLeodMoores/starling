@@ -25,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
   /** The master that produced the event. */
   private final AbstractMaster<D> _master;
 
-  /* package */ MasterChangeNotification(ChangeEvent event, AbstractMaster<D> master) {
+  /* package */ MasterChangeNotification(final ChangeEvent event, final AbstractMaster<D> master) {
     ArgumentChecker.notNull(event, "event");
     ArgumentChecker.notNull(master, "master");
     _event = event;
@@ -43,7 +43,7 @@ import com.opengamma.util.ArgumentChecker;
    * @return The changed version of the object, looked up from the master that produced the event.
    */
   /* package */ UniqueIdentifiable getEntity() {
-    VersionCorrection versionCorrection = VersionCorrection.of(_event.getVersionFrom(), _event.getVersionInstant());
+    final VersionCorrection versionCorrection = VersionCorrection.of(_event.getVersionFrom(), _event.getVersionInstant());
     return _master.get(_event.getObjectId(), versionCorrection).getValue();
   }
 }

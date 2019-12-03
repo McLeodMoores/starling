@@ -1,17 +1,15 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.function.rest;
 
-import java.net.URI;
 import java.util.Collection;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 
 import org.fudgemsg.FudgeMsgEnvelope;
 import org.fudgemsg.MutableFudgeMsg;
@@ -41,8 +39,9 @@ public class DataFunctionRepositoryResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying repository over REST.
-   * 
-   * @param functionRepo the underlying repository, not null
+   *
+   * @param functionRepo
+   *          the underlying repository, not null
    */
   public DataFunctionRepositoryResource(final FunctionRepository functionRepo) {
     ArgumentChecker.notNull(functionRepo, "functionRepo");
@@ -54,24 +53,24 @@ public class DataFunctionRepositoryResource extends AbstractDataResource {
     _underlying = functionRepo;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the repository.
-   * 
+   *
    * @return the repository, not null
    */
   public FunctionRepository getFunctionRepository() {
     return _underlying.get();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   @Path("functionsByUniqueId")
   public Response getFunctionsByUniqueId() {
     final Collection<FunctionDefinition> allFunctions = getFunctionRepository().getAllFunctions();
     final FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
     final MutableFudgeMsg msg = serializer.newMessage();
-    for (FunctionDefinition function : allFunctions) {
+    for (final FunctionDefinition function : allFunctions) {
       final MutableFudgeMsg submsg = serializer.newMessage();
       submsg.add("shortName", function.getShortName());
       serializer.addToMessageWithClassHeaders(submsg, "defaultParameters", null, function.getDefaultParameters(), FunctionParameters.class);
@@ -86,7 +85,7 @@ public class DataFunctionRepositoryResource extends AbstractDataResource {
     final Collection<FunctionDefinition> allFunctions = getFunctionRepository().getAllFunctions();
     final FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
     final MutableFudgeMsg msg = serializer.newMessage();
-    for (FunctionDefinition function : allFunctions) {
+    for (final FunctionDefinition function : allFunctions) {
       final MutableFudgeMsg submsg = serializer.newMessage();
       submsg.add("uniqueId", function.getUniqueId());
       serializer.addToMessageWithClassHeaders(submsg, "defaultParameters", null, function.getDefaultParameters(), FunctionParameters.class);

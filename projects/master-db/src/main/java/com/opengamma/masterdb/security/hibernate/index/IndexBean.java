@@ -30,26 +30,26 @@ import com.opengamma.masterdb.security.hibernate.SecurityBean;
 public abstract class IndexBean extends SecurityBean {
   @PropertyDefinition
   private String _description;
-  
+
   /**
    * The index family id.
    */
   @PropertyDefinition
   private ExternalIdBean _indexFamilyId;
-    
+
   @Override
   public boolean equals(final Object other) {
     if (!(other instanceof IndexBean)) {
       return false;
     }
-    IndexBean index = (IndexBean) other;
+    final IndexBean index = (IndexBean) other;
     return new EqualsBuilder()
       .append(getId(), index.getId())
       .append(getDescription(), index.getDescription())
       .append(getIndexFamilyId(), index.getIndexFamilyId())
       .isEquals();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()

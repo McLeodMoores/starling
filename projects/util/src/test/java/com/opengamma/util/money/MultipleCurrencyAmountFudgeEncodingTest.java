@@ -22,6 +22,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class MultipleCurrencyAmountFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   * Tests a cycle.
+   */
   public void test() {
     MultipleCurrencyAmount object = MultipleCurrencyAmount.of(Currency.AUD, 101);
     object = object.plus(Currency.GBP, 300);
@@ -29,13 +32,19 @@ public class MultipleCurrencyAmountFudgeEncodingTest extends AbstractFudgeBuilde
     assertEncodeDecodeCycle(MultipleCurrencyAmount.class, object);
   }
 
-  public void test_toFudgeMsg() {
-    MultipleCurrencyAmount sample = MultipleCurrencyAmount.of(CurrencyAmount.parse("USD 0"));
+  /**
+   * Tests conversion to a Fudge message.
+   */
+  public void testToFudgeMsg() {
+    final MultipleCurrencyAmount sample = MultipleCurrencyAmount.of(CurrencyAmount.parse("USD 0"));
     assertNull(MultipleCurrencyAmountFudgeBuilder.toFudgeMsg(new FudgeSerializer(OpenGammaFudgeContext.getInstance()), null));
     assertNotNull(MultipleCurrencyAmountFudgeBuilder.toFudgeMsg(new FudgeSerializer(OpenGammaFudgeContext.getInstance()), sample));
   }
 
-  public void test_fromFudgeMsg() {
+  /**
+   * Tests conversion from a Fudge message.
+   */
+  public void testFromFudgeMsg() {
     assertNull(MultipleCurrencyAmountFudgeBuilder.fromFudgeMsg(new FudgeDeserializer(OpenGammaFudgeContext.getInstance()), null));
   }
 

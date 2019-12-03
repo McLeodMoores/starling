@@ -11,14 +11,14 @@ import com.opengamma.engine.view.listener.ViewResultListenerFactory;
 import com.opengamma.livedata.UserPrincipal;
 
 /**
- * 
+ *
  */
 public class BatchDbViewResultListenerFactory implements ViewResultListenerFactory {
 
   private BatchRunWriter _batchRunWriter;
 
   @Override
-  public ViewResultListener createViewResultListener(UserPrincipal user) {
+  public ViewResultListener createViewResultListener(final UserPrincipal user) {
     return new BatchDbViewResultListener(_batchRunWriter, user);
   }
 
@@ -26,7 +26,7 @@ public class BatchDbViewResultListenerFactory implements ViewResultListenerFacto
     return _batchRunWriter;
   }
 
-  public void setBatchRunMaster(BatchRunWriter batchRunWriter) {
+  public void setBatchRunMaster(final BatchRunWriter batchRunWriter) {
     this._batchRunWriter = batchRunWriter;
   }
 }

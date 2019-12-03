@@ -24,8 +24,8 @@ import com.opengamma.util.money.Currency;
  */
 public abstract class AbstractCurrencyMatrix implements CurrencyMatrix, MutableUniqueIdentifiable {
 
-  private final ConcurrentHashMap<Currency, ConcurrentHashMap<Currency, CurrencyMatrixValue>> _values = new ConcurrentHashMap<Currency, ConcurrentHashMap<Currency, CurrencyMatrixValue>>();
-  private final ConcurrentHashMap<Currency, AtomicInteger> _targets = new ConcurrentHashMap<Currency, AtomicInteger>();
+  private final ConcurrentHashMap<Currency, ConcurrentHashMap<Currency, CurrencyMatrixValue>> _values = new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<Currency, AtomicInteger> _targets = new ConcurrentHashMap<>();
 
   private UniqueId _uniqueId;
 
@@ -47,13 +47,13 @@ public abstract class AbstractCurrencyMatrix implements CurrencyMatrix, MutableU
 
   @Override
   public Set<Currency> getSourceCurrencies() {
-    Map<Currency, ConcurrentHashMap<Currency, CurrencyMatrixValue>> values = _values;
+    final Map<Currency, ConcurrentHashMap<Currency, CurrencyMatrixValue>> values = _values;
     return Collections.unmodifiableSet(values.keySet());
   }
 
   @Override
   public Set<Currency> getTargetCurrencies() {
-    Map<Currency, AtomicInteger> targets = _targets;
+    final Map<Currency, AtomicInteger> targets = _targets;
     return Collections.unmodifiableSet(targets.keySet());
   }
 
@@ -63,13 +63,12 @@ public abstract class AbstractCurrencyMatrix implements CurrencyMatrix, MutableU
       // This shouldn't happen in sensible code
       return CurrencyMatrixValue.of(1.0);
     }
-    ConcurrentHashMap<Currency, CurrencyMatrixValue> conversions = _values.get(source);
+    final ConcurrentHashMap<Currency, CurrencyMatrixValue> conversions = _values.get(source);
     if (conversions == null) {
       return null;
-    } else {
-      CurrencyMatrixValue currMtxVal = conversions.get(target);
-      return currMtxVal;
     }
+    final CurrencyMatrixValue currMtxVal = conversions.get(target);
+    return currMtxVal;
   }
 
   // Helper methods for sub-classes
@@ -80,7 +79,7 @@ public abstract class AbstractCurrencyMatrix implements CurrencyMatrix, MutableU
     ArgumentChecker.notNull(rate, "rate");
     ConcurrentHashMap<Currency, CurrencyMatrixValue> conversions = _values.get(source);
     if (conversions == null) {
-      conversions = new ConcurrentHashMap<Currency, CurrencyMatrixValue>();
+      conversions = new ConcurrentHashMap<>();
       final ConcurrentHashMap<Currency, CurrencyMatrixValue> newConversions = _values.putIfAbsent(source, conversions);
       if (newConversions != null) {
         conversions = newConversions;
@@ -119,7 +118,7 @@ public abstract class AbstractCurrencyMatrix implements CurrencyMatrix, MutableU
   protected CurrencyMatrixValue removeConversion(final Currency source, final Currency target) {
     ArgumentChecker.notNull(source, "source");
     ArgumentChecker.notNull(target, "target");
-    ConcurrentHashMap<Currency, CurrencyMatrixValue> conversions = _values.get(source);
+    final ConcurrentHashMap<Currency, CurrencyMatrixValue> conversions = _values.get(source);
     if (conversions == null) {
       // Nothing from that source
       return null;
@@ -130,7 +129,7 @@ public abstract class AbstractCurrencyMatrix implements CurrencyMatrix, MutableU
       return null;
     }
     // Removed a value, so need to decrease the target's reference count
-    AtomicInteger targetCount = _targets.get(target);
+    final AtomicInteger targetCount = _targets.get(target);
     if (targetCount != null) {
       // Target count should never be null at this point
       if (targetCount.decrementAndGet() == 0) {
@@ -151,7 +150,7 @@ public abstract class AbstractCurrencyMatrix implements CurrencyMatrix, MutableU
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -159,12 +158,12 @@ public abstract class AbstractCurrencyMatrix implements CurrencyMatrix, MutableU
       return false;
     }
     if (obj instanceof CurrencyMatrix) {
-      CurrencyMatrix other = (CurrencyMatrix) obj;
-      EqualsBuilder equalsBuider = new EqualsBuilder().append(getUniqueId(), other.getUniqueId())
+      final CurrencyMatrix other = (CurrencyMatrix) obj;
+      final EqualsBuilder equalsBuider = new EqualsBuilder().append(getUniqueId(), other.getUniqueId())
           .append(getSourceCurrencies(), other.getSourceCurrencies())
           .append(getTargetCurrencies(), other.getTargetCurrencies());
-      for (Currency source : getSourceCurrencies()) {
-        for (Currency target : getTargetCurrencies()) {
+      for (final Currency source : getSourceCurrencies()) {
+        for (final Currency target : getTargetCurrencies()) {
           equalsBuider.append(getConversion(source, target), other.getConversion(source, target));
         }
       }

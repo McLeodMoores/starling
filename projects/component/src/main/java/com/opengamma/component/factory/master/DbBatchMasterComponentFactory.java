@@ -36,7 +36,7 @@ public class DbBatchMasterComponentFactory extends AbstractDbMasterComponentFact
 
   @PropertyDefinition(validate = "notNull")
   private ComputationTargetResolver _computationTargetResolver;
-  
+
   public DbBatchMasterComponentFactory() {
     super("rsk", BatchMaster.class);
   }
@@ -45,20 +45,20 @@ public class DbBatchMasterComponentFactory extends AbstractDbMasterComponentFact
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteBatchMaster.class;
   }
-  
+
   @Override
-  protected DbBatchMaster createMaster(ComponentRepository repo, ComponentInfo info) throws Exception {
+  protected DbBatchMaster createMaster(final ComponentRepository repo, final ComponentInfo info) throws Exception {
     return new DbBatchMaster(getDbConnector(), getComputationTargetResolver());
   }
 
   @Override
-  protected AbstractDataResource createPublishedResource(DbBatchMaster dbMaster, BatchMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbBatchMaster dbMaster, final BatchMaster postProcessedMaster) {
     return new DataBatchMasterResource(dbMaster);
   }
 
 
   @Override
-  protected BatchMaster wrapMasterWithTrackingInterface(BatchMaster postProcessedMaster) {
+  protected BatchMaster wrapMasterWithTrackingInterface(final BatchMaster postProcessedMaster) {
     throw new UnsupportedOperationException("Batch master does not support tracking.");
   }
 

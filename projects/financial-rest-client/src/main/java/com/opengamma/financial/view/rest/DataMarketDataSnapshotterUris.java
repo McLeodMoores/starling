@@ -30,8 +30,8 @@ public class DataMarketDataSnapshotterUris {
    * @param viewCycleId  the unique id of the view cycle, not null
    * @return the URI, not null
    */
-  public static URI uriCreateSnapshot(URI baseUri, UniqueId viewClientId, UniqueId viewCycleId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path(PATH_CREATE_SNAPSHOT + "/" + viewClientId + "/" + viewCycleId);
+  public static URI uriCreateSnapshot(final URI baseUri, final UniqueId viewClientId, final UniqueId viewCycleId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path(PATH_CREATE_SNAPSHOT + "/" + viewClientId + "/" + viewCycleId);
     return bld.build();
   }
 
@@ -43,8 +43,8 @@ public class DataMarketDataSnapshotterUris {
    * @param viewCycleId  the unique id of the view cycle, not null
    * @return the URI, not null
    */
-  public static URI uriGetYieldCurveSpecs(URI baseUri, UniqueId viewClientId, UniqueId viewCycleId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path(PATH_YIELD_CURVE_SPECS + "/" + viewClientId + "/" + viewCycleId);    
+  public static URI uriGetYieldCurveSpecs(final URI baseUri, final UniqueId viewClientId, final UniqueId viewCycleId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path(PATH_YIELD_CURVE_SPECS + "/" + viewClientId + "/" + viewCycleId);
     return bld.build();
   }
 

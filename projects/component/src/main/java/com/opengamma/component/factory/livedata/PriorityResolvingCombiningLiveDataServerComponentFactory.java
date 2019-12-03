@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.livedata;
@@ -9,8 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import net.sf.ehcache.CacheManager;
 
 import org.apache.commons.lang.text.StrBuilder;
 import org.joda.beans.Bean;
@@ -44,6 +42,8 @@ import com.opengamma.provider.livedata.LiveDataServerTypes;
 import com.opengamma.security.user.HibernateUserManager;
 import com.opengamma.security.user.UserManager;
 import com.opengamma.util.db.DbConnector;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory to create a combining live data server.
@@ -94,13 +94,13 @@ public class PriorityResolvingCombiningLiveDataServerComponentFactory extends Ab
 
   //-------------------------------------------------------------------------
   @Override
-  protected StandardLiveDataServer initServer(ComponentRepository repo) {
-    List<ComponentInfo> infos = buildInfoList();
-    List<StandardLiveDataServer> servers = Lists.newArrayList();
-    for (ComponentInfo info : infos) {
+  protected StandardLiveDataServer initServer(final ComponentRepository repo) {
+    final List<ComponentInfo> infos = buildInfoList();
+    final List<StandardLiveDataServer> servers = Lists.newArrayList();
+    for (final ComponentInfo info : infos) {
       servers.add((StandardLiveDataServer) repo.getInstance(info));
     }
-    PriorityResolvingCombiningLiveDataServer combinedServer = new PriorityResolvingCombiningLiveDataServer(servers, getCacheManager());
+    final PriorityResolvingCombiningLiveDataServer combinedServer = new PriorityResolvingCombiningLiveDataServer(servers, getCacheManager());
     configureServerPlugins(repo, combinedServer);
     repo.registerMBean(new LiveDataServerMBean(combinedServer));
     return combinedServer;
@@ -108,35 +108,35 @@ public class PriorityResolvingCombiningLiveDataServerComponentFactory extends Ab
 
   /**
    * Configures any plugins that alter the behavior of the basic server.
-   * 
+   *
    * @param repo  the repository, not null
    * @param server  the server being configured, not null
    */
-  protected void configureServerPlugins(ComponentRepository repo, PriorityResolvingCombiningLiveDataServer server) {
-    DistributionSpecificationResolver resolver = server.getDefaultDistributionSpecificationResolver();
-    
-    UserManager userManager = new HibernateUserManager(getDbConnector());
-    LiveDataEntitlementChecker entitlementChecker = new UserEntitlementChecker(userManager, resolver);
-    
-    JmsSenderFactory senderFactory = new JmsSenderFactory(getJmsConnector());
-    
+  protected void configureServerPlugins(final ComponentRepository repo, final PriorityResolvingCombiningLiveDataServer server) {
+    final DistributionSpecificationResolver resolver = server.getDefaultDistributionSpecificationResolver();
+
+    final UserManager userManager = new HibernateUserManager(getDbConnector());
+    final LiveDataEntitlementChecker entitlementChecker = new UserEntitlementChecker(userManager, resolver);
+
+    final JmsSenderFactory senderFactory = new JmsSenderFactory(getJmsConnector());
+
     server.setDistributionSpecificationResolver(resolver);
     server.setEntitlementChecker(entitlementChecker);
     server.setMarketDataSenderFactory(senderFactory);
   }
 
   @Override
-  protected LiveDataMetaData createMetaData(ComponentRepository repo) {
-    List<ComponentInfo> infos = buildInfoList();
-    Set<ExternalScheme> schemes = Sets.newLinkedHashSet();
-    StrBuilder buf = new StrBuilder();
-    for (ComponentInfo info : infos) {
-      ComponentInfo infoProvider = repo.findInfo(LiveDataMetaDataProvider.class, info.getClassifier());
+  protected LiveDataMetaData createMetaData(final ComponentRepository repo) {
+    final List<ComponentInfo> infos = buildInfoList();
+    final Set<ExternalScheme> schemes = Sets.newLinkedHashSet();
+    final StrBuilder buf = new StrBuilder();
+    for (final ComponentInfo info : infos) {
+      final ComponentInfo infoProvider = repo.findInfo(LiveDataMetaDataProvider.class, info.getClassifier());
       if (infoProvider == null) {
         throw new OpenGammaRuntimeException("Unable to find matching LiveDataMetaDataProvider: " + info);
       }
-      LiveDataMetaDataProvider provider = (LiveDataMetaDataProvider) repo.getInstance(infoProvider);
-      LiveDataMetaData metaData = provider.metaData();
+      final LiveDataMetaDataProvider provider = (LiveDataMetaDataProvider) repo.getInstance(infoProvider);
+      final LiveDataMetaData metaData = provider.metaData();
       schemes.addAll(metaData.getSupportedSchemes());
       buf.appendSeparator(", ").append(metaData.getDescription());
     }
@@ -145,11 +145,11 @@ public class PriorityResolvingCombiningLiveDataServerComponentFactory extends Ab
 
   /**
    * Builds the list of server infos.
-   * 
+   *
    * @return the server list, not null
    */
   protected List<ComponentInfo> buildInfoList() {
-    List<ComponentInfo> infos = Lists.newArrayList();
+    final List<ComponentInfo> infos = Lists.newArrayList();
     infos.add(getServer1());
     infos.add(getServer2());
     infos.add(getServer3());

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.creditdefaultswap.definition.vanilla;
@@ -13,7 +13,6 @@ import com.opengamma.analytics.financial.credit.CreditInstrumentDefinition;
 import com.opengamma.analytics.financial.credit.DebtSeniority;
 import com.opengamma.analytics.financial.credit.RestructuringClause;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.StubType;
-import com.opengamma.analytics.financial.credit.obligor.definition.Obligor;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -23,8 +22,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- *  Definition of a generic Single Name Credit Default Swap contract (abstract class therefore different types of CDS will inherit from this)
- *@deprecated this will be deleted 
+ * Definition of a generic Single Name Credit Default Swap contract (abstract class therefore different types of CDS will inherit from this).
+ *
+ * @deprecated this will be deleted
  */
 @Deprecated
 public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDefinition {
@@ -114,7 +114,8 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
   // The trade notional (in the trade currency), convention is that this will always be a positive amount
   private final double _notional;
 
-  // The recovery rate to be used in the calculation of the CDS MtM (the recovery used in pricing can be different to the rate used to calibrate the hazard rates)
+  // The recovery rate to be used in the calculation of the CDS MtM (the recovery used in pricing can be different to the rate used to calibrate the hazard
+  // rates)
   private final double _recoveryRate;
 
   // Flag to determine whether the accrued coupons should be included in the CDS premium leg calculation
@@ -134,35 +135,61 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
   // Constructor for a CDS contract object
 
   /**
-   * Create a CDS object 
-   * @param buySellProtection Are we buying or selling the credit protection
-   * @param protectionBuyer protection buyer
-   * @param protectionSeller protection seller
-   * @param referenceEntity reference entity
-   * @param currency Currency 
-   * @param debtSeniority Debt Seniority
-   * @param restructuringClause Restructuring Clause
-   * @param calendar Calendar
-   * @param startDate Date when protection begins (this can be the start or the end of the day depending on the value of protectionStart)
-   * @param effectiveDate Date when party assumes ownership (aka stepin date or assignment date). Currently must have  startDate <= effectiveDate which
-   * means you cannot buy forward protection - TODO investigate whether this can be removed
-   * @param maturityDate Date when protection ends (end of day)
-   * @param stubType stub type
-   * @param couponFrequency coupon frequency
-   * @param daycountFractionConvention day-count convention
-   * @param businessdayAdjustmentConvention business-day adjustment convention
-   * @param immAdjustMaturityDate if true adjust IMM maturity date - TODO check exactly what this does 
-   * @param adjustEffectiveDate if true adjust effective date for non-business days 
-   * @param adjustMaturityDate if true adjust (non-IMM) maturity date for non-business days 
-   * @param notional the notional 
-   * @param recoveryRate the recovery rate (between 0 and 1.0)
-   * @param includeAccruedPremium If true accrued premium must be paid in the event of default
-   * @param protectionStart if true the protection is from the start of day 
+   * Create a CDS object.
+   *
+   * @param buySellProtection
+   *          Are we buying or selling the credit protection
+   * @param protectionBuyer
+   *          protection buyer
+   * @param protectionSeller
+   *          protection seller
+   * @param referenceEntity
+   *          reference entity
+   * @param currency
+   *          Currency
+   * @param debtSeniority
+   *          Debt Seniority
+   * @param restructuringClause
+   *          Restructuring Clause
+   * @param calendar
+   *          Calendar
+   * @param startDate
+   *          Date when protection begins (this can be the start or the end of the day depending on the value of protectionStart)
+   * @param effectiveDate
+   *          Date when party assumes ownership (aka stepin date or assignment date). Currently must have startDate &lt; effectiveDate which means you cannot
+   *          buy forward protection
+   * @param maturityDate
+   *          Date when protection ends (end of day)
+   * @param stubType
+   *          stub type
+   * @param couponFrequency
+   *          coupon frequency
+   * @param daycountFractionConvention
+   *          day-count convention
+   * @param businessdayAdjustmentConvention
+   *          business-day adjustment convention
+   * @param immAdjustMaturityDate
+   *          if true adjust IMM maturity date - TODO check exactly what this does
+   * @param adjustEffectiveDate
+   *          if true adjust effective date for non-business days
+   * @param adjustMaturityDate
+   *          if true adjust (non-IMM) maturity date for non-business days
+   * @param notional
+   *          the notional
+   * @param recoveryRate
+   *          the recovery rate (between 0 and 1.0)
+   * @param includeAccruedPremium
+   *          If true accrued premium must be paid in the event of default
+   * @param protectionStart
+   *          if true the protection is from the start of day
    */
-  public CreditDefaultSwapDefinition(final BuySellProtection buySellProtection, final LegalEntity protectionBuyer, final LegalEntity protectionSeller, final LegalEntity referenceEntity, final Currency currency,
-      final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final Calendar calendar, final ZonedDateTime startDate, final ZonedDateTime effectiveDate,
+  public CreditDefaultSwapDefinition(final BuySellProtection buySellProtection, final LegalEntity protectionBuyer, final LegalEntity protectionSeller,
+      final LegalEntity referenceEntity, final Currency currency,
+      final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final Calendar calendar, final ZonedDateTime startDate,
+      final ZonedDateTime effectiveDate,
       final ZonedDateTime maturityDate, final StubType stubType, final PeriodFrequency couponFrequency, final DayCount daycountFractionConvention,
-      final BusinessDayConvention businessdayAdjustmentConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate, final boolean adjustMaturityDate, final double notional,
+      final BusinessDayConvention businessdayAdjustmentConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate,
+      final boolean adjustMaturityDate, final double notional,
       final double recoveryRate, final boolean includeAccruedPremium, final boolean protectionStart) {
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
@@ -381,14 +408,14 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
     result = prime * result + _maturityDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _protectionBuyer.hashCode();
     temp = Double.doubleToLongBits(_protectionOffset);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _protectionSeller.hashCode();
     result = prime * result + (_protectionStart ? 1231 : 1237);
     temp = Double.doubleToLongBits(_recoveryRate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _referenceEntity.hashCode();
     result = prime * result + _restructuringClause.hashCode();
     result = prime * result + _startDate.hashCode();
@@ -486,11 +513,19 @@ public abstract class CreditDefaultSwapDefinition implements CreditInstrumentDef
 
   @Override
   public String toString() {
-    return "CreditDefaultSwapDefinition{" + "_buySellProtection=" + _buySellProtection + ", _protectionBuyer=" + _protectionBuyer + ", _protectionSeller=" + _protectionSeller + ", _referenceEntity=" +
-        _referenceEntity + ", _currency=" + _currency + ", _debtSeniority=" + _debtSeniority + ", _restructuringClause=" + _restructuringClause + ", _calendar=" + _calendar + ", _startDate=" +
-        _startDate + ", _effectiveDate=" + _effectiveDate + ", _maturityDate=" + _maturityDate + ", _stubType=" + _stubType + ", _couponFrequency=" + _couponFrequency +
-        ", _daycountFractionConvention=" + _daycountFractionConvention + ", _businessdayAdjustmentConvention=" + _businessdayAdjustmentConvention + ", _immAdjustMaturityDate=" +
-        _immAdjustMaturityDate + ", _adjustEffectiveDate=" + _adjustEffectiveDate + ", _adjustMaturityDate=" + _adjustMaturityDate + ", _notional=" + _notional + ", _recoveryRate=" + _recoveryRate +
-        ", _includeAccruedPremium=" + _includeAccruedPremium + ", _protectionStart=" + _protectionStart + ", _creditKey='" + _creditKey + '\'' + ", _protectionOffset=" + _protectionOffset + '}';
+    return "CreditDefaultSwapDefinition{" + "_buySellProtection=" + _buySellProtection + ", _protectionBuyer=" + _protectionBuyer + ", _protectionSeller="
+        + _protectionSeller + ", _referenceEntity="
+        + _referenceEntity + ", _currency=" + _currency + ", _debtSeniority=" + _debtSeniority + ", _restructuringClause=" + _restructuringClause
+        + ", _calendar="
+        + _calendar + ", _startDate="
+        + _startDate + ", _effectiveDate=" + _effectiveDate + ", _maturityDate=" + _maturityDate + ", _stubType=" + _stubType + ", _couponFrequency="
+        + _couponFrequency
+        + ", _daycountFractionConvention=" + _daycountFractionConvention + ", _businessdayAdjustmentConvention=" + _businessdayAdjustmentConvention
+        + ", _immAdjustMaturityDate="
+        + _immAdjustMaturityDate + ", _adjustEffectiveDate=" + _adjustEffectiveDate + ", _adjustMaturityDate=" + _adjustMaturityDate + ", _notional="
+        + _notional
+        + ", _recoveryRate=" + _recoveryRate
+        + ", _includeAccruedPremium=" + _includeAccruedPremium + ", _protectionStart=" + _protectionStart + ", _creditKey='" + _creditKey + '\''
+        + ", _protectionOffset=" + _protectionOffset + '}';
   }
 }

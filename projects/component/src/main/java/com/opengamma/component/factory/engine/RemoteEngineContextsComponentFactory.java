@@ -10,8 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-import net.sf.ehcache.CacheManager;
-
 import org.apache.commons.lang.StringUtils;
 import org.fudgemsg.FudgeMsg;
 import org.joda.beans.Bean;
@@ -56,16 +54,8 @@ import com.opengamma.engine.ComputationTargetResolver;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.view.ViewProcessor;
-import com.opengamma.financial.analytics.ircurve.EHCachingInterpolatedYieldCurveDefinitionSource;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
-import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveDefinitionSource;
-import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
 import com.opengamma.financial.analytics.volatility.cube.rest.RemoteVolatilityCubeDefinitionSource;
-import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.EHCachingConventionBundleSource;
-import com.opengamma.financial.convention.rest.RemoteConventionBundleSource;
 import com.opengamma.financial.security.EHCachingFinancialSecuritySource;
 import com.opengamma.financial.security.FinancialSecuritySource;
 import com.opengamma.financial.security.RemoteFinancialSecuritySource;
@@ -85,22 +75,23 @@ import com.opengamma.util.rest.FudgeRestClient;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import net.sf.ehcache.CacheManager;
+
 /**
- * Component factory for {@link FunctionCompilationContext} and {@link FunctionExecutionContext} instances that are based on a remote configuration document and local factory which determines the
- * required construction pattern.
+ * Component factory for {@link FunctionCompilationContext} and {@link FunctionExecutionContext} instances that are based on a remote configuration document and
+ * local factory which determines the required construction pattern.
  */
 @BeanDefinition
-@SuppressWarnings("deprecation")
 public class RemoteEngineContextsComponentFactory extends AbstractComponentFactory {
 
   // TODO: Update the Spring based configuration for remote calc nodes to use this
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteEngineContextsComponentFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteEngineContextsComponentFactory.class);
   private static final String CONTEXT_CONFIGURATION_NAME = "remoteConfiguration";
   private static final String CONTEXT_CONFIGURATION_URI_NAME = "remoteConfigurationUri";
 
   /**
-   * The classifier to distinguish these contexts from elsewhere
+   * The classifier to distinguish these contexts from elsewhere.
    */
   @PropertyDefinition(validate = "notNull")
   private String _classifier;
@@ -118,8 +109,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   private Class<? extends AbstractComponentFactory> _templateEngineContexts = EngineContextsComponentFactory.class;
 
   /**
-   * The component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often used independently. Performance is
-   * better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * The component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    */
   @PropertyDefinition(validate = "notNull")
   private Class<? extends AbstractComponentFactory> _templateTargetResolver = TargetResolverComponentFactory.class;
@@ -147,243 +138,180 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   protected ConfigMaster cache(final ConfigMaster configMaster) {
     if (getCacheManager() != null) {
       return new EHCachingConfigMaster("EngineContext.configMaster", configMaster, getCacheManager());
-    } else {
-      return configMaster;
     }
+    return configMaster;
   }
 
   protected ConfigSource cache(final ConfigSource configSource) {
     if (getCacheManager() != null) {
       return new EHCachingConfigSource(configSource, getCacheManager());
-    } else {
-      return configSource;
     }
-  }
-
-  protected ConventionBundleSource cache(final ConventionBundleSource conventionBundleSource) {
-    if (getCacheManager() != null) {
-      return new EHCachingConventionBundleSource(conventionBundleSource, getCacheManager());
-    } else {
-      return conventionBundleSource;
-    }
+    return configSource;
   }
 
   protected ConventionSource cache(final ConventionSource conventionSource) {
     if (getCacheManager() != null) {
       return new EHCachingConventionSource(conventionSource, getCacheManager());
-    } else {
-      return conventionSource;
     }
+    return conventionSource;
   }
 
   protected SecuritySource cache(final FinancialSecuritySource securitySource) {
     if (getCacheManager() != null) {
       return new EHCachingFinancialSecuritySource(securitySource, getCacheManager());
-    } else {
-      return securitySource;
     }
+    return securitySource;
   }
 
   protected ExchangeSource cache(final ExchangeSource exchangeSource) {
     if (getCacheManager() != null) {
       return new EHCachingExchangeSource(exchangeSource, getCacheManager());
-    } else {
-      return exchangeSource;
     }
+    return exchangeSource;
   }
 
   protected HistoricalTimeSeriesResolver cache(final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
     if (getCacheManager() != null) {
       return new EHCachingHistoricalTimeSeriesResolver(historicalTimeSeriesResolver, getCacheManager());
-    } else {
-      return historicalTimeSeriesResolver;
     }
+    return historicalTimeSeriesResolver;
   }
 
   protected HistoricalTimeSeriesSource cache(final HistoricalTimeSeriesSource historicalTimeSeriesSource) {
     if (getCacheManager() != null) {
       return new EHCachingHistoricalTimeSeriesSource(historicalTimeSeriesSource, getCacheManager());
-    } else {
-      return historicalTimeSeriesSource;
     }
+    return historicalTimeSeriesSource;
   }
 
   protected HolidaySource cache(final HolidaySource holidaySource) {
     return new CachedHolidaySource(holidaySource);
   }
 
-  protected InterpolatedYieldCurveDefinitionSource cache(final InterpolatedYieldCurveDefinitionSource interpolatedYieldCurveDefinitionSource) {
-    if (getCacheManager() != null) {
-      return new EHCachingInterpolatedYieldCurveDefinitionSource(interpolatedYieldCurveDefinitionSource, getCacheManager());
-    } else {
-      return interpolatedYieldCurveDefinitionSource;
-    }
-  }
-
   protected LegalEntitySource cache(final LegalEntitySource legalEntitySource) {
     if (getCacheManager() != null) {
       return new EHCachingLegalEntitySource(legalEntitySource, getCacheManager());
-    } else {
-      return legalEntitySource;
     }
+    return legalEntitySource;
   }
 
   protected PositionSource cache(final PositionSource positionSource) {
     if (getCacheManager() != null) {
       return new EHCachingPositionSource(positionSource, getCacheManager());
-    } else {
-      return positionSource;
     }
+    return positionSource;
   }
 
   protected RegionSource cache(final RegionSource regionSource) {
     if (getCacheManager() != null) {
       return new EHCachingRegionSource(regionSource, getCacheManager());
-    } else {
-      return regionSource;
     }
+    return regionSource;
   }
 
   // component creation - if URIs are available
 
   protected ConfigMaster createConfigMaster(final URI uri) {
     if (uri != null) {
-      return cache(new RemoteConfigMaster(uri/*, TODO: change manager */));
-    } else {
-      return null;
+      return cache(new RemoteConfigMaster(uri/* , TODO: change manager */));
     }
+    return null;
   }
 
   protected ConfigSource createConfigSource(final URI uri) {
     if (uri != null) {
-      return cache(new RemoteConfigSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
+      return cache(new RemoteConfigSource(uri/* , TODO: change manager */));
     }
-  }
-
-  protected ConventionBundleSource createConventionBundleSource(final URI uri) {
-    if (uri != null) {
-      return cache(new RemoteConventionBundleSource(uri));
-    } else {
-      return null;
-    }
+    return null;
   }
 
   protected ConventionSource createConventionSource(final URI uri) {
     if (uri != null) {
-      return cache(new RemoteConventionSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
+      return cache(new RemoteConventionSource(uri/* , TODO: change manager */));
     }
+    return null;
   }
 
   protected ExchangeSource createExchangeSource(final URI uri) {
     if (uri != null) {
-      return cache(new RemoteExchangeSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
+      return cache(new RemoteExchangeSource(uri/* , TODO: change manager */));
     }
+    return null;
   }
 
   protected HistoricalTimeSeriesResolver createHistoricalTimeSeriesResolver(final URI uri) {
     if (uri != null) {
       return cache(new RemoteHistoricalTimeSeriesResolver(uri));
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected HistoricalTimeSeriesSource createHistoricalTimeSeriesSource(final URI uri) {
     if (uri != null) {
-      return cache(new RemoteHistoricalTimeSeriesSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
+      return cache(new RemoteHistoricalTimeSeriesSource(uri/* , TODO: change manager */));
     }
+    return null;
   }
 
   protected HolidaySource createHolidaySource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteHolidaySource(uri));
-    } else {
-      return null;
     }
-  }
-
-  protected InterpolatedYieldCurveDefinitionSource createInterpolatedYieldCurveDefinitionSource(final URI uri) {
-    if (uri != null) {
-      return cache(new RemoteInterpolatedYieldCurveDefinitionSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
-    }
-  }
-
-  protected InterpolatedYieldCurveSpecificationBuilder createInterpolatedYieldCurveSpecificationBuilder(final URI uri) {
-    if (uri != null) {
-      return /*TODO: cache*/(new RemoteInterpolatedYieldCurveSpecificationBuilder(uri));
-    } else {
-      return null;
-    }
+    return null;
   }
 
   protected LegalEntitySource createLegalEntitySource(final URI uri) {
     if (uri != null) {
-      return cache(new RemoteLegalEntitySource(uri/*, TODO: change manager */));
-    } else {
-      return null;
+      return cache(new RemoteLegalEntitySource(uri/* , TODO: change manager */));
     }
+    return null;
   }
 
   protected PositionSource createPositionSource(final URI uri) {
     if (uri != null) {
-      return cache(new RemotePositionSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
+      return cache(new RemotePositionSource(uri/* , TODO: change manager */));
     }
+    return null;
   }
 
   protected RegionSource createRegionSource(final URI uri) {
     if (uri != null) {
-      return cache(new RemoteRegionSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
+      return cache(new RemoteRegionSource(uri/* , TODO: change manager */));
     }
+    return null;
   }
 
   protected SecuritySource createSecuritySource(final URI uri) {
     if (uri != null) {
-      return cache(new RemoteFinancialSecuritySource(uri/*, TODO: change manager */));
-    } else {
-      return null;
+      return cache(new RemoteFinancialSecuritySource(uri/* , TODO: change manager */));
     }
+    return null;
   }
 
   protected ViewProcessor createViewProcessor(final URI uri) {
-    if ((getJmsConnector() != null) && (uri != null)) {
+    if (getJmsConnector() != null && uri != null) {
       return new RemoteViewProcessor(uri, getJmsConnector(), Executors.newSingleThreadScheduledExecutor());
-    } else {
-      return null;
     }
+    return null;
   }
 
   protected VolatilityCubeDefinitionSource createVolatilityCubeDefinitionSource(final URI uri) {
     if (uri != null) {
-      return /*TODO: cache*/(new RemoteVolatilityCubeDefinitionSource(uri/*, TODO: change manager */));
-    } else {
-      return null;
+      return /* TODO: cache */new RemoteVolatilityCubeDefinitionSource(uri/* , TODO: change manager */);
     }
+    return null;
   }
 
   // initialisation
 
   /**
    * Fetches the remote configuration document and supplies a suitable validation service.
-   * 
+   *
    * @return the URI validation service and configuration document, not null
    */
   protected Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> fetchConfiguration() {
     final FudgeRestClient client = FudgeRestClient.create();
-    s_logger.info("Fetching remote configuration for {} from {}", getClassifier(), getConfiguration());
+    LOGGER.info("Fetching remote configuration for {} from {}", getClassifier(), getConfiguration());
     final FudgeMsg remoteConfiguration = client.accessFudge(getConfiguration()).get(FudgeMsg.class);
     final UriEndPointDescriptionProvider.Validater validator = UriEndPointDescriptionProvider.validater(Executors.newCachedThreadPool(), getConfiguration());
     return Pairs.of(validator, remoteConfiguration);
@@ -391,15 +319,17 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Fetches a URI from the remote configuration.
-   * 
-   * @param remoteConfiguration the remote configuration, as created by {@link #fetchConfiguration}
-   * @param label the element from the remote configuration document, not null
+   *
+   * @param remoteConfiguration
+   *          the remote configuration, as created by {@link #fetchConfiguration}
+   * @param label
+   *          the element from the remote configuration document, not null
    * @return the URI or null if none is available/defined
    */
   protected URI fetchURI(final Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> remoteConfiguration, final String label) {
     final FudgeMsg configuration = remoteConfiguration.getSecond().getMessage(label);
     if (configuration == null) {
-      s_logger.warn("{} not defined in remote configuration {}", label, getConfiguration());
+      LOGGER.warn("{} not defined in remote configuration {}", label, getConfiguration());
       return null;
     }
     return remoteConfiguration.getFirst().getAccessibleURI(configuration);
@@ -407,7 +337,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Gets the classifier used to refer to remote components.
-   * 
+   *
    * @return the classifier, not null
    */
   protected String getRemoteClassifier() {
@@ -415,37 +345,51 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets the component in the template and registers it in the local repository. The local repository is used as a cache when local forms, such as the target resolver, are constructed.
-   * 
-   * @param repo the component repository, not null
-   * @param property the template property, not null
-   * @param template the template component factory, not null
-   * @param component the remote component, null if none is available
+   * Sets the component in the template and registers it in the local repository. The local repository is used as a cache when local forms, such as the target
+   * resolver, are constructed.
+   *
+   * @param repo
+   *          the component repository, not null
+   * @param property
+   *          the template property, not null
+   * @param template
+   *          the template component factory, not null
+   * @param component
+   *          the remote component, null if none is available
    */
   @SuppressWarnings("unchecked")
-  protected void remoteComponent(final ComponentRepository repo, final MetaProperty<?> property, final AbstractComponentFactory template, Object component) {
+  protected void remoteComponent(final ComponentRepository repo, final MetaProperty<?> property, final AbstractComponentFactory template,
+      final Object component) {
     // Always set the template so that it's null validation can take place
     property.set(template, component);
     if (component != null) {
-      s_logger.debug("Registered {}::{}", property.propertyType().getSimpleName(), getRemoteClassifier());
+      LOGGER.debug("Registered {}::{}", property.propertyType().getSimpleName(), getRemoteClassifier());
       repo.registerComponent((Class<Object>) property.propertyType(), getRemoteClassifier(), component);
     }
   }
 
   /**
-   * Processes a field from the template component factory, either passing a value from the local configuration or using a value from the remote configuration document to set it accordingly.
-   * 
-   * @param repo the component repository, not null
-   * @param property the template property, not null
-   * @param localConfiguration the local configuration, not null
-   * @param remoteConfiguration the remote configuration, as created by {@link #fetchConfiguration}
-   * @param template the template component factory, not null
+   * Processes a field from the template component factory, either passing a value from the local configuration or using a value from the remote configuration
+   * document to set it accordingly.
+   *
+   * @param repo
+   *          the component repository, not null
+   * @param property
+   *          the template property, not null
+   * @param localConfiguration
+   *          the local configuration, not null
+   * @param remoteConfiguration
+   *          the remote configuration, as created by {@link #fetchConfiguration}
+   * @param template
+   *          the template component factory, not null
+   * @throws Exception
+   *           if there is a problem
    */
   protected void remoteComponentProperty(final ComponentRepository repo, final MetaProperty<?> property, final LinkedHashMap<String, String> localConfiguration,
       final Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> remoteConfiguration, final AbstractComponentFactory template) throws Exception {
     final Object existingComponent = repo.findInstance(property.propertyType(), getRemoteClassifier());
     if (existingComponent != null) {
-      s_logger.debug("Got cached {}::{}", property.propertyType().getSimpleName(), getRemoteClassifier());
+      LOGGER.debug("Got cached {}::{}", property.propertyType().getSimpleName(), getRemoteClassifier());
       property.set(template, existingComponent);
       return;
     }
@@ -454,7 +398,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
         property.set(template, getCacheManager());
         break;
       case "classifier":
-        property.set(template, (localConfiguration != null) ? getClassifier() : getRemoteClassifier());
+        property.set(template, localConfiguration != null ? getClassifier() : getRemoteClassifier());
         break;
       case "compilationBlacklist":
         // TODO:
@@ -464,9 +408,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
         break;
       case "configSource":
         remoteComponent(repo, property, template, createConfigSource(fetchURI(remoteConfiguration, "configSource")));
-        break;
-      case "conventionBundleSource":
-        remoteComponent(repo, property, template, createConventionBundleSource(fetchURI(remoteConfiguration, "conventionBundleSource")));
         break;
       case "conventionSource":
         remoteComponent(repo, property, template, createConventionSource(fetchURI(remoteConfiguration, "conventionSource")));
@@ -485,12 +426,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
         break;
       case "holidaySource":
         remoteComponent(repo, property, template, createHolidaySource(fetchURI(remoteConfiguration, "holidaySource")));
-        break;
-      case "interpolatedYieldCurveDefinitionSource":
-        remoteComponent(repo, property, template, createInterpolatedYieldCurveDefinitionSource(fetchURI(remoteConfiguration, "interpolatedYieldCurveDefinitionSource")));
-        break;
-      case "interpolatedYieldCurveSpecificationBuilder":
-        remoteComponent(repo, property, template, createInterpolatedYieldCurveSpecificationBuilder(fetchURI(remoteConfiguration, "interpolatedYieldCurveSpecificationBuilder")));
         break;
       case "legalEntitySource":
         remoteComponent(repo, property, template, createLegalEntitySource(fetchURI(remoteConfiguration, "legalEntitySource")));
@@ -518,8 +453,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
         remoteComponent(repo, property, template, createVolatilityCubeDefinitionSource(fetchURI(remoteConfiguration, "volatilityCubeDefinitionSource")));
         break;
       default:
-        s_logger.warn("Can't handle {} on {}", property.name(), template);
-        if ((localConfiguration != null) && !"true".equals(localConfiguration.remove("ignore" + StringUtils.capitalize(property.name())))) {
+        LOGGER.warn("Can't handle {} on {}", property.name(), template);
+        if (localConfiguration != null && !"true".equals(localConfiguration.remove("ignore" + StringUtils.capitalize(property.name())))) {
           if (isStrict()) {
             throw new UnsupportedOperationException("Strict mode set and can't handle template field " + property + " on " + template);
           }
@@ -529,17 +464,24 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Processes the fields from a template component factory, either passing a value from local configuration, if any, or using a value from the remote configuration document to set it accordingly.
-   * 
-   * @param repo the component repository, not null
-   * @param localConfiguration the local configuration, null if none
-   * @param remoteConfiguration the remote configuration, as created by {@link #fetchConfiguration}
-   * @param template the template component factory, not null
+   * Processes the fields from a template component factory, either passing a value from local configuration, if any, or using a value from the remote
+   * configuration document to set it accordingly.
+   *
+   * @param repo
+   *          the component repository, not null
+   * @param localConfiguration
+   *          the local configuration, null if none
+   * @param remoteConfiguration
+   *          the remote configuration, as created by {@link #fetchConfiguration}
+   * @param template
+   *          the template component factory, not null
+   * @throws Exception
+   *           if there is a problem
    */
   protected void initTemplate(final ComponentRepository repo, final LinkedHashMap<String, String> localConfiguration,
       final Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> remoteConfiguration, final AbstractComponentFactory template) throws Exception {
     for (final MetaProperty<?> templateProperty : template.metaBean().metaPropertyIterable()) {
-      final String localValue = (localConfiguration != null) ? localConfiguration.remove(templateProperty.name()) : null;
+      final String localValue = localConfiguration != null ? localConfiguration.remove(templateProperty.name()) : null;
       if (localValue != null) {
         // Literal or local reference
         if (Boolean.class.equals(templateProperty.propertyType()) || Boolean.TYPE.equals(templateProperty.propertyType())) {
@@ -558,8 +500,9 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Fetches the original configuration message, if the context was created by this factory.
-   * 
-   * @param context the context to check, not null
+   *
+   * @param context
+   *          the context to check, not null
    * @return the original configuration message or null if none
    */
   public static FudgeMsg getConfiguration(final FunctionCompilationContext context) {
@@ -568,8 +511,9 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Fetches the original configuration URI, if the context was created by this factory.
-   * 
-   * @param context the context to check, not null
+   *
+   * @param context
+   *          the context to check, not null
    * @return the original configuration URI or null if none
    */
   public static URI getConfigurationUri(final FunctionCompilationContext context) {
@@ -578,8 +522,9 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Fetches the original configuration message, if the context was created by this factory.
-   * 
-   * @param context the context to check, not null
+   *
+   * @param context
+   *          the context to check, not null
    * @return the original configuration message or null if none
    */
   public static FudgeMsg getConfiguration(final FunctionExecutionContext context) {
@@ -588,8 +533,9 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Fetches the original configuration URI, if the context was created by this factory.
-   * 
-   * @param context the context to check, not null
+   *
+   * @param context
+   *          the context to check, not null
    * @return the original configuration URI or null if none
    */
   public static URI getConfigurationUri(final FunctionExecutionContext context) {
@@ -631,7 +577,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the classifier to distinguish these contexts from elsewhere
+   * Gets the classifier to distinguish these contexts from elsewhere.
    * @return the value of the property, not null
    */
   public String getClassifier() {
@@ -639,7 +585,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets the classifier to distinguish these contexts from elsewhere
+   * Sets the classifier to distinguish these contexts from elsewhere.
    * @param classifier  the new value of the property, not null
    */
   public void setClassifier(String classifier) {
@@ -709,8 +655,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often used independently. Performance is
-   * better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * Gets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    * @return the value of the property, not null
    */
   public Class<? extends AbstractComponentFactory> getTemplateTargetResolver() {
@@ -718,8 +664,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often used independently. Performance is
-   * better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * Sets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    * @param templateTargetResolver  the new value of the property, not null
    */
   public void setTemplateTargetResolver(Class<? extends AbstractComponentFactory> templateTargetResolver) {
@@ -729,7 +675,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Gets the the {@code templateTargetResolver} property.
-   * better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    * @return the property, not null
    */
   public final Property<Class<? extends AbstractComponentFactory>> templateTargetResolver() {

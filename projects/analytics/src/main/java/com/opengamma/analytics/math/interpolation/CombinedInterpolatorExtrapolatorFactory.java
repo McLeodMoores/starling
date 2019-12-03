@@ -5,6 +5,7 @@
  */
 package com.opengamma.analytics.math.interpolation;
 
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -22,9 +23,12 @@ public final class CombinedInterpolatorExtrapolatorFactory {
   }
 
   /**
-   * Creates a combined interpolator that does not extrapolate on the left or right.
-   * @param interpolatorName  the interpolator name, not null
-   * @return  the interpolator
+   * Creates a combined interpolator that does not extrapolate on the left or
+   * right.
+   * 
+   * @param interpolatorName
+   *          the interpolator name, not null
+   * @return the interpolator
    */
   public static CombinedInterpolatorExtrapolator getInterpolator(final String interpolatorName) {
     final Interpolator1D interpolator = Interpolator1DFactory.getInterpolator(interpolatorName);
@@ -32,11 +36,15 @@ public final class CombinedInterpolatorExtrapolatorFactory {
   }
 
   /**
-   * Creates a combined interpolator that uses the same extrapolator on the left and right if the extrapolator
-   * name is not null, or that only interpolated if not.
-   * @param interpolatorName  the interpolator name, not null
-   * @param extrapolatorName  the extrapolator name, can be null
-   * @return  the interpolator
+   * Creates a combined interpolator that uses the same extrapolator on the left
+   * and right if the extrapolator name is not null, or that only interpolated
+   * if not.
+   * 
+   * @param interpolatorName
+   *          the interpolator name, not null
+   * @param extrapolatorName
+   *          the extrapolator name, can be null
+   * @return the interpolator
    */
   public static CombinedInterpolatorExtrapolator getInterpolator(final String interpolatorName, final String extrapolatorName) {
     final Interpolator1D interpolator = Interpolator1DFactory.getInterpolator(interpolatorName);
@@ -48,12 +56,17 @@ public final class CombinedInterpolatorExtrapolatorFactory {
   }
 
   /**
-   * Creates a combined interpolator and extrapolator. If the left and / or right extrapolator name is not provided, extrapolation
-   * will not be performed on the left and / or right.
-   * @param interpolatorName  the interpolator name, not null
-   * @param leftExtrapolatorName  the extrapolator name, can be null
-   * @param rightExtrapolatorName  the extrapolator name, can be null
-   * @return  the interpolator
+   * Creates a combined interpolator and extrapolator. If the left and / or
+   * right extrapolator name is not provided, extrapolation will not be
+   * performed on the left and / or right.
+   * 
+   * @param interpolatorName
+   *          the interpolator name, not null
+   * @param leftExtrapolatorName
+   *          the extrapolator name, can be null
+   * @param rightExtrapolatorName
+   *          the extrapolator name, can be null
+   * @return the interpolator
    */
   public static CombinedInterpolatorExtrapolator getInterpolator(final String interpolatorName, final String leftExtrapolatorName,
       final String rightExtrapolatorName) {
@@ -75,15 +88,18 @@ public final class CombinedInterpolatorExtrapolatorFactory {
   }
 
   /**
-   * Gets an extrapolator. Some extrapolators (e.g. linear) depend on the interpolator, so this information must
-   * be passed into this method.
-   * @param extrapolatorName  the extrapolator name, not null
-   * @param interpolator  the interpolator, can be null
-   * @return  the extrapolator
+   * Gets an extrapolator. Some extrapolators (e.g. linear) depend on the
+   * interpolator, so this information must be passed into this method.
+   * 
+   * @param extrapolatorName
+   *          the extrapolator name, not null
+   * @param interpolator
+   *          the interpolator, can be null
+   * @return the extrapolator
    */
   public static Interpolator1D getExtrapolator(final String extrapolatorName, final Interpolator1D interpolator) {
     ArgumentChecker.notNull(extrapolatorName, "extrapolatorName");
-    if (extrapolatorName.equals(Interpolator1DFactory.LINEAR_EXTRAPOLATOR)) {
+    if (extrapolatorName.equals(LinearExtrapolator1dAdapter.NAME)) {
       return new LinearExtrapolator1D(interpolator);
     }
     if (extrapolatorName.equals(Interpolator1DFactory.LOG_LINEAR_EXTRAPOLATOR)) {

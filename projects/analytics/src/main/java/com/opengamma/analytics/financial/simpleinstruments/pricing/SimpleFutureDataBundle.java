@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.simpleinstruments.pricing;
@@ -8,9 +8,9 @@ package com.opengamma.analytics.financial.simpleinstruments.pricing;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 
 /**
- * Market data requirements for pricing the SimpleFuture and EquityFuture.<p>
- * NOTE: Each EquityFuturesPricingMethod requires different data. 
- * Some members of the data bundle may be null!
+ * Market data requirements for pricing the SimpleFuture and EquityFuture.
+ * <p>
+ * NOTE: Each EquityFuturesPricingMethod requires different data. Some members of the data bundle may be null!
  */
 public class SimpleFutureDataBundle {
 
@@ -27,13 +27,19 @@ public class SimpleFutureDataBundle {
   private final Double _costOfCarry;
 
   /**
-   * @param fundingCurve Used for discounting 
-   * @param marketPrice Quoted futures price
-   * @param spotValue Quoted market spot value of the underlying
-   * @param dividendYield An estimate of the continuous dividend yield over the life of the future
-   * @param costOfCarry An estimate of the cost of carry, as a rate => FwdPrice = Spot * exp(costOfCarry * T)
+   * @param fundingCurve
+   *          Used for discounting
+   * @param marketPrice
+   *          Quoted futures price
+   * @param spotValue
+   *          Quoted market spot value of the underlying
+   * @param dividendYield
+   *          An estimate of the continuous dividend yield over the life of the future
+   * @param costOfCarry
+   *          An estimate of the cost of carry, as a rate =&gt; FwdPrice = Spot * exp(costOfCarry * T)
    */
-  public SimpleFutureDataBundle(YieldAndDiscountCurve fundingCurve, Double marketPrice, Double spotValue, Double dividendYield, Double costOfCarry) {
+  public SimpleFutureDataBundle(final YieldAndDiscountCurve fundingCurve, final Double marketPrice, final Double spotValue, final Double dividendYield,
+      final Double costOfCarry) {
     _fundingCurve = fundingCurve;
     _marketPrice = marketPrice;
     _spotValue = spotValue;
@@ -43,6 +49,7 @@ public class SimpleFutureDataBundle {
 
   /**
    * Gets the fundingCurve.
+   *
    * @return the fundingCurve
    */
   public final YieldAndDiscountCurve getFundingCurve() {
@@ -51,6 +58,7 @@ public class SimpleFutureDataBundle {
 
   /**
    * Gets the marketPrice.
+   *
    * @return the marketPrice
    */
   public final Double getMarketPrice() {
@@ -59,6 +67,7 @@ public class SimpleFutureDataBundle {
 
   /**
    * Gets the spotValue.
+   *
    * @return the spotValue
    */
   public final Double getSpotValue() {
@@ -67,6 +76,7 @@ public class SimpleFutureDataBundle {
 
   /**
    * Gets the dividendYield.
+   *
    * @return the dividendYield
    */
   public final Double getDividendYield() {
@@ -75,6 +85,7 @@ public class SimpleFutureDataBundle {
 
   /**
    * Gets the costOfCarry.
+   *
    * @return the costOfCarry
    */
   public final Double getCostOfCarry() {
@@ -85,16 +96,16 @@ public class SimpleFutureDataBundle {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_costOfCarry == null) ? 0 : _costOfCarry.hashCode());
-    result = prime * result + ((_dividendYield == null) ? 0 : _dividendYield.hashCode());
-    result = prime * result + ((_fundingCurve == null) ? 0 : _fundingCurve.hashCode());
-    result = prime * result + ((_marketPrice == null) ? 0 : _marketPrice.hashCode());
-    result = prime * result + ((_spotValue == null) ? 0 : _spotValue.hashCode());
+    result = prime * result + (_costOfCarry == null ? 0 : _costOfCarry.hashCode());
+    result = prime * result + (_dividendYield == null ? 0 : _dividendYield.hashCode());
+    result = prime * result + (_fundingCurve == null ? 0 : _fundingCurve.hashCode());
+    result = prime * result + (_marketPrice == null ? 0 : _marketPrice.hashCode());
+    result = prime * result + (_spotValue == null ? 0 : _spotValue.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -102,7 +113,7 @@ public class SimpleFutureDataBundle {
     if (!(obj instanceof SimpleFutureDataBundle)) {
       return false;
     }
-    SimpleFutureDataBundle other = (SimpleFutureDataBundle) obj;
+    final SimpleFutureDataBundle other = (SimpleFutureDataBundle) obj;
     if (_costOfCarry == null) {
       if (other._costOfCarry != null) {
         return false;

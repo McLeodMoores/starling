@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.date.localdate;
@@ -24,7 +24,7 @@ import com.opengamma.timeseries.date.DateObjectTimeSeries;
 
 /**
  * Standard immutable implementation of {@code LocalDateObjectTimeSeries}.
- * 
+ *
  * @param <V>  the value being viewed over time
  */
 public final class ImmutableLocalDateObjectTimeSeries<V>
@@ -32,7 +32,7 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
     implements LocalDateObjectTimeSeries<V>, Serializable {
 
   /** Empty instance. */
-  private static final ImmutableLocalDateObjectTimeSeries<?> EMPTY_SERIES = new ImmutableLocalDateObjectTimeSeries<Object>(new int[0], new Object[0]);
+  private static final ImmutableLocalDateObjectTimeSeries<?> EMPTY_SERIES = new ImmutableLocalDateObjectTimeSeries<>(new int[0], new Object[0]);
 
   /** Serialization version. */
   private static final long serialVersionUID = -43654613865187568L;
@@ -51,18 +51,18 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
    * Creates an empty builder, used to create time-series.
    * <p>
    * The builder has methods to create and modify a time-series.
-   * 
+   *
    * @param <V>  the value being viewed over time
    * @return the time-series builder, not null
    */
   public static <V> LocalDateObjectTimeSeriesBuilder<V> builder() {
-    return new ImmutableLocalDateObjectTimeSeriesBuilder<V>();
+    return new ImmutableLocalDateObjectTimeSeriesBuilder<>();
   }
 
   //-------------------------------------------------------------------------
   /**
    * Obtains a time-series from a single date and value.
-   * 
+   *
    * @param <V>  the value being viewed over time
    * @return the time-series, not null
    */
@@ -73,110 +73,112 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
 
   /**
    * Obtains a time-series from a single date and value.
-   * 
+   *
    * @param <V>  the value being viewed over time
    * @param date  the singleton date, not null
    * @param value  the singleton value
    * @return the time-series, not null
    */
-  public static <V> ImmutableLocalDateObjectTimeSeries<V> of(LocalDate date, V value) {
+  public static <V> ImmutableLocalDateObjectTimeSeries<V> of(final LocalDate date, final V value) {
     Objects.requireNonNull(date, "date");
-    int[] timesArray = new int[] {LocalDateToIntConverter.convertToInt(date)};
+    final int[] timesArray = new int[] {LocalDateToIntConverter.convertToInt(date)};
     @SuppressWarnings("unchecked")
+    final
     V[] valuesArray = (V[]) new Object[] {value};
-    return new ImmutableLocalDateObjectTimeSeries<V>(timesArray, valuesArray);
+    return new ImmutableLocalDateObjectTimeSeries<>(timesArray, valuesArray);
   }
 
   /**
    * Obtains a time-series from matching arrays of dates and values.
-   * 
+   *
    * @param <V>  the value being viewed over time
    * @param dates  the date array, not null
    * @param values  the value array, not null
    * @return the time-series, not null
    */
-  public static <V> ImmutableLocalDateObjectTimeSeries<V> of(LocalDate[] dates, V[] values) {
-    int[] timesArray = convertToIntArray(dates);
-    V[] valuesArray = values.clone();
+  public static <V> ImmutableLocalDateObjectTimeSeries<V> of(final LocalDate[] dates, final V[] values) {
+    final int[] timesArray = convertToIntArray(dates);
+    final V[] valuesArray = values.clone();
     validate(timesArray, valuesArray);
-    return new ImmutableLocalDateObjectTimeSeries<V>(timesArray, valuesArray);
+    return new ImmutableLocalDateObjectTimeSeries<>(timesArray, valuesArray);
   }
 
   /**
    * Obtains a time-series from matching arrays of dates and values.
-   * 
+   *
    * @param <V>  the value being viewed over time
    * @param dates  the date array, not null
    * @param values  the value array, not null
    * @return the time-series, not null
    */
-  public static <V> ImmutableLocalDateObjectTimeSeries<V> of(int[] dates, V[] values) {
+  public static <V> ImmutableLocalDateObjectTimeSeries<V> of(final int[] dates, final V[] values) {
     validate(dates, values);
-    int[] timesArray = dates.clone();
-    V[] valuesArray = values.clone();
-    return new ImmutableLocalDateObjectTimeSeries<V>(timesArray, valuesArray);
+    final int[] timesArray = dates.clone();
+    final V[] valuesArray = values.clone();
+    return new ImmutableLocalDateObjectTimeSeries<>(timesArray, valuesArray);
   }
 
   /**
    * Obtains a time-series from matching arrays of dates and values.
-   * 
+   *
    * @param <V>  the value being viewed over time
    * @param dates  the date list, not null
    * @param values  the value list, not null
    * @return the time-series, not null
    */
-  public static <V> ImmutableLocalDateObjectTimeSeries<V> of(Collection<LocalDate> dates, Collection<V> values) {
-    int[] timesArray = convertToIntArray(dates);
+  public static <V> ImmutableLocalDateObjectTimeSeries<V> of(final Collection<LocalDate> dates, final Collection<V> values) {
+    final int[] timesArray = convertToIntArray(dates);
     @SuppressWarnings("unchecked")
+    final
     V[] valuesArray = (V[]) values.toArray();
     validate(timesArray, valuesArray);
-    return new ImmutableLocalDateObjectTimeSeries<V>(timesArray, valuesArray);
+    return new ImmutableLocalDateObjectTimeSeries<>(timesArray, valuesArray);
   }
 
   /**
    * Obtains a time-series from another time-series.
-   * 
+   *
    * @param <V>  the value being viewed over time
    * @param timeSeries  the time-series, not null
    * @return the time-series, not null
    */
   @SuppressWarnings("unchecked")
-  public static <V> ImmutableLocalDateObjectTimeSeries<V> of(DateObjectTimeSeries<?, V> timeSeries) {
+  public static <V> ImmutableLocalDateObjectTimeSeries<V> of(final DateObjectTimeSeries<?, V> timeSeries) {
     if (timeSeries instanceof ImmutableLocalDateObjectTimeSeries) {
       return (ImmutableLocalDateObjectTimeSeries<V>) timeSeries;
     }
-    DateObjectTimeSeries<?, V> other = (DateObjectTimeSeries<?, V>) timeSeries;
-    int[] timesArray = other.timesArrayFast();
-    V[] valuesArray = other.valuesArray();
-    return new ImmutableLocalDateObjectTimeSeries<V>(timesArray, valuesArray);
+    final DateObjectTimeSeries<?, V> other = timeSeries;
+    final int[] timesArray = other.timesArrayFast();
+    final V[] valuesArray = other.valuesArray();
+    return new ImmutableLocalDateObjectTimeSeries<>(timesArray, valuesArray);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Obtains a time-series from another time-series.
-   * 
+   *
    * @param <V>  the value being viewed over time
    * @param timeSeries  the time-series, not null
    * @return the time-series, not null
    */
-  public static <V> ImmutableLocalDateObjectTimeSeries<V> from(ObjectTimeSeries<LocalDate, V> timeSeries) {
+  public static <V> ImmutableLocalDateObjectTimeSeries<V> from(final ObjectTimeSeries<LocalDate, V> timeSeries) {
     if (timeSeries instanceof DateObjectTimeSeries) {
       return of((DateObjectTimeSeries<LocalDate, V>) timeSeries);
     }
-    int[] timesArray = convertToIntArray(timeSeries.timesArray());
-    V[] valuesArray = timeSeries.valuesArray();
-    return new ImmutableLocalDateObjectTimeSeries<V>(timesArray, valuesArray);
+    final int[] timesArray = convertToIntArray(timeSeries.timesArray());
+    final V[] valuesArray = timeSeries.valuesArray();
+    return new ImmutableLocalDateObjectTimeSeries<>(timesArray, valuesArray);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Validates the data before creation.
-   * 
+   *
    * @param <V>  the value being viewed over time
    * @param times  the times, not null
    * @param values  the values, not null
    */
-  private static <V> void validate(int[] times, V[] values) {
+  private static <V> void validate(final int[] times, final V[] values) {
     if (times == null || values == null) {
       throw new NullPointerException("Array must not be null");
     }
@@ -186,7 +188,7 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
     }
     // check dates are ordered
     int maxTime = Integer.MIN_VALUE;
-    for (int time : times) {
+    for (final int time : times) {
       if (time < maxTime) {
         throw new IllegalArgumentException("dates must be ordered");
       }
@@ -196,50 +198,70 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param times  the times, not null
    * @param values  the values, not null
    */
-  ImmutableLocalDateObjectTimeSeries(int[] times, V[] values) {
+  ImmutableLocalDateObjectTimeSeries(final int[] times, final V[] values) {
     _times = times;
     _values = values;
   }
 
   //-------------------------------------------------------------------------
-  static int[] convertToIntArray(Collection<LocalDate> times) {
-    int[] timesArray = new int[times.size()];
+  /**
+   * Converts a collection of dates to an array of int.
+   *
+   * @param times  a collection of dates
+   * @return  an array of int
+   */
+  static int[] convertToIntArray(final Collection<LocalDate> times) {
+    final int[] timesArray = new int[times.size()];
     int i = 0;
-    for (LocalDate time : times) {
+    for (final LocalDate time : times) {
       timesArray[i++] = LocalDateToIntConverter.convertToInt(time);
     }
     return timesArray;
   }
 
-  static int[] convertToIntArray(LocalDate[] dates) {
-    int[] timesArray = new int[dates.length];
+  /**
+   * Converts an array of dates to an array of int.
+   *
+   * @param dates  a collection of dates
+   * @return  an array of int
+   */
+  static int[] convertToIntArray(final LocalDate[] dates) {
+    final int[] timesArray = new int[dates.length];
     for (int i = 0; i < timesArray.length; i++) {
       timesArray[i] = LocalDateToIntConverter.convertToInt(dates[i]);
     }
     return timesArray;
   }
 
-  static <V> Entry<LocalDate, V> makeMapEntry(LocalDate key, V value) {
-    return new SimpleImmutableEntry<LocalDate, V>(key, value);
+  /**
+   * Creates an immutable entry of date and value.
+   *
+   * @param key  the key
+   * @param value  the value
+   * @return  an entry
+   * @param <V>  the type of the data
+   */
+  static <V> Entry<LocalDate, V> makeMapEntry(final LocalDate key, final V value) {
+    return new SimpleImmutableEntry<>(key, value);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected int convertToInt(LocalDate date) {
+  protected int convertToInt(final LocalDate date) {
     return LocalDateToIntConverter.convertToInt(date);
   }
 
   @Override
-  protected LocalDate convertFromInt(int date) {
+  protected LocalDate convertFromInt(final int date) {
     return LocalDateToIntConverter.convertToLocalDate(date);
   }
 
   @Override
-  protected LocalDate[] createArray(int size) {
+  protected LocalDate[] createArray(final int size) {
     return new LocalDate[size];
   }
 
@@ -251,28 +273,27 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean containsTime(int date) {
-    int binarySearch = Arrays.binarySearch(_times, date);
-    return (binarySearch >= 0);
+  public boolean containsTime(final int date) {
+    final int binarySearch = Arrays.binarySearch(_times, date);
+    return binarySearch >= 0;
   }
 
   @Override
-  public V getValue(int date) {
-    int binarySearch = Arrays.binarySearch(_times, date);
+  public V getValue(final int date) {
+    final int binarySearch = Arrays.binarySearch(_times, date);
     if (binarySearch >= 0) {
       return _values[binarySearch];
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
-  public int getTimeAtIndexFast(int index) {
+  public int getTimeAtIndexFast(final int index) {
     return _times[index];
   }
 
   @Override
-  public V getValueAtIndex(int index) {
+  public V getValueAtIndex(final int index) {
     return _values[index];
   }
 
@@ -281,7 +302,7 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
   public int getEarliestTimeFast() {
     try {
       return _times[0];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -290,7 +311,7 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
   public V getEarliestValue() {
     try {
       return _values[0];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -299,7 +320,7 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
   public int getLatestTimeFast() {
     try {
       return _times[_times.length - 1];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -308,7 +329,7 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
   public V getLatestValue() {
     try {
       return _values[_values.length - 1];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -332,23 +353,23 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
 
       @Override
       public boolean hasNext() {
-        return (_index + 1) < size();
+        return _index + 1 < size();
       }
 
       @Override
       public Entry<LocalDate, V> next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
-        int date = ImmutableLocalDateObjectTimeSeries.this.getTimeAtIndexFast(_index);
-        V value = ImmutableLocalDateObjectTimeSeries.this.getValueAtIndex(_index);
+        final int date = ImmutableLocalDateObjectTimeSeries.this.getTimeAtIndexFast(_index);
+        final V value = ImmutableLocalDateObjectTimeSeries.this.getValueAtIndex(_index);
         return makeMapEntry(ImmutableLocalDateObjectTimeSeries.this.convertFromInt(date), value);
       }
 
       @Override
       public int nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -395,149 +416,150 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
 
   //-------------------------------------------------------------------------
   @Override
-  public LocalDateObjectTimeSeries<V> subSeries(LocalDate startTime, LocalDate endTime) {
+  public LocalDateObjectTimeSeries<V> subSeries(final LocalDate startTime, final LocalDate endTime) {
     return subSeriesFast(convertToInt(startTime), true, convertToInt(endTime), false);
   }
 
   @Override
-  public LocalDateObjectTimeSeries<V> subSeries(LocalDate startTime, boolean includeStart, LocalDate endTime, boolean includeEnd) {
+  public LocalDateObjectTimeSeries<V> subSeries(final LocalDate startTime, final boolean includeStart, final LocalDate endTime, final boolean includeEnd) {
     return subSeriesFast(convertToInt(startTime), includeStart, convertToInt(endTime), includeEnd);
   }
 
   @Override
-  public LocalDateObjectTimeSeries<V> subSeriesFast(int startTime, int endTime) {
+  public LocalDateObjectTimeSeries<V> subSeriesFast(final int startTime, final int endTime) {
     return subSeriesFast(startTime, true, endTime, false);
   }
 
   @Override
-  public LocalDateObjectTimeSeries<V> subSeriesFast(int startTime, boolean includeStart, int endTime, boolean includeEnd) {
+  public LocalDateObjectTimeSeries<V> subSeriesFast(final int startTime, final boolean includeStart,
+      final int endTime, final boolean includeEnd) {
     if (endTime < startTime) {
       throw new IllegalArgumentException("Invalid subSeries: endTime < startTime");
-    }
-    // special case for start equals end
-    if (startTime == endTime) {
-      if (includeStart && includeEnd) {
-        int pos = Arrays.binarySearch(_times, startTime);
-        if (pos >= 0) {
-          return new ImmutableLocalDateObjectTimeSeries<V>(new int[] {startTime}, Arrays.copyOfRange(_values, pos, pos + 1));
-        }
-      }
-      return ofEmpty();
     }
     // special case when this is empty
     if (isEmpty()) {
       return ofEmpty();
     }
-    // normalize to include start and exclude end
-    if (includeStart == false) {
-      startTime++;
+    // special case for start equals end
+    if (startTime == endTime) {
+      if (includeStart && includeEnd) {
+        final int pos = Arrays.binarySearch(_times, startTime);
+        if (pos >= 0) {
+          return new ImmutableLocalDateObjectTimeSeries<>(new int[] {startTime}, Arrays.copyOfRange(_values, pos, pos + 1));
+        }
+      }
+      return ofEmpty();
     }
+    // normalize to include start and exclude end
+    int start = startTime;
+    if (!includeStart) {
+      start++;
+    }
+    int end = endTime;
     if (includeEnd) {
-      if (endTime != Integer.MAX_VALUE) {
-        endTime++;
+      if (end != Integer.MAX_VALUE) {
+        end++;
       }
     }
     // calculate
-    int startPos = Arrays.binarySearch(_times, startTime);
+    int startPos = Arrays.binarySearch(_times, start);
     startPos = startPos >= 0 ? startPos : -(startPos + 1);
-    int endPos = Arrays.binarySearch(_times, endTime);
+    int endPos = Arrays.binarySearch(_times, end);
     endPos = endPos >= 0 ? endPos : -(endPos + 1);
-    if (includeEnd && endTime == Integer.MAX_VALUE) {
+    if (includeEnd && end == Integer.MAX_VALUE) {
       endPos = _times.length;
     }
-    int[] timesArray = Arrays.copyOfRange(_times, startPos, endPos);
-    V[] valuesArray = Arrays.copyOfRange(_values, startPos, endPos);
-    return new ImmutableLocalDateObjectTimeSeries<V>(timesArray, valuesArray);
+    final int[] timesArray = Arrays.copyOfRange(_times, startPos, endPos);
+    final V[] valuesArray = Arrays.copyOfRange(_values, startPos, endPos);
+    return new ImmutableLocalDateObjectTimeSeries<>(timesArray, valuesArray);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public LocalDateObjectTimeSeries<V> head(int numItems) {
+  public LocalDateObjectTimeSeries<V> head(final int numItems) {
     if (numItems == size()) {
       return this;
     }
-    int[] timesArray = Arrays.copyOfRange(_times, 0, numItems);
-    V[] valuesArray = Arrays.copyOfRange(_values, 0, numItems);
-    return new ImmutableLocalDateObjectTimeSeries<V>(timesArray, valuesArray);
+    final int[] timesArray = Arrays.copyOfRange(_times, 0, numItems);
+    final V[] valuesArray = Arrays.copyOfRange(_values, 0, numItems);
+    return new ImmutableLocalDateObjectTimeSeries<>(timesArray, valuesArray);
   }
 
   @Override
-  public LocalDateObjectTimeSeries<V> tail(int numItems) {
-    int size = size();
+  public LocalDateObjectTimeSeries<V> tail(final int numItems) {
+    final int size = size();
     if (numItems == size) {
       return this;
     }
-    int[] timesArray = Arrays.copyOfRange(_times, size - numItems, size);
-    V[] valuesArray = Arrays.copyOfRange(_values, size - numItems, size);
-    return new ImmutableLocalDateObjectTimeSeries<V>(timesArray, valuesArray);
+    final int[] timesArray = Arrays.copyOfRange(_times, size - numItems, size);
+    final V[] valuesArray = Arrays.copyOfRange(_values, size - numItems, size);
+    return new ImmutableLocalDateObjectTimeSeries<>(timesArray, valuesArray);
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public LocalDateObjectTimeSeries<V> lag(int days) {
-    int[] times = timesArrayFast();
-    V[] values = valuesArray();
+  public LocalDateObjectTimeSeries<V> lag(final int days) {
+    final int[] times = timesArrayFast();
+    final V[] values = valuesArray();
     if (days == 0) {
-      return new ImmutableLocalDateObjectTimeSeries<V>(times, values);
+      return new ImmutableLocalDateObjectTimeSeries<>(times, values);
     } else if (days < 0) {
       if (-days < times.length) {
-        int[] resultTimes = new int[times.length + days]; // remember days is -ve
+        final int[] resultTimes = new int[times.length + days]; // remember days is -ve
         System.arraycopy(times, 0, resultTimes, 0, times.length + days);
-        V[] resultValues = (V[]) new Object[times.length + days];
+        final V[] resultValues = (V[]) new Object[times.length + days];
         System.arraycopy(values, -days, resultValues, 0, times.length + days);
-        return new ImmutableLocalDateObjectTimeSeries<V>(resultTimes, resultValues);
-      } else {
-        return ImmutableLocalDateObjectTimeSeries.ofEmpty();
+        return new ImmutableLocalDateObjectTimeSeries<>(resultTimes, resultValues);
       }
+      return ImmutableLocalDateObjectTimeSeries.ofEmpty();
     } else { // if (days > 0) {
       if (days < times.length) {
-        int[] resultTimes = new int[times.length - days]; // remember days is +ve
+        final int[] resultTimes = new int[times.length - days]; // remember days is +ve
         System.arraycopy(times, days, resultTimes, 0, times.length - days);
-        V[] resultValues = (V[]) new Object[times.length - days];
+        final V[] resultValues = (V[]) new Object[times.length - days];
         System.arraycopy(values, 0, resultValues, 0, times.length - days);
-        return new ImmutableLocalDateObjectTimeSeries<V>(resultTimes, resultValues);
-      } else {
-        return ImmutableLocalDateObjectTimeSeries.ofEmpty();
+        return new ImmutableLocalDateObjectTimeSeries<>(resultTimes, resultValues);
       }
+      return ImmutableLocalDateObjectTimeSeries.ofEmpty();
     }
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ImmutableLocalDateObjectTimeSeries<V> newInstance(LocalDate[] dates, V[] values) {
+  public ImmutableLocalDateObjectTimeSeries<V> newInstance(final LocalDate[] dates, final V[] values) {
     return of(dates, values);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public LocalDateObjectTimeSeries<V> operate(UnaryOperator<V> operator) {
-    V[] valuesArray = valuesArray();
+  public LocalDateObjectTimeSeries<V> operate(final UnaryOperator<V> operator) {
+    final V[] valuesArray = valuesArray();
     for (int i = 0; i < valuesArray.length; i++) {
       valuesArray[i] = operator.operate(valuesArray[i]);
     }
-    return new ImmutableLocalDateObjectTimeSeries<V>(_times, valuesArray);  // immutable, so can share times
+    return new ImmutableLocalDateObjectTimeSeries<>(_times, valuesArray);  // immutable, so can share times
   }
 
   @Override
-  public LocalDateObjectTimeSeries<V> operate(V other, BinaryOperator<V> operator) {
-    V[] valuesArray = valuesArray();
+  public LocalDateObjectTimeSeries<V> operate(final V other, final BinaryOperator<V> operator) {
+    final V[] valuesArray = valuesArray();
     for (int i = 0; i < valuesArray.length; i++) {
       valuesArray[i] = operator.operate(valuesArray[i], other);
     }
-    return new ImmutableLocalDateObjectTimeSeries<V>(_times, valuesArray);  // immutable, so can share times
+    return new ImmutableLocalDateObjectTimeSeries<>(_times, valuesArray);  // immutable, so can share times
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public LocalDateObjectTimeSeries<V> operate(DateObjectTimeSeries<?, V> other, BinaryOperator<V> operator) {
-    int[] aTimes = timesArrayFast();
-    V[] aValues = valuesArray();
+  public LocalDateObjectTimeSeries<V> operate(final DateObjectTimeSeries<?, V> other, final BinaryOperator<V> operator) {
+    final int[] aTimes = timesArrayFast();
+    final V[] aValues = valuesArray();
     int aCount = 0;
-    int[] bTimes = other.timesArrayFast();
-    V[] bValues = other.valuesArray();
+    final int[] bTimes = other.timesArrayFast();
+    final V[] bValues = other.valuesArray();
     int bCount = 0;
-    int[] resTimes = new int[aTimes.length + bTimes.length];
-    V[] resValues = (V[]) new Object[resTimes.length];
+    final int[] resTimes = new int[aTimes.length + bTimes.length];
+    final V[] resValues = (V[]) new Object[resTimes.length];
     int resCount = 0;
     while (aCount < aTimes.length && bCount < bTimes.length) {
       if (aTimes[aCount] == bTimes[bCount]) {
@@ -552,34 +574,34 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
         bCount++;
       }
     }
-    int[] trimmedTimes = new int[resCount];
-    V[] trimmedValues = (V[]) new Object[resCount];
+    final int[] trimmedTimes = new int[resCount];
+    final V[] trimmedValues = (V[]) new Object[resCount];
     System.arraycopy(resTimes, 0, trimmedTimes, 0, resCount);
     System.arraycopy(resValues, 0, trimmedValues, 0, resCount);
-    return new ImmutableLocalDateObjectTimeSeries<V>(trimmedTimes, trimmedValues);
+    return new ImmutableLocalDateObjectTimeSeries<>(trimmedTimes, trimmedValues);
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public LocalDateObjectTimeSeries<V> unionOperate(DateObjectTimeSeries<?, V> other, BinaryOperator<V> operator) {
-    int[] aTimes = timesArrayFast();
-    V[] aValues = valuesArray();
+  public LocalDateObjectTimeSeries<V> unionOperate(final DateObjectTimeSeries<?, V> other, final BinaryOperator<V> operator) {
+    final int[] aTimes = timesArrayFast();
+    final V[] aValues = valuesArray();
     int aCount = 0;
-    int[] bTimes = other.timesArrayFast();
-    V[] bValues = other.valuesArray();
+    final int[] bTimes = other.timesArrayFast();
+    final V[] bValues = other.valuesArray();
     int bCount = 0;
-    int[] resTimes = new int[aTimes.length + bTimes.length];
-    V[] resValues = (V[]) new Object[resTimes.length];
+    final int[] resTimes = new int[aTimes.length + bTimes.length];
+    final V[] resValues = (V[]) new Object[resTimes.length];
     int resCount = 0;
     while (aCount < aTimes.length || bCount < bTimes.length) {
       if (aCount >= aTimes.length) {
-        int bRemaining = bTimes.length - bCount;
+        final int bRemaining = bTimes.length - bCount;
         System.arraycopy(bTimes, bCount, resTimes, resCount, bRemaining);
         System.arraycopy(bValues, bCount, resValues, resCount, bRemaining);
         resCount += bRemaining;
         break;
       } else if (bCount >= bTimes.length) {
-        int aRemaining = aTimes.length - aCount;
+        final int aRemaining = aTimes.length - aCount;
         System.arraycopy(aTimes, aCount, resTimes, resCount, aRemaining);
         System.arraycopy(aValues, aCount, resValues, resCount, aRemaining);
         resCount += aRemaining;
@@ -602,26 +624,26 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
         bCount++;
       }
     }
-    int[] trimmedTimes = new int[resCount];
-    V[] trimmedValues = (V[]) new Object[resCount];
+    final int[] trimmedTimes = new int[resCount];
+    final V[] trimmedValues = (V[]) new Object[resCount];
     System.arraycopy(resTimes, 0, trimmedTimes, 0, resCount);
     System.arraycopy(resValues, 0, trimmedValues, 0, resCount);
-    return new ImmutableLocalDateObjectTimeSeries<V>(trimmedTimes, trimmedValues);
+    return new ImmutableLocalDateObjectTimeSeries<>(trimmedTimes, trimmedValues);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public LocalDateObjectTimeSeries<V> intersectionFirstValue(DateObjectTimeSeries<?, V> other) {
+  public LocalDateObjectTimeSeries<V> intersectionFirstValue(final DateObjectTimeSeries<?, V> other) {
     return operate(other, ObjectTimeSeriesOperators.<V>firstOperator());
   }
 
   @Override
-  public LocalDateObjectTimeSeries<V> intersectionSecondValue(DateObjectTimeSeries<?, V> other) {
+  public LocalDateObjectTimeSeries<V> intersectionSecondValue(final DateObjectTimeSeries<?, V> other) {
     return operate(other, ObjectTimeSeriesOperators.<V>secondOperator());
   }
 
   @Override
-  public LocalDateObjectTimeSeries<V> noIntersectionOperation(DateObjectTimeSeries<?, V> other) {
+  public LocalDateObjectTimeSeries<V> noIntersectionOperation(final DateObjectTimeSeries<?, V> other) {
     return unionOperate(other, ObjectTimeSeriesOperators.<V>noIntersectionOperator());
   }
 
@@ -633,19 +655,19 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj instanceof ImmutableLocalDateObjectTimeSeries) {
-      ImmutableLocalDateObjectTimeSeries<?> other = (ImmutableLocalDateObjectTimeSeries<?>) obj;
-      return Arrays.equals(_times, other._times) &&
-              Arrays.equals(_values, other._values);
+      final ImmutableLocalDateObjectTimeSeries<?> other = (ImmutableLocalDateObjectTimeSeries<?>) obj;
+      return Arrays.equals(_times, other._times)
+             && Arrays.equals(_values, other._values);
     }
     if (obj instanceof DateObjectTimeSeries) {
-      DateObjectTimeSeries<?, ?> other = (DateObjectTimeSeries<?, ?>) obj;
-      return Arrays.equals(timesArrayFast(), other.timesArrayFast()) &&
-              Arrays.equals(valuesArray(), other.valuesArray());
+      final DateObjectTimeSeries<?, ?> other = (DateObjectTimeSeries<?, ?>) obj;
+      return Arrays.equals(timesArrayFast(), other.timesArrayFast())
+             && Arrays.equals(valuesArray(), other.valuesArray());
     }
     return false;
   }

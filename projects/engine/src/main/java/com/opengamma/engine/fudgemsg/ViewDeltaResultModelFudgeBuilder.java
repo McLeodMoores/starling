@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -18,7 +18,7 @@ import com.opengamma.engine.view.impl.InMemoryViewDeltaResultModel;
 import com.opengamma.engine.view.impl.InMemoryViewResultModel;
 
 /**
- * 
+ *
  */
 @GenericFudgeBuilderFor(ViewDeltaResultModel.class)
 public class ViewDeltaResultModelFudgeBuilder extends ViewResultModelFudgeBuilder implements FudgeBuilder<ViewDeltaResultModel> {
@@ -26,19 +26,19 @@ public class ViewDeltaResultModelFudgeBuilder extends ViewResultModelFudgeBuilde
   private static final String FIELD_PREVIOUSTS = "previousTS";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ViewDeltaResultModel deltaModel) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ViewDeltaResultModel deltaModel) {
     final MutableFudgeMsg message = ViewResultModelFudgeBuilder.createResultModelMessage(serializer, deltaModel);
     message.add(FIELD_PREVIOUSTS, deltaModel.getPreviousResultTimestamp());
     return message;
   }
 
   @Override
-  public ViewDeltaResultModel buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-    InMemoryViewDeltaResultModel viewDeltaResultModel = (InMemoryViewDeltaResultModel) bootstrapCommonDataFromMessage(deserializer, message);
-    
+  public ViewDeltaResultModel buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final InMemoryViewDeltaResultModel viewDeltaResultModel = (InMemoryViewDeltaResultModel) bootstrapCommonDataFromMessage(deserializer, message);
+
     final Instant parentResultTimestamp = message.getFieldValue(Instant.class, message.getByName(FIELD_PREVIOUSTS));
     viewDeltaResultModel.setPreviousCalculationTime(parentResultTimestamp);
-    
+
     return viewDeltaResultModel;
   }
 

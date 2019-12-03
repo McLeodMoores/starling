@@ -12,8 +12,8 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Data structure to hold information about a functional volatility surface and information to help
- * with plotting (minimum and maximum axis values and the number of values to sample between the two).
+ * Data structure to hold information about a functional volatility surface and information to help with plotting (minimum and maximum axis values and the
+ * number of values to sample between the two).
  */
 public class FunctionalVolatilitySurfaceData {
   private final VolatilitySurface _surface;
@@ -33,7 +33,8 @@ public class FunctionalVolatilitySurfaceData {
     ArgumentChecker.notNull(surface, "surface");
     ArgumentChecker.notNull(xLabel, "x label");
     ArgumentChecker.notNull(yLabel, "y label");
-    ArgumentChecker.isTrue(surface.getSurface() instanceof FunctionalDoublesSurface, "surface must be a FunctionalVolatilitySurface; have {}", surface.getSurface().getClass());
+    ArgumentChecker.isTrue(surface.getSurface() instanceof FunctionalDoublesSurface, "surface must be a FunctionalVolatilitySurface; have {}",
+        surface.getSurface().getClass());
     ArgumentChecker.isTrue(xMinimum < xMaximum, "minimum value of x {} must be less than the maximum value {}", xMinimum, xMaximum);
     ArgumentChecker.isTrue(nX > 0, "number of x samples {} must be greater than zero", nX);
     ArgumentChecker.isTrue(yMinimum < yMaximum, "minimum value of y {} must be less than the maximum value {}", yMinimum, yMaximum);
@@ -102,22 +103,22 @@ public class FunctionalVolatilitySurfaceData {
     result = prime * result + _nX;
     long temp;
     temp = Double.doubleToLongBits(_nY);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _surface.hashCode();
     result = prime * result + _xLabel.hashCode();
     temp = Double.doubleToLongBits(_xMaximum);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_xMinimum);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _yLabel.hashCode();
     temp = Double.doubleToLongBits(_yMaximum);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_yMinimum);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_zMaximum);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_zMinimum);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

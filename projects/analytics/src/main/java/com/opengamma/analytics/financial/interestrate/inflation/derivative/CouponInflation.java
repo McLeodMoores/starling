@@ -24,13 +24,20 @@ public abstract class CouponInflation extends Coupon {
 
   /**
    * Inflation coupon constructor.
-   * @param currency The coupon currency.
-   * @param paymentTime The time to payment.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param priceIndex The price index associated to the coupon.
+   * 
+   * @param currency
+   *          The coupon currency.
+   * @param paymentTime
+   *          The time to payment.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param priceIndex
+   *          The price index associated to the coupon.
    */
-  public CouponInflation(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final IndexPrice priceIndex) {
+  public CouponInflation(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional,
+      final IndexPrice priceIndex) {
     super(currency, paymentTime, paymentYearFraction, notional);
     Validate.notNull(priceIndex, "Price index");
     _priceIndex = priceIndex;
@@ -38,6 +45,7 @@ public abstract class CouponInflation extends Coupon {
 
   /**
    * Gets the price index associated to the coupon.
+   * 
    * @return The price index.
    */
   public IndexPrice getPriceIndex() {

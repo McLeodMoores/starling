@@ -10,12 +10,12 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Agriculture future option commodity derivative
+ * Agriculture future option commodity derivative.
  */
 public class AgricultureFutureOption extends CommodityFutureOption<AgricultureFuture> {
 
   /**
-   * Constructor for future options
+   * Constructor for future options.
    *
    * @param expiry Time (in years as a double) until the date-time at which the future expires
    * @param underlying Underlying future
@@ -23,7 +23,8 @@ public class AgricultureFutureOption extends CommodityFutureOption<AgricultureFu
    * @param exerciseType Exercise type - European or American
    * @param isCall Call if true, Put if false
    */
-  public AgricultureFutureOption(final double expiry, final AgricultureFuture underlying, final double strike, final ExerciseDecisionType exerciseType, final boolean isCall) {
+  public AgricultureFutureOption(final double expiry, final AgricultureFuture underlying, final double strike,
+      final ExerciseDecisionType exerciseType, final boolean isCall) {
     super(expiry, underlying, strike, exerciseType, isCall);
   }
 

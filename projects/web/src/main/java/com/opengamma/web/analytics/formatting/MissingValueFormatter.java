@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
 
   private final String _message;
 
-  /*package*/ MissingValueFormatter(String message) {
+  /*package*/ MissingValueFormatter(final String message) {
     ArgumentChecker.notEmpty(message, "message");
     _message = message;
   }
@@ -24,5 +24,5 @@ import com.opengamma.util.ArgumentChecker;
   public String toString() {
     return _message;
   }
-  
+
 }

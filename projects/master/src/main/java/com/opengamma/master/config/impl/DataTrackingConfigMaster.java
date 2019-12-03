@@ -16,32 +16,38 @@ import com.opengamma.master.config.ConfigSearchRequest;
 import com.opengamma.master.config.ConfigSearchResult;
 
 /**
- * Config master which tracks accesses using UniqueIds.
+ * Config master which tracks accesses using {@link com.opengamma.id.UniqueId}s.
  */
 public class DataTrackingConfigMaster extends AbstractDataTrackingMaster<ConfigDocument, ConfigMaster> implements ConfigMaster {
-  
-  public DataTrackingConfigMaster(ConfigMaster delegate) {
+
+  /**
+   * Sets up the delegate config master.
+   *
+   * @param delegate
+   *          the delegate, not null
+   */
+  public DataTrackingConfigMaster(final ConfigMaster delegate) {
     super(delegate);
   }
 
   @Override
-  public <R> ConfigSearchResult<R> search(ConfigSearchRequest<R> request) {
-    ConfigSearchResult<R> searchResult = delegate().search(request);
+  public <R> ConfigSearchResult<R> search(final ConfigSearchRequest<R> request) {
+    final ConfigSearchResult<R> searchResult = delegate().search(request);
     trackDocs(searchResult.getDocuments());
     return searchResult;
   }
 
   @Override
-  public <R> ConfigHistoryResult<R> history(ConfigHistoryRequest<R> request) {
-    ConfigHistoryResult<R> historyResult = delegate().history(request);
+  public <R> ConfigHistoryResult<R> history(final ConfigHistoryRequest<R> request) {
+    final ConfigHistoryResult<R> historyResult = delegate().history(request);
     trackDocs(historyResult.getDocuments());
     return historyResult;
   }
 
   @Override
-  public ConfigMetaDataResult metaData(ConfigMetaDataRequest request) {
+  public ConfigMetaDataResult metaData(final ConfigMetaDataRequest request) {
     return delegate().metaData(request);
   }
-  
-  
+
+
 }

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -41,11 +41,11 @@ public class DataHistoricalDataPointsResource extends AbstractDataResource {
   /**
    * The identifier specified in the URI.
    */
-  private ObjectId _urlResourceId;
+  private final ObjectId _urlResourceId;
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param htsResource  the parent resource, not null
    * @param dpId  the data-points unique identifier, not null
    */
@@ -59,7 +59,7 @@ public class DataHistoricalDataPointsResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the parent resource.
-   * 
+   *
    * @return the parent resource, not null
    */
   public DataHistoricalTimeSeriesMasterResource getParentResource() {
@@ -68,7 +68,7 @@ public class DataHistoricalDataPointsResource extends AbstractDataResource {
 
   /**
    * Gets the data-points identifier from the URL.
-   * 
+   *
    * @return the object identifier, not null
    */
   public ObjectId getUrlDataPointsId() {
@@ -78,7 +78,7 @@ public class DataHistoricalDataPointsResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the time-series master.
-   * 
+   *
    * @return the time-series master, not null
    */
   public HistoricalTimeSeriesMaster getHistoricalTimeSeriesMaster() {
@@ -87,53 +87,52 @@ public class DataHistoricalDataPointsResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response get(@Context UriInfo uriInfo, @QueryParam("versionAsOf") String versionAsOf, @QueryParam("correctedTo") String correctedTo) {
-    VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-    HistoricalTimeSeriesGetFilter filter = RestUtils.decodeQueryParams(uriInfo, HistoricalTimeSeriesGetFilter.class);
+  public Response get(@Context final UriInfo uriInfo, @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final HistoricalTimeSeriesGetFilter filter = RestUtils.decodeQueryParams(uriInfo, HistoricalTimeSeriesGetFilter.class);
     if (filter != null) {
-      ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId(), vc, filter);
-      return responseOkObject(result);
-    } else {
-      ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId(), vc);
+      final ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId(), vc, filter);
       return responseOkObject(result);
     }
+    final ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId(), vc);
+    return responseOkObject(result);
   }
 
   @POST
   @Path("updates")
-  public Response postUpdates(LocalDateDoubleTimeSeries newPoints) {
-    UniqueId result = getHistoricalTimeSeriesMaster().updateTimeSeriesDataPoints(getUrlDataPointsId(), newPoints);
+  public Response postUpdates(final LocalDateDoubleTimeSeries newPoints) {
+    final UniqueId result = getHistoricalTimeSeriesMaster().updateTimeSeriesDataPoints(getUrlDataPointsId(), newPoints);
     return responseOkObject(result);
   }
 
   @POST
   @Path("corrections")
-  public Response postCorrections(LocalDateDoubleTimeSeries newPoints) {
-    UniqueId result = getHistoricalTimeSeriesMaster().correctTimeSeriesDataPoints(getUrlDataPointsId(), newPoints);
+  public Response postCorrections(final LocalDateDoubleTimeSeries newPoints) {
+    final UniqueId result = getHistoricalTimeSeriesMaster().correctTimeSeriesDataPoints(getUrlDataPointsId(), newPoints);
     return responseOkObject(result);
   }
 
   @DELETE
   @Path("removals/{startDate}/{endDate}")
-  public Response remove(@PathParam("startDate") String startDateStr, @PathParam("endDate") String endDateStr) {
-    LocalDate fromDateInclusive = (startDateStr != null ? LocalDate.parse(startDateStr) : null);
-    LocalDate toDateInclusive = (endDateStr != null ? LocalDate.parse(endDateStr) : null);
-    
-    UniqueId result = getHistoricalTimeSeriesMaster().removeTimeSeriesDataPoints(getUrlDataPointsId(), fromDateInclusive, toDateInclusive);
+  public Response remove(@PathParam("startDate") final String startDateStr, @PathParam("endDate") final String endDateStr) {
+    final LocalDate fromDateInclusive = startDateStr != null ? LocalDate.parse(startDateStr) : null;
+    final LocalDate toDateInclusive = endDateStr != null ? LocalDate.parse(endDateStr) : null;
+
+    final UniqueId result = getHistoricalTimeSeriesMaster().removeTimeSeriesDataPoints(getUrlDataPointsId(), fromDateInclusive, toDateInclusive);
     return responseOkObject(result);
   }
 
   //-------------------------------------------------------------------------
   @GET
   @Path("versions/{versionId}")
-  public Response getVersioned(@Context UriInfo uriInfo, @PathParam("versionId") String versionId) {
-    HistoricalTimeSeriesGetFilter filter = RestUtils.decodeQueryParams(uriInfo, HistoricalTimeSeriesGetFilter.class);
+  public Response getVersioned(@Context final UriInfo uriInfo, @PathParam("versionId") final String versionId) {
+    final HistoricalTimeSeriesGetFilter filter = RestUtils.decodeQueryParams(uriInfo, HistoricalTimeSeriesGetFilter.class);
     if (filter != null) {
-      ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId().atVersion(versionId), filter);
-      return responseOkObject(result);
-    } else {
-      ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId().atVersion(versionId));
+      final ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId().atVersion(versionId), filter);
       return responseOkObject(result);
     }
+    final ManageableHistoricalTimeSeries result = getHistoricalTimeSeriesMaster().getTimeSeries(getUrlDataPointsId().atVersion(versionId));
+    return responseOkObject(result);
   }
 }

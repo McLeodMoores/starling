@@ -49,7 +49,7 @@ public final class ResolvedSecurityLink<S extends Security>
    * @param value the security object to be embedded
    */
   @ImmutableConstructor
-  /* package */ ResolvedSecurityLink(S value) {
+  /* package */ ResolvedSecurityLink(final S value) {
     _value = ArgumentChecker.notNull(value, "value");
   }
 
@@ -76,7 +76,7 @@ public final class ResolvedSecurityLink<S extends Security>
   @Override
   public ExternalIdBundle getIdentifier() {
 
-    ExternalIdBundle idBundle = _value.getExternalIdBundle();
+    final ExternalIdBundle idBundle = _value.getExternalIdBundle();
     if (idBundle.isEmpty()) {
       throw new UnsupportedOperationException("Fixed security link does not have an identifier for its security");
     }
@@ -159,7 +159,7 @@ public final class ResolvedSecurityLink<S extends Security>
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       ResolvedSecurityLink<?> other = (ResolvedSecurityLink<?>) obj;
-      return JodaBeanUtils.equal(getValue(), other.getValue());
+      return JodaBeanUtils.equal(_value, other._value);
     }
     return false;
   }
@@ -167,7 +167,7 @@ public final class ResolvedSecurityLink<S extends Security>
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValue());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_value);
     return hash;
   }
 
@@ -175,7 +175,7 @@ public final class ResolvedSecurityLink<S extends Security>
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("ResolvedSecurityLink{");
-    buf.append("value").append('=').append(JodaBeanUtils.toString(getValue()));
+    buf.append("value").append('=').append(JodaBeanUtils.toString(_value));
     buf.append('}');
     return buf.toString();
   }
@@ -319,19 +319,31 @@ public final class ResolvedSecurityLink<S extends Security>
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<S> setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder<S> setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder<S> setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

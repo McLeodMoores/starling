@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.curve.inflation.generator;
@@ -12,8 +12,8 @@ import com.opengamma.analytics.financial.provider.description.inflation.Inflatio
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Store the details and generate the required curve. The curve is the sum (or difference) of two curves 
- * (operation on the continuously-compounded zero-coupon rates): an existing curve referenced by its name and a new curve. 
+ * Store the details and generate the required curve. The curve is the sum (or difference) of two curves
+ * (operation on the continuously-compounded zero-coupon rates): an existing curve referenced by its name and a new curve.
  * The generated curve is a YieldAndDiscountAddZeroSpreadCurve.
  */
 
@@ -52,15 +52,15 @@ public class GeneratorPriceIndexCurveAddPriceIndexExisting extends GeneratorPric
   }
 
   @Override
-  public PriceIndexCurve generateCurve(String name, double[] parameters) {
+  public PriceIndexCurve generateCurve(final String name, final double[] parameters) {
     throw new UnsupportedOperationException("Cannot create the curve form the generator without an existing curve");
   }
 
   @Override
-  public PriceIndexCurve generateCurve(String name, InflationProviderInterface inflation, double[] parameters) {
+  public PriceIndexCurve generateCurve(final String name, final InflationProviderInterface inflation, final double[] parameters) {
     if (inflation instanceof InflationProviderDiscount) { // TODO: improve the way the curves are generated
-      PriceIndexCurve existingCurve = ((InflationProviderDiscount) inflation).getCurve(_existingCurveName);
-      PriceIndexCurve newCurve = _generator.generateCurve(name + "-0", inflation, parameters);
+      final PriceIndexCurve existingCurve = ((InflationProviderDiscount) inflation).getCurve(_existingCurveName);
+      final PriceIndexCurve newCurve = _generator.generateCurve(name + "-0", inflation, parameters);
       return new PriceIndexCurveAddPriceIndexSpreadCurve(name, _substract, existingCurve, newCurve);
 
     }
@@ -68,14 +68,14 @@ public class GeneratorPriceIndexCurveAddPriceIndexExisting extends GeneratorPric
   }
 
   @Override
-  public GeneratorPriceIndexCurve finalGenerator(Object data) {
+  public GeneratorPriceIndexCurve finalGenerator(final Object data) {
     return new GeneratorPriceIndexCurveAddPriceIndexExisting(_generator.finalGenerator(data), _substract, _existingCurveName);
   }
 
   @Override
-  public double[] initialGuess(double[] rates) {
+  public double[] initialGuess(final double[] rates) {
     ArgumentChecker.isTrue(rates.length == _generator.getNumberOfParameter(), "Rates of incorrect length.");
-    double[] spread = new double[rates.length];
+    final double[] spread = new double[rates.length];
     // Implementation note: The AddYieldExisting generator is used for spread. The initial guess is a spread of 0.
     return spread;
   }

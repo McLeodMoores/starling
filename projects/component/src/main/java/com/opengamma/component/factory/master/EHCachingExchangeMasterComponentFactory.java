@@ -8,8 +8,6 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -29,6 +27,8 @@ import com.opengamma.master.exchange.ExchangeMaster;
 import com.opengamma.master.exchange.impl.DataExchangeMasterResource;
 import com.opengamma.master.exchange.impl.EHCachingExchangeMaster;
 import com.opengamma.master.exchange.impl.RemoteExchangeMaster;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the combined exchange master.
@@ -62,14 +62,14 @@ public class EHCachingExchangeMasterComponentFactory extends AbstractComponentFa
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> exchangeuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> exchangeuration) {
 
-    ExchangeMaster master = new EHCachingExchangeMaster(getClassifier(),
+    final ExchangeMaster master = new EHCachingExchangeMaster(getClassifier(),
                                                         getUnderlying(),
                                                         getCacheManager());
 
     // register
-    ComponentInfo info = new ComponentInfo(ExchangeMaster.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(ExchangeMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteExchangeMaster.class);

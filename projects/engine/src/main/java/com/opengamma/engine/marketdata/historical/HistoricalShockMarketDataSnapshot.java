@@ -38,7 +38,7 @@ public class HistoricalShockMarketDataSnapshot implements MarketDataSnapshot {
      */
     PROPORTIONAL {
       @Override
-      public Double shock(Double value1, Double value2, Double baseValue) {
+      public Double shock(final Double value1, final Double value2, final Double baseValue) {
         return baseValue * value2 / value1;
       }
     },
@@ -47,7 +47,7 @@ public class HistoricalShockMarketDataSnapshot implements MarketDataSnapshot {
      */
     ABSOLUTE {
       @Override
-      public Double shock(Double value1, Double value2, Double baseValue) {
+      public Double shock(final Double value1, final Double value2, final Double baseValue) {
         return baseValue + value2 - value1;
       }
     };
@@ -67,10 +67,10 @@ public class HistoricalShockMarketDataSnapshot implements MarketDataSnapshot {
   private final MarketDataSnapshot _historicalSnapshot2;
   private final MarketDataSnapshot _baseSnapshot;
 
-  public HistoricalShockMarketDataSnapshot(ShockType shockType,
-                                           MarketDataSnapshot historicalSnapshot1,
-                                           MarketDataSnapshot historicalSnapshot2,
-                                           MarketDataSnapshot baseSnapshot) {
+  public HistoricalShockMarketDataSnapshot(final ShockType shockType,
+                                           final MarketDataSnapshot historicalSnapshot1,
+                                           final MarketDataSnapshot historicalSnapshot2,
+                                           final MarketDataSnapshot baseSnapshot) {
     ArgumentChecker.notNull(historicalSnapshot1, "historicalSnapshot1");
     ArgumentChecker.notNull(historicalSnapshot2, "historicalSnapshot2");
     ArgumentChecker.notNull(baseSnapshot, "baseSnapshot");
@@ -99,21 +99,21 @@ public class HistoricalShockMarketDataSnapshot implements MarketDataSnapshot {
   }
 
   @Override
-  public void init(Set<ValueSpecification> values, long timeout, TimeUnit ucUnit) {
-    Instant start = OpenGammaClock.getInstance().instant();
-    TemporalUnit unit = convertUnit(ucUnit);
+  public void init(final Set<ValueSpecification> values, final long timeout, final TimeUnit ucUnit) {
+    final Instant start = OpenGammaClock.getInstance().instant();
+    final TemporalUnit unit = convertUnit(ucUnit);
     Duration remaining = Duration.of(timeout, unit);
 
     _historicalSnapshot1.init(values, timeout, ucUnit);
-    Instant after1 = OpenGammaClock.getInstance().instant();
-    Duration duration1 = Duration.between(start, after1);
+    final Instant after1 = OpenGammaClock.getInstance().instant();
+    final Duration duration1 = Duration.between(start, after1);
     remaining = remaining.minus(duration1);
     if (remaining.isNegative()) {
       return;
     }
     _historicalSnapshot2.init(values, remaining.get(unit), ucUnit);
-    Instant after2 = OpenGammaClock.getInstance().instant();
-    Duration duration2 = Duration.between(after1, after2);
+    final Instant after2 = OpenGammaClock.getInstance().instant();
+    final Duration duration2 = Duration.between(after1, after2);
     remaining = remaining.minus(duration2);
     if (remaining.isNegative()) {
       return;
@@ -137,10 +137,10 @@ public class HistoricalShockMarketDataSnapshot implements MarketDataSnapshot {
   }
 
   @Override
-  public Object query(ValueSpecification specification) {
-    Object value1 = _historicalSnapshot1.query(specification);
-    Object value2 = _historicalSnapshot2.query(specification);
-    Object baseValue = _baseSnapshot.query(specification);
+  public Object query(final ValueSpecification specification) {
+    final Object value1 = _historicalSnapshot1.query(specification);
+    final Object value2 = _historicalSnapshot2.query(specification);
+    final Object baseValue = _baseSnapshot.query(specification);
     if (!(value1 instanceof Double) || !(value2 instanceof Double) || !(baseValue instanceof Double)) {
       return baseValue;
     }
@@ -148,15 +148,15 @@ public class HistoricalShockMarketDataSnapshot implements MarketDataSnapshot {
   }
 
   @Override
-  public Map<ValueSpecification, Object> query(Set<ValueSpecification> specifications) {
-    Map<ValueSpecification, Object> values = Maps.newHashMapWithExpectedSize(specifications.size());
-    for (ValueSpecification specification : specifications) {
+  public Map<ValueSpecification, Object> query(final Set<ValueSpecification> specifications) {
+    final Map<ValueSpecification, Object> values = Maps.newHashMapWithExpectedSize(specifications.size());
+    for (final ValueSpecification specification : specifications) {
       values.put(specification, query(specification));
     }
     return values;
   }
 
-  private static TemporalUnit convertUnit(TimeUnit unit) {
+  private static TemporalUnit convertUnit(final TimeUnit unit) {
     switch (unit) {
       case NANOSECONDS:
         return ChronoUnit.NANOS;

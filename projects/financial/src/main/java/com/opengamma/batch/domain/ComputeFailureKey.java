@@ -40,7 +40,7 @@ public class ComputeFailureKey extends DirectBean {
   @PropertyDefinition
   private String _stackTrace;
 
-  public ComputeFailureKey(String functionId, String exceptionClass, String exceptionMsg, String stackTrace) {
+  public ComputeFailureKey(final String functionId, final String exceptionClass, final String exceptionMsg, final String stackTrace) {
     ArgumentChecker.notNull(functionId, "functionId");
     ArgumentChecker.notNull(exceptionClass, "exceptionClass");
     ArgumentChecker.notNull(stackTrace, "stackTrace");

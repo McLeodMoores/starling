@@ -12,18 +12,20 @@ import org.threeten.bp.temporal.TemporalAdjuster;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  Adjusts a date to the day of a month
+ * Adjusts a date to the day of a month.
  */
 public class DayOfMonthTemporalAdjuster implements TemporalAdjuster {
 
-  /** 
+  /**
    * day of a month
    */
   private final int _day;
 
   /**
    * Public constructor.
-   * @param day day of a month
+   * 
+   * @param day
+   *          day of a month
    */
   public DayOfMonthTemporalAdjuster(final int day) {
     ArgumentChecker.notNull(day, "day");

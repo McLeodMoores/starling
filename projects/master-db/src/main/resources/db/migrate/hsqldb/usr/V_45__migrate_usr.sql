@@ -9,9 +9,9 @@ CREATE TABLE usr_schema_version (
 );
 INSERT INTO usr_schema_version (version_key, version_value) VALUES ('schema_patch', '45');
 
-CREATE SEQUENCE usr_oguser_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS usr_oguser_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE usr_idkey_seq as bigint
+CREATE SEQUENCE IF NOT EXISTS usr_idkey_seq as bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 
 CREATE TABLE usr_oguser (

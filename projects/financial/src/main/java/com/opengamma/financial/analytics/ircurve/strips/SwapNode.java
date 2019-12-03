@@ -56,7 +56,7 @@ public class SwapNode extends CurveNode {
   private ExternalId _receiveLegConvention;
 
   /**
-   * Whether to use fixings when constructing the swap
+   * Whether to use fixings when constructing the swap.
    */
   @PropertyDefinition
   private boolean _useFixings;
@@ -64,16 +64,21 @@ public class SwapNode extends CurveNode {
   /**
    * For the builder.
    */
-  /* package */SwapNode() {
+  /* package */ SwapNode() {
     super();
   }
 
   /**
-   * @param startTenor The start tenor, not null
-   * @param maturityTenor The maturity tenor, not null
-   * @param payLegConvention The pay leg convention, not null
-   * @param receiveLegConvention The receive leg convention, not null
-   * @param curveNodeIdMapperName The curve node id mapper name, not null
+   * @param startTenor
+   *          The start tenor, not null
+   * @param maturityTenor
+   *          The maturity tenor, not null
+   * @param payLegConvention
+   *          The pay leg convention, not null
+   * @param receiveLegConvention
+   *          The receive leg convention, not null
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name, not null
    */
   public SwapNode(final Tenor startTenor, final Tenor maturityTenor, final ExternalId payLegConvention, final ExternalId receiveLegConvention,
       final String curveNodeIdMapperName) {
@@ -86,12 +91,18 @@ public class SwapNode extends CurveNode {
   }
 
   /**
-   * @param startTenor The start tenor, not null
-   * @param maturityTenor The maturity tenor, not null
-   * @param payLegConvention The pay leg convention, not null
-   * @param receiveLegConvention The receive leg convention, not null
-   * @param useFixings True if fixings are to be used in curve construction
-   * @param curveNodeIdMapperName The curve node id mapper name, not null
+   * @param startTenor
+   *          The start tenor, not null
+   * @param maturityTenor
+   *          The maturity tenor, not null
+   * @param payLegConvention
+   *          The pay leg convention, not null
+   * @param receiveLegConvention
+   *          The receive leg convention, not null
+   * @param useFixings
+   *          True if fixings are to be used in curve construction
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name, not null
    */
   public SwapNode(final Tenor startTenor, final Tenor maturityTenor, final ExternalId payLegConvention, final ExternalId receiveLegConvention,
       final boolean useFixings, final String curveNodeIdMapperName) {
@@ -104,12 +115,18 @@ public class SwapNode extends CurveNode {
   }
 
   /**
-   * @param startTenor The start tenor, not null
-   * @param maturityTenor The maturity tenor, not null
-   * @param payLegConvention The pay leg convention, not null
-   * @param receiveLegConvention The receive leg convention, not null
-   * @param curveNodeIdMapperName The curve node id mapper name, not null
-   * @param name The name
+   * @param startTenor
+   *          The start tenor, not null
+   * @param maturityTenor
+   *          The maturity tenor, not null
+   * @param payLegConvention
+   *          The pay leg convention, not null
+   * @param receiveLegConvention
+   *          The receive leg convention, not null
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name, not null
+   * @param name
+   *          The name
    */
   public SwapNode(final Tenor startTenor, final Tenor maturityTenor, final ExternalId payLegConvention, final ExternalId receiveLegConvention,
       final String curveNodeIdMapperName, final String name) {
@@ -122,13 +139,20 @@ public class SwapNode extends CurveNode {
   }
 
   /**
-   * @param startTenor The start tenor, not null
-   * @param maturityTenor The maturity tenor, not null
-   * @param payLegConvention The pay leg convention, not null
-   * @param receiveLegConvention The receive leg convention, not null
-   * @param useFixings True if fixings are to be used in curve construction
-   * @param curveNodeIdMapperName The curve node id mapper name, not null
-   * @param name The name
+   * @param startTenor
+   *          The start tenor, not null
+   * @param maturityTenor
+   *          The maturity tenor, not null
+   * @param payLegConvention
+   *          The pay leg convention, not null
+   * @param receiveLegConvention
+   *          The receive leg convention, not null
+   * @param useFixings
+   *          True if fixings are to be used in curve construction
+   * @param curveNodeIdMapperName
+   *          The curve node id mapper name, not null
+   * @param name
+   *          The name
    */
   public SwapNode(final Tenor startTenor, final Tenor maturityTenor, final ExternalId payLegConvention, final ExternalId receiveLegConvention,
       final boolean useFixings, final String curveNodeIdMapperName, final String name) {
@@ -276,7 +300,7 @@ public class SwapNode extends CurveNode {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets whether to use fixings when constructing the swap
+   * Gets whether to use fixings when constructing the swap.
    * @return the value of the property
    */
   public boolean isUseFixings() {
@@ -284,7 +308,7 @@ public class SwapNode extends CurveNode {
   }
 
   /**
-   * Sets whether to use fixings when constructing the swap
+   * Sets whether to use fixings when constructing the swap.
    * @param useFixings  the new value of the property
    */
   public void setUseFixings(boolean useFixings) {

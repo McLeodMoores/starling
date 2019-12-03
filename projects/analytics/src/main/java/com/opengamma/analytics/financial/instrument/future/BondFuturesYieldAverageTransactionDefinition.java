@@ -14,11 +14,11 @@ import com.opengamma.analytics.financial.interestrate.future.derivative.BondFutu
 import com.opengamma.analytics.financial.interestrate.future.derivative.BondFuturesYieldAverageTransaction;
 
 /**
- * Transaction on a bond future security with cash settlement against a price deduced from a yield average. 
+ * Transaction on a bond future security with cash settlement against a price deduced from a yield average.
  * In particular used for AUD-SFE bond futures.
  */
 public class BondFuturesYieldAverageTransactionDefinition extends FuturesTransactionDefinition<BondFuturesYieldAverageSecurityDefinition>
-    implements InstrumentDefinitionWithData<BondFuturesYieldAverageTransaction, Double> {
+implements InstrumentDefinitionWithData<BondFuturesYieldAverageTransaction, Double> {
 
   /**
    * Constructor.
@@ -40,27 +40,28 @@ public class BondFuturesYieldAverageTransactionDefinition extends FuturesTransac
   }
 
   @Override
-  public BondFuturesYieldAverageTransaction toDerivative(ZonedDateTime date, String... yieldCurveNames) {
+  public BondFuturesYieldAverageTransaction toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     throw new NotImplementedException("The method toDerivative of YieldAverageBondFuturesTransactionDefinition is not implemented with curve names.");
   }
 
   @Override
-  public BondFuturesYieldAverageTransaction toDerivative(ZonedDateTime date, Double data, String... yieldCurveNames) {
+  public BondFuturesYieldAverageTransaction toDerivative(final ZonedDateTime date, final Double data, final String... yieldCurveNames) {
     throw new NotImplementedException("The method toDerivative of YieldAverageBondFuturesTransactionDefinition is not implemented with curve names.");
   }
 
   @Override
-  public BondFuturesYieldAverageTransaction toDerivative(ZonedDateTime date) {
-    throw new UnsupportedOperationException("The method toDerivative of YieldAverageBondFuturesTransactionDefinition does not support the one argument method (without margin price data).");
+  public BondFuturesYieldAverageTransaction toDerivative(final ZonedDateTime date) {
+    throw new UnsupportedOperationException("The method toDerivative of YieldAverageBondFuturesTransactionDefinition does "
+        + "not support the one argument method (without margin price data).");
   }
 
   @Override
-  public <U, V> V accept(InstrumentDefinitionVisitor<U, V> visitor, U data) {
+  public <U, V> V accept(final InstrumentDefinitionVisitor<U, V> visitor, final U data) {
     return visitor.visitYieldAverageBondFuturesTransactionDefinition(this, data);
   }
 
   @Override
-  public <V> V accept(InstrumentDefinitionVisitor<?, V> visitor) {
+  public <V> V accept(final InstrumentDefinitionVisitor<?, V> visitor) {
     return visitor.visitYieldAverageBondFuturesTransactionDefinition(this);
   }
 

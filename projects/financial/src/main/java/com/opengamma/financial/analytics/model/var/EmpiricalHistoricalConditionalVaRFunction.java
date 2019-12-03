@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.var;
@@ -31,13 +31,15 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.timeseries.DoubleTimeSeries;
 
 /**
- * 
+ *
  */
 public class EmpiricalHistoricalConditionalVaRFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final EmpiricalDistributionConditionalVaRCalculator CALCULATOR = new EmpiricalDistributionConditionalVaRCalculator(StatisticsCalculatorFactory.MEAN_CALCULATOR);
+  private static final EmpiricalDistributionConditionalVaRCalculator CALCULATOR = new EmpiricalDistributionConditionalVaRCalculator(
+      StatisticsCalculatorFactory.MEAN_CALCULATOR);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final String currency = getCurrency(inputs);
     final Object pnlSeriesObj = inputs.getValue(ValueRequirementNames.PNL_SERIES);
     if (pnlSeriesObj == null) {
@@ -54,7 +56,8 @@ public class EmpiricalHistoricalConditionalVaRFunction extends AbstractFunction.
     final EmpiricalDistributionVaRParameters parameters = getParameters(scheduleCalculatorNames, horizonNames, confidenceLevelNames);
     final double var = CALCULATOR.evaluate(parameters, pnlSeries).getVaRValue();
     final ValueProperties resultProperties = getResultProperties(currency, desiredValues.iterator().next());
-    return Sets.newHashSet(new ComputedValue(new ValueSpecification(ValueRequirementNames.CONDITIONAL_HISTORICAL_VAR, target.toSpecification(), resultProperties), var));
+    return Sets.newHashSet(
+        new ComputedValue(new ValueSpecification(ValueRequirementNames.CONDITIONAL_HISTORICAL_VAR, target.toSpecification(), resultProperties), var));
   }
 
   private String getCurrency(final FunctionInputs inputs) {
@@ -102,7 +105,7 @@ public class EmpiricalHistoricalConditionalVaRFunction extends AbstractFunction.
         .with(ValuePropertyNames.SAMPLING_PERIOD, samplingPeriodName.iterator().next())
         .with(ValuePropertyNames.SCHEDULE_CALCULATOR, scheduleCalculatorName.iterator().next())
         .with(ValuePropertyNames.SAMPLING_FUNCTION, samplingFunctionName.iterator().next())
-        .with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, "Delta"); //TODO
+        .with(ValuePropertyNames.PROPERTY_PNL_CONTRIBUTIONS, "Delta"); // TODO
     final Set<String> desiredCurrencyValues = desiredValue.getConstraints().getValues(ValuePropertyNames.CURRENCY);
     if (desiredCurrencyValues == null || desiredCurrencyValues.isEmpty()) {
       properties.withAny(ValuePropertyNames.CURRENCY);
@@ -124,7 +127,8 @@ public class EmpiricalHistoricalConditionalVaRFunction extends AbstractFunction.
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     final String currency = input.getProperty(ValuePropertyNames.CURRENCY);
     if (currency == null) {
@@ -165,7 +169,8 @@ public class EmpiricalHistoricalConditionalVaRFunction extends AbstractFunction.
     return properties.get();
   }
 
-  private EmpiricalDistributionVaRParameters getParameters(final Set<String> scheduleCalculatorNames, final Set<String> horizonNames, final Set<String> confidenceLevelNames) {
+  private EmpiricalDistributionVaRParameters getParameters(final Set<String> scheduleCalculatorNames, final Set<String> horizonNames,
+      final Set<String> confidenceLevelNames) {
     if (scheduleCalculatorNames == null || scheduleCalculatorNames.isEmpty() || scheduleCalculatorNames.size() != 1) {
       throw new OpenGammaRuntimeException("Missing or non-unique schedule calculator name: " + scheduleCalculatorNames);
     }

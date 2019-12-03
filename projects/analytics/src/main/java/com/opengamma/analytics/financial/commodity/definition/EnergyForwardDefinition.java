@@ -15,14 +15,15 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Energy forward definition
+ * Energy forward definition.
  */
 public class EnergyForwardDefinition extends CommodityForwardDefinition<EnergyForward> {
 
   /**
    * Constructor for forwards with delivery dates (i.e. physical settlement)
    *
-   * @param expiryDate  the time and the day that a particular delivery month of a forwards contract stops trading, as well as the final settlement price for that contract
+   * @param expiryDate  the time and the day that a particular delivery month of a forwards contract stops trading,
+   * as well as the final settlement price for that contract
    * @param underlying  identifier of the underlying commodity
    * @param unitAmount  size of a unit
    * @param firstDeliveryDate  date of first delivery - PHYSICAL settlement
@@ -44,7 +45,8 @@ public class EnergyForwardDefinition extends CommodityForwardDefinition<EnergyFo
   /**
    * Constructor for forwards without delivery dates (e.g. cash settlement)
    *
-   * @param expiryDate  is the time and the day that a particular delivery month of a forwards contract stops trading, as well as the final settlement price for that contract
+   * @param expiryDate  is the time and the day that a particular delivery month of a forwards contract stops trading,
+   * as well as the final settlement price for that contract
    * @param underlying  identifier of the underlying commodity
    * @param unitAmount  size of a unit
    * @param amount  number of units
@@ -53,15 +55,16 @@ public class EnergyForwardDefinition extends CommodityForwardDefinition<EnergyFo
    * @param currency currency
    * @param settlementDate settlement date
    */
-  public EnergyForwardDefinition(final ZonedDateTime expiryDate, final ExternalId underlying, final double unitAmount, final double amount, final String unitName,
-      final double referencePrice, final Currency currency, final ZonedDateTime settlementDate) {
+  public EnergyForwardDefinition(final ZonedDateTime expiryDate, final ExternalId underlying, final double unitAmount,
+      final double amount, final String unitName, final double referencePrice, final Currency currency, final ZonedDateTime settlementDate) {
     this(expiryDate, underlying, unitAmount, null, null, amount, unitName, SettlementType.CASH, referencePrice, currency, settlementDate);
   }
 
   /**
-   * Static constructor method for cash settled forwards
-   * 
-   * @param expiryDate  the time and the day that a particular delivery month of a forwards contract stops trading, as well as the final settlement price for that contract
+   * Static constructor method for cash settled forwards.
+   *
+   * @param expiryDate  the time and the day that a particular delivery month of a forwards contract stops trading,
+   * as well as the final settlement price for that contract
    * @param underlying  identifier of the underlying commodity
    * @param unitAmount  size of a unit
    * @param amount  number of units
@@ -71,15 +74,18 @@ public class EnergyForwardDefinition extends CommodityForwardDefinition<EnergyFo
    * @param settlementDate settlement date
    * @return the forward
    */
-  public static EnergyForwardDefinition withCashSettlement(final ZonedDateTime expiryDate, final ExternalId underlying, final double unitAmount, final double amount, final String unitName,
+  public static EnergyForwardDefinition withCashSettlement(final ZonedDateTime expiryDate, final ExternalId underlying,
+      final double unitAmount, final double amount, final String unitName,
       final double referencePrice, final Currency currency, final ZonedDateTime settlementDate) {
-    return new EnergyForwardDefinition(expiryDate, underlying, unitAmount, null, null, amount, unitName, SettlementType.CASH, referencePrice, currency, settlementDate);
+    return new EnergyForwardDefinition(expiryDate, underlying, unitAmount, null, null, amount, unitName, SettlementType.CASH,
+        referencePrice, currency, settlementDate);
   }
 
   /**
-   * Static constructor method for physical settlement futures
-   * 
-   * @param expiryDate  the time and the day that a particular delivery month of a forwards contract stops trading, as well as the final settlement price for that contract
+   * Static constructor method for physical settlement futures.
+   *
+   * @param expiryDate  the time and the day that a particular delivery month of a forwards contract stops trading,
+   * as well as the final settlement price for that contract
    * @param underlying  identifier of the underlying commodity
    * @param unitAmount  size of a unit
    * @param firstDeliveryDate  date of first delivery - PHYSICAL settlement
@@ -113,7 +119,8 @@ public class EnergyForwardDefinition extends CommodityForwardDefinition<EnergyFo
     ArgumentChecker.inOrderOrEqual(date, this.getExpiryDate(), "date", "expiry date");
     final double timeToFixing = TimeCalculator.getTimeBetween(date, this.getExpiryDate());
     final double timeToSettlement = TimeCalculator.getTimeBetween(date, this.getSettlementDate());
-    return new EnergyForward(timeToFixing, getUnderlying(), getUnitAmount(), getFirstDeliveryDate(), getLastDeliveryDate(), getAmount(), getUnitName(), getSettlementType(),
+    return new EnergyForward(timeToFixing, getUnderlying(), getUnitAmount(), getFirstDeliveryDate(), getLastDeliveryDate(),
+        getAmount(), getUnitName(), getSettlementType(),
         timeToSettlement, getReferencePrice(), getCurrency());
   }
 
@@ -122,10 +129,11 @@ public class EnergyForwardDefinition extends CommodityForwardDefinition<EnergyFo
     ArgumentChecker.inOrderOrEqual(date, this.getExpiryDate(), "date", "expiry date");
     final double timeToFixing = TimeCalculator.getTimeBetween(date, this.getExpiryDate());
     final double timeToSettlement = TimeCalculator.getTimeBetween(date, this.getSettlementDate());
-    return new EnergyForward(timeToFixing, getUnderlying(), getUnitAmount(), getFirstDeliveryDate(), getLastDeliveryDate(), getAmount(), getUnitName(), getSettlementType(), timeToSettlement,
+    return new EnergyForward(timeToFixing, getUnderlying(), getUnitAmount(), getFirstDeliveryDate(), getLastDeliveryDate(), getAmount(),
+        getUnitName(), getSettlementType(), timeToSettlement,
         referencePrice.doubleValue(), getCurrency());
   }
-  
+
   @Override
   public <U, V> V accept(final InstrumentDefinitionVisitor<U, V> visitor, final U data) {
     ArgumentChecker.notNull(visitor, "visitor");

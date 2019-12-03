@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function;
@@ -24,18 +24,19 @@ public class InMemoryCompiledFunctionRepository implements CompiledFunctionRepos
 
   private static final FunctionInvoker MISSING = new FunctionInvoker() {
     @Override
-    public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       return null;
     }
-    
+
     @Override
     public boolean canHandleMissingInputs() {
       return false;
     }
   };
 
-  private final ConcurrentMap<String, CompiledFunctionDefinition> _functionDefinitions = new ConcurrentHashMap<String, CompiledFunctionDefinition>();
-  private final ConcurrentMap<String, FunctionInvoker> _functionInvokers = new ConcurrentHashMap<String, FunctionInvoker>();
+  private final ConcurrentMap<String, CompiledFunctionDefinition> _functionDefinitions = new ConcurrentHashMap<>();
+  private final ConcurrentMap<String, FunctionInvoker> _functionInvokers = new ConcurrentHashMap<>();
   private final FunctionCompilationContext _compilationContext;
   private Instant _earliestInvocationTime;
   private Instant _latestInvocationTime;
@@ -105,7 +106,7 @@ public class InMemoryCompiledFunctionRepository implements CompiledFunctionRepos
         invoker = previous;
       }
     }
-    return (invoker == MISSING) ? null : invoker;
+    return invoker == MISSING ? null : invoker;
   }
 
   @Override
@@ -113,10 +114,12 @@ public class InMemoryCompiledFunctionRepository implements CompiledFunctionRepos
     return _compilationContext;
   }
 
+  @Override
   public Instant getEarliestInvocationTime() {
     return _earliestInvocationTime;
   }
 
+  @Override
   public Instant getLatestInvocationTime() {
     return _latestInvocationTime;
   }

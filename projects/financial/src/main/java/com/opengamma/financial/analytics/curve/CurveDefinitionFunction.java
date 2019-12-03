@@ -43,7 +43,8 @@ public class CurveDefinitionFunction extends AbstractFunction {
   private CurveDefinitionSource _curveDefinitionSource;
 
   /**
-   * @param curveName The curve name, not null
+   * @param curveName
+   *          The curve name, not null
    */
   public CurveDefinitionFunction(final String curveName) {
     ArgumentChecker.notNull(curveName, "curve name");
@@ -84,7 +85,8 @@ public class CurveDefinitionFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         return Collections.emptySet();
       }
 

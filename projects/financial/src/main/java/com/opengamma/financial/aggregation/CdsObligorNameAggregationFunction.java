@@ -22,17 +22,17 @@ public class CdsObligorNameAggregationFunction extends AbstractRedCodeHandlingCd
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securitySource  the security source, not null
    * @param legalEntitySource  the organization source, not null
    */
-  public CdsObligorNameAggregationFunction(SecuritySource securitySource, LegalEntitySource legalEntitySource) {
+  public CdsObligorNameAggregationFunction(final SecuritySource securitySource, final LegalEntitySource legalEntitySource) {
     super(NAME, securitySource, new CdsObligorExtractor(legalEntitySource));
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected String handleExtractedData(LegalEntity legalEntity) {
+  protected String handleExtractedData(final LegalEntity legalEntity) {
     return legalEntity.getName();
   }
 

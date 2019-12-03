@@ -39,7 +39,7 @@ public class PortfolioPermissionChecker {
    * @param portfolio the portfolio to check, not null
    * @param nodeChecker the checker for each node in the portfolio, not null
    */
-  public PortfolioPermissionChecker(Portfolio portfolio, NodeChecker nodeChecker) {
+  public PortfolioPermissionChecker(final Portfolio portfolio, final NodeChecker nodeChecker) {
     ArgumentChecker.notNull(portfolio, "portfolio");
     ArgumentChecker.notNull(nodeChecker, "nodeChecker");
     _permissions = checkNodes(portfolio.getRootNode(), nodeChecker);
@@ -52,30 +52,30 @@ public class PortfolioPermissionChecker {
    * @param nodeChecker the checker for the node
    * @return map of nodes with permissions
    */
-  private Map<PortfolioNode, PortfolioPermission> checkNodes(PortfolioNode node,
-                                                             NodeChecker nodeChecker) {
+  private Map<PortfolioNode, PortfolioPermission> checkNodes(final PortfolioNode node,
+      final NodeChecker nodeChecker) {
 
     // TODO This should probably use PortfolioNodeTraverser for doing the depth-first traversal of the portfolio
 
 
     if (nodeChecker.check(node) == DENY) {
       return ImmutableMap.of(node, DENY);
-    } else {
-      List<PortfolioNode> children = node.getChildNodes();
-      ImmutableMap.Builder<PortfolioNode, PortfolioPermission> builder = ImmutableMap.builder();
-      // Result for node of interest is dependent on whether the children are accessible
-      // so keep track of whether we are denied access to any
-      boolean allAllowed = true;
-
-      for (PortfolioNode child : children) {
-        Map<PortfolioNode, PortfolioPermission> result = checkNodes(child, nodeChecker);
-        builder.putAll(result);
-        allAllowed = allAllowed && result.get(child) == ALLOW;
-      }
-
-      builder.put(node, allAllowed ? ALLOW : PARTIAL);
-      return builder.build();
     }
+    final List<PortfolioNode> children = node.getChildNodes();
+    final ImmutableMap.Builder<PortfolioNode, PortfolioPermission> builder = ImmutableMap.builder();
+    // Result for node of interest is dependent on whether the children are
+    // accessible
+    // so keep track of whether we are denied access to any
+    boolean allAllowed = true;
+
+    for (final PortfolioNode child : children) {
+      final Map<PortfolioNode, PortfolioPermission> result = checkNodes(child, nodeChecker);
+      builder.putAll(result);
+      allAllowed = allAllowed && result.get(child) == ALLOW;
+    }
+
+    builder.put(node, allAllowed ? ALLOW : PARTIAL);
+    return builder.build();
   }
 
   /**
@@ -84,7 +84,7 @@ public class PortfolioPermissionChecker {
    * @param node the node to check
    * @return the permissions for the node
    */
-  public PortfolioPermission permissionCheck(PortfolioNode node) {
+  public PortfolioPermission permissionCheck(final PortfolioNode node) {
     return _permissions.containsKey(node) ? _permissions.get(node) : DENY;
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
@@ -44,7 +44,7 @@ import com.opengamma.engine.function.FunctionExecutionContext;
     setExecutionStartTime(state.getExecutionStartTime());
   }
 
-  protected void setFunctionExecutionContext(FunctionExecutionContext functionExecutionContext) {
+  protected void setFunctionExecutionContext(final FunctionExecutionContext functionExecutionContext) {
     _functionExecutionContext = functionExecutionContext;
   }
 
@@ -52,7 +52,7 @@ import com.opengamma.engine.function.FunctionExecutionContext;
     return _functionExecutionContext;
   }
 
-  protected void setJob(CalculationJob job) {
+  protected void setJob(final CalculationJob job) {
     _job = job;
   }
 

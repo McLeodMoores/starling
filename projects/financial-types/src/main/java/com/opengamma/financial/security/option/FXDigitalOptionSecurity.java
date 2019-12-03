@@ -58,7 +58,7 @@ public class FXDigitalOptionSecurity extends FinancialSecurity {
   private Currency _paymentCurrency;
   /**
    * The put amount.
-   */  
+   */
   @PropertyDefinition(validate = "notNull")
   private double _putAmount;
   /**
@@ -82,12 +82,34 @@ public class FXDigitalOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private LongShort _longShort = LongShort.LONG;
 
-  FXDigitalOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  FXDigitalOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public FXDigitalOptionSecurity(Currency putCurrency, Currency callCurrency, double putAmount, double callAmount, Currency paymentCurrency, Expiry expiry,
-      ZonedDateTime settlementDate, boolean isLong) {
+  /**
+   * @param putCurrency
+   *          the put currency, not null
+   * @param callCurrency
+   *          the call currency, not null
+   * @param putAmount
+   *          the put amount
+   * @param callAmount
+   *          the call amount
+   * @param paymentCurrency
+   *          the payment currency, not null
+   * @param expiry
+   *          the expiry, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param isLong
+   *          true if the option is long, false if it is short
+   */
+  public FXDigitalOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount,
+      final Currency paymentCurrency, final Expiry expiry,
+      final ZonedDateTime settlementDate, final boolean isLong) {
     super(SECURITY_TYPE);
     setPutCurrency(putCurrency);
     setCallCurrency(callCurrency);
@@ -99,16 +121,16 @@ public class FXDigitalOptionSecurity extends FinancialSecurity {
     setLongShort(LongShort.ofLong(isLong));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitFXDigitalOptionSecurity(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if the long/short type is long.
-   * 
+   *
    * @return true if long, false if short
    */
   public boolean isLong() {
@@ -117,7 +139,7 @@ public class FXDigitalOptionSecurity extends FinancialSecurity {
 
   /**
    * Checks if the long/short type is short.
-   * 
+   *
    * @return true if short, false if long
    */
   public boolean isShort() {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.generator;
@@ -74,7 +74,8 @@ public class FXVolatilitySwapPortfolioGeneratorTool extends AbstractPortfolioGen
     final SecurityGenerator<ManageableSecurity> securities = createFXVolatilitySwapSecurityGenerator(FX_VOLATILITY_SWAPS.size());
     configure(securities);
     final PositionGenerator positions = new SimplePositionGenerator<>(securities, getSecurityPersister(), getCounterPartyGenerator());
-    final PortfolioNodeGenerator rootNode = new LeafPortfolioNodeGenerator(new StaticNameGenerator("FX Volatility Swaps"), positions, FX_VOLATILITY_SWAPS.size());
+    final PortfolioNodeGenerator rootNode = new LeafPortfolioNodeGenerator(new StaticNameGenerator("FX Volatility Swaps"), positions,
+        FX_VOLATILITY_SWAPS.size());
     return new PortfolioGenerator(rootNode, portfolioNameGenerator);
   }
 
@@ -88,6 +89,7 @@ public class FXVolatilitySwapPortfolioGeneratorTool extends AbstractPortfolioGen
 
   /**
    * Creates a security generator that loops over the list of FX volatility swaps.
+   * 
    * @size The expected size of the portfolio
    * @return The security generator
    */

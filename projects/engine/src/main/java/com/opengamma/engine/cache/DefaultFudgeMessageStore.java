@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -47,23 +47,23 @@ public class DefaultFudgeMessageStore implements FudgeMessageStore {
   }
 
   @Override
-  public FudgeMsg get(long identifier) {
+  public FudgeMsg get(final long identifier) {
     final byte[] data = getBinaryData().get(identifier);
-    return (data != null) ? new EncodedFudgeMsg(data, getFudgeContext()) : null;
+    return data != null ? new EncodedFudgeMsg(data, getFudgeContext()) : null;
   }
 
   @Override
-  public Map<Long, FudgeMsg> get(Collection<Long> identifiers) {
+  public Map<Long, FudgeMsg> get(final Collection<Long> identifiers) {
     final Map<Long, byte[]> dataValues = getBinaryData().get(identifiers);
-    final Map<Long, FudgeMsg> resultValues = new HashMap<Long, FudgeMsg>();
-    for (Map.Entry<Long, byte[]> data : dataValues.entrySet()) {
+    final Map<Long, FudgeMsg> resultValues = new HashMap<>();
+    for (final Map.Entry<Long, byte[]> data : dataValues.entrySet()) {
       resultValues.put(data.getKey(), new EncodedFudgeMsg(data.getValue(), getFudgeContext()));
     }
     return resultValues;
   }
 
   @Override
-  public void put(long identifier, FudgeMsg dataMessage) {
+  public void put(final long identifier, final FudgeMsg dataMessage) {
     final byte[] data;
     if (dataMessage instanceof FudgeEncoded) {
       data = ((FudgeEncoded) dataMessage).getFudgeEncoded();
@@ -77,11 +77,11 @@ public class DefaultFudgeMessageStore implements FudgeMessageStore {
   }
 
   @Override
-  public void put(Map<Long, FudgeMsg> dataMessages) {
-    final Map<Long, byte[]> dataBytes = new HashMap<Long, byte[]>();
+  public void put(final Map<Long, FudgeMsg> dataMessages) {
+    final Map<Long, byte[]> dataBytes = new HashMap<>();
     ByteArrayOutputStream baos = null;
     FudgeDataOutputStreamWriter writer = null;
-    for (Map.Entry<Long, FudgeMsg> dataMessage : dataMessages.entrySet()) {
+    for (final Map.Entry<Long, FudgeMsg> dataMessage : dataMessages.entrySet()) {
       final byte[] data;
       if (dataMessage.getValue() instanceof FudgeEncoded) {
         data = ((FudgeEncoded) dataMessage.getValue()).getFudgeEncoded();

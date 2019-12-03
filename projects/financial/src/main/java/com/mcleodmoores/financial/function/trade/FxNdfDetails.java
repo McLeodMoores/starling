@@ -10,7 +10,7 @@ import com.opengamma.util.money.CurrencyAmount;
 /**
  *
  */
-public class FxNdfDetails {
+public final class FxNdfDetails {
 
   public static Builder builder() {
     return new Builder();

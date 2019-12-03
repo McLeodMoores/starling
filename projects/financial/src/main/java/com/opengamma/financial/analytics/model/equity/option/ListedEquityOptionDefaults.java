@@ -27,29 +27,30 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Populates {@link ListedEquityOptionFunction} with defaults. Basic configuration for clients that use one forward curve/config pair and one discounting curve/curve pair.
+ * Populates {@link ListedEquityOptionFunction} with defaults. Basic configuration for clients that use one forward curve/config pair and one discounting
+ * curve/curve pair.
  * <p>
- * This mimics {@link EquityOptionInterpolatedBlackLognormalDefaults}, which populates fields for the EquityOptionFunction family, 
- * but this doesn't set volatility surface properties.
+ * This mimics {@link EquityOptionInterpolatedBlackLognormalDefaults}, which populates fields for the EquityOptionFunction family, but this doesn't set
+ * volatility surface properties.
  */
 public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction {
 
   /** The value requirement names for which these defaults apply */
-  private static final String[] s_valueNames = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.DELTA,
-    ValueRequirementNames.GAMMA,
-    ValueRequirementNames.VEGA,
-    ValueRequirementNames.VOMMA,
-    ValueRequirementNames.VANNA,
-    ValueRequirementNames.RHO,
-    ValueRequirementNames.CARRY_RHO,
-    ValueRequirementNames.THETA,
-    ValueRequirementNames.VALUE_DELTA,
-    ValueRequirementNames.VALUE_GAMMA,
-    ValueRequirementNames.FORWARD,
-    ValueRequirementNames.IMPLIED_VOLATILITY,
-    ValueRequirementNames.PNL // Produced by EquityOption*ScenarioFunction
+  private static final String[] VALUE_NAMES = new String[] {
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.GAMMA,
+                ValueRequirementNames.VEGA,
+                ValueRequirementNames.VOMMA,
+                ValueRequirementNames.VANNA,
+                ValueRequirementNames.RHO,
+                ValueRequirementNames.CARRY_RHO,
+                ValueRequirementNames.THETA,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.FORWARD,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.PNL // Produced by EquityOption*ScenarioFunction
   };
 
   /** Map of id name to discounting curve configuration */
@@ -63,18 +64,25 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
   /** The priority of this set of defaults */
   private final PriorityClass _priority;
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ListedEquityOptionDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ListedEquityOptionDefaults.class);
 
   /**
-   * Basic constructor for configurations with just a single
-   * 
-   * @param priority PriorityClass name (e.g. PriorityClass.NORMAL.name())
-   * @param perIdConfig Map of strings consisting of groups of 5 inputs: <p>
-   * 0) id the unique string used to define a set of inputs<p>
-   * 1) discountingCurveName Name of the discounting curve (e.g. "Discounting")<p>
-   * 2) discountingCurveConfig Name of the curve configuration (e.g. "ExchangeTradedSingleCurveUSDConfig")<p>
-   * 3) forwardCurveName Name of the forward curve (e.g. "Futures3M")<p>
-   * 4) forwardCurveCalculationMethodName Calculation method for the Equity Forward Curve (e.g. "YieldCurveImplied")
+   * Basic constructor for configurations with just a single.
+   *
+   * @param priority
+   *          PriorityClass name (e.g. PriorityClass.NORMAL.name())
+   * @param perIdConfig
+   *          Map of strings consisting of groups of 5 inputs:
+   *          <p>
+   *          0) id the unique string used to define a set of inputs
+   *          <p>
+   *          1) discountingCurveName Name of the discounting curve (e.g. "Discounting")
+   *          <p>
+   *          2) discountingCurveConfig Name of the curve configuration (e.g. "ExchangeTradedSingleCurveUSDConfig")
+   *          <p>
+   *          3) forwardCurveName Name of the forward curve (e.g. "Futures3M")
+   *          <p>
+   *          4) forwardCurveCalculationMethodName Calculation method for the Equity Forward Curve (e.g. "YieldCurveImplied")
    */
   public ListedEquityOptionDefaults(final String priority, final String... perIdConfig) {
     super(FinancialSecurityTypes.EQUITY_INDEX_OPTION_SECURITY
@@ -86,8 +94,9 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
     _priority = PriorityClass.valueOf(priority);
 
     final int nPairs = perIdConfig.length;
-    ArgumentChecker.isTrue(nPairs % 5 == 0, "Must have discounting name, discounting curve config, surface name, surface interpolation method, forward curve name" +
-        "and forward curve calculation method per id");
+    ArgumentChecker.isTrue(nPairs % 5 == 0,
+        "Must have discounting name, discounting curve config, surface name, surface interpolation method, forward curve name"
+            + "and forward curve calculation method per id");
     _idToDiscountingCurveName = Maps.newHashMap();
     _idToDiscountingCurveConfig = Maps.newHashMap();
     _idToForwardCurveName = Maps.newHashMap();
@@ -100,14 +109,14 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
       _idToForwardCurveCalculationMethodName.put(id, Collections.singleton(perIdConfig[i + 4]));
     }
   }
-  
+
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Security eqSec = target.getSecurity();
     final String id = getId(eqSec);
     return _idToDiscountingCurveName.containsKey(id);
   }
-  
+
   /**
    * @return All ids for which a default is available
    */
@@ -116,13 +125,15 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
   }
 
   /**
-   * @param security The security
+   * @param security
+   *          The security
    * @return The id for the security
    */
-  protected abstract String getId(Security security);  
+  protected abstract String getId(Security security);
+
   @Override
-  protected void getDefaults(PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+  protected void getDefaults(final PropertyDefaults defaults) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_CONFIG);
       defaults.addValuePropertyName(valueName, EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_NAME);
       defaults.addValuePropertyName(valueName, ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_NAME);
@@ -140,7 +151,8 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String id = getId(target.getSecurity());
     switch (propertyName) {
       case EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_CONFIG:
@@ -152,7 +164,7 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
       case ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD:
         return _idToForwardCurveCalculationMethodName.get(id);
       default:
-        s_logger.error("Cannot get a default value for {}", propertyName);
+        LOGGER.error("Cannot get a default value for {}", propertyName);
         return null;
     }
   }

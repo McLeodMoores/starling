@@ -28,11 +28,12 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Populates {@link EquityOptionFunction}, including {@link EquityVanillaBarrierOptionBlackFunction}, with defaults appropriate for pricing using an interpolated Black lognormal volatility surface.
+ * Populates {@link EquityOptionFunction}, including {@link EquityVanillaBarrierOptionBlackFunction}, with defaults appropriate for pricing using an
+ * interpolated Black lognormal volatility surface.
  */
 public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityOptionInterpolatedBlackLognormalDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionInterpolatedBlackLognormalDefaults.class);
   /** Map of id name to discounting curve configuration */
   private final Map<String, Set<String>> _idToDiscountingCurveConfig;
   /** Map of id name to discounting curve name */
@@ -49,43 +50,45 @@ public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends Def
   private final PriorityClass _priority;
 
   /** The value requirement names for which these defaults apply */
-  private static final String[] s_valueNames = new String[] {
-    ValueRequirementNames.PRESENT_VALUE,
-    ValueRequirementNames.VEGA_QUOTE_MATRIX,
-    ValueRequirementNames.VALUE_VEGA,
-    ValueRequirementNames.IMPLIED_VOLATILITY,
-    ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
-    ValueRequirementNames.FORWARD,
-    ValueRequirementNames.SPOT,
-    ValueRequirementNames.VALUE_DELTA,
-    ValueRequirementNames.VALUE_GAMMA,
-    ValueRequirementNames.VALUE_VOMMA,
-    ValueRequirementNames.VALUE_VANNA,
-    ValueRequirementNames.VALUE_RHO,
-    ValueRequirementNames.VALUE_CARRY_RHO,
-    ValueRequirementNames.VALUE_THETA,
-    ValueRequirementNames.VALUE_DUAL_DELTA,
-    ValueRequirementNames.DELTA,
-    ValueRequirementNames.GAMMA,
-    ValueRequirementNames.VOMMA,
-    ValueRequirementNames.VANNA,
-    ValueRequirementNames.RHO,
-    ValueRequirementNames.CARRY_RHO,
-    ValueRequirementNames.THETA,
-    ValueRequirementNames.DUAL_DELTA,
-    ValueRequirementNames.VEGA,
-    ValueRequirementNames.PNL, // Produced by EquityOption*ScenarioFunction
-    ValueRequirementNames.POSITION_DELTA,
-    ValueRequirementNames.POSITION_GAMMA,
-    ValueRequirementNames.POSITION_RHO,
-    ValueRequirementNames.POSITION_THETA,
-    ValueRequirementNames.POSITION_VEGA,
-    ValueRequirementNames.POSITION_WEIGHTED_VEGA
+  private static final String[] VALUE_NAMES = new String[] {
+                ValueRequirementNames.PRESENT_VALUE,
+                ValueRequirementNames.VEGA_QUOTE_MATRIX,
+                ValueRequirementNames.VALUE_VEGA,
+                ValueRequirementNames.IMPLIED_VOLATILITY,
+                ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
+                ValueRequirementNames.FORWARD,
+                ValueRequirementNames.SPOT,
+                ValueRequirementNames.VALUE_DELTA,
+                ValueRequirementNames.VALUE_GAMMA,
+                ValueRequirementNames.VALUE_VOMMA,
+                ValueRequirementNames.VALUE_VANNA,
+                ValueRequirementNames.VALUE_RHO,
+                ValueRequirementNames.VALUE_CARRY_RHO,
+                ValueRequirementNames.VALUE_THETA,
+                ValueRequirementNames.VALUE_DUAL_DELTA,
+                ValueRequirementNames.DELTA,
+                ValueRequirementNames.GAMMA,
+                ValueRequirementNames.VOMMA,
+                ValueRequirementNames.VANNA,
+                ValueRequirementNames.RHO,
+                ValueRequirementNames.CARRY_RHO,
+                ValueRequirementNames.THETA,
+                ValueRequirementNames.DUAL_DELTA,
+                ValueRequirementNames.VEGA,
+                ValueRequirementNames.PNL, // Produced by EquityOption*ScenarioFunction
+                ValueRequirementNames.POSITION_DELTA,
+                ValueRequirementNames.POSITION_GAMMA,
+                ValueRequirementNames.POSITION_RHO,
+                ValueRequirementNames.POSITION_THETA,
+                ValueRequirementNames.POSITION_VEGA,
+                ValueRequirementNames.POSITION_WEIGHTED_VEGA
   };
 
   /**
-   * @param priority The priority class of {@link DefaultPropertyFunction} instances, allowing them to be ordered relative to each other, not null
-   * @param perIdConfig Defaults values of curve configuration, discounting curve, surface name and interpolation method per id, not null
+   * @param priority
+   *          The priority class of {@link DefaultPropertyFunction} instances, allowing them to be ordered relative to each other, not null
+   * @param perIdConfig
+   *          Defaults values of curve configuration, discounting curve, surface name and interpolation method per id, not null
    */
   public EquityOptionInterpolatedBlackLognormalDefaults(final String priority, final String... perIdConfig) {
     super(FinancialSecurityTypes.EQUITY_INDEX_OPTION_SECURITY
@@ -96,8 +99,9 @@ public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends Def
     _priority = PriorityClass.valueOf(priority);
 
     final int nPairs = perIdConfig.length;
-    ArgumentChecker.isTrue(nPairs % 7 == 0, "Must have discounting name, discounting curve config, surface name, surface interpolation method, forward curve name" +
-        "and forward curve calculation method per id");
+    ArgumentChecker.isTrue(nPairs % 7 == 0,
+        "Must have discounting name, discounting curve config, surface name, surface interpolation method, forward curve name"
+            + "and forward curve calculation method per id");
     _idToDiscountingCurveName = Maps.newHashMap();
     _idToDiscountingCurveConfig = Maps.newHashMap();
     _idToSurfaceName = Maps.newHashMap();
@@ -124,7 +128,7 @@ public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends Def
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_CONFIG);
       defaults.addValuePropertyName(valueName, EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_NAME);
       defaults.addValuePropertyName(valueName, ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_NAME);
@@ -140,15 +144,16 @@ public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends Def
     if (!constraints.isDefined(ValuePropertyNames.CALCULATION_METHOD)) {
       return null;
     }
-    Set<String> values = constraints.getValues(ValuePropertyNames.SURFACE_CALCULATION_METHOD);
-    if ((values == null) || (!values.isEmpty() && !values.contains(BlackVolatilitySurfacePropertyNamesAndValues.INTERPOLATED_BLACK_LOGNORMAL))) {
+    final Set<String> values = constraints.getValues(ValuePropertyNames.SURFACE_CALCULATION_METHOD);
+    if (values == null || !values.isEmpty() && !values.contains(BlackVolatilitySurfacePropertyNamesAndValues.INTERPOLATED_BLACK_LOGNORMAL)) {
       return null;
     }
     return super.getRequirements(context, target, desiredValue);
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final String id = getId(target.getSecurity());
     switch (propertyName) {
       case EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_CONFIG:
@@ -164,7 +169,7 @@ public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends Def
       case BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR:
         return _idToSurfaceInterpolatorName.get(id);
       default:
-        s_logger.error("Cannot get a default value for {}", propertyName);
+        LOGGER.error("Cannot get a default value for {}", propertyName);
         return null;
     }
   }
@@ -187,7 +192,8 @@ public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends Def
   }
 
   /**
-   * @param security The security
+   * @param security
+   *          The security
    * @return The id for the security
    */
   protected abstract String getId(Security security);

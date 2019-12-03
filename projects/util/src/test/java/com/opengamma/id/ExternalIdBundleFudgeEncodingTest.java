@@ -17,25 +17,37 @@ import com.opengamma.util.test.AbstractFudgeBuilderTestCase;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Test Fudge encoding.
+ * Test Fudge encoding for {@link ExternalIdBundle}.
  */
 @Test(groups = TestGroup.UNIT)
 public class ExternalIdBundleFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
+  /**
+   * Tests an encoding / decoding cycle.
+   */
+  @Test
   public void test() {
-    ExternalIdBundle object = ExternalIdBundle.of(
+    final ExternalIdBundle object = ExternalIdBundle.of(
         ExternalId.of("id1", "value1"),
         ExternalId.of("id2", "value2"));
     assertEncodeDecodeCycle(ExternalIdBundle.class, object);
   }
 
-  public void test_toFudgeMsg() {
-    ExternalIdBundle sample = ExternalIdBundle.of("A", "B");
+  /**
+   * Tests conversion to a Fudge message.
+   */
+  @Test
+  public void testToFudgeMsg() {
+    final ExternalIdBundle sample = ExternalIdBundle.of("A", "B");
     assertNull(ExternalIdBundleFudgeBuilder.toFudgeMsg(new FudgeSerializer(OpenGammaFudgeContext.getInstance()), null));
     assertNotNull(ExternalIdBundleFudgeBuilder.toFudgeMsg(new FudgeSerializer(OpenGammaFudgeContext.getInstance()), sample));
   }
 
-  public void test_fromFudgeMsg() {
+  /**
+   * Tests conversion from a null Fudge message.
+   */
+  @Test
+  public void testFromFudgeMsg() {
     assertNull(ExternalIdBundleFudgeBuilder.fromFudgeMsg(new FudgeDeserializer(OpenGammaFudgeContext.getInstance()), null));
   }
 

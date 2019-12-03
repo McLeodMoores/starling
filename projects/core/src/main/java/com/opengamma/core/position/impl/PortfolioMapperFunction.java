@@ -16,7 +16,7 @@ import com.opengamma.core.position.Position;
 public interface PortfolioMapperFunction<T> {
 
   /**
-   * Maps from a portfolio node to a value of the required type
+   * Maps from a portfolio node to a value of the required type.
    *
    * @param node  the portfolio node, not null
    * @return the transformed portfolio node
@@ -24,7 +24,7 @@ public interface PortfolioMapperFunction<T> {
   T apply(PortfolioNode node);
 
   /**
-   * Maps from a position to a value of the required type
+   * Maps from a position to a value of the required type.
    *
    * @param parent the parent portfolio node, not null
    * @param position the position, not null

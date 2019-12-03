@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.config;
@@ -76,13 +76,15 @@ public class FunctionConfigurationDefinitionAggregatorTest {
   @Test
   public void cyclicReference() {
 
-    final FunctionConfigurationDefinition defA = new FunctionConfigurationDefinition("DFA", ImmutableList.<String>of("DFB"), ImmutableList.of(SF1, SF2), ImmutableList.of(PF1, PF2));
-    final FunctionConfigurationDefinition defB = new FunctionConfigurationDefinition("DFB", ImmutableList.<String>of("DFA"), ImmutableList.of(SF3, SF4), ImmutableList.of(PF3, PF4));
+    final FunctionConfigurationDefinition defA =
+        new FunctionConfigurationDefinition("DFA", ImmutableList.<String>of("DFB"), ImmutableList.of(SF1, SF2), ImmutableList.of(PF1, PF2));
+    final FunctionConfigurationDefinition defB =
+        new FunctionConfigurationDefinition("DFB", ImmutableList.<String>of("DFA"), ImmutableList.of(SF3, SF4), ImmutableList.of(PF3, PF4));
 
     when(_cfgSource.getSingle(FunctionConfigurationDefinition.class, "DFA", VersionCorrection.LATEST)).thenReturn(defA);
     when(_cfgSource.getSingle(FunctionConfigurationDefinition.class, "DFB", VersionCorrection.LATEST)).thenReturn(defB);
 
-    Set<FunctionConfiguration> expectedFunc = new HashSet<FunctionConfiguration>();
+    final Set<FunctionConfiguration> expectedFunc = new HashSet<>();
     expectedFunc.add(SF1);
     expectedFunc.add(SF2);
     expectedFunc.add(SF3);
@@ -99,7 +101,7 @@ public class FunctionConfigurationDefinitionAggregatorTest {
   }
 
   private Set<FunctionConfiguration> getExpectedFunctions() {
-    Set<FunctionConfiguration> func = new HashSet<FunctionConfiguration>();
+    final Set<FunctionConfiguration> func = new HashSet<>();
     func.add(SF1);
     func.add(SF2);
     func.add(SF3);

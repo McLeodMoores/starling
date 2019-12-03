@@ -23,7 +23,7 @@ public class DatabaseRestoreTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
@@ -33,8 +33,8 @@ public class DatabaseRestoreTool extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() throws Exception {
-    String dataDir = getCommandLine().getOptionValue(DATA_DIRECTORY);
-    DatabaseRestore databaseRestore = new DatabaseRestore(dataDir,
+    final String dataDir = getCommandLine().getOptionValue(DATA_DIRECTORY);
+    final DatabaseRestore databaseRestore = new DatabaseRestore(dataDir,
                                                           getToolContext().getSecurityMaster(),
                                                           getToolContext().getPositionMaster(),
                                                           getToolContext().getPortfolioMaster(),
@@ -49,10 +49,10 @@ public class DatabaseRestoreTool extends AbstractTool<ToolContext> {
   }
 
   @Override
-  protected Options createOptions(boolean mandatoryConfigResource) {
-    Options options = super.createOptions(mandatoryConfigResource);
+  protected Options createOptions(final boolean mandatoryConfigResource) {
+    final Options options = super.createOptions(mandatoryConfigResource);
 
-    Option dataDirOption = new Option(DATA_DIRECTORY, true, "Directory containing the database dump files");
+    final Option dataDirOption = new Option(DATA_DIRECTORY, true, "Directory containing the database dump files");
     dataDirOption.setRequired(true);
     options.addOption(dataDirOption);
 

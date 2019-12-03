@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -26,15 +26,15 @@ public class DataHistoricalDataPointsUris {
 
   /**
    * Builds a URI for the resource.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param objectId  the object identifier, not null
    * @param vc  the version-correction locator, null for latest
    * @param filter  the filter, may be null
    * @return the URI, not null
    */
-  public static URI uri(URI baseUri, ObjectIdentifiable objectId, VersionCorrection vc, HistoricalTimeSeriesGetFilter filter) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/dataPoints/{dpId}");
+  public static URI uri(final URI baseUri, final ObjectIdentifiable objectId, final VersionCorrection vc, final HistoricalTimeSeriesGetFilter filter) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/dataPoints/{dpId}");
     if (vc != null) {
       bld.queryParam("versionAsOf", vc.getVersionAsOfString());
       bld.queryParam("correctedTo", vc.getCorrectedToString());
@@ -47,17 +47,17 @@ public class DataHistoricalDataPointsUris {
 
   /**
    * Builds a URI for a specific version of the resource.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param uniqueId  the unique identifier, not null
    * @param filter  the filter, may be null
    * @return the URI, not null
    */
-  public static URI uriVersion(URI baseUri, UniqueId uniqueId, HistoricalTimeSeriesGetFilter filter) {
+  public static URI uriVersion(final URI baseUri, final UniqueId uniqueId, final HistoricalTimeSeriesGetFilter filter) {
     if (uniqueId.isLatest()) {
       return uri(baseUri, uniqueId, null, filter);
     }
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/dataPoints/{dpId}/versions/{versionId}");
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/dataPoints/{dpId}/versions/{versionId}");
     if (filter != null) {
       RestUtils.encodeQueryParams(bld, filter);
     }
@@ -66,39 +66,39 @@ public class DataHistoricalDataPointsUris {
 
   /**
    * Builds a URI for the corrections resource.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param objectId  the object identifier, not null
    * @return the URI, not null
    */
-  public static URI uriUpdates(URI baseUri, ObjectIdentifiable objectId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/dataPoints/{dpId}/updates");
+  public static URI uriUpdates(final URI baseUri, final ObjectIdentifiable objectId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/dataPoints/{dpId}/updates");
     return bld.build(objectId.getObjectId());
   }
 
   /**
    * Builds a URI for the corrections resource.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param objectId  the object identifier, not null
    * @return the URI, not null
    */
-  public static URI uriCorrections(URI baseUri, ObjectIdentifiable objectId) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/dataPoints/{dpId}/corrections");
+  public static URI uriCorrections(final URI baseUri, final ObjectIdentifiable objectId) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/dataPoints/{dpId}/corrections");
     return bld.build(objectId.getObjectId());
   }
 
   /**
    * Builds a URI for the corrections resource.
-   * 
+   *
    * @param baseUri  the base URI, not null
    * @param objectId  the object identifier, not null
    * @param fromDateInclusive  the start date, may be null
    * @param toDateInclusive  the end date, may be null
    * @return the URI, not null
    */
-  public static URI uriRemovals(URI baseUri, ObjectIdentifiable objectId, LocalDate fromDateInclusive, LocalDate toDateInclusive) {
-    UriBuilder bld = UriBuilder.fromUri(baseUri).path("/dataPoints/{dpId}/removals/{startDate}/{endDate}");
+  public static URI uriRemovals(final URI baseUri, final ObjectIdentifiable objectId, final LocalDate fromDateInclusive, final LocalDate toDateInclusive) {
+    final UriBuilder bld = UriBuilder.fromUri(baseUri).path("/dataPoints/{dpId}/removals/{startDate}/{endDate}");
     return bld.build(objectId.getObjectId(), ObjectUtils.toString(fromDateInclusive, ""), ObjectUtils.toString(toDateInclusive, ""));
   }
 

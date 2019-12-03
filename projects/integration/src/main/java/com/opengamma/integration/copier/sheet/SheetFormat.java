@@ -1,38 +1,49 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.integration.copier.sheet;
 
 /**
- * Known sheet formats
+ * Known sheet formats.
  */
 public enum SheetFormat {
 
-  /** CSV sheet */
-  CSV, 
+  /** CSV sheet. */
+  CSV,
 
-  /** XLS sheet */
+  /** XLS sheet. */
   XLS,
 
-  /** XLSX sheet */
+  /** XLSX sheet. */
   XLSX,
 
-  /** XLS sheet */
+  /** XLS sheet. */
   XML,
 
-  /** ZIP sheet */
+  /** ZIP sheet. */
   ZIP,
 
-  /** Unknown sheet */
+  /** Unknown sheet. */
   UNKNOWN;
- 
-  public static SheetFormat of(String filename) {
+
+  /**
+   * Returns the sheet format from the file extension.
+   *
+   * @param filename
+   *          the file name
+   * @return the sheet format
+   */
+  public static SheetFormat of(final String filename) {
     if (filename.lastIndexOf('.') < 0) {
       return SheetFormat.UNKNOWN;
     }
-    String extension = filename.substring(filename.lastIndexOf('.')).toLowerCase().trim();
+    final String extension = filename.substring(filename.lastIndexOf('.')).toLowerCase().trim();
     if (extension.equals(".csv")) {
       return SheetFormat.CSV;
     } else if (extension.equals(".xls")) {

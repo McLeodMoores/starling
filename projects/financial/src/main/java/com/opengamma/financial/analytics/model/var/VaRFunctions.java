@@ -110,10 +110,12 @@ public class VaRFunctions extends AbstractFunctionConfigurationBean {
 
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-      functions.add(functionConfiguration(NormalHistoricalVaRDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName(), getMeanCalculatorName(),
+      functions.add(functionConfiguration(NormalHistoricalVaRDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(),
+          getSamplingCalculatorName(), getMeanCalculatorName(),
           getStdDevCalculatorName(), Double.toString(getConfidenceLevel()), Double.toString(getHorizon())));
-      functions.add(functionConfiguration(EmpiricalHistoricalVaRDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName(),
-          Double.toString(getConfidenceLevel()), Double.toString(getHorizon())));
+      functions.add(
+          functionConfiguration(EmpiricalHistoricalVaRDefaultPropertiesFunction.class, getSamplingPeriodName(), getScheduleName(), getSamplingCalculatorName(),
+              Double.toString(getConfidenceLevel()), Double.toString(getHorizon())));
     }
 
   }

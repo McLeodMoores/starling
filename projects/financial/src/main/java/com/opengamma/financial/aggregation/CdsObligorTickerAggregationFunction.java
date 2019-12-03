@@ -7,7 +7,6 @@ package com.opengamma.financial.aggregation;
 
 import com.opengamma.core.legalentity.LegalEntity;
 import com.opengamma.core.legalentity.LegalEntitySource;
-import com.opengamma.core.obligor.definition.Obligor;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.id.ExternalScheme;
 
@@ -24,17 +23,17 @@ public class CdsObligorTickerAggregationFunction extends AbstractRedCodeHandling
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securitySource  the security source, not null
    * @param legalEntitySource  the organization source, not null
    */
-  public CdsObligorTickerAggregationFunction(SecuritySource securitySource, LegalEntitySource legalEntitySource) {
+  public CdsObligorTickerAggregationFunction(final SecuritySource securitySource, final LegalEntitySource legalEntitySource) {
     super(NAME, securitySource, new CdsObligorExtractor(legalEntitySource));
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected String handleExtractedData(LegalEntity obligor) {
+  protected String handleExtractedData(final LegalEntity obligor) {
     return obligor.getExternalIdBundle().getValue(ExternalScheme.of("TICKER"));
   }
 

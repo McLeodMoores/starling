@@ -10,8 +10,8 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.cube.Cube;
 
 /**
- *  Operating splitting (as in Duffy chapter 22) with boundary conditions applied at each of the 4 steps
- * <b>Note</b> this is for testing purposes and is not recommended for actual use
+ * Operating splitting (as in Duffy chapter 22) with boundary conditions applied at each of the 4 steps <b>Note</b> this is for testing purposes and is not
+ * recommended for actual use.
  */
 @SuppressWarnings("deprecation")
 public class OperatorSplittingFiniteDifference2D implements ConvectionDiffusionPDESolver2D {
@@ -22,18 +22,21 @@ public class OperatorSplittingFiniteDifference2D implements ConvectionDiffusionP
   private static final int SOR_MAX = 5000;
 
   @Override
-  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax, final BoundaryCondition2D xLowerBoundary,
+  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax,
+      final BoundaryCondition2D xLowerBoundary,
       final BoundaryCondition2D xUpperBoundary, final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary) {
     return solve(pdeData, tSteps, xSteps, ySteps, tMax, xLowerBoundary, xUpperBoundary, yLowerBoundary, yUpperBoundary, null);
   }
 
   @Override
-  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax, final BoundaryCondition2D xLowerBoundary,
-      final BoundaryCondition2D xUpperBoundary, final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary, final Cube<Double, Double, Double, Double> freeBoundary) {
+  public double[][] solve(final ConvectionDiffusion2DPDEDataBundle pdeData, final int tSteps, final int xSteps, final int ySteps, final double tMax,
+      final BoundaryCondition2D xLowerBoundary,
+      final BoundaryCondition2D xUpperBoundary, final BoundaryCondition2D yLowerBoundary, final BoundaryCondition2D yUpperBoundary,
+      final Cube<Double, Double, Double, Double> freeBoundary) {
 
-    final double dt = tMax / (tSteps);
-    final double dx = (xUpperBoundary.getLevel() - xLowerBoundary.getLevel()) / (xSteps);
-    final double dy = (yUpperBoundary.getLevel() - yLowerBoundary.getLevel()) / (ySteps);
+    final double dt = tMax / tSteps;
+    final double dx = (xUpperBoundary.getLevel() - xLowerBoundary.getLevel()) / xSteps;
+    final double dy = (yUpperBoundary.getLevel() - yLowerBoundary.getLevel()) / ySteps;
     final double dtdx2 = dt / dx / dx;
     final double dtdx = dt / dx;
     final double dtdy2 = dt / dy / dy;
@@ -92,9 +95,9 @@ public class OperatorSplittingFiniteDifference2D implements ConvectionDiffusionP
           b = pdeData.getB(t, x[i], y[j]);
           c = pdeData.getC(t, x[i], y[j]);
 
-          mx[i][i - 1] = (dtdx2 * a - 0.5 * dtdx * b);
+          mx[i][i - 1] = dtdx2 * a - 0.5 * dtdx * b;
           mx[i][i] = 1 + (-2 * dtdx2 * a + dt * c);
-          mx[i][i + 1] = (dtdx2 * a + 0.5 * dtdx * b);
+          mx[i][i + 1] = dtdx2 * a + 0.5 * dtdx * b;
 
           q[i] = vt[i][j];
         }
@@ -133,8 +136,8 @@ public class OperatorSplittingFiniteDifference2D implements ConvectionDiffusionP
           errorSqr = 0.0;
           scale = 0.0;
           for (int l = 0; l <= xSteps; l++) {
-            min = (l == xSteps ? 0 : Math.max(0, l - 1));
-            max = (l == 0 ? xSteps : Math.min(xSteps, l + 1));
+            min = l == xSteps ? 0 : Math.max(0, l - 1);
+            max = l == 0 ? xSteps : Math.min(xSteps, l + 1);
             sum = 0;
             // for (int k = 0; k <= xSteps; k++) {
             for (int k = min; k <= max; k++) { // mx is tri-diagonal so only need 3 steps here
@@ -172,9 +175,9 @@ public class OperatorSplittingFiniteDifference2D implements ConvectionDiffusionP
           d = pdeData.getD(t, x[i], y[j]);
           f = pdeData.getF(t, x[i], y[j]);
 
-          my[j][j - 1] = (dtdy2 * d - 0.5 * dtdy * f);
-          my[j][j] = 1 + (-2 * dtdy2 * d);
-          my[j][j + 1] = (dtdy2 * d + 0.5 * dtdy * f);
+          my[j][j - 1] = dtdy2 * d - 0.5 * dtdy * f;
+          my[j][j] = 1 + -2 * dtdy2 * d;
+          my[j][j + 1] = dtdy2 * d + 0.5 * dtdy * f;
 
           r[j] = v[i][j];
         }
@@ -212,8 +215,8 @@ public class OperatorSplittingFiniteDifference2D implements ConvectionDiffusionP
           scale = 0.0;
           int min, max;
           for (int l = 0; l <= ySteps; l++) {
-            min = (l == ySteps ? 0 : Math.max(0, l - 1));
-            max = (l == 0 ? ySteps : Math.min(ySteps, l + 1));
+            min = l == ySteps ? 0 : Math.max(0, l - 1);
+            max = l == 0 ? ySteps : Math.min(ySteps, l + 1);
             sum = 0;
             // for (int k = 0; k <= ySteps; k++) {
             for (int k = min; k <= max; k++) {

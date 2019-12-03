@@ -18,7 +18,6 @@ import org.fudgemsg.MutableFudgeMsg;
 import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 
-import com.google.common.collect.Iterators;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -37,7 +36,7 @@ public final class HistoricalTimeSeriesBundle {
   private static final class Entry implements Iterable<HistoricalTimeSeries> {
 
     // Maintain insertion order, so that the bundle can be ordered e.g. by tenor
-    private final Map<ExternalIdBundle, HistoricalTimeSeries> _timeSeries = new LinkedHashMap<ExternalIdBundle, HistoricalTimeSeries>();
+    private final Map<ExternalIdBundle, HistoricalTimeSeries> _timeSeries = new LinkedHashMap<>();
     private Map<ExternalId, HistoricalTimeSeries> _lookup;
 
     private HistoricalTimeSeries getImpl(final ExternalId id) {
@@ -61,7 +60,7 @@ public final class HistoricalTimeSeriesBundle {
       if (_lookup != null) {
         return;
       }
-      _lookup = new HashMap<ExternalId, HistoricalTimeSeries>();
+      _lookup = new HashMap<>();
       for (final Map.Entry<ExternalIdBundle, HistoricalTimeSeries> e : _timeSeries.entrySet()) {
         addImpl(e.getKey(), e.getValue());
       }
@@ -130,7 +129,7 @@ public final class HistoricalTimeSeriesBundle {
 
   }
 
-  private final Map<String, Entry> _data = new HashMap<String, Entry>();
+  private final Map<String, Entry> _data = new HashMap<>();
 
   public void add(final String field, final ExternalIdBundle idBundle, final HistoricalTimeSeries timeSeries) {
     ArgumentChecker.notNull(field, "field");
@@ -189,7 +188,7 @@ public final class HistoricalTimeSeriesBundle {
     ArgumentChecker.notNull(field, "field");
     final Entry e = _data.get(field);
     if (e == null) {
-      return Iterators.emptyIterator();
+      return Collections.emptyIterator();
     }
     return e.iterator();
   }

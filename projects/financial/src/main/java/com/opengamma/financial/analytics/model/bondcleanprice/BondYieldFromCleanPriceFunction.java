@@ -10,7 +10,6 @@ import static com.opengamma.engine.value.ValueRequirementNames.YTM;
 import com.opengamma.analytics.financial.interestrate.bond.calculator.YieldFromCleanPriceCalculator;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.FunctionCompilationContext;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.financial.security.bond.BillSecurity;
 
 /**
@@ -19,8 +18,8 @@ import com.opengamma.financial.security.bond.BillSecurity;
 public class BondYieldFromCleanPriceFunction extends BondFromCleanPriceFunction<Double> {
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#YTM}
-   * and the calculator to {@link YieldFromCleanPriceCalculator}
+   * Sets the value requirement name to {@link com.opengamma.engine.value.ValueRequirementNames#YTM} and the calculator to
+   * {@link YieldFromCleanPriceCalculator}.
    */
   public BondYieldFromCleanPriceFunction() {
     super(YTM, YieldFromCleanPriceCalculator.getInstance());

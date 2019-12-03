@@ -19,17 +19,16 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class representing a credit rating, with information about the rating,
- * rating description (e.g. prime, investment grade, etc.), the rating
- * agency name and whether the rating is long- or short-term.
+ * Class representing a credit rating, with information about the rating, rating description (e.g. prime, investment grade, etc.), the rating agency name and
+ * whether the rating is long- or short-term.
  * <p>
  * This class is immutable and thread-safe.
  */
@@ -58,16 +57,20 @@ public final class CreditRating implements ImmutableBean, Serializable {
   private final String _agencyName;
 
   /**
-   * True if the rating is long-term, false if short-term
+   * True if the rating is long-term, false if short-term.
    */
   @PropertyDefinition
   private final boolean _longTerm;
 
   /**
-   * Constructs a credit rating
-   * @param rating The rating value, not null
-   * @param agencyName The agency name
-   * @param isLongTerm True if the rating is long-term
+   * Constructs a credit rating.
+   *
+   * @param rating
+   *          The rating value, not null
+   * @param agencyName
+   *          The agency name
+   * @param isLongTerm
+   *          True if the rating is long-term
    * @return The rating
    */
   public static CreditRating of(final String rating, final String agencyName, final boolean isLongTerm) {
@@ -75,11 +78,16 @@ public final class CreditRating implements ImmutableBean, Serializable {
   }
 
   /**
-   * Constructs a credit rating
-   * @param rating The rating value, not null
-   * @param ratingDescription The rating value, not null
-   * @param agencyName The agency name, not null
-   * @param isLongTerm True if the rating is long-term
+   * Constructs a credit rating.
+   *
+   * @param rating
+   *          The rating value, not null
+   * @param ratingDescription
+   *          The rating value, not null
+   * @param agencyName
+   *          The agency name, not null
+   * @param isLongTerm
+   *          True if the rating is long-term
    * @return The rating
    */
   public static CreditRating of(final String rating, final String ratingDescription, final String agencyName,
@@ -89,10 +97,14 @@ public final class CreditRating implements ImmutableBean, Serializable {
   }
 
   /**
-   * @param rating The rating value
-   * @param ratingDescription The description
-   * @param agencyName The agency name
-   * @param isLongTerm True if the rating is long-term
+   * @param rating
+   *          The rating value
+   * @param ratingDescription
+   *          The description
+   * @param agencyName
+   *          The agency name
+   * @param isLongTerm
+   *          True if the rating is long-term
    */
   @ImmutableConstructor
   private CreditRating(final String rating, final String ratingDescription, final String agencyName,
@@ -106,6 +118,7 @@ public final class CreditRating implements ImmutableBean, Serializable {
 
   /**
    * Gets the rating value.
+   *
    * @return The rating value
    */
   public String getRating() {
@@ -114,6 +127,7 @@ public final class CreditRating implements ImmutableBean, Serializable {
 
   /**
    * Gets the rating description.
+   *
    * @return The rating description
    */
   public String getRatingDescription() {
@@ -160,7 +174,7 @@ public final class CreditRating implements ImmutableBean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets true if the rating is long-term, false if short-term
+   * Gets true if the rating is long-term, false if short-term.
    * @return the value of the property
    */
   public boolean isLongTerm() {
@@ -175,10 +189,10 @@ public final class CreditRating implements ImmutableBean, Serializable {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CreditRating other = (CreditRating) obj;
-      return JodaBeanUtils.equal(getRating(), other.getRating()) &&
-          JodaBeanUtils.equal(getRatingDescription(), other.getRatingDescription()) &&
-          JodaBeanUtils.equal(getAgencyName(), other.getAgencyName()) &&
-          (isLongTerm() == other.isLongTerm());
+      return JodaBeanUtils.equal(_rating, other._rating) &&
+          JodaBeanUtils.equal(_ratingDescription, other._ratingDescription) &&
+          JodaBeanUtils.equal(_agencyName, other._agencyName) &&
+          (_longTerm == other._longTerm);
     }
     return false;
   }
@@ -186,10 +200,10 @@ public final class CreditRating implements ImmutableBean, Serializable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getRating());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getRatingDescription());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAgencyName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(isLongTerm());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_rating);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_ratingDescription);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_agencyName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_longTerm);
     return hash;
   }
 
@@ -197,10 +211,10 @@ public final class CreditRating implements ImmutableBean, Serializable {
   public String toString() {
     StringBuilder buf = new StringBuilder(160);
     buf.append("CreditRating{");
-    buf.append("rating").append('=').append(getRating()).append(',').append(' ');
-    buf.append("ratingDescription").append('=').append(getRatingDescription()).append(',').append(' ');
-    buf.append("agencyName").append('=').append(getAgencyName()).append(',').append(' ');
-    buf.append("longTerm").append('=').append(JodaBeanUtils.toString(isLongTerm()));
+    buf.append("rating").append('=').append(_rating).append(',').append(' ');
+    buf.append("ratingDescription").append('=').append(_ratingDescription).append(',').append(' ');
+    buf.append("agencyName").append('=').append(_agencyName).append(',').append(' ');
+    buf.append("longTerm").append('=').append(JodaBeanUtils.toString(_longTerm));
     buf.append('}');
     return buf.toString();
   }
@@ -345,7 +359,7 @@ public final class CreditRating implements ImmutableBean, Serializable {
   /**
    * The bean-builder for {@code CreditRating}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<CreditRating> {
+  private static final class Builder extends DirectPrivateBeanBuilder<CreditRating> {
 
     private String _rating;
     private String _ratingDescription;
@@ -356,6 +370,7 @@ public final class CreditRating implements ImmutableBean, Serializable {
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -393,30 +408,6 @@ public final class CreditRating implements ImmutableBean, Serializable {
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

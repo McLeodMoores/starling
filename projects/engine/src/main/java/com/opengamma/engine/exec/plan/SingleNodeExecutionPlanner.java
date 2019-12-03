@@ -31,7 +31,7 @@ import com.opengamma.engine.view.impl.ExecutionLogModeSource;
  */
 public class SingleNodeExecutionPlanner implements GraphExecutionPlanner {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SingleNodeExecutionPlanner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SingleNodeExecutionPlanner.class);
 
   private static final class JobBuilder {
 
@@ -44,13 +44,14 @@ public class SingleNodeExecutionPlanner implements GraphExecutionPlanner {
     private final Map<ValueSpecification, FunctionParameters> _parameters;
     private final Set<DependencyNode> _executed;
 
-    public JobBuilder(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final Set<ValueSpecification> sharedValues, final Map<ValueSpecification, FunctionParameters> parameters) {
+    JobBuilder(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final Set<ValueSpecification> sharedValues,
+        final Map<ValueSpecification, FunctionParameters> parameters) {
       final int size = graph.getSize();
-      _items = new ArrayList<CalculationJobItem>(size);
+      _items = new ArrayList<>(size);
       _calcConfigName = graph.getCalculationConfigurationName();
       _logModeSource = logModeSource;
       _sharedValues = sharedValues;
-      _privateValues = new HashSet<ValueSpecification>();
+      _privateValues = new HashSet<>();
       _terminals = graph.getTerminalOutputs();
       _parameters = parameters;
       _executed = Sets.newHashSetWithExpectedSize(size);
@@ -70,13 +71,13 @@ public class SingleNodeExecutionPlanner implements GraphExecutionPlanner {
       final ExecutionLogMode logMode = _logModeSource.getLogMode(_calcConfigName, root.getOutputValue(0));
       final ValueSpecification[] outputs = DependencyNodeImpl.getOutputValueArray(root);
       FunctionParameters functionParameters = root.getFunction().getParameters();
-      for (ValueSpecification output : outputs) {
+      for (final ValueSpecification output : outputs) {
         if (_terminals.containsKey(output)) {
           _sharedValues.add(output);
         } else {
           _privateValues.add(output);
         }
-        FunctionParameters newParameters = _parameters.get(output);
+        final FunctionParameters newParameters = _parameters.get(output);
         if (newParameters != null) {
           functionParameters = newParameters;
         }
@@ -89,12 +90,11 @@ public class SingleNodeExecutionPlanner implements GraphExecutionPlanner {
     }
 
     public CacheSelectHint getCacheHint() {
-      s_logger.debug("{} private values, {} shared values in graph", _privateValues.size(), _sharedValues.size());
+      LOGGER.debug("{} private values, {} shared values in graph", _privateValues.size(), _sharedValues.size());
       if (_privateValues.size() < _sharedValues.size()) {
         return CacheSelectHint.privateValues(_privateValues);
-      } else {
-        return CacheSelectHint.sharedValues(_sharedValues);
       }
+      return CacheSelectHint.sharedValues(_sharedValues);
     }
 
   }
@@ -103,7 +103,7 @@ public class SingleNodeExecutionPlanner implements GraphExecutionPlanner {
       final Map<ValueSpecification, FunctionParameters> parameters) {
     final JobBuilder builder = new JobBuilder(graph, logModeSource, sharedValues, parameters);
     final int roots = graph.getRootCount();
-    iLoop: for (int i = 0; i < roots; i++) { //CSIGNORE
+    iLoop: for (int i = 0; i < roots; i++) { // CSIGNORE
       final DependencyNode root = graph.getRootNode(i);
       final int outputs = root.getOutputCount();
       for (int j = 0; j < outputs; j++) {
@@ -119,10 +119,12 @@ public class SingleNodeExecutionPlanner implements GraphExecutionPlanner {
   // GraphExecutionPlanner
 
   @Override
-  public GraphExecutionPlan createPlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final long functionInitialisationId, final Set<ValueSpecification> sharedValues,
+  public GraphExecutionPlan createPlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final long functionInitialisationId,
+      final Set<ValueSpecification> sharedValues,
       final Map<ValueSpecification, FunctionParameters> parameters) {
     final PlannedJob job = createJob(graph, logModeSource, sharedValues, parameters);
-    return new GraphExecutionPlan(graph.getCalculationConfigurationName(), functionInitialisationId, Collections.singleton(job), 1, job.getItems().size(), Double.NaN, Double.NaN);
+    return new GraphExecutionPlan(
+        graph.getCalculationConfigurationName(), functionInitialisationId, Collections.singleton(job), 1, job.getItems().size(), Double.NaN, Double.NaN);
   }
 
 }

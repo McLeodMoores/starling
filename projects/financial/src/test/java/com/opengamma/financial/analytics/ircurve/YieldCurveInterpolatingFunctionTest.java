@@ -26,13 +26,13 @@ public class YieldCurveInterpolatingFunctionTest {
 
   @Test
   public void simpleTest() {
-    ArrayList<Double> xs = Lists.newArrayList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
-    ArrayList<Double> ys = Lists.newArrayList(1.0, 2.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
-    DoubleQuadraticInterpolator1D interpolator = new DoubleQuadraticInterpolator1D();
+    final ArrayList<Double> xs = Lists.newArrayList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
+    final ArrayList<Double> ys = Lists.newArrayList(1.0, 2.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
+    final DoubleQuadraticInterpolator1D interpolator = new DoubleQuadraticInterpolator1D();
 
-    InterpolatedDoublesCurve inputCurve = InterpolatedDoublesCurve.from(xs, ys, interpolator);
+    final InterpolatedDoublesCurve inputCurve = InterpolatedDoublesCurve.from(xs, ys, interpolator);
 
-    NodalDoublesCurve interpolatedCurve = YieldCurveInterpolatingFunction.interpolateCurve(inputCurve);
+    final NodalDoublesCurve interpolatedCurve = YieldCurveInterpolatingFunction.interpolateCurve(inputCurve);
 
     AssertJUnit.assertNotSame(0, interpolatedCurve.getXData().length);
     AssertJUnit.assertNotSame(0, interpolatedCurve.getYData().length);
@@ -41,14 +41,14 @@ public class YieldCurveInterpolatingFunctionTest {
         interpolatedCurve.getXData()[interpolatedCurve.getXData().length - 1]);
 
     for (int i = 0; i < interpolatedCurve.getXData().length; i++) {
-      double x = interpolatedCurve.getXData()[i];
-      double y = interpolatedCurve.getYData()[i];
+      final double x = interpolatedCurve.getXData()[i];
+      final double y = interpolatedCurve.getYData()[i];
       AssertJUnit.assertEquals(inputCurve.getYValue(x), y);
     }
-    
+
     for (int i = 1; i < interpolatedCurve.getXData().length; i++) {
-      double x = interpolatedCurve.getXData()[i];
-      double prevX = interpolatedCurve.getXData()[i-1];
+      final double x = interpolatedCurve.getXData()[i];
+      final double prevX = interpolatedCurve.getXData()[i - 1];
       assertTrue(prevX < x);
     }
   }

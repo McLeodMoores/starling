@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -36,7 +36,7 @@ public final class FXForwardSecurityBeanOperation extends AbstractSecurityBeanOp
   }
 
   @Override
-  public FXForwardSecurityBean createBean(final OperationContext context, HibernateSecurityMasterDao secMasterSession, FXForwardSecurity security) {
+  public FXForwardSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final FXForwardSecurity security) {
     final FXForwardSecurityBean bean = new FXForwardSecurityBean();
     bean.setPayCurrency(secMasterSession.getOrCreateCurrencyBean(security.getPayCurrency().getCode()));
     bean.setPayAmount(security.getPayAmount());
@@ -48,13 +48,13 @@ public final class FXForwardSecurityBeanOperation extends AbstractSecurityBeanOp
   }
 
   @Override
-  public FXForwardSecurity createSecurity(final OperationContext context, FXForwardSecurityBean bean) {
-    ZonedDateTime forwardDate = zonedDateTimeBeanToDateTimeWithZone(bean.getForwardDate());
-    ExternalId region = externalIdBeanToExternalId(bean.getRegion());
-    Currency payCurrency = currencyBeanToCurrency(bean.getPayCurrency());
-    double payAmount = bean.getPayAmount();
-    Currency receiveCurrency = currencyBeanToCurrency(bean.getReceiveCurrency());
-    double receiveAmount = bean.getReceiveAmount();
+  public FXForwardSecurity createSecurity(final OperationContext context, final FXForwardSecurityBean bean) {
+    final ZonedDateTime forwardDate = zonedDateTimeBeanToDateTimeWithZone(bean.getForwardDate());
+    final ExternalId region = externalIdBeanToExternalId(bean.getRegion());
+    final Currency payCurrency = currencyBeanToCurrency(bean.getPayCurrency());
+    final double payAmount = bean.getPayAmount();
+    final Currency receiveCurrency = currencyBeanToCurrency(bean.getReceiveCurrency());
+    final double receiveAmount = bean.getReceiveAmount();
     return new FXForwardSecurity(payCurrency, payAmount, receiveCurrency, receiveAmount, forwardDate, region);
   }
 

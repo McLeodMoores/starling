@@ -56,7 +56,7 @@ public abstract class AbstractHistoryRequest extends DirectBean implements Paged
    * The request for paging.
    * By default all matching items will be returned.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private PagingRequest _pagingRequest = PagingRequest.ALL;
   /**
    * The object identifier to match.
@@ -105,7 +105,7 @@ public abstract class AbstractHistoryRequest extends DirectBean implements Paged
   /**
    * Creates an instance with object identifier.
    * This will retrieve all versions and corrections unless the relevant fields are set.
-   * 
+   *
    * @param objectId  the object identifier, not null
    */
   public AbstractHistoryRequest(final ObjectIdentifiable objectId) {
@@ -114,12 +114,12 @@ public abstract class AbstractHistoryRequest extends DirectBean implements Paged
 
   /**
    * Creates an instance with object identifier and optional version and correction.
-   * 
+   *
    * @param objectId  the object identifier, not null
    * @param versionInstant  the version instant to retrieve, null for all versions
    * @param correctedToInstant  the instant that the data should be corrected to, null for all corrections
    */
-  public AbstractHistoryRequest(final ObjectIdentifiable objectId, Instant versionInstant, Instant correctedToInstant) {
+  public AbstractHistoryRequest(final ObjectIdentifiable objectId, final Instant versionInstant, final Instant correctedToInstant) {
     ArgumentChecker.notNull(objectId, "objectId");
     setObjectId(objectId.getObjectId());
     setVersionsFromInstant(versionInstant);
@@ -153,6 +153,7 @@ public abstract class AbstractHistoryRequest extends DirectBean implements Paged
    * By default all matching items will be returned.
    * @return the value of the property
    */
+  @Override
   public PagingRequest getPagingRequest() {
     return _pagingRequest;
   }
@@ -162,6 +163,7 @@ public abstract class AbstractHistoryRequest extends DirectBean implements Paged
    * By default all matching items will be returned.
    * @param pagingRequest  the new value of the property
    */
+  @Override
   public void setPagingRequest(PagingRequest pagingRequest) {
     this._pagingRequest = pagingRequest;
   }

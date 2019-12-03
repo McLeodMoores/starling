@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention.calendar;
@@ -27,7 +27,9 @@ public abstract class AbstractCalendar implements Calendar, Serializable {
 
   /**
    * Creates an instance.
-   * @param name  the convention name, not null
+   * 
+   * @param name
+   *          the convention name, not null
    */
   protected AbstractCalendar(final String name) {
     Validate.notNull(name, "name");
@@ -38,10 +40,11 @@ public abstract class AbstractCalendar implements Calendar, Serializable {
   /**
    * Checks if the date is a working date.
    * <p>
-   * This invokes {@link #isNormallyWorkingDay(LocalDate)} followed by either
-   * {@link #isWorkingDayException(LocalDate)} or {@link #isNonWorkingDayException(LocalDate)}.
-   * 
-   * @param date  the date to check, not null
+   * This invokes {@link #isNormallyWorkingDay(LocalDate)} followed by either {@link #isWorkingDayException(LocalDate)} or
+   * {@link #isNonWorkingDayException(LocalDate)}.
+   *
+   * @param date
+   *          the date to check, not null
    * @return true if the date is a working date
    */
   @Override
@@ -55,7 +58,7 @@ public abstract class AbstractCalendar implements Calendar, Serializable {
 
   /**
    * Gets the name of the convention.
-   * 
+   *
    * @return the name, not null
    * @deprecated use getName()
    */
@@ -73,15 +76,18 @@ public abstract class AbstractCalendar implements Calendar, Serializable {
   // -------------------------------------------------------------------------
   /**
    * Checks if the date would be a working day if no exceptions apply.
-   * @param date  the date to check, not null
+   * 
+   * @param date
+   *          the date to check, not null
    * @return true if the date is normally a working day
    */
-  protected abstract boolean isNormallyWorkingDay(final LocalDate date);
+  protected abstract boolean isNormallyWorkingDay(LocalDate date);
 
   /**
-   * Checks if the date is a non-working day, but would be considered a working day
-   * by the {@code isNormallyWorkingDay} method.
-   * @param date  the date to check, not null
+   * Checks if the date is a non-working day, but would be considered a working day by the {@code isNormallyWorkingDay} method.
+   * 
+   * @param date
+   *          the date to check, not null
    * @return true if the date is, unusually, a non-working day
    */
   protected boolean isWorkingDayException(final LocalDate date) {
@@ -89,9 +95,10 @@ public abstract class AbstractCalendar implements Calendar, Serializable {
   }
 
   /**
-   * Checks if the date is a working day, but would be considered a non-working day
-   * by the {@code isNormallyWorkingDay} method.
-   * @param date  the date to check, not null
+   * Checks if the date is a working day, but would be considered a non-working day by the {@code isNormallyWorkingDay} method.
+   * 
+   * @param date
+   *          the date to check, not null
    * @return true if the date is, unusually, a working day
    */
   protected boolean isNonWorkingDayException(final LocalDate date) {

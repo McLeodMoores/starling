@@ -45,8 +45,8 @@ import com.opengamma.util.paging.Paging;
  * As such, this implementation is currently most useful for testing scenarios.
  */
 public class InMemoryHolidayMaster
-    extends SimpleAbstractInMemoryMaster<HolidayDocument>
-    implements HolidayMaster {
+extends SimpleAbstractInMemoryMaster<HolidayDocument>
+implements HolidayMaster {
 
   /**
    * The default scheme used for each {@link ObjectId}.
@@ -90,7 +90,7 @@ public class InMemoryHolidayMaster
 
   //-------------------------------------------------------------------------
   @Override
-  protected void validateDocument(HolidayDocument document) {
+  protected void validateDocument(final HolidayDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getName(), "document.name");
     ArgumentChecker.notNull(document.getHoliday(), "document.holiday");
@@ -100,7 +100,7 @@ public class InMemoryHolidayMaster
   @Override
   public HolidayMetaDataResult metaData(final HolidayMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
-    HolidayMetaDataResult result = new HolidayMetaDataResult();
+    final HolidayMetaDataResult result = new HolidayMetaDataResult();
     if (request.isHolidayTypes()) {
       result.getHolidayTypes().addAll(Arrays.asList(HolidayType.values()));
     }
@@ -111,14 +111,14 @@ public class InMemoryHolidayMaster
   @Override
   public HolidaySearchResult search(final HolidaySearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    final List<HolidayDocument> list = new ArrayList<HolidayDocument>();
-    for (HolidayDocument doc : _store.values()) {
+    final List<HolidayDocument> list = new ArrayList<>();
+    for (final HolidayDocument doc : _store.values()) {
       if (request.matches(doc)) {
         list.add(doc);
       }
     }
     Collections.sort(list, request.getSortOrder());
-    
+
     final HolidaySearchResult result = new HolidaySearchResult();
     result.setPaging(Paging.of(request.getPagingRequest(), list));
     result.getDocuments().addAll(request.getPagingRequest().select(list));
@@ -133,7 +133,7 @@ public class InMemoryHolidayMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public HolidayDocument get(final ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public HolidayDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     final HolidayDocument document = _store.get(objectId.getObjectId());
@@ -183,7 +183,7 @@ public class InMemoryHolidayMaster
     document.setVersionToInstant(null);
     document.setCorrectionFromInstant(now);
     document.setCorrectionToInstant(null);
-    if (_store.replace(uniqueId.getObjectId(), storedDocument, document) == false) {
+    if (!_store.replace(uniqueId.getObjectId(), storedDocument, document)) {
       throw new IllegalArgumentException("Concurrent modification");
     }
     _changeManager.entityChanged(ChangeType.CHANGED, document.getObjectId(), storedDocument.getVersionFromInstant(), document.getVersionToInstant(), now);

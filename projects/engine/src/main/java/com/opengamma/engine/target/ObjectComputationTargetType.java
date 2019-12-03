@@ -7,16 +7,16 @@ package com.opengamma.engine.target;
 
 import java.io.ObjectStreamException;
 
-import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * Wrapper around the {@link ComputationTargetType} instance that is typed for the leaf node. This can be used to extract the required type from a target using
- * {@link ComputationTarget#getValue(ObjectComputationTargetType)}.
- * 
- * @param <T> the target object type
+ * {@link com.opengamma.engine.ComputationTarget#getValue(ObjectComputationTargetType)}.
+ *
+ * @param <T>
+ *          the target object type
  */
 public class ObjectComputationTargetType<T extends UniqueIdentifiable> extends ComputationTargetType {
 
@@ -33,11 +33,11 @@ public class ObjectComputationTargetType<T extends UniqueIdentifiable> extends C
 
   public static <T extends UniqueIdentifiable> ObjectComputationTargetType<T> of(final ComputationTargetType type, final Class<T> clazz) {
     assert type.isTargetType(clazz) : clazz + " is not valid for " + type;
-    return new ObjectComputationTargetType<T>(type, clazz);
+    return new ObjectComputationTargetType<>(type, clazz);
   }
 
   public static <T extends UniqueIdentifiable> ObjectComputationTargetType<T> of(final Class<T> clazz) {
-    return new ObjectComputationTargetType<T>(ComputationTargetType.of(clazz), clazz);
+    return new ObjectComputationTargetType<>(ComputationTargetType.of(clazz), clazz);
   }
 
   private ComputationTargetType getUnderlying() {
@@ -50,7 +50,7 @@ public class ObjectComputationTargetType<T extends UniqueIdentifiable> extends C
 
   /**
    * Creates a specification for the given object. The specification will consist of this type and the object's unique identifier.
-   * 
+   *
    * @param object the object to produce the specification for, not null
    * @return the target specification, never null
    */

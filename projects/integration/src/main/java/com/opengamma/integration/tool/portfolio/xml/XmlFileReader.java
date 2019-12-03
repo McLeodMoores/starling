@@ -43,27 +43,27 @@ public class XmlFileReader implements Iterable<PositionReader> {
    * @param schemaRegister the schema register, use to determine what xml
    * versions can be handled
    */
-  public XmlFileReader(InputStream inputStream, SchemaRegister schemaRegister) {
+  public XmlFileReader(final InputStream inputStream, final SchemaRegister schemaRegister) {
 
     // Create a ByteArrayInputStream to ensure reset() is available
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
       org.apache.commons.io.IOUtils.copy(inputStream, baos);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Unable to read xml", e);
     }
 
-    byte[] bytes = baos.toByteArray();
-    ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+    final byte[] bytes = baos.toByteArray();
+    final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 
-    SchemaVersion version = extractSchemaVersion(bais);
-    PortfolioConversion converter = schemaRegister.getConverterForSchema(version);
+    final SchemaVersion version = extractSchemaVersion(bais);
+    final PortfolioConversion converter = schemaRegister.getConverterForSchema(version);
 
     //reset after schema version is extracted
     bais.reset();
 
     if (converter != null) {
-      Iterable<VersionedPortfolioHandler> handlers = converter.convertPortfolio(bais);
+      final Iterable<VersionedPortfolioHandler> handlers = converter.convertPortfolio(bais);
       _readers = Iterables.transform(handlers, new Function<VersionedPortfolioHandler, PositionReader>() {
         @Override
         public PositionReader apply(final VersionedPortfolioHandler vph) {
@@ -80,7 +80,7 @@ public class XmlFileReader implements Iterable<PositionReader> {
     return _readers.iterator();
   }
 
-  private SchemaVersion extractSchemaVersion(InputStream inputStream) {
+  private SchemaVersion extractSchemaVersion(final InputStream inputStream) {
     return new SchemaVersionParser(new InputStreamReader(inputStream)).parseSchemaVersion();
   }
 

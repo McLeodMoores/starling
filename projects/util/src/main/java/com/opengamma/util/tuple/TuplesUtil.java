@@ -5,12 +5,12 @@
  */
 package com.opengamma.util.tuple;
 
+import java.util.Map;
+
 import it.unimi.dsi.fastutil.ints.Int2DoubleMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-
-import java.util.Map;
 
 /**
  * Utilities.
@@ -20,6 +20,12 @@ import java.util.Map;
 @Deprecated
 public class TuplesUtil {
 
+  /**
+   * Gets a map entry.
+   *
+   * @param pair  the pair
+   * @return  an entry
+   */
   public static Map.Entry pairToEntry(final Pair pair) {
     return new Map.Entry() {
       @Override
@@ -33,12 +39,18 @@ public class TuplesUtil {
       }
 
       @Override
-      public Object setValue(Object value) {
+      public Object setValue(final Object value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
     };
   }
 
+  /**
+   * Gets a map entry.
+   *
+   * @param pair  the pair
+   * @return  an entry
+   */
   public static Long2ObjectMap.Entry pairToEntry(final LongObjectPair pair) {
     return new Long2ObjectMap.Entry() {
       @Override
@@ -57,12 +69,18 @@ public class TuplesUtil {
       }
 
       @Override
-      public Object setValue(Object value) {
+      public Object setValue(final Object value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
     };
   }
 
+  /**
+   * Gets a map entry.
+   *
+   * @param pair  the pair
+   * @return  an entry
+   */
   public static Long2DoubleMap.Entry pairToEntry(final LongDoublePair pair) {
     return new Long2DoubleMap.Entry() {
       @Override
@@ -71,7 +89,7 @@ public class TuplesUtil {
       }
 
       @Override
-      public double setValue(double value) {
+      public double setValue(final double value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
 
@@ -91,12 +109,18 @@ public class TuplesUtil {
       }
 
       @Override
-      public Double setValue(Double value) {
+      public Double setValue(final Double value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
     };
   }
 
+  /**
+   * Gets a map entry.
+   *
+   * @param pair  the pair
+   * @return  an entry
+   */
   public static Int2DoubleMap.Entry pairToEntry(final IntDoublePair pair) {
     return new Int2DoubleMap.Entry() {
       @Override
@@ -105,7 +129,7 @@ public class TuplesUtil {
       }
 
       @Override
-      public double setValue(double value) {
+      public double setValue(final double value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
 
@@ -125,12 +149,18 @@ public class TuplesUtil {
       }
 
       @Override
-      public Double setValue(Double value) {
+      public Double setValue(final Double value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
     };
   }
 
+  /**
+   * Gets a map entry.
+   *
+   * @param pair  the pair
+   * @return  an entry
+   */
   public static Int2ObjectMap.Entry pairToEntry(final IntObjectPair pair) {
     return new Int2ObjectMap.Entry() {
       @Override
@@ -149,7 +179,7 @@ public class TuplesUtil {
       }
 
       @Override
-      public Object setValue(Object value) {
+      public Object setValue(final Object value) {
         throw new UnsupportedOperationException("This entry is immutable");
       }
     };

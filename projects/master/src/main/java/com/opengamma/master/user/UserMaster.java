@@ -1,14 +1,10 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user;
 
-import com.opengamma.DataDuplicationException;
-import com.opengamma.DataNotFoundException;
-import com.opengamma.DataVersionException;
-import com.opengamma.core.change.ChangeProvider;
 import com.opengamma.core.user.UserAccount;
 import com.opengamma.core.user.UserSource;
 import com.opengamma.id.ObjectId;
@@ -29,7 +25,7 @@ import com.opengamma.id.UniqueId;
  * Unlike some other master interfaces, a user master only maintains lightweight history.
  * Each version is assigned a unique identifier, but only the current version can be queried.
  */
-public interface UserMaster extends UserSource, ChangeProvider {
+public interface UserMaster extends UserSource {
 
   /**
    * Checks if a user name already exists.
@@ -44,12 +40,14 @@ public interface UserMaster extends UserSource, ChangeProvider {
   /**
    * Gets a user by name.
    * <p>
-   * This will return the user matching the user name.
-   * A user name is a unique key for the user master.
+   * This will return the user matching the user name. A user name is a unique
+   * key for the user master.
    *
-   * @param userName  the user name to retrieve, not null
+   * @param userName
+   *          the user name to retrieve, not null
    * @return the user, not null
-   * @throws DataNotFoundException if there is no user with the specified name
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no user with the specified name
    */
   ManageableUser getByName(String userName);
 
@@ -58,10 +56,13 @@ public interface UserMaster extends UserSource, ChangeProvider {
    * <p>
    * This will return the user matching the object identifier.
    *
-   * @param objectId  the object identifier to retrieve, not null
+   * @param objectId
+   *          the object identifier to retrieve, not null
    * @return the user, not null
-   * @throws IllegalArgumentException if the identifier is invalid
-   * @throws DataNotFoundException if there is no user with the specified identifier
+   * @throws IllegalArgumentException
+   *           if the identifier is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no user with the specified identifier
    */
   ManageableUser getById(ObjectId objectId);
 
@@ -71,25 +72,33 @@ public interface UserMaster extends UserSource, ChangeProvider {
    * <p>
    * This adds a user, ensuring that the user does not already exist.
    *
-   * @param user  the user to add, not null
+   * @param user
+   *          the user to add, not null
    * @return the unique identifier of the added user, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataDuplicationException if the user name is already used
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataDuplicationException
+   *           if the user name is already used
    */
   UniqueId add(ManageableUser user);
 
   /**
    * Updates a user in the data store.
    * <p>
-   * This updates a user, ensuring that the user already exists.
-   * The unique identifier must be set in the user and it must have a version.
+   * This updates a user, ensuring that the user already exists. The unique
+   * identifier must be set in the user and it must have a version.
    *
-   * @param user  the user to add, not null
+   * @param user
+   *          the user to add, not null
    * @return the unique identifier of the updated user, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if the user to update cannot be found
-   * @throws DataVersionException if the unique identifier version is not the latest one
-   * @throws DataDuplicationException if the user is being renamed and the name is already used
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if the user to update cannot be found
+   * @throws com.opengamma.DataVersionException
+   *           if the unique identifier version is not the latest one
+   * @throws com.opengamma.DataDuplicationException
+   *           if the user is being renamed and the name is already used
    */
   UniqueId update(ManageableUser user);
 
@@ -109,25 +118,31 @@ public interface UserMaster extends UserSource, ChangeProvider {
   /**
    * Removes a user from the data store.
    *
-   * @param userName  the user name to remove, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no user with the specified name
+   * @param userName
+   *          the user name to remove, not null
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no user with the specified name
    */
   void removeByName(String userName);
 
   /**
    * Removes a user from the data store.
    *
-   * @param objectId  the object identifier to remove, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no user with the specified identifier
+   * @param objectId
+   *          the object identifier to remove, not null
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no user with the specified identifier
    */
   void removeById(ObjectId objectId);
 
   //-------------------------------------------------------------------------
   /**
    * Searches for users matching the specified search criteria.
-   * 
+   *
    * @param request  the search request, not null
    * @return the search result, not null
    * @throws IllegalArgumentException if the request is invalid
@@ -137,29 +152,37 @@ public interface UserMaster extends UserSource, ChangeProvider {
   /**
    * Queries the event history of a single user.
    * <p>
-   * If an implementation does not store history, and empty object must be returned.
-   * 
-   * @param request  the history request, not null
+   * If an implementation does not store history, and empty object must be
+   * returned.
+   *
+   * @param request
+   *          the history request, not null
    * @return the user history, not null
-   * @throws IllegalArgumentException if the request is invalid
-   * @throws DataNotFoundException if there is no user with the specified identifier
+   * @throws IllegalArgumentException
+   *           if the request is invalid
+   * @throws com.opengamma.DataNotFoundException
+   *           if there is no user with the specified identifier
    */
   UserEventHistoryResult eventHistory(UserEventHistoryRequest request);
 
   //-------------------------------------------------------------------------
   /**
    * Gets the fully resolved user account by user name.
-   * 
-   * @param userName  the user name, not null
+   *
+   * @param userName
+   *          the user name, not null
    * @return the user account with the specified user name, not null
-   * @throws DataNotFoundException if the user could not be found
-   * @throws RuntimeException if an error occurs
+   * @throws com.opengamma.DataNotFoundException
+   *           if the user could not be found
+   * @throws RuntimeException
+   *           if an error occurs
    */
+  @Override
   UserAccount getAccount(String userName);
 
   /**
    * Gets the {@code RoleMaster} used to query and manage users.
-   * 
+   *
    * @return the user master, not null
    */
   RoleMaster roleMaster();

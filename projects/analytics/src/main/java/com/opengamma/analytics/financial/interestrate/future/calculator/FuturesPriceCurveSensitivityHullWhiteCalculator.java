@@ -30,7 +30,8 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  * Computes the par rate for different instrument. The meaning of "par rate" is instrument dependent.
  */
-public final class FuturesPriceCurveSensitivityHullWhiteCalculator extends InstrumentDerivativeVisitorAdapter<HullWhiteOneFactorProviderInterface, MulticurveSensitivity> {
+public final class FuturesPriceCurveSensitivityHullWhiteCalculator
+    extends InstrumentDerivativeVisitorAdapter<HullWhiteOneFactorProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -39,6 +40,7 @@ public final class FuturesPriceCurveSensitivityHullWhiteCalculator extends Instr
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static FuturesPriceCurveSensitivityHullWhiteCalculator getInstance() {
@@ -64,26 +66,29 @@ public final class FuturesPriceCurveSensitivityHullWhiteCalculator extends Instr
    */
   private static final CashFlowEquivalentCurveSensitivityCalculator CFECSC = CashFlowEquivalentCurveSensitivityCalculator.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public MulticurveSensitivity visitInterestRateFutureSecurity(final InterestRateFutureSecurity futures, final HullWhiteOneFactorProviderInterface multicurve) {
     ArgumentChecker.notNull(futures, "Future");
     ArgumentChecker.notNull(multicurve, "Multi-curves with Hull-White");
-    final double futureConvexityFactor = MODEL.futuresConvexityFactor(multicurve.getHullWhiteParameters(), futures.getTradingLastTime(), futures.getFixingPeriodStartTime(),
+    final double futureConvexityFactor = MODEL.futuresConvexityFactor(multicurve.getHullWhiteParameters(), futures.getTradingLastTime(),
+        futures.getFixingPeriodStartTime(),
         futures.getFixingPeriodEndTime());
     // Backward sweep
     final double priceBar = 1.0;
     final double forwardBar = -futureConvexityFactor * priceBar;
     final Map<String, List<ForwardSensitivity>> mapFwd = new HashMap<>();
     final List<ForwardSensitivity> listForward = new ArrayList<>();
-    listForward.add(new SimplyCompoundedForwardSensitivity(futures.getFixingPeriodStartTime(), futures.getFixingPeriodEndTime(), futures.getFixingPeriodAccrualFactor(), forwardBar));
+    listForward.add(new SimplyCompoundedForwardSensitivity(futures.getFixingPeriodStartTime(), futures.getFixingPeriodEndTime(),
+        futures.getFixingPeriodAccrualFactor(), forwardBar));
     mapFwd.put(multicurve.getMulticurveProvider().getName(futures.getIborIndex()), listForward);
     return MulticurveSensitivity.ofForward(mapFwd);
   }
 
   @Override
-  public MulticurveSensitivity visitSwapFuturesPriceDeliverableSecurity(final SwapFuturesPriceDeliverableSecurity futures, final HullWhiteOneFactorProviderInterface multicurve) {
+  public MulticurveSensitivity visitSwapFuturesPriceDeliverableSecurity(final SwapFuturesPriceDeliverableSecurity futures,
+      final HullWhiteOneFactorProviderInterface multicurve) {
     ArgumentChecker.notNull(futures, "Future");
     ArgumentChecker.notNull(multicurve, "Multi-curves with Hull-White");
     final Currency ccy = futures.getCurrency();
@@ -95,27 +100,29 @@ public final class FuturesPriceCurveSensitivityHullWhiteCalculator extends Instr
     final double[] adjustments = new double[nbCf];
     final double[] df = new double[nbCf];
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      adjustments[loopcf] = MODEL.futuresConvexityFactor(parameters, futures.getTradingLastTime(), cfe.getNthPayment(loopcf).getPaymentTime(), futures.getDeliveryTime());
+      adjustments[loopcf] = MODEL.futuresConvexityFactor(parameters, futures.getTradingLastTime(), cfe.getNthPayment(loopcf).getPaymentTime(),
+          futures.getDeliveryTime());
       df[loopcf] = multicurves.getDiscountFactor(ccy, cfe.getNthPayment(loopcf).getPaymentTime());
     }
     double price = 1.0;
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      price += (cfe.getNthPayment(loopcf).getAmount() * df[loopcf] * adjustments[loopcf]) / df[0];
+      price += cfe.getNthPayment(loopcf).getAmount() * df[loopcf] * adjustments[loopcf] / df[0];
     }
     // Backward sweep
     final double priceBar = 1.0;
     final double[] dfBar = new double[nbCf];
     dfBar[0] = -(price - 1.0d - cfe.getNthPayment(0).getAmount() * adjustments[0]) / df[0] * priceBar;
     for (int loopcf = 1; loopcf < nbCf; loopcf++) {
-      dfBar[loopcf] = (cfe.getNthPayment(loopcf).getAmount() * adjustments[loopcf]) / df[0] * priceBar;
+      dfBar[loopcf] = cfe.getNthPayment(loopcf).getAmount() * adjustments[loopcf] / df[0] * priceBar;
     }
     final double[] cfeAmountBar = new double[nbCf];
     for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      cfeAmountBar[loopcf] = (df[loopcf] * adjustments[loopcf]) / df[0] * priceBar;
+      cfeAmountBar[loopcf] = df[loopcf] * adjustments[loopcf] / df[0] * priceBar;
     }
     final List<DoublesPair> listDfSensi = new ArrayList<>();
     for (int loopcf = 0; loopcf < cfe.getNumberOfPayments(); loopcf++) {
-      final DoublesPair dfSensi = DoublesPair.of(cfe.getNthPayment(loopcf).getPaymentTime(), -cfe.getNthPayment(loopcf).getPaymentTime() * df[loopcf] * dfBar[loopcf]);
+      final DoublesPair dfSensi = DoublesPair.of(cfe.getNthPayment(loopcf).getPaymentTime(),
+          -cfe.getNthPayment(loopcf).getPaymentTime() * df[loopcf] * dfBar[loopcf]);
       listDfSensi.add(dfSensi);
     }
     final Map<String, List<DoublesPair>> pvsDF = new HashMap<>();

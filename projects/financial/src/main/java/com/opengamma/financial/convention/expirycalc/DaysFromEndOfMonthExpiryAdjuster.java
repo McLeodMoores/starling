@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention.expirycalc;
@@ -8,31 +8,40 @@ package com.opengamma.financial.convention.expirycalc;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class DaysFromEndOfMonthExpiryAdjuster implements ExchangeTradedInstrumentExpiryCalculator {
   /** A weekend calendar */
-  private static final Calendar WEEKEND = new MondayToFridayCalendar("Weekend");
+  private static final WorkingDayCalendar WEEKEND = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   /** The name of this adjuster */
   private static final String NAME = "DaysFromEndOfMonthExpiryAdjuster";
   /** The number of working days from last working day of the month */
   private final int _nWorkingDays;
 
   /**
-   * @param nWorkingDays The number of working days 
+   * @param nWorkingDays
+   *          The number of working days
    */
   public DaysFromEndOfMonthExpiryAdjuster(final int nWorkingDays) {
     ArgumentChecker.notNegative(nWorkingDays, "nWorkingDays");
     _nWorkingDays = nWorkingDays;
   }
 
+  @Deprecated
   @Override
   public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+    return getExpiryDate(n, today, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  @Override
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final WorkingDayCalendar holidayCalendar) {
     ArgumentChecker.isTrue(n > 0, "n must be greater than 0; have {}", n);
     ArgumentChecker.notNull(today, "today");
     ArgumentChecker.notNull(holidayCalendar, "holidayCalendar");

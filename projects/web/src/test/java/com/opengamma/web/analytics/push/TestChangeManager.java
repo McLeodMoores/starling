@@ -22,22 +22,22 @@ import com.opengamma.id.ObjectId;
  */
 public class TestChangeManager implements ChangeManager, ChangeProvider {
 
-  private final List<ChangeListener> _listeners = new CopyOnWriteArrayList<ChangeListener>();
+  private final List<ChangeListener> _listeners = new CopyOnWriteArrayList<>();
 
   @Override
-  public void addChangeListener(ChangeListener listener) {
+  public void addChangeListener(final ChangeListener listener) {
     _listeners.add(listener);
   }
 
   @Override
-  public void removeChangeListener(ChangeListener listener) {
+  public void removeChangeListener(final ChangeListener listener) {
     throw new UnsupportedOperationException("removeChangeListener not implemented");
   }
 
   @Override
-  public void entityChanged(ChangeType type, ObjectId objectId, Instant versonFrom, Instant versionTo, Instant versionInstant) {
-    ChangeEvent event = new ChangeEvent(type, objectId, versonFrom, versionTo, versionInstant);
-    for (ChangeListener listener : _listeners) {
+  public void entityChanged(final ChangeType type, final ObjectId objectId, final Instant versonFrom, final Instant versionTo, final Instant versionInstant) {
+    final ChangeEvent event = new ChangeEvent(type, objectId, versonFrom, versionTo, versionInstant);
+    for (final ChangeListener listener : _listeners) {
       listener.entityChanged(event);
     }
   }

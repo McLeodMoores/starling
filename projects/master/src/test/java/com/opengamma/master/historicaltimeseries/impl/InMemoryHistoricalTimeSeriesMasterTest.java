@@ -48,335 +48,400 @@ public class InMemoryHistoricalTimeSeriesMasterTest {
   private static final ExternalIdBundle BUNDLE1 = ExternalIdBundle.of(ID1);
   private static final ExternalIdBundle BUNDLE2 = ExternalIdBundle.of(ID2);
 
-  private InMemoryHistoricalTimeSeriesMaster testEmpty;
-  private InMemoryHistoricalTimeSeriesMaster testPopulated;
-  private HistoricalTimeSeriesInfoDocument doc1;
-  private HistoricalTimeSeriesInfoDocument doc2;
-  private ManageableHistoricalTimeSeriesInfo info1;
-  private ManageableHistoricalTimeSeriesInfo info2;
+  private InMemoryHistoricalTimeSeriesMaster _testEmpty;
+  private InMemoryHistoricalTimeSeriesMaster _testPopulated;
+  private HistoricalTimeSeriesInfoDocument _doc1;
+  private HistoricalTimeSeriesInfoDocument _doc2;
+  private ManageableHistoricalTimeSeriesInfo _info1;
+  private ManageableHistoricalTimeSeriesInfo _info2;
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
-    testEmpty = new InMemoryHistoricalTimeSeriesMaster(new ObjectIdSupplier("Test"));
-    testPopulated = new InMemoryHistoricalTimeSeriesMaster(new ObjectIdSupplier("Test"));
-    info1 = new ManageableHistoricalTimeSeriesInfo();
-    info1.setName("Name1");
-    info1.setDataField("DF1");
-    info1.setDataSource("DS1");
-    info1.setDataProvider("DP1");
-    info1.setObservationTime("OT1");
-    info1.setExternalIdBundle(ExternalIdBundleWithDates.of(BUNDLE1));
-    doc1 = new HistoricalTimeSeriesInfoDocument();
-    doc1.setInfo(info1);
-    doc1 = testPopulated.add(doc1);
-    info2 = new ManageableHistoricalTimeSeriesInfo();
-    info2.setName("Name2");
-    info2.setDataField("DF2");
-    info2.setDataSource("DS2");
-    info2.setDataProvider("DP2");
-    info2.setObservationTime("OT2");
-    info2.setExternalIdBundle(ExternalIdBundleWithDates.of(BUNDLE2));
-    doc2 = new HistoricalTimeSeriesInfoDocument();
-    doc2.setInfo(info2);
-    doc2 = testPopulated.add(doc2);
+    _testEmpty = new InMemoryHistoricalTimeSeriesMaster(new ObjectIdSupplier("Test"));
+    _testPopulated = new InMemoryHistoricalTimeSeriesMaster(new ObjectIdSupplier("Test"));
+    _info1 = new ManageableHistoricalTimeSeriesInfo();
+    _info1.setName("Name1");
+    _info1.setDataField("DF1");
+    _info1.setDataSource("DS1");
+    _info1.setDataProvider("DP1");
+    _info1.setObservationTime("OT1");
+    _info1.setExternalIdBundle(ExternalIdBundleWithDates.of(BUNDLE1));
+    _doc1 = new HistoricalTimeSeriesInfoDocument();
+    _doc1.setInfo(_info1);
+    _doc1 = _testPopulated.add(_doc1);
+    _info2 = new ManageableHistoricalTimeSeriesInfo();
+    _info2.setName("Name2");
+    _info2.setDataField("DF2");
+    _info2.setDataSource("DS2");
+    _info2.setDataProvider("DP2");
+    _info2.setObservationTime("OT2");
+    _info2.setExternalIdBundle(ExternalIdBundleWithDates.of(BUNDLE2));
+    _doc2 = new HistoricalTimeSeriesInfoDocument();
+    _doc2.setInfo(_info2);
+    _doc2 = _testPopulated.add(_doc2);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullSupplier() {
+  public void testConstructorNullSupplier() {
     new InMemoryHistoricalTimeSeriesMaster((Supplier<ObjectId>) null);
   }
 
-  public void test_defaultSupplier() {
-    InMemoryHistoricalTimeSeriesMaster master = new InMemoryHistoricalTimeSeriesMaster();
-    HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
-    doc.setInfo(info1);
-    HistoricalTimeSeriesInfoDocument added = master.add(doc);
+  /**
+   *
+   */
+  public void testDefaultSupplier() {
+    final InMemoryHistoricalTimeSeriesMaster master = new InMemoryHistoricalTimeSeriesMaster();
+    final HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
+    doc.setInfo(_info1);
+    final HistoricalTimeSeriesInfoDocument added = master.add(doc);
     assertEquals("MemHts", added.getUniqueId().getScheme());
   }
 
-  public void test_alternateSupplier() {
-    InMemoryHistoricalTimeSeriesMaster master = new InMemoryHistoricalTimeSeriesMaster(new ObjectIdSupplier("Hello"));
-    HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
-    doc.setInfo(info1);
-    HistoricalTimeSeriesInfoDocument added = master.add(doc);
+  /**
+   *
+   */
+  public void testAlternateSupplier() {
+    final InMemoryHistoricalTimeSeriesMaster master = new InMemoryHistoricalTimeSeriesMaster(new ObjectIdSupplier("Hello"));
+    final HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
+    doc.setInfo(_info1);
+    final HistoricalTimeSeriesInfoDocument added = master.add(doc);
     assertEquals("Hello", added.getUniqueId().getScheme());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_search_emptyMaster() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
-    HistoricalTimeSeriesInfoSearchResult result = testEmpty.search(request);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testSearchEmptyMaster() {
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+    final HistoricalTimeSeriesInfoSearchResult result = _testEmpty.search(request);
     assertEquals(0, result.getPaging().getTotalItems());
     assertEquals(0, result.getDocuments().size());
   }
 
-  public void test_search_populatedMaster_all() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
-    HistoricalTimeSeriesInfoSearchResult result = testPopulated.search(request);
+  /**
+   *
+   */
+  public void testSearchPopulatedMasterAll() {
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+    final HistoricalTimeSeriesInfoSearchResult result = _testPopulated.search(request);
     assertEquals(2, result.getPaging().getTotalItems());
-    List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
+    final List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
     assertEquals(2, docs.size());
-    assertEquals(true, docs.contains(doc1));
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc1));
+    assertEquals(true, docs.contains(_doc2));
   }
 
-  public void test_search_populatedMaster_filterByBundle() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest(BUNDLE1);
-    HistoricalTimeSeriesInfoSearchResult result = testPopulated.search(request);
+  /**
+   *
+   */
+  public void testSearchPopulatedMasterFilterByBundle() {
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest(BUNDLE1);
+    final HistoricalTimeSeriesInfoSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
     assertEquals(1, result.getDocuments().size());
-    assertEquals(true, result.getDocuments().contains(doc1));
+    assertEquals(true, result.getDocuments().contains(_doc1));
   }
 
-  public void test_search_populatedMaster_filterByBundle_both() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+  /**
+   *
+   */
+  public void testSearchPopulatedMasterFilterByBundleBoth() {
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
     request.addExternalIds(BUNDLE1);
     request.addExternalIds(BUNDLE2);
-    HistoricalTimeSeriesInfoSearchResult result = testPopulated.search(request);
+    final HistoricalTimeSeriesInfoSearchResult result = _testPopulated.search(request);
     assertEquals(2, result.getPaging().getTotalItems());
-    List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
+    final List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
     assertEquals(2, docs.size());
-    assertEquals(true, docs.contains(doc1));
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc1));
+    assertEquals(true, docs.contains(_doc2));
   }
 
-  public void test_search_popluatedMaster_filterByExternalIdValue() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+  /**
+   *
+   */
+  public void testSearchPopluatedMasterFilterByExternalIdValue() {
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
     request.setExternalIdValue("B");
-    HistoricalTimeSeriesInfoSearchResult result = testPopulated.search(request);
+    final HistoricalTimeSeriesInfoSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
+    final List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc1));
+    assertEquals(true, docs.contains(_doc1));
   }
 
-  public void test_search_popluatedMaster_filterByExternalIdValue_case() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+  /**
+   *
+   */
+  public void testSearchPopluatedMasterFilterByExternalIdValueCase() {
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
     request.setExternalIdValue("b");
-    HistoricalTimeSeriesInfoSearchResult result = testPopulated.search(request);
+    final HistoricalTimeSeriesInfoSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
+    final List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc1));
+    assertEquals(true, docs.contains(_doc1));
   }
 
-  public void test_search_populatedMaster_filterByName() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+  /**
+   *
+   */
+  public void testSearchPopulatedMasterFilterByName() {
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
     request.setName("*ame2");
-    HistoricalTimeSeriesInfoSearchResult result = testPopulated.search(request);
+    final HistoricalTimeSeriesInfoSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
+    final List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc2));
   }
 
-  public void test_search_populatedMaster_filterByDataField() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+  /**
+   *
+   */
+  public void testSearchPopulatedMasterFilterByDataField() {
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
     request.setDataField("DF2");
-    HistoricalTimeSeriesInfoSearchResult result = testPopulated.search(request);
+    final HistoricalTimeSeriesInfoSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
+    final List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc2));
   }
 
-  public void test_search_populatedMaster_filterByDataSource() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+  /**
+   *
+   */
+  public void testSearchPopulatedMasterFilterByDataSource() {
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
     request.setDataSource("DS2");
-    HistoricalTimeSeriesInfoSearchResult result = testPopulated.search(request);
+    final HistoricalTimeSeriesInfoSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
+    final List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc2));
   }
 
-  public void test_search_populatedMaster_filterByDataProvider() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+  /**
+   *
+   */
+  public void testSearchPopulatedMasterFilterByDataProvider() {
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
     request.setDataProvider("DP2");
-    HistoricalTimeSeriesInfoSearchResult result = testPopulated.search(request);
+    final HistoricalTimeSeriesInfoSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
+    final List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc2));
   }
 
-  public void test_search_populatedMaster_filterByObservationTime() {
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+  /**
+   *
+   */
+  public void testSearchPopulatedMasterFilterByObservationTime() {
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
     request.setObservationTime("OT2");
-    HistoricalTimeSeriesInfoSearchResult result = testPopulated.search(request);
+    final HistoricalTimeSeriesInfoSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
+    final List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc2));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_get_emptyMaster() {
-    assertNull(testEmpty.get(OTHER_UID));
+  public void testGetEmptyMaster() {
+    assertNull(_testEmpty.get(OTHER_UID));
   }
 
-  public void test_get_populatedMaster() {
-    assertSame(doc1, testPopulated.get(doc1.getUniqueId()));
-    assertSame(doc2, testPopulated.get(doc2.getUniqueId()));
+  /**
+   *
+   */
+  public void testGetPopulatedMaster() {
+    assertSame(_doc1, _testPopulated.get(_doc1.getUniqueId()));
+    assertSame(_doc2, _testPopulated.get(_doc2.getUniqueId()));
   }
 
-  //-------------------------------------------------------------------------
-  public void test_add_emptyMaster() {
-    HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
-    doc.setInfo(info1);
-    HistoricalTimeSeriesInfoDocument added = testEmpty.add(doc);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testAddEmptyMaster() {
+    final HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
+    doc.setInfo(_info1);
+    final HistoricalTimeSeriesInfoDocument added = _testEmpty.add(doc);
     assertNotNull(added.getVersionFromInstant());
     assertNotNull(added.getCorrectionFromInstant());
     assertEquals(added.getVersionFromInstant(), added.getCorrectionFromInstant());
     assertEquals("Test", added.getUniqueId().getScheme());
     added.setUniqueId(null);
     added.getInfo().setTimeSeriesObjectId(null);
-    assertEquals(info1, added.getInfo());
+    assertEquals(_info1, added.getInfo());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_update_emptyMaster() {
-    HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
-    doc.setInfo(info1);
+  public void testUpdateEmptyMaster() {
+    final HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
+    doc.setInfo(_info1);
     doc.setUniqueId(OTHER_UID);
-    testEmpty.update(doc);
+    _testEmpty.update(doc);
   }
 
-  public void test_update_populatedMaster() {
-    HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
-    doc.setInfo(info1);
-    doc.setUniqueId(doc1.getUniqueId());
-    HistoricalTimeSeriesInfoDocument updated = testPopulated.update(doc);
-    assertEquals(doc1.getUniqueId(), updated.getUniqueId());
-    assertNotNull(doc1.getVersionFromInstant());
+  /**
+   *
+   */
+  public void testUpdatePopulatedMaster() {
+    final HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument();
+    doc.setInfo(_info1);
+    doc.setUniqueId(_doc1.getUniqueId());
+    final HistoricalTimeSeriesInfoDocument updated = _testPopulated.update(doc);
+    assertEquals(_doc1.getUniqueId(), updated.getUniqueId());
+    assertNotNull(_doc1.getVersionFromInstant());
     assertNotNull(updated.getVersionFromInstant());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_remove_emptyMaster() {
-    testEmpty.remove(OTHER_UID);
+  public void testRemoveEmptyMaster() {
+    _testEmpty.remove(OTHER_UID);
   }
 
-  public void test_remove_populatedMaster() {
-    testPopulated.remove(doc1.getUniqueId());
-    HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
-    HistoricalTimeSeriesInfoSearchResult result = testPopulated.search(request);
+  /**
+   *
+   */
+  public void testRemovePopulatedMaster() {
+    _testPopulated.remove(_doc1.getUniqueId());
+    final HistoricalTimeSeriesInfoSearchRequest request = new HistoricalTimeSeriesInfoSearchRequest();
+    final HistoricalTimeSeriesInfoSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
+    final List<HistoricalTimeSeriesInfoDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
-    assertEquals(true, docs.contains(doc2));
+    assertEquals(true, docs.contains(_doc2));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
-  public void test_getTS_UID_otherId() {
-    testEmpty.getTimeSeries(OTHER_UID);
+  public void testGetTSUIDOtherId() {
+    _testEmpty.getTimeSeries(OTHER_UID);
   }
 
-  public void test_points_update_correct() {
-    LocalDate[] dates = {LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 2)};
-    double[] values = {1.1d, 2.2d};
-    LocalDateDoubleTimeSeries input = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
-    
-    UniqueId uniqueId = testPopulated.updateTimeSeriesDataPoints(doc1.getUniqueId(), input);
-    assertEquals(doc1.getUniqueId().getObjectId(), uniqueId.getObjectId());
-    
-    ManageableHistoricalTimeSeries test = testPopulated.getTimeSeries(uniqueId);
+  /**
+   *
+   */
+  public void testPointsUpdateCorrect() {
+    final LocalDate[] dates = { LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 2) };
+    final double[] values = { 1.1d, 2.2d };
+    final LocalDateDoubleTimeSeries input = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
+
+    final UniqueId uniqueId = _testPopulated.updateTimeSeriesDataPoints(_doc1.getUniqueId(), input);
+    assertEquals(_doc1.getUniqueId().getObjectId(), uniqueId.getObjectId());
+
+    final ManageableHistoricalTimeSeries test = _testPopulated.getTimeSeries(uniqueId);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(input, test.getTimeSeries());
-    
-    LocalDate[] dates2 = {LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 3)};
-    double[] values2 = {1.5d, 2.5d};
-    LocalDateDoubleTimeSeries input2 = ImmutableLocalDateDoubleTimeSeries.of(dates2, values2);
-    
-    UniqueId uniqueId2 = testPopulated.correctTimeSeriesDataPoints(doc1.getUniqueId(), input2);
-    assertEquals(doc1.getUniqueId().getObjectId(), uniqueId2.getObjectId());
-    
-    LocalDate[] expectedDates = {LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 2), LocalDate.of(2011, 1, 3)};
-    double[] expectedValues = {1.5d, 2.2d, 2.5d};
-    LocalDateDoubleTimeSeries expected = ImmutableLocalDateDoubleTimeSeries.of(expectedDates, expectedValues);
-    ManageableHistoricalTimeSeries test2 = testPopulated.getTimeSeries(uniqueId);
+
+    final LocalDate[] dates2 = { LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 3) };
+    final double[] values2 = { 1.5d, 2.5d };
+    final LocalDateDoubleTimeSeries input2 = ImmutableLocalDateDoubleTimeSeries.of(dates2, values2);
+
+    final UniqueId uniqueId2 = _testPopulated.correctTimeSeriesDataPoints(_doc1.getUniqueId(), input2);
+    assertEquals(_doc1.getUniqueId().getObjectId(), uniqueId2.getObjectId());
+
+    final LocalDate[] expectedDates = { LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 2), LocalDate.of(2011, 1, 3) };
+    final double[] expectedValues = { 1.5d, 2.2d, 2.5d };
+    final LocalDateDoubleTimeSeries expected = ImmutableLocalDateDoubleTimeSeries.of(expectedDates, expectedValues);
+    final ManageableHistoricalTimeSeries test2 = _testPopulated.getTimeSeries(uniqueId);
     assertEquals(uniqueId, test2.getUniqueId());
     assertEquals(expected, test2.getTimeSeries());
   }
 
-  public void test_points_update_remove() {
-    LocalDate[] dates = {LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 2)};
-    double[] values = {1.1d, 2.2d};
-    LocalDateDoubleTimeSeries input = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
-    
-    UniqueId uniqueId = testPopulated.updateTimeSeriesDataPoints(doc1.getUniqueId(), input);
-    assertEquals(doc1.getUniqueId().getObjectId(), uniqueId.getObjectId());
-    
-    ManageableHistoricalTimeSeries test = testPopulated.getTimeSeries(uniqueId);
+  /**
+   *
+   */
+  public void testPointsUpdateRemove() {
+    final LocalDate[] dates = { LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 2) };
+    final double[] values = { 1.1d, 2.2d };
+    final LocalDateDoubleTimeSeries input = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
+
+    final UniqueId uniqueId = _testPopulated.updateTimeSeriesDataPoints(_doc1.getUniqueId(), input);
+    assertEquals(_doc1.getUniqueId().getObjectId(), uniqueId.getObjectId());
+
+    final ManageableHistoricalTimeSeries test = _testPopulated.getTimeSeries(uniqueId);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(input, test.getTimeSeries());
-    
-    UniqueId uniqueId2 = testPopulated.removeTimeSeriesDataPoints(doc1.getUniqueId(), LocalDate.of(2011, 1, 2), null);
-    assertEquals(doc1.getUniqueId().getObjectId(), uniqueId2.getObjectId());
-    
-    LocalDate[] expectedDates = {LocalDate.of(2011, 1, 1)};
-    double[] expectedValues = {1.1d};
-    LocalDateDoubleTimeSeries expected = ImmutableLocalDateDoubleTimeSeries.of(expectedDates, expectedValues);
-    ManageableHistoricalTimeSeries test2 = testPopulated.getTimeSeries(uniqueId);
+
+    final UniqueId uniqueId2 = _testPopulated.removeTimeSeriesDataPoints(_doc1.getUniqueId(), LocalDate.of(2011, 1, 2), null);
+    assertEquals(_doc1.getUniqueId().getObjectId(), uniqueId2.getObjectId());
+
+    final LocalDate[] expectedDates = { LocalDate.of(2011, 1, 1) };
+    final double[] expectedValues = { 1.1d };
+    final LocalDateDoubleTimeSeries expected = ImmutableLocalDateDoubleTimeSeries.of(expectedDates, expectedValues);
+    final ManageableHistoricalTimeSeries test2 = _testPopulated.getTimeSeries(uniqueId);
     assertEquals(uniqueId, test2.getUniqueId());
     assertEquals(expected, test2.getTimeSeries());
   }
 
-  public void test_points_getFilter() {
-    
+  /**
+   *
+   */
+  public void testPointsGetFilter() {
+
     // Set up HTS for comparison purposes
-    LocalDate[] dates = {
-        LocalDate.of(2011, 1, 1), 
-        LocalDate.of(2011, 1, 2), 
-        LocalDate.of(2011, 1, 3), 
-        LocalDate.of(2011, 1, 5), 
-        LocalDate.of(2011, 1, 6), 
-        LocalDate.of(2011, 1, 8)
-    };
-    double[] values = {
-        1.0d, 
-        1.1d, 
-        1.3d, 
-        1.2d, 
-        2.2d, 
-        2.0d
-    }; 
-    LocalDateDoubleTimeSeries input = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
-    testPopulated.updateTimeSeriesDataPoints(doc1.getUniqueId(), input);
-    ManageableHistoricalTimeSeries reference = testPopulated.getTimeSeries(doc1.getUniqueId());
-    
+    final LocalDate[] dates = { LocalDate.of(2011, 1, 1), LocalDate.of(2011, 1, 2), LocalDate.of(2011, 1, 3), LocalDate.of(2011, 1, 5),
+        LocalDate.of(2011, 1, 6), LocalDate.of(2011, 1, 8) };
+    final double[] values = { 1.0d, 1.1d, 1.3d, 1.2d, 2.2d, 2.0d };
+    final LocalDateDoubleTimeSeries input = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
+    _testPopulated.updateTimeSeriesDataPoints(_doc1.getUniqueId(), input);
+    final ManageableHistoricalTimeSeries reference = _testPopulated.getTimeSeries(_doc1.getUniqueId());
+
     // Get entire series using blank filter
-    HistoricalTimeSeriesGetFilter filter = HistoricalTimeSeriesGetFilter.ofAll();
-    ManageableHistoricalTimeSeries test = testPopulated.getTimeSeries(doc1.getUniqueId(), filter);
+    final HistoricalTimeSeriesGetFilter filter = HistoricalTimeSeriesGetFilter.ofAll();
+    ManageableHistoricalTimeSeries test = _testPopulated.getTimeSeries(_doc1.getUniqueId(), filter);
     assertEquals(reference.getTimeSeries(), test.getTimeSeries());
     assertEquals(input, test.getTimeSeries());
 
     // Get filtered by time, open-ended end
     filter.setEarliestDate(reference.getTimeSeries().getTimeAtIndex(1)); // exclude first point
-    test = testPopulated.getTimeSeries(doc1.getUniqueId(), filter);
+    test = _testPopulated.getTimeSeries(_doc1.getUniqueId(), filter);
     assertEquals(reference.getTimeSeries().size() - 1, test.getTimeSeries().size());
     assertEquals(reference.getTimeSeries().getValueAtIndex(1), test.getTimeSeries().getEarliestValue());
     assertEquals(reference.getTimeSeries().getTimeAtIndex(1), test.getTimeSeries().getEarliestTime());
     assertEquals(reference.getTimeSeries().getValueAtIndex(reference.getTimeSeries().size() - 1), test.getTimeSeries().getLatestValue());
-    assertEquals(reference.getTimeSeries().getTimeAtIndex(reference.getTimeSeries().size() - 1), test.getTimeSeries().getLatestTime());    
+    assertEquals(reference.getTimeSeries().getTimeAtIndex(reference.getTimeSeries().size() - 1), test.getTimeSeries().getLatestTime());
 
     // Get filtered by time, closed at both ends
     filter.setLatestDate(reference.getTimeSeries().getTimeAtIndex(reference.getTimeSeries().size() - 2)); // exclude last point
-    test = testPopulated.getTimeSeries(doc1.getUniqueId(), filter);
+    test = _testPopulated.getTimeSeries(_doc1.getUniqueId(), filter);
     assertEquals(reference.getTimeSeries().size() - 2, test.getTimeSeries().size());
     assertEquals(reference.getTimeSeries().getValueAtIndex(1), test.getTimeSeries().getEarliestValue());
     assertEquals(reference.getTimeSeries().getTimeAtIndex(1), test.getTimeSeries().getEarliestTime());
     assertEquals(reference.getTimeSeries().getValueAtIndex(reference.getTimeSeries().size() - 2), test.getTimeSeries().getLatestValue());
     assertEquals(reference.getTimeSeries().getTimeAtIndex(reference.getTimeSeries().size() - 2), test.getTimeSeries().getLatestTime());
-    
+
     // Get filtered by time, open-ended start
     filter.setEarliestDate(null);
-    test = testPopulated.getTimeSeries(doc1.getUniqueId(), filter);
+    test = _testPopulated.getTimeSeries(_doc1.getUniqueId(), filter);
     assertEquals(reference.getTimeSeries().size() - 1, test.getTimeSeries().size());
     assertEquals(reference.getTimeSeries().getValueAtIndex(0), test.getTimeSeries().getEarliestValue());
     assertEquals(reference.getTimeSeries().getTimeAtIndex(0), test.getTimeSeries().getEarliestTime());
@@ -385,39 +450,39 @@ public class InMemoryHistoricalTimeSeriesMasterTest {
 
     // Get filtered by +ve maxPoints, open-ended start
     filter.setMaxPoints(2); // get earliest two points
-    test = testPopulated.getTimeSeries(doc1.getUniqueId(), filter);
+    test = _testPopulated.getTimeSeries(_doc1.getUniqueId(), filter);
     assertEquals(2, test.getTimeSeries().size());
     assertEquals(reference.getTimeSeries().getTimeAtIndex(0), test.getTimeSeries().getTimeAtIndex(0));
     assertEquals(reference.getTimeSeries().getValueAtIndex(0), test.getTimeSeries().getValueAtIndex(0));
     assertEquals(reference.getTimeSeries().getTimeAtIndex(1), test.getTimeSeries().getTimeAtIndex(1));
     assertEquals(reference.getTimeSeries().getValueAtIndex(1), test.getTimeSeries().getValueAtIndex(1));
-    
+
     // Get filtered by +ve maxPoints, closed date range
     filter.setEarliestDate(reference.getTimeSeries().getTimeAtIndex(1)); // exclude first point
-    test = testPopulated.getTimeSeries(doc1.getUniqueId(), filter);
+    test = _testPopulated.getTimeSeries(_doc1.getUniqueId(), filter);
     assertEquals(2, test.getTimeSeries().size());
     assertEquals(reference.getTimeSeries().getTimeAtIndex(1), test.getTimeSeries().getTimeAtIndex(0));
     assertEquals(reference.getTimeSeries().getValueAtIndex(1), test.getTimeSeries().getValueAtIndex(0));
     assertEquals(reference.getTimeSeries().getTimeAtIndex(2), test.getTimeSeries().getTimeAtIndex(1));
     assertEquals(reference.getTimeSeries().getValueAtIndex(2), test.getTimeSeries().getValueAtIndex(1));
-    
+
     // Get filtered by -ve maxPoints, closed date range
     filter.setMaxPoints(-2); // get latest two points
-    test = testPopulated.getTimeSeries(doc1.getUniqueId(), filter);
+    test = _testPopulated.getTimeSeries(_doc1.getUniqueId(), filter);
     assertEquals(2, test.getTimeSeries().size());
     assertEquals(reference.getTimeSeries().getTimeAtIndex(reference.getTimeSeries().size() - 3), test.getTimeSeries().getTimeAtIndex(0));
     assertEquals(reference.getTimeSeries().getValueAtIndex(reference.getTimeSeries().size() - 3), test.getTimeSeries().getValueAtIndex(0));
     assertEquals(reference.getTimeSeries().getTimeAtIndex(reference.getTimeSeries().size() - 2), test.getTimeSeries().getTimeAtIndex(1));
     assertEquals(reference.getTimeSeries().getValueAtIndex(reference.getTimeSeries().size() - 2), test.getTimeSeries().getValueAtIndex(1));
-    
+
     // Get filtered by -ve maxPoints, open-ended end
     filter.setLatestDate(null);
-    test = testPopulated.getTimeSeries(doc1.getUniqueId(), filter);
+    test = _testPopulated.getTimeSeries(_doc1.getUniqueId(), filter);
     assertEquals(2, test.getTimeSeries().size());
     assertEquals(reference.getTimeSeries().getTimeAtIndex(reference.getTimeSeries().size() - 2), test.getTimeSeries().getTimeAtIndex(0));
     assertEquals(reference.getTimeSeries().getValueAtIndex(reference.getTimeSeries().size() - 2), test.getTimeSeries().getValueAtIndex(0));
     assertEquals(reference.getTimeSeries().getTimeAtIndex(reference.getTimeSeries().size() - 1), test.getTimeSeries().getTimeAtIndex(1));
-    assertEquals(reference.getTimeSeries().getValueAtIndex(reference.getTimeSeries().size() - 1), test.getTimeSeries().getValueAtIndex(1));   
+    assertEquals(reference.getTimeSeries().getValueAtIndex(reference.getTimeSeries().size() - 1), test.getTimeSeries().getValueAtIndex(1));
   }
 
 }

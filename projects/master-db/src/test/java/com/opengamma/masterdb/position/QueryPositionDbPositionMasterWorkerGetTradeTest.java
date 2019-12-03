@@ -36,18 +36,18 @@ import com.opengamma.util.test.TestGroup;
 public class QueryPositionDbPositionMasterWorkerGetTradeTest extends AbstractDbPositionMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(QueryPositionDbPositionMasterWorkerGetTradeTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueryPositionDbPositionMasterWorkerGetTradeTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public QueryPositionDbPositionMasterWorkerGetTradeTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, true);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_getTrade_nullUID() {
-    _posMaster.get((UniqueId)null);
+    _posMaster.get((UniqueId) null);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)

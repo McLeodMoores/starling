@@ -19,31 +19,31 @@ import com.opengamma.master.portfolio.PortfolioSearchResult;
  * Portfolio master which tracks accesses using UniqueIds.
  */
 public class DataTrackingPortfolioMaster extends AbstractDataTrackingMaster<PortfolioDocument, PortfolioMaster> implements PortfolioMaster {
-  
-  public DataTrackingPortfolioMaster(PortfolioMaster delegate) {
+
+  public DataTrackingPortfolioMaster(final PortfolioMaster delegate) {
     super(delegate);
   }
 
   @Override
-  public PortfolioSearchResult search(PortfolioSearchRequest request) {
-    PortfolioSearchResult searchResult = delegate().search(request);
+  public PortfolioSearchResult search(final PortfolioSearchRequest request) {
+    final PortfolioSearchResult searchResult = delegate().search(request);
     trackDocs(searchResult.getDocuments());
     return searchResult;
   }
 
   @Override
-  public PortfolioHistoryResult history(PortfolioHistoryRequest request) {
-    PortfolioHistoryResult historyResult = delegate().history(request);
+  public PortfolioHistoryResult history(final PortfolioHistoryRequest request) {
+    final PortfolioHistoryResult historyResult = delegate().history(request);
     trackDocs(historyResult.getDocuments());
     return historyResult;
   }
 
   @Override
-  public ManageablePortfolioNode getNode(UniqueId nodeId) {
-    ManageablePortfolioNode node = delegate().getNode(nodeId);
+  public ManageablePortfolioNode getNode(final UniqueId nodeId) {
+    final ManageablePortfolioNode node = delegate().getNode(nodeId);
     trackId(node.getUniqueId());
     return node;
   }
 
-  
+
 }

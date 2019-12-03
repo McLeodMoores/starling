@@ -14,11 +14,6 @@ import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationBundle;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.function.config.SimpleFunctionConfigurationSource;
-import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues;
-import com.opengamma.financial.analytics.model.forex.FXOptionsCalculationMethodDefaults;
-import com.opengamma.financial.analytics.model.forex.option.black.BlackFunctions;
-import com.opengamma.financial.analytics.model.forex.option.callspreadblack.CallSpreadBlackFunctions;
-import com.opengamma.financial.analytics.model.forex.option.callspreadblack.FXDigitalCallSpreadBlackFunction;
 import com.opengamma.financial.analytics.model.forex.option.localvol.LocalVolFunctions;
 import com.opengamma.financial.analytics.model.futureoption.BarrierOptionDistanceDefaults;
 import com.opengamma.financial.analytics.model.futureoption.BarrierOptionDistanceFunction;
@@ -38,7 +33,8 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Gets the default values for calculations
+   * Gets the default values for calculations.
+   *
    * @return The repository with equity option defaults set
    */
   public static FunctionConfigurationSource defaults() {
@@ -48,7 +44,8 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * @param barrierFormat the barrier output display format
+   * @param barrierFormat
+   *          the barrier output display format
    * @return The repository with equity barrier option defaults set
    */
   public static FunctionConfigurationSource defaults(final String barrierFormat) {
@@ -85,22 +82,6 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(FXSpotRatePercentageChangeFunction.class));
     functions.add(functionConfiguration(FXOptionSpotRateFunction.class));
     functions.add(functionConfiguration(FXBarrierOptionDistanceFunction.class));
-    functions.add(functionConfiguration(FXOptionsCalculationMethodDefaults.class, CalculationPropertyNamesAndValues.BLACK_METHOD,
-        FXDigitalCallSpreadBlackFunction.CALL_SPREAD_BLACK_METHOD));
-  }
-
-  /**
-   * Adds Black functions for FX options to the repository
-   * @return A function configuration source populated with FX option Black functions
-   * @deprecated The functions that are added are deprecated
-   */
-  @Deprecated
-  protected FunctionConfigurationSource blackFunctionConfiguration() {
-    return BlackFunctions.instance();
-  }
-
-  protected FunctionConfigurationSource callSpreadBlackFunctionConfiguration() {
-    return CallSpreadBlackFunctions.instance();
   }
 
   protected FunctionConfigurationSource localVolFunctionConfiguration() {
@@ -109,12 +90,13 @@ public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
   protected FunctionConfigurationSource vannaVolgaFunctionConfiguration() {
     // TODO
-    return new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(Collections.<FunctionConfiguration>emptyList()));
+    return new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(Collections.<FunctionConfiguration> emptyList()));
   }
 
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(), blackFunctionConfiguration(), callSpreadBlackFunctionConfiguration(), localVolFunctionConfiguration(),
+    return CombiningFunctionConfigurationSource.of(super.createObject(),
+        localVolFunctionConfiguration(),
         vannaVolgaFunctionConfiguration());
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.model;
@@ -33,7 +33,7 @@ public class SecurityMasterRequestMessage implements Serializable {
   public static final String SECURITY_IDENTITY_FIELD_NAME = "securityIdentity";
   /** Fudge field key. */
   public static final String BOND_ISSUER_TYPE_FIELD_NAME = "bondIssuerType";
-  
+
   private MessageType _messageType;
   private ExternalIdBundle _secKey;
   private UniqueId _uid;
@@ -47,9 +47,10 @@ public class SecurityMasterRequestMessage implements Serializable {
   }
 
   /**
-   * @param messageType the messageType to set
+   * @param messageType
+   *          the messageType to set
    */
-  public void setMessageType(MessageType messageType) {
+  public void setMessageType(final MessageType messageType) {
     _messageType = messageType;
   }
 
@@ -61,14 +62,16 @@ public class SecurityMasterRequestMessage implements Serializable {
   }
 
   /**
-   * @param secKey the secKey to set
+   * @param secKey
+   *          the secKey to set
    */
-  public void setSecKey(ExternalIdBundle secKey) {
+  public void setSecKey(final ExternalIdBundle secKey) {
     _secKey = secKey;
   }
-  
+
   /**
    * Gets the unique identifier.
+   *
    * @return the unique identifier
    */
   public UniqueId getUniqueId() {
@@ -77,36 +80,41 @@ public class SecurityMasterRequestMessage implements Serializable {
 
   /**
    * Sets the unique identifier.
-   * @param uid  the unique identifier
+   *
+   * @param uid
+   *          the unique identifier
    */
-  public void setUniqueId(UniqueId uid) {
+  public void setUniqueId(final UniqueId uid) {
     _uid = uid;
   }
-  
+
   /**
-   * Gets the bond issuer type
+   * Gets the bond issuer type.
+   *
    * @return the bond issuer type
    */
   public String getBondIssuerType() {
     return _bondIssuerType;
   }
-  
-  /** 
-   * Sets the bond issuer type
-   * @param bondIssuerType the bond issuer type
+
+  /**
+   * Sets the bond issuer type.
+   *
+   * @param bondIssuerType
+   *          the bond issuer type
    */
-  public void setBondIssuerType(String bondIssuerType) {
+  public void setBondIssuerType(final String bondIssuerType) {
     _bondIssuerType = bondIssuerType;
   }
 
   public FudgeMsg toFudgeMsg(final FudgeSerializer serializer) {
     ArgumentChecker.notNull(serializer, "FudgeSerializer");
     if (getMessageType() == null) {
-      return null; 
+      return null;
     }
-    MutableFudgeMsg msg = serializer.newMessage();
+    final MutableFudgeMsg msg = serializer.newMessage();
     msg.add(MESSAGE_TYPE_FIELD_NAME, getMessageType().name());
-    switch(getMessageType()) {
+    switch (getMessageType()) {
       case GET_SECURITIES_BY_KEY:
       case GET_SECURITY_BY_KEY:
         if (_secKey == null) {
@@ -119,7 +127,7 @@ public class SecurityMasterRequestMessage implements Serializable {
         if (_uid == null) {
           throw new IllegalStateException("Identity key cannot be null for get_security_by_identity message");
         }
-        FudgeMsg identityKeyMsg = UniqueIdFudgeBuilder.toFudgeMsg(serializer, _uid);
+        final FudgeMsg identityKeyMsg = UniqueIdFudgeBuilder.toFudgeMsg(serializer, _uid);
         msg.add(SECURITY_IDENTITY_FIELD_NAME, identityKeyMsg);
         break;
       case GET_SECURITIES_BY_BOND_ISSUER_TYPE:
@@ -138,23 +146,23 @@ public class SecurityMasterRequestMessage implements Serializable {
     if (msg == null) {
       return null;
     }
-    SecurityMasterRequestMessage request = new SecurityMasterRequestMessage();
-    String msgTypeStr = (String) msg.getByName(MESSAGE_TYPE_FIELD_NAME).getValue();
-    MessageType msgType = MessageType.valueOf(msgTypeStr);
+    final SecurityMasterRequestMessage request = new SecurityMasterRequestMessage();
+    final String msgTypeStr = (String) msg.getByName(MESSAGE_TYPE_FIELD_NAME).getValue();
+    final MessageType msgType = MessageType.valueOf(msgTypeStr);
     request.setMessageType(msgType);
-    switch(msgType) {
+    switch (msgType) {
       case GET_SECURITIES_BY_KEY:
       case GET_SECURITY_BY_KEY:
       case GET_OPTION_CHAIN:
         request.setSecKey(decodeSecurityKeyFromFudgeMsg(deserializer, msg));
         break;
       case GET_SECURITY_BY_IDENTITY:
-        FudgeMsg identityKeyMsg = msg.getMessage(SECURITY_IDENTITY_FIELD_NAME);
-        UniqueId uid = UniqueIdFudgeBuilder.fromFudgeMsg(deserializer, identityKeyMsg);
+        final FudgeMsg identityKeyMsg = msg.getMessage(SECURITY_IDENTITY_FIELD_NAME);
+        final UniqueId uid = UniqueIdFudgeBuilder.fromFudgeMsg(deserializer, identityKeyMsg);
         request.setUniqueId(uid);
         break;
       case GET_SECURITIES_BY_BOND_ISSUER_TYPE:
-        String bondIssuerType = msg.getString(BOND_ISSUER_TYPE_FIELD_NAME);
+        final String bondIssuerType = msg.getString(BOND_ISSUER_TYPE_FIELD_NAME);
         request.setBondIssuerType(bondIssuerType);
         break;
     }
@@ -163,13 +171,14 @@ public class SecurityMasterRequestMessage implements Serializable {
 
   /**
    * Decodes an identifier bundle from the message.
-   * 
-   * @param msg  the message to decode, not null
+   *
+   * @param msg
+   *          the message to decode, not null
    * @return the bundle, not null
    */
-  private static ExternalIdBundle decodeSecurityKeyFromFudgeMsg(final FudgeDeserializer deserializer, FudgeMsg msg) {
+  private static ExternalIdBundle decodeSecurityKeyFromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg) {
     ArgumentChecker.notNull(msg, "FudgeMsg");
-    FudgeMsg secKeyMsg = (FudgeMsg) msg.getByName(SECURITY_KEY_FIELD_NAME).getValue();
+    final FudgeMsg secKeyMsg = (FudgeMsg) msg.getByName(SECURITY_KEY_FIELD_NAME).getValue();
     return ExternalIdBundleFudgeBuilder.fromFudgeMsg(deserializer, secKeyMsg);
   }
 
@@ -178,11 +187,11 @@ public class SecurityMasterRequestMessage implements Serializable {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Type of message.
    */
-  public static enum MessageType {
+  public enum MessageType {
     /** Option chain message. */
     GET_OPTION_CHAIN,
     /** Get securities by key. */

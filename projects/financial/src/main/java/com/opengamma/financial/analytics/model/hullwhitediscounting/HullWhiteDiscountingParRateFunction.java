@@ -26,19 +26,17 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the par rate of instruments using curves constructed using
- * the Hull-White one factor discounting method.
+ * Calculates the par rate of instruments using curves constructed using the Hull-White one factor discounting method.
  */
 public class HullWhiteDiscountingParRateFunction extends HullWhiteDiscountingFunction {
   /** The par rate calculator */
   private static final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, Double> CALCULATOR = ParRateHullWhiteCalculator.getInstance();
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PAR_RATE}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PAR_RATE}.
    */
   public HullWhiteDiscountingParRateFunction() {
     super(PAR_RATE);

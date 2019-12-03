@@ -58,6 +58,7 @@ public class VolatilitySurfaceDataFudgeBuilder implements FudgeBuilder<Volatilit
   /** The y labels field */
   private static final String Y_LABEL_FIELD = "yLabel";
 
+  @SuppressWarnings("unchecked")
   @Override
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final VolatilitySurfaceData<?, ?> object) {
     final MutableFudgeMsg message = serializer.newMessage();
@@ -163,12 +164,12 @@ public class VolatilitySurfaceDataFudgeBuilder implements FudgeBuilder<Volatilit
     if (message.hasField(X_LABEL_FIELD)) {
       xLabel = message.getString(X_LABEL_FIELD);
     } else {
-      xLabel = VolatilitySurfaceData.DEFAULT_X_LABEL;     // for backwards compatibility - should be removed at some point
+      xLabel = VolatilitySurfaceData.DEFAULT_X_LABEL; // for backwards compatibility - should be removed at some point
     }
     if (message.hasField(Y_LABEL_FIELD)) {
       yLabel = message.getString(Y_LABEL_FIELD);
     } else {
-      yLabel = VolatilitySurfaceData.DEFAULT_Y_LABEL;     // for backwards compatibility - should be removed at some point
+      yLabel = VolatilitySurfaceData.DEFAULT_Y_LABEL; // for backwards compatibility - should be removed at some point
     }
     if (xsArray.length > 0 && ysArray.length > 0) {
       final Class<?> xClazz = xsArray[0].getClass();
@@ -184,7 +185,8 @@ public class VolatilitySurfaceDataFudgeBuilder implements FudgeBuilder<Volatilit
       }
       return new VolatilitySurfaceData<>(definitionName, specificationName, target, xsArray, xLabel, ysArray, yLabel, values);
     }
-    return new VolatilitySurfaceData<>(definitionName, specificationName, target, xsArray, xLabel, ysArray, yLabel, Collections.<Pair<Object, Object>, Double>emptyMap());
+    return new VolatilitySurfaceData<>(definitionName, specificationName, target, xsArray, xLabel, ysArray, yLabel,
+        Collections.<Pair<Object, Object>, Double> emptyMap());
   }
 
 }

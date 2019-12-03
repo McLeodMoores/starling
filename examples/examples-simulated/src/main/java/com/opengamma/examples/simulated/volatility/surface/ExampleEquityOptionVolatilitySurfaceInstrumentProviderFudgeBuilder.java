@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.volatility.surface;
@@ -17,10 +17,11 @@ import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 
 /**
- * 
+ *
  */
 @FudgeBuilderFor(ExampleEquityOptionVolatilitySurfaceInstrumentProvider.class)
-public class ExampleEquityOptionVolatilitySurfaceInstrumentProviderFudgeBuilder implements FudgeBuilder<ExampleEquityOptionVolatilitySurfaceInstrumentProvider> {
+public class ExampleEquityOptionVolatilitySurfaceInstrumentProviderFudgeBuilder
+implements FudgeBuilder<ExampleEquityOptionVolatilitySurfaceInstrumentProvider> {
 
   @Override
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ExampleEquityOptionVolatilitySurfaceInstrumentProvider object) {

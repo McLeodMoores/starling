@@ -72,12 +72,12 @@ public class BondTotalReturnSwap extends TotalReturnSwap {
     result = prime * result + _bond.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_quantity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -87,7 +87,7 @@ public class BondTotalReturnSwap extends TotalReturnSwap {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    BondTotalReturnSwap other = (BondTotalReturnSwap) obj;
+    final BondTotalReturnSwap other = (BondTotalReturnSwap) obj;
     if (!ObjectUtils.equals(_bond, other._bond)) {
       return false;
     }

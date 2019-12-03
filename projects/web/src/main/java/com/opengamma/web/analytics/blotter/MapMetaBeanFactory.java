@@ -22,9 +22,9 @@ import com.opengamma.util.ArgumentChecker;
 
   private final Map<String, MetaBean> _metaBeans = Maps.newHashMap();
 
-  /* package */ MapMetaBeanFactory(Set<MetaBean> metaBeans) {
+  /* package */ MapMetaBeanFactory(final Set<MetaBean> metaBeans) {
     ArgumentChecker.notNull(metaBeans, "metaBeans");
-    for (MetaBean metaBean : metaBeans) {
+    for (final MetaBean metaBean : metaBeans) {
       _metaBeans.put(metaBean.beanType().getSimpleName(), metaBean);
     }
   }
@@ -35,8 +35,8 @@ import com.opengamma.util.ArgumentChecker;
    * @throws OpenGammaRuntimeException If there's no {@link MetaBean} keyed on the type name of the data source
    */
   @Override
-  public MetaBean beanFor(BeanDataSource beanData) {
-    MetaBean metaBean = _metaBeans.get(beanData.getBeanTypeName());
+  public MetaBean beanFor(final BeanDataSource beanData) {
+    final MetaBean metaBean = _metaBeans.get(beanData.getBeanTypeName());
     if (metaBean == null) {
       throw new OpenGammaRuntimeException("No meta bean for type " + beanData.getBeanTypeName());
     }

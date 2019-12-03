@@ -46,12 +46,12 @@ public class MockConvention extends ManageableConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the name, not null
    * @param bundle  the bundle, not null
    * @param currency  the currency, not null
    */
-  public MockConvention(String name, ExternalIdBundle bundle, Currency currency) {
+  public MockConvention(final String name, final ExternalIdBundle bundle, final Currency currency) {
     super(name, bundle);
     setCurrency(currency);
   }

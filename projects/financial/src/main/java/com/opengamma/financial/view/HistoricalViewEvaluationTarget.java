@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.view;
@@ -43,7 +43,7 @@ import com.opengamma.util.money.Currency;
 public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
 
   /**
-   * Fudge field containing the start date
+   * Fudge field containing the start date.
    */
   protected static final String START_DATE_FIELD = "startDate";
   /**
@@ -69,25 +69,32 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
 
   /**
    * Creates a new target.
-   * 
-   * @param user  the user the view is created for, not null.
-   * @param startDate  the start date as a {@link DateConstraint} encoded string, not null
-   * @param includeStart  whether to include the start date in the evaluation.
-   * @param endDate  the end date as a {@link DateConstraint} encoded string, not null
-   * @param includeEnd  whether to include the end date in the evaluation.
-   * @param currencyCalendars  the currencies for which to obtain a compound holiday calendar in order to obtain a valid sequence of dates, may be null
-   * @param marketDataMode  the mode in which market data should be obtained, not null
+   *
+   * @param user
+   *          the user the view is created for, not null.
+   * @param startDate
+   *          the start date as a {@link DateConstraint} encoded string, not null
+   * @param includeStart
+   *          whether to include the start date in the evaluation.
+   * @param endDate
+   *          the end date as a {@link DateConstraint} encoded string, not null
+   * @param includeEnd
+   *          whether to include the end date in the evaluation.
+   * @param currencyCalendars
+   *          the currencies for which to obtain a compound holiday calendar in order to obtain a valid sequence of dates, may be null
+   * @param marketDataMode
+   *          the mode in which market data should be obtained, not null
    */
-  public HistoricalViewEvaluationTarget(UserPrincipal user, String startDate, boolean includeStart, String endDate,
-      boolean includeEnd, Set<Currency> currencyCalendars, HistoricalViewEvaluationMarketDataMode marketDataMode) {
+  public HistoricalViewEvaluationTarget(final UserPrincipal user, final String startDate, final boolean includeStart, final String endDate,
+      final boolean includeEnd, final Set<Currency> currencyCalendars, final HistoricalViewEvaluationMarketDataMode marketDataMode) {
     super(user, new HistoricalSequence(startDate, includeStart, endDate, includeEnd, currencyCalendars, marketDataMode));
   }
 
-  protected HistoricalViewEvaluationTarget(ViewDefinition viewDefinition, final HistoricalSequence sequence) {
+  protected HistoricalViewEvaluationTarget(final ViewDefinition viewDefinition, final HistoricalSequence sequence) {
     super(viewDefinition, sequence);
   }
 
-  private HistoricalViewEvaluationTarget(FudgeDeserializer deserializer, FudgeMsg message) {
+  private HistoricalViewEvaluationTarget(final FudgeDeserializer deserializer, final FudgeMsg message) {
     this(deserializer, message,
         message.getString(START_DATE_FIELD),
         message.getBoolean(INCLUDE_START_FIELD),
@@ -97,8 +104,9 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
         deserializer.fieldValueToObject(HistoricalViewEvaluationMarketDataMode.class, message.getByName(MARKET_DATA_MODE_FIELD)));
   }
 
-  private HistoricalViewEvaluationTarget(FudgeDeserializer deserializer, FudgeMsg message, String startDate,
-      boolean includeStart, String endDate, boolean includeEnd, Set<Currency> currencyCalendars, HistoricalViewEvaluationMarketDataMode marketDataMode) {
+  private HistoricalViewEvaluationTarget(final FudgeDeserializer deserializer, final FudgeMsg message, final String startDate,
+      final boolean includeStart, final String endDate, final boolean includeEnd, final Set<Currency> currencyCalendars,
+      final HistoricalViewEvaluationMarketDataMode marketDataMode) {
     super(deserializer, message, new HistoricalSequence(startDate, includeStart, endDate, includeEnd, currencyCalendars, marketDataMode));
   }
 
@@ -110,11 +118,11 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
   protected ViewEvaluationTarget createUnion(final ViewDefinition newViewDefinition) {
     return new HistoricalViewEvaluationTarget(newViewDefinition, (HistoricalSequence) getExecutionSequence());
   }
-  
-  private static Set<Currency> getCurrencyCalendars(FudgeDeserializer deserializer, FudgeMsg message) {
-    Set<Currency> currencies = new HashSet<Currency>();
-    for (FudgeField ccyField : message.getAllByName(CURRENCY_CALENDAR_FIELD)) {
-      Currency ccy = deserializer.fieldValueToObject(Currency.class, ccyField);
+
+  private static Set<Currency> getCurrencyCalendars(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final Set<Currency> currencies = new HashSet<>();
+    for (final FudgeField ccyField : message.getAllByName(CURRENCY_CALENDAR_FIELD)) {
+      final Currency ccy = deserializer.fieldValueToObject(Currency.class, ccyField);
       currencies.add(ccy);
     }
     return !currencies.isEmpty() ? currencies : null;
@@ -147,8 +155,8 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
      */
     private final HistoricalViewEvaluationMarketDataMode _marketDataMode;
 
-    public HistoricalSequence(String startDateDescriptor, boolean includeStart, String endDateDescriptor,
-        boolean includeEnd, Set<Currency> currencyCalendars, HistoricalViewEvaluationMarketDataMode marketDataMode) {
+    HistoricalSequence(final String startDateDescriptor, final boolean includeStart, final String endDateDescriptor,
+        final boolean includeEnd, final Set<Currency> currencyCalendars, final HistoricalViewEvaluationMarketDataMode marketDataMode) {
       ArgumentChecker.notNull(startDateDescriptor, "startDate");
       ArgumentChecker.notNull(endDateDescriptor, "endDate");
       ArgumentChecker.notNull(marketDataMode, "marketDataMode");
@@ -163,7 +171,7 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
     // ViewCycleExecutionSequenceDescriptor
 
     @Override
-    public ViewCycleExecutionSequence createSequence(FunctionExecutionContext executionContext) {
+    public ViewCycleExecutionSequence createSequence(final FunctionExecutionContext executionContext) {
       LocalDate startDate = DateConstraint.evaluate(executionContext, _startDateDescriptor);
       LocalDate endDate = DateConstraint.evaluate(executionContext, _endDateDescriptor);
       if (!_includeStart) {
@@ -174,20 +182,21 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
       }
       HolidaySourceCalendarAdapter calendar;
       if (_currencyCalendars != null) {
-        Currency[] currencies = _currencyCalendars.toArray(new Currency[_currencyCalendars.size()]);
-        HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
+        final Currency[] currencies = _currencyCalendars.toArray(new Currency[_currencyCalendars.size()]);
+        final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(executionContext);
         calendar = new HolidaySourceCalendarAdapter(holidaySource, currencies);
       } else {
         calendar = null;
       }
-      List<ViewCycleExecutionOptions> executionSequence = new LinkedList<ViewCycleExecutionOptions>();
+      final List<ViewCycleExecutionOptions> executionSequence = new LinkedList<>();
       LocalDate previousWorkingDate = null;
       LocalDate currentDate = startDate;
       while (!currentDate.isAfter(endDate)) {
         if (calendar == null || calendar.isWorkingDay(currentDate)) {
-          MarketDataSpecification marketDataSpec = createMarketDataSpec(previousWorkingDate, currentDate, LocalDate.now(executionContext.getValuationClock()));
+          final MarketDataSpecification marketDataSpec = createMarketDataSpec(previousWorkingDate, currentDate,
+              LocalDate.now(executionContext.getValuationClock()));
           if (marketDataSpec != null) {
-            ViewCycleExecutionOptions executionOptions = ViewCycleExecutionOptions.builder()
+            final ViewCycleExecutionOptions executionOptions = ViewCycleExecutionOptions.builder()
                 .setMarketDataSpecification(marketDataSpec)
                 .create();
             executionSequence.add(executionOptions);
@@ -199,8 +208,9 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
       return new ArbitraryViewCycleExecutionSequence(executionSequence);
     }
 
-    private MarketDataSpecification createMarketDataSpec(LocalDate previousHistoricalDate, LocalDate historicalDate, LocalDate valuationDate) {
-      FixedHistoricalMarketDataSpecification historicalDateSpec = new FixedHistoricalMarketDataSpecification(historicalDate);
+    private MarketDataSpecification createMarketDataSpec(final LocalDate previousHistoricalDate, final LocalDate historicalDate,
+        final LocalDate valuationDate) {
+      final FixedHistoricalMarketDataSpecification historicalDateSpec = new FixedHistoricalMarketDataSpecification(historicalDate);
       switch (_marketDataMode) {
         case HISTORICAL:
           return historicalDateSpec;
@@ -208,8 +218,8 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
           if (previousHistoricalDate == null) {
             return null;
           }
-          FixedHistoricalMarketDataSpecification valuationDateSpec = new FixedHistoricalMarketDataSpecification(valuationDate);
-          FixedHistoricalMarketDataSpecification previousHistoricalDateSpec = new FixedHistoricalMarketDataSpecification(previousHistoricalDate);
+          final FixedHistoricalMarketDataSpecification valuationDateSpec = new FixedHistoricalMarketDataSpecification(valuationDate);
+          final FixedHistoricalMarketDataSpecification previousHistoricalDateSpec = new FixedHistoricalMarketDataSpecification(previousHistoricalDate);
           return HistoricalShockMarketDataSpecification.of(ShockType.PROPORTIONAL, previousHistoricalDateSpec, historicalDateSpec, valuationDateSpec);
         default:
           throw new OpenGammaRuntimeException("Unsupported market data mode: " + _marketDataMode);
@@ -240,11 +250,11 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
       }
       final HistoricalSequence other = (HistoricalSequence) o;
       return ObjectUtils.equals(_startDateDescriptor, other._startDateDescriptor)
-          && (_includeStart == other._includeStart)
+          && _includeStart == other._includeStart
           && ObjectUtils.equals(_endDateDescriptor, other._endDateDescriptor)
-          && (_includeEnd == other._includeEnd)
+          && _includeEnd == other._includeEnd
           && ObjectUtils.equals(_currencyCalendars, other._currencyCalendars)
-          && (_marketDataMode == other._marketDataMode);
+          && _marketDataMode == other._marketDataMode;
     }
 
   }
@@ -264,11 +274,11 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
   public boolean isIncludeEnd() {
     return ((HistoricalSequence) getExecutionSequence())._includeEnd;
   }
-  
+
   public Set<Currency> getCurrencyCalendars() {
     return ((HistoricalSequence) getExecutionSequence())._currencyCalendars;
   }
-  
+
   public HistoricalViewEvaluationMarketDataMode getMarketDataMode() {
     return ((HistoricalSequence) getExecutionSequence())._marketDataMode;
   }
@@ -279,26 +289,26 @@ public class HistoricalViewEvaluationTarget extends ViewEvaluationTarget {
   }
 
   @Override
-  protected void toFudgeMsgImpl(FudgeSerializer serializer, MutableFudgeMsg message) {
+  protected void toFudgeMsgImpl(final FudgeSerializer serializer, final MutableFudgeMsg message) {
     super.toFudgeMsgImpl(serializer, message);
   }
 
   @Override
-  protected void serializeExecutionSequence(FudgeSerializer serializer, MutableFudgeMsg message) {
+  protected void serializeExecutionSequence(final FudgeSerializer serializer, final MutableFudgeMsg message) {
     // More efficient to recreate the execution sequence rather than serializing it
     message.add(START_DATE_FIELD, getStartDate());
     message.add(INCLUDE_START_FIELD, isIncludeStart());
     message.add(END_DATE_FIELD, getEndDate());
     message.add(INCLUDE_END_FIELD, isIncludeEnd());
     if (getCurrencyCalendars() != null) {
-      for (Currency ccy : getCurrencyCalendars()) {
+      for (final Currency ccy : getCurrencyCalendars()) {
         serializer.addToMessage(message, CURRENCY_CALENDAR_FIELD, null, ccy);
       }
     }
     serializer.addToMessage(message, MARKET_DATA_MODE_FIELD, null, getMarketDataMode());
   }
 
-  public static HistoricalViewEvaluationTarget fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg message) {
+  public static HistoricalViewEvaluationTarget fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg message) {
     return new HistoricalViewEvaluationTarget(deserializer, message);
   }
 

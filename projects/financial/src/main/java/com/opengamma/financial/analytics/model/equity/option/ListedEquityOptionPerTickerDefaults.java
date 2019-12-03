@@ -11,17 +11,17 @@ import com.opengamma.financial.analytics.model.equity.EquitySecurityUtils;
 /**
  * Populates {@link ListedEquityOptionFunction} with defaults appropriate
  * for pricing using a volatility implied from the market value of the instrument.<p>
- * In this class, the inputs are keyed by underlying Ticker. 
+ * In this class, the inputs are keyed by underlying Ticker.
  * See {@link EquitySecurityUtils#getIndexOrEquityNameFromUnderlying}
  */
 public class ListedEquityOptionPerTickerDefaults extends ListedEquityOptionDefaults {
 
-  public ListedEquityOptionPerTickerDefaults(String priority, String[] perIdConfig) {
+  public ListedEquityOptionPerTickerDefaults(final String priority, final String[] perIdConfig) {
     super(priority, perIdConfig);
   }
 
   @Override
-  protected String getId(Security security) {
+  protected String getId(final Security security) {
     final String id = EquitySecurityUtils.getIndexOrEquityNameFromUnderlying(security, true);
     if (id != null) {
       return id.toUpperCase();

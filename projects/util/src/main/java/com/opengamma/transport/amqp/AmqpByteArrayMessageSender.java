@@ -21,24 +21,25 @@ public class AmqpByteArrayMessageSender extends AbstractAmqpByteArraySender impl
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param amqpTemplate  the template, not null
    * @param exchange  the exchange, not null
    * @param routingKey  the routing key, not null
    */
-  public AmqpByteArrayMessageSender(AmqpTemplate amqpTemplate, String exchange, String routingKey) {
+  public AmqpByteArrayMessageSender(final AmqpTemplate amqpTemplate, final String exchange, final String routingKey) {
     this(amqpTemplate, exchange, routingKey, new MessageProperties());
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param amqpTemplate  the template, not null
    * @param exchange  the exchange, not null
    * @param routingKey  the routing key, not null
    * @param messageProperties  the properties, not null
    */
-  public AmqpByteArrayMessageSender(AmqpTemplate amqpTemplate, String exchange, String routingKey, MessageProperties messageProperties) {
+  public AmqpByteArrayMessageSender(final AmqpTemplate amqpTemplate, final String exchange, final String routingKey,
+      final MessageProperties messageProperties) {
     super(amqpTemplate, exchange, routingKey);
     ArgumentChecker.notNull(messageProperties, "messageProperties");
     _messageProperties = messageProperties;
@@ -47,7 +48,7 @@ public class AmqpByteArrayMessageSender extends AbstractAmqpByteArraySender impl
   //-------------------------------------------------------------------------
   /**
    * Gets the message properties.
-   * 
+   *
    * @return the properties, not null
    */
   public MessageProperties getMessageProperties() {
@@ -57,7 +58,7 @@ public class AmqpByteArrayMessageSender extends AbstractAmqpByteArraySender impl
   //-------------------------------------------------------------------------
   @Override
   public void send(final byte[] message) {
-    Message amqpMsg = new Message(message, getMessageProperties());
+    final Message amqpMsg = new Message(message, getMessageProperties());
     getAmqpTemplate().send(getExchange(), getRoutingKey(), amqpMsg);
   }
 

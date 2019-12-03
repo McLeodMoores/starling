@@ -20,7 +20,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * Turns any master into change providing master
+ * Turns any master into change providing master.
  */
 public class ChangeProvidingDecorator {
 
@@ -38,84 +38,84 @@ public class ChangeProvidingDecorator {
       }
 
       @Override
-      public D add(D document) {
-        D doc = underlying.add(document);
+      public D add(final D document) {
+        final D doc = underlying.add(document);
         _changeManager.entityChanged(ChangeType.CHANGED, doc.getObjectId(), doc.getVersionFromInstant(), doc.getVersionToInstant(), Instant.now(clock));
         return doc;
       }
 
       @Override
-      public UniqueId addVersion(ObjectIdentifiable objectId, D documentToAdd) {
-        UniqueId uid = underlying.addVersion(objectId, documentToAdd);
+      public UniqueId addVersion(final ObjectIdentifiable objectId, final D documentToAdd) {
+        final UniqueId uid = underlying.addVersion(objectId, documentToAdd);
         _changeManager.entityChanged(ChangeType.ADDED, uid.getObjectId(), null, null, Instant.now(clock));
         return uid;
       }
 
       @Override
-      public D correct(D document) {
-        D doc = underlying.correct(document);
+      public D correct(final D document) {
+        final D doc = underlying.correct(document);
         _changeManager.entityChanged(ChangeType.CHANGED, doc.getObjectId(), doc.getVersionFromInstant(), doc.getVersionToInstant(), Instant.now(clock));
         return doc;
       }
 
       @Override
-      public D get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+      public D get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
         return underlying.get(objectId, versionCorrection);
       }
 
       @Override
-      public D get(UniqueId uniqueId) {
+      public D get(final UniqueId uniqueId) {
         return underlying.get(uniqueId);
       }
 
       @Override
-      public Map<UniqueId, D> get(Collection<UniqueId> uniqueIds) {
+      public Map<UniqueId, D> get(final Collection<UniqueId> uniqueIds) {
         return underlying.get(uniqueIds);
       }
 
       @Override
-      public void remove(ObjectIdentifiable objectIdentifiable) {
+      public void remove(final ObjectIdentifiable objectIdentifiable) {
         underlying.remove(objectIdentifiable);
         _changeManager.entityChanged(ChangeType.REMOVED, objectIdentifiable.getObjectId(), null, null, Instant.now(clock));
       }
 
       @Override
-      public void removeVersion(UniqueId uniqueId) {
+      public void removeVersion(final UniqueId uniqueId) {
         underlying.removeVersion(uniqueId);
         _changeManager.entityChanged(ChangeType.REMOVED, uniqueId.getObjectId(), null, null, Instant.now(clock));
       }
 
       @Override
-      public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<D> replacementDocuments) {
-        List<UniqueId> removed = underlying.replaceAllVersions(objectId, replacementDocuments);
+      public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<D> replacementDocuments) {
+        final List<UniqueId> removed = underlying.replaceAllVersions(objectId, replacementDocuments);
         _changeManager.entityChanged(ChangeType.REMOVED, objectId.getObjectId(), null, null, Instant.now(clock));
         return removed;
       }
 
       @Override
-      public UniqueId replaceVersion(D replacementDocument) {
-        UniqueId uid = underlying.replaceVersion(replacementDocument);
+      public UniqueId replaceVersion(final D replacementDocument) {
+        final UniqueId uid = underlying.replaceVersion(replacementDocument);
         _changeManager.entityChanged(ChangeType.CHANGED, uid.getObjectId(), null, null, Instant.now(clock));
         return uid;
       }
 
       @Override
-      public List<UniqueId> replaceVersion(UniqueId uniqueId, List<D> replacementDocuments) {
-        List<UniqueId> replaced = underlying.replaceVersion(uniqueId, replacementDocuments);
+      public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<D> replacementDocuments) {
+        final List<UniqueId> replaced = underlying.replaceVersion(uniqueId, replacementDocuments);
         _changeManager.entityChanged(ChangeType.CHANGED, uniqueId.getObjectId(), null, null, Instant.now(clock));
         return replaced;
       }
 
       @Override
-      public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<D> replacementDocuments) {
-        List<UniqueId> replaced = underlying.replaceVersions(objectId, replacementDocuments);
+      public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<D> replacementDocuments) {
+        final List<UniqueId> replaced = underlying.replaceVersions(objectId, replacementDocuments);
         _changeManager.entityChanged(ChangeType.CHANGED, objectId.getObjectId(), null, null, Instant.now(clock));
         return replaced;
       }
 
       @Override
-      public D update(D document) {
-        D doc = underlying.update(document);
+      public D update(final D document) {
+        final D doc = underlying.update(document);
         _changeManager.entityChanged(ChangeType.CHANGED, doc.getObjectId(), doc.getVersionFromInstant(), doc.getVersionToInstant(), Instant.now(clock));
         return doc;
       }

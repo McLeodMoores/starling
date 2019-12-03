@@ -34,7 +34,7 @@ import com.opengamma.util.test.TestGroup;
 @SuppressWarnings("unchecked")
 public class BeanBuildingVisitorTest {
 
-  private static final BeanVisitorDecorator s_securityTypeFilter = new PropertyFilter(ManageableSecurity.meta().securityType());
+  private static final BeanVisitorDecorator SECURITY_TYPE_FILTER = new PropertyFilter(ManageableSecurity.meta().securityType());
 
   private static final MetaBeanFactory META_BEAN_FACTORY = new MapMetaBeanFactory(ImmutableSet.<MetaBean>of(
       FXForwardSecurity.meta(),
@@ -61,7 +61,7 @@ public class BeanBuildingVisitorTest {
                                                                        CONVERTERS);
     MetaBean metaBean = META_BEAN_FACTORY.beanFor(BlotterTestUtils.FX_FORWARD_DATA_SOURCE);
     BeanBuilder<ManageableSecurity> beanBuilder =
-        (BeanBuilder<ManageableSecurity>) new BeanTraverser(s_securityTypeFilter).traverse(metaBean, visitor);
+        (BeanBuilder<ManageableSecurity>) new BeanTraverser(SECURITY_TYPE_FILTER).traverse(metaBean, visitor);
     ManageableSecurity security = beanBuilder.build();
     assertTrue(JodaBeanUtils.equalIgnoring(BlotterTestUtils.FX_FORWARD, security, ManageableSecurity.meta().uniqueId()));
   }
@@ -76,7 +76,7 @@ public class BeanBuildingVisitorTest {
                                                                        CONVERTERS);
     MetaBean metaBean = META_BEAN_FACTORY.beanFor(BlotterTestUtils.SWAP_DATA_SOURCE);
     BeanBuilder<ManageableSecurity> beanBuilder =
-        (BeanBuilder<ManageableSecurity>) new BeanTraverser(s_securityTypeFilter).traverse(metaBean, visitor);
+        (BeanBuilder<ManageableSecurity>) new BeanTraverser(SECURITY_TYPE_FILTER).traverse(metaBean, visitor);
     ManageableSecurity security = beanBuilder.build();
     assertTrue(JodaBeanUtils.equalIgnoring(BlotterTestUtils.SWAP, security, ManageableSecurity.meta().uniqueId()));
   }

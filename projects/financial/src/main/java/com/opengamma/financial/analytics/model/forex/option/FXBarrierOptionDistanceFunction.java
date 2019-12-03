@@ -20,7 +20,8 @@ import com.opengamma.financial.security.option.FXDigitalOptionSecurity;
 // logic in getBarrierLevel() / getMarketDataRequirement() probably implies this should be refactored
 
 /**
- * Function to compute barrier distance for equity options Defined as absolute difference (optionally expressed as a percentage) between barrier level and market price
+ * Function to compute barrier distance for equity options Defined as absolute difference (optionally expressed as a percentage) between barrier level and
+ * market price.
  */
 public class FXBarrierOptionDistanceFunction extends BarrierOptionDistanceFunction {
 
@@ -36,7 +37,7 @@ public class FXBarrierOptionDistanceFunction extends BarrierOptionDistanceFuncti
   }
 
   @Override
-  protected ValueRequirement getMarketDataRequirement(FinancialSecurity security) {
+  protected ValueRequirement getMarketDataRequirement(final FinancialSecurity security) {
     if (security instanceof FXBarrierOptionSecurity) {
       final FXBarrierOptionSecurity barrierOption = (FXBarrierOptionSecurity) security;
       return ConventionBasedFXRateFunction.getSpotRateRequirement(barrierOption.getCallCurrency(), barrierOption.getPutCurrency());
@@ -59,7 +60,7 @@ public class FXBarrierOptionDistanceFunction extends BarrierOptionDistanceFuncti
   }
 
   @Override
-  public double getBarrierLevel(FinancialSecurity security) {
+  public double getBarrierLevel(final FinancialSecurity security) {
     // yes this should be a visitor
     if (security instanceof FXBarrierOptionSecurity) {
       return ((FXBarrierOptionSecurity) security).getBarrierLevel();

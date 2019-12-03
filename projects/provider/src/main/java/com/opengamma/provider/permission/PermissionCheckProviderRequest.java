@@ -42,8 +42,7 @@ public class PermissionCheckProviderRequest implements Bean {
   @PropertyDefinition(validate = "notNull")
   private ExternalIdBundle _userIdBundle;
   /**
-   * The network address where user is logged in.
-   * This is intended to be an IP address.
+   * The network address where user is logged in. This is intended to be an IP address.
    */
   @PropertyDefinition
   private String _networkAddress;
@@ -53,59 +52,73 @@ public class PermissionCheckProviderRequest implements Bean {
   @PropertyDefinition(validate = "notNull")
   private final Set<String> _requestedPermissions = new TreeSet<>();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Obtains an instance to get user permissions check request.
-   * 
-   * @param userId  the identifier of user credentials, not null
-   * @param networkAddress  the user network address, may be null
-   * @param requestedPermissions  the requested permissions, not null
+   *
+   * @param userId
+   *          the identifier of user credentials, not null
+   * @param networkAddress
+   *          the user network address, may be null
+   * @param requestedPermissions
+   *          the requested permissions, not null
    * @return the request, not null
    */
-  public static PermissionCheckProviderRequest createGet(ExternalId userId, String networkAddress, String... requestedPermissions) {
+  public static PermissionCheckProviderRequest createGet(final ExternalId userId, final String networkAddress, final String... requestedPermissions) {
     return createGet(userId, networkAddress, Arrays.asList(requestedPermissions));
   }
 
   /**
    * Obtains an instance to get user permissions check request.
-   * 
-   * @param userIdBundle  the identifier bundle of user credentials, not null
-   * @param networkAddress  the user network address, may be null
-   * @param requestedPermissions  the requested permissions, not null
+   *
+   * @param userIdBundle
+   *          the identifier bundle of user credentials, not null
+   * @param networkAddress
+   *          the user network address, may be null
+   * @param requestedPermissions
+   *          the requested permissions, not null
    * @return the request, not null
    */
-  public static PermissionCheckProviderRequest createGet(ExternalIdBundle userIdBundle, String networkAddress, String... requestedPermissions) {
+  public static PermissionCheckProviderRequest createGet(final ExternalIdBundle userIdBundle, final String networkAddress,
+      final String... requestedPermissions) {
     return createGet(userIdBundle, networkAddress, Arrays.asList(requestedPermissions));
   }
 
   /**
    * Obtains an instance to get user permissions check request.
-   * 
-   * @param userId  the identifier of user credentials, not null
-   * @param networkAddress  the user network address, may be null
-   * @param requestedPermissions  the requested permissions, not null
+   *
+   * @param userId
+   *          the identifier of user credentials, not null
+   * @param networkAddress
+   *          the user network address, may be null
+   * @param requestedPermissions
+   *          the requested permissions, not null
    * @return the request, not null
    */
-  public static PermissionCheckProviderRequest createGet(ExternalId userId, String networkAddress, Iterable<String> requestedPermissions) {
+  public static PermissionCheckProviderRequest createGet(final ExternalId userId, final String networkAddress, final Iterable<String> requestedPermissions) {
     ArgumentChecker.notNull(userId, "userId");
     return createGet(ExternalIdBundle.of(userId), networkAddress, requestedPermissions);
   }
 
   /**
    * Obtains an instance to get user permissions check request.
-   * 
-   * @param userIdBundle  the external id bundle of user credentials, not null
-   * @param networkAddress  the user network address, may be null
-   * @param requestedPermissions  the requested permissions, not null
+   *
+   * @param userIdBundle
+   *          the external id bundle of user credentials, not null
+   * @param networkAddress
+   *          the user network address, may be null
+   * @param requestedPermissions
+   *          the requested permissions, not null
    * @return the request, not null
    */
-  public static PermissionCheckProviderRequest createGet(ExternalIdBundle userIdBundle, String networkAddress, Iterable<String> requestedPermissions) {
+  public static PermissionCheckProviderRequest createGet(final ExternalIdBundle userIdBundle, final String networkAddress,
+      final Iterable<String> requestedPermissions) {
     ArgumentChecker.notNull(userIdBundle, "userIdBundle");
     ArgumentChecker.notNull(requestedPermissions, "requestedPermissions");
-    PermissionCheckProviderRequest request = new PermissionCheckProviderRequest();
+    final PermissionCheckProviderRequest request = new PermissionCheckProviderRequest();
     request.setUserIdBundle(userIdBundle);
     request.setNetworkAddress(networkAddress);
-    for (String permission : requestedPermissions) {
+    for (final String permission : requestedPermissions) {
       request.getRequestedPermissions().add(permission);
     }
     return request;
@@ -174,8 +187,7 @@ public class PermissionCheckProviderRequest implements Bean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the network address where user is logged in.
-   * This is intended to be an IP address.
+   * Gets the network address where user is logged in. This is intended to be an IP address.
    * @return the value of the property
    */
   public String getNetworkAddress() {
@@ -183,8 +195,7 @@ public class PermissionCheckProviderRequest implements Bean {
   }
 
   /**
-   * Sets the network address where user is logged in.
-   * This is intended to be an IP address.
+   * Sets the network address where user is logged in. This is intended to be an IP address.
    * @param networkAddress  the new value of the property
    */
   public void setNetworkAddress(String networkAddress) {
@@ -193,7 +204,6 @@ public class PermissionCheckProviderRequest implements Bean {
 
   /**
    * Gets the the {@code networkAddress} property.
-   * This is intended to be an IP address.
    * @return the property, not null
    */
   public final Property<String> networkAddress() {

@@ -16,8 +16,8 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 
 /**
- * A partial implementation of {@link Source}
- * 
+ * A partial implementation of {@link Source}.
+ *
  * @param <V> the type returned by the source
  */
 public abstract class AbstractSource<V>
@@ -25,13 +25,13 @@ public abstract class AbstractSource<V>
 
   /**
    * Bulk helper method that loops around the input collection calling the single search method serially.
-   * 
+   *
    * @param <V>  the result type
    * @param source  the source to search on, not null
    * @param uniqueIds  the unique identifiers, not null
    * @return the map of results, not null
    */
-  public static <V> Map<UniqueId, V> get(Source<V> source, Collection<UniqueId> uniqueIds) {
+  public static <V> Map<UniqueId, V> get(final Source<V> source, final Collection<UniqueId> uniqueIds) {
     final Map<UniqueId, V> result = newHashMap();
     for (final UniqueId uniqueId : uniqueIds) {
       try {
@@ -46,7 +46,7 @@ public abstract class AbstractSource<V>
 
   /**
    * Bulk helper method that loops around the input collection calling the single search method serially.
-   * 
+   *
    * @param <V>  the result type
    * @param source  the source to search on, not null
    * @param objectIds  the object identifiers, not null
@@ -68,7 +68,7 @@ public abstract class AbstractSource<V>
 
   //-------------------------------------------------------------------------
   @Override
-  public Map<UniqueId, V> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, V> get(final Collection<UniqueId> uniqueIds) {
     return get(this, uniqueIds);
   }
 

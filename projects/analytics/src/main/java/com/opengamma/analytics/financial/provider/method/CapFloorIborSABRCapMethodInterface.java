@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.method;
@@ -16,10 +16,13 @@ public interface CapFloorIborSABRCapMethodInterface {
 
   /**
    * Computes the present value of the instrument.
-   * @param cap The cap/floor on Ibor.
-   * @param sabr The SABR cap/floor data and multi-curves provider.
+   * 
+   * @param cap
+   *          The cap/floor on Ibor.
+   * @param sabr
+   *          The SABR cap/floor data and multi-curves provider.
    * @return The present value.
    */
-  MultipleCurrencyAmount presentValue(final CapFloorIbor cap, final SABRCapProviderInterface sabr);
+  MultipleCurrencyAmount presentValue(CapFloorIbor cap, SABRCapProviderInterface sabr);
 
 }

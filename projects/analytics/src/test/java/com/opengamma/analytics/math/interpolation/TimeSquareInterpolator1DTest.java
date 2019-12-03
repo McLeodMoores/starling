@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -10,6 +10,8 @@ import static org.testng.AssertJUnit.assertEquals;
 import org.testng.annotations.Test;
 
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.analytics.math.interpolation.factory.TimeSquareInterpolator1dAdapter;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -51,11 +53,11 @@ public class TimeSquareInterpolator1DTest {
    * Tests the sensitivity of the interpolated value to the Y values.
    */
   public void interpolation() {
-    final Interpolator1D interpolatorFromFactory = Interpolator1DFactory.TIME_SQUARE_INSTANCE;
-    double[] x = new double[] {1.0, 1.5, 2, 2.75};
+    final Interpolator1D interpolatorFromFactory = NamedInterpolator1dFactory.of(TimeSquareInterpolator1dAdapter.NAME);
+    final double[] x = new double[] {1.0, 1.5, 2, 2.75};
     for (int loopx = 0; loopx < x.length; loopx++) {
-      double yCalculated = INTERPOLATOR.interpolate(DATA, x[loopx]);
-      double yCalculatedFactory = interpolatorFromFactory.interpolate(DATA, x[loopx]);
+      final double yCalculated = INTERPOLATOR.interpolate(DATA, x[loopx]);
+      final double yCalculatedFactory = interpolatorFromFactory.interpolate(DATA, x[loopx]);
       final int index = DATA.getLowerBoundIndex(x[loopx]);
       final double weight = (DATA.getKeys()[index + 1] - x[loopx]) / (DATA.getKeys()[index + 1] - DATA.getKeys()[index]);
       final double val1 = DATA.getKeys()[index] * DATA.getValues()[index] * DATA.getValues()[index];
@@ -64,9 +66,9 @@ public class TimeSquareInterpolator1DTest {
       assertEquals("TimeSquare interpolator: data point " + loopx, yExpected, yCalculated, TOLERANCE_Y);
       assertEquals("TimeSquare interpolator: data point " + loopx, yCalculated, yCalculatedFactory, TOLERANCE_Y);
     }
-    int lenghtx = DATA.getKeys().length;
-    double lastx = DATA.getKeys()[lenghtx - 1];
-    double yCalculated = INTERPOLATOR.interpolate(DATA, lastx);
+    final int lenghtx = DATA.getKeys().length;
+    final double lastx = DATA.getKeys()[lenghtx - 1];
+    final double yCalculated = INTERPOLATOR.interpolate(DATA, lastx);
     final double yExpected = DATA.getValues()[lenghtx - 1];
     assertEquals("TimeSquare interpolator: last point", yExpected, yCalculated, TOLERANCE_Y);
   }
@@ -76,30 +78,30 @@ public class TimeSquareInterpolator1DTest {
    * Tests the sensitivity of the interpolated value to the Y values.
    */
   public void interpolationSensitivity() {
-    double shift = 1.0E-6;
-    double[] x = new double[] {1.0, 1.5, 2, 2.75};
+    final double shift = 1.0E-6;
+    final double[] x = new double[] {1.0, 1.5, 2, 2.75};
     for (int loopx = 0; loopx < x.length; loopx++) {
-      double yInit = INTERPOLATOR.interpolate(DATA, x[loopx]);
-      double[] ySensiCalculated = INTERPOLATOR.getNodeSensitivitiesForValue(DATA, x[loopx]);
+      final double yInit = INTERPOLATOR.interpolate(DATA, x[loopx]);
+      final double[] ySensiCalculated = INTERPOLATOR.getNodeSensitivitiesForValue(DATA, x[loopx]);
       for (int loopsens = 0; loopsens < X.length; loopsens++) {
-        double[] yVectorBumped = Y.clone();
+        final double[] yVectorBumped = Y.clone();
         yVectorBumped[loopsens] += shift;
-        Interpolator1DDataBundle dataBumped = INTERPOLATOR.getDataBundle(X, yVectorBumped);
-        double yBumped = INTERPOLATOR.interpolate(dataBumped, x[loopx]);
-        double ySensiExpected = (yBumped - yInit) / shift;
+        final Interpolator1DDataBundle dataBumped = INTERPOLATOR.getDataBundle(X, yVectorBumped);
+        final double yBumped = INTERPOLATOR.interpolate(dataBumped, x[loopx]);
+        final double ySensiExpected = (yBumped - yInit) / shift;
         assertEquals("TimeSquare interpolator: test " + loopx + " node " + loopsens, ySensiExpected, ySensiCalculated[loopsens], TOLERANCE_SENSI);
       }
     }
-    int lenghtx = DATA.getKeys().length;
-    double lastx = DATA.getKeys()[lenghtx - 1];
-    double yInitLast = INTERPOLATOR.interpolate(DATA, lastx);
-    double[] ySensiCalculated = INTERPOLATOR.getNodeSensitivitiesForValue(DATA, lastx);
+    final int lenghtx = DATA.getKeys().length;
+    final double lastx = DATA.getKeys()[lenghtx - 1];
+    final double yInitLast = INTERPOLATOR.interpolate(DATA, lastx);
+    final double[] ySensiCalculated = INTERPOLATOR.getNodeSensitivitiesForValue(DATA, lastx);
     for (int loopsens = 0; loopsens < X.length; loopsens++) {
-      double[] yVectorBumped = Y.clone();
+      final double[] yVectorBumped = Y.clone();
       yVectorBumped[loopsens] += shift;
-      Interpolator1DDataBundle dataBumped = INTERPOLATOR.getDataBundle(X, yVectorBumped);
-      double yBumped = INTERPOLATOR.interpolate(dataBumped, lastx);
-      double ySensiExpected = (yBumped - yInitLast) / shift;
+      final Interpolator1DDataBundle dataBumped = INTERPOLATOR.getDataBundle(X, yVectorBumped);
+      final double yBumped = INTERPOLATOR.interpolate(dataBumped, lastx);
+      final double ySensiExpected = (yBumped - yInitLast) / shift;
       assertEquals("TimeSquare interpolator: test last node " + loopsens, ySensiExpected, ySensiCalculated[loopsens], TOLERANCE_SENSI);
     }
   }

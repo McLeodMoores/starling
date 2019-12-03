@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.definition;
@@ -14,14 +14,14 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
- * Definition for a fade-in option. The payoff of the option is the same as that
- * for a standard option with the size of the payoff weighted by how many
- * times the asset price was inside a pre-defined range <i>(L, U)</i>
- * 
+ *
+ * Definition for a fade-in option. The payoff of the option is the same as that for a standard option with the size of the payoff weighted by how many times
+ * the asset price was inside a pre-defined range <i>(L, U)</i>
+ *
  */
 public class FadeInOptionDefinition extends OptionDefinition {
-  private final OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle> _payoffFunction = new OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle>() {
+  private final OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle> _payoffFunction =
+      new OptionPayoffFunction<StandardOptionWithSpotTimeSeriesDataBundle>() {
 
     @Override
     public double getPayoff(final StandardOptionWithSpotTimeSeriesDataBundle data, final Double optionPrice) {
@@ -69,9 +69,9 @@ public class FadeInOptionDefinition extends OptionDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_lowerBound);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_upperBound);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

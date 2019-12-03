@@ -41,12 +41,10 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * This is the simplest possible implementation of the {@link LegalEntity} interface.
  * <p>
- * This class is mutable and not thread-safe.
- * It is intended to be used in the engine via the read-only {@code LegalEntity} interface.
+ * This class is mutable and not thread-safe. It is intended to be used in the engine via the read-only {@code LegalEntity} interface.
  */
 @BeanDefinition
-public class SimpleLegalEntity extends DirectBean
-    implements LegalEntity, MutableUniqueIdentifiable, Serializable {
+public class SimpleLegalEntity extends DirectBean implements LegalEntity, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -54,57 +52,57 @@ public class SimpleLegalEntity extends DirectBean
   /**
    * The unique identifier of the legal entity.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideSet = true, overrideGet = true)
   private UniqueId _uniqueId;
   /**
    * The bundle of external identifiers that define the legal entity.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
    * The map of attributes, which can be used for attaching additional application-level information.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideSet = true, overrideGet = true)
   private final Map<String, String> _attributes = new HashMap<>();
   /**
    * The map of details, which can be used for attaching additional application-level information.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideSet = true, overrideGet = true)
   private final Map<String, String> _details = new HashMap<>();
   /**
    * The name of the legal entity.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
   /**
    * The ratings.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Rating> _ratings = new ArrayList<>();
   /**
    * The capabilities.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Capability> _capabilities = new ArrayList<>();
   /**
    * The external identifier bundle.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<ExternalIdBundle> _issuedSecurities = new ArrayList<>();
   /**
    * The obligations.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Obligation> _obligations = new ArrayList<>();
   /**
    * The root portfolio.
    */
-  @PropertyDefinition()
+  @PropertyDefinition(overrideGet = true)
   private RootPortfolio _rootPortfolio;
   /**
    * The accounts.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private List<Account> _accounts = new ArrayList<>();
 
   /**
@@ -116,10 +114,12 @@ public class SimpleLegalEntity extends DirectBean
   /**
    * Creates a legal entity specifying the values of the main fields.
    *
-   * @param name the name of the legal entity, not null
-   * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
+   * @param name
+   *          the name of the legal entity, not null
+   * @param externalIdBundle
+   *          the bundle of identifiers that define the legal entity, not null
    */
-  public SimpleLegalEntity(String name, ExternalIdBundle externalIdBundle) {
+  public SimpleLegalEntity(final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(externalIdBundle, "externalIdBundle");
     setName(name);
@@ -129,11 +129,14 @@ public class SimpleLegalEntity extends DirectBean
   /**
    * Creates a legal entity specifying the values of the main fields.
    *
-   * @param uniqueId the unique identifier, not null
-   * @param name the name of the legal entity, not null
-   * @param externalIdBundle the bundle of identifiers that define the legal entity, not null
+   * @param uniqueId
+   *          the unique identifier, not null
+   * @param name
+   *          the name of the legal entity, not null
+   * @param externalIdBundle
+   *          the bundle of identifiers that define the legal entity, not null
    */
-  protected SimpleLegalEntity(UniqueId uniqueId, String name, ExternalIdBundle externalIdBundle) {
+  protected SimpleLegalEntity(final UniqueId uniqueId, final String name, final ExternalIdBundle externalIdBundle) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(externalIdBundle, "externalIdBundle");
     setUniqueId(uniqueId);
@@ -141,25 +144,26 @@ public class SimpleLegalEntity extends DirectBean
     setExternalIdBundle(externalIdBundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle representing this legal entity.
    *
-   * @param legalEntityId the identifier to add, not null
+   * @param legalEntityId
+   *          the identifier to add, not null
    */
-  public void addExternalId(ExternalId legalEntityId) {
+  public void addExternalId(final ExternalId legalEntityId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(legalEntityId));
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
   }
 
   @Override
-  public void addDetail(String key, String value) {
+  public void addDetail(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _details.put(key, value);
@@ -189,6 +193,7 @@ public class SimpleLegalEntity extends DirectBean
    * Gets the unique identifier of the legal entity.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -197,6 +202,7 @@ public class SimpleLegalEntity extends DirectBean
    * Sets the unique identifier of the legal entity.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -214,6 +220,7 @@ public class SimpleLegalEntity extends DirectBean
    * Gets the bundle of external identifiers that define the legal entity.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
@@ -240,6 +247,7 @@ public class SimpleLegalEntity extends DirectBean
    * Gets the map of attributes, which can be used for attaching additional application-level information.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getAttributes() {
     return _attributes;
   }
@@ -248,6 +256,7 @@ public class SimpleLegalEntity extends DirectBean
    * Sets the map of attributes, which can be used for attaching additional application-level information.
    * @param attributes  the new value of the property, not null
    */
+  @Override
   public void setAttributes(Map<String, String> attributes) {
     JodaBeanUtils.notNull(attributes, "attributes");
     this._attributes.clear();
@@ -267,6 +276,7 @@ public class SimpleLegalEntity extends DirectBean
    * Gets the map of details, which can be used for attaching additional application-level information.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getDetails() {
     return _details;
   }
@@ -275,6 +285,7 @@ public class SimpleLegalEntity extends DirectBean
    * Sets the map of details, which can be used for attaching additional application-level information.
    * @param details  the new value of the property, not null
    */
+  @Override
   public void setDetails(Map<String, String> details) {
     JodaBeanUtils.notNull(details, "details");
     this._details.clear();
@@ -294,6 +305,7 @@ public class SimpleLegalEntity extends DirectBean
    * Gets the name of the legal entity.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }
@@ -320,6 +332,7 @@ public class SimpleLegalEntity extends DirectBean
    * Gets the ratings.
    * @return the value of the property, not null
    */
+  @Override
   public List<Rating> getRatings() {
     return _ratings;
   }
@@ -346,6 +359,7 @@ public class SimpleLegalEntity extends DirectBean
    * Gets the capabilities.
    * @return the value of the property, not null
    */
+  @Override
   public List<Capability> getCapabilities() {
     return _capabilities;
   }
@@ -372,6 +386,7 @@ public class SimpleLegalEntity extends DirectBean
    * Gets the external identifier bundle.
    * @return the value of the property, not null
    */
+  @Override
   public List<ExternalIdBundle> getIssuedSecurities() {
     return _issuedSecurities;
   }
@@ -398,6 +413,7 @@ public class SimpleLegalEntity extends DirectBean
    * Gets the obligations.
    * @return the value of the property, not null
    */
+  @Override
   public List<Obligation> getObligations() {
     return _obligations;
   }
@@ -424,6 +440,7 @@ public class SimpleLegalEntity extends DirectBean
    * Gets the root portfolio.
    * @return the value of the property
    */
+  @Override
   public RootPortfolio getRootPortfolio() {
     return _rootPortfolio;
   }
@@ -449,6 +466,7 @@ public class SimpleLegalEntity extends DirectBean
    * Gets the accounts.
    * @return the value of the property, not null
    */
+  @Override
   public List<Account> getAccounts() {
     return _accounts;
   }

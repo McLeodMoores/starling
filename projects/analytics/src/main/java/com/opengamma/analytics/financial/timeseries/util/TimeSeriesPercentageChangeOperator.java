@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.timeseries.util;
@@ -17,7 +17,7 @@ import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSerie
 public class TimeSeriesPercentageChangeOperator extends Function1D<DateDoubleTimeSeries<?>, DateDoubleTimeSeries<?>> {
 
   @Override
-  public DateDoubleTimeSeries<?> evaluate(DateDoubleTimeSeries<?> ts) {
+  public DateDoubleTimeSeries<?> evaluate(final DateDoubleTimeSeries<?> ts) {
     Validate.notNull(ts, "time series");
     Validate.isTrue(ts.size() > 1, "time series length must be > 1");
     final int[] times = ts.timesArrayFast();

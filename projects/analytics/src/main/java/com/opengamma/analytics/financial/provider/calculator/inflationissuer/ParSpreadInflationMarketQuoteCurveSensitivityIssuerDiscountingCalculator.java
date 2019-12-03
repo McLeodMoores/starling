@@ -18,20 +18,22 @@ import com.opengamma.analytics.financial.provider.description.inflation.Inflatio
 import com.opengamma.analytics.financial.provider.sensitivity.inflation.InflationSensitivity;
 
 /**
- * Calculates the sensitivity of the par spread (to the market quote) of issuer-specific
- * instruments to the curves used in pricing by discounting. This calculator requires the
- * transaction version of instruments like bonds and bills, as the purchase price
- * information is necessary to calculate a meaningful par spread.
+ * Calculates the sensitivity of the par spread (to the market quote) of issuer-specific instruments to the curves used in pricing by discounting. This
+ * calculator requires the transaction version of instruments like bonds and bills, as the purchase price information is necessary to calculate a meaningful par
+ * spread.
  */
-public final class ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator extends InstrumentDerivativeVisitorDelegate<InflationIssuerProviderInterface, InflationSensitivity> {
+public final class ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator
+extends InstrumentDerivativeVisitorDelegate<InflationIssuerProviderInterface, InflationSensitivity> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator INSTANCE = new ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator();
+  private static final ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator INSTANCE =
+      new ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator();
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountingCalculator getInstance() {
@@ -52,14 +54,14 @@ public final class ParSpreadInflationMarketQuoteCurveSensitivityIssuerDiscountin
   /** Calculator for bond transactions */
   private static final BondTransactionDiscountingMethod METHOD_BOND_TR = BondTransactionDiscountingMethod.getInstance();
 
-  //     -----     Deposit     -----
+  // ----- Deposit -----
 
   @Override
   public InflationSensitivity visitDepositCounterpart(final DepositCounterpart deposit, final InflationIssuerProviderInterface issuercurves) {
     return InflationSensitivity.of(METHOD_DEPO_CTPY.parSpreadCurveSensitivity(deposit, issuercurves.getIssuerProvider()));
   }
 
-  //     -----     Bond/Bill     -----
+  // ----- Bond/Bill -----
 
   @Override
   public InflationSensitivity visitBillTransaction(final BillTransaction bill, final InflationIssuerProviderInterface issuercurves) {

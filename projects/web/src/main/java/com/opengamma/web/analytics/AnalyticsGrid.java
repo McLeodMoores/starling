@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 /* package */ abstract class AnalyticsGrid<V extends Viewport> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AnalyticsGrid.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticsGrid.class);
 
   /** Viewports keyed by ID. */
   private final Map<Integer, V> _viewports;
@@ -33,11 +33,11 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param viewportListener  the listener for changes to this grid's viewports, not null
    * @param callbackId  the ID that is passed to listeners when the grid structure changes, any unique value, not null
    */
-  /* package */ AnalyticsGrid(ViewportListener viewportListener, String callbackId) {
+  /* package */ AnalyticsGrid(final ViewportListener viewportListener, final String callbackId) {
     ArgumentChecker.notNull(viewportListener, "viewportListener");
     ArgumentChecker.notNull(callbackId, "callbackId");
     _viewportListener = viewportListener;
@@ -52,9 +52,9 @@ import com.opengamma.util.ArgumentChecker;
    * @param callbackId  the ID that is passed to listeners when the grid structure changes, any unique value, not null
    * @param viewports a map of the viewports to be associated with the grid
    */
-  /* package */ AnalyticsGrid(ViewportListener viewportListener,
-                              String callbackId,
-                              Map<Integer, V> viewports) {
+  /* package */ AnalyticsGrid(final ViewportListener viewportListener,
+                              final String callbackId,
+                              final Map<Integer, V> viewports) {
     ArgumentChecker.notNull(viewportListener, "viewportListener");
     ArgumentChecker.notNull(callbackId, "callbackId");
     ArgumentChecker.notNull(viewports, "viewports");
@@ -70,9 +70,9 @@ import com.opengamma.util.ArgumentChecker;
 
   /* package */ abstract ViewCycle getViewCycle();
 
-  /* package */ String updateViewport(int viewportId, ViewportDefinition viewportDefinition, ResultsCache cache) {
-    V viewport = getViewport(viewportId);
-    ViewportDefinition currentViewportDefinition = viewport.getDefinition();
+  /* package */ String updateViewport(final int viewportId, final ViewportDefinition viewportDefinition, final ResultsCache cache) {
+    final V viewport = getViewport(viewportId);
+    final ViewportDefinition currentViewportDefinition = viewport.getDefinition();
     viewport.update(viewportDefinition, getViewCycle(), cache);
     _viewportListener.viewportUpdated(currentViewportDefinition, viewportDefinition, getGridStructure());
     String callbackId;
@@ -86,15 +86,15 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * Returns a viewport that represents part of the grid that a user is viewing.
-   * 
+   *
    * @param viewportId  the ID of the viewport
    * @return the viewport, not null
    * @throws DataNotFoundException If no viewport exists with the specified ID
    */
-  /* package */ V getViewport(int viewportId) {
-    V viewport = _viewports.get(viewportId);
+  /* package */ V getViewport(final int viewportId) {
+    final V viewport = _viewports.get(viewportId);
     if (viewport == null) {
-      s_logger.debug("Received request for non-existent viewport ID {}", viewportId);
+      LOGGER.debug("Received request for non-existent viewport ID {}", viewportId);
       throw new DataNotFoundException("No viewport found with ID " + viewportId);
     }
     return viewport;
@@ -112,17 +112,17 @@ import com.opengamma.util.ArgumentChecker;
    * @param cache  the result cache
    * @return true if the viewport has data
    */
-  /* package */ boolean createViewport(int viewportId,
-                                       String callbackId,
-                                       String structureCallbackId,
-                                       ViewportDefinition viewportDefinition,
-                                       ResultsCache cache) {
+  /* package */ boolean createViewport(final int viewportId,
+                                       final String callbackId,
+                                       final String structureCallbackId,
+                                       final ViewportDefinition viewportDefinition,
+                                       final ResultsCache cache) {
     if (_viewports.containsKey(viewportId)) {
       throw new IllegalArgumentException("Viewport ID " + viewportId + " is already in use");
     }
-    V viewport = createViewport(viewportDefinition, callbackId, structureCallbackId, cache);
+    final V viewport = createViewport(viewportDefinition, callbackId, structureCallbackId, cache);
     _viewportListener.viewportCreated(viewportDefinition, getGridStructure());
-    boolean hasData = (viewport.getState() != Viewport.State.EMPTY);
+    final boolean hasData = viewport.getState() != Viewport.State.EMPTY;
     _viewports.put(viewportId, viewport);
     return hasData;
   }
@@ -142,14 +142,14 @@ import com.opengamma.util.ArgumentChecker;
                                           ResultsCache cache);
   /**
    * Deletes a viewport.
-   * 
+   *
    * @param viewportId  the ID of the viewport
    * @throws DataNotFoundException if no viewport exists with the specified ID
    */
-  /* package */ void deleteViewport(int viewportId) {
-    Viewport viewport = _viewports.remove(viewportId);
+  /* package */ void deleteViewport(final int viewportId) {
+    final Viewport viewport = _viewports.remove(viewportId);
     if (viewport == null) {
-      s_logger.debug("Received request to delete non-existent viewport ID {}", viewportId);
+      LOGGER.debug("Received request to delete non-existent viewport ID {}", viewportId);
       throw new DataNotFoundException("No viewport found with ID " + viewportId);
     }
     _viewportListener.viewportDeleted(viewport.getDefinition(), getGridStructure());
@@ -157,17 +157,17 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * Returns the current data displayed in the viewport.
-   * 
+   *
    * @param viewportId  the ID of the viewport
    * @return the current data displayed in the viewport
    */
-  /* package */ ViewportResults getData(int viewportId) {
+  /* package */ ViewportResults getData(final int viewportId) {
     return getViewport(viewportId).getData();
   }
 
   /**
    * Gets the callback ID.
-   * 
+   *
    * @return the ID that's sent to listeners when the row and column structure of the grid is updated
    */
   /* package */ String getCallbackId() {
@@ -176,7 +176,7 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * Gets the viewport listener.
-   * 
+   *
    * @return the viewport listener
    */
   ViewportListener getViewportListener() {
@@ -185,7 +185,7 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * Viewports keyed by ID.
-   * 
+   *
    * @return the map of viewports, not null
    */
   /* package */ Map<Integer, V> getViewports() {

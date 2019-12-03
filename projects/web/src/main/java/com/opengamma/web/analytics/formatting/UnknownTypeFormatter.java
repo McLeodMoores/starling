@@ -15,23 +15,23 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /* package */ class UnknownTypeFormatter extends DefaultFormatter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(UnknownTypeFormatter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UnknownTypeFormatter.class);
 
   @Override
-  public String formatCell(Object value, ValueSpecification valueSpec, Object inlineKey) {
+  public String formatCell(final Object value, final ValueSpecification valueSpec, final Object inlineKey) {
     logType(value, valueSpec);
     return super.formatCell(value, valueSpec, inlineKey);
   }
 
   @Override
-  public Object format(Object value, ValueSpecification valueSpec, Format format, Object inlineKey) {
+  public Object format(final Object value, final ValueSpecification valueSpec, final Format format, final Object inlineKey) {
     logType(value, valueSpec);
     return super.format(value, valueSpec, format, inlineKey);
   }
 
-  private static void logType(Object value, ValueSpecification valueSpec) {
-    String typeName = value == null ? null : value.getClass().getName();
-    s_logger.info("Value received for unknown type, value name: {}, type: {}", valueSpec.getValueName(), typeName);
+  private static void logType(final Object value, final ValueSpecification valueSpec) {
+    final String typeName = value == null ? null : value.getClass().getName();
+    LOGGER.info("Value received for unknown type, value name: {}, type: {}", valueSpec.getValueName(), typeName);
   }
 
   @Override

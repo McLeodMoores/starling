@@ -18,54 +18,53 @@ import com.opengamma.livedata.resolver.DistributionSpecificationResolver;
 import com.opengamma.livedata.server.DistributionSpecification;
 
 /**
- * Wraps a {@link DistributionSpecificationResolver} from Strong Bloomberg space into Fake bloomberg space
+ * Wraps a {@link DistributionSpecificationResolver} from Strong Bloomberg space into Fake bloomberg space.
  */
 public class FakeDistributionSpecificationResolver implements DistributionSpecificationResolver {
 
   private final DistributionSpecificationResolver _underlying;
 
-  
   /**
-   * @param underlying the bloomberg spec resolver
+   * @param underlying
+   *          the bloomberg spec resolver
    */
-  public FakeDistributionSpecificationResolver(DistributionSpecificationResolver underlying) {
+  public FakeDistributionSpecificationResolver(final DistributionSpecificationResolver underlying) {
     super();
     _underlying = underlying;
   }
 
   @Override
-  public DistributionSpecification resolve(LiveDataSpecification liveDataSpecificationFromClient) {
-    DistributionSpecification underResolved = _underlying.resolve(liveDataSpecificationFromClient);
+  public DistributionSpecification resolve(final LiveDataSpecification liveDataSpecificationFromClient) {
+    final DistributionSpecification underResolved = _underlying.resolve(liveDataSpecificationFromClient);
     return wrap(underResolved);
   }
 
   @Override
   public Map<LiveDataSpecification, DistributionSpecification> resolve(
-      Collection<LiveDataSpecification> liveDataSpecifications) {
-    Map<LiveDataSpecification, DistributionSpecification> underResolved = _underlying
+      final Collection<LiveDataSpecification> liveDataSpecifications) {
+    final Map<LiveDataSpecification, DistributionSpecification> underResolved = _underlying
         .resolve(liveDataSpecifications);
-    HashMap<LiveDataSpecification, DistributionSpecification> ret = new HashMap<LiveDataSpecification, DistributionSpecification>();
-    for (Entry<LiveDataSpecification, DistributionSpecification> entry : underResolved.entrySet()) {
+    final HashMap<LiveDataSpecification, DistributionSpecification> ret = new HashMap<>();
+    for (final Entry<LiveDataSpecification, DistributionSpecification> entry : underResolved.entrySet()) {
       ret.put(entry.getKey(), wrap(entry.getValue()));
     }
     return ret;
   }
-  
 
-  private DistributionSpecification wrap(DistributionSpecification underResolved) {
+  private DistributionSpecification wrap(final DistributionSpecification underResolved) {
     if (underResolved == null) {
       return null;
     }
-    ExternalId identifier = underResolved.getMarketDataId();
+    final ExternalId identifier = underResolved.getMarketDataId();
     ExternalScheme wrappedScheme;
     if (identifier.getScheme().equals(ExternalSchemes.BLOOMBERG_BUID)) {
       wrappedScheme = ExternalSchemes.BLOOMBERG_BUID_WEAK;
     } else if (identifier.getScheme().equals(ExternalSchemes.BLOOMBERG_TICKER)) {
-      wrappedScheme = ExternalSchemes.BLOOMBERG_TICKER_WEAK;      
+      wrappedScheme = ExternalSchemes.BLOOMBERG_TICKER_WEAK;
     } else {
       throw new IllegalArgumentException("Unsupported scheme: " + identifier.getScheme());
     }
-    ExternalId wrapped = ExternalId.of(wrappedScheme, identifier.getValue());
+    final ExternalId wrapped = ExternalId.of(wrappedScheme, identifier.getValue());
     return new DistributionSpecification(wrapped, underResolved.getNormalizationRuleSet(), underResolved.getJmsTopic().concat(".Fake"));
   }
 }

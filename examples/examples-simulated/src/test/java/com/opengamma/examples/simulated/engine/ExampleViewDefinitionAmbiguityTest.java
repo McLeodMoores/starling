@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.engine;
@@ -81,7 +81,7 @@ public class ExampleViewDefinitionAmbiguityTest extends ViewDefinitionAmbiguityT
     }
     Arrays.sort(viewDefinitions, new Comparator<Object[]>() {
       @Override
-      public int compare(Object[] o1, Object[] o2) {
+      public int compare(final Object[] o1, final Object[] o2) {
         return ((ViewDefinition) o1[0]).getName().compareTo(((ViewDefinition) o2[0]).getName());
       }
     });

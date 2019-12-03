@@ -31,7 +31,7 @@ public class CurrencyPairFudgeSecondaryType extends SecondaryFieldType<CurrencyP
    * @return The currency pair as a string in the form AAA/BBB
    */
   @Override
-  public String secondaryToPrimary(CurrencyPair currencyPair) {
+  public String secondaryToPrimary(final CurrencyPair currencyPair) {
     return currencyPair.getName();
   }
 
@@ -40,7 +40,7 @@ public class CurrencyPairFudgeSecondaryType extends SecondaryFieldType<CurrencyP
    * @return The currency pair
    */
   @Override
-  public CurrencyPair primaryToSecondary(String currencyPairString) {
+  public CurrencyPair primaryToSecondary(final String currencyPairString) {
     return CurrencyPair.parse(currencyPairString);
   }
 }

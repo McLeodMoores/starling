@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.cds;
@@ -20,31 +20,30 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.cds.CreditDefaultSwapIndexComponent;
 import com.opengamma.masterdb.security.hibernate.ExternalIdBean;
 
 /**
- * A Hibernate bean representation of {@link CreditDefaultSwapIndexComponent}.
+ * A Hibernate bean representation of {@link com.opengamma.financial.security.cds.CreditDefaultSwapIndexComponent}.
  */
 @BeanDefinition
 public class CDSIndexComponentBean extends DirectBean {
   /**
-   * The obligor identifier
+   * The obligor identifier.
    */
   @PropertyDefinition
   private ExternalIdBean _obligor;
   /**
-   * The weight
+   * The weight.
    */
   @PropertyDefinition
   private Double _weight;
   /**
-   * The bond ref id
+   * The bond ref id.
    */
   @PropertyDefinition
   private ExternalIdBean _bondId;
   /**
-   * The name
+   * The name.
    */
   @PropertyDefinition
   private String _name;
@@ -70,7 +69,7 @@ public class CDSIndexComponentBean extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the obligor identifier
+   * Gets the obligor identifier.
    * @return the value of the property
    */
   public ExternalIdBean getObligor() {
@@ -78,7 +77,7 @@ public class CDSIndexComponentBean extends DirectBean {
   }
 
   /**
-   * Sets the obligor identifier
+   * Sets the obligor identifier.
    * @param obligor  the new value of the property
    */
   public void setObligor(ExternalIdBean obligor) {
@@ -95,7 +94,7 @@ public class CDSIndexComponentBean extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the weight
+   * Gets the weight.
    * @return the value of the property
    */
   public Double getWeight() {
@@ -103,7 +102,7 @@ public class CDSIndexComponentBean extends DirectBean {
   }
 
   /**
-   * Sets the weight
+   * Sets the weight.
    * @param weight  the new value of the property
    */
   public void setWeight(Double weight) {
@@ -120,7 +119,7 @@ public class CDSIndexComponentBean extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bond ref id
+   * Gets the bond ref id.
    * @return the value of the property
    */
   public ExternalIdBean getBondId() {
@@ -128,7 +127,7 @@ public class CDSIndexComponentBean extends DirectBean {
   }
 
   /**
-   * Sets the bond ref id
+   * Sets the bond ref id.
    * @param bondId  the new value of the property
    */
   public void setBondId(ExternalIdBean bondId) {
@@ -145,7 +144,7 @@ public class CDSIndexComponentBean extends DirectBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the name
+   * Gets the name.
    * @return the value of the property
    */
   public String getName() {
@@ -153,7 +152,7 @@ public class CDSIndexComponentBean extends DirectBean {
   }
 
   /**
-   * Sets the name
+   * Sets the name.
    * @param name  the new value of the property
    */
   public void setName(String name) {

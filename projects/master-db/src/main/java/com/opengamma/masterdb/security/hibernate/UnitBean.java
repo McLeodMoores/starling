@@ -13,7 +13,7 @@ public class UnitBean extends EnumBean {
   protected UnitBean() {
   }
 
-  public UnitBean(String unitName) {
+  public UnitBean(final String unitName) {
     super(unitName);
   }
 

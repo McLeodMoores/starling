@@ -28,7 +28,7 @@ import com.opengamma.id.ExternalIdBundle;
  */
 public class MarketDataELCompiler implements OverrideOperationCompiler {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataELCompiler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataELCompiler.class);
 
   private final class Evaluator implements OverrideOperation {
 
@@ -36,7 +36,7 @@ public class MarketDataELCompiler implements OverrideOperationCompiler {
 
     private final ComputationTargetResolver.AtVersionCorrection _resolver;
 
-    public Evaluator(final UserExpression expr, final ComputationTargetResolver.AtVersionCorrection resolver) {
+    Evaluator(final UserExpression expr, final ComputationTargetResolver.AtVersionCorrection resolver) {
       _expr = expr;
       _resolver = resolver;
     }
@@ -48,7 +48,7 @@ public class MarketDataELCompiler implements OverrideOperationCompiler {
     @Override
     public Object apply(final ValueRequirement requirement, final Object original) {
       UserExpressionParser.setResolver(_resolver);
-      s_logger.debug("Applying {} to {}", _expr, requirement);
+      LOGGER.debug("Applying {} to {}", _expr, requirement);
       final UserExpression.Evaluator eval = getExpr().evaluator();
       eval.setVariable("x", original);
       if (requirement.getTargetReference().getType().isTargetType(ComputationTargetType.SECURITY)) {
@@ -92,12 +92,11 @@ public class MarketDataELCompiler implements OverrideOperationCompiler {
       final Object result = eval.evaluate();
       UserExpressionParser.setResolver(null);
       if (result == UserExpression.NA) {
-        s_logger.debug("Evaluation failed - using original {}", original);
+        LOGGER.debug("Evaluation failed - using original {}", original);
         return original;
-      } else {
-        s_logger.debug("Evaluation of {} to {}", original, result);
-        return result;
       }
+      LOGGER.debug("Evaluation of {} to {}", original, result);
+      return result;
     }
 
   }

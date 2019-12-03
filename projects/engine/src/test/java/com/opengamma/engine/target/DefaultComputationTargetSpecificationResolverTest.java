@@ -49,27 +49,44 @@ public class DefaultComputationTargetSpecificationResolverTest {
 
   }
 
-  private final VersionCorrection VC = VersionCorrection.of(Instant.now(), Instant.now());
-  private final DefaultComputationTargetSpecificationResolver RESOLVER = new DefaultComputationTargetSpecificationResolver();
-  private final ComputationTargetSpecification SPECIFICATION_NULL = ComputationTargetSpecification.NULL;
-  private final ComputationTargetSpecification SPECIFICATION_PRIMITIVE_VERSIONED = ComputationTargetSpecification.of(UniqueId.of("ExternalId-Test", "X", "V"));
-  private final ComputationTargetSpecification SPECIFICATION_PRIMITIVE_LATEST = ComputationTargetSpecification.of(UniqueId.of("ExternalId-Test", "X"));
-  private final ComputationTargetSpecification SPECIFICATION_FOO_VERSIONED = new ComputationTargetSpecification(ComputationTargetType.of(Foo.class), UniqueId.of("Foo", "Bar", "V"));
-  private final ComputationTargetSpecification SPECIFICATION_FOO_LATEST = new ComputationTargetSpecification(ComputationTargetType.of(Foo.class), UniqueId.of("Foo", "Bar"));
-  private final ComputationTargetSpecification SPECIFICATION_BAR_LATEST = new ComputationTargetSpecification(ComputationTargetType.of(Bar.class), UniqueId.of("Bar", "Foo"));
-  private final ComputationTargetSpecification SPECIFICATION_FOO_BAD = new ComputationTargetSpecification(ComputationTargetType.of(Foo.class), UniqueId.of("Foo", "Cow"));
-  private final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR = new ComputationTargetSpecification(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), UniqueId.of(
+  private static final VersionCorrection VC =
+      VersionCorrection.of(Instant.now(), Instant.now());
+  private static final DefaultComputationTargetSpecificationResolver RESOLVER =
+      new DefaultComputationTargetSpecificationResolver();
+  private static final ComputationTargetSpecification SPECIFICATION_NULL =
+      ComputationTargetSpecification.NULL;
+  private static final ComputationTargetSpecification SPECIFICATION_PRIMITIVE_VERSIONED =
+      ComputationTargetSpecification.of(UniqueId.of("ExternalId-Test", "X", "V"));
+  private static final ComputationTargetSpecification SPECIFICATION_PRIMITIVE_LATEST =
+      ComputationTargetSpecification.of(UniqueId.of("ExternalId-Test", "X"));
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_VERSIONED =
+      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class), UniqueId.of("Foo", "Bar", "V"));
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_LATEST =
+      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class), UniqueId.of("Foo", "Bar"));
+  private static final ComputationTargetSpecification SPECIFICATION_BAR_LATEST =
+      new ComputationTargetSpecification(ComputationTargetType.of(Bar.class), UniqueId.of("Bar", "Foo"));
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_BAD =
+      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class), UniqueId.of("Foo", "Cow"));
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR =
+      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), UniqueId.of(
       "Foo", "Bar"));
-  private final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR_BAD = new ComputationTargetSpecification(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)),
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR_BAD =
+      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)),
       UniqueId.of("Foo", "Cow"));
-  private final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR_VERSIONED = new ComputationTargetSpecification(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)),
+  private static final ComputationTargetSpecification SPECIFICATION_FOO_OR_BAR_VERSIONED =
+      new ComputationTargetSpecification(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)),
       UniqueId.of("Foo", "Bar", "V"));
-  private final ComputationTargetRequirement REQUIREMENT_PRIMITIVE = new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE, ExternalIdBundle.of(ExternalId.of("Test", "X")));
-  private final ComputationTargetRequirement REQUIREMENT_FOO_VALID = new ComputationTargetRequirement(ComputationTargetType.of(Foo.class), ExternalIdBundle.of(ExternalId.of("Test", "B")));
-  private final ComputationTargetRequirement REQUIREMENT_FOO_INVALID = new ComputationTargetRequirement(ComputationTargetType.of(Foo.class), ExternalIdBundle.of(ExternalId.of("Test", "C")));
-  private final ComputationTargetRequirement REQUIREMENT_FOO_OR_BAR = new ComputationTargetRequirement(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), ExternalId.of(
+  private static final ComputationTargetRequirement REQUIREMENT_PRIMITIVE =
+      new ComputationTargetRequirement(ComputationTargetType.PRIMITIVE, ExternalIdBundle.of(ExternalId.of("Test", "X")));
+  private static final ComputationTargetRequirement REQUIREMENT_FOO_VALID =
+      new ComputationTargetRequirement(ComputationTargetType.of(Foo.class), ExternalIdBundle.of(ExternalId.of("Test", "B")));
+  private static final ComputationTargetRequirement REQUIREMENT_FOO_INVALID =
+      new ComputationTargetRequirement(ComputationTargetType.of(Foo.class), ExternalIdBundle.of(ExternalId.of("Test", "C")));
+  private static final ComputationTargetRequirement REQUIREMENT_FOO_OR_BAR =
+      new ComputationTargetRequirement(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), ExternalId.of(
       "Test", "B"));
-  private final ComputationTargetRequirement REQUIREMENT_FOO_OR_BAR_BAD = new ComputationTargetRequirement(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), ExternalId.of(
+  private static final ComputationTargetRequirement REQUIREMENT_FOO_OR_BAR_BAD =
+      new ComputationTargetRequirement(ComputationTargetType.of(Foo.class).or(ComputationTargetType.of(Bar.class)), ExternalId.of(
       "Test", "C"));
 
   public DefaultComputationTargetSpecificationResolverTest() {
@@ -80,9 +97,8 @@ public class DefaultComputationTargetSpecificationResolverTest {
         assertEquals(versionCorrection, VC);
         if (identifiers.contains(ExternalId.of("Test", "B"))) {
           return SPECIFICATION_FOO_VERSIONED.getUniqueId();
-        } else {
-          return null;
         }
+        return null;
       }
 
       @Override
@@ -90,9 +106,8 @@ public class DefaultComputationTargetSpecificationResolverTest {
         assertEquals(versionCorrection, VC);
         if (identifier.getValue().equals("Bar")) {
           return SPECIFICATION_FOO_VERSIONED.getUniqueId();
-        } else {
-          return null;
         }
+        return null;
       }
 
     });
@@ -154,7 +169,7 @@ public class DefaultComputationTargetSpecificationResolverTest {
   }
 
   public void testAll() {
-    final Set<ComputationTargetReference> request = new HashSet<ComputationTargetReference>();
+    final Set<ComputationTargetReference> request = new HashSet<>();
     request.add(SPECIFICATION_NULL);
     request.add(SPECIFICATION_PRIMITIVE_VERSIONED);
     request.add(SPECIFICATION_PRIMITIVE_LATEST);

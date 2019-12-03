@@ -40,7 +40,7 @@ public class BondFutureSecurity extends FutureSecurity {
    * The deliverables.
    */
   @PropertyDefinition(validate = "notNull")
-  private final List<BondFutureDeliverable> _basket = new ArrayList<BondFutureDeliverable>();  
+  private final List<BondFutureDeliverable> _basket = new ArrayList<>();
   /**
    * The first delivery date.
    */
@@ -52,21 +52,46 @@ public class BondFutureSecurity extends FutureSecurity {
   @PropertyDefinition(validate = "notNull")
   private ZonedDateTime _lastDeliveryDate;
 
-  BondFutureSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  BondFutureSecurity() {
     super();
   }
 
-  public BondFutureSecurity(Expiry expiry, String tradingExchange, String settlementExchange, Currency currency, double unitAmount,
-      Collection<? extends BondFutureDeliverable> basket, ZonedDateTime firstDeliveryDate, ZonedDateTime lastDeliveryDate, String category) {
+  /**
+   * @param expiry
+   *          the future expiry, not null
+   * @param tradingExchange
+   *          the trading exchange name, not null
+   * @param settlementExchange
+   *          the settlement exchange name, not null
+   * @param currency
+   *          the currency, not null
+   * @param unitAmount
+   *          the unit amount, not null
+   * @param basket
+   *          the basket of deliverable bonds and conversion factors, not null
+   *          or empty
+   * @param firstDeliveryDate
+   *          the first date on which the bond can be delivered, not null
+   * @param lastDeliveryDate
+   *          the last date on which the bond can be delivered, not null
+   * @param category
+   *          the future category, not null
+   */
+  public BondFutureSecurity(final Expiry expiry, final String tradingExchange, final String settlementExchange, final Currency currency,
+      final double unitAmount, final Collection<? extends BondFutureDeliverable> basket, final ZonedDateTime firstDeliveryDate,
+      final ZonedDateTime lastDeliveryDate, final String category) {
     super(expiry, tradingExchange, settlementExchange, currency, unitAmount, category);
-    setBasket(ImmutableList.copyOf(basket));    
+    setBasket(ImmutableList.copyOf(basket));
     setFirstDeliveryDate(firstDeliveryDate);
     setLastDeliveryDate(lastDeliveryDate);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitBondFutureSecurity(this);
   }
 

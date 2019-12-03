@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.fudgemsg;
@@ -16,7 +16,6 @@ import com.opengamma.analytics.financial.model.option.definition.SABRInterestRat
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.financial.analytics.TestsDataSets;
-import com.opengamma.financial.analytics.model.volatility.cube.fitted.FittedSmileDataPoints;
 import com.opengamma.financial.analytics.volatility.fittedresults.HestonFittedSurfaces;
 import com.opengamma.financial.analytics.volatility.fittedresults.SABRFittedSurfaces;
 import com.opengamma.id.ExternalId;
@@ -28,7 +27,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class SmileFittedSurfaceBuilderTest extends AnalyticsTestBase {
@@ -40,7 +39,7 @@ public class SmileFittedSurfaceBuilderTest extends AnalyticsTestBase {
     final InterpolatedDoublesSurface betaSurface = sabrResults.getBetaSurface();
     final InterpolatedDoublesSurface nuSurface = sabrResults.getNuSurface();
     final InterpolatedDoublesSurface rhoSurface = sabrResults.getRhoSurface();
-    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<DoublesPair, DoubleMatrix2D>();
+    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<>();
     inverseJacobians.put(DoublesPair.of(0d, 1d), new DoubleMatrix2D(new double[][] { {1, 2 }, {3, 4 } }));
     inverseJacobians.put(DoublesPair.of(2d, 1d), new DoubleMatrix2D(new double[][] { {10, 20 }, {30, 40 } }));
     final SABRFittedSurfaces fits = new SABRFittedSurfaces(alphaSurface, betaSurface, nuSurface, rhoSurface, inverseJacobians);
@@ -56,7 +55,7 @@ public class SmileFittedSurfaceBuilderTest extends AnalyticsTestBase {
     final InterpolatedDoublesSurface omegaSurface = sabrResults.getRhoSurface();
     final InterpolatedDoublesSurface rhoSurface = TestsDataSets.createSABR1AlphaBumped().getRhoSurface();
     final Currency currency = Currency.AUD;
-    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<DoublesPair, DoubleMatrix2D>();
+    final Map<DoublesPair, DoubleMatrix2D> inverseJacobians = new HashMap<>();
     inverseJacobians.put(DoublesPair.of(0d, 1d), new DoubleMatrix2D(new double[][] { {1, 2 }, {3, 4 } }));
     inverseJacobians.put(DoublesPair.of(2d, 1d), new DoubleMatrix2D(new double[][] { {10, 20 }, {30, 40 } }));
     final HestonFittedSurfaces fits = new HestonFittedSurfaces(kappaSurface, thetaSurface, vol0Surface, omegaSurface, rhoSurface, inverseJacobians, currency);
@@ -65,8 +64,8 @@ public class SmileFittedSurfaceBuilderTest extends AnalyticsTestBase {
 
   @Test
   public void testSABRFittedDataPoints() {
-    final Map<Pair<Tenor, Tenor>, ExternalId[]> externalIds = new HashMap<Pair<Tenor, Tenor>, ExternalId[]>();
-    final Map<Pair<Tenor, Tenor>, Double[]> relativeStrikes = new HashMap<Pair<Tenor, Tenor>, Double[]>();
+    final Map<Pair<Tenor, Tenor>, ExternalId[]> externalIds = new HashMap<>();
+    final Map<Pair<Tenor, Tenor>, Double[]> relativeStrikes = new HashMap<>();
     externalIds.put(Pairs.of(Tenor.ONE_YEAR, Tenor.ONE_YEAR),
         new ExternalId[] {ExternalId.of("TEST", "USSV0101A"), ExternalId.of("TEST", "USSV0101B"), ExternalId.of("TEST", "USSV0101C"), ExternalId.of("TEST", "USSV0101D") });
     relativeStrikes.put(Pairs.of(Tenor.ONE_YEAR, Tenor.ONE_YEAR), new Double[] {-100., -50., 0., 50. });

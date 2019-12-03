@@ -32,11 +32,11 @@ public class EqualityCheckerTest {
 
   private static final double DELTA = 0.0001;
 
-  private static void checkEqual(Object value1, Object value2) {
+  private static void checkEqual(final Object value1, final Object value2) {
     assertTrue(EqualityChecker.equals(value1, value2, DELTA));
   }
 
-  private static void checkNotEqual(Object value1, Object value2) {
+  private static void checkNotEqual(final Object value1, final Object value2) {
     assertFalse(EqualityChecker.equals(value1, value2, DELTA));
   }
 
@@ -49,31 +49,31 @@ public class EqualityCheckerTest {
 
   @Test
   public void bean() {
-    String name = "name";
+    final String name = "name";
     // same data
-    NodalDoublesCurve curve1 = new NodalDoublesCurve(new double[]{1, 2, 3}, new double[]{2, 3, 4}, true, name);
+    final NodalDoublesCurve curve1 = new NodalDoublesCurve(new double[]{1, 2, 3}, new double[]{2, 3, 4}, true, name);
     checkEqual(curve1, curve1);
 
     // same data, different name, name should be ignored
-    NodalDoublesCurve curve2 = new NodalDoublesCurve(new double[]{1, 2, 3}, new double[]{2, 3, 4}, true, "name2");
+    final NodalDoublesCurve curve2 = new NodalDoublesCurve(new double[]{1, 2, 3}, new double[]{2, 3, 4}, true, "name2");
     checkEqual(curve1, curve2);
 
     // different curve data
-    NodalDoublesCurve curve3 = new NodalDoublesCurve(new double[]{1.1, 2, 3}, new double[]{2, 3, 4}, true, name);
+    final NodalDoublesCurve curve3 = new NodalDoublesCurve(new double[]{1.1, 2, 3}, new double[]{2, 3, 4}, true, name);
     checkNotEqual(curve1, curve3);
 
     // different curve data but within delta, should be equal
-    NodalDoublesCurve curve4 = new NodalDoublesCurve(new double[]{1.000001, 2, 3}, new double[]{2, 3, 4}, true, name);
+    final NodalDoublesCurve curve4 = new NodalDoublesCurve(new double[]{1.000001, 2, 3}, new double[]{2, 3, 4}, true, name);
     checkEqual(curve1, curve4);
   }
 
   @Test
   public void yieldCurve() {
-    NodalDoublesCurve nodalDoublesCurve1 = new NodalDoublesCurve(new double[]{1, 2, 3}, new double[]{2, 3, 4}, true);
+    final NodalDoublesCurve nodalDoublesCurve1 = new NodalDoublesCurve(new double[]{1, 2, 3}, new double[]{2, 3, 4}, true);
     checkEqual(new YieldCurve("name", nodalDoublesCurve1), new YieldCurve("name", nodalDoublesCurve1));
     // name is ignored because it's auto-generated and differs between runs
     checkEqual(new YieldCurve("name1", nodalDoublesCurve1), new YieldCurve("name2", nodalDoublesCurve1));
-    NodalDoublesCurve nodalDoublesCurve2 = new NodalDoublesCurve(new double[]{1.1, 2, 3}, new double[]{2, 3, 4}, true);
+    final NodalDoublesCurve nodalDoublesCurve2 = new NodalDoublesCurve(new double[]{1.1, 2, 3}, new double[]{2, 3, 4}, true);
     checkNotEqual(new YieldCurve("name", nodalDoublesCurve1), new YieldCurve("name", nodalDoublesCurve2));
   }
 
@@ -224,7 +224,7 @@ public class EqualityCheckerTest {
 
   @Test
   public void volatilitySurfaceData() {
-    VolatilitySurfaceData<String, String> surface1 =
+    final VolatilitySurfaceData<String, String> surface1 =
         new VolatilitySurfaceData<>("defName",
                                     "specName",
                                     UniqueId.of("tst", "123"),
@@ -236,7 +236,7 @@ public class EqualityCheckerTest {
                                                     Pairs.of("1", "b"), 2d,
                                                     Pairs.of("2", "a"), 3d,
                                                     Pairs.of("2", "b"), 4d));
-    VolatilitySurfaceData<String, String> surface2 =
+    final VolatilitySurfaceData<String, String> surface2 =
         new VolatilitySurfaceData<>("defName",
                                     "specName",
                                     UniqueId.of("tst", "123"),
@@ -250,7 +250,7 @@ public class EqualityCheckerTest {
                                                     Pairs.of("2", "b"), 4d));
     checkEqual(surface1, surface2);
 
-    VolatilitySurfaceData<String, String> surface3 =
+    final VolatilitySurfaceData<String, String> surface3 =
         new VolatilitySurfaceData<>("defName",
                                     "specName",
                                     UniqueId.of("tst", "123"),
@@ -264,7 +264,7 @@ public class EqualityCheckerTest {
                                                     Pairs.of("2", "b"), 4.00001));
     checkEqual(surface1, surface3);
 
-    VolatilitySurfaceData<String, String> surface4 =
+    final VolatilitySurfaceData<String, String> surface4 =
         new VolatilitySurfaceData<>("defName",
                                     "specName",
                                     UniqueId.of("tst", "123"),
@@ -278,7 +278,7 @@ public class EqualityCheckerTest {
                                                     Pairs.of("2", "b"), 4.1));
     checkNotEqual(surface1, surface4);
 
-    VolatilitySurfaceData<String, String> surface5 =
+    final VolatilitySurfaceData<String, String> surface5 =
         new VolatilitySurfaceData<>("defName",
                                     "specName",
                                     UniqueId.of("tst", "123"),

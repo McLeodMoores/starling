@@ -81,12 +81,33 @@ public class EquityOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private String _exchange;
 
-  EquityOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  EquityOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public EquityOptionSecurity(OptionType optionType, double strike, Currency currency, ExternalId underlyingIdentifier,
-      ExerciseType exerciseType, Expiry expiry, double pointValue, String exchange) {
+  /**
+   * @param optionType
+   *          the option type, not null
+   * @param strike
+   *          the strike
+   * @param currency
+   *          the currency, not null
+   * @param underlyingIdentifier
+   *          the identifier of the underlying equity, not null
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param expiry
+   *          the expiry, not null
+   * @param pointValue
+   *          the value of a point, not null
+   * @param exchange
+   *          the exchange name, not null
+   */
+  public EquityOptionSecurity(final OptionType optionType, final double strike, final Currency currency, final ExternalId underlyingIdentifier,
+      final ExerciseType exerciseType, final Expiry expiry, final double pointValue, final String exchange) {
     super(SECURITY_TYPE);
     setOptionType(optionType);
     setStrike(strike);
@@ -100,7 +121,7 @@ public class EquityOptionSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitEquityOptionSecurity(this);
   }
 

@@ -53,7 +53,7 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
   }
 
   HullWhiteMethodCurveSetUp(final HullWhiteMethodCurveSetUp setup) {
-    //TODO copy
+    // TODO copy
     _curveNames = setup._curveNames;
     _curveTypes = setup._curveTypes;
     _preConstructedCurves = setup._preConstructedCurves;
@@ -136,13 +136,15 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
       }
     }
     return new HullWhiteMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes,
-        _fxMatrix, _preConstructedCurves, knownDiscountingCurves, knownIborCurves, knownOvernightCurves, _knownBundle, _parameters, _currency,
+        _fxMatrix, _preConstructedCurves, knownDiscountingCurves, knownIborCurves, knownOvernightCurves, _knownBundle, _parameters,
+        _currency,
         _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override
   public HullWhiteMethodCurveSetUp copy() {
-    return new HullWhiteMethodCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix, _knownBundle, _parameters, _currency,
+    return new HullWhiteMethodCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix, _knownBundle, _parameters,
+        _currency,
         _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
@@ -201,7 +203,7 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
       _nodes.put(curveName, nodesForCurve);
     }
     nodesForCurve.add(definition);
-    //TODO if market data is already present, log then overwrite
+    // TODO if market data is already present, log then overwrite
     return this;
   }
 
@@ -228,12 +230,11 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
     return this;
   }
 
-  //TODO rename
+  // TODO rename
   public HullWhiteMethodCurveSetUp forHullWhiteCurrency(final Currency currency) {
     _currency = currency;
     return this;
   }
-
 
   @Override
   public HullWhiteMethodCurveSetUp rootFindingAbsoluteTolerance(final double tolerance) {

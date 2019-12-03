@@ -24,23 +24,25 @@ import com.opengamma.id.VersionCorrection;
 public interface CompiledViewDefinition {
 
   /**
-   * Gets the resolver version/correction date that was used to retrieve the portfolio and any other data structures needed by functions used in the compilation.
-   * 
+   * Gets the resolver version/correction date that was used to retrieve the portfolio and any other data structures needed by
+   * functions used in the compilation.
+   *
    * @return the version/correction used to resolve any targets, including the portfolio
    */
   VersionCorrection getResolverVersionCorrection();
 
   /**
-   * Gets the unique compilation identifier. Two compiled view definitions with the same unique compilation identifier will contain the same dependency graphs for exactly the same reasons - that is,
-   * the compiled forms are identical except for the resolver version/correction timestamp.
-   * 
+   * Gets the unique compilation identifier. Two compiled view definitions with the same unique compilation identifier will
+   * contain the same dependency graphs for exactly the same reasons - that is, the compiled forms are identical except for
+   * the resolver version/correction timestamp.
+   *
    * @return a compilation identifier, unique within the scope of any caches that may persist or transport compiled view definitions around an installation
    */
   String getCompilationIdentifier();
 
   /**
    * Returns a copy of this object with an updated version/correction parameter.
-   * 
+   *
    * @param resolverVersionCorrection the resolver version/correction date for the copy
    * @return the copy
    */
@@ -83,9 +85,11 @@ public interface CompiledViewDefinition {
   Map<String, CompiledViewCalculationConfiguration> getCompiledCalculationConfigurationsMap();
 
   /**
-   * Gets the combined market data requirements of all calculation configurations. These specifications correspond to the values that must be sourced by the leaf nodes of the graph and may be used to
-   * establish market data subscriptions. If the external identifiers corresponding to the market data lines are required, the associated market data provider that participated in the graph building
-   * must be consulted to provide a conversion, or the aliased requirements from the individual calculation configurations may be used.
+   * Gets the combined market data requirements of all calculation configurations. These specifications correspond to the
+   * values that must be sourced by the leaf nodes of the graph and may be used to establish market data subscriptions.
+   * If the external identifiers corresponding to the market data lines are required, the associated market data provider
+   * that participated in the graph building must be consulted to provide a conversion, or the aliased requirements from
+   * the individual calculation configurations may be used.
    *
    * @return the value specifications for all necessary market data, not null
    */

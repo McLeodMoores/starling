@@ -46,8 +46,8 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbConfigMasterWorkerTest.class);
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbConfigMasterWorkerTest.class);
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   protected DbConfigMaster _cfgMaster;
   protected Instant _version1aInstant;
@@ -58,9 +58,9 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
   protected int _totalExternalIds;
   protected int _totalBundles;
 
-  public AbstractDbConfigMasterWorkerTest(String databaseType, String databaseVersion, boolean readOnly) {
+  public AbstractDbConfigMasterWorkerTest(final String databaseType, final String databaseVersion, final boolean readOnly) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -80,29 +80,29 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
   }
 
   //-------------------------------------------------------------------------
-  protected ObjectId setupTestData(Instant now) {
-    Clock origClock = _cfgMaster.getClock();
+  protected ObjectId setupTestData(final Instant now) {
+    final Clock origClock = _cfgMaster.getClock();
     try {
       _cfgMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
 
-      String initialValue = "initial";
-      ConfigItem<String> initial = ConfigItem.of(initialValue, "some_name");      
+      final String initialValue = "initial";
+      final ConfigItem<String> initial = ConfigItem.of(initialValue, "some_name");
       _cfgMaster.add(new ConfigDocument(initial));
 
-      ObjectId baseOid = initial.getObjectId();
+      final ObjectId baseOid = initial.getObjectId();
 
-      List<ConfigDocument> firstReplacement = newArrayList();
+      final List<ConfigDocument> firstReplacement = newArrayList();
       for (int i = 0; i < 5; i++) {
-        String val = "setup_" + i;
-        ConfigItem<String> item = ConfigItem.of(val, "some_name_"+i);
-        ConfigDocument doc = new ConfigDocument(item);
+        final String val = "setup_" + i;
+        final ConfigItem<String> item = ConfigItem.of(val, "some_name_" + i);
+        final ConfigDocument doc = new ConfigDocument(item);
         doc.setVersionFromInstant(now.plus(i, MINUTES));
         firstReplacement.add(doc);
       }
       _cfgMaster.setClock(Clock.fixed(now.plus(1, HOURS), ZoneOffset.UTC));
       _cfgMaster.replaceVersions(baseOid.getObjectId(), firstReplacement);
       return baseOid;
-      
+
     } finally {
       _cfgMaster.setClock(origClock);
     }
@@ -110,7 +110,7 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
 
   private void init() {
     _cfgMaster = new DbConfigMaster(getDbConnector());
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     _cfgMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
     _version1aInstant = now.minusSeconds(102);
     _version1bInstant = now.minusSeconds(101);
@@ -122,10 +122,10 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
   }
 
   private void addExternalIds() {
-    FudgeMsgEnvelope env = s_fudgeContext.toFudgeMsg(ExternalId.of("A", "B"));
-    byte[] bytes = s_fudgeContext.toByteArray(env.getMessage());
-    String cls = ExternalId.class.getName();
-    LobHandler lobHandler = new DefaultLobHandler();
+    final FudgeMsgEnvelope env = FUDGE_CONTEXT.toFudgeMsg(ExternalId.of("A", "B"));
+    final byte[] bytes = FUDGE_CONTEXT.toByteArray(env.getMessage());
+    final String cls = ExternalId.class.getName();
+    final LobHandler lobHandler = new DefaultLobHandler();
     final JdbcOperations template = _cfgMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO cfg_config VALUES (?,?,?,?,?, ?,?,?,?)",
         101, 101, toSqlTimestamp(_version1aInstant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1aInstant), MAX_SQL_TIMESTAMP, "TestConfig101", cls,
@@ -141,12 +141,12 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
         new SqlParameterValue(Types.BLOB, new SqlLobValue(bytes, lobHandler)));
     _totalExternalIds = 3;
   }
-  
+
   private void addExternalIdBundles() {
-    FudgeMsgEnvelope env = s_fudgeContext.toFudgeMsg(ExternalIdBundle.of(ExternalId.of("C", "D"), ExternalId.of("E", "F")));
-    byte[] bytes = s_fudgeContext.toByteArray(env.getMessage());
-    String cls = ExternalIdBundle.class.getName();
-    LobHandler lobHandler = new DefaultLobHandler();
+    final FudgeMsgEnvelope env = FUDGE_CONTEXT.toFudgeMsg(ExternalIdBundle.of(ExternalId.of("C", "D"), ExternalId.of("E", "F")));
+    final byte[] bytes = FUDGE_CONTEXT.toByteArray(env.getMessage());
+    final String cls = ExternalIdBundle.class.getName();
+    final LobHandler lobHandler = new DefaultLobHandler();
     final JdbcOperations template = _cfgMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO cfg_config VALUES (?,?,?,?,?, ?,?,?,?)",
         301, 301, toSqlTimestamp(_version1aInstant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1aInstant), MAX_SQL_TIMESTAMP, "TestConfig301", cls,
@@ -165,7 +165,7 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
 
   //-------------------------------------------------------------------------
   protected void assert101(final ConfigDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "101", "0");
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "101", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1aInstant, test.getVersionFromInstant());
@@ -177,7 +177,7 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
   }
 
   protected void assert102(final ConfigDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "102", "0");
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "102", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1bInstant, test.getVersionFromInstant());
@@ -189,7 +189,7 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
   }
 
   protected void assert201(final ConfigDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "201", "0");
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "201", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1cInstant, test.getVersionFromInstant());
@@ -201,7 +201,7 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
   }
 
   protected void assert202(final ConfigDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbCfg", "201", "1");
+    final UniqueId uniqueId = UniqueId.of("DbCfg", "201", "1");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version2Instant, test.getVersionFromInstant());

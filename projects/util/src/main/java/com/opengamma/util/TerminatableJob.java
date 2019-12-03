@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 public abstract class TerminatableJob implements Runnable {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(TerminatableJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TerminatableJob.class);
 
   /**
    * A flag to indicate whether the job has been started
@@ -43,7 +43,7 @@ public abstract class TerminatableJob implements Runnable {
         runOneCycle();
       }
     } catch (Exception e) {
-      s_logger.warn("Job " + this + " terminated with unhandled exception", e);
+      LOGGER.warn("Job " + this + " terminated with unhandled exception", e);
     } finally {
       // Want to ensure that even if the job terminates with an exception (e.g. InterruptedException), the tidy-up
       // semantics of postRunCycle are preserved

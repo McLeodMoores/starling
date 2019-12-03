@@ -32,11 +32,11 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
  *
  */
 public class FXOptionSpotRateFunction extends AbstractFunction.NonCompiledInvoker {
-  /** Property indicating the data type required */
+  /** Property indicating the data type required. */
   public static final String PROPERTY_DATA_TYPE = "DataType";
-  /** Live FX spot rates for a security */
+  /** Live FX spot rates for a security. */
   public static final String LIVE = "Live";
-  /** Last close FX spot rates for a security */
+  /** Last close FX spot rates for a security. */
   public static final String LAST_CLOSE = "LastClose";
 
   @Override
@@ -70,7 +70,9 @@ public class FXOptionSpotRateFunction extends AbstractFunction.NonCompiledInvoke
 
   @Override
   public ComputationTargetType getTargetType() {
-    return FinancialSecurityTypes.FX_OPTION_SECURITY.or(FinancialSecurityTypes.FX_DIGITAL_OPTION_SECURITY).or(FinancialSecurityTypes.FX_BARRIER_OPTION_SECURITY);
+    return FinancialSecurityTypes.FX_OPTION_SECURITY
+        .or(FinancialSecurityTypes.FX_DIGITAL_OPTION_SECURITY)
+        .or(FinancialSecurityTypes.FX_BARRIER_OPTION_SECURITY);
   }
 
   @Override
@@ -86,7 +88,7 @@ public class FXOptionSpotRateFunction extends AbstractFunction.NonCompiledInvoke
     final Currency callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor());
     final UnorderedCurrencyPair currencyPair = UnorderedCurrencyPair.of(putCurrency, callCurrency);
     final Set<String> dataTypes = desiredValue.getConstraints().getValues(PROPERTY_DATA_TYPE);
-    if ((dataTypes == null) || dataTypes.isEmpty() || dataTypes.contains(LIVE)) {
+    if (dataTypes == null || dataTypes.isEmpty() || dataTypes.contains(LIVE)) {
       // Live
       return Collections.singleton(ConventionBasedFXRateFunction.getSpotRateRequirement(currencyPair));
     }

@@ -19,11 +19,11 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class EquitySecurityFudgeEncodingTest extends FinancialTestBase {
 
-  private static final EquitySecurity s_ref = new EquitySecurity("A", "B", "C", Currency.USD);
+  private static final EquitySecurity REF = new EquitySecurity("A", "B", "C", Currency.USD);
 
   @Test
   public void testCycle() {
-    assertEquals(s_ref, cycleObject(EquitySecurity.class, s_ref));
+    assertEquals(REF, cycleObject(EquitySecurity.class, REF));
   }
 
 }

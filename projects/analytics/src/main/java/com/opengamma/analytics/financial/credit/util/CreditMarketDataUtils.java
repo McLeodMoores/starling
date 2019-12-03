@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.util;
@@ -11,7 +11,8 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Class to check the efficacy of user input CDS spread data (e.g. that tenors of calibrating instruments are in ascending order)
- *@deprecated this will be deleted 
+ *
+ * @deprecated this will be deleted
  */
 @Deprecated
 public class CreditMarketDataUtils {
@@ -21,8 +22,10 @@ public class CreditMarketDataUtils {
     ArgumentChecker.notNull(valuationDate, "valuation date");
     ArgumentChecker.notNull(marketDates, "market dates");
     ArgumentChecker.notNull(marketSpreads, "market spreads");
-    ArgumentChecker.isTrue(marketDates.length == marketSpreads.length, "Number of dates {} and spreads {} should be equal", marketDates.length, marketSpreads.length);
-    ArgumentChecker.isTrue(marketDates[0].isAfter(valuationDate), "Calibration instrument of tenor {} is before the valuation date {}", marketDates[0], valuationDate);
+    ArgumentChecker.isTrue(marketDates.length == marketSpreads.length, "Number of dates {} and spreads {} should be equal",
+        marketDates.length, marketSpreads.length);
+    ArgumentChecker.isTrue(marketDates[0].isAfter(valuationDate), "Calibration instrument of tenor {} is before the valuation date {}", marketDates[0],
+        valuationDate);
     ArgumentChecker.notNegativeOrZero(marketSpreads[0], TOLERANCE, "Market spread ({}) for date {}", marketSpreads[0], marketDates[0]);
     if (marketDates.length > 1) {
       for (int m = 1; m < marketDates.length; m++) {

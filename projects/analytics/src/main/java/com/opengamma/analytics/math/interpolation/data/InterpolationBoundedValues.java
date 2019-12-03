@@ -10,7 +10,7 @@ import java.io.Serializable;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public final class InterpolationBoundedValues implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -20,7 +20,8 @@ public final class InterpolationBoundedValues implements Serializable {
   private final Double _higherBoundKey;
   private final Double _higherBoundValue;
 
-  public InterpolationBoundedValues(final int lowerBoundIndex, final Double lowerBoundKey, final Double lowerBoundValue, final Double higherKey, final Double higherValue) {
+  public InterpolationBoundedValues(final int lowerBoundIndex, final Double lowerBoundKey, final Double lowerBoundValue, final Double higherKey,
+      final Double higherValue) {
     ArgumentChecker.notNegative(lowerBoundIndex, "lower bound index");
     _lowerBoundIndex = lowerBoundIndex;
     _lowerBoundKey = lowerBoundKey;

@@ -23,8 +23,9 @@ public class DemoLiveDataAvailabilityFilterFactoryBean extends SingletonFactoryB
 
   @Override
   protected MarketDataAvailabilityFilter createObject() {
-    final Collection<ExternalScheme> acceptableSchemes = new HashSet<ExternalScheme>();
-    Collections.addAll(acceptableSchemes, ExternalSchemes.BLOOMBERG_BUID_WEAK, ExternalSchemes.BLOOMBERG_BUID, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.BLOOMBERG_TICKER);
+    final Collection<ExternalScheme> acceptableSchemes = new HashSet<>();
+    Collections.addAll(acceptableSchemes, ExternalSchemes.BLOOMBERG_BUID_WEAK, ExternalSchemes.BLOOMBERG_BUID, ExternalSchemes.BLOOMBERG_TICKER_WEAK,
+        ExternalSchemes.BLOOMBERG_TICKER);
     final Collection<String> validMarketDataRequirementNames = MarketDataRequirementNamesHelper.constructValidRequirementNames();
     return new DomainMarketDataAvailabilityFilter(acceptableSchemes, validMarketDataRequirementNames);
   }

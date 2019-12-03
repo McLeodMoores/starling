@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.matrix;
@@ -11,14 +11,16 @@ import org.apache.commons.lang.Validate;
 import com.opengamma.analytics.math.linearalgebra.TridiagonalMatrix;
 
 /**
- * An absolutely minimal implementation of matrix algebra - only various multiplications covered. For more advanced stuff (e.g. calculating the inverse) use {@link ColtMatrixAlgebra} or
- * {@link CommonsMatrixAlgebra}
+ * An absolutely minimal implementation of matrix algebra - only various multiplications covered. For more advanced stuff (e.g. calculating the inverse) use
+ * {@link ColtMatrixAlgebra} or {@link CommonsMatrixAlgebra}
  */
 public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   *
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public double getCondition(final Matrix<?> m) {
@@ -27,7 +29,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   *
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public double getDeterminant(final Matrix<?> m) {
@@ -57,7 +61,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   *
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public DoubleMatrix2D getInverse(final Matrix<?> m) {
@@ -66,7 +72,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   *
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public double getNorm1(final Matrix<?> m) {
@@ -74,9 +82,10 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
   }
 
   /**
-   * {@inheritDoc}
-   * This is only implemented for {@link DoubleMatrix1D}.
-   * @throws IllegalArgumentException If the matrix is not a {@link DoubleMatrix1D}
+   * {@inheritDoc} This is only implemented for {@link DoubleMatrix1D}.
+   *
+   * @throws IllegalArgumentException
+   *           If the matrix is not a {@link DoubleMatrix1D}
    */
   @Override
   public double getNorm2(final Matrix<?> m) {
@@ -97,7 +106,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   *
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public double getNormInfinity(final Matrix<?> m) {
@@ -130,7 +141,9 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
 
   /**
    * {@inheritDoc}
+   *
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public DoubleMatrix2D getPower(final Matrix<?> m, final int p) {
@@ -179,12 +192,11 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
   }
 
   /**
-   * {@inheritDoc}
-   * The following combinations of input matrices m1 and m2 are allowed:
+   * {@inheritDoc} The following combinations of input matrices m1 and m2 are allowed:
    * <ul>
-   * <li> m1 = 2-D matrix, m2 = 2-D matrix, returns $\mathbf{C} = \mathbf{AB}$
-   * <li> m1 = 2-D matrix, m2 = 1-D matrix, returns $\mathbf{C} = \mathbf{A}b$
-   * <li> m1 = 1-D matrix, m2 = 2-D matrix, returns $\mathbf{C} = a^T\mathbf{B}$
+   * <li>m1 = 2-D matrix, m2 = 2-D matrix, returns $\mathbf{C} = \mathbf{AB}$
+   * <li>m1 = 2-D matrix, m2 = 1-D matrix, returns $\mathbf{C} = \mathbf{A}b$
+   * <li>m1 = 1-D matrix, m2 = 2-D matrix, returns $\mathbf{C} = a^T\mathbf{B}$
    * </ul>
    */
   @Override
@@ -202,13 +214,16 @@ public class OGMatrixAlgebra extends MatrixAlgebra {
     } else if (m1 instanceof DoubleMatrix1D && m2 instanceof DoubleMatrix2D) {
       return multiply((DoubleMatrix1D) m1, (DoubleMatrix2D) m2);
     }
-    throw new IllegalArgumentException("Can only multiply two DoubleMatrix2D; a DoubleMatrix2D and a DoubleMatrix1D; or a DoubleMatrix1D and a DoubleMatrix2D. have " + m1.getClass() + " and "
-        + m2.getClass());
+    throw new IllegalArgumentException(
+        "Can only multiply two DoubleMatrix2D; a DoubleMatrix2D and a DoubleMatrix1D; or a DoubleMatrix1D and a DoubleMatrix2D. have " + m1.getClass() + " and "
+            + m2.getClass());
   }
 
   /**
    * {@inheritDoc}
+   *
    * @throws NotImplementedException
+   *           in all cases
    */
   @Override
   public DoubleMatrix2D getPower(final Matrix<?> m, final double p) {

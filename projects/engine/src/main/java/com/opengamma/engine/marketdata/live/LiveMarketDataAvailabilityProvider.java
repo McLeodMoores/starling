@@ -35,10 +35,11 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * Constructs a new instance.
-   * 
-   * @param normalizationRules the normalization rules to use
+   *
+   * @param normalizationRules
+   *          the normalization rules to use
    */
-  public LiveMarketDataAvailabilityProvider(final String normalizationRules) {
+  LiveMarketDataAvailabilityProvider(final String normalizationRules) {
     ArgumentChecker.notNull(normalizationRules, "normalizationRules");
     _normalizationRules = normalizationRules;
   }
@@ -52,10 +53,11 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   /**
-   * Creates a live data specification based on a {@link ValueSpecification} created by this availability provider. The normalization ruleset is used as the target. The external identifiers are marked
-   * with properties.
-   * 
-   * @param properties the properties, not null
+   * Creates a live data specification based on a {@link ValueSpecification} created by this availability provider. The normalization ruleset is used as the
+   * target. The external identifiers are marked with properties.
+   *
+   * @param valueSpec
+   *          the value specification containing the normalization property, not null
    * @return the original live data specification, not null
    */
   public static LiveDataSpecification getLiveDataSpecification(final ValueSpecification valueSpec) {
@@ -74,28 +76,33 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   @Override
-  protected ValueSpecification getAvailability(ComputationTargetSpecification targetSpec, final ExternalId identifier, final ValueRequirement desiredValue) {
-    if (targetSpec == null) {
-      targetSpec = DefaultMarketDataAvailabilityProvider.createPrimitiveComputationTargetSpecification(identifier);
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalId identifier,
+      final ValueRequirement desiredValue) {
+    ComputationTargetSpecification cts = targetSpec;
+    if (cts == null) {
+      cts = DefaultMarketDataAvailabilityProvider.createPrimitiveComputationTargetSpecification(identifier);
     }
-    return new ValueSpecification(desiredValue.getValueName(), targetSpec, createValueProperties().with(IDENTIFIER_PROPERTY, identifier.toString()).get());
+    return new ValueSpecification(desiredValue.getValueName(), cts, createValueProperties().with(IDENTIFIER_PROPERTY, identifier.toString()).get());
   }
 
   @Override
-  protected ValueSpecification getAvailability(ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue) {
-    if (targetSpec == null) {
-      targetSpec = DefaultMarketDataAvailabilityProvider.createPrimitiveComputationTargetSpecification(identifiers);
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers,
+      final ValueRequirement desiredValue) {
+    ComputationTargetSpecification cts = targetSpec;
+    if (cts == null) {
+      cts = DefaultMarketDataAvailabilityProvider.createPrimitiveComputationTargetSpecification(identifiers);
     }
     final String[] identifierStrings = new String[identifiers.size()];
     int i = 0;
     for (final ExternalId identifier : identifiers) {
       identifierStrings[i++] = identifier.toString();
     }
-    return new ValueSpecification(desiredValue.getValueName(), targetSpec, createValueProperties().with(IDENTIFIER_PROPERTY, identifierStrings).get());
+    return new ValueSpecification(desiredValue.getValueName(), cts, createValueProperties().with(IDENTIFIER_PROPERTY, identifierStrings).get());
   }
 
   @Override
-  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier, final ValueRequirement desiredValue) {
+  protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final UniqueId identifier,
+      final ValueRequirement desiredValue) {
     // Can't provide any live data unless there is an external identifier recognized by the data provider
     return null;
   }
@@ -108,7 +115,7 @@ import com.opengamma.util.ArgumentChecker;
 
   @Override
   public Serializable getAvailabilityHintKey() {
-    final ArrayList<Serializable> key = new ArrayList<Serializable>(3);
+    final ArrayList<Serializable> key = new ArrayList<>(3);
     key.add(getClass().getName());
     key.add(getNormalizationRules());
     return key;

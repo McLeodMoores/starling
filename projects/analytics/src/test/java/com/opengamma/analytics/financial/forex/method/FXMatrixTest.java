@@ -33,29 +33,44 @@ public class FXMatrixTest {
 
   private static final double TOLERANCE_RATE = 1.0E-10;
 
+  /**
+   * Tests that the currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCurrencyConstructor1() {
     new FXMatrix((Currency) null);
   }
 
+  /**
+   * Tests that the currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCurrency1() {
     final FXMatrix fxMatrix = new FXMatrix();
     fxMatrix.addCurrency(null, USD, EUR_USD);
   }
 
+  /**
+   * Tests that the currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCurrency2() {
     final FXMatrix fxMatrix = new FXMatrix();
     fxMatrix.addCurrency(EUR, null, EUR_USD);
   }
 
+  /**
+   * Tests that the currencies must be different.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void sameCurrency() {
     final FXMatrix fxMatrix = new FXMatrix();
     fxMatrix.addCurrency(EUR, EUR, EUR_USD);
   }
 
+  /**
+   * Tests that the currency must be present in the matrix.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void currency1NotPresent() {
     final FXMatrix fxMatrix = new FXMatrix();
@@ -63,6 +78,9 @@ public class FXMatrixTest {
     fxMatrix.getFxRate(GBP, USD);
   }
 
+  /**
+   * Tests that the currency must be present in the matrix.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void currency2NotPresent() {
     final FXMatrix fxMatrix = new FXMatrix();
@@ -70,6 +88,9 @@ public class FXMatrixTest {
     fxMatrix.getFxRate(USD, GBP);
   }
 
+  /**
+   * Tests that a currency cannot be added twice.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void currencyAlreadyPresent() {
     final FXMatrix fxMatrix = new FXMatrix();
@@ -78,6 +99,9 @@ public class FXMatrixTest {
     fxMatrix.addCurrency(GBP, USD, 1.234);
   }
 
+  /**
+   * Tests a 1x1 matrix.
+   */
   @Test
   public void onePair() {
     final FXMatrix fxMatrix = new FXMatrix();
@@ -88,6 +112,9 @@ public class FXMatrixTest {
     assertEquals("FXMatrix - first pair", 1.0, fxMatrix.getFxRate(EUR, EUR), TOLERANCE_RATE);
   }
 
+  /**
+   * Tests a 1x1 matrix.
+   */
   @Test
   public void onePairSecondConstructor() {
     final FXMatrix fxMatrix = new FXMatrix(EUR, USD, EUR_USD);
@@ -97,6 +124,9 @@ public class FXMatrixTest {
     assertEquals("FXMatrix - first pair", 1.0, fxMatrix.getFxRate(EUR, EUR), TOLERANCE_RATE);
   }
 
+  /**
+   * Tests a 1x1 matrix.
+   */
   @Test
   public void onePairThirdConstructor() {
     final FXMatrix fxMatrix = new FXMatrix(USD);
@@ -107,6 +137,9 @@ public class FXMatrixTest {
     assertEquals("FXMatrix - first pair", 1.0, fxMatrix.getFxRate(EUR, EUR), TOLERANCE_RATE);
   }
 
+  /**
+   * Tests a 2x2 matrix.
+   */
   @Test
   public void twoPairs() {
     final FXMatrix fxMatrix = new FXMatrix();
@@ -121,6 +154,9 @@ public class FXMatrixTest {
     assertEquals("FXMatrix - two pairs", 1.0, fxMatrix.getFxRate(GBP, GBP), 1.0E-10); // Is this useful? At least it is correct!
   }
 
+  /**
+   * Tests a 3x3 matrix.
+   */
   @Test
   public void threePairs() {
     final FXMatrix fxMatrix = new FXMatrix();
@@ -138,8 +174,11 @@ public class FXMatrixTest {
     assertEquals("FXMatrix - three pairs", GBP_EUR * EUR_USD * USD_KRW, fxMatrix.getFxRate(GBP, KRW), 1.0E-10);
   }
 
+  /**
+   * Tests the copy constructor.
+   */
   @Test
-  public void constructorFromExisitingFxMatrix() {
+  public void constructorFromExistingFxMatrix() {
     final FXMatrix fxMatrix1 = new FXMatrix(EUR, USD, EUR_USD);
     final FXMatrix fxMatrix2 = new FXMatrix(fxMatrix1);
     assertEquals("FXMatrix - constructor", fxMatrix1, fxMatrix2);
@@ -193,6 +232,9 @@ public class FXMatrixTest {
     assertEquals("FXMatrix - update", newGBPEUR * EUR_USD * USD_KRW, fxMatrix.getFxRate(GBP, KRW), TOLERANCE_RATE);
   }
 
+  /**
+   * Tests the hashCode and equals methods.
+   */
   @Test
   public void testHashCodeEquals() {
     final FXMatrix fxMatrix = new FXMatrix();
@@ -230,10 +272,14 @@ public class FXMatrixTest {
   public void merge1() {
     final FXMatrix fxMatrixEURUSD = new FXMatrix();
     fxMatrixEURUSD.addCurrency(EUR, USD, EUR_USD);
-    assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(fxMatrixEURUSD, new FXMatrix(USD)), TOLERANCE_RATE));
-    assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(fxMatrixEURUSD, new FXMatrix(EUR)), TOLERANCE_RATE));
-    assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(new FXMatrix(USD), fxMatrixEURUSD), TOLERANCE_RATE));
-    assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(new FXMatrix(EUR), fxMatrixEURUSD), TOLERANCE_RATE));
+    assertTrue("FXMatrixUtils - merge",
+        FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(fxMatrixEURUSD, new FXMatrix(USD)), TOLERANCE_RATE));
+    assertTrue("FXMatrixUtils - merge",
+        FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(fxMatrixEURUSD, new FXMatrix(EUR)), TOLERANCE_RATE));
+    assertTrue("FXMatrixUtils - merge",
+        FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(new FXMatrix(USD), fxMatrixEURUSD), TOLERANCE_RATE));
+    assertTrue("FXMatrixUtils - merge",
+        FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(new FXMatrix(EUR), fxMatrixEURUSD), TOLERANCE_RATE));
     final FXMatrix fxMatrixGBPEUR = new FXMatrix();
     fxMatrixGBPEUR.addCurrency(GBP, EUR, GBP_EUR);
     final FXMatrix fxMatrixEURUSDGBP = new FXMatrix();
@@ -274,8 +320,10 @@ public class FXMatrixTest {
     fxMatrix1.addCurrency(KRW, USD, 1.0 / USD_KRW);
     assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrix1, FXMatrixUtils.merge(fxMatrix1, new FXMatrix()), TOLERANCE_RATE));
     assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrix1, FXMatrixUtils.merge(new FXMatrix(), fxMatrix1), TOLERANCE_RATE));
-    assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrix1, FXMatrixUtils.merge(new FXMatrix(USD), fxMatrix1), TOLERANCE_RATE));
-    assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(new FXMatrix(), FXMatrixUtils.merge(new FXMatrix(), new FXMatrix()), TOLERANCE_RATE));
+    assertTrue("FXMatrixUtils - merge",
+        FXMatrixUtils.compare(fxMatrix1, FXMatrixUtils.merge(new FXMatrix(USD), fxMatrix1), TOLERANCE_RATE));
+    assertTrue("FXMatrixUtils - merge",
+        FXMatrixUtils.compare(new FXMatrix(), FXMatrixUtils.merge(new FXMatrix(), new FXMatrix()), TOLERANCE_RATE));
   }
 
   /**

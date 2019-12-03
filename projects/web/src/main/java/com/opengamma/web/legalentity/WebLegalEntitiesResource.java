@@ -47,7 +47,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 
 /**
  * RESTful resource for all legalEntity documents.
- * <p/>
+ * <p>
  * The legalEntity documents resource represents all the data for one element type in the legalEntity master.
  */
 @Path("/legalentities")
@@ -64,59 +64,101 @@ public class WebLegalEntitiesResource extends AbstractWebLegalEntityResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Creates a HTML GET request that returns the web page.
+   *
+   * @param pgIdx
+   *          the paging first-item index, can be null
+   * @param pgNum
+   *          the paging page, can be null
+   * @param pgSze
+   *          the page size, can be null
+   * @param sort
+   *          how to sort the results, can be null
+   * @param name
+   *          the legal entity name, not null
+   * @param type
+   *          the type, can be null
+   * @param legalEntityIdStrs
+   *          the identifiers of the legal entity, not null
+   * @param uriInfo
+   *          the URI info, not null
+   * @return the Freemarker output
+   */
   @GET
   @Produces(MediaType.TEXT_HTML)
-  @SubscribeMaster(MasterType.CONFIG)
+  @SubscribeMaster(MasterType.LEGAL_ENTITY)
   public String getHTML(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("sort") String sort,
-      @QueryParam("name") String name,
-      @QueryParam("type") String type,
-      @QueryParam("legalEntityId") List<String> legalEntityIdStrs,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    LegalEntitySearchSortOrder so = buildSortOrder(sort, LegalEntitySearchSortOrder.NAME_ASC);
-    FlexiBean out = search(pr, so, name, type, legalEntityIdStrs, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort,
+      @QueryParam("name") final String name,
+      @QueryParam("type") final String type,
+      @QueryParam("legalEntityId") final List<String> legalEntityIdStrs,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final LegalEntitySearchSortOrder so = buildSortOrder(sort, LegalEntitySearchSortOrder.NAME_ASC);
+    final FlexiBean out = search(pr, so, name, type, legalEntityIdStrs, uriInfo);
     return getFreemarker().build(HTML_DIR + "legalentities.ftl", out);
   }
 
+  /**
+   * Creates a JSON GET request that returns the web page.
+   *
+   * @param pgIdx
+   *          the paging first-item index, can be null
+   * @param pgNum
+   *          the paging page, can be null
+   * @param pgSze
+   *          the page size, can be null
+   * @param sort
+   *          how to sort the results, can be null
+   * @param name
+   *          the legal entity name, not null
+   * @param type
+   *          the type, can be null
+   * @param legalEntityIdStrs
+   *          the identifiers of the legal entity, not null
+   * @param uriInfo
+   *          the URI info, not null
+   * @return the Freemarker output
+   */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @SubscribeMaster(MasterType.CONFIG)
+  @SubscribeMaster(MasterType.LEGAL_ENTITY)
   public String getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("sort") String sort,
-      @QueryParam("name") String name,
-      @QueryParam("type") String type,
-      @QueryParam("legalEntityId") List<String> legalEntityIdStrs,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    LegalEntitySearchSortOrder so = buildSortOrder(sort, LegalEntitySearchSortOrder.NAME_ASC);
-    FlexiBean out = search(pr, so, name, type, legalEntityIdStrs, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort,
+      @QueryParam("name") final String name,
+      @QueryParam("type") final String type,
+      @QueryParam("legalEntityId") final List<String> legalEntityIdStrs,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final LegalEntitySearchSortOrder so = buildSortOrder(sort, LegalEntitySearchSortOrder.NAME_ASC);
+    final FlexiBean out = search(pr, so, name, type, legalEntityIdStrs, uriInfo);
     return getFreemarker().build(JSON_DIR + "legalentities.ftl", out);
   }
 
-  private FlexiBean search(PagingRequest request, LegalEntitySearchSortOrder so, String name,
-                           String typeName, List<String> legalEntityIdStrs, UriInfo uriInfo) {
-    FlexiBean out = createRootData();
+  private FlexiBean search(final PagingRequest request, final LegalEntitySearchSortOrder so, final String name,
+      final String typeName, final List<String> legalEntityIdStrs, final UriInfo uriInfo) {
+    final FlexiBean out = createRootData();
 
-    LegalEntitySearchRequest searchRequest = new LegalEntitySearchRequest();
-    typeName = StringUtils.trimToNull(typeName);
+    final LegalEntitySearchRequest searchRequest = new LegalEntitySearchRequest();
+    final String trimmedTypeName = StringUtils.trimToNull(typeName);
     searchRequest.setPagingRequest(request);
     searchRequest.setSortOrder(so);
     searchRequest.setName(StringUtils.trimToNull(name));
     out.put("searchRequest", searchRequest);
-    out.put("type", typeName);
-    for (String legalEntityIdStr : legalEntityIdStrs) {
+    out.put("type", trimmedTypeName);
+    for (final String legalEntityIdStr : legalEntityIdStrs) {
       searchRequest.addObjectId(ObjectId.parse(legalEntityIdStr));
     }
 
     if (data().getUriInfo().getQueryParameters().size() > 0) {
-      LegalEntitySearchResult searchResult = data().getLegalEntityMaster().search(searchRequest);
+      final LegalEntitySearchResult searchResult = data().getLegalEntityMaster().search(searchRequest);
       out.put("searchResult", searchResult);
       out.put("paging", new WebPaging(searchResult.getPaging(), uriInfo));
     }
@@ -124,102 +166,140 @@ public class WebLegalEntitiesResource extends AbstractWebLegalEntityResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * POSTs a legal entity to the master using HTML.
+   *
+   * @param name
+   *          the name, not null
+   * @param xml
+   *          the legal entity XML, not null
+   * @param typeName
+   *          the type name, can be null
+   * @return the response
+   */
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
-      @FormParam("name") String name,
-      @FormParam("legalEntityXML") String xml,
-      @FormParam("type") String typeName) {
-    name = StringUtils.trimToNull(name);
-    xml = StringUtils.trimToNull(xml);
-    typeName = StringUtils.trimToNull(typeName);
+      @FormParam("name") final String name,
+      @FormParam("legalEntityXML") final String xml,
+      @FormParam("type") final String typeName) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedXml = StringUtils.trimToNull(xml);
+    final String trimmedTypeName = StringUtils.trimToNull(typeName);
 
-    if (name == null || xml == null) {
-      FlexiBean out = createRootData();
-      if (name == null) {
+    if (trimmedName == null || trimmedXml == null) {
+      final FlexiBean out = createRootData();
+      if (trimmedName == null) {
         out.put("err_nameMissing", true);
       }
-      if (xml == null) {
+      if (trimmedXml == null) {
         out.put("err_xmlMissing", true);
       }
-      out.put("name", StringUtils.defaultString(name));
-      out.put("type", StringUtils.defaultString(typeName));
-      out.put("legalEntityXML", StringEscapeUtils.escapeJavaScript(StringUtils.defaultString(xml)));
-      String html = getFreemarker().build(HTML_DIR + "legalentity-add.ftl", out);
+      out.put("name", StringUtils.defaultString(trimmedName));
+      out.put("type", StringUtils.defaultString(trimmedTypeName));
+      out.put("legalEntityXML", StringEscapeUtils.escapeJavaScript(StringUtils.defaultString(trimmedXml)));
+      final String html = getFreemarker().build(HTML_DIR + "legalentity-add.ftl", out);
       return Response.ok(html).build();
     }
 
-    final ManageableLegalEntity legalEntity = parseXML(xml, ManageableLegalEntity.class);
-    legalEntity.setName(name);
-    LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
-    LegalEntityDocument added = data().getLegalEntityMaster().add(doc);
-    URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
+    final ManageableLegalEntity legalEntity = parseXML(trimmedXml, ManageableLegalEntity.class);
+    legalEntity.setName(trimmedName);
+    final LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
+    final LegalEntityDocument added = data().getLegalEntityMaster().add(doc);
+    final URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
     return Response.seeOther(uri).build();
   }
 
+  /**
+   * POSTs a legal entity to the master using JSON.
+   *
+   * @param name
+   *          the name, not null
+   * @param json
+   *          the legal entity JSON, can be null if the XML is not
+   * @param xml
+   *          the legal entity XML, can be null if the JSON is not
+   * @param typeName
+   *          the type name, can be null
+   * @return the response
+   */
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
   public Response postJSON(
-      @FormParam("name") String name,
-      @FormParam("legalEntityJSON") String json,
-      @FormParam("legalEntityXML") String xml,
-      @FormParam("type") String typeName) {
-    name = StringUtils.trimToNull(name);
-    json = StringUtils.trimToNull(json);
-    xml = StringUtils.trimToNull(xml);
-    typeName = StringUtils.trimToNull(typeName);
+      @FormParam("name") final String name,
+      @FormParam("legalEntityJSON") final String json,
+      @FormParam("legalEntityXML") final String xml,
+      @FormParam("type") final String typeName) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedJson = StringUtils.trimToNull(json);
+    final String trimmedXml = StringUtils.trimToNull(xml);
+    final String trimmedTypeName = StringUtils.trimToNull(typeName);
 
-    final Class<? extends ManageableLegalEntity> typeClazz = (typeName != null ? data().getTypeMap().get(typeName) : null);
+    final Class<? extends ManageableLegalEntity> typeClazz = trimmedTypeName != null ? data().getTypeMap().get(trimmedTypeName) : null;
     Response result = null;
-    if (name == null || typeClazz == null || isEmptyLegalEntityData(json, xml)) {
+    if (trimmedName == null || typeClazz == null || isEmptyLegalEntityData(trimmedJson, trimmedXml)) {
       result = Response.status(Status.BAD_REQUEST).build();
     } else {
       ManageableLegalEntity legalEntity = null;
-      if (json != null) {
-        legalEntity = (ManageableLegalEntity) parseJSON(json);
-      } else if (xml != null) {
-        legalEntity = parseXML(xml, typeClazz);
+      if (trimmedJson != null) {
+        legalEntity = (ManageableLegalEntity) parseJSON(trimmedJson);
+      } else if (trimmedXml != null) {
+        legalEntity = parseXML(trimmedXml, typeClazz);
       }
       if (legalEntity == null) {
         result = Response.status(Status.BAD_REQUEST).build();
       } else {
-        legalEntity.setName(name);
-        LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
-        LegalEntityDocument added = data().getLegalEntityMaster().add(doc);
-        URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
+        legalEntity.setName(trimmedName);
+        final LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
+        final LegalEntityDocument added = data().getLegalEntityMaster().add(doc);
+        final URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
         result = Response.created(uri).build();
       }
     }
     return result;
   }
 
-  private boolean isEmptyLegalEntityData(String json, String xml) {
-    return (json == null && xml == null);
+  private static boolean isEmptyLegalEntityData(final String json, final String xml) {
+    return json == null && xml == null;
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the meta-data.
+   *
+   * @return the meta-data
+   */
   @GET
   @Path("metaData")
   @Produces(MediaType.APPLICATION_JSON)
   public String getMetaDataJSON() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(JSON_DIR + "metadata.ftl", out);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Finds a legal entity by identifier. If there is no identifier for the
+   * identifier, the history is searched. If nothing is found, an exception is
+   * thrown.
+   *
+   * @param idStr
+   *          the identifier
+   * @return the legal entity
+   */
   @Path("{legalEntityId}")
-  public Object findLegalEntityHTML(@Subscribe @PathParam("legalEntityId") String idStr) {
+  public Object findLegalEntityHTML(@Subscribe @PathParam("legalEntityId") final String idStr) {
     data().setUriLegalEntityId(idStr);
-    UniqueId oid = UniqueId.parse(idStr);
+    final UniqueId oid = UniqueId.parse(idStr);
     try {
-      LegalEntityDocument doc = data().getLegalEntityMaster().get(oid);
+      final LegalEntityDocument doc = data().getLegalEntityMaster().get(oid);
       data().setLegalEntity(doc);
-    } catch (DataNotFoundException ex) {
-      LegalEntityHistoryRequest historyRequest = new LegalEntityHistoryRequest(oid);
+    } catch (final DataNotFoundException ex) {
+      final LegalEntityHistoryRequest historyRequest = new LegalEntityHistoryRequest(oid);
       historyRequest.setPagingRequest(PagingRequest.ONE);
-      LegalEntityHistoryResult historyResult = data().getLegalEntityMaster().history(historyRequest);
+      final LegalEntityHistoryResult historyResult = data().getLegalEntityMaster().history(historyRequest);
       if (historyResult.getDocuments().size() == 0) {
         throw ex;
       }
@@ -235,9 +315,10 @@ public class WebLegalEntitiesResource extends AbstractWebLegalEntityResource {
    *
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    LegalEntitySearchRequest searchRequest = new LegalEntitySearchRequest();
+    final FlexiBean out = super.createRootData();
+    final LegalEntitySearchRequest searchRequest = new LegalEntitySearchRequest();
     out.put("searchRequest", searchRequest);
     return out;
   }
@@ -250,8 +331,8 @@ public class WebLegalEntitiesResource extends AbstractWebLegalEntityResource {
    * @param data the data, not null
    * @return the URI, not null
    */
-  public static URI uri(WebLegalEntityData data) {
-    UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebLegalEntitiesResource.class);
+  public static URI uri(final WebLegalEntityData data) {
+    final UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebLegalEntitiesResource.class);
     return builder.build();
   }
 

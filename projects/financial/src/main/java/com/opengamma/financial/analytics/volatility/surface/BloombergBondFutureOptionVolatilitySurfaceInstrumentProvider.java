@@ -24,39 +24,55 @@ public class BloombergBondFutureOptionVolatilitySurfaceInstrumentProvider extend
   }
 
   /**
-   * Uses the default ticker scheme (BLOOMBERG_TICKER_WEAK)
-   * @param futureOptionPrefix the prefix to the resulting code, not null
-   * @param postfix the postfix to the resulting code, not null
-   * @param dataFieldName the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
-   * @param useCallAboveStrike the strike above which to use calls rather than puts, not null
-   * @param exchangeIdName the id of the exchange, not null
+   * Uses the default ticker scheme (BLOOMBERG_TICKER_WEAK).
+   *
+   * @param futureOptionPrefix
+   *          the prefix to the resulting code, not null
+   * @param postfix
+   *          the postfix to the resulting code, not null
+   * @param dataFieldName
+   *          the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
+   * @param useCallAboveStrike
+   *          the strike above which to use calls rather than puts, not null
+   * @param exchangeIdName
+   *          the id of the exchange, not null
    */
-  public BloombergBondFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName, final Double useCallAboveStrike,
+  public BloombergBondFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName,
+      final Double useCallAboveStrike,
       final String exchangeIdName) {
     super(futureOptionPrefix, postfix, dataFieldName, useCallAboveStrike, exchangeIdName);
   }
 
   /**
-   * @param futureOptionPrefix the prefix to the resulting code, not null
-   * @param postfix the postfix to the resulting code, not null
-   * @param dataFieldName the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
-   * @param useCallAboveStrike the strike above which to use calls rather than puts, not null
-   * @param exchangeIdName the id of the exchange, not null
-   * @param schemeName the name of the ticker scheme, not null
+   * @param futureOptionPrefix
+   *          the prefix to the resulting code, not null
+   * @param postfix
+   *          the postfix to the resulting code, not null
+   * @param dataFieldName
+   *          the name of the data field, not null. Expecting MarketDataRequirementNames.IMPLIED_VOLATILITY or OPT_IMPLIED_VOLATILITY_MID
+   * @param useCallAboveStrike
+   *          the strike above which to use calls rather than puts, not null
+   * @param exchangeIdName
+   *          the id of the exchange, not null
+   * @param schemeName
+   *          the name of the ticker scheme, not null
    */
-  public BloombergBondFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName, final Double useCallAboveStrike,
+  public BloombergBondFutureOptionVolatilitySurfaceInstrumentProvider(final String futureOptionPrefix, final String postfix, final String dataFieldName,
+      final Double useCallAboveStrike,
       final String exchangeIdName, final String schemeName) {
     super(futureOptionPrefix, postfix, dataFieldName, useCallAboveStrike, exchangeIdName, schemeName);
   }
 
   /**
-   * Provides ExternalID for Bloomberg ticker, e.g. RXZ3C 100 Comdty,
-   * given a reference date and an integer offset, the n'th subsequent option
-   * The format is futurePrefix + month + year + callPutFlag + strike + postfix
+   * Provides ExternalID for Bloomberg ticker, e.g. RXZ3C 100 Comdty, given a reference date and an integer offset, the n'th subsequent option The format is
+   * futurePrefix + month + year + callPutFlag + strike + postfix
    *
-   * @param futureOptionNumber n'th future following curve date, not null
-   * @param strike option's strike, expressed as price, e.g. 100, not null
-   * @param surfaceDate date of curve validity; valuation date, not null
+   * @param futureOptionNumber
+   *          n'th future following curve date, not null
+   * @param strike
+   *          option's strike, expressed as price, e.g. 100, not null
+   * @param surfaceDate
+   *          date of curve validity; valuation date, not null
    * @return The external id for the Bloomberg ticker
    */
   @Override

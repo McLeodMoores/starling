@@ -21,8 +21,8 @@ public class SimpleFuturePV01Function extends SimpleFutureFunction {
   }
 
   @Override
-  protected Double computeValues(InstrumentDerivative derivative, SimpleFutureDataBundle market) {
-    SimpleFuture simpleFuture = derivative.accept(SimpleFutureConverter.getInstance());
+  protected Double computeValues(final InstrumentDerivative derivative, final SimpleFutureDataBundle market) {
+    final SimpleFuture simpleFuture = derivative.accept(SimpleFutureConverter.getInstance());
     return simpleFuture.getSettlement() * market.getMarketPrice() / 10000.0;
   }
 

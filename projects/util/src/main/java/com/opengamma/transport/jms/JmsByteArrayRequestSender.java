@@ -35,7 +35,7 @@ import com.opengamma.util.NamedThreadPoolFactory;
 public class JmsByteArrayRequestSender extends AbstractJmsByteArraySender implements ByteArrayRequestSender {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(JmsByteArrayRequestSender.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JmsByteArrayRequestSender.class);
 
   /**
    * The executor service.
@@ -44,7 +44,7 @@ public class JmsByteArrayRequestSender extends AbstractJmsByteArraySender implem
 
   /**
    * Creates an instance associated with a destination and template.
-   * 
+   *
    * @param destinationName the destination name, not null
    * @param jmsTemplate the template, not null
    */
@@ -54,7 +54,7 @@ public class JmsByteArrayRequestSender extends AbstractJmsByteArraySender implem
 
   /**
    * Creates an instance associated with a destination and template, specifying the executor to use.
-   * 
+   *
    * @param destinationName the destination name, not null
    * @param jmsTemplate the template, not null
    * @param executor the executor, not null
@@ -68,16 +68,16 @@ public class JmsByteArrayRequestSender extends AbstractJmsByteArraySender implem
   //-------------------------------------------------------------------------
   @Override
   public void sendRequest(final byte[] request, final ByteArrayMessageReceiver responseReceiver) {
-    s_logger.debug("Dispatching request of size {} to destination {}", request.length, getDestinationName());
+    LOGGER.debug("Dispatching request of size {} to destination {}", request.length, getDestinationName());
     _executor.execute(new Runnable() {
       @Override
       public void run() {
         getJmsTemplate().execute(new SessionCallback<Object>() {
           @Override
-          public Object doInJms(Session session) throws JMSException {
+          public Object doInJms(final Session session) throws JMSException {
             try {
               final TemporaryTopic tempTopic = session.createTemporaryTopic();
-              s_logger.debug("Requesting response to temp topic {}", tempTopic);
+              LOGGER.debug("Requesting response to temp topic {}", tempTopic);
               final byte[] bytes;
 
               final MessageConsumer consumer = session.createConsumer(tempTopic);
@@ -85,7 +85,8 @@ public class JmsByteArrayRequestSender extends AbstractJmsByteArraySender implem
                 final BytesMessage bytesMessage = session.createBytesMessage();
                 bytesMessage.writeBytes(request);
                 bytesMessage.setJMSReplyTo(tempTopic);
-                final Destination requestDestination = getJmsTemplate().getDestinationResolver().resolveDestinationName(session, getDestinationName(), getJmsTemplate().isPubSubDomain());
+                final Destination requestDestination = getJmsTemplate().getDestinationResolver().resolveDestinationName(session,
+                    getDestinationName(), getJmsTemplate().isPubSubDomain());
                 final MessageProducer producer = session.createProducer(requestDestination);
                 try {
                   producer.send(bytesMessage);
@@ -95,19 +96,19 @@ public class JmsByteArrayRequestSender extends AbstractJmsByteArraySender implem
                 final Message response = consumer.receive(getJmsTemplate().getReceiveTimeout());
                 if (response == null) {
                   // TODO UTL-37.
-                  s_logger.error("Timeout reached while waiting for a response to send to {}", responseReceiver);
+                  LOGGER.error("Timeout reached while waiting for a response to send to {}", responseReceiver);
                   return null;
                 }
                 bytes = JmsByteArrayHelper.extractBytes(response);
               } finally {
                 consumer.close();
               }
-              s_logger.debug("Dispatching response of length {}", bytes.length);
+              LOGGER.debug("Dispatching response of length {}", bytes.length);
               responseReceiver.messageReceived(bytes);
 
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
               // TODO UTL-37.
-              s_logger.error("Unexpected exception while waiting for a response to send to " + responseReceiver, ex);
+              LOGGER.error("Unexpected exception while waiting for a response to send to " + responseReceiver, ex);
             }
             return null;
           }

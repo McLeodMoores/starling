@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.db;
@@ -63,34 +63,34 @@ public class DbDateUtils {
   //-------------------------------------------------------------------------
   /**
    * Creates a time-stamp from an {@code InstantProvider}.
-   * 
+   *
    * @param instant  the instant to convert, not null
    * @return the SQL time-stamp, not null
    */
-  public static Timestamp toSqlTimestamp(Instant instant) {
+  public static Timestamp toSqlTimestamp(final Instant instant) {
     ArgumentChecker.notNull(instant, "instant");
-    OffsetDateTime utc = OffsetDateTime.ofInstant(instant, ZoneOffset.UTC);
+    final OffsetDateTime utc = OffsetDateTime.ofInstant(instant, ZoneOffset.UTC);
     return toSqlDateTime(utc.toLocalDateTime());
   }
 
   /**
    * Creates an {@code Instant} from an SQL time-stamp.
-   * 
+   *
    * @param timestamp  the SQL time-stamp to convert, not null
    * @return the instant, null if far-future
    */
-  public static Instant fromSqlTimestamp(Timestamp timestamp) {
-    LocalDateTime ldt = fromSqlDateTime(timestamp);
+  public static Instant fromSqlTimestamp(final Timestamp timestamp) {
+    final LocalDateTime ldt = fromSqlDateTime(timestamp);
     return ldt.atOffset(ZoneOffset.UTC).toInstant();
   }
 
   /**
    * Creates an {@code Instant} from an SQL time-stamp treating null as far-future.
-   * 
+   *
    * @param timestamp  the SQL time-stamp to convert, not null
    * @return the instant, null if far-future
    */
-  public static Instant fromSqlTimestampNullFarFuture(Timestamp timestamp) {
+  public static Instant fromSqlTimestampNullFarFuture(final Timestamp timestamp) {
     if (timestamp.compareTo(EFFECTIVE_MAX_TIMESTAMP) > 0) {
       return null;
     }
@@ -100,12 +100,12 @@ public class DbDateUtils {
   //-------------------------------------------------------------------------
   /**
    * Creates a SQL date from a {@code DateTimeProvider}.
-   * 
+   *
    * @param dateTime  the date-time to convert, not null
    * @return the SQL date, not null
    */
   @SuppressWarnings("deprecation")
-  public static Timestamp toSqlDateTime(LocalDateTime dateTime) {
+  public static Timestamp toSqlDateTime(final LocalDateTime dateTime) {
     ArgumentChecker.notNull(dateTime, "dateTime");
     return new Timestamp(
         dateTime.getYear() - 1900, dateTime.getMonthValue() - 1, dateTime.getDayOfMonth(),
@@ -115,12 +115,12 @@ public class DbDateUtils {
   /**
    * Creates a {@code LocalDateTime} from an SQL time-stamp.
    * This is used when the time-stamp represents a local date-time rather than an instant.
-   * 
+   *
    * @param timestamp  the SQL time-stamp to convert, not null
    * @return the date-time, null if far-future
    */
   @SuppressWarnings("deprecation")
-  public static LocalDateTime fromSqlDateTime(Timestamp timestamp) {
+  public static LocalDateTime fromSqlDateTime(final Timestamp timestamp) {
     ArgumentChecker.notNull(timestamp, "timestamp");
     return LocalDateTime.of(
         timestamp.getYear() + 1900, timestamp.getMonth() + 1, timestamp.getDate(),
@@ -130,11 +130,11 @@ public class DbDateUtils {
   /**
    * Creates a {@code LocalDateTime} from an SQL time-stamp.
    * This is used when the time-stamp represents a local date-time rather than an instant.
-   * 
+   *
    * @param timestamp  the SQL time-stamp to convert, not null
    * @return the date-time, null if far-future
    */
-  public static LocalDateTime fromSqlDateTimeNullFarFuture(Timestamp timestamp) {
+  public static LocalDateTime fromSqlDateTimeNullFarFuture(final Timestamp timestamp) {
     if (timestamp.compareTo(EFFECTIVE_MAX_TIMESTAMP) > 0) {
       return null;
     }
@@ -144,23 +144,23 @@ public class DbDateUtils {
   //-------------------------------------------------------------------------
   /**
    * Creates a SQL date from a {@code DateProvider}.
-   * 
+   *
    * @param date  the date to convert, not null
    * @return the SQL date, not null
    */
   @SuppressWarnings("deprecation")
-  public static Date toSqlDate(LocalDate date) {
+  public static Date toSqlDate(final LocalDate date) {
     ArgumentChecker.notNull(date, "dateProvider");
     return new Date(date.getYear() - 1900, date.getMonthValue() - 1, date.getDayOfMonth());
   }
 
   /**
    * Creates a SQL date from a {@code DateProvider}.
-   * 
+   *
    * @param date  the date to convert, null returns max
    * @return the SQL date, not null
    */
-  public static Date toSqlDateNullFarFuture(LocalDate date) {
+  public static Date toSqlDateNullFarFuture(final LocalDate date) {
     if (date == null) {
       return MAX_SQL_DATE;
     }
@@ -169,11 +169,11 @@ public class DbDateUtils {
 
   /**
    * Creates a SQL date from a {@code DateProvider}.
-   * 
+   *
    * @param date  the date to convert, null returns max
    * @return the SQL date, not null
    */
-  public static Date toSqlDateNullFarPast(LocalDate date) {
+  public static Date toSqlDateNullFarPast(final LocalDate date) {
     if (date == null) {
       return MIN_SQL_DATE;
     }
@@ -182,23 +182,23 @@ public class DbDateUtils {
 
   /**
    * Creates a {@code LocalDate} from a SQL date.
-   * 
+   *
    * @param date  the SQL date to convert, not null
    * @return the date, not null
    */
   @SuppressWarnings("deprecation")
-  public static LocalDate fromSqlDate(Date date) {
+  public static LocalDate fromSqlDate(final Date date) {
     ArgumentChecker.notNull(date, "date");
     return LocalDate.of(date.getYear() + 1900, date.getMonth() + 1, date.getDate());
   }
 
   /**
    * Creates a {@code LocalDate} from a SQL date.
-   * 
+   *
    * @param date  the SQL date to convert, not null
    * @return the date, null if far future
    */
-  public static LocalDate fromSqlDateNullFarFuture(Date date) {
+  public static LocalDate fromSqlDateNullFarFuture(final Date date) {
     if (date.equals(MAX_SQL_DATE)) {
       return null;
     }
@@ -207,11 +207,11 @@ public class DbDateUtils {
 
   /**
    * Creates a {@code LocalDate} from a SQL date.
-   * 
+   *
    * @param date  the SQL date to convert, not null
    * @return the date, null if far past
    */
-  public static LocalDate fromSqlDateNullFarPast(Date date) {
+  public static LocalDate fromSqlDateNullFarPast(final Date date) {
     if (date.equals(MIN_SQL_DATE)) {
       return null;
     }
@@ -220,12 +220,12 @@ public class DbDateUtils {
 
   /**
    * Creates a {@code LocalDate} from a possibly null SQL date.
-   * 
+   *
    * @param date  the SQL date to convert, null returns null
    * @return the date, may be null
    */
-  public static LocalDate fromSqlDateAllowNull(Date date) {
-    return (date != null ? fromSqlDate(date) : null);
+  public static LocalDate fromSqlDateAllowNull(final Date date) {
+    return date != null ? fromSqlDate(date) : null;
   }
 
   //-------------------------------------------------------------------------
@@ -233,12 +233,12 @@ public class DbDateUtils {
    * Creates a SQL timestamp from a {@code TimeProvider}.
    * <p>
    * This method is needed to be able to pass nano-of-second to the database when dealing with times.
-   * 
+   *
    * @param time  the time to convert, not null
    * @return the SQL time, not null
    */
   @SuppressWarnings("deprecation")
-  public static Timestamp toSqlTimestamp(LocalTime time) {
+  public static Timestamp toSqlTimestamp(final LocalTime time) {
     ArgumentChecker.notNull(time, "time");
     return new Timestamp(70, 0, 1, time.getHour(), time.getMinute(), time.getSecond(), time.getNano());
   }
@@ -247,24 +247,24 @@ public class DbDateUtils {
    * Creates a SQL time from a {@code TimeProvider}.
    * <p>
    * This method does not handle nano-of-second, and should not normally be used.
-   * 
+   *
    * @param time  the time to convert, not null
    * @return the SQL time, not null
    */
   @SuppressWarnings("deprecation")
-  public static Time toSqlTime(LocalTime time) {
+  public static Time toSqlTime(final LocalTime time) {
     ArgumentChecker.notNull(time, "time");
     return new Time(time.getHour(), time.getMinute(), time.getSecond());
   }
 
   /**
    * Creates a {@code LocalTime} from an SQL time.
-   * 
+   *
    * @param time  the SQL time to convert, not null
    * @return the time, not null
    */
   @SuppressWarnings("deprecation")
-  public static LocalTime fromSqlTime(Time time) {
+  public static LocalTime fromSqlTime(final Time time) {
     ArgumentChecker.notNull(time, "time");
     return LocalTime.of(time.getHours(), time.getMinutes(), time.getSeconds());
   }
@@ -273,12 +273,12 @@ public class DbDateUtils {
    * Creates a {@code LocalTime} from an SQL timestamp.
    * <p>
    * This method is needed to be able to retrieve nanoseconds from the database when dealing with times.
-   * 
+   *
    * @param timestamp  the SQL timestamp to convert, not null
    * @return the time, not null
    */
   @SuppressWarnings("deprecation")
-  public static LocalTime fromSqlTime(Timestamp timestamp) {
+  public static LocalTime fromSqlTime(final Timestamp timestamp) {
     ArgumentChecker.notNull(timestamp, "timestamp");
     return LocalTime.of(timestamp.getHours(), timestamp.getMinutes(), timestamp.getSeconds(), timestamp.getNanos());
   }

@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.sf.ehcache.CacheManager;
-
 import org.fudgemsg.FudgeMsg;
 
 import com.opengamma.id.ExternalScheme;
@@ -21,23 +19,25 @@ import com.opengamma.livedata.normalization.StandardRules;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
+import net.sf.ehcache.CacheManager;
+
 /**
- * 
+ *
  */
 public class MockLiveDataServer extends StandardLiveDataServer {
 
   private final ExternalScheme _domain;
-  private final List<String> _subscriptions = new ArrayList<String>();
-  private final List<String> _unsubscriptions = new ArrayList<String>();
+  private final List<String> _subscriptions = new ArrayList<>();
+  private final List<String> _unsubscriptions = new ArrayList<>();
   private volatile int _numConnections; // = 0;
   private volatile int _numDisconnections; // = 0;
   private final Map<String, FudgeMsg> _uniqueId2MarketData;
 
-  public MockLiveDataServer(ExternalScheme domain, CacheManager cacheManager) {
+  public MockLiveDataServer(final ExternalScheme domain, final CacheManager cacheManager) {
     this(domain, new ConcurrentHashMap<String, FudgeMsg>(), cacheManager);
   }
 
-  public MockLiveDataServer(ExternalScheme domain, Map<String, FudgeMsg> uniqueId2Snapshot, CacheManager cacheManager) {
+  public MockLiveDataServer(final ExternalScheme domain, final Map<String, FudgeMsg> uniqueId2Snapshot, final CacheManager cacheManager) {
     super(cacheManager);
     ArgumentChecker.notNull(domain, "Identification domain");
     ArgumentChecker.notNull(uniqueId2Snapshot, "Snapshot map");
@@ -46,52 +46,52 @@ public class MockLiveDataServer extends StandardLiveDataServer {
   }
 
   //-------------------------------------------------------------------------
-  public void addMarketDataMapping(String key, FudgeMsg value) {
-    _uniqueId2MarketData.put(key, value);        
+  public void addMarketDataMapping(final String key, final FudgeMsg value) {
+    _uniqueId2MarketData.put(key, value);
   }
-  
+
   @Override
   public ExternalScheme getUniqueIdDomain() {
     return _domain;
   }
 
   @Override
-  protected Map<String, Object> doSubscribe(Collection<String> uniqueIds) {
-    Map<String, Object> returnValue = new HashMap<String, Object>();
-    
-    for (String uniqueId : uniqueIds) {
+  protected Map<String, Object> doSubscribe(final Collection<String> uniqueIds) {
+    final Map<String, Object> returnValue = new HashMap<>();
+
+    for (final String uniqueId : uniqueIds) {
       _subscriptions.add(uniqueId);
       returnValue.put(uniqueId, uniqueId);
     }
-    
+
     return returnValue;
   }
 
   @Override
-  protected void doUnsubscribe(Collection<Object> subscriptionHandles) {
-    for (Object subscriptionHandle : subscriptionHandles) {
+  protected void doUnsubscribe(final Collection<Object> subscriptionHandles) {
+    for (final Object subscriptionHandle : subscriptionHandles) {
       _unsubscriptions.add((String) subscriptionHandle);
     }
   }
-  
+
   @Override
-  protected Map<String, FudgeMsg> doSnapshot(Collection<String> uniqueIds) {
-    Map<String, FudgeMsg> returnValue = new HashMap<String, FudgeMsg>();
-    
-    for (String uniqueId : uniqueIds) {
+  protected Map<String, FudgeMsg> doSnapshot(final Collection<String> uniqueIds) {
+    final Map<String, FudgeMsg> returnValue = new HashMap<>();
+
+    for (final String uniqueId : uniqueIds) {
       FudgeMsg snapshot = _uniqueId2MarketData.get(uniqueId);
       if (snapshot == null) {
         snapshot = OpenGammaFudgeContext.getInstance().newMessage();
       }
       returnValue.put(uniqueId, snapshot);
     }
-    
+
     return returnValue;
   }
-  
+
   public void sendLiveDataToClient() {
-    for (Subscription subscription : getSubscriptions()) {
-      FudgeMsg marketData = doSnapshot(subscription.getSecurityUniqueId());
+    for (final Subscription subscription : getSubscriptions()) {
+      final FudgeMsg marketData = doSnapshot(subscription.getSecurityUniqueId());
       liveDataReceived(subscription.getSecurityUniqueId(), marketData);
     }
   }
@@ -113,10 +113,10 @@ public class MockLiveDataServer extends StandardLiveDataServer {
   protected void doDisconnect() {
     _numDisconnections++;
   }
-  
+
   @Override
   protected boolean snapshotOnSubscriptionStartRequired(
-      Subscription subscription) {
+      final Subscription subscription) {
     return false;
   }
 
@@ -127,7 +127,7 @@ public class MockLiveDataServer extends StandardLiveDataServer {
   public int getNumDisconnections() {
     return _numDisconnections;
   }
-  
+
   @Override
   public String getDefaultNormalizationRuleSetId() {
     return StandardRules.getNoNormalization().getId();

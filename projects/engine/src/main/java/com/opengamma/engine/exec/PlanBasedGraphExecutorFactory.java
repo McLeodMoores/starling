@@ -32,7 +32,7 @@ public class PlanBasedGraphExecutorFactory implements DependencyGraphExecutorFac
   // DependencyGraphExecutorFactory
 
   @Override
-  public DependencyGraphExecutor createExecutor(SingleComputationCycle cycle) {
+  public DependencyGraphExecutor createExecutor(final SingleComputationCycle cycle) {
     return new PlanBasedGraphExecutor(getPlanner(), cycle);
   }
 

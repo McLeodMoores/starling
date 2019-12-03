@@ -22,17 +22,17 @@ public class GridColumnGroups {
   /** The column groups. */
   private final List<GridColumnGroup> _columnGroups;
 
-  /* package */ GridColumnGroups(List<GridColumnGroup> columnGroups) {
+  /* package */ GridColumnGroups(final List<GridColumnGroup> columnGroups) {
     ArgumentChecker.notNull(columnGroups, "columnGroups");
-    List<GridColumn> columns = Lists.newArrayList();
-    for (GridColumnGroup group : columnGroups) {
+    final List<GridColumn> columns = Lists.newArrayList();
+    for (final GridColumnGroup group : columnGroups) {
       columns.addAll(group.getColumns());
     }
     _columns = Collections.unmodifiableList(columns);
     _columnGroups = ImmutableList.copyOf(columnGroups);
   }
 
-  /* package */ GridColumnGroups(GridColumnGroup columnGroup) {
+  /* package */ GridColumnGroups(final GridColumnGroup columnGroup) {
     this(Lists.newArrayList(columnGroup));
   }
 
@@ -40,7 +40,7 @@ public class GridColumnGroups {
    * @return A instance containing no column groups
    */
   /* package */ static GridColumnGroups empty() {
-    return new GridColumnGroups(Collections.<GridColumnGroup>emptyList());
+    return new GridColumnGroups(Collections.<GridColumnGroup> emptyList());
   }
 
   /**
@@ -51,11 +51,13 @@ public class GridColumnGroups {
   }
 
   /**
-   * Returns the column at an index
-   * @param index The column index, zero based
+   * Returns the column at an index.
+   * 
+   * @param index
+   *          The column index, zero based
    * @return The column at the specified index
    */
-  public GridColumn getColumn(int index) {
+  public GridColumn getColumn(final int index) {
     return _columns.get(index);
   }
 

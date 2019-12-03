@@ -31,7 +31,10 @@ import com.opengamma.util.time.DateUtils;
 
 /**
  * Tests related to bond futures security Definition construction.
+ * 
+ * @deprecated
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class BondFutureDefinitionTest {
   // 5-Year U.S. Treasury Note Futures: FVU1
@@ -158,7 +161,6 @@ public class BondFutureDefinitionTest {
   /**
    * Tests the toDerivative method.
    */
-  @SuppressWarnings("deprecation")
   @Test
   public void toDerivativeDeprecated() {
     final ZonedDateTime firstDeliveryDate = ScheduleCalculator.getAdjustedDate(FIRST_NOTICE_DATE, SETTLEMENT_DAYS, CALENDAR);

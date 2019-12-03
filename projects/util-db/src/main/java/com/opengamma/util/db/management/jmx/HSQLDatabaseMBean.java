@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.db.management.jmx;
@@ -27,15 +27,15 @@ import com.google.common.collect.Sets;
 @ManagedResource(description = "Basic housekeeping operations on HSQL that can be managed via JMX")
 public class HSQLDatabaseMBean extends DatabaseMBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(HSQLDatabaseMBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HSQLDatabaseMBean.class);
 
   /**
    * All active instances - used to generate meaningful names.
    */
-  private static final Set<HSQLDatabaseMBean> s_instances = Sets.newSetFromMap(new WeakHashMap<HSQLDatabaseMBean, Boolean>());
+  private static final Set<HSQLDatabaseMBean> INSTANCES = Sets.newSetFromMap(new WeakHashMap<HSQLDatabaseMBean, Boolean>());
 
   /* package */static void flush() {
-    s_instances.clear();
+    INSTANCES.clear();
   }
 
   /**
@@ -45,8 +45,8 @@ public class HSQLDatabaseMBean extends DatabaseMBean {
 
   public HSQLDatabaseMBean() {
     super("HSQLDB");
-    synchronized (s_instances) {
-      s_instances.add(this);
+    synchronized (INSTANCES) {
+      INSTANCES.add(this);
     }
   }
 
@@ -54,14 +54,14 @@ public class HSQLDatabaseMBean extends DatabaseMBean {
    * Find the shortest unique name among the active instances.
    * <p>
    * Working from the right hand end of the local JDBC string the shortest form is found that uniquely identifies the database.
-   * 
+   *
    * @return a name, not containing slashes, that can be used for the backup set.
    */
   protected String createBackupName() {
     final Integer one = 1;
-    final Map<String, Integer> nameCount = new HashMap<String, Integer>();
-    synchronized (s_instances) {
-      for (HSQLDatabaseMBean instance : s_instances) {
+    final Map<String, Integer> nameCount = new HashMap<>();
+    synchronized (INSTANCES) {
+      for (final HSQLDatabaseMBean instance : INSTANCES) {
         String jdbc = instance.getLocalJdbc();
         if (nameCount.put(jdbc, one) != null) {
           // Another MBean already has this JDBC string -- ignore
@@ -79,10 +79,10 @@ public class HSQLDatabaseMBean extends DatabaseMBean {
           slash = jdbc.lastIndexOf('/');
           final Integer count = nameCount.get(shortName);
           if (count == null) {
-            s_logger.debug("Found {} for {}", shortName, instance);
+            LOGGER.debug("Found {} for {}", shortName, instance);
             nameCount.put(shortName, one);
           } else {
-            s_logger.debug("Name collision on {} for {}", shortName, instance);
+            LOGGER.debug("Name collision on {} for {}", shortName, instance);
             nameCount.put(shortName, count + 1);
           }
         }
@@ -98,7 +98,7 @@ public class HSQLDatabaseMBean extends DatabaseMBean {
         shortName = jdbc.substring(slash + 1) + "-" + shortName;
       }
       if (one.equals(nameCount.get(shortName))) {
-        s_logger.info("Using backup set {} for {}", shortName, this);
+        LOGGER.info("Using backup set {} for {}", shortName, this);
         return shortName;
       }
       jdbc = jdbc.substring(0, slash);
@@ -123,7 +123,7 @@ public class HSQLDatabaseMBean extends DatabaseMBean {
     if (!backup.isDirectory()) {
       throw new UnsupportedOperationException("Can't create folder " + backup);
     }
-    s_logger.info("Writing backup to {}", backupPath);
+    LOGGER.info("Writing backup to {}", backupPath);
     return backupPath + File.separatorChar;
   }
 
@@ -133,9 +133,9 @@ public class HSQLDatabaseMBean extends DatabaseMBean {
     try (Connection connection = getDataSource().getConnection()) {
       final PreparedStatement statement = connection.prepareStatement("BACKUP DATABASE TO '" + path + "' BLOCKING");
       statement.execute();
-      s_logger.info("Checkpoint backup written to {}", path);
-    } catch (SQLException e) {
-      s_logger.error("Caught exception", e);
+      LOGGER.info("Checkpoint backup written to {}", path);
+    } catch (final SQLException e) {
+      LOGGER.error("Caught exception", e);
       throw new UnsupportedOperationException("SQL error attempting backup: " + e.getMessage());
     }
     return "Files backed up to:\n" + path;
@@ -147,9 +147,9 @@ public class HSQLDatabaseMBean extends DatabaseMBean {
     try (Connection connection = getDataSource().getConnection()) {
       final PreparedStatement statement = connection.prepareStatement("BACKUP DATABASE TO '" + path + "' NOT BLOCKING");
       statement.execute();
-      s_logger.info("Hot backup written to {}", path);
-    } catch (SQLException e) {
-      s_logger.error("Caught exception", e);
+      LOGGER.info("Hot backup written to {}", path);
+    } catch (final SQLException e) {
+      LOGGER.error("Caught exception", e);
       throw new UnsupportedOperationException("SQL error attempting backup: " + e.getMessage());
     }
     return "Files backed up to:\n" + path;

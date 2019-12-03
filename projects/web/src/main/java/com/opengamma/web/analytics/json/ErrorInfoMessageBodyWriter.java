@@ -37,35 +37,35 @@ public class ErrorInfoMessageBodyWriter implements MessageBodyWriter<List<ErrorI
   private static final String ID = "id";
 
   @Override
-  public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+  public boolean isWriteable(final Class<?> type, final Type genericType, final Annotation[] annotations, final MediaType mediaType) {
     if (!(genericType instanceof ParameterizedType)) {
       return false;
     }
-    ParameterizedType parameterizedType = (ParameterizedType) genericType;
-    return (parameterizedType.getRawType().equals(List.class)) &&
+    final ParameterizedType parameterizedType = (ParameterizedType) genericType;
+    return parameterizedType.getRawType().equals(List.class) &&
         parameterizedType.getActualTypeArguments().length == 1 &&
         parameterizedType.getActualTypeArguments()[0].equals(ErrorInfo.class);
   }
 
   @Override
-  public long getSize(List<ErrorInfo> errorInfo,
-                      Class<?> type,
-                      Type genericType,
-                      Annotation[] annotations,
-                      MediaType mediaType) {
+  public long getSize(final List<ErrorInfo> errorInfo,
+                      final Class<?> type,
+                      final Type genericType,
+                      final Annotation[] annotations,
+                      final MediaType mediaType) {
     return -1; // unknown
   }
 
   @Override
-  public void writeTo(List<ErrorInfo> errorInfos,
-                      Class<?> type,
-                      Type genericType,
-                      Annotation[] annotations,
-                      MediaType mediaType,
-                      MultivaluedMap<String, Object> httpHeaders,
-                      OutputStream entityStream) throws IOException, WebApplicationException {
-    List<Map<String, Object>> errors = Lists.newArrayList();
-    for (ErrorInfo errorInfo : errorInfos) {
+  public void writeTo(final List<ErrorInfo> errorInfos,
+                      final Class<?> type,
+                      final Type genericType,
+                      final Annotation[] annotations,
+                      final MediaType mediaType,
+                      final MultivaluedMap<String, Object> httpHeaders,
+                      final OutputStream entityStream) throws IOException, WebApplicationException {
+    final List<Map<String, Object>> errors = Lists.newArrayList();
+    for (final ErrorInfo errorInfo : errorInfos) {
       errors.add(ImmutableMap.<String, Object>of(ERROR_MESSAGE, errorInfo.getMessage(), ID, errorInfo.getId()));
     }
     entityStream.write(new JSONArray(errors).toString().getBytes());

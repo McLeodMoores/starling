@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.historicaltimeseries.impl;
@@ -37,11 +37,11 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
    */
   private final ChangeManager _changeManager;
 
-
   /**
    * Creates an instance.
    *
-   * @param baseUri  the base target URI for all RESTful web services, not null
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
    */
   public RemoteHistoricalTimeSeriesSource(final URI baseUri) {
     this(baseUri, new BasicChangeManager());
@@ -49,9 +49,11 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
 
   /**
    * Creates an instance.
-   * 
-   * @param baseUri  the base target URI for all RESTful web services, not null
-   * @param changeManager  the change manager, not null
+   *
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
+   * @param changeManager
+   *          the change manager, not null
    */
   public RemoteHistoricalTimeSeriesSource(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri);
@@ -59,244 +61,264 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
     _changeManager = changeManager;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriGet(getBaseUri(), uniqueId);
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriGet(getBaseUri(), uniqueId);
       return accessRemote(uri).get(HistoricalTimeSeries.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(UniqueId uniqueId, LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end,
+      final boolean includeEnd) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriGet(getBaseUri(), uniqueId, start, includeStart, end, includeEnd, null);
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriGet(getBaseUri(), uniqueId, start, includeStart, end, includeEnd, null);
       return accessRemote(uri).get(HistoricalTimeSeries.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(UniqueId uniqueId, LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd, int maxPoints) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end,
+      final boolean includeEnd, final int maxPoints) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriGet(getBaseUri(), uniqueId, start, includeStart, end, includeEnd, maxPoints);
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriGet(getBaseUri(), uniqueId, start, includeStart, end, includeEnd, maxPoints);
       return accessRemote(uri).get(HistoricalTimeSeries.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(UniqueId uniqueId) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final UniqueId uniqueId) {
     return extractPair(getHistoricalTimeSeries(uniqueId, null, true, null, true, -1));
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(UniqueId uniqueId, LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final UniqueId uniqueId, final LocalDate start, final boolean includeStart, final LocalDate end,
+      final boolean includeEnd) {
     return extractPair(getHistoricalTimeSeries(uniqueId, start, includeStart, end, includeEnd, -1));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(ExternalIdBundle identifierBundle, String dataSource, String dataProvider, String dataField) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField) {
     return getHistoricalTimeSeries(identifierBundle, dataSource, dataProvider, dataField, null, true, null, true);
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(ExternalIdBundle identifierBundle, String dataSource, String dataProvider, String dataField,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchSingle(
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchSingle(
           getBaseUri(), identifierBundle, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd, null);
       return accessRemote(uri).get(HistoricalTimeSeries.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(ExternalIdBundle identifierBundle, String dataSource, String dataProvider, String dataField,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd, int maxPoints) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchSingle(
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchSingle(
           getBaseUri(), identifierBundle, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd, maxPoints);
       return accessRemote(uri).get(HistoricalTimeSeries.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String dataSource, String dataProvider, String dataField) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField) {
     return getHistoricalTimeSeries(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, null, true, null, true);
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String dataSource, String dataProvider, String dataField,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchSingle(
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchSingle(
           getBaseUri(), identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd, null);
       return accessRemote(uri).get(HistoricalTimeSeries.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String dataSource, String dataProvider, String dataField,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd, int maxPoints) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchSingle(
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchSingle(
           getBaseUri(), identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd, maxPoints);
       return accessRemote(uri).get(HistoricalTimeSeries.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String dataSource, String dataProvider, String dataField) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField) {
     return getLatestDataPoint(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, null, true, null, true);
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String dataSource, String dataProvider, String dataField,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
-    return extractPair(getHistoricalTimeSeries(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd, -1));
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
+    return extractPair(
+        getHistoricalTimeSeries(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd, -1));
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(ExternalIdBundle identifierBundle, String dataSource, String dataProvider, String dataField) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField) {
     return getLatestDataPoint(identifierBundle, dataSource, dataProvider, dataField, null, true, null, true);
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(ExternalIdBundle identifierBundle, String dataSource, String dataProvider, String dataField,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final ExternalIdBundle identifierBundle, final String dataSource, final String dataProvider,
+      final String dataField,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     return extractPair(getHistoricalTimeSeries(identifierBundle, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd, -1));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(String dataField, ExternalIdBundle identifierBundle, String resolutionKey) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey) {
     return getHistoricalTimeSeries(dataField, identifierBundle, resolutionKey, null, true, null, true);
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(String dataField, ExternalIdBundle identifierBundle, String resolutionKey,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchResolve(
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchResolve(
           getBaseUri(), identifierBundle, dataField, resolutionKey, start, includeStart, end, includeEnd, null);
       return accessRemote(uri).get(HistoricalTimeSeries.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(String dataField, ExternalIdBundle identifierBundle, String resolutionKey,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd, int maxPoints) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchResolve(
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchResolve(
           getBaseUri(), identifierBundle, dataField, resolutionKey, start, includeStart, end, includeEnd, maxPoints);
       return accessRemote(uri).get(HistoricalTimeSeries.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(String dataField, ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String resolutionKey) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey) {
     return getHistoricalTimeSeries(dataField, identifierBundle, identifierValidityDate, resolutionKey, null, true, null, true);
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(String dataField, ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String resolutionKey,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchResolve(
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchResolve(
           getBaseUri(), identifierBundle, identifierValidityDate, dataField, resolutionKey, start, includeStart, end, includeEnd, null);
       return accessRemote(uri).get(HistoricalTimeSeries.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
   @Override
-  public HistoricalTimeSeries getHistoricalTimeSeries(String dataField, ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String resolutionKey,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd, int maxPoints) {
+  public HistoricalTimeSeries getHistoricalTimeSeries(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd, final int maxPoints) {
     ArgumentChecker.notNull(identifierBundle, "identifierBundle");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchResolve(
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchResolve(
           getBaseUri(), identifierBundle, identifierValidityDate, dataField, resolutionKey, start, includeStart, end, includeEnd, maxPoints);
       return accessRemote(uri).get(HistoricalTimeSeries.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(String dataField, ExternalIdBundle identifierBundle, String resolutionKey) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey) {
     return getLatestDataPoint(dataField, identifierBundle, resolutionKey, null, true, null, true);
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(String dataField, ExternalIdBundle identifierBundle, String resolutionKey,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final String resolutionKey,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     return extractPair(getHistoricalTimeSeries(dataField, identifierBundle, resolutionKey, start, includeStart, end, includeEnd, -1));
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(String dataField, ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String resolutionKey) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey) {
     return getLatestDataPoint(dataField, identifierBundle, identifierValidityDate, resolutionKey, null, true, null, true);
   }
 
   @Override
-  public Pair<LocalDate, Double> getLatestDataPoint(String dataField, ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String resolutionKey,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
+  public Pair<LocalDate, Double> getLatestDataPoint(final String dataField, final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate,
+      final String resolutionKey,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     return extractPair(getHistoricalTimeSeries(dataField, identifierBundle, identifierValidityDate, resolutionKey, start, includeStart, end, includeEnd, -1));
   }
 
-  //-------------------------------------------------------------------------
-  @SuppressWarnings("unchecked")
+  // -------------------------------------------------------------------------
   @Override
-  public Map<ExternalIdBundle, HistoricalTimeSeries> getHistoricalTimeSeries(Set<ExternalIdBundle> identifierSet, String dataSource, String dataProvider, String dataField,
-      LocalDate start, boolean includeStart, LocalDate end, boolean includeEnd) {
+  public Map<ExternalIdBundle, HistoricalTimeSeries> getHistoricalTimeSeries(final Set<ExternalIdBundle> identifierSet, final String dataSource,
+      final String dataProvider, final String dataField,
+      final LocalDate start, final boolean includeStart, final LocalDate end, final boolean includeEnd) {
     ArgumentChecker.notNull(identifierSet, "identifierSet");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchBulk(getBaseUri());
-      FudgeMsg msg = DataHistoricalTimeSeriesSourceUris.uriSearchBulkData(identifierSet, dataSource, dataProvider, dataField, start, includeStart, end, includeEnd);
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriSearchBulk(getBaseUri());
+      final FudgeMsg msg = DataHistoricalTimeSeriesSourceUris.uriSearchBulkData(identifierSet, dataSource, dataProvider, dataField, start, includeStart, end,
+          includeEnd);
       return accessRemote(uri).post(FudgeMapWrapper.class, msg).getMap();
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }
 
-  //-------------------------------------------------------------------------
-  private Pair<LocalDate, Double> extractPair(HistoricalTimeSeries historicalTimeSeries) {
+  // -------------------------------------------------------------------------
+  private static Pair<LocalDate, Double> extractPair(final HistoricalTimeSeries historicalTimeSeries) {
     if (historicalTimeSeries == null) {
       return null;
     }
-    LocalDateDoubleTimeSeries series = historicalTimeSeries.getTimeSeries();
+    final LocalDateDoubleTimeSeries series = historicalTimeSeries.getTimeSeries();
     if (series.size() == 0) {
       return null;
     }
@@ -304,12 +326,12 @@ public class RemoteHistoricalTimeSeriesSource extends AbstractRemoteClient imple
   }
 
   @Override
-  public ExternalIdBundle getExternalIdBundle(UniqueId uniqueId) {
+  public ExternalIdBundle getExternalIdBundle(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     try {
-      URI uri = DataHistoricalTimeSeriesSourceUris.uriExternalIdBundleGet(getBaseUri(), uniqueId);
+      final URI uri = DataHistoricalTimeSeriesSourceUris.uriExternalIdBundleGet(getBaseUri(), uniqueId);
       return accessRemote(uri).get(ExternalIdBundle.class);
-    } catch (UniformInterfaceException404NotFound ex) {
+    } catch (final UniformInterfaceException404NotFound ex) {
       return null;
     }
   }

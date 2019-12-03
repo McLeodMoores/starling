@@ -10,7 +10,7 @@ import org.threeten.bp.Instant;
 import com.opengamma.engine.view.ViewDeltaResultModel;
 
 /**
- * 
+ *
  */
 public class InMemoryViewDeltaResultModel extends InMemoryViewResultModel implements ViewDeltaResultModel {
 
@@ -43,7 +43,7 @@ public class InMemoryViewDeltaResultModel extends InMemoryViewResultModel implem
   /**
    * @param previousResultTimestamp the previousResultTimestamp to set
    */
-  public void setPreviousCalculationTime(Instant previousResultTimestamp) {
+  public void setPreviousCalculationTime(final Instant previousResultTimestamp) {
     _previousResultTimestamp = previousResultTimestamp;
   }
 }

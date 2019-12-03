@@ -46,7 +46,7 @@ import com.opengamma.util.time.Expiry;
 public class EquityDividendFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityDividendFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityDividendFutureLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -57,91 +57,93 @@ public class EquityDividendFutureLoader extends SecurityLoader {
       FIELD_FUT_TRADING_HRS,
       FIELD_ID_MIC_PRIM_EXCH, // trading exchange
       FIELD_CRNCY,
-//      FIELD_FUTURES_CATEGORY,
-//      FIELD_FUT_TRADING_UNITS,
+      // FIELD_FUTURES_CATEGORY,
+      // FIELD_FUT_TRADING_UNITS,
       FIELD_PARSEKYABLE_DES,
       FIELD_SETTLE_DT,
       FIELD_FUTURES_CATEGORY,
-//      FIELD_FUT_CONT_SIZE,
+      // FIELD_FUT_CONT_SIZE,
       FIELD_UNDL_SPOT_TICKER,
       FIELD_ID_BBG_UNIQUE,
       FIELD_ID_CUSIP,
       FIELD_ID_ISIN,
       FIELD_ID_SEDOL1,
       FIELD_FUT_VAL_PT));
-  
+
   /**
-   * The valid Bloomberg future categories for Equity Dividend Futures
+   * The valid Bloomberg future categories for Equity Dividend Futures.
    */
   public static final Set<String> VALID_FUTURE_CATEGORIES = Collections.unmodifiableSet(Sets.newHashSet(
       BloombergConstants.BBG_STOCK_FUTURE_TYPE));
 
   /**
    * Creates an instance.
-   * @param referenceDataProvider  the provider, not null
+   *
+   * @param referenceDataProvider
+   *          the provider, not null
    */
-  public EquityDividendFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.EQUITY_DIVIDEND_FUTURE);
+  public EquityDividendFutureLoader(final ReferenceDataProvider referenceDataProvider) {
+    super(LOGGER, referenceDataProvider, SecurityType.EQUITY_DIVIDEND_FUTURE);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  protected ManageableSecurity createSecurity(FudgeMsg fieldData) {
-    String marketSectorDes = fieldData.getString(FIELD_MARKET_SECTOR_DES);
-    String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
-    String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
-    String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
-    String currencyStr = fieldData.getString(FIELD_CRNCY);
-    String settleDate = fieldData.getString(FIELD_SETTLE_DT);
-    String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
-//    Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
-//    String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
-    String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
-    String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
-    String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
-    double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
-    
+  protected ManageableSecurity createSecurity(final FudgeMsg fieldData) {
+    final String marketSectorDes = fieldData.getString(FIELD_MARKET_SECTOR_DES);
+    final String expiryDate = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
+    final String futureTradingHours = fieldData.getString(FIELD_FUT_TRADING_HRS);
+    final String micExchangeCode = fieldData.getString(FIELD_ID_MIC_PRIM_EXCH);
+    final String currencyStr = fieldData.getString(FIELD_CRNCY);
+    final String settleDate = fieldData.getString(FIELD_SETTLE_DT);
+    final String category = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUTURES_CATEGORY), " ");
+    // Double unitNumber = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
+    // String unitName = fieldData.getString(FIELD_FUT_TRADING_UNITS);
+    final String underlyingTicker = fieldData.getString(FIELD_UNDL_SPOT_TICKER);
+    final String name = BloombergDataUtils.removeDuplicateWhiteSpace(fieldData.getString(FIELD_FUT_LONG_NAME), " ");
+    final String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
+    final double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
+
     if (!isValidField(marketSectorDes)) {
-      s_logger.warn("market sector description is null, cannot construct equity dividend future security");
+      LOGGER.warn("market sector description is null, cannot construct equity dividend future security");
       return null;
     }
 
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct equity dividend future security");
+      LOGGER.warn("bbgUnique is null, cannot construct equity dividend future security");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null, cannot construct equity dividend future security");
+      LOGGER.warn("expiry date is null, cannot construct equity dividend future security");
       return null;
     }
     if (!isValidField(settleDate)) {
-      s_logger.warn("settle date is null, cannot construct equity dividend future security");
+      LOGGER.warn("settle date is null, cannot construct equity dividend future security");
       return null;
     }
     if (!isValidField(category)) {
-      s_logger.warn("futures category is null, cannot construct equity dividend index future security");
+      LOGGER.warn("futures category is null, cannot construct equity dividend index future security");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null, cannot construct equity dividend index future security");
+      LOGGER.warn("futures trading hours is null, cannot construct equity dividend index future security");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null, cannot construct equity dividend future security");
+      LOGGER.warn("settlement exchange is null, cannot construct equity dividend future security");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.info("currency is null, cannot construct equity dividend future security");
+      LOGGER.info("currency is null, cannot construct equity dividend future security");
       return null;
     }
-//    if (!isValidField(unitName)) {
-//      s_logger.info("unitName is null, cannot construct equity dividend future security");
-//      return null;
-//    }
-//    if (unitNumber == null) {
-//      s_logger.info("unitNumber is null, cannot construct equity dividend future security");
-//      return null;
-//    }
+    // if (!isValidField(unitName)) {
+    // LOGGER.info("unitName is null, cannot construct equity dividend future security");
+    // return null;
+    // }
+    // if (unitNumber == null) {
+    // LOGGER.info("unitNumber is null, cannot construct equity dividend future security");
+    // return null;
+    // }
     ExternalId underlying = null;
     if (underlyingTicker != null) {
       if (BloombergDataUtils.isValidBloombergTicker(underlyingTicker)) {
@@ -150,17 +152,18 @@ public class EquityDividendFutureLoader extends SecurityLoader {
         underlying = ExternalSchemes.bloombergTickerSecurityId(underlyingTicker + " " + marketSectorDes);
       }
     }
-    Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
+    final Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
     if (expiry == null) {
       return null;
     }
-    Expiry settle = decodeExpiry(settleDate, futureTradingHours);
+    final Expiry settle = decodeExpiry(settleDate, futureTradingHours);
     if (settle == null) {
-      s_logger.info("Invalid settlement date, cannot construct equity dividend future security");
+      LOGGER.info("Invalid settlement date, cannot construct equity dividend future security");
       return null;
     }
-    Currency currency = Currency.parse(currencyStr);
-    EquityIndexDividendFutureSecurity security = new EquityIndexDividendFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount, settle.getExpiry(), underlying, category);
+    final Currency currency = Currency.parse(currencyStr);
+    final EquityIndexDividendFutureSecurity security = new EquityIndexDividendFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, unitAmount,
+        settle.getExpiry(), underlying, category);
     security.setName(name);
     // set identifiers
     parseIdentifiers(fieldData, security);

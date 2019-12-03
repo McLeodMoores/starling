@@ -48,25 +48,25 @@ public class SimpleSecurityLink extends AbstractLink<Security>
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SimpleSecurityLink.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleSecurityLink.class);
 
   /**
    * The target security.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private Security _target;
   // TODO: remove
 
   /**
    * Obtains an instance from a security, storing the object identifier
    * if possible and the external identifier bundle if not.
-   * 
+   *
    * @param security  the security to store, not null
    * @return the link with one identifier set, not null
    */
-  public static SimpleSecurityLink of(Security security) {
+  public static SimpleSecurityLink of(final Security security) {
     ArgumentChecker.notNull(security, "security");
-    SimpleSecurityLink link = new SimpleSecurityLink();
+    final SimpleSecurityLink link = new SimpleSecurityLink();
     if (security.getUniqueId() != null) {
       link.setObjectId(security.getUniqueId().getObjectId());
     } else {
@@ -78,13 +78,13 @@ public class SimpleSecurityLink extends AbstractLink<Security>
 
   /**
    * Obtains an instance from a security, storing the external identifier bundle.
-   * 
+   *
    * @param security  the security to store, not null
    * @return the link with identifier bundle set, not null
    */
-  public static SimpleSecurityLink ofBundleId(Security security) {
+  public static SimpleSecurityLink ofBundleId(final Security security) {
     ArgumentChecker.notNull(security, "security");
-    SimpleSecurityLink link = new SimpleSecurityLink(security.getExternalIdBundle());
+    final SimpleSecurityLink link = new SimpleSecurityLink(security.getExternalIdBundle());
     link.setExternalId(security.getExternalIdBundle());
     link.setTarget(security);
     return link;
@@ -100,7 +100,7 @@ public class SimpleSecurityLink extends AbstractLink<Security>
 
   /**
    * Creates a link from an object identifier.
-   * 
+   *
    * @param objectId  the object identifier, not null
    * @deprecated using object ids will limit ability to export links, use ExternalIds or ExternalIdBundles, even if they need to be generated GUIDs
    */
@@ -111,7 +111,7 @@ public class SimpleSecurityLink extends AbstractLink<Security>
 
   /**
    * Creates a link from a unique identifier, only storing the object identifier.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @deprecated using object ids will limit ability to export links, use ExternalIds or ExternalIdBundles, even if they need to be generated GUIDs
    */
@@ -122,7 +122,7 @@ public class SimpleSecurityLink extends AbstractLink<Security>
 
   /**
    * Creates a link from an external identifier.
-   * 
+   *
    * @param externalId  the external identifier, not null
    */
   public SimpleSecurityLink(final ExternalId externalId) {
@@ -131,7 +131,7 @@ public class SimpleSecurityLink extends AbstractLink<Security>
 
   /**
    * Creates a link from an external identifier bundle.
-   * 
+   *
    * @param bundle  the identifier bundle, not null
    */
   public SimpleSecurityLink(final ExternalIdBundle bundle) {
@@ -140,10 +140,10 @@ public class SimpleSecurityLink extends AbstractLink<Security>
 
   /**
    * Clones the specified link, sharing the target security.
-   * 
+   *
    * @param linkToClone  the link to clone, not null
    */
-  public SimpleSecurityLink(SecurityLink linkToClone) {
+  public SimpleSecurityLink(final SecurityLink linkToClone) {
     super();
     setObjectId(linkToClone.getObjectId());
     setExternalId(linkToClone.getExternalId());
@@ -153,35 +153,37 @@ public class SimpleSecurityLink extends AbstractLink<Security>
   //-------------------------------------------------------------------------
   /**
    * Resolves the security for the latest version-correction using a security source.
-   * 
+   *
    * @param source  the source to use to resolve, not null
    * @return the resolved security, not null
    * @throws DataNotFoundException if the security could not be resolved
    * @throws RuntimeException if an error occurs while resolving
    */
-  public Security resolve(SecuritySource source) {
+  @Override
+  public Security resolve(final SecuritySource source) {
     return resolve(source, VersionCorrection.LATEST);
   }
 
   /**
    * Resolves the security using a security source.
-   * 
+   *
    * @param source  the source to use to resolve, not null
    * @param versionCorrection  the version-correction, not null
    * @return the resolved security, not null
    * @throws DataNotFoundException if the security could not be resolved
    * @throws RuntimeException if an error occurs while resolving
    */
-  public Security resolve(SecuritySource source, VersionCorrection versionCorrection) {
-    ObjectId objectId = getObjectId();
+  @Override
+  public Security resolve(final SecuritySource source, final VersionCorrection versionCorrection) {
+    final ObjectId objectId = getObjectId();
     if (objectId != null) {
-      Security target = (Security) source.get(objectId, versionCorrection);
+      final Security target = source.get(objectId, versionCorrection);
       setTarget(target);
       return target;
     }
-    ExternalIdBundle bundle = getExternalId();
+    final ExternalIdBundle bundle = getExternalId();
     if (bundle.size() > 0) {
-      Security target = source.getSingle(bundle, versionCorrection);
+      final Security target = source.getSingle(bundle, versionCorrection);
       if (target != null) {
         setTarget(target);
         return target;
@@ -193,18 +195,19 @@ public class SimpleSecurityLink extends AbstractLink<Security>
   /**
    * Resolves the security using a security source,
    * logging any exception and returning null.
-   * 
+   *
    * @param source  the source to use to resolve, not null
    * @return the resolved security, null if unable to resolve
    */
-  public Security resolveQuiet(SecuritySource source) {
+  @Override
+  public Security resolveQuiet(final SecuritySource source) {
     try {
       return resolve(source);
-    } catch (DataNotFoundException ex) {
-      s_logger.warn("Unable to resolve security {}", this);
+    } catch (final DataNotFoundException ex) {
+      LOGGER.warn("Unable to resolve security {}", this);
       return null;
-    } catch (RuntimeException ex) {
-      s_logger.warn("Unable to resolve security {}: {}", this, ex);
+    } catch (final RuntimeException ex) {
+      LOGGER.warn("Unable to resolve security {}: {}", this, ex);
       return null;
     }
   }
@@ -233,6 +236,7 @@ public class SimpleSecurityLink extends AbstractLink<Security>
    * Gets the target security.
    * @return the value of the property
    */
+  @Override
   public Security getTarget() {
     return _target;
   }

@@ -26,7 +26,7 @@ import com.opengamma.util.test.TestLifecycle;
 @Test(groups = TestGroup.UNIT)
 public class CachingFunctionRepositoryCompilerTest {
 
-  private static class MockFunction extends AbstractFunction {
+  private static final class MockFunction extends AbstractFunction {
 
     private final AtomicInteger _compileCount = new AtomicInteger();
     private final Long _validBefore;
@@ -39,7 +39,7 @@ public class CachingFunctionRepositoryCompilerTest {
     }
 
     @Override
-    public CompiledFunctionDefinition compile(FunctionCompilationContext context, Instant atInstant) {
+    public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
       _compileCount.incrementAndGet();
       final AbstractFunction.AbstractCompiledFunction compiled = new AbstractFunction.AbstractCompiledFunction() {
 
@@ -49,12 +49,13 @@ public class CachingFunctionRepositoryCompilerTest {
         }
 
         @Override
-        public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           return null;
         }
 
         @Override
-        public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, final ValueRequirement desiredValue) {
+        public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+            final ValueRequirement desiredValue) {
           return null;
         }
 
@@ -64,7 +65,7 @@ public class CachingFunctionRepositoryCompilerTest {
         }
 
         @Override
-        public boolean canApplyTo(FunctionCompilationContext context, ComputationTarget target) {
+        public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
           return false;
         }
 

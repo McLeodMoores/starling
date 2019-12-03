@@ -17,8 +17,8 @@ import com.opengamma.analytics.math.cube.Cube;
 import com.opengamma.analytics.math.cube.FunctionalDoublesCube;
 import com.opengamma.analytics.math.function.Function;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.util.test.TestGroup;
 
@@ -85,84 +85,66 @@ public class HestonPDETestCase {
     // V_UPPER = new DirichletBoundaryCondition2D(0.0, 5 * V0);
 
     // TODO these more sophisticated boundary conditions don't work
-    // V_LOWER = new DirichletBoundaryCondition2D(FunctionalDoublesSurface.from(volZeroBoundary), 0); // TODO should be solving the convection PDE on this boundary
-    // V_UPPER = new DirichletBoundaryCondition2D(FunctionalDoublesSurface.from(volInfiniteBoundary), 5 * V0); // option the same as underlying for vol -> infinity
+    // V_LOWER = new DirichletBoundaryCondition2D(FunctionalDoublesSurface.from(volZeroBoundary), 0); // TODO should be solving the
+    // convection PDE on this boundary
+    // V_UPPER = new DirichletBoundaryCondition2D(FunctionalDoublesSurface.from(volInfiniteBoundary), 5 * V0); // option the same as
+    // underlying for vol -> infinity
 
-    final Function<Double, Double> a = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        final double x = txy[1];
-        final double y = txy[2];
-        return -0.5 * x * x * y;
-      }
+    final Function<Double, Double> a = txy -> {
+      Validate.isTrue(txy.length == 3);
+      final double x = txy[1];
+      final double y = txy[2];
+      return -0.5 * x * x * y;
     };
     A = FunctionalDoublesCube.from(a);
 
-    final Function<Double, Double> b = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        final double x = txy[1];
-        return -x * RATE;
-      }
+    final Function<Double, Double> b = txy -> {
+      Validate.isTrue(txy.length == 3);
+      final double x = txy[1];
+      return -x * RATE;
     };
     B = FunctionalDoublesCube.from(b);
 
-    final Function<Double, Double> c = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        return RATE;
-      }
+    final Function<Double, Double> c = txy -> {
+      Validate.isTrue(txy.length == 3);
+      return RATE;
     };
     C = FunctionalDoublesCube.from(c);
 
-    final Function<Double, Double> d = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        final double y = txy[2];
-        return -0.5 * OMEGA * OMEGA * y;
-      }
+    final Function<Double, Double> d = txy -> {
+      Validate.isTrue(txy.length == 3);
+      final double y = txy[2];
+      return -0.5 * OMEGA * OMEGA * y;
     };
     D = FunctionalDoublesCube.from(d);
 
-    final Function<Double, Double> e = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        final double x = txy[1];
-        final double y = txy[2];
+    final Function<Double, Double> e = txy -> {
+      Validate.isTrue(txy.length == 3);
+      final double x = txy[1];
+      final double y = txy[2];
 
-        return -x * y * OMEGA * RHO;
-      }
+      return -x * y * OMEGA * RHO;
     };
     E = FunctionalDoublesCube.from(e);
 
-    final Function<Double, Double> f = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        final double y = txy[2];
-        return -KAPPA * (THETA - y);
-      }
+    final Function<Double, Double> f = txy -> {
+      Validate.isTrue(txy.length == 3);
+      final double y = txy[2];
+      return -KAPPA * (THETA - y);
     };
     F = FunctionalDoublesCube.from(f);
 
-    final Function<Double, Double> payoff = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... xy) {
-        Validate.isTrue(xy.length == 2);
-        final double x = xy[0];
-        return Math.max(x - STRIKE, 0);
-      }
+    final Function<Double, Double> payoff = xy -> {
+      Validate.isTrue(xy.length == 2);
+      final double x = xy[0];
+      return Math.max(x - STRIKE, 0);
     };
 
     DATA = new ConvectionDiffusion2DPDEDataBundle(A, B, C, D, E, F, FunctionalDoublesSurface.from(payoff));
   }
 
-  void testCallPrice(final ConvectionDiffusionPDESolver2D solver, final int timeSteps, final int spotSteps, final int volSqrSteps, final boolean print) {
+  static void testCallPrice(final ConvectionDiffusionPDESolver2D solver, final int timeSteps, final int spotSteps, final int volSqrSteps,
+      final boolean print) {
 
     final double deltaX = (F_UPPER.getLevel() - F_LOWER.getLevel()) / spotSteps;
     final double deltaY = (V_UPPER.getLevel() - V_LOWER.getLevel()) / volSqrSteps;
@@ -185,7 +167,8 @@ public class HestonPDETestCase {
       }
     }
 
-    // TODO There is no guarantee that F0 and V0 are grid points (it depends on the chosen step sizes), so we should do a surface interpolation (what fun!)
+    // TODO There is no guarantee that F0 and V0 are grid points (it depends on the chosen step sizes), so we should do a surface
+    // interpolation (what fun!)
     final double pdfPrice = res[(int) (F0 / deltaX)][(int) (V0 / deltaY)];
 
     // System.out.print("\n");
@@ -207,7 +190,7 @@ public class HestonPDETestCase {
       price[i] = strikeNprice[i][1];
     }
 
-    final Interpolator1D interpolator = Interpolator1DFactory.getInterpolator("DoubleQuadratic");
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of("DoubleQuadratic");
     final Interpolator1DDataBundle dataBundle = interpolator.getDataBundleFromSortedArrays(k, price);
 
     final double fftPrice = interpolator.interpolate(dataBundle, STRIKE);

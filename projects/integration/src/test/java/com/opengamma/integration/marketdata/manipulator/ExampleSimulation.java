@@ -5,8 +5,6 @@
  */
 package com.opengamma.integration.marketdata.manipulator;
 
-import static com.opengamma.integration.marketdata.manipulator.dsl.SimulationUtils.bucketedShift;
-import static com.opengamma.integration.marketdata.manipulator.dsl.SimulationUtils.pointShift;
 import static com.opengamma.integration.marketdata.manipulator.dsl.SimulationUtils.volShift;
 
 import java.util.List;
@@ -36,51 +34,42 @@ import com.opengamma.integration.server.RemoteServer;
 import com.opengamma.livedata.UserPrincipal;
 
 /**
- * Demonstration of the most straightforward way to run a simulation.
- * Assumes the examples-simulated server is running locally with the default configuration and data.
+ * Demonstration of the most straightforward way to run a simulation. Assumes the examples-simulated server is running locally with the default configuration
+ * and data.
  */
 /* package */ class ExampleSimulation {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleSimulation.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleSimulation.class);
 
   private static final Set<String> CURRENCY_PAIRS = ImmutableSet.of("GBPUSD", "EURUSD", "USDJPY", "CHFUSD");
   private static final List<Double> SCALING_FACTORS = ImmutableList.of(0.95, 1.0, 1.05);
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
 
     // set up the connection to the server that will run the simulation ------------------------------------------------
 
     try (RemoteServer server = RemoteServer.create("http://localhost:8080")) {
-      ViewProcessor viewProcessor = server.getViewProcessor();
-      ConfigSource configSource = server.getConfigSource();
-      String viewDefinitionName = "AUD Swaps (3m / 6m basis) (1)";
-      UniqueId viewDefId = SimulationUtils.latestViewDefinitionId(viewDefinitionName, configSource);
-      List<MarketDataSpecification> marketDataSpecs =
-          ImmutableList.<MarketDataSpecification>of(LiveMarketDataSpecification.of("Simulated live market data"));
+      final ViewProcessor viewProcessor = server.getViewProcessor();
+      final ConfigSource configSource = server.getConfigSource();
+      final String viewDefinitionName = "AUD Swaps (3m / 6m basis) (1)";
+      final UniqueId viewDefId = SimulationUtils.latestViewDefinitionId(viewDefinitionName, configSource);
+      final List<MarketDataSpecification> marketDataSpecs = ImmutableList
+          .<MarketDataSpecification> of(LiveMarketDataSpecification.of("Simulated live market data"));
 
       // define the simulation -----------------------------------------------------------------------------------------
 
-      Simulation simulation = new Simulation("Example simulation");
-      for (Double scalingFactor : SCALING_FACTORS) {
+      final Simulation simulation = new Simulation("Example simulation");
+      for (final Double scalingFactor : SCALING_FACTORS) {
         // add a scenario (a single calculation cycle and set of results) for each scale factor
-        Scenario scenario = simulation.scenario(Double.toString(scalingFactor));
-        for (String currencyPair : CURRENCY_PAIRS) {
+        final Scenario scenario = simulation.scenario(Double.toString(scalingFactor));
+        for (final String currencyPair : CURRENCY_PAIRS) {
           // bump each spot rate in the scenario by the scale factor
           scenario.marketDataPoint().id("OG_SYNTHETIC_TICKER", currencyPair).apply().scaling(scalingFactor);
         }
         scenario.curve().named("foo").currencies("USD").apply().parallelShift(0.1);
-        scenario.surface().named("bar").apply().shifts(ScenarioShiftType.ABSOLUTE,
-                                                       volShift(Period.ofMonths(6), 3.5, 0.1),
-                                                       volShift(Period.ofYears(1), 4.5, 0.2));
+        scenario.surface().named("bar").apply().shifts(ScenarioShiftType.ABSOLUTE, volShift(Period.ofMonths(6), 3.5, 0.1),
+            volShift(Period.ofYears(1), 4.5, 0.2));
         scenario.spotRate().currencyPair("EURUSD").apply().scaling(0.1);
-        scenario.curveData().currencies("EUR").apply()
-            .bucketedShifts(ScenarioShiftType.RELATIVE,
-                            bucketedShift(Period.ofYears(1), Period.ofYears(2), 0.01),
-                            bucketedShift(Period.ofYears(2), Period.ofYears(3), 0.005));
-        scenario.curveData().currencies("EUR").apply()
-            .pointShifts(ScenarioShiftType.ABSOLUTE,
-                         pointShift(Period.ofMonths(3), 0.01),
-                         pointShift(Period.ofMonths(6), 0.015));
       }
 
       // run the simulation --------------------------------------------------------------------------------------------
@@ -91,25 +80,25 @@ import com.opengamma.livedata.UserPrincipal;
 
   private static class Listener extends AbstractViewResultListener {
 
-      @Override
-      public UserPrincipal getUser() {
-        return UserPrincipal.getTestUser();
-      }
-
-      @Override
-      public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
-        s_logger.info("view definition compiled");
-      }
-
-      @Override
-      public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
-        s_logger.warn("view definition compilation failed", exception);
-      }
-
-      @Override
-      public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
-        s_logger.info("cycle completed");
-      }
+    @Override
+    public UserPrincipal getUser() {
+      return UserPrincipal.getTestUser();
     }
+
+    @Override
+    public void viewDefinitionCompiled(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
+      LOGGER.info("view definition compiled");
+    }
+
+    @Override
+    public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
+      LOGGER.warn("view definition compilation failed", exception);
+    }
+
+    @Override
+    public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
+      LOGGER.info("cycle completed");
+    }
+  }
 
 }

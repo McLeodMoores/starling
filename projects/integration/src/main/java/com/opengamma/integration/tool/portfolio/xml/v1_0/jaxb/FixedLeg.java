@@ -21,7 +21,7 @@ public class FixedLeg extends SwapLeg {
     return _rate;
   }
 
-  public void setRate(BigDecimal rate) {
+  public void setRate(final BigDecimal rate) {
     _rate = rate;
   }
 }

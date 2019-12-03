@@ -22,7 +22,8 @@ import com.opengamma.financial.analytics.volatility.surface.BloombergEquityFutur
  * SurfaceProvider provides ticker codes for creation of surfaces. These are serialized along with VolatilitySurfaceSpecification
  */
 @FudgeBuilderFor(BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider.class)
-public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProviderFudgeBuilder implements FudgeBuilder<BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider> {
+public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProviderFudgeBuilder
+    implements FudgeBuilder<BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider> {
   /** The field indicating which value is the cutoff for asking for calls or puts */
   private static final String CALL_FIELD_NAME = "useCallAboveStrikeValue";
   /** The exchange id field name */
@@ -49,17 +50,17 @@ public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProviderFudge
   @Override
   public BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     String futureOptionPrefix = message.getString(PREFIX_FIELD_NAME);
-    //backward compatibility
+    // backward compatibility
     if (futureOptionPrefix == null) {
       futureOptionPrefix = message.getString("futureOptionPrefix");
     }
     String postfix = message.getString(POSTFIX_FIELD_NAME);
-    //backward compatibility
+    // backward compatibility
     if (postfix == null) {
       postfix = message.getString("postfix");
     }
     String dataFieldName = message.getString(DATA_FIELD_NAME);
-    //backward compatibility
+    // backward compatibility
     if (dataFieldName == null) {
       dataFieldName = message.getString("dataFieldName");
     }
@@ -68,15 +69,18 @@ public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProviderFudge
       final String exchangeId = message.getString(EXCHANGE_ID_FIELD_NAME);
       if (message.hasField(TICKER_SCHEME_NAME)) {
         final String tickerScheme = message.getString(TICKER_SCHEME_NAME);
-        return new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(futureOptionPrefix, postfix, dataFieldName, useCallAboveValue, exchangeId, tickerScheme);
+        return new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(futureOptionPrefix, postfix, dataFieldName, useCallAboveValue, exchangeId,
+            tickerScheme);
       }
       return new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(futureOptionPrefix, postfix, dataFieldName, useCallAboveValue, exchangeId);
     }
-    if (message.hasField(TICKER_SCHEME_NAME)) { //this will never be hit, but better to be safe
+    if (message.hasField(TICKER_SCHEME_NAME)) { // this will never be hit, but better to be safe
       final String tickerScheme = message.getString(TICKER_SCHEME_NAME);
-      return new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(futureOptionPrefix, postfix, dataFieldName, useCallAboveValue, DEFAULT_EXCHANGE_ID, tickerScheme);
+      return new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(futureOptionPrefix, postfix, dataFieldName, useCallAboveValue,
+          DEFAULT_EXCHANGE_ID, tickerScheme);
     }
-    return new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(futureOptionPrefix, postfix, dataFieldName, useCallAboveValue, DEFAULT_EXCHANGE_ID);
+    return new BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider(futureOptionPrefix, postfix, dataFieldName, useCallAboveValue,
+        DEFAULT_EXCHANGE_ID);
   }
 
 }

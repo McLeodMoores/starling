@@ -15,10 +15,10 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a vanilla foreign exchange European option. When the option is a call, the option holder has the right to enter into the Forex transaction; 
+ * Class describing a vanilla foreign exchange European option. When the option is a call, the option holder has the right to enter into the Forex transaction;
  * if the option is a put, the option holder has the right to enter into a Forex transaction equal to the underlying but with opposite signs.
- * A Call on a Forex EUR 1.00 / USD -1.41 is thus the right to call 1.00 EUR and put 1.41 USD. A put on a Forex EUR -1.00 / USD 1.41 is the right to 
- * exchange -(-1.00) EUR = 1.00 EUR and -1.41 EUR; it is thus also the right to call 1.00 EUR and put 1.41 USD. A put on a Forex  USD 1.41 / EUR -1.00 is 
+ * A Call on a Forex EUR 1.00 / USD -1.41 is thus the right to call 1.00 EUR and put 1.41 USD. A put on a Forex EUR -1.00 / USD 1.41 is the right to
+ * exchange -(-1.00) EUR = 1.00 EUR and -1.41 EUR; it is thus also the right to call 1.00 EUR and put 1.41 USD. A put on a Forex  USD 1.41 / EUR -1.00 is
  * also the right to call 1.00 EUR and put 1.41 USD.
  */
 public class ForexOptionVanilla extends EuropeanVanillaOption implements InstrumentDerivative {
@@ -40,7 +40,8 @@ public class ForexOptionVanilla extends EuropeanVanillaOption implements Instrum
    * @param isLong The long (true) / short (false) flag.
    */
   public ForexOptionVanilla(final Forex underlyingForex, final double expirationTime, final boolean isCall, final boolean isLong) {
-    super(-underlyingForex.getPaymentCurrency2().getAmount() / underlyingForex.getPaymentCurrency1().getAmount(), expirationTime, isCall ^ (underlyingForex.getPaymentCurrency1().getAmount() < 0));
+    super(-underlyingForex.getPaymentCurrency2().getAmount() / underlyingForex.getPaymentCurrency1().getAmount(),
+        expirationTime, isCall ^ underlyingForex.getPaymentCurrency1().getAmount() < 0);
     Validate.isTrue(expirationTime <= underlyingForex.getPaymentTime(), "Expiration should be before payment.");
     this._underlyingForex = underlyingForex;
     _isLong = isLong;

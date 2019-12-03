@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.tool;
@@ -30,56 +30,56 @@ import com.opengamma.util.db.DbDateUtils;
 import com.opengamma.util.db.tool.DbToolContext;
 
 /**
- * Tool converting Organistaion Database to Legal Entity Database
+ * Tool converting Organistaion Database to Legal Entity Database.
  */
 @Scriptable
 public class DbConvertOrganisationsToLegalEntitiesTool extends AbstractDbTool<DbToolContext> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbConvertOrganisationsToLegalEntitiesTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbConvertOrganisationsToLegalEntitiesTool.class);
 
   @Override
-  protected void doRun(boolean write, File outputFile) throws Exception {
-    String getAllSql = "SELECT ID,OID,VER_FROM_INSTANT,VER_TO_INSTANT,CORR_FROM_INSTANT,CORR_TO_INSTANT," +
-        "PROVIDER_SCHEME,PROVIDER_VALUE,OBLIGOR_SHORT_NAME,OBLIGOR_RED_CODE,OBLIGOR_TICKER,OBLIGOR_COUNTRY," +
-        "OBLIGOR_REGION,OBLIGOR_SECTOR,OBLIGOR_COMPOSITE_RATING,OBLIGOR_IMPLIED_RATING,OBLIGOR_FITCH_CREDIT_RATING," +
-        "OBLIGOR_MOODYS_CREDIT_RATING,OBLIGOR_STANDARD_AND_POORS_CREDIT_RATING,OBLIGOR_HAS_DEFAULTED FROM ORG_ORGANISATION";
+  protected void doRun(final boolean write, final File outputFile) throws Exception {
+    final String getAllSql = "SELECT ID,OID,VER_FROM_INSTANT,VER_TO_INSTANT,CORR_FROM_INSTANT,CORR_TO_INSTANT,"
+        + "PROVIDER_SCHEME,PROVIDER_VALUE,OBLIGOR_SHORT_NAME,OBLIGOR_RED_CODE,OBLIGOR_TICKER,OBLIGOR_COUNTRY,"
+        + "OBLIGOR_REGION,OBLIGOR_SECTOR,OBLIGOR_COMPOSITE_RATING,OBLIGOR_IMPLIED_RATING,OBLIGOR_FITCH_CREDIT_RATING,"
+        + "OBLIGOR_MOODYS_CREDIT_RATING,OBLIGOR_STANDARD_AND_POORS_CREDIT_RATING,OBLIGOR_HAS_DEFAULTED FROM ORG_ORGANISATION";
 
-    Connection conn = getDbToolContext().getDbConnector().getDataSource().getConnection();
+    final Connection conn = getDbToolContext().getDbConnector().getDataSource().getConnection();
 
-    Statement stmt = conn.createStatement(
+    final Statement stmt = conn.createStatement(
         ResultSet.TYPE_SCROLL_INSENSITIVE,
         ResultSet.CONCUR_READ_ONLY);
     stmt.setFetchSize(Integer.MIN_VALUE);
-    // The combination of a forward-only, read-only result set, with a fetch size of Integer.MIN_VALUE serves as 
-    // a signal to the driver to stream result sets row-by-row. After this any result sets created with the statement 
+    // The combination of a forward-only, read-only result set, with a fetch size of Integer.MIN_VALUE serves as
+    // a signal to the driver to stream result sets row-by-row. After this any result sets created with the statement
     // will be retrieved row-by-row.
-    ResultSet rs = stmt.executeQuery(getAllSql);
+    final ResultSet rs = stmt.executeQuery(getAllSql);
 
-    LegalEntityMaster legalEntityMaster = new DbLegalEntityBeanMaster(getDbToolContext().getDbConnector());
+    final LegalEntityMaster legalEntityMaster = new DbLegalEntityBeanMaster(getDbToolContext().getDbConnector());
 
     while (rs.next()) {
-      long id = rs.getLong("ID");
-      long oid = rs.getLong("OID");
-      Instant verFrom = DbDateUtils.fromSqlTimestamp(rs.getTimestamp("VER_FROM_INSTANT"));
-      Instant verTo = DbDateUtils.fromSqlTimestamp(rs.getTimestamp("VER_TO_INSTANT"));
-      Instant corrFrom = DbDateUtils.fromSqlTimestamp(rs.getTimestamp("CORR_FROM_INSTANT"));
-      Instant corrTo = DbDateUtils.fromSqlTimestamp(rs.getTimestamp("CORR_TO_INSTANT"));
-      String providerScheme = rs.getString("PROVIDER_SCHEME");
-      String providerValue = rs.getString("PROVIDER_VALUE");
-      String name = rs.getString("OBLIGOR_SHORT_NAME");
-      String redCode = rs.getString("OBLIGOR_RED_CODE");
-      String ticker = rs.getString("OBLIGOR_TICKER");
-      String country = rs.getString("OBLIGOR_COUNTRY");
-      String region = rs.getString("OBLIGOR_REGION");
-      String sector = rs.getString("OBLIGOR_SECTOR");
-      String compositeRating = rs.getString("OBLIGOR_COMPOSITE_RATING");
-      String impliedRating = rs.getString("OBLIGOR_IMPLIED_RATING");
-      String fitchCreditRating = rs.getString("OBLIGOR_FITCH_CREDIT_RATING");
-      String moodysCreditRating = rs.getString("OBLIGOR_MOODYS_CREDIT_RATING");
-      String standardAndPoorsCreditRating = rs.getString("OBLIGOR_STANDARD_AND_POORS_CREDIT_RATING");
-      String hasDefaulted = rs.getString("OBLIGOR_HAS_DEFAULTED");
+      final long id = rs.getLong("ID");
+      final long oid = rs.getLong("OID");
+      final Instant verFrom = DbDateUtils.fromSqlTimestamp(rs.getTimestamp("VER_FROM_INSTANT"));
+      final Instant verTo = DbDateUtils.fromSqlTimestamp(rs.getTimestamp("VER_TO_INSTANT"));
+      final Instant corrFrom = DbDateUtils.fromSqlTimestamp(rs.getTimestamp("CORR_FROM_INSTANT"));
+      final Instant corrTo = DbDateUtils.fromSqlTimestamp(rs.getTimestamp("CORR_TO_INSTANT"));
+      final String providerScheme = rs.getString("PROVIDER_SCHEME");
+      final String providerValue = rs.getString("PROVIDER_VALUE");
+      final String name = rs.getString("OBLIGOR_SHORT_NAME");
+      final String redCode = rs.getString("OBLIGOR_RED_CODE");
+      final String ticker = rs.getString("OBLIGOR_TICKER");
+      final String country = rs.getString("OBLIGOR_COUNTRY");
+      final String region = rs.getString("OBLIGOR_REGION");
+      final String sector = rs.getString("OBLIGOR_SECTOR");
+      final String compositeRating = rs.getString("OBLIGOR_COMPOSITE_RATING");
+      final String impliedRating = rs.getString("OBLIGOR_IMPLIED_RATING");
+      final String fitchCreditRating = rs.getString("OBLIGOR_FITCH_CREDIT_RATING");
+      final String moodysCreditRating = rs.getString("OBLIGOR_MOODYS_CREDIT_RATING");
+      final String standardAndPoorsCreditRating = rs.getString("OBLIGOR_STANDARD_AND_POORS_CREDIT_RATING");
+      final String hasDefaulted = rs.getString("OBLIGOR_HAS_DEFAULTED");
 
-      ManageableLegalEntity legalEntity = new ManageableLegalEntity(name, ExternalIdBundle.of(ExternalSchemes.MARKIT_RED_CODE, redCode));
+      final ManageableLegalEntity legalEntity = new ManageableLegalEntity(name, ExternalIdBundle.of(ExternalSchemes.MARKIT_RED_CODE, redCode));
       legalEntity.setUniqueId(UniqueId.of(DbLegalEntityBeanMaster.IDENTIFIER_SCHEME_DEFAULT, Long.toString(oid), Long.toString(id - oid)));
       legalEntity.addExternalId(ExternalId.of("TICKER", ticker));
       legalEntity.addAttribute("country", country);
@@ -97,7 +97,7 @@ public class DbConvertOrganisationsToLegalEntitiesTool extends AbstractDbTool<Db
       legalEntity.getRatings().add(new Rating("Moodys", CreditRating.valueOf(moodysCreditRating), null));
       legalEntity.getRatings().add(new Rating("StandardAndPoors", CreditRating.valueOf(standardAndPoorsCreditRating), null));
 
-      LegalEntityDocument document = new LegalEntityDocument();
+      final LegalEntityDocument document = new LegalEntityDocument();
       document.setCorrectionFromInstant(corrFrom);
       document.setCorrectionToInstant(corrTo);
       document.setVersionFromInstant(verFrom);

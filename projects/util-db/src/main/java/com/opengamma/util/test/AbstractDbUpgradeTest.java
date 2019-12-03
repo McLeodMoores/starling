@@ -31,7 +31,7 @@ import com.opengamma.util.tuple.Triple;
  */
 public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
 
-  private static final Map<String, Map<String, String>> s_targetSchema = Maps.newHashMap();
+  private static final Map<String, Map<String, String>> TARGET_SCHEMA = Maps.newHashMap();
 
   private final List<Triple<String, String, String>> _comparisons = Lists.newLinkedList();
 
@@ -48,13 +48,13 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param databaseType  the database type, not null
    * @param schemaGroupName  the schema group name, not null
    * @param targetVersion  the target version
    * @param createVersion  the create version
    */
-  protected AbstractDbUpgradeTest(String databaseType, String schemaGroupName, final int targetVersion, final int createVersion) {
+  protected AbstractDbUpgradeTest(final String databaseType, final String schemaGroupName, final int targetVersion, final int createVersion) {
     ArgumentChecker.notNull(schemaGroupName, "schameGroupName");
     ArgumentChecker.notNull(databaseType, "databaseType");
     _schemaGroupName = schemaGroupName;
@@ -64,25 +64,39 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Sets the target and create versions, initializes the database and creates the tables.
+   *
+   * @throws Exception  if there is a problem
+   */
   @BeforeMethod(alwaysRun = true)
   public void setUp() throws Exception {
-    DbTool dbTool = getDbTool();
+    final DbTool dbTool = getDbTool();
     dbTool.setTargetVersion(_targetVersion);
     dbTool.setCreateVersion(_createVersion);
     dbTool.dropTestSchema();
     dbTool.createTestSchema();
-    dbTool.createTables(DbScriptUtils.getDbSchemaGroupMetadata(_schemaGroupName), dbTool.getTestCatalog(), dbTool.getTestSchema(), _targetVersion, _createVersion, this);
+    dbTool.createTables(DbScriptUtils.getDbSchemaGroupMetadata(_schemaGroupName), dbTool.getTestCatalog(),
+        dbTool.getTestSchema(), _targetVersion, _createVersion, this);
     dbTool.clearTestTables();
   }
 
+  /**
+   * Clears all databases.
+   */
   @AfterMethod(alwaysRun = true)
   public void tearDown() {
     // need to clear version cache from here
     // this is messy but necessary
-    AbstractDbTest.s_databaseTypeVersion.clear();
+    AbstractDbTest.DATABASE_TYPE_VERSION.clear();
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the database tool.
+   *
+   * @return  the tool
+   */
   protected DbTool getDbTool() {
     return initDbTool();
   }
@@ -98,7 +112,8 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
       synchronized (this) {
         dbTool = _dbTool;
         if (dbTool == null) {
-          _dbTool = dbTool = DbTest.createDbTool(_databaseType, null);  // CSIGNORE
+          dbTool = DbTest.createDbTool(_databaseType, null);
+          _dbTool = dbTool;
         }
       }
     }
@@ -106,32 +121,34 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the version schemas for each database type.
+   *
+   * @return  the version schemas
+   */
   protected Map<String, String> getVersionSchemas() {
-    Map<String, String> versionSchema = s_targetSchema.get(_databaseType);
+    Map<String, String> versionSchema = TARGET_SCHEMA.get(_databaseType);
     if (versionSchema == null) {
       versionSchema = new HashMap<>();
-      s_targetSchema.put(_databaseType, versionSchema);
+      TARGET_SCHEMA.put(_databaseType, versionSchema);
     }
     return versionSchema;
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests an upgrade.
+   */
   @Test(groups = TestGroup.UNIT_DB)
   public void testDatabaseUpgrade() {
-    for (Triple<String, String, String> comparison : _comparisons) {
-      /*
-       * System.out.println(comparison.getFirst() + " expected:");
-       * System.out.println(comparison.getSecond());
-       * System.out.println(comparison.getFirst() + " found:");
-       * System.out.println(comparison.getThird());
-       */
-      int diff = StringUtils.indexOfDifference(comparison.getSecond(), comparison.getThird());
+    for (final Triple<String, String, String> comparison : _comparisons) {
+      final int diff = StringUtils.indexOfDifference(comparison.getSecond(), comparison.getThird());
       if (diff >= 0) {
         System.err.println("Difference at " + diff + "in " + _databaseType + "/" + comparison.getFirst());
-        System.err.println("Upgraded --->..." + StringUtils.substring(comparison.getSecond(), diff - 200, diff) +
-          "<-!!!->" + StringUtils.substring(comparison.getSecond(), diff, diff + 200) + "...");
-        System.err.println(" Created --->..." + StringUtils.substring(comparison.getThird(), diff - 200, diff) +
-          "<-!!!->" + StringUtils.substring(comparison.getThird(), diff, diff + 200) + "...");
+        System.err.println("Upgraded --->..." + StringUtils.substring(comparison.getSecond(), diff - 200, diff)
+          + "<-!!!->" + StringUtils.substring(comparison.getSecond(), diff, diff + 200) + "...");
+        System.err.println(" Created --->..." + StringUtils.substring(comparison.getThird(), diff - 200, diff)
+          + "<-!!!->" + StringUtils.substring(comparison.getThird(), diff, diff + 200) + "...");
       }
       assertEquals(_databaseType + ": " + comparison.getFirst(), comparison.getSecond(), comparison.getThird());
     }
@@ -140,7 +157,7 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
   @Override
   public void tablesCreatedOrUpgraded(final int version, final DbSchemaGroupMetadata schemaGroupMetadata) {
     final Map<String, String> versionSchemas = getVersionSchemas();
-    String key = schemaGroupMetadata.getSchemaGroupName() + "_" + version;
+    final String key = schemaGroupMetadata.getSchemaGroupName() + "_" + version;
     if (versionSchemas.containsKey(key)) {
       // if we've already done the full schema, then we want to test that this upgrade has given us the same (but defer the comparison)
       _comparisons.add(Triple.of(key, versionSchemas.get(key), _dbTool.describeDatabase(schemaGroupMetadata.getSchemaGroupName())));

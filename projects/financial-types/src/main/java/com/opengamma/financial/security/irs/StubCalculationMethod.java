@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.apache.commons.collections.functors.NonePredicate;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
@@ -45,7 +44,7 @@ public final class StubCalculationMethod implements ImmutableBean {
    */
   @PropertyDefinition
   private final Double _firstStubRate;
-  
+
   /**
    * The last stub rate. Setting this will override any interpolation. This is an optional field.
    */
@@ -57,7 +56,7 @@ public final class StubCalculationMethod implements ImmutableBean {
    */
   @PropertyDefinition
   private final LocalDate _firstStubEndDate;
-  
+
   /**
    * The date at which the regular coupon periods ends and last stub period begins. This is an optional field, unless stub type is BOTH.
    */
@@ -69,25 +68,25 @@ public final class StubCalculationMethod implements ImmutableBean {
    */
   @PropertyDefinition
   private final ExternalId _firstStubStartReferenceRateId;
-  
+
   /**
    *  The External Id which corresponds to the end index rate for the first stub. This is an optional field.
    */
   @PropertyDefinition
   private final ExternalId _firstStubEndReferenceRateId;
-  
+
   /**
    *  The External Id which corresponds to the start index rate for the last stub. This is an optional field.
    */
   @PropertyDefinition
   private final ExternalId _lastStubStartReferenceRateId;
-  
+
   /**
    *  The External Id which corresponds to the end index rate for the last stub. This is an optional field.
    */
   @PropertyDefinition
-  private final ExternalId _lastStubEndReferenceRateId;  
-  
+  private final ExternalId _lastStubEndReferenceRateId;
+
   /**
    * Returns whether the first stub rate has been set.
    * @return whether the first stub rate has been set.
@@ -95,7 +94,7 @@ public final class StubCalculationMethod implements ImmutableBean {
   public boolean hasFirstStubRate() {
     return _firstStubRate != null && !_firstStubRate.isNaN();
   }
-  
+
   /**
    * Returns whether the last stub rate has been set.
    * @return whether the last stub rate has been set.
@@ -103,7 +102,7 @@ public final class StubCalculationMethod implements ImmutableBean {
   public boolean hasLastStubRate() {
     return _lastStubRate != null && !_lastStubRate.isNaN();
   }
-  
+
   /**
    * Returns whether the first stub has a reference rate set for the start.
    * @return whether the first stub start reference rate id has been set.
@@ -111,7 +110,7 @@ public final class StubCalculationMethod implements ImmutableBean {
   public boolean hasFirstStubStartReferenceRateId() {
     return _firstStubStartReferenceRateId != null;
   }
-  
+
   /**
    * Returns whether the first stub has a reference rate set for the end.
    * @return whether the first stub end reference rate id has been set.
@@ -119,7 +118,7 @@ public final class StubCalculationMethod implements ImmutableBean {
   public boolean hasFirstStubEndReferenceRateId() {
     return _firstStubEndReferenceRateId != null;
   }
-  
+
   /**
    * Returns whether the last stub has a reference rate set for the start.
    * @return whether the last stub start reference rate id has been set.
@@ -127,7 +126,7 @@ public final class StubCalculationMethod implements ImmutableBean {
   public boolean hasLastStubStartReferenceRateId() {
     return _lastStubStartReferenceRateId != null;
   }
-  
+
   /**
    * Returns whether the last stub has a reference rate set for the end.
    * @return whether the last stub end reference rate id has been set.
@@ -138,7 +137,7 @@ public final class StubCalculationMethod implements ImmutableBean {
 
   /**
    * Validate inputs.
-   * 
+   *
    * @return this stub calculation method
    */
   public StubCalculationMethod validate() {
@@ -146,21 +145,22 @@ public final class StubCalculationMethod implements ImmutableBean {
       case BOTH:
         ArgumentChecker.notNull(getFirstStubEndDate(), "Dual stub must have a first stub period end date");
         ArgumentChecker.notNull(getLastStubEndDate(), "Dual stub must have a last stub period end date");
-        
+
         if (hasFirstStubStartReferenceRateId() && !hasFirstStubEndReferenceRateId()) {
           throw new OpenGammaRuntimeException("Dual stub has a first stub start reference rate identifier without a stub end reference rate");
         } else if (hasFirstStubEndReferenceRateId() && !hasFirstStubStartReferenceRateId()) {
           throw new OpenGammaRuntimeException("Dual stub has a first stub end reference rate identifier without a stub start reference rate");
         }
-        
+
         if (hasLastStubStartReferenceRateId() && !hasLastStubEndReferenceRateId()) {
           throw new OpenGammaRuntimeException("Dual stub has a last stub start reference rate identifier without a stub end reference rate");
         } else if (hasLastStubEndReferenceRateId() && !hasLastStubStartReferenceRateId()) {
           throw new OpenGammaRuntimeException("Dual stub has a last stub end reference rate identifier without a stub start reference rate");
-        }        
+        }
         break;
-        
+
       case SHORT_START:
+      case LONG_START:
         if (hasFirstStubStartReferenceRateId() && !hasFirstStubEndReferenceRateId()) {
           throw new OpenGammaRuntimeException("Stub has a first stub start reference rate identifier without a stub end reference rate");
         }
@@ -168,25 +168,8 @@ public final class StubCalculationMethod implements ImmutableBean {
           throw new OpenGammaRuntimeException("Stub has a first stub end reference rate identifier without a stub start reference rate");
         }
         break;
-        
-      case LONG_START:
-        if (hasFirstStubStartReferenceRateId() && !hasFirstStubEndReferenceRateId()) {
-          throw new OpenGammaRuntimeException("Stub has a first stub start reference rate identifier without a stub end reference rate");
-        }
-        if (hasFirstStubEndReferenceRateId() && !hasFirstStubStartReferenceRateId()) {
-          throw new OpenGammaRuntimeException("Dual stub has a first stub end reference rate identifier without a stub start reference rate");
-        }
-        break;
-        
+
       case SHORT_END:
-        if (hasLastStubStartReferenceRateId() && !hasLastStubEndReferenceRateId()) {
-          throw new OpenGammaRuntimeException("Stub has a last stub start reference rate identifier without a stub end reference rate");
-        }
-        if (hasLastStubEndReferenceRateId() && !hasLastStubStartReferenceRateId()) {
-          throw new OpenGammaRuntimeException("Stub has a last stub end reference rate identifier without a stub start reference rate");
-        }
-        break;
-        
       case LONG_END:
         if (hasLastStubStartReferenceRateId() && !hasLastStubEndReferenceRateId()) {
           throw new OpenGammaRuntimeException("Stub has a last stub start reference rate identifier without a stub end reference rate");
@@ -194,13 +177,11 @@ public final class StubCalculationMethod implements ImmutableBean {
         if (hasLastStubEndReferenceRateId() && !hasLastStubStartReferenceRateId()) {
           throw new OpenGammaRuntimeException("Stub has a last stub end reference rate identifier without a stub start reference rate");
         }
-        
-        if (hasLastStubStartReferenceRateId() && !hasLastStubEndReferenceRateId()) {
-          throw new OpenGammaRuntimeException("Dual stub has a last stub start reference rate identifier without a stub end reference rate");
-        } else if (hasLastStubEndReferenceRateId() && !hasLastStubStartReferenceRateId()) {
-          throw new OpenGammaRuntimeException("Dual stub has a last stub end reference rate identifier without a stub start reference rate");
-        }        
-        break;         
+        break;
+
+      case NONE:
+      default:
+        break;
     }
     return this;
   }
@@ -361,15 +342,15 @@ public final class StubCalculationMethod implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       StubCalculationMethod other = (StubCalculationMethod) obj;
-      return JodaBeanUtils.equal(getType(), other.getType()) &&
-          JodaBeanUtils.equal(getFirstStubRate(), other.getFirstStubRate()) &&
-          JodaBeanUtils.equal(getLastStubRate(), other.getLastStubRate()) &&
-          JodaBeanUtils.equal(getFirstStubEndDate(), other.getFirstStubEndDate()) &&
-          JodaBeanUtils.equal(getLastStubEndDate(), other.getLastStubEndDate()) &&
-          JodaBeanUtils.equal(getFirstStubStartReferenceRateId(), other.getFirstStubStartReferenceRateId()) &&
-          JodaBeanUtils.equal(getFirstStubEndReferenceRateId(), other.getFirstStubEndReferenceRateId()) &&
-          JodaBeanUtils.equal(getLastStubStartReferenceRateId(), other.getLastStubStartReferenceRateId()) &&
-          JodaBeanUtils.equal(getLastStubEndReferenceRateId(), other.getLastStubEndReferenceRateId());
+      return JodaBeanUtils.equal(_type, other._type) &&
+          JodaBeanUtils.equal(_firstStubRate, other._firstStubRate) &&
+          JodaBeanUtils.equal(_lastStubRate, other._lastStubRate) &&
+          JodaBeanUtils.equal(_firstStubEndDate, other._firstStubEndDate) &&
+          JodaBeanUtils.equal(_lastStubEndDate, other._lastStubEndDate) &&
+          JodaBeanUtils.equal(_firstStubStartReferenceRateId, other._firstStubStartReferenceRateId) &&
+          JodaBeanUtils.equal(_firstStubEndReferenceRateId, other._firstStubEndReferenceRateId) &&
+          JodaBeanUtils.equal(_lastStubStartReferenceRateId, other._lastStubStartReferenceRateId) &&
+          JodaBeanUtils.equal(_lastStubEndReferenceRateId, other._lastStubEndReferenceRateId);
     }
     return false;
   }
@@ -377,15 +358,15 @@ public final class StubCalculationMethod implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFirstStubRate());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getLastStubRate());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFirstStubEndDate());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getLastStubEndDate());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFirstStubStartReferenceRateId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFirstStubEndReferenceRateId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getLastStubStartReferenceRateId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getLastStubEndReferenceRateId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_type);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_firstStubRate);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_lastStubRate);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_firstStubEndDate);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_lastStubEndDate);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_firstStubStartReferenceRateId);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_firstStubEndReferenceRateId);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_lastStubStartReferenceRateId);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_lastStubEndReferenceRateId);
     return hash;
   }
 
@@ -393,15 +374,15 @@ public final class StubCalculationMethod implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(320);
     buf.append("StubCalculationMethod{");
-    buf.append("type").append('=').append(getType()).append(',').append(' ');
-    buf.append("firstStubRate").append('=').append(getFirstStubRate()).append(',').append(' ');
-    buf.append("lastStubRate").append('=').append(getLastStubRate()).append(',').append(' ');
-    buf.append("firstStubEndDate").append('=').append(getFirstStubEndDate()).append(',').append(' ');
-    buf.append("lastStubEndDate").append('=').append(getLastStubEndDate()).append(',').append(' ');
-    buf.append("firstStubStartReferenceRateId").append('=').append(getFirstStubStartReferenceRateId()).append(',').append(' ');
-    buf.append("firstStubEndReferenceRateId").append('=').append(getFirstStubEndReferenceRateId()).append(',').append(' ');
-    buf.append("lastStubStartReferenceRateId").append('=').append(getLastStubStartReferenceRateId()).append(',').append(' ');
-    buf.append("lastStubEndReferenceRateId").append('=').append(JodaBeanUtils.toString(getLastStubEndReferenceRateId()));
+    buf.append("type").append('=').append(_type).append(',').append(' ');
+    buf.append("firstStubRate").append('=').append(_firstStubRate).append(',').append(' ');
+    buf.append("lastStubRate").append('=').append(_lastStubRate).append(',').append(' ');
+    buf.append("firstStubEndDate").append('=').append(_firstStubEndDate).append(',').append(' ');
+    buf.append("lastStubEndDate").append('=').append(_lastStubEndDate).append(',').append(' ');
+    buf.append("firstStubStartReferenceRateId").append('=').append(_firstStubStartReferenceRateId).append(',').append(' ');
+    buf.append("firstStubEndReferenceRateId").append('=').append(_firstStubEndReferenceRateId).append(',').append(' ');
+    buf.append("lastStubStartReferenceRateId").append('=').append(_lastStubStartReferenceRateId).append(',').append(' ');
+    buf.append("lastStubEndReferenceRateId").append('=').append(JodaBeanUtils.toString(_lastStubEndReferenceRateId));
     buf.append('}');
     return buf.toString();
   }
@@ -739,19 +720,31 @@ public final class StubCalculationMethod implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.fudgemsg;
@@ -22,18 +22,24 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class OpenGammaFudgeContextTest {
 
+  /**
+   *
+   */
   @Test
-  public void test_context() {
+  public void testContext() {
     // simple basic test
-    FudgeContext context = OpenGammaFudgeContext.getInstance();
+    final FudgeContext context = OpenGammaFudgeContext.getInstance();
     assertNotNull(context);
     assertNotNull(context.getObjectDictionary());
     assertTrue(context.getObjectDictionary().getObjectBuilder(Paging.class) instanceof PagingFudgeBuilder);
     assertTrue(context.getObjectDictionary().getMessageBuilder(Paging.class) instanceof PagingFudgeBuilder);
   }
 
+  /**
+   *
+   */
   @Test
-  public void test_cached() {
+  public void testCached() {
     assertSame(OpenGammaFudgeContext.getInstance(), OpenGammaFudgeContext.getInstance());
   }
 

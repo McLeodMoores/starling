@@ -21,25 +21,25 @@ public class ActiveMQTransportListener implements TransportListener {
   /**
    * The JMS sender factory.
    */
-  private JmsSenderFactory _senderFactory;
+  private final JmsSenderFactory _senderFactory;
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param senderFactory  the sender factory to use, not null
    */
-  public ActiveMQTransportListener(JmsSenderFactory senderFactory) {
+  public ActiveMQTransportListener(final JmsSenderFactory senderFactory) {
     ArgumentChecker.notNull(senderFactory, "JMS Sender factory");
     _senderFactory = senderFactory;
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public void onCommand(Object command) {
+  public void onCommand(final Object command) {
   }
 
   @Override
-  public void onException(IOException error) {
+  public void onException(final IOException error) {
   }
 
   @Override

@@ -22,17 +22,20 @@ import com.opengamma.util.test.TestGroup;
 public class StandardRulesTest {
 
 
+  /**
+   * Tests the no normalization rules.
+   */
   @Test
   public void noNormalization() {
-    NormalizationRuleSet ruleSet = StandardRules.getNoNormalization();
-    
-    MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
+    final NormalizationRuleSet ruleSet = StandardRules.getNoNormalization();
+
+    final MutableFudgeMsg msg = OpenGammaFudgeContext.getInstance().newMessage();
     msg.add("Foo", "1");
     msg.add("Bar", 2.0);
     msg.add("Baz", 500);
-    
-    FieldHistoryStore store = new FieldHistoryStore();
-    FudgeMsg normalizedMsg = ruleSet.getNormalizedMessage(msg, "123", store);
+
+    final FieldHistoryStore store = new FieldHistoryStore();
+    final FudgeMsg normalizedMsg = ruleSet.getNormalizedMessage(msg, "123", store);
     assertEquals(msg, normalizedMsg);
   }
 

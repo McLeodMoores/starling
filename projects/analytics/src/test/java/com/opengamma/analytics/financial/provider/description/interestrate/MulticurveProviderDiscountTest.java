@@ -35,7 +35,7 @@ public class MulticurveProviderDiscountTest {
 
   @Test
   public void testAddingSameDiscountingCurveWithSameCurrencySucceeds() {
-    YieldAndDiscountCurve test = mockCurve("test");
+    final YieldAndDiscountCurve test = mockCurve("test");
     _provider.setCurve(Currency.USD, test);
     _provider.setCurve(Currency.USD, test);
   }
@@ -48,7 +48,7 @@ public class MulticurveProviderDiscountTest {
 
   @Test
   public void testAddingSameForwardIborCurveWithSameIndexSucceeds() {
-    YieldAndDiscountCurve test = mockCurve("test");
+    final YieldAndDiscountCurve test = mockCurve("test");
     _provider.setCurve(IBOR_INDEX_1, test);
     _provider.setCurve(IBOR_INDEX_1, test);
   }
@@ -61,7 +61,7 @@ public class MulticurveProviderDiscountTest {
 
   @Test
   public void testAddingSameForwardONCurveWithSameIndexSucceeds() {
-    YieldAndDiscountCurve test = mockCurve("test");
+    final YieldAndDiscountCurve test = mockCurve("test");
     _provider.setCurve(INDEX_ON, test);
     _provider.setCurve(INDEX_ON, test);
   }
@@ -69,12 +69,12 @@ public class MulticurveProviderDiscountTest {
   private YieldAndDiscountCurve mockCurve(final String name) {
     return new YieldAndDiscountCurve(name) {
       @Override
-      public double getForwardRate(double t) {
+      public double getForwardRate(final double t) {
         return 0;
       }
 
       @Override
-      public double[] getInterestRateParameterSensitivity(double time) {
+      public double[] getInterestRateParameterSensitivity(final double time) {
         return new double[0];
       }
 
@@ -89,7 +89,7 @@ public class MulticurveProviderDiscountTest {
       }
 
       @Override
-      public double getInterestRate(Double x) {
+      public double getInterestRate(final Double x) {
         return 0;
       }
     };

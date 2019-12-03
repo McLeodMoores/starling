@@ -18,7 +18,7 @@ public class ScenarioResultModel {
 
   private final Map<String, Object> _parameters;
 
-  /* package */ ScenarioResultModel(SimpleResultModel results, Map<String, Object> parameters) {
+  /* package */ ScenarioResultModel(final SimpleResultModel results, final Map<String, Object> parameters) {
     _results = ArgumentChecker.notNull(results, "results");
     _parameters = ArgumentChecker.notNull(parameters, "parameters");
   }
@@ -46,9 +46,9 @@ public class ScenarioResultModel {
 
   @Override
   public String toString() {
-    return "ScenarioResultModel [" +
-        ", _results=" + _results +
-        "_parameters=" + _parameters +
-        "]";
+    return "ScenarioResultModel ["
+        + ", _results=" + _results
+        + "_parameters=" + _parameters
+        + "]";
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance.pricing;
@@ -27,8 +27,8 @@ import com.opengamma.analytics.financial.model.volatility.local.PureLocalVolatil
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * Class to calculate the expected variance (<b>not</b> annualised) of an equity variance swap when a discount curve, affine dividends and a <b>pure</b> local volatility surface is 
- * specified. See White (2012), Equity Variance Swap with Dividends, for details of the model.
+ * Class to calculate the expected variance (<b>not</b> annualised) of an equity variance swap when a discount curve,
+ * affine dividends and a <b>pure</b> local volatility surface is  specified. See White (2012), Equity Variance Swap with Dividends, for details of the model.
  */
 public class EquityVarianceSwapBackwardsPurePDE {
   /** Bunching parameter for the time mesh */
@@ -51,7 +51,7 @@ public class EquityVarianceSwapBackwardsPurePDE {
   private final ConvectionDiffusionPDESolver _solver;
 
   /**
-   * Sets up the PDE
+   * Sets up the PDE.
    */
   public EquityVarianceSwapBackwardsPurePDE() {
     _nTimeSteps = 100;
@@ -66,7 +66,8 @@ public class EquityVarianceSwapBackwardsPurePDE {
    * @param dividends The dividends structure, not null
    * @param expiry The expiry of the variance swap, greater than zero
    * @param pureLocalVolSurface A <b>pure</b> local volatility surface, not null
-   * @return The expected variance with and without adjustments for the dividend payments (the former is usually the case for single stock and the latter for indices)
+   * @return The expected variance with and without adjustments for the dividend payments
+   * (the former is usually the case for single stock and the latter for indices)
    */
   public double[] expectedVariance(final double spot, final YieldAndDiscountCurve discountCurve, final AffineDividends dividends, final double expiry,
       final PureLocalVolatilitySurface pureLocalVolSurface) {
@@ -90,7 +91,8 @@ public class EquityVarianceSwapBackwardsPurePDE {
     final MeshingFunction spaceMesh = new ExponentialMeshing(yMin, yMax, _nSpaceSteps, LAMBDA_X);
 
     final PDEGrid1D grid = new PDEGrid1D(timeMesh, spaceMesh);
-    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> db = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, logPayoff, lower, upper, grid);
+    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> db =
+        new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, logPayoff, lower, upper, grid);
     final PDEResults1D res = _solver.solve(db);
 
     final int index = getLowerBoundIndex(res.getGrid().getSpaceNodes(), 0.0);
@@ -113,7 +115,7 @@ public class EquityVarianceSwapBackwardsPurePDE {
       i++;
     }
 
-    //TODO add correction terms 
+    //TODO add correction terms
     return new double[] {rvNoDivs + 2 * corrDivAdj, rvNoDivs + 2 * uncorrDivAdj };
   }
 
@@ -133,14 +135,16 @@ public class EquityVarianceSwapBackwardsPurePDE {
     final ConvectionDiffusionPDE1DStandardCoefficients pde = PDE_PROVIDER.getLogBackwardsLocalVol(tau, localVolSurface);
     final Function1D<Double, Double> initalCond = getCorrectionInitialCondition(ad, curves, index, correctForDividends);
 
-    final BoundaryCondition lower = new NeumannBoundaryCondition(getCorrectionLowerBoundaryCondition(ad, curves, index, correctForDividends, index), yMin, true);
+    final BoundaryCondition lower =
+        new NeumannBoundaryCondition(getCorrectionLowerBoundaryCondition(ad, curves, index, correctForDividends, index), yMin, true);
     final BoundaryCondition upper = new NeumannBoundaryCondition(0.0, yMax, false);
 
     final MeshingFunction timeMesh = new ExponentialMeshing(0, tau, _nTimeSteps, LAMBDA_T);
     final MeshingFunction spaceMesh = new HyperbolicMeshing(yMin, yMax, 0.0, _nSpaceSteps, LAMBDA_X);
 
     final PDEGrid1D grid = new PDEGrid1D(timeMesh, spaceMesh);
-    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> db = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, initalCond, lower, upper, grid);
+    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> db =
+        new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, initalCond, lower, upper, grid);
     final PDEResults1D res = _solver.solve(db);
 
     final int gIndex = getLowerBoundIndex(res.getGrid().getSpaceNodes(), 0.0);
@@ -155,7 +159,7 @@ public class EquityVarianceSwapBackwardsPurePDE {
   private Function1D<Double, Double> getLogPayoff(final EquityDividendsCurvesBundle divs, final double expiry) {
     final double f = divs.getF(expiry);
     final double d = divs.getD(expiry);
-    final double logF = (d == 0 ? Math.log(f) : 0.0);
+    final double logF = d == 0 ? Math.log(f) : 0.0;
     return new Function1D<Double, Double>() {
 
       @Override
@@ -216,7 +220,7 @@ public class EquityVarianceSwapBackwardsPurePDE {
     final double f = curves.getF(tau);
     final double d = curves.getD(tau);
     final double x = Math.exp(yMin);
-    //the assumption is that for very small x, x is stuck at low values, so the stock value at the dividend is just this projected by the forward 
+    //the assumption is that for very small x, x is stuck at low values, so the stock value at the dividend is just this projected by the forward
     final double s = (f - d) * x + d;
     final double temp = Math.log(s * (1 - beta) / (s + alpha));
     final double res = (correctForDividends ? 1.0 : 1.0 + temp) * alpha / s / (s + alpha) * (f - d);

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -13,39 +13,39 @@ public abstract class RemoteCalcNodeMessageVisitor {
 
   protected abstract void visitUnexpectedMessage(RemoteCalcNodeMessage message);
 
-  protected void visitCancelMessage(Cancel message) {
+  protected void visitCancelMessage(final Cancel message) {
     visitUnexpectedMessage(message);
   }
 
-  protected void visitExecuteMessage(Execute message) {
+  protected void visitExecuteMessage(final Execute message) {
     visitUnexpectedMessage(message);
   }
 
-  protected void visitFailureMessage(Failure message) {
+  protected void visitFailureMessage(final Failure message) {
     visitUnexpectedMessage(message);
   }
 
-  protected void visitInitMessage(Init message) {
+  protected void visitInitMessage(final Init message) {
     visitUnexpectedMessage(message);
   }
 
-  protected void visitInvocationsMessage(Invocations message) {
+  protected void visitInvocationsMessage(final Invocations message) {
     visitUnexpectedMessage(message);
   }
 
-  protected void visitIsAliveMessage(IsAlive message) {
+  protected void visitIsAliveMessage(final IsAlive message) {
     visitUnexpectedMessage(message);
   }
 
-  protected void visitReadyMessage(Ready message) {
+  protected void visitReadyMessage(final Ready message) {
     visitUnexpectedMessage(message);
   }
 
-  protected void visitResultMessage(Result message) {
+  protected void visitResultMessage(final Result message) {
     visitUnexpectedMessage(message);
   }
 
-  protected void visitScalingMessage(Scaling message) {
+  protected void visitScalingMessage(final Scaling message) {
     visitUnexpectedMessage(message);
   }
 

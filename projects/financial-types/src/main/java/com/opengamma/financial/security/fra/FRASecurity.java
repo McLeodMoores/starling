@@ -26,7 +26,7 @@ import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
 
 /**
- * A security for FRAs.
+ * A security defining a vanilla FRA.
  */
 @BeanDefinition
 @SecurityDescription(type = FRASecurity.SECURITY_TYPE, description = "Fra")
@@ -81,25 +81,35 @@ public class FRASecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private ExternalId _underlyingId;
 
-
-  FRASecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  FRASecurity() {
     super(SECURITY_TYPE);
   }
 
   /**
-   * Creates an instance
-   * 
-   * @param currency the currency, not null.
-   * @param region the region identifier, not null
-   * @param startDate the start date, not null
-   * @param endDate the end date, not null
-   * @param rate the rate
-   * @param amount the amount
-   * @param underlyingIdentifier the underlying identifier, not null
-   * @param fixingDate the fixing date, not null
+   * Creates an instance.
+   *
+   * @param currency
+   *          the currency, not null.
+   * @param region
+   *          the region identifier, not null
+   * @param startDate
+   *          the start date, not null
+   * @param endDate
+   *          the end date, not null
+   * @param rate
+   *          the rate
+   * @param amount
+   *          the amount
+   * @param underlyingIdentifier
+   *          the underlying identifier, not null
+   * @param fixingDate
+   *          the fixing date, not null
    */
-  public FRASecurity(Currency currency, ExternalId region, ZonedDateTime startDate, ZonedDateTime endDate, double rate,
-                     double amount, ExternalId underlyingIdentifier, ZonedDateTime fixingDate) {
+  public FRASecurity(final Currency currency, final ExternalId region, final ZonedDateTime startDate, final ZonedDateTime endDate, final double rate,
+      final double amount, final ExternalId underlyingIdentifier, final ZonedDateTime fixingDate) {
     super(SECURITY_TYPE);
     setCurrency(currency);
     setRegionId(region);
@@ -111,9 +121,9 @@ public class FRASecurity extends FinancialSecurity {
     setFixingDate(fixingDate);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitFRASecurity(this);
   }
 

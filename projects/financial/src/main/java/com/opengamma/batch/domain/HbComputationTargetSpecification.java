@@ -59,6 +59,7 @@ public class HbComputationTargetSpecification extends DirectBean {
 
   /**
    * Gets the unique id of the base market data.
+   * 
    * @return the value of the base market data.
    */
   public UniqueId getUniqueId() {
@@ -66,10 +67,12 @@ public class HbComputationTargetSpecification extends DirectBean {
   }
 
   /**
-   * Sets the unique id of the base market data
-   * @param baseUid  the new base market data.
+   * Sets the unique id of the base market data.
+   * 
+   * @param baseUid
+   *          the new base market data.
    */
-  public void setUniqueId(UniqueId baseUid) {
+  public void setUniqueId(final UniqueId baseUid) {
     setUidScheme(baseUid.getScheme());
     setUidValue(baseUid.getValue());
     setUidVersion(baseUid.getVersion());
@@ -78,7 +81,7 @@ public class HbComputationTargetSpecification extends DirectBean {
   public HbComputationTargetSpecification() {
   }
 
-  public HbComputationTargetSpecification(ComputationTargetSpecification computationTargetSpecification) {
+  public HbComputationTargetSpecification(final ComputationTargetSpecification computationTargetSpecification) {
     setType(computationTargetSpecification.getType());
     setUniqueId(computationTargetSpecification.getUniqueId());
   }

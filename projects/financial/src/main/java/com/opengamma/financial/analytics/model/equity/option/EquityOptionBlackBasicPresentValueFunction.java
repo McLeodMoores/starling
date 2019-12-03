@@ -20,15 +20,14 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the present value of an equity index or equity option using the Black formula.
- * In BLACK_BASIC_METHOD, volatility is implied from MARKET_VALUE.
+ * Calculates the present value of an equity index or equity option using the Black formula. In BLACK_BASIC_METHOD, volatility is implied from MARKET_VALUE.
  */
 public class EquityOptionBlackBasicPresentValueFunction extends EquityOptionBlackBasicFunction {
   /** The Black present value calculator */
-  private static final EquityOptionBlackPresentValueCalculator s_calculator = EquityOptionBlackPresentValueCalculator.getInstance();
+  private static final EquityOptionBlackPresentValueCalculator CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityOptionBlackBasicPresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);
@@ -38,7 +37,7 @@ public class EquityOptionBlackBasicPresentValueFunction extends EquityOptionBlac
   protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
-    final double pv = derivative.accept(s_calculator, market);
+    final double pv = derivative.accept(CALCULATOR, market);
     return Collections.singleton(new ComputedValue(resultSpec, pv));
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.loader;
 
@@ -32,7 +32,9 @@ public class ExampleLegalEntityLoader extends AbstractTool<ToolContext> {
 
   /**
    * Main method to run this loader.
-   * @param args The program arguments
+   * 
+   * @param args
+   *          The program arguments
    */
   public static void main(final String[] args) {
     new ExampleLegalEntityLoader().invokeAndTerminate(args);
@@ -47,9 +49,10 @@ public class ExampleLegalEntityLoader extends AbstractTool<ToolContext> {
   }
 
   /**
-   * Stores a legal entity in the legal entity database. If the entity is already
-   * present, updates it. Otherwise, adds a new entry.
-   * @param entity The legal entity
+   * Stores a legal entity in the legal entity database. If the entity is already present, updates it. Otherwise, adds a new entry.
+   * 
+   * @param entity
+   *          The legal entity
    */
   private void storeLegalEntity(final ManageableLegalEntity entity) {
     final LegalEntityMaster master = getToolContext().getLegalEntityMaster();

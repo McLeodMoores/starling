@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.security.impl;
@@ -28,7 +28,7 @@ public class RemoteSecurityLoader extends AbstractRemoteClient implements Securi
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param baseUri  the base target URI for all RESTful web services, not null
    */
   public RemoteSecurityLoader(final URI baseUri) {
@@ -39,9 +39,9 @@ public class RemoteSecurityLoader extends AbstractRemoteClient implements Securi
   // delegate convenience methods to request/result method
   // code copied from AbstractSecurityLoader due to lack of multiple inheritance
   @Override
-  public UniqueId loadSecurity(ExternalIdBundle externalIdBundle) {
-    SecurityLoaderRequest request = SecurityLoaderRequest.create(externalIdBundle);
-    SecurityLoaderResult result = loadSecurities(request);
+  public UniqueId loadSecurity(final ExternalIdBundle externalIdBundle) {
+    final SecurityLoaderRequest request = SecurityLoaderRequest.create(externalIdBundle);
+    final SecurityLoaderResult result = loadSecurities(request);
     if (result.getResultMap().size() == 0) {
       throw new OpenGammaRuntimeException("Unable to load security: " + externalIdBundle);
     }
@@ -49,18 +49,18 @@ public class RemoteSecurityLoader extends AbstractRemoteClient implements Securi
   }
 
   @Override
-  public Map<ExternalIdBundle, UniqueId> loadSecurities(Iterable<ExternalIdBundle> externalIdBundles) {
-    SecurityLoaderRequest request = SecurityLoaderRequest.create(externalIdBundles);
-    SecurityLoaderResult result = loadSecurities(request);
+  public Map<ExternalIdBundle, UniqueId> loadSecurities(final Iterable<ExternalIdBundle> externalIdBundles) {
+    final SecurityLoaderRequest request = SecurityLoaderRequest.create(externalIdBundles);
+    final SecurityLoaderResult result = loadSecurities(request);
     return result.getResultMap();
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public SecurityLoaderResult loadSecurities(SecurityLoaderRequest request) {
+  public SecurityLoaderResult loadSecurities(final SecurityLoaderRequest request) {
     ArgumentChecker.notNull(request, "request");
-    
-    URI uri = DataSecurityLoaderUris.uriGet(getBaseUri());
+
+    final URI uri = DataSecurityLoaderUris.uriGet(getBaseUri());
     return accessRemote(uri).post(SecurityLoaderResult.class, request);
   }
 

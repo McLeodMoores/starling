@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.greeks;
@@ -15,13 +15,13 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 
 /**
- * 
+ *
  */
 public class AvailableValueGreeks {
   private static final Map<String, ValueGreek> AVAILABLE_VALUE_GREEKS;
 
   static {
-    AVAILABLE_VALUE_GREEKS = new HashMap<String, ValueGreek>();
+    AVAILABLE_VALUE_GREEKS = new HashMap<>();
     AVAILABLE_VALUE_GREEKS.put(ValueRequirementNames.VALUE_FAIR_VALUE, new ValueGreek(Greek.FAIR_PRICE));
     AVAILABLE_VALUE_GREEKS.put(ValueRequirementNames.VALUE_DELTA, new ValueGreek(Greek.DELTA));
     AVAILABLE_VALUE_GREEKS.put(ValueRequirementNames.VALUE_DELTA_BLEED, new ValueGreek(Greek.DELTA_BLEED));

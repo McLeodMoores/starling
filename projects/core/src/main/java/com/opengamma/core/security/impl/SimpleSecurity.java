@@ -34,12 +34,10 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * This is the simplest possible implementation of the {@link Security} interface.
  * <p>
- * This class is mutable and not thread-safe.
- * It is intended to be used in the engine via the read-only {@code Security} interface.
+ * This class is mutable and not thread-safe. It is intended to be used in the engine via the read-only {@code Security} interface.
  */
 @BeanDefinition
-public class SimpleSecurity extends DirectBean
-    implements Security, MutableUniqueIdentifiable, Serializable {
+public class SimpleSecurity extends DirectBean implements Security, MutableUniqueIdentifiable, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -47,28 +45,27 @@ public class SimpleSecurity extends DirectBean
   /**
    * The unique identifier.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
    * The external identifier bundle.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
    * The security type.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _securityType;
   /**
    * The display name.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
   /**
-   * The general purpose security attributes.
-   * These can be used to add arbitrary additional information to the object.
+   * The general purpose security attributes. These can be used to add arbitrary additional information to the object.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideSet = true, overrideGet = true)
   private final Map<String, String> _attributes = Maps.newHashMap();
 
   /**
@@ -79,41 +76,47 @@ public class SimpleSecurity extends DirectBean
 
   /**
    * Creates an instance.
-   * 
-   * @param securityType  the security type, not null
+   *
+   * @param securityType
+   *          the security type, not null
    */
-  public SimpleSecurity(String securityType) {
+  public SimpleSecurity(final String securityType) {
     setSecurityType(securityType);
   }
 
   /**
    * Creates an instance.
-   * 
-   * @param uniqueId  the unique identifier, may be null
-   * @param bundle  the external identifier bundle, not null
-   * @param securityType  the security type, not null
-   * @param name  the display name, not null
+   *
+   * @param uniqueId
+   *          the unique identifier, may be null
+   * @param bundle
+   *          the external identifier bundle, not null
+   * @param securityType
+   *          the security type, not null
+   * @param name
+   *          the display name, not null
    */
-  public SimpleSecurity(UniqueId uniqueId, ExternalIdBundle bundle, String securityType, String name) {
+  public SimpleSecurity(final UniqueId uniqueId, final ExternalIdBundle bundle, final String securityType, final String name) {
     setUniqueId(uniqueId);
     setExternalIdBundle(bundle);
     setSecurityType(securityType);
     setName(name);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle.
-   * 
-   * @param externalId  the external identifier, not null
+   *
+   * @param externalId
+   *          the external identifier, not null
    */
   public void addExternalId(final ExternalId externalId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(externalId));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
@@ -143,6 +146,7 @@ public class SimpleSecurity extends DirectBean
    * Gets the unique identifier.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
@@ -151,6 +155,7 @@ public class SimpleSecurity extends DirectBean
    * Sets the unique identifier.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
@@ -168,6 +173,7 @@ public class SimpleSecurity extends DirectBean
    * Gets the external identifier bundle.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
@@ -194,6 +200,7 @@ public class SimpleSecurity extends DirectBean
    * Gets the security type.
    * @return the value of the property, not null
    */
+  @Override
   public String getSecurityType() {
     return _securityType;
   }
@@ -220,6 +227,7 @@ public class SimpleSecurity extends DirectBean
    * Gets the display name.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }
@@ -243,19 +251,19 @@ public class SimpleSecurity extends DirectBean
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the general purpose security attributes.
-   * These can be used to add arbitrary additional information to the object.
+   * Gets the general purpose security attributes. These can be used to add arbitrary additional information to the object.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getAttributes() {
     return _attributes;
   }
 
   /**
-   * Sets the general purpose security attributes.
-   * These can be used to add arbitrary additional information to the object.
+   * Sets the general purpose security attributes. These can be used to add arbitrary additional information to the object.
    * @param attributes  the new value of the property, not null
    */
+  @Override
   public void setAttributes(Map<String, String> attributes) {
     JodaBeanUtils.notNull(attributes, "attributes");
     this._attributes.clear();
@@ -264,7 +272,6 @@ public class SimpleSecurity extends DirectBean
 
   /**
    * Gets the the {@code attributes} property.
-   * These can be used to add arbitrary additional information to the object.
    * @return the property, not null
    */
   public final Property<Map<String, String>> attributes() {

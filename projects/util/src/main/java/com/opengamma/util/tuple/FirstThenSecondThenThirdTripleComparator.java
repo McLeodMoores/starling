@@ -10,21 +10,26 @@ import java.util.Comparator;
 /**
  * A comparator for two triple instances capturing the generic types ensuring they are comparable.
  * <p>
- * A Triple <i>(x<sub>1</sub>, y<sub>1</sub>, z<sub>1</sub>)</i> is less than another triple
- * <i>(x<sub>2</sub>, y<sub>2</sub>, z<sub>2</sub>)</i> if one of these is true:<br />
- * <i>x<sub>1</sub> < x<sub>2</sub></i><br>
- * <i>x<sub>1</sub> = x<sub>2</sub></i> and <i>y<sub>1</sub> < y<sub>2</sub></i><br>
- * <i>x<sub>1</sub> = x<sub>2</sub></i> and <i>y<sub>1</sub> = y<sub>2</sub></i><br> and <i>z<sub>1</sub> < z<sub>2</sub></i><br> 
+ * A Triple <i>(x<sub>1</sub>, y<sub>1</sub>, z<sub>1</sub>)</i> is less than another triple <i>(x<sub>2</sub>, y<sub>2</sub>, z<sub>2</sub>)</i> if one of
+ * these is true:<br>
+ * <i>x<sub>1</sub> &lt; x<sub>2</sub></i><br>
+ * <i>x<sub>1</sub> = x<sub>2</sub></i> and <i>y<sub>1</sub> &lt; y<sub>2</sub></i><br>
+ * <i>x<sub>1</sub> = x<sub>2</sub></i> and <i>y<sub>1</sub> = y<sub>2</sub></i><br>
+ * and <i>z<sub>1</sub> &lt; z<sub>2</sub></i><br>
  * <p>
  * This comparator does not support null elements in the triple.
  * <p>
  * This class is immutable and thread-safe.
  *
- * @param <A> the first element type
- * @param <B> the second element type
- * @param <C> the third element type
+ * @param <A>
+ *          the first element type
+ * @param <B>
+ *          the second element type
+ * @param <C>
+ *          the third element type
  */
-public final class FirstThenSecondThenThirdTripleComparator<A extends Comparable<A>, B extends Comparable<B>, C extends Comparable<C>> implements Comparator<Triple<A, B, C>> {
+public final class FirstThenSecondThenThirdTripleComparator<A extends Comparable<A>, B extends Comparable<B>, C extends Comparable<C>>
+implements Comparator<Triple<A, B, C>> {
 
   /**
    * Singleton instance that relies on all elements in the triple being {@link Comparable}.

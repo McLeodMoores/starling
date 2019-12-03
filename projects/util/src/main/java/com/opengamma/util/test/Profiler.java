@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.test;
@@ -26,8 +26,8 @@ import com.google.common.collect.Sets;
  */
 public final class Profiler {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(Profiler.class);
-  private static final Collection<Profiler> s_profilers = Sets.newSetFromMap(new MapMaker().weakKeys().<Profiler, Boolean>makeMap());
+  private static final Logger LOGGER = LoggerFactory.getLogger(Profiler.class);
+  private static final Collection<Profiler> PROFILERS = Sets.newSetFromMap(new MapMaker().weakKeys().<Profiler, Boolean>makeMap());
   private static volatile boolean s_enabled;
   private static volatile int s_reset;
 
@@ -49,7 +49,7 @@ public final class Profiler {
       return;
     }
     do {
-      int lock = _lock.get();
+      final int lock = _lock.get();
       if (lock == 0) {
         if (_lock.compareAndSet(0, 1)) {
           break;
@@ -111,7 +111,7 @@ public final class Profiler {
       _snapshotOperations = 0;
       _reset = reset;
     }
-    _snapshotTime += (double) _time.getAndSet(0) / 1e6;
+    _snapshotTime += _time.getAndSet(0) / 1e6;
     _snapshotOperations += _operations.getAndSet(0);
     assert _lock.get() == -1;
     _lock.set(0);
@@ -119,7 +119,7 @@ public final class Profiler {
 
   public static synchronized Profiler create(final String name) {
     final Profiler profiler = new Profiler(name);
-    s_profilers.add(profiler);
+    PROFILERS.add(profiler);
     return profiler;
   }
 
@@ -131,15 +131,16 @@ public final class Profiler {
     return create(clazz.getName() + '%' + name);
   }
 
-  private static void insertNoClash(final Map<String, Object[]> report, final Object[] arg, int dot) {
+  private static void insertNoClash(final Map<String, Object[]> report, final Object[] arg, final int dot) {
     final String key = (String) arg[0];
-    while (dot >= 0) {
-      final String substring = key.substring(dot + 1);
+    int d = dot;
+    while (d >= 0) {
+      final String substring = key.substring(d + 1);
       if (report.containsKey(substring)) {
         final Object[] clash = report.remove(substring);
         final int xdot = key.length() - substring.length() - 2;
         insertNoClash(report, clash, key.lastIndexOf('.', xdot));
-        dot = key.lastIndexOf('.', dot - 1);
+        d = key.lastIndexOf('.', d - 1);
       } else {
         report.put(substring, arg);
         return;
@@ -149,19 +150,20 @@ public final class Profiler {
   }
 
   private static synchronized void printProfilers() {
-    final Map<String, Object[]> report = new HashMap<String, Object[]>();
-    for (Profiler profiler : s_profilers) {
+    final Map<String, Object[]> report = new HashMap<>();
+    for (final Profiler profiler : PROFILERS) {
       profiler.snapshot();
-      final Object[] arg = new Object[] {profiler._name, profiler._snapshotOperations, profiler._snapshotTime, (double) profiler._snapshotTime / (double) profiler._snapshotOperations };
+      final Object[] arg = new Object[] {profiler._name, profiler._snapshotOperations, profiler._snapshotTime,
+          profiler._snapshotTime / profiler._snapshotOperations };
       insertNoClash(report, arg, profiler._name.lastIndexOf('.'));
     }
-    List<String> keys = new ArrayList<String>(report.keySet());
+    final List<String> keys = new ArrayList<>(report.keySet());
     Collections.sort(keys, new Comparator<String>() {
       @Override
       public int compare(final String a, final String b) {
         final Object[] as = report.get(a);
         final Object[] bs = report.get(b);
-        double d = (Double) bs[2] - (Double) as[2]; // sort by total time consumed 
+        final double d = (Double) bs[2] - (Double) as[2]; // sort by total time consumed
         if (d < 0) {
           return -1;
         } else if (d > 0) {
@@ -171,12 +173,12 @@ public final class Profiler {
         }
       }
     });
-    for (String key : keys) {
+    for (final String key : keys) {
       final Object[] values = report.get(key);
       values[0] = key;
-      s_logger.info("{} - {} in {}ms ({} ms/op)", values);
+      LOGGER.info("{} - {} in {}ms ({} ms/op)", values);
     }
-    s_logger.debug("{} active profiler instances", s_profilers.size());
+    LOGGER.debug("{} active profiler instances", PROFILERS.size());
   }
 
   public static void enable(final long period) {
@@ -185,7 +187,7 @@ public final class Profiler {
 
   public static synchronized void enable(final long period, final int resetPeriod) {
     if (isEnabled()) {
-      s_logger.warn("Already enabled");
+      LOGGER.warn("Already enabled");
       return;
     }
     s_enabled = true;
@@ -195,11 +197,11 @@ public final class Profiler {
         for (int count = 0;; count++) {
           try {
             Thread.sleep(period);
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
             return;
           }
           if (resetPeriod != 0) {
-            if ((count % resetPeriod) == 0) {
+            if (count % resetPeriod == 0) {
               s_reset++;
             }
           }

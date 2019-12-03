@@ -19,15 +19,18 @@ import com.opengamma.util.tuple.Triple;
  */
 public class PresentValueBlackSTIRFuturesCubeSensitivity {
 
-  /** The object containing the volatility sensitivity. Not null. 
-   * The dimension of the cube are expiration/delay/strike price */
+  /**
+   * The object containing the volatility sensitivity. Not null. The dimension of the cube are expiration/delay/strike price
+   */
   private final CubeValue _sensitivity;
   /** The Ibor Index of the futures on for which the Black data is valid, i.e. the data is calibrated to futures on the given index. Not null. */
   private final IborIndex _index;
 
   /**
    * Constructor with empty sensitivity.
-   * @param index The Ibor Index of the futures on for which the Black data is valid.
+   *
+   * @param index
+   *          The Ibor Index of the futures on for which the Black data is valid.
    */
   public PresentValueBlackSTIRFuturesCubeSensitivity(final IborIndex index) {
     ArgumentChecker.notNull(index, "index");
@@ -37,8 +40,11 @@ public class PresentValueBlackSTIRFuturesCubeSensitivity {
 
   /**
    * Constructor from parameter sensitivities.
-   * @param sensitivity The volatility sensitivity as a map.
-   * @param index The Ibor Index of the futures on for which the Black data is valid.
+   *
+   * @param sensitivity
+   *          The volatility sensitivity as a map.
+   * @param index
+   *          The Ibor Index of the futures on for which the Black data is valid.
    */
   public PresentValueBlackSTIRFuturesCubeSensitivity(final Map<Triple<Double, Double, Double>, Double> sensitivity,
       final IborIndex index) {
@@ -50,8 +56,11 @@ public class PresentValueBlackSTIRFuturesCubeSensitivity {
 
   /**
    * Constructor from parameter sensitivities. The SurfaceValue are not copied but used directly.
-   * @param sensitivity The volatility sensitivity as a SurfaceValue.
-   * @param index The Ibor Index of the futures on for which the Black data is valid.
+   *
+   * @param sensitivity
+   *          The volatility sensitivity as a SurfaceValue.
+   * @param index
+   *          The Ibor Index of the futures on for which the Black data is valid.
    */
   public PresentValueBlackSTIRFuturesCubeSensitivity(final CubeValue sensitivity, final IborIndex index) {
     ArgumentChecker.notNull(sensitivity, "Sensitivity");
@@ -61,10 +70,13 @@ public class PresentValueBlackSTIRFuturesCubeSensitivity {
   }
 
   /**
-   * Add one sensitivity to the volatility sensitivity. The existing object is modified. If the point is not in the existing points of the sensitivity, it is put in the map.
-   * If a point is already in the existing points of the object, the value is added to the existing value.
-   * @param expiryDelayStrike The expiration time/delay time/strike triple.
-   * @param sensitivity The sensitivity.
+   * Add one sensitivity to the volatility sensitivity. The existing object is modified. If the point is not in the existing points of the sensitivity, it is
+   * put in the map. If a point is already in the existing points of the object, the value is added to the existing value.
+   *
+   * @param expiryDelayStrike
+   *          The expiration time/delay time/strike triple.
+   * @param sensitivity
+   *          The sensitivity.
    */
   public void addSensitivity(final Triple<Double, Double, Double> expiryDelayStrike, final double sensitivity) {
     _sensitivity.add(expiryDelayStrike, sensitivity);
@@ -72,7 +84,9 @@ public class PresentValueBlackSTIRFuturesCubeSensitivity {
 
   /**
    * Create a new sensitivity object with all the sensitivities multiplied by a common factor.
-   * @param factor The multiplicative factor.
+   *
+   * @param factor
+   *          The multiplicative factor.
    * @return The multiplied sensitivity.
    */
   public PresentValueBlackSTIRFuturesCubeSensitivity multipliedBy(final double factor) {
@@ -81,7 +95,9 @@ public class PresentValueBlackSTIRFuturesCubeSensitivity {
 
   /**
    * Return the sum of to sensitivities in a new one. The original sensitivities are unchanged. The associated swap generators should be identical.
-   * @param sensi The Black sensitivity to add.
+   *
+   * @param sensi
+   *          The Black sensitivity to add.
    * @return The sum sensitivity.
    */
   public PresentValueBlackSTIRFuturesCubeSensitivity plus(final PresentValueBlackSTIRFuturesCubeSensitivity sensi) {
@@ -91,6 +107,7 @@ public class PresentValueBlackSTIRFuturesCubeSensitivity {
 
   /**
    * Gets the volatility sensitivity.
+   *
    * @return The sensitivity.
    */
   public CubeValue getSensitivity() {
@@ -99,6 +116,7 @@ public class PresentValueBlackSTIRFuturesCubeSensitivity {
 
   /**
    * Returns the Ibor Index of the futures on for which the Black data is valid.
+   *
    * @return The index.
    */
   public IborIndex getIborIndex() {

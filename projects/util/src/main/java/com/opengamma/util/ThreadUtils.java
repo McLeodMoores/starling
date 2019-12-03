@@ -21,18 +21,18 @@ public final class ThreadUtils {
   //-------------------------------------------------------------------------
   /**
    * Attempt to join the thread specified safely.
-   *  
+   *
    * @param thread  the thread to join, not null
    * @param timeoutMillis  the timeout in milliseconds
    * @return true if the join succeeded, false if a timeout occurred
    */
-  public static boolean safeJoin(Thread thread, long timeoutMillis) {
+  public static boolean safeJoin(final Thread thread, final long timeoutMillis) {
     if (!thread.isAlive()) {
       return true;
     }
     try {
       thread.join(timeoutMillis);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       // clear the interrupted state
       Thread.interrupted();
     }

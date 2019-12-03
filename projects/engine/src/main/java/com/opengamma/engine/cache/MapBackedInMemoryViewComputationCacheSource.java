@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.cache;
@@ -24,7 +24,7 @@ public class MapBackedInMemoryViewComputationCacheSource implements ViewComputat
    * a separate lock.
    */
   private final Map<ViewComputationCacheKey, MapBackedInMemoryViewComputationCache> _currentCaches =
-      new HashMap<ViewComputationCacheKey, MapBackedInMemoryViewComputationCache>();
+      new HashMap<>();
   /**
    * Controls access to the cache.
    * We do it this way because the initial size of the underlying map in
@@ -34,8 +34,8 @@ public class MapBackedInMemoryViewComputationCacheSource implements ViewComputat
   private final ReadWriteLock _cacheLock = new ReentrantReadWriteLock();
 
   @Override
-  public ViewComputationCache getCache(UniqueId viewCycleId, String calculationConfigurationName) {
-    ViewComputationCacheKey key = new ViewComputationCacheKey(viewCycleId, calculationConfigurationName);
+  public ViewComputationCache getCache(final UniqueId viewCycleId, final String calculationConfigurationName) {
+    final ViewComputationCacheKey key = new ViewComputationCacheKey(viewCycleId, calculationConfigurationName);
     MapBackedInMemoryViewComputationCache cache = null;
     _cacheLock.readLock().lock();
     try {
@@ -61,11 +61,11 @@ public class MapBackedInMemoryViewComputationCacheSource implements ViewComputat
   }
 
   @Override
-  public ViewComputationCache cloneCache(UniqueId viewCycleId, String calculationConfigurationName) {
-    ViewComputationCacheKey key = new ViewComputationCacheKey(viewCycleId, calculationConfigurationName);
+  public ViewComputationCache cloneCache(final UniqueId viewCycleId, final String calculationConfigurationName) {
+    final ViewComputationCacheKey key = new ViewComputationCacheKey(viewCycleId, calculationConfigurationName);
     _cacheLock.readLock().lock();
     try {
-      MapBackedInMemoryViewComputationCache cache = _currentCaches.get(key);
+      final MapBackedInMemoryViewComputationCache cache = _currentCaches.get(key);
       if (cache == null) {
         return null;
       }
@@ -76,13 +76,13 @@ public class MapBackedInMemoryViewComputationCacheSource implements ViewComputat
   }
 
   @Override
-  public void releaseCaches(UniqueId viewCycleId) {
+  public void releaseCaches(final UniqueId viewCycleId) {
     ArgumentChecker.notNull(viewCycleId, "viewCycleId");
     _cacheLock.writeLock().lock();
     try {
-      Iterator<Map.Entry<ViewComputationCacheKey, MapBackedInMemoryViewComputationCache>> iterator = _currentCaches.entrySet().iterator();
+      final Iterator<Map.Entry<ViewComputationCacheKey, MapBackedInMemoryViewComputationCache>> iterator = _currentCaches.entrySet().iterator();
       while (iterator.hasNext()) {
-        Map.Entry<ViewComputationCacheKey, MapBackedInMemoryViewComputationCache> entry = iterator.next();
+        final Map.Entry<ViewComputationCacheKey, MapBackedInMemoryViewComputationCache> entry = iterator.next();
         if (entry.getKey().getViewCycleId().equals(viewCycleId)) {
           // This is just to give a little extra help to the GC in the event that it doesn't
           // clear up the parent object.

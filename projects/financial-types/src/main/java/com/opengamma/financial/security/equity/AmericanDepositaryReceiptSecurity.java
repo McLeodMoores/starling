@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.equity;
@@ -23,7 +23,6 @@ import com.opengamma.financial.security.FinancialSecurityVisitor;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
-
 
 /**
  * A class representing an American depositary receipt security.
@@ -97,12 +96,19 @@ public class AmericanDepositaryReceiptSecurity extends FinancialSecurity {
 
   /**
    * Creates an instance without setting the GICS code or the short name.
-   * @param exchange The exchange, not null
-   * @param exchangeCode The exchange code, not null
-   * @param companyName The company name, not null
-   * @param currency The currency, not null
-   * @param foreignCurrency The foreign currency, not null
-   * @param underlyingIdBundle The underlying id bundle, not null
+   * 
+   * @param exchange
+   *          The exchange, not null
+   * @param exchangeCode
+   *          The exchange code, not null
+   * @param companyName
+   *          The company name, not null
+   * @param currency
+   *          The currency, not null
+   * @param foreignCurrency
+   *          The foreign currency, not null
+   * @param underlyingIdBundle
+   *          The underlying id bundle, not null
    */
   public AmericanDepositaryReceiptSecurity(final String exchange, final String exchangeCode, final String companyName, final Currency currency,
       final Currency foreignCurrency, final ExternalIdBundle underlyingIdBundle) {
@@ -117,18 +123,28 @@ public class AmericanDepositaryReceiptSecurity extends FinancialSecurity {
 
   /**
    * Creates an instance.
-   * @param shortName The short name
-   * @param exchange The exchange, not null
-   * @param exchangeCode The exchange code, not null
-   * @param companyName The company name, not null
-   * @param currency The currency, not null
-   * @param foreignCurrency The foreign currency, not null
-   * @param gicsCode The GICS code
-   * @param underlyingIdBundle The underlying id bundle, not null
+   * 
+   * @param shortName
+   *          The short name
+   * @param exchange
+   *          The exchange, not null
+   * @param exchangeCode
+   *          The exchange code, not null
+   * @param companyName
+   *          The company name, not null
+   * @param currency
+   *          The currency, not null
+   * @param foreignCurrency
+   *          The foreign currency, not null
+   * @param gicsCode
+   *          The GICS code
+   * @param underlyingIdBundle
+   *          The underlying id bundle, not null
    */
-  public AmericanDepositaryReceiptSecurity(final String shortName, final String exchange, final String exchangeCode, final String companyName, final Currency currency,
-      final Currency foreignCurrency, final GICSCode gicsCode, final ExternalIdBundle underlyingIdBundle) {
+  public AmericanDepositaryReceiptSecurity(final String shortName, final String exchange, final String exchangeCode, final String companyName,
+      final Currency currency, final Currency foreignCurrency, final GICSCode gicsCode, final ExternalIdBundle underlyingIdBundle) {
     super(SECURITY_TYPE);
+    setShortName(shortName);
     setExchange(exchange);
     setExchangeCode(exchangeCode);
     setCompanyName(companyName);

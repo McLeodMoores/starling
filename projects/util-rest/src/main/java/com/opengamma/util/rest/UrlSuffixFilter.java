@@ -47,11 +47,11 @@ public class UrlSuffixFilter implements ContainerRequestFilter {
   }
 
   @Override
-  public ContainerRequest filter(ContainerRequest request) {
+  public ContainerRequest filter(final ContainerRequest request) {
     if (request.getMethod().equalsIgnoreCase("GET")) {
-      URI requestUri = request.getRequestUri();
-      String path = requestUri.getPath();
-      for (String suffix : SUFFIXES.keySet()) {
+      final URI requestUri = request.getRequestUri();
+      final String path = requestUri.getPath();
+      for (final String suffix : SUFFIXES.keySet()) {
         if (path.endsWith(suffix)) {
           adjustHeader(request, path, suffix);
           break;
@@ -61,18 +61,18 @@ public class UrlSuffixFilter implements ContainerRequestFilter {
     return request;
   }
 
-  private void adjustHeader(ContainerRequest request, String path, String suffix) {
-    String mime = SUFFIXES.get(suffix);
-    
+  private static void adjustHeader(final ContainerRequest request, final String path, final String suffix) {
+    final String mime = SUFFIXES.get(suffix);
+
     // change accept header
-    InBoundHeaders headers = (InBoundHeaders) request.getRequestHeaders();
+    final InBoundHeaders headers = (InBoundHeaders) request.getRequestHeaders();
     headers.put(HttpHeaders.ACCEPT, Collections.singletonList(mime));
     request.setHeaders(headers);
-    
+
     // remove suffix from the URL
-    String newPath = path.substring(0, path.length() - suffix.length());
-    URI requestUri = request.getRequestUri();
-    URI newURI = UriBuilder.fromUri(requestUri).replacePath(newPath).build();
+    final String newPath = path.substring(0, path.length() - suffix.length());
+    final URI requestUri = request.getRequestUri();
+    final URI newURI = UriBuilder.fromUri(requestUri).replacePath(newPath).build();
     request.setUris(request.getBaseUri(), newURI);
   }
 

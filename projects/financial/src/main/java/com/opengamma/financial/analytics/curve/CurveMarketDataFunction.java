@@ -47,12 +47,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * For a given curve name, returns a {@link SnapshotDataBundle} containing the market data for the nodes of that curve. This function does not require that any or all of the market data is available
- * for it to return the snapshot.
+ * For a given curve name, returns a {@link SnapshotDataBundle} containing the market data for the nodes of that curve. This function does not require that any
+ * or all of the market data is available for it to return the snapshot.
  */
 public class CurveMarketDataFunction extends AbstractFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(CurveMarketDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurveMarketDataFunction.class);
   /** The curve name */
   private final String _curveName;
   /** The curve definition source */
@@ -61,7 +61,8 @@ public class CurveMarketDataFunction extends AbstractFunction {
   private CurveSpecificationBuilder _curveSpecificationBuilder;
 
   /**
-   * @param curveName The curve name, not null
+   * @param curveName
+   *          The curve name, not null
    */
   public CurveMarketDataFunction(final String curveName) {
     ArgumentChecker.notNull(curveName, "curve name");
@@ -89,7 +90,8 @@ public class CurveMarketDataFunction extends AbstractFunction {
     final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, _curveName).get();
     final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, properties);
     try {
-      final AbstractCurveSpecification specification = CurveUtils.getSpecification(atInstant, _curveDefinitionSource, _curveSpecificationBuilder, atZDT.toLocalDate(), _curveName);
+      final AbstractCurveSpecification specification = CurveUtils.getSpecification(atInstant, _curveDefinitionSource, _curveSpecificationBuilder,
+          atZDT.toLocalDate(), _curveName);
       return new MyCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000), specification, spec);
     } catch (final Exception e) {
       throw new OpenGammaRuntimeException(e.getMessage() + ": problem in CurveDefinition called " + _curveName);
@@ -108,13 +110,18 @@ public class CurveMarketDataFunction extends AbstractFunction {
     private final Set<ValueRequirement> _requirements;
 
     /**
-     * @param earliestInvocation The earliest time at which this function can be invoked
-     * @param latestInvocation The latest time at which this function can be invoked
-     * @param specification The curve specification
-     * @param spec The result specification
+     * @param earliestInvocation
+     *          The earliest time at which this function can be invoked
+     * @param latestInvocation
+     *          The latest time at which this function can be invoked
+     * @param specification
+     *          The curve specification
+     * @param spec
+     *          The result specification
      */
     @SuppressWarnings("synthetic-access")
-    public MyCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final AbstractCurveSpecification specification, final ValueSpecification spec) {
+    public MyCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final AbstractCurveSpecification specification,
+        final ValueSpecification spec) {
       super(earliestInvocation, latestInvocation);
       _specification = specification;
       _spec = spec;
@@ -141,7 +148,8 @@ public class CurveMarketDataFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       if (_requirements == null) {
         return null;
       }
@@ -161,8 +169,11 @@ public class CurveMarketDataFunction extends AbstractFunction {
 
   /**
    * Gets the market data requirements from a curve specification.
-   * @param abstractSpecification The curve specification
-   * @param curveName The curve name
+   *
+   * @param abstractSpecification
+   *          The curve specification
+   * @param curveName
+   *          The curve name
    * @return The set of requirements
    */
   /* package */static Set<ValueRequirement> getRequirements(final AbstractCurveSpecification abstractSpecification, final String curveName) {
@@ -189,7 +200,7 @@ public class CurveMarketDataFunction extends AbstractFunction {
             requirements.add(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, id.getIdentifier()));
           }
         } catch (final OpenGammaRuntimeException e) {
-          s_logger.error(curveName + " " + e.getMessage());
+          LOGGER.error(curveName + " " + e.getMessage());
           return null;
         }
       }
@@ -206,17 +217,23 @@ public class CurveMarketDataFunction extends AbstractFunction {
 
   /**
    * Populates a market data snapshot for a curve specification.
-   * @param abstractSpecification The specification
-   * @param inputs The function inputs
-   * @param marketData The market data snapshot bundle
-   * @param resolver The external id bundle resolver
+   *
+   * @param abstractSpecification
+   *          The specification
+   * @param inputs
+   *          The function inputs
+   * @param marketData
+   *          The market data snapshot bundle
+   * @param resolver
+   *          The external id bundle resolver
    * @return A populated snapshot
    */
-  /* package */static SnapshotDataBundle populateSnapshot(final AbstractCurveSpecification abstractSpecification, final FunctionInputs inputs, final SnapshotDataBundle marketData,
-      final ExternalIdBundleResolver resolver) {
+  /* package */static SnapshotDataBundle populateSnapshot(final AbstractCurveSpecification abstractSpecification, final FunctionInputs inputs,
+      final SnapshotDataBundle marketData, final ExternalIdBundleResolver resolver) {
     if (abstractSpecification instanceof ConstantCurveSpecification) {
       final ConstantCurveSpecification constant = (ConstantCurveSpecification) abstractSpecification;
-      final ComputedValue value = inputs.getComputedValue(new ValueRequirement(constant.getDataField(), ComputationTargetType.PRIMITIVE, constant.getIdentifier()));
+      final ComputedValue value = inputs
+          .getComputedValue(new ValueRequirement(constant.getDataField(), ComputationTargetType.PRIMITIVE, constant.getIdentifier()));
       if (value != null) {
         final ExternalIdBundle identifiers = value.getSpecification().getTargetSpecification().accept(resolver);
         final Object valueObject = value.getValue();
@@ -225,7 +242,7 @@ public class CurveMarketDataFunction extends AbstractFunction {
         }
         marketData.setDataPoint(identifiers, (Double) valueObject);
       } else {
-        s_logger.info("Could not get market data for {} with field {}", constant.getIdentifier(), constant.getDataField());
+        LOGGER.info("Could not get market data for {} with field {}", constant.getIdentifier(), constant.getDataField());
       }
     } else if (abstractSpecification instanceof CurveSpecification) {
       final CurveSpecification specification = (CurveSpecification) abstractSpecification;
@@ -237,7 +254,7 @@ public class CurveMarketDataFunction extends AbstractFunction {
               value = inputs.getComputedValue(new ValueRequirement(id.getDataField(), ComputationTargetType.SECURITY, id.getIdentifier()));
             } catch (final NullPointerException e) {
               // happens when the target cannot be resolved
-              value = null;
+              value = inputs.getComputedValue(new ValueRequirement(id.getDataField(), ComputationTargetType.PRIMITIVE, id.getIdentifier()));
             }
           } else {
             value = inputs.getComputedValue(new ValueRequirement(id.getDataField(), ComputationTargetType.PRIMITIVE, id.getIdentifier()));
@@ -250,8 +267,8 @@ public class CurveMarketDataFunction extends AbstractFunction {
             final ExternalIdBundle identifiers = value.getSpecification().getTargetSpecification().accept(resolver);
             if (id instanceof PointsCurveNodeWithIdentifier) {
               final PointsCurveNodeWithIdentifier pointsId = (PointsCurveNodeWithIdentifier) id;
-              final ComputedValue base = inputs
-                  .getComputedValue(new ValueRequirement(pointsId.getUnderlyingDataField(), ComputationTargetType.PRIMITIVE, pointsId.getUnderlyingIdentifier()));
+              final ComputedValue base = inputs.getComputedValue(
+                  new ValueRequirement(pointsId.getUnderlyingDataField(), ComputationTargetType.PRIMITIVE, pointsId.getUnderlyingIdentifier()));
               if (base != null) {
                 final Object baseObject = base.getValue();
                 if (!(baseObject instanceof Double)) {
@@ -264,21 +281,22 @@ public class CurveMarketDataFunction extends AbstractFunction {
                   marketData.setDataPoint(spreadIdentifiers, (Double) valueObject + (Double) baseObject);
                 }
               } else {
-                s_logger.info("Could not get market data for {}", pointsId.getUnderlyingIdentifier());
+                LOGGER.info("Could not get market data for {}", pointsId.getUnderlyingIdentifier());
               }
             } else {
               marketData.setDataPoint(identifiers, (Double) valueObject);
             }
           } else {
-            s_logger.info("Could not get market data for {}", id.getIdentifier());
+            LOGGER.info("Could not get market data for {}", id.getIdentifier());
           }
         } else {
-          final ComputedValue value = inputs.getComputedValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, id.getIdentifier()));
+          final ComputedValue value = inputs
+              .getComputedValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, id.getIdentifier()));
           if (value != null) {
             final ExternalIdBundle identifiers = value.getSpecification().getTargetSpecification().accept(resolver);
             marketData.setDataPoint(identifiers, (Double) value.getValue());
           } else {
-            s_logger.info("Could not get market data for {}", id.getIdentifier());
+            LOGGER.info("Could not get market data for {}", id.getIdentifier());
           }
         }
       }

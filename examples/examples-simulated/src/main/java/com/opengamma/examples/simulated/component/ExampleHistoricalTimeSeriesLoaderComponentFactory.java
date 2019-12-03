@@ -28,7 +28,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesLoader;
 public class ExampleHistoricalTimeSeriesLoaderComponentFactory extends AbstractHistoricalTimeSeriesLoaderComponentFactory {
 
   @Override
-  protected HistoricalTimeSeriesLoader createHistoricalTimeSeriesLoader(ComponentRepository repo) {
+  protected HistoricalTimeSeriesLoader createHistoricalTimeSeriesLoader(final ComponentRepository repo) {
     return new MockTimeSeriesLoader();
   }
 

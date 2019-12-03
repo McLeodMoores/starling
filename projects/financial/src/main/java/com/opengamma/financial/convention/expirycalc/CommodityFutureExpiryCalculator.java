@@ -10,27 +10,28 @@ import java.util.Arrays;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Month;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
  * Expiry calculator for commodity futures.
  */
+@ExpiryCalculator
 public final class CommodityFutureExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
-  /** Name of the calculator */
+  /** Name of the calculator. */
   public static final String NAME = "CommodityFutureExpiryCalculator";
   /** Singleton. */
   private static final CommodityFutureExpiryCalculator INSTANCE = new CommodityFutureExpiryCalculator();
 
-  private static final Month[] COMMODITY_FUTURE_EXPIRY_MONTHS =
-  {Month.JANUARY, Month.MARCH, Month.MAY, Month.JULY,
-    Month.AUGUST, Month.SEPTEMBER, Month.NOVEMBER
-  };
+  private static final Month[] COMMODITY_FUTURE_EXPIRY_MONTHS = { Month.JANUARY, Month.MARCH, Month.MAY, Month.JULY, Month.AUGUST, Month.SEPTEMBER,
+                Month.NOVEMBER };
 
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the instance, not null
    */
   public static CommodityFutureExpiryCalculator getInstance() {
@@ -43,19 +44,39 @@ public final class CommodityFutureExpiryCalculator implements ExchangeTradedInst
   private CommodityFutureExpiryCalculator() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Expiry date of commodity Futures:
-   * The business day preceding the 15th day of the contract month.
-   * See http://www.cmegroup.com/trading/agricultural/grain-and-oilseed/soybean_contractSpecs_futures.html#prodType=AME
-   * 
-   * @param n  the n'th expiry date after today, greater than zero
-   * @param today  the valuation date, not null
-   * @param holidayCalendar  the holiday calendar, not null
+   * Expiry date of commodity Futures: The business day preceding the 15th day of the contract month. See
+   * http://www.cmegroup.com/trading/agricultural/grain-and-oilseed/soybean_contractSpecs_futures.html#prodType=AME
+   *
+   * @param n
+   *          the n'th expiry date after today, greater than zero
+   * @param today
+   *          the valuation date, not null
+   * @param holidayCalendar
+   *          the holiday calendar, not null
+   * @return the expiry date, not null
+   */
+  @Deprecated
+  @Override
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+    return getExpiryDate(n, today, WorkingDayCalendarAdapter.of(holidayCalendar));
+  }
+
+  /**
+   * Expiry date of commodity Futures: The business day preceding the 15th day of the contract month. See
+   * http://www.cmegroup.com/trading/agricultural/grain-and-oilseed/soybean_contractSpecs_futures.html#prodType=AME
+   *
+   * @param n
+   *          the n'th expiry date after today, greater than zero
+   * @param today
+   *          the valuation date, not null
+   * @param holidayCalendar
+   *          the holiday calendar, not null
    * @return the expiry date, not null
    */
   @Override
-  public LocalDate getExpiryDate(final int n, final LocalDate today, final Calendar holidayCalendar) {
+  public LocalDate getExpiryDate(final int n, final LocalDate today, final WorkingDayCalendar holidayCalendar) {
     ArgumentChecker.isTrue(n > 0, "n must be greater than zero; have {}", n);
     ArgumentChecker.notNull(today, "today");
     ArgumentChecker.notNull(holidayCalendar, "holiday calendar");
@@ -86,7 +107,7 @@ public final class CommodityFutureExpiryCalculator implements ExchangeTradedInst
   private LocalDate getNextExpiryMonth(final LocalDate dtCurrent) {
     final Month mthCurrent = dtCurrent.getMonth();
     final int idx = Arrays.binarySearch(COMMODITY_FUTURE_EXPIRY_MONTHS, mthCurrent);
-    if (Math.abs(idx) >= (COMMODITY_FUTURE_EXPIRY_MONTHS.length - 1)) {
+    if (Math.abs(idx) >= COMMODITY_FUTURE_EXPIRY_MONTHS.length - 1) {
       return LocalDate.of(dtCurrent.getYear() + 1, Month.JANUARY, dtCurrent.getDayOfMonth());
     } else if (idx >= 0) {
       return dtCurrent.with(COMMODITY_FUTURE_EXPIRY_MONTHS[idx + 1]);

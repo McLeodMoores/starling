@@ -20,13 +20,13 @@ public class SimpleFuturePriceDeltaFunction extends SimpleFutureFunction {
     super(ValueRequirementNames.VALUE_DELTA);
   }
 
-  protected Double computeValues(SimpleFuture derivative, SimpleFutureDataBundle market) {
+  protected Double computeValues(final SimpleFuture derivative, final SimpleFutureDataBundle market) {
     return derivative.getUnitAmount();
   }
 
   @Override
-  protected Double computeValues(InstrumentDerivative derivative, SimpleFutureDataBundle market) {
-    SimpleFuture simpleFuture = derivative.accept(SimpleFutureConverter.getInstance());
+  protected Double computeValues(final InstrumentDerivative derivative, final SimpleFutureDataBundle market) {
+    final SimpleFuture simpleFuture = derivative.accept(SimpleFutureConverter.getInstance());
     return simpleFuture.getUnitAmount();
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -12,8 +12,8 @@ public class DiscardingInvocationStatisticsGatherer implements FunctionInvocatio
 
   @Override
   public void functionInvoked(
-      String configurationName, String functionId, int invocationCount,
-      double executionNanos, double dataInputBytes, double dataOutputBytes) {
+      final String configurationName, final String functionId, final int invocationCount,
+      final double executionNanos, final double dataInputBytes, final double dataOutputBytes) {
     // no action
   }
 

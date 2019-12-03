@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.montecarlo;
@@ -22,12 +22,14 @@ import com.opengamma.analytics.math.random.RandomNumberGenerator;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  * @param <T>
+ *          The type of the option
  * @param <U>
+ *          The type of the data
  */
 public abstract class MonteCarloOptionModel<T extends OptionDefinition, U extends StandardOptionDataBundle> implements OptionModel<T, U> {
-  private static final Logger s_logger = LoggerFactory.getLogger(MonteCarloOptionModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MonteCarloOptionModel.class);
   private final int _n;
   private final int _steps;
   private final StochasticProcess<T, U> _process;
@@ -52,7 +54,7 @@ public abstract class MonteCarloOptionModel<T extends OptionDefinition, U extend
     Validate.notEmpty(requiredGreeks, "required greeks");
     if (requiredGreeks.contains(Greek.FAIR_PRICE)) {
       if (requiredGreeks.size() > 1) {
-        s_logger.warn("Can only produce fair price");
+        LOGGER.warn("Can only produce fair price");
       }
     } else {
       throw new IllegalArgumentException("Can only produce fair price");

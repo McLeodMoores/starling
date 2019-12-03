@@ -43,9 +43,9 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class BloombergRefDataCollector implements Lifecycle {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergRefDataCollector.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergRefDataCollector.class);
   /** Fudge context. */
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   /**
    * The watch list file.
@@ -70,14 +70,20 @@ public class BloombergRefDataCollector implements Lifecycle {
 
   /**
    * Create an instance.
-   * 
-   * @param fudgeContext  the fudgeContext, not null
-   * @param watchListFile  the watch list file, not null
-   * @param refDataProvider  the reference data provider, not null
-   * @param fieldsFile  the file containing the fields
-   * @param outputFile  the output file, not null
+   *
+   * @param fudgeContext
+   *          the fudgeContext, not null
+   * @param watchListFile
+   *          the watch list file, not null
+   * @param refDataProvider
+   *          the reference data provider, not null
+   * @param fieldsFile
+   *          the file containing the fields
+   * @param outputFile
+   *          the output file, not null
    */
-  public BloombergRefDataCollector(FudgeContext fudgeContext, File watchListFile, ReferenceDataProvider refDataProvider, File fieldsFile, File outputFile) {
+  public BloombergRefDataCollector(final FudgeContext fudgeContext, final File watchListFile, final ReferenceDataProvider refDataProvider,
+      final File fieldsFile, final File outputFile) {
     ArgumentChecker.notNull(fudgeContext, "fudgeContext");
     ArgumentChecker.notNull(watchListFile, "watch list file");
     ArgumentChecker.notNull(refDataProvider, "reference data provider");
@@ -91,22 +97,26 @@ public class BloombergRefDataCollector implements Lifecycle {
 
   /**
    * Create an instance.
-   * 
-   * @param watchListFile  the watch list file, not null
-   * @param refDataProvider  the reference data provider, not null
-   * @param fieldsFile  the file containing the fields
-   * @param outputFile  the output file, not null
+   *
+   * @param watchListFile
+   *          the watch list file, not null
+   * @param refDataProvider
+   *          the reference data provider, not null
+   * @param fieldsFile
+   *          the file containing the fields
+   * @param outputFile
+   *          the output file, not null
    */
-  public BloombergRefDataCollector(File watchListFile, ReferenceDataProvider refDataProvider, File fieldsFile, File outputFile) {
-    this(s_fudgeContext, watchListFile, refDataProvider, fieldsFile, outputFile);
+  public BloombergRefDataCollector(final File watchListFile, final ReferenceDataProvider refDataProvider, final File fieldsFile, final File outputFile) {
+    this(FUDGE_CONTEXT, watchListFile, refDataProvider, fieldsFile, outputFile);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public synchronized void start() {
-    s_logger.info("starting bloombergRefDataCollector");
+    LOGGER.info("starting bloombergRefDataCollector");
     if (isRunning()) {
-      s_logger.info("bloombergRefDataCollector is already running");
+      LOGGER.info("bloombergRefDataCollector is already running");
       return;
     }
     _started.set(true);
@@ -115,16 +125,16 @@ public class BloombergRefDataCollector implements Lifecycle {
   }
 
   private Set<String> loadFields() {
-    Set<String> fields = Sets.newHashSet();
+    final Set<String> fields = Sets.newHashSet();
     LineIterator it;
     try {
       it = FileUtils.lineIterator(_fieldsFile);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("IOException when reading " + _fieldsFile, ex);
     }
     try {
       while (it.hasNext()) {
-        String line = it.nextLine();
+        final String line = it.nextLine();
         if (StringUtils.isBlank(line) || line.charAt(0) == '#') {
           continue;
         }
@@ -137,12 +147,12 @@ public class BloombergRefDataCollector implements Lifecycle {
   }
 
   private Set<String> loadSecurities() {
-    Set<String> bloombergKeys = Sets.newHashSet();
+    final Set<String> bloombergKeys = Sets.newHashSet();
     try {
-      for (ExternalId identifier : BloombergDataUtils.identifierLoader(new FileReader(_watchListFile))) {
+      for (final ExternalId identifier : BloombergDataUtils.identifierLoader(new FileReader(_watchListFile))) {
         bloombergKeys.add(BloombergDomainIdentifierResolver.toBloombergKey(identifier));
       }
-    } catch (FileNotFoundException ex) {
+    } catch (final FileNotFoundException ex) {
       throw new OpenGammaRuntimeException(_watchListFile + " cannot be found", ex);
     }
     return bloombergKeys;
@@ -150,28 +160,29 @@ public class BloombergRefDataCollector implements Lifecycle {
 
   @Override
   public synchronized void stop() {
-    s_logger.info("stopping bloombergRefDataCollector");
+    LOGGER.info("stopping bloombergRefDataCollector");
     _started.set(false);
   }
 
   @Override
   public synchronized boolean isRunning() {
-    return _started.get() == true;
+    return _started.get();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Main entry point from command line
-   * 
-   * @param args the args
+   * Main entry point from command line.
+   *
+   * @param args
+   *          the args
    */
-  public static void main(String[] args) { //CSIGNORE
-    BloombergCliOptions bbgOptions = createOptions();
+  public static void main(final String[] args) { // CSIGNORE
+    final BloombergCliOptions bbgOptions = createOptions();
     processCommandLineOptions(args, bbgOptions);
   }
 
-  private static void processCommandLineOptions(String[] args, BloombergCliOptions bbgOptions) {
-    CommandLine cmdLine = bbgOptions.parse(args);
+  private static void processCommandLineOptions(final String[] args, final BloombergCliOptions bbgOptions) {
+    final CommandLine cmdLine = bbgOptions.parse(args);
     if (cmdLine == null) {
       bbgOptions.printUsage(BloombergRefDataCollector.class);
       return;
@@ -180,34 +191,36 @@ public class BloombergRefDataCollector implements Lifecycle {
       bbgOptions.printUsage(BloombergRefDataCollector.class);
       return;
     }
-    String dataFieldFile = cmdLine.getOptionValue(BloombergCliOptions.FIELDS_FILE_OPTION);
-    String identifiersFile = cmdLine.getOptionValue(BloombergCliOptions.IDENTIFIERS_OPTION);
-    String outputFile = cmdLine.getOptionValue(BloombergCliOptions.OUPUT_OPTION);
-    String host = cmdLine.getOptionValue(BloombergCliOptions.HOST_OPTION);
+    final String dataFieldFile = cmdLine.getOptionValue(BloombergCliOptions.FIELDS_FILE_OPTION);
+    final String identifiersFile = cmdLine.getOptionValue(BloombergCliOptions.IDENTIFIERS_OPTION);
+    final String outputFile = cmdLine.getOptionValue(BloombergCliOptions.OUPUT_OPTION);
+    final String host = cmdLine.getOptionValue(BloombergCliOptions.HOST_OPTION);
     String port = cmdLine.getOptionValue(BloombergCliOptions.PORT_OPTION);
-    
+
     if (port == null) {
       port = BloombergConstants.DEFAULT_PORT;
     }
-    
-    s_logger.info("loading ref data with host: {} port: {} fields: {} identifies: {} outputfile {}", new Object[]{host, port, dataFieldFile, identifiersFile, outputFile});
-    
-    BloombergConnectorFactoryBean factory = new BloombergConnectorFactoryBean("BloombergRefDataCollector", host, Integer.valueOf(port));
-    BloombergConnector bloombergConnector = factory.getObjectCreating();
-    BloombergReferenceDataProvider refDataProvider = new BloombergReferenceDataProvider(bloombergConnector);
+
+    LOGGER.info("loading ref data with host: {} port: {} fields: {} identifies: {} outputfile {}",
+        new Object[] { host, port, dataFieldFile, identifiersFile, outputFile });
+
+    final BloombergConnectorFactoryBean factory = new BloombergConnectorFactoryBean("BloombergRefDataCollector", host, Integer.valueOf(port));
+    final BloombergConnector bloombergConnector = factory.getObjectCreating();
+    final BloombergReferenceDataProvider refDataProvider = new BloombergReferenceDataProvider(bloombergConnector);
     refDataProvider.start();
-    
-    BloombergRefDataCollector refDataCollector = new BloombergRefDataCollector(new File(identifiersFile), refDataProvider, new File(dataFieldFile), new File(outputFile));
+
+    final BloombergRefDataCollector refDataCollector = new BloombergRefDataCollector(new File(identifiersFile), refDataProvider, new File(dataFieldFile),
+        new File(outputFile));
     refDataCollector.start();
   }
 
   private static BloombergCliOptions createOptions() {
-    Builder builder = new BloombergCliOptions.Builder()
-      .withDataFieldsFile(true)
-      .withIdentifiers(true)
-      .withOutput(true)
-      .withHost(true)
-      .withPort(false);
+    final Builder builder = new BloombergCliOptions.Builder()
+        .withDataFieldsFile(true)
+        .withIdentifiers(true)
+        .withOutput(true)
+        .withHost(true)
+        .withPort(false);
     return builder.build();
   }
 

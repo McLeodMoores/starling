@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.component.factory.web;
 
@@ -27,6 +27,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.springframework.web.context.ServletContextAware;
 
+import com.mcleodmoores.web.json.convention.WebConventionsUtils;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 import com.opengamma.core.change.AggregatingChangeManager;
@@ -51,6 +52,7 @@ import com.opengamma.financial.security.lookup.SecurityAttributeMapper;
 import com.opengamma.livedata.UserPrincipal;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.impl.MasterConfigSource;
+import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.master.legalentity.LegalEntityMaster;
 import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotMaster;
@@ -87,19 +89,18 @@ import com.opengamma.web.analytics.rest.WebUiResource;
 import com.opengamma.web.server.AggregatedViewDefinitionManager;
 
 /**
- * A version of {@link com.opengamma.component.factory.web.WebsiteViewportsComponentFactory} that does not reference deprecated
- * components and only requires:
+ * A version of {@link com.opengamma.component.factory.web.WebsiteViewportsComponentFactory} that does not reference deprecated components and only requires:
  * <ul>
- *  <li> {@link SecurityMaster}: a master for securities that allows updates
- *  <li> {@link SecuritySource}: a source for securities
- *  <li> {@link PositionMaster}: a master for positions that allows updates
- *  <li> {@link PositionSource}: a source for positions
- *  <li> {@link PortfolioMaster}: a master for portfolios
- *  <li> {@link ComputationTargetResolver}: resolves the computation targets of a {@link com.opengamma.engine.function.FunctionDefinition}
- *  to a real target e.g. a security
- *  <li> {@link ViewProcessor}: manages the computation jobs for {@link com.opengamma.engine.view.ViewDefinition}s.
- *  <li> {@link PortfolioAggregationFunctions}: aggregates portfolios e.g. by currency
- *  <li> {@link UserPrincipal}: the user
+ * <li>{@link SecurityMaster}: a master for securities that allows updates
+ * <li>{@link SecuritySource}: a source for securities
+ * <li>{@link PositionMaster}: a master for positions that allows updates
+ * <li>{@link PositionSource}: a source for positions
+ * <li>{@link PortfolioMaster}: a master for portfolios
+ * <li>{@link ComputationTargetResolver}: resolves the computation targets of a {@link com.opengamma.engine.function.FunctionDefinition} to a real target e.g. a
+ * security
+ * <li>{@link ViewProcessor}: manages the computation jobs for {@link com.opengamma.engine.view.ViewDefinition}s.
+ * <li>{@link PortfolioAggregationFunctions}: aggregates portfolios e.g. by currency
+ * <li>{@link UserPrincipal}: the user
  * </ul>
  * All other components are optional.
  */
@@ -165,6 +166,12 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
    */
   @PropertyDefinition
   private LegalEntityMaster _legalEntityMaster;
+
+  /**
+   * The convention master.
+   */
+  @PropertyDefinition
+  private ConventionMaster _conventionMaster;
 
   /**
    * The user master.
@@ -233,14 +240,14 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
   private LiveMarketDataProviderFactory _liveMarketDataProviderFactory;
 
   /**
-   * Indicates if currency amounts should be displayed in the UI without the currency code.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    */
   @PropertyDefinition
   private boolean _suppressCurrencyDisplay;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final LongPollingConnectionManager longPolling = buildLongPolling();
@@ -264,14 +271,12 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     } else {
       blotterColumnMapper = null;
     }
-    final AggregatedViewDefinitionManager aggregatedViewDefManager =
-        new AggregatedViewDefinitionManager(getPositionSource(), getSecuritySource(), getCombinedConfigSource(),
-            getUserConfigMaster(), getUserPortfolioMaster(), getUserPositionMaster(),
-            getPortfolioAggregationFunctions().getMappedFunctions());
-    final AnalyticsViewManager analyticsViewManager =
-        new AnalyticsViewManager(getViewProcessor(), getParallelViewRecompilation(), aggregatedViewDefManager, getComputationTargetResolver(),
-            getFunctionRepository(), null, blotterColumnMapper, getPositionSource(), getCombinedConfigSource(), getSecuritySource(), getSecurityMaster(),
-            getPositionMaster());
+    final AggregatedViewDefinitionManager aggregatedViewDefManager = new AggregatedViewDefinitionManager(getPositionSource(), getSecuritySource(),
+        getCombinedConfigSource(), getUserConfigMaster(), getUserPortfolioMaster(), getUserPositionMaster(),
+        getPortfolioAggregationFunctions().getMappedFunctions());
+    final AnalyticsViewManager analyticsViewManager = new AnalyticsViewManager(getViewProcessor(), getParallelViewRecompilation(), aggregatedViewDefManager,
+        getComputationTargetResolver(), getFunctionRepository(), null, blotterColumnMapper, getPositionSource(), getCombinedConfigSource(), getSecuritySource(),
+        getSecurityMaster(), getPositionMaster());
     final ResultsFormatter resultsFormatter = new ResultsFormatter(_suppressCurrencyDisplay ? SUPPRESS_CURRENCY : DISPLAY_CURRENCY);
     final GridColumnsJsonWriter columnWriter = new GridColumnsJsonWriter(resultsFormatter);
     final ViewportResultsJsonCsvWriter viewportResultsWriter = new ViewportResultsJsonCsvWriter(resultsFormatter);
@@ -290,6 +295,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     repo.getRestComponents().publishHelper(new GridColumnGroupsMessageBodyWriter(columnWriter));
     repo.getRestComponents().publishHelper(new ViewportResultsMessageBodyWriter(viewportResultsWriter));
     repo.getRestComponents().publishHelper(new ErrorInfoMessageBodyWriter());
+    repo.getRestComponents().publishResource(new WebConventionsUtils());
 
     // these items need to be available to the servlet, but aren't important enough to be published components
     repo.registerServletContextAware(new ServletContextAware() {
@@ -303,7 +309,8 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   /**
    * Gets the function repository, returning an empty repository if a {@link FunctionConfigurationSource} is not available.
-   * @return  the function repository
+   *
+   * @return the function repository
    */
   protected FunctionRepositoryFactory getFunctionRepository() {
     // TODO: This is slightly wasteful if the view processor is in the same process and has created its own repository. Ideally we
@@ -318,16 +325,17 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   /**
    * Builds a long polling connection manager.
-   * @return  a long polling connection manager
+   *
+   * @return a long polling connection manager
    */
   protected LongPollingConnectionManager buildLongPolling() {
     return new LongPollingConnectionManager();
   }
 
   /**
-   * Builds a change manager and adds the historical time series master, config master and legal entity master
-   * if they are available.
-   * @return  the change manager
+   * Builds a change manager and adds the historical time series master, config master and legal entity master if they are available.
+   *
+   * @return the change manager
    */
   protected ChangeManager buildChangeManager() {
     final List<ChangeProvider> providers = new ArrayList<>();
@@ -348,7 +356,8 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   /**
    * Builds a change manager and adds the masters if they are available.
-   * @return  the change manager
+   *
+   * @return the change manager
    */
   protected MasterChangeManager buildMasterChangeManager() {
     final Map<MasterType, ChangeProvider> providers = new HashMap<>();
@@ -363,9 +372,13 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     }
     if (getLegalEntityMaster() != null) {
       providers.put(MasterType.ORGANIZATION, getLegalEntityMaster());
+      providers.put(MasterType.LEGAL_ENTITY, getLegalEntityMaster());
     }
     if (getMarketDataSnapshotMaster() != null) {
       providers.put(MasterType.MARKET_DATA_SNAPSHOT, getMarketDataSnapshotMaster());
+    }
+    if (getConventionMaster() != null) {
+      providers.put(MasterType.CONVENTION, getConventionMaster());
     }
     return new MasterChangeManager(providers);
   }
@@ -643,6 +656,31 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
    */
   public final Property<LegalEntityMaster> legalEntityMaster() {
     return metaBean().legalEntityMaster().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
+  /**
+   * Gets the convention master.
+   * @return the value of the property
+   */
+  public ConventionMaster getConventionMaster() {
+    return _conventionMaster;
+  }
+
+  /**
+   * Sets the convention master.
+   * @param conventionMaster  the new value of the property
+   */
+  public void setConventionMaster(ConventionMaster conventionMaster) {
+    this._conventionMaster = conventionMaster;
+  }
+
+  /**
+   * Gets the the {@code conventionMaster} property.
+   * @return the property, not null
+   */
+  public final Property<ConventionMaster> conventionMaster() {
+    return metaBean().conventionMaster().createProperty(this);
   }
 
   //-----------------------------------------------------------------------
@@ -928,9 +966,9 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   //-----------------------------------------------------------------------
   /**
-   * Gets indicates if currency amounts should be displayed in the UI without the currency code.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Gets indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    * @return the value of the property
    */
   public boolean isSuppressCurrencyDisplay() {
@@ -938,9 +976,9 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
   }
 
   /**
-   * Sets indicates if currency amounts should be displayed in the UI without the currency code.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * Sets indicates if currency amounts should be displayed in the UI without the currency code. Note that this will affect all
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    * @param suppressCurrencyDisplay  the new value of the property
    */
   public void setSuppressCurrencyDisplay(boolean suppressCurrencyDisplay) {
@@ -949,8 +987,8 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   /**
    * Gets the the {@code suppressCurrencyDisplay} property.
-   * Note that this will affect all views and should only be used where all results for all views will always be
-   * in a single, well-known currency. Default value is false, indicating that currencies will be displayed by default.
+   * views and should only be used where all results for all views will always be in a single, well-known currency.
+   * Default value is false, indicating that currencies will be displayed by default.
    * @return the property, not null
    */
   public final Property<Boolean> suppressCurrencyDisplay() {
@@ -980,6 +1018,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
           JodaBeanUtils.equal(getFunctions(), other.getFunctions()) &&
           JodaBeanUtils.equal(getHistoricalTimeSeriesMaster(), other.getHistoricalTimeSeriesMaster()) &&
           JodaBeanUtils.equal(getLegalEntityMaster(), other.getLegalEntityMaster()) &&
+          JodaBeanUtils.equal(getConventionMaster(), other.getConventionMaster()) &&
           JodaBeanUtils.equal(getUserPositionMaster(), other.getUserPositionMaster()) &&
           JodaBeanUtils.equal(getUserPortfolioMaster(), other.getUserPortfolioMaster()) &&
           JodaBeanUtils.equal(getUserConfigMaster(), other.getUserConfigMaster()) &&
@@ -1010,6 +1049,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     hash = hash * 31 + JodaBeanUtils.hashCode(getFunctions());
     hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getLegalEntityMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConventionMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getUserPositionMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getUserPortfolioMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getUserConfigMaster());
@@ -1027,7 +1067,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(736);
+    StringBuilder buf = new StringBuilder(768);
     buf.append("MinimalWebsiteViewportsComponentFactory{");
     int len = buf.length();
     toString(buf);
@@ -1051,6 +1091,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     buf.append("functions").append('=').append(JodaBeanUtils.toString(getFunctions())).append(',').append(' ');
     buf.append("historicalTimeSeriesMaster").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesMaster())).append(',').append(' ');
     buf.append("legalEntityMaster").append('=').append(JodaBeanUtils.toString(getLegalEntityMaster())).append(',').append(' ');
+    buf.append("conventionMaster").append('=').append(JodaBeanUtils.toString(getConventionMaster())).append(',').append(' ');
     buf.append("userPositionMaster").append('=').append(JodaBeanUtils.toString(getUserPositionMaster())).append(',').append(' ');
     buf.append("userPortfolioMaster").append('=').append(JodaBeanUtils.toString(getUserPortfolioMaster())).append(',').append(' ');
     buf.append("userConfigMaster").append('=').append(JodaBeanUtils.toString(getUserConfigMaster())).append(',').append(' ');
@@ -1126,6 +1167,11 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     private final MetaProperty<LegalEntityMaster> _legalEntityMaster = DirectMetaProperty.ofReadWrite(
         this, "legalEntityMaster", MinimalWebsiteViewportsComponentFactory.class, LegalEntityMaster.class);
     /**
+     * The meta-property for the {@code conventionMaster} property.
+     */
+    private final MetaProperty<ConventionMaster> _conventionMaster = DirectMetaProperty.ofReadWrite(
+        this, "conventionMaster", MinimalWebsiteViewportsComponentFactory.class, ConventionMaster.class);
+    /**
      * The meta-property for the {@code userPositionMaster} property.
      */
     private final MetaProperty<PositionMaster> _userPositionMaster = DirectMetaProperty.ofReadWrite(
@@ -1200,6 +1246,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
         "functions",
         "historicalTimeSeriesMaster",
         "legalEntityMaster",
+        "conventionMaster",
         "userPositionMaster",
         "userPortfolioMaster",
         "userConfigMaster",
@@ -1242,6 +1289,8 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
           return _historicalTimeSeriesMaster;
         case -1944474242:  // legalEntityMaster
           return _legalEntityMaster;
+        case 41113907:  // conventionMaster
+          return _conventionMaster;
         case 1808868758:  // userPositionMaster
           return _userPositionMaster;
         case 686514815:  // userPortfolioMaster
@@ -1367,6 +1416,14 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     }
 
     /**
+     * The meta-property for the {@code conventionMaster} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<ConventionMaster> conventionMaster() {
+      return _conventionMaster;
+    }
+
+    /**
      * The meta-property for the {@code userPositionMaster} property.
      * @return the meta-property, not null
      */
@@ -1486,6 +1543,8 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
           return ((MinimalWebsiteViewportsComponentFactory) bean).getHistoricalTimeSeriesMaster();
         case -1944474242:  // legalEntityMaster
           return ((MinimalWebsiteViewportsComponentFactory) bean).getLegalEntityMaster();
+        case 41113907:  // conventionMaster
+          return ((MinimalWebsiteViewportsComponentFactory) bean).getConventionMaster();
         case 1808868758:  // userPositionMaster
           return ((MinimalWebsiteViewportsComponentFactory) bean).getUserPositionMaster();
         case 686514815:  // userPortfolioMaster
@@ -1546,6 +1605,9 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
           return;
         case -1944474242:  // legalEntityMaster
           ((MinimalWebsiteViewportsComponentFactory) bean).setLegalEntityMaster((LegalEntityMaster) newValue);
+          return;
+        case 41113907:  // conventionMaster
+          ((MinimalWebsiteViewportsComponentFactory) bean).setConventionMaster((ConventionMaster) newValue);
           return;
         case 1808868758:  // userPositionMaster
           ((MinimalWebsiteViewportsComponentFactory) bean).setUserPositionMaster((PositionMaster) newValue);

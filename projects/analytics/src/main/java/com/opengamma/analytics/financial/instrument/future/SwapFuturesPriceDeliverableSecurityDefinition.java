@@ -39,11 +39,16 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
 
   /**
    * Constructor. The delivery date is the accrual start date of the first coupon of the swap fixed leg.
-   * @param lastTradingDate The futures last trading date.
-   * @param underlyingSwap The futures underlying swap.
-   * @param notional The notional of the future.
+   *
+   * @param lastTradingDate
+   *          The futures last trading date.
+   * @param underlyingSwap
+   *          The futures underlying swap.
+   * @param notional
+   *          The notional of the future.
    */
-  public SwapFuturesPriceDeliverableSecurityDefinition(final ZonedDateTime lastTradingDate, final SwapFixedIborDefinition underlyingSwap, final double notional) {
+  public SwapFuturesPriceDeliverableSecurityDefinition(final ZonedDateTime lastTradingDate, final SwapFixedIborDefinition underlyingSwap,
+      final double notional) {
     super(lastTradingDate);
     ArgumentChecker.notNull(underlyingSwap, "Swap");
     ArgumentChecker.isTrue(Math.abs(underlyingSwap.getFixedLeg().getNthPayment(0).getNotional() - 1.0) < 1.0E-10, "Swap should be receiver of notional 1");
@@ -54,14 +59,21 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
 
   /**
    * Builder from the financial details.
-   * @param effectiveDate The underlying swap effective date (delivery date).
-   * @param generator The swap generator.
-   * @param tenor The underlying swap tenor.
-   * @param notional The futures notional.
-   * @param rate The underlying swap rate.
+   *
+   * @param effectiveDate
+   *          The underlying swap effective date (delivery date).
+   * @param generator
+   *          The swap generator.
+   * @param tenor
+   *          The underlying swap tenor.
+   * @param notional
+   *          The futures notional.
+   * @param rate
+   *          The underlying swap rate.
    * @return The futures.
    */
-  public static SwapFuturesPriceDeliverableSecurityDefinition from(final ZonedDateTime effectiveDate, final GeneratorSwapFixedIbor generator, final Period tenor,
+  public static SwapFuturesPriceDeliverableSecurityDefinition from(final ZonedDateTime effectiveDate, final GeneratorSwapFixedIbor generator,
+      final Period tenor,
       final double notional, final double rate) {
     ArgumentChecker.notNull(effectiveDate, "Effective date");
     ArgumentChecker.notNull(generator, "Generator");
@@ -72,6 +84,7 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
 
   /**
    * Returns the delivery date.
+   *
    * @return The date.
    */
   public ZonedDateTime getDeliveryDate() {
@@ -80,6 +93,7 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
 
   /**
    * Returns the futures underlying swap.
+   *
    * @return The swap.
    */
   public SwapFixedIborDefinition getUnderlyingSwap() {
@@ -87,7 +101,8 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
   }
 
   /**
-   * Returns the notional of the future
+   * Returns the notional of the future.
+   *
    * @return The notional.
    */
   public double getNotional() {
@@ -96,6 +111,7 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -142,7 +158,7 @@ public class SwapFuturesPriceDeliverableSecurityDefinition extends FuturesSecuri
     result = prime * result + _deliveryDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingSwap.hashCode();
     return result;
   }

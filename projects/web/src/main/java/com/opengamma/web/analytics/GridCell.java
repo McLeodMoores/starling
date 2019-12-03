@@ -25,13 +25,13 @@ public class GridCell implements Comparable<GridCell> {
 
   /**
    * Creates an instance from a packed text format.
-   * 
+   *
    * @param cell  the row and column indices separated by a comma, for example "12,46", not null, indices must be non-negative
    */
-  public GridCell(String cell) {
+  public GridCell(final String cell) {
     // used by JAX-RS
     ArgumentChecker.notNull(cell, "cell");
-    String[] rowCol = cell.split(",");
+    final String[] rowCol = cell.split(",");
     if (rowCol.length < 3) {
       throw new IllegalArgumentException("Cell must be specified as 'row,col,\"format\"'");
     }
@@ -43,12 +43,12 @@ public class GridCell implements Comparable<GridCell> {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param row  the row index, not negative
    * @param column  the column index, not negative
    * @param format  the formatter to use, not null
    */
-  public GridCell(int row, int column, TypeFormatter.Format format) {
+  public GridCell(final int row, final int column, final TypeFormatter.Format format) {
     ArgumentChecker.notNull(format, "format");
     _row = row;
     _column = column;
@@ -65,7 +65,7 @@ public class GridCell implements Comparable<GridCell> {
   //-------------------------------------------------------------------------
   /**
    * Gets the row.
-   * 
+   *
    * @return the row index
    */
   /* package */ int getRow() {
@@ -74,7 +74,7 @@ public class GridCell implements Comparable<GridCell> {
 
   /**
    * Gets the column.
-   * 
+   *
    * @return the column index
    */
   /* package */ int getColumn() {
@@ -83,7 +83,7 @@ public class GridCell implements Comparable<GridCell> {
 
   /**
    * Gets the formatter.
-   * 
+   *
    * @return the format applied to the cell's data
    */
   /* package */ TypeFormatter.Format getFormat() {
@@ -92,14 +92,14 @@ public class GridCell implements Comparable<GridCell> {
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GridCell cell = (GridCell) o;
+    final GridCell cell = (GridCell) o;
 
     if (_column != cell._column) {
       return false;
@@ -124,17 +124,17 @@ public class GridCell implements Comparable<GridCell> {
   /**
    * A cell is greater than another cell if its row index is higher or it's row
    * index is the same and its column index is higher.
-   * 
+   *
    * @param other  the other cell, not null
    * @return the comparison result
    */
   @Override
-  public int compareTo(GridCell other) {
-    int rowComp = Integer.compare(_row, other._row);
+  public int compareTo(final GridCell other) {
+    final int rowComp = Integer.compare(_row, other._row);
     if (rowComp != 0) {
       return rowComp;
     }
-    int colComp = Integer.compare(_column, other._column);
+    final int colComp = Integer.compare(_column, other._column);
     if (colComp != 0) {
       return colComp;
     }

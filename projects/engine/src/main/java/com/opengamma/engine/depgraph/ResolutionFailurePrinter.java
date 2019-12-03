@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -77,13 +77,14 @@ public class ResolutionFailurePrinter extends ResolutionFailureVisitor<Void> {
   }
 
   protected String toString(final ValueSpecification valueSpecification) {
-    return valueSpecification.getValueName() + ' ' + toString(valueSpecification.getProperties()) + " on " + toString(valueSpecification.getTargetSpecification());
+    return valueSpecification.getValueName() + ' ' + toString(valueSpecification.getProperties()) + " on "
+              + toString(valueSpecification.getTargetSpecification());
   }
 
   protected String toString(final Map<ValueSpecification, ValueRequirement> requirements) {
     final StringBuilder sb = new StringBuilder();
     boolean comma = false;
-    for (ValueSpecification requirement : requirements.keySet()) {
+    for (final ValueSpecification requirement : requirements.keySet()) {
       if (comma) {
         sb.append(", ");
       } else {
@@ -103,7 +104,7 @@ public class ResolutionFailurePrinter extends ResolutionFailureVisitor<Void> {
   protected String toStringResolutionFailures(final Set<ResolutionFailure> failures) {
     final StringBuilder sb = new StringBuilder();
     boolean comma = false;
-    for (ResolutionFailure failure : failures) {
+    for (final ResolutionFailure failure : failures) {
       if (comma) {
         sb.append(", ");
       } else {
@@ -123,7 +124,7 @@ public class ResolutionFailurePrinter extends ResolutionFailureVisitor<Void> {
   protected String toStringValueSpecifications(final Set<ValueSpecification> specifications) {
     final StringBuilder sb = new StringBuilder();
     boolean comma = false;
-    for (ValueSpecification specification : specifications) {
+    for (final ValueSpecification specification : specifications) {
       if (comma) {
         sb.append(", ");
       } else {
@@ -186,7 +187,7 @@ public class ResolutionFailurePrinter extends ResolutionFailureVisitor<Void> {
       final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied) {
     final StringWriter buffer = new StringWriter();
     final ResolutionFailurePrinter visitor = new ResolutionFailurePrinter(this, new PrintWriter(buffer));
-    for (ResolutionFailure requirement : unsatisfied) {
+    for (final ResolutionFailure requirement : unsatisfied) {
       if (_visited.add(requirement)) {
         requirement.accept(visitor);
       } else {
@@ -195,8 +196,8 @@ public class ResolutionFailurePrinter extends ResolutionFailureVisitor<Void> {
     }
     synchronized (_out) {
       _out.print(_indent);
-      _out.println("Couldn't satisfy " + toStringResolutionFailures(unsatisfied) + " for " + function + " to produce " + toString(desiredOutput) + " for " + toString(valueRequirement) +
-          ". Caused by:");
+      _out.println("Couldn't satisfy " + toStringResolutionFailures(unsatisfied) + " for " + function + " to produce "
+      + toString(desiredOutput) + " for " + toString(valueRequirement) + ". Caused by:");
       _out.print(buffer.toString());
     }
     return null;
@@ -205,15 +206,16 @@ public class ResolutionFailurePrinter extends ResolutionFailureVisitor<Void> {
   @Override
   protected Void visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
       final Map<ValueSpecification, ValueRequirement> requirements) {
-    println("getAdditionalRequirements method failed on " + function + " with inputs " + toString(requirements) + " to produce " + toString(desiredOutput) + " for " +
-        toString(valueRequirement));
+    println("getAdditionalRequirements method failed on " + function + " with inputs " + toString(requirements) + " to produce "
+        + toString(desiredOutput) + " for " + toString(valueRequirement));
     return null;
   }
 
   @Override
   protected Void visitGetResultsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
       final Map<ValueSpecification, ValueRequirement> requirements) {
-    println("getResults method failed on " + function + " with inputs " + toString(requirements) + " to produce " + toString(desiredOutput) + " for " + toString(valueRequirement));
+    println("getResults method failed on " + function + " with inputs " + toString(requirements) + " to produce "
+      + toString(desiredOutput) + " for " + toString(valueRequirement));
     return null;
   }
 
@@ -226,8 +228,8 @@ public class ResolutionFailurePrinter extends ResolutionFailureVisitor<Void> {
   @Override
   protected Void visitLateResolutionFailure(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
       final Map<ValueSpecification, ValueRequirement> requirements) {
-    println("Provisional result " + toString(desiredOutput) + " for " + toString(desiredOutput) + " not in output of " + function + " after late resolution of " +
-        toStringValueSpecifications(requirements.keySet()));
+    println("Provisional result " + toString(desiredOutput) + " for " + toString(desiredOutput) + " not in output of "
+            + function + " after late resolution of " + toStringValueSpecifications(requirements.keySet()));
     return null;
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.function;
@@ -14,22 +14,24 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Give a struct {@link PiecewisePolynomialResult}, Compute value, first derivative and integral of piecewise polynomial function
+ * Give a struct {@link PiecewisePolynomialResult}, Compute value, first derivative and integral of piecewise polynomial function.
  */
 public class PiecewisePolynomialFunction1D {
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public PiecewisePolynomialFunction1D() {
 
   }
 
-  /** 
-   * @param pp PiecewisePolynomialResult
-   * @param xKey  
-   * @return Values of piecewise polynomial functions at xKey 
-   * When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains multiple splines, an element in the return values corresponds to each spline 
+  /**
+   * @param pp
+   *          PiecewisePolynomialResult
+   * @param xKey
+   *          the x key
+   * @return Values of piecewise polynomial functions at xKey When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains multiple
+   *         splines, an element in the return values corresponds to each spline
    */
   public DoubleMatrix1D evaluate(final PiecewisePolynomialResult pp, final double xKey) {
     ArgumentChecker.notNull(pp, "pp");
@@ -42,11 +44,11 @@ public class PiecewisePolynomialFunction1D {
     final DoubleMatrix2D coefMatrix = pp.getCoefMatrix();
     final int dim = pp.getDimensions();
 
-    double[] res = new double[dim];
+    final double[] res = new double[dim];
 
     int indicator = FunctionUtils.getLowerBoundIndex(knots, xKey);
     if (indicator == nKnots - 1) {
-      indicator--; //there is 1 less interval that knots 
+      indicator--; // there is 1 less interval that knots
     }
 
     for (int j = 0; j < dim; ++j) {
@@ -61,10 +63,12 @@ public class PiecewisePolynomialFunction1D {
   }
 
   /**
-   * @param pp PiecewisePolynomialResult
-   * @param xKeys 
-   * @return Values of piecewise polynomial functions at xKeys 
-   * When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains multiple piecewise polynomials, a row vector of return value corresponds to each piecewise polynomial
+   * @param pp
+   *          PiecewisePolynomialResult
+   * @param xKeys
+   *          the x keys
+   * @return Values of piecewise polynomial functions at xKeys When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains multiple
+   *         piecewise polynomials, a row vector of return value corresponds to each piecewise polynomial
    */
   public DoubleMatrix2D evaluate(final PiecewisePolynomialResult pp, final double[] xKeys) {
     ArgumentChecker.notNull(pp, "pp");
@@ -81,7 +85,7 @@ public class PiecewisePolynomialFunction1D {
     final DoubleMatrix2D coefMatrix = pp.getCoefMatrix();
     final int dim = pp.getDimensions();
 
-    double[][] res = new double[dim][keyLength];
+    final double[][] res = new double[dim][keyLength];
 
     for (int k = 0; k < dim; ++k) {
       for (int j = 0; j < keyLength; ++j) {
@@ -106,11 +110,12 @@ public class PiecewisePolynomialFunction1D {
   }
 
   /**
-   * @param pp PiecewisePolynomialResult
-   * @param xKeys 
-   * @return Values of piecewise polynomial functions at xKeys
-   * When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains multiple piecewise polynomials, 
-   * one element of return vector of DoubleMatrix2D corresponds to each piecewise polynomial
+   * @param pp
+   *          PiecewisePolynomialResult
+   * @param xKeys
+   *          the keys
+   * @return Values of piecewise polynomial functions at xKeys When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains multiple
+   *         piecewise polynomials, one element of return vector of DoubleMatrix2D corresponds to each piecewise polynomial
    */
   public DoubleMatrix2D[] evaluate(final PiecewisePolynomialResult pp, final double[][] xKeys) {
     ArgumentChecker.notNull(pp, "pp");
@@ -130,7 +135,7 @@ public class PiecewisePolynomialFunction1D {
     final DoubleMatrix2D coefMatrix = pp.getCoefMatrix();
     final int dim = pp.getDimensions();
 
-    double[][][] res = new double[dim][keyDim][keyLength];
+    final double[][][] res = new double[dim][keyDim][keyLength];
 
     for (int k = 0; k < dim; ++k) {
       for (int l = 0; l < keyDim; ++l) {
@@ -154,7 +159,7 @@ public class PiecewisePolynomialFunction1D {
       }
     }
 
-    DoubleMatrix2D[] resMat = new DoubleMatrix2D[dim];
+    final DoubleMatrix2D[] resMat = new DoubleMatrix2D[dim];
     for (int i = 0; i < dim; ++i) {
       resMat[i] = new DoubleMatrix2D(res[i]);
     }
@@ -162,11 +167,13 @@ public class PiecewisePolynomialFunction1D {
     return resMat;
   }
 
-  /** 
-   * @param pp PiecewisePolynomialResult
-   * @param xKey 
-   * @return First derivatives of piecewise polynomial functions at xKey 
-   * When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains multiple piecewise polynomials, an element in the return values corresponds to each piecewise polynomial 
+  /**
+   * @param pp
+   *          PiecewisePolynomialResult
+   * @param xKey
+   *          the keys
+   * @return First derivatives of piecewise polynomial functions at xKey When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains
+   *         multiple piecewise polynomials, an element in the return values corresponds to each piecewise polynomial
    */
   public DoubleMatrix1D differentiate(final PiecewisePolynomialResult pp, final double xKey) {
     ArgumentChecker.notNull(pp, "pp");
@@ -179,7 +186,7 @@ public class PiecewisePolynomialFunction1D {
     final int nCoefs = pp.getOrder();
     final int dim = pp.getDimensions();
 
-    double[][] res = new double[dim * (nKnots - 1)][nCoefs - 1];
+    final double[][] res = new double[dim * (nKnots - 1)][nCoefs - 1];
     for (int i = 0; i < dim * (nKnots - 1); ++i) {
       Arrays.fill(res[i], 0.);
     }
@@ -190,16 +197,18 @@ public class PiecewisePolynomialFunction1D {
       }
     }
 
-    PiecewisePolynomialResult ppDiff = new PiecewisePolynomialResult(new DoubleMatrix1D(knots), new DoubleMatrix2D(res), nCoefs - 1, pp.getDimensions());
+    final PiecewisePolynomialResult ppDiff = new PiecewisePolynomialResult(new DoubleMatrix1D(knots), new DoubleMatrix2D(res), nCoefs - 1, pp.getDimensions());
 
     return evaluate(ppDiff, xKey);
   }
 
   /**
-   * @param pp 
-   * @param xKeys 
-   * @return First derivatives of piecewise polynomial functions at xKeys 
-   * When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains multiple piecewise polynomials, a row vector of return value corresponds to each piecewise polynomial
+   * @param pp
+   *          PiecewisePolynomialResult
+   * @param xKeys
+   *          the keys
+   * @return First derivatives of piecewise polynomial functions at xKeys When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains
+   *         multiple piecewise polynomials, a row vector of return value corresponds to each piecewise polynomial
    */
   public DoubleMatrix2D differentiate(final PiecewisePolynomialResult pp, final double[] xKeys) {
     ArgumentChecker.notNull(pp, "pp");
@@ -212,7 +221,7 @@ public class PiecewisePolynomialFunction1D {
     final int nCoefs = pp.getOrder();
     final int dim = pp.getDimensions();
 
-    double[][] res = new double[dim * (nKnots - 1)][nCoefs - 1];
+    final double[][] res = new double[dim * (nKnots - 1)][nCoefs - 1];
     for (int i = 0; i < dim * (nKnots - 1); ++i) {
       Arrays.fill(res[i], 0.);
     }
@@ -223,16 +232,18 @@ public class PiecewisePolynomialFunction1D {
       }
     }
 
-    PiecewisePolynomialResult ppDiff = new PiecewisePolynomialResult(new DoubleMatrix1D(knots), new DoubleMatrix2D(res), nCoefs - 1, pp.getDimensions());
+    final PiecewisePolynomialResult ppDiff = new PiecewisePolynomialResult(new DoubleMatrix1D(knots), new DoubleMatrix2D(res), nCoefs - 1, pp.getDimensions());
 
     return evaluate(ppDiff, xKeys);
   }
 
-  /** 
-   * @param pp PiecewisePolynomialResult
-   * @param xKey 
-   * @return Second derivatives of piecewise polynomial functions at xKey 
-   * When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains multiple piecewise polynomials, an element in the return values corresponds to each piecewise polynomial 
+  /**
+   * @param pp
+   *          the polynomial result
+   * @param xKey
+   *          the x value for which to find the second derivative
+   * @return Second derivatives of piecewise polynomial functions at xKey When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains
+   *         multiple piecewise polynomials, an element in the return values corresponds to each piecewise polynomial
    */
   public DoubleMatrix1D differentiateTwice(final PiecewisePolynomialResult pp, final double xKey) {
     ArgumentChecker.notNull(pp, "pp");
@@ -245,7 +256,7 @@ public class PiecewisePolynomialFunction1D {
     final int nCoefs = pp.getOrder();
     final int dim = pp.getDimensions();
 
-    double[][] res = new double[dim * (nKnots - 1)][nCoefs - 2];
+    final double[][] res = new double[dim * (nKnots - 1)][nCoefs - 2];
     for (int i = 0; i < dim * (nKnots - 1); ++i) {
       Arrays.fill(res[i], 0.);
     }
@@ -256,16 +267,18 @@ public class PiecewisePolynomialFunction1D {
       }
     }
 
-    PiecewisePolynomialResult ppDiff = new PiecewisePolynomialResult(new DoubleMatrix1D(knots), new DoubleMatrix2D(res), nCoefs - 1, pp.getDimensions());
+    final PiecewisePolynomialResult ppDiff = new PiecewisePolynomialResult(new DoubleMatrix1D(knots), new DoubleMatrix2D(res), nCoefs - 1, pp.getDimensions());
 
     return evaluate(ppDiff, xKey);
   }
 
   /**
-   * @param pp 
-   * @param xKeys 
-   * @return Second derivatives of piecewise polynomial functions at xKeys 
-   * When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains multiple piecewise polynomials, a row vector of return value corresponds to each piecewise polynomial
+   * @param pp
+   *          the polynomial result
+   * @param xKeys
+   *          the x values for which to find the second derivative
+   * @return Second derivatives of piecewise polynomial functions at xKeys When _dim in PiecewisePolynomialResult is greater than 1, i.e., the struct contains
+   *         multiple piecewise polynomials, a row vector of return value corresponds to each piecewise polynomial
    */
   public DoubleMatrix2D differentiateTwice(final PiecewisePolynomialResult pp, final double[] xKeys) {
     ArgumentChecker.notNull(pp, "pp");
@@ -278,7 +291,7 @@ public class PiecewisePolynomialFunction1D {
     final int nCoefs = pp.getOrder();
     final int dim = pp.getDimensions();
 
-    double[][] res = new double[dim * (nKnots - 1)][nCoefs - 2];
+    final double[][] res = new double[dim * (nKnots - 1)][nCoefs - 2];
     for (int i = 0; i < dim * (nKnots - 1); ++i) {
       Arrays.fill(res[i], 0.);
     }
@@ -289,16 +302,19 @@ public class PiecewisePolynomialFunction1D {
       }
     }
 
-    PiecewisePolynomialResult ppDiff = new PiecewisePolynomialResult(new DoubleMatrix1D(knots), new DoubleMatrix2D(res), nCoefs - 1, pp.getDimensions());
+    final PiecewisePolynomialResult ppDiff = new PiecewisePolynomialResult(new DoubleMatrix1D(knots), new DoubleMatrix2D(res), nCoefs - 1, pp.getDimensions());
 
     return evaluate(ppDiff, xKeys);
   }
 
-  /** 
-   * @param pp PiecewisePolynomialResult
-   * @param initialKey 
-   * @param xKey 
-   * @return Integral of piecewise polynomial between initialKey and xKey 
+  /**
+   * @param pp
+   *          PiecewisePolynomialResult
+   * @param initialKey
+   *          the initial x value
+   * @param xKey
+   *          the x value for which to integrate
+   * @return Integral of piecewise polynomial between initialKey and xKey
    */
   public double integrate(final PiecewisePolynomialResult pp, final double initialKey, final double xKey) {
     ArgumentChecker.notNull(pp, "pp");
@@ -312,7 +328,7 @@ public class PiecewisePolynomialFunction1D {
     final int nKnots = pp.getNumberOfIntervals() + 1;
     final double[][] coefMatrix = pp.getCoefMatrix().getData();
 
-    double[][] res = new double[nKnots - 1][nCoefs + 1];
+    final double[][] res = new double[nKnots - 1][nCoefs + 1];
     for (int i = 0; i < nKnots - 1; ++i) {
       Arrays.fill(res[i], 0.);
     }
@@ -323,7 +339,7 @@ public class PiecewisePolynomialFunction1D {
       }
     }
 
-    double[] constTerms = new double[nKnots - 1];
+    final double[] constTerms = new double[nKnots - 1];
     Arrays.fill(constTerms, 0.);
 
     int indicator = 0;
@@ -354,11 +370,14 @@ public class PiecewisePolynomialFunction1D {
     return evaluate(ppInt, xKey).getData()[0];
   }
 
-  /** 
-   * @param pp PiecewisePolynomialResult
-   * @param initialKey 
-   * @param xKeys 
-   * @return Integral of piecewise polynomial between initialKey and xKeys 
+  /**
+   * @param pp
+   *          PiecewisePolynomialResult
+   * @param initialKey
+   *          the initial x value
+   * @param xKeys
+   *          the x values for which to integrate
+   * @return Integral of piecewise polynomial between initialKey and xKeys
    */
   public DoubleMatrix1D integrate(final PiecewisePolynomialResult pp, final double initialKey, final double[] xKeys) {
     ArgumentChecker.notNull(pp, "pp");
@@ -373,7 +392,7 @@ public class PiecewisePolynomialFunction1D {
     final int nKnots = pp.getNumberOfIntervals() + 1;
     final double[][] coefMatrix = pp.getCoefMatrix().getData();
 
-    double[][] res = new double[nKnots - 1][nCoefs + 1];
+    final double[][] res = new double[nKnots - 1][nCoefs + 1];
     for (int i = 0; i < nKnots - 1; ++i) {
       Arrays.fill(res[i], 0.);
     }
@@ -384,7 +403,7 @@ public class PiecewisePolynomialFunction1D {
       }
     }
 
-    double[] constTerms = new double[nKnots - 1];
+    final double[] constTerms = new double[nKnots - 1];
     Arrays.fill(constTerms, 0.);
 
     int indicator = 0;
@@ -418,9 +437,11 @@ public class PiecewisePolynomialFunction1D {
   }
 
   /**
-   * @param coefs {a_n,a_{n-1},...} of f(x) = a_n x^{n} + a_{n-1} x^{n-1} + ....
-   * @param x 
-   * @param leftknot Knot specifying underlying interpolation function
+   * @param coefs
+   *          {a_n,a_{n-1},...} of f(x) = a_n x^{n} + a_{n-1} x^{n-1} + ....
+   * @param x
+   * @param leftknot
+   *          Knot specifying underlying interpolation function
    * @return Value of the underlying interpolation function at the value of x
    */
   private double getValue(final double[] coefs, final double x, final double leftknot) {

@@ -114,14 +114,14 @@ public abstract class VectorRootFinderTest {
   static final double[] TIME_GRID = new double[] {0.25, 0.5, 1.0, 1.5, 2.0, 3.0, 5.0, 7.0, 10.0, 15.0, 20.0, 25.0, 30.0};
   static final Function1D<Double, Double> DUMMY_YIELD_CURVE = new Function1D<Double, Double>() {
 
-    private static final double a = -0.03;
-    private static final double b = 0.02;
-    private static final double c = 0.5;
-    private static final double d = 0.05;
+    private static final double A = -0.03;
+    private static final double B = 0.02;
+    private static final double C = 0.5;
+    private static final double D = 0.05;
 
     @Override
     public Double evaluate(final Double x) {
-      return Math.exp(-x * ((a + b * x) * Math.exp(-c * x) + d));
+      return Math.exp(-x * ((A + B * x) * Math.exp(-C * x) + D));
     }
   };
   static final Function1D<DoubleMatrix1D, DoubleMatrix1D> SWAP_RATES = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {

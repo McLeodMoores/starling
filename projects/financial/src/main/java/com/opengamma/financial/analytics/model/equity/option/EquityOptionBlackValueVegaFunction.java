@@ -31,7 +31,7 @@ public class EquityOptionBlackValueVegaFunction extends EquityOptionBlackFunctio
   private static final ValueVegaCalculator CALCULATOR = ValueVegaCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_VEGA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_VEGA}.
    */
   public EquityOptionBlackValueVegaFunction() {
     super(ValueRequirementNames.VALUE_VEGA);

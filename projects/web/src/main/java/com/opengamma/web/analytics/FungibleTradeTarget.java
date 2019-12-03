@@ -17,7 +17,7 @@ public class FungibleTradeTarget extends RowTarget {
   /** The position ID */
   private final UniqueId _positionId;
 
-  /* package */ FungibleTradeTarget(String name, UniqueId nodeId, UniqueId positionId, UniqueId tradeId) {
+  /* package */ FungibleTradeTarget(final String name, final UniqueId nodeId, final UniqueId positionId, final UniqueId tradeId) {
     super(name, nodeId);
     _tradeId = tradeId;
     _positionId = positionId;

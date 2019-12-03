@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.copier.snapshot.copier;
@@ -15,11 +15,12 @@ import com.opengamma.util.ArgumentChecker;
 public class SimpleSnapshotCopier implements SnapshotCopier {
 
   @Override
-  public void copy(SnapshotReader snapshotReader, SnapshotWriter snapshotWriter) {
+  public void copy(final SnapshotReader snapshotReader, final SnapshotWriter snapshotWriter) {
     copy(snapshotReader, snapshotWriter, null);
   }
 
-  public void copy(SnapshotReader snapshotReader, SnapshotWriter snapshotWriter, SnapshotCopierVisitor visitor) {
+  @Override
+  public void copy(final SnapshotReader snapshotReader, final SnapshotWriter snapshotWriter, final SnapshotCopierVisitor visitor) {
     ArgumentChecker.notNull(snapshotWriter, "snapshotWriter");
     ArgumentChecker.notNull(snapshotReader, "snapshotReader");
     snapshotWriter.writeName(snapshotReader.getName());

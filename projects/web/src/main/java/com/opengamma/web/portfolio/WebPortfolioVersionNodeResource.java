@@ -31,40 +31,43 @@ public class WebPortfolioVersionNodeResource extends WebPortfolioNodeResource {
    * Creates the resource.
    * @param parent  the parent resource, not null
    */
-  public WebPortfolioVersionNodeResource(AbstractWebPortfolioResource parent) {
+  public WebPortfolioVersionNodeResource(final AbstractWebPortfolioResource parent) {
     super(parent);
   }
 
   //-------------------------------------------------------------------------
+  @Override
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
-    FlexiBean out = createPortfolioNodeData();
+    final FlexiBean out = createPortfolioNodeData();
     return getFreemarker().build(HTML_DIR + "portfolionode.ftl", out);
   }
 
+  @Override
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getJSON() {
-    FlexiBean out = createPortfolioNodeData();
-    String s = getFreemarker().build(JSON_DIR + "portfolionode.ftl", out);
+    final FlexiBean out = createPortfolioNodeData();
+    final String s = getFreemarker().build(JSON_DIR + "portfolionode.ftl", out);
     return Response.ok(s).build();
   }
 
   private FlexiBean createPortfolioNodeData() {
-    ManageablePortfolioNode node = data().getNode();
-    PositionSearchRequest positionSearch = new PositionSearchRequest();
+    final ManageablePortfolioNode node = data().getNode();
+    final PositionSearchRequest positionSearch = new PositionSearchRequest();
     positionSearch.setPositionObjectIds(node.getPositionIds());
-    PositionSearchResult positionsResult = data().getPositionMaster().search(positionSearch);
+    final PositionSearchResult positionsResult = data().getPositionMaster().search(positionSearch);
     resolveSecurities(positionsResult.getPositions());
 
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     out.put("positionsResult", positionsResult);
     out.put("positions", positionsResult.getPositions());
     return out;
   }
 
   //-------------------------------------------------------------------------
+  @Override
   @Path("positions")
   public WebPortfolioNodePositionsResource findPositions() {
     return new WebPortfolioNodePositionsResource(this);
@@ -75,10 +78,11 @@ public class WebPortfolioVersionNodeResource extends WebPortfolioNodeResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    PortfolioDocument doc = data().getVersioned();
-    ManageablePortfolioNode node = data().getNode();
+    final FlexiBean out = super.createRootData();
+    final PortfolioDocument doc = data().getVersioned();
+    final ManageablePortfolioNode node = data().getNode();
     out.put("portfolioDoc", doc);
     out.put("portfolio", doc.getPortfolio());
     out.put("parentNode", data().getParentNode());
@@ -106,8 +110,8 @@ public class WebPortfolioVersionNodeResource extends WebPortfolioNodeResource {
    * @return the URI, not null
    */
   public static URI uri(final WebPortfoliosData data, final UniqueId overrideNodeId) {
-    String portfolioId = data.getBestPortfolioUriId(null);
-    String nodeId = data.getBestNodeUriId(overrideNodeId);
+    final String portfolioId = data.getBestPortfolioUriId(null);
+    final String nodeId = data.getBestNodeUriId(overrideNodeId);
     return data.getUriInfo().getBaseUriBuilder().path(WebPortfolioNodeResource.class).build(portfolioId, nodeId);
   }
 

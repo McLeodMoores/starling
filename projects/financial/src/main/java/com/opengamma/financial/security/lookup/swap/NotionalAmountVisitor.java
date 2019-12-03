@@ -17,22 +17,22 @@ import com.opengamma.financial.security.swap.VarianceSwapNotional;
 /* package */ class NotionalAmountVisitor implements NotionalVisitor<Double> {
 
   @Override
-  public Double visitCommodityNotional(CommodityNotional notional) {
+  public Double visitCommodityNotional(final CommodityNotional notional) {
     return null;
   }
 
   @Override
-  public Double visitInterestRateNotional(InterestRateNotional notional) {
+  public Double visitInterestRateNotional(final InterestRateNotional notional) {
     return notional.getAmount();
   }
 
   @Override
-  public Double visitSecurityNotional(SecurityNotional notional) {
+  public Double visitSecurityNotional(final SecurityNotional notional) {
     return null;
   }
 
   @Override
-  public Double visitVarianceSwapNotional(VarianceSwapNotional notional) {
+  public Double visitVarianceSwapNotional(final VarianceSwapNotional notional) {
     return null;
   }
 

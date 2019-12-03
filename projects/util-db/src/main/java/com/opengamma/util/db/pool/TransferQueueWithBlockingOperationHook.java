@@ -14,7 +14,7 @@ import com.opengamma.util.async.BlockingOperation;
 
 /**
  * Wrapper around a {@link TransferQueue} instance that will make calls to {@link BlockingOperation#wouldBlock} before any potentially blocking operations.
- * 
+ *
  * @param <T> the type of elements in the queue
  */
 public final class TransferQueueWithBlockingOperationHook<T> implements TransferQueue<T> {
@@ -51,10 +51,9 @@ public final class TransferQueueWithBlockingOperationHook<T> implements Transfer
   public boolean offer(final T e, final long timeout, final TimeUnit unit) throws InterruptedException {
     if (offer(e)) {
       return true;
-    } else {
-      BlockingOperation.wouldBlock();
-      return getUnderlying().offer(e, timeout, unit);
     }
+    BlockingOperation.wouldBlock();
+    return getUnderlying().offer(e, timeout, unit);
   }
 
   @Override
@@ -62,10 +61,9 @@ public final class TransferQueueWithBlockingOperationHook<T> implements Transfer
     final T result = poll();
     if (result != null) {
       return result;
-    } else {
-      BlockingOperation.wouldBlock();
-      return getUnderlying().take();
     }
+    BlockingOperation.wouldBlock();
+    return getUnderlying().take();
   }
 
   @Override
@@ -73,10 +71,9 @@ public final class TransferQueueWithBlockingOperationHook<T> implements Transfer
     final T result = poll();
     if (result != null) {
       return result;
-    } else {
-      BlockingOperation.wouldBlock();
-      return getUnderlying().poll(timeout, unit);
     }
+    BlockingOperation.wouldBlock();
+    return getUnderlying().poll(timeout, unit);
   }
 
   @Override
@@ -100,7 +97,7 @@ public final class TransferQueueWithBlockingOperationHook<T> implements Transfer
   }
 
   @Override
-  public int drainTo(final Collection<? super T> c, int maxElements) {
+  public int drainTo(final Collection<? super T> c, final int maxElements) {
     return getUnderlying().drainTo(c, maxElements);
   }
 
@@ -189,10 +186,9 @@ public final class TransferQueueWithBlockingOperationHook<T> implements Transfer
   public boolean tryTransfer(final T e, final long timeout, final TimeUnit unit) throws InterruptedException {
     if (tryTransfer(e)) {
       return true;
-    } else {
-      BlockingOperation.wouldBlock();
-      return getUnderlying().tryTransfer(e, timeout, unit);
     }
+    BlockingOperation.wouldBlock();
+    return getUnderlying().tryTransfer(e, timeout, unit);
   }
 
   @Override

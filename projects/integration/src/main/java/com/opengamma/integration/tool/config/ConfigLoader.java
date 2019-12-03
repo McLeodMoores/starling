@@ -33,93 +33,94 @@ import com.opengamma.master.portfolio.PortfolioSearchResult;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Class to load configurations from an input stream
+ * Class to load configurations from an input stream.
  */
 public class ConfigLoader {
-  private static final Logger s_logger = LoggerFactory.getLogger(ConfigLoader.class);
-  private ConfigMaster _configMaster;
-  private PortfolioMaster _portfolioMaster;
-  private boolean _actuallyStore;
-  private boolean _verbose;
-  private boolean _attemptToPortPortfolioIds;
-  
-  public ConfigLoader(ConfigMaster configMaster, PortfolioMaster portfolioMaster, boolean attemptToPortPortfolioIds, 
-                      boolean actuallyStore, boolean verbose) {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConfigLoader.class);
+  private final ConfigMaster _configMaster;
+  private final PortfolioMaster _portfolioMaster;
+  private final boolean _actuallyStore;
+  private final boolean _verbose;
+  private final boolean _attemptToPortPortfolioIds;
+
+  public ConfigLoader(final ConfigMaster configMaster, final PortfolioMaster portfolioMaster, final boolean attemptToPortPortfolioIds,
+      final boolean actuallyStore, final boolean verbose) {
     _configMaster = configMaster;
     _portfolioMaster = portfolioMaster;
     _attemptToPortPortfolioIds = attemptToPortPortfolioIds;
     _actuallyStore = actuallyStore;
     _verbose = verbose;
   }
-  
-  public void loadConfig(InputStream inputStream) {
-    FudgeXMLStreamReader xmlStreamReader = new FudgeXMLStreamReader(OpenGammaFudgeContext.getInstance(), new InputStreamReader(new BufferedInputStream(inputStream)));
-    FudgeMsgReader fudgeMsgReader = new FudgeMsgReader(xmlStreamReader);
-    FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
-    FudgeMsg configsMessage = fudgeMsgReader.nextMessage();
+
+  public void loadConfig(final InputStream inputStream) {
+    final FudgeXMLStreamReader xmlStreamReader = new FudgeXMLStreamReader(OpenGammaFudgeContext.getInstance(),
+        new InputStreamReader(new BufferedInputStream(inputStream)));
+    final FudgeMsgReader fudgeMsgReader = new FudgeMsgReader(xmlStreamReader);
+    final FudgeDeserializer deserializer = new FudgeDeserializer(OpenGammaFudgeContext.getInstance());
+    final FudgeMsg configsMessage = fudgeMsgReader.nextMessage();
     if (configsMessage == null) {
-      s_logger.error("Error reading first message from XML stream");
+      LOGGER.error("Error reading first message from XML stream");
       return;
     }
-    Object object = deserializer.fudgeMsgToObject(FlexiBean.class, configsMessage);
+    final Object object = deserializer.fudgeMsgToObject(FlexiBean.class, configsMessage);
     if (!(object instanceof FlexiBean)) {
-      s_logger.error("XML Stream deserialised to object of type " + object.getClass() + ": " + object.toString());
+      LOGGER.error("XML Stream deserialised to object of type " + object.getClass() + ": " + object.toString());
       return;
     }
-    FlexiBean wrapper = (FlexiBean) object;
+    final FlexiBean wrapper = (FlexiBean) object;
     if (!wrapper.contains("configs")) {
-      s_logger.error("File stream does not contain configs element");
+      LOGGER.error("File stream does not contain configs element");
       return;
     }
     @SuppressWarnings("unchecked")
-    List<ConfigEntry> configs = (List<ConfigEntry>) wrapper.get("configs");
+    final List<ConfigEntry> configs = (List<ConfigEntry>) wrapper.get("configs");
     if (wrapper.contains("idToPortfolioMap")) {
       @SuppressWarnings("unchecked")
-      Map<UniqueId, String> idToPortfolioMap = (Map<UniqueId, String>) wrapper.get("idToPortfolioMap");
+      final Map<UniqueId, String> idToPortfolioMap = (Map<UniqueId, String>) wrapper.get("idToPortfolioMap");
       if (idToPortfolioMap == null) {
-        s_logger.warn("Apparently corrupt portfolio id -> name map, won't attempt to port portfolio ids");
-        loadConfigs(configs, Collections.<UniqueId, String>emptyMap());
+        LOGGER.warn("Apparently corrupt portfolio id -> name map, won't attempt to port portfolio ids");
+        loadConfigs(configs, Collections.<UniqueId, String> emptyMap());
       } else {
         loadConfigs(configs, idToPortfolioMap);
       }
     } else {
-      loadConfigs(configs, Collections.<UniqueId, String>emptyMap());
+      loadConfigs(configs, Collections.<UniqueId, String> emptyMap());
     }
-    
+
   }
 
-  private void loadConfigs(List<ConfigEntry> configs, Map<UniqueId, String> idNameMap) {
-    for (ConfigEntry entry : configs) {
+  private void loadConfigs(final List<ConfigEntry> configs, final Map<UniqueId, String> idNameMap) {
+    for (final ConfigEntry entry : configs) {
       try {
-        Class<?> clazz = Class.forName(entry.getType());
-        Object object = entry.getObject();        
+        final Class<?> clazz = Class.forName(entry.getType());
+        Object object = entry.getObject();
         if (object instanceof ViewDefinition) {
           if (_attemptToPortPortfolioIds) {
             object = attemptToPortPortfolioIds((ViewDefinition) object, idNameMap);
           }
         }
-        ConfigItem<Object> item = ConfigItem.of(object, entry.getName(), clazz);
+        final ConfigItem<Object> item = ConfigItem.of(object, entry.getName(), clazz);
         if (_actuallyStore) {
           ConfigMasterUtils.storeByName(_configMaster, item);
           if (_verbose) {
-            s_logger.info("Stored " + entry.getName() + " of type " + entry.getType());
+            LOGGER.info("Stored " + entry.getName() + " of type " + entry.getType());
           }
         } else {
           if (_verbose) {
-            s_logger.info("Simulated store " + entry.getName() + " of type " + entry.getType());
+            LOGGER.info("Simulated store " + entry.getName() + " of type " + entry.getType());
           }
         }
 
-      } catch (ClassNotFoundException ex) {
-        s_logger.error("Could not find class called " + entry.getType() + " skipping config " + entry.getName());
+      } catch (final ClassNotFoundException ex) {
+        LOGGER.error("Could not find class called " + entry.getType() + " skipping config " + entry.getName());
       }
     }
   }
 
-  private ViewDefinition attemptToPortPortfolioIds(ViewDefinition viewDefinition, Map<UniqueId, String> idNameMap) {
+  private ViewDefinition attemptToPortPortfolioIds(final ViewDefinition viewDefinition, final Map<UniqueId, String> idNameMap) {
     if (idNameMap.containsKey(viewDefinition.getPortfolioId())) {
       if (_verbose) {
-        s_logger.info("Attempting to port portfolio id " + viewDefinition.getPortfolioId());
+        LOGGER.info("Attempting to port portfolio id " + viewDefinition.getPortfolioId());
       }
       UniqueId replacementId = lookupPortfolioByName(idNameMap.get(viewDefinition.getPortfolioId()));
       if (replacementId != null) {
@@ -131,25 +132,25 @@ public class ConfigLoader {
     }
     return viewDefinition;
   }
-  
-  private UniqueId lookupPortfolioByName(String name) {
-    PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
+
+  private UniqueId lookupPortfolioByName(final String name) {
+    final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
     searchRequest.setName(name);
-    PortfolioSearchResult searchResult = _portfolioMaster.search(searchRequest);
+    final PortfolioSearchResult searchResult = _portfolioMaster.search(searchRequest);
     try {
-      ManageablePortfolio singlePortfolio = searchResult.getSinglePortfolio();
+      final ManageablePortfolio singlePortfolio = searchResult.getSinglePortfolio();
       if (_verbose) {
-        s_logger.info("Found portfolio called " + name + " mapping in it's id: " + singlePortfolio.getUniqueId());
+        LOGGER.info("Found portfolio called " + name + " mapping in it's id: " + singlePortfolio.getUniqueId());
       }
       return singlePortfolio.getUniqueId();
-    } catch (IllegalStateException ise) {
-      s_logger.warn("Found multiple portfolios called " + name + " so skipping");
+    } catch (final IllegalStateException ise) {
+      LOGGER.warn("Found multiple portfolios called " + name + " so skipping");
       return null;
-    } catch (OpenGammaRuntimeException ogre) {
+    } catch (final OpenGammaRuntimeException ogre) {
       if (searchResult.getDocuments().size() > 1) {
-        s_logger.warn("Found multiple portfolios called " + name + " so skipping");
+        LOGGER.warn("Found multiple portfolios called " + name + " so skipping");
       } else {
-        s_logger.warn("Didn't find a portfolio called " + name + " so skipping");
+        LOGGER.warn("Didn't find a portfolio called " + name + " so skipping");
       }
       return null;
     }

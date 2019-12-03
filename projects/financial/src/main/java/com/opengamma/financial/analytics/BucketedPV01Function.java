@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * <p/>
+ * <p>
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics;
@@ -56,30 +56,30 @@ public class BucketedPV01Function extends BaseNonCompiledInvoker {
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext,
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext,
       final FunctionInputs inputs,
-      ComputationTarget target,
-      Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
+      final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
 
-    DoubleLabelledMatrix1D matrix = (DoubleLabelledMatrix1D) inputs.getComputedValue(YIELD_CURVE_NODE_SENSITIVITIES).getValue();
+    final DoubleLabelledMatrix1D matrix = (DoubleLabelledMatrix1D) inputs.getComputedValue(YIELD_CURVE_NODE_SENSITIVITIES).getValue();
 
-    ValueRequirement desiredValue = functional(desiredValues).first();
+    final ValueRequirement desiredValue = functional(desiredValues).first();
 
     final double rescaleFactor;
     if (desiredValue.getConstraints().getSingleValue(ValuePropertyNames.SCALING_FACTOR) != null) {
-      double scalingFactor = Double.parseDouble(desiredValue.getConstraint(ValuePropertyNames.SCALING_FACTOR));
+      final double scalingFactor = Double.parseDouble(desiredValue.getConstraint(ValuePropertyNames.SCALING_FACTOR));
       rescaleFactor = RESCALE_FACTOR / scalingFactor;
     } else {
       rescaleFactor = RESCALE_FACTOR;
     }
-    LabelledMatrix1D<Double, Double> matrixDividedBy10k = matrix.mapValues(new Function3<Double, Double, Object, Double>() {
+    final LabelledMatrix1D<Double, Double> matrixDividedBy10k = matrix.mapValues(new Function3<Double, Double, Object, Double>() {
       @Override
-      public Double execute(Double notUsed, Double value, Object notUsed2) {
+      public Double execute(final Double notUsed, final Double value, final Object notUsed2) {
         return value / rescaleFactor;
       }
     });
 
-    ValueSpecification valueSpecification = ValueSpecification.of(desiredValue.getValueName(),
+    final ValueSpecification valueSpecification = ValueSpecification.of(desiredValue.getValueName(),
         target.toSpecification(),
         desiredValue.getConstraints());
 

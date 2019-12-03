@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.value;
@@ -89,7 +89,7 @@ public class ValuePropertiesTest {
   }
 
   public void testWithAny() {
-    ValueProperties props = ValueProperties.withAny("A").get();
+    final ValueProperties props = ValueProperties.withAny("A").get();
     assertTrue(props.getValues("A").isEmpty());
   }
 
@@ -109,7 +109,8 @@ public class ValuePropertiesTest {
   }
 
   public void testIsSatisfiedBy() {
-    final ValueProperties requirement = ValueProperties.with("A", "1").with("B", "2", "3").withAny("C").withOptional("D").with("E", "1").withOptional("E").get();
+    final ValueProperties requirement =
+        ValueProperties.with("A", "1").with("B", "2", "3").withAny("C").withOptional("D").with("E", "1").withOptional("E").get();
     assertTrue(requirement.isSatisfiedBy(requirement));
     assertTrue(requirement.isSatisfiedBy(ValueProperties.all()));
     assertFalse(requirement.isSatisfiedBy(ValueProperties.none()));
@@ -133,7 +134,8 @@ public class ValuePropertiesTest {
   }
 
   public void testCompose() {
-    final ValueProperties requirement = ValueProperties.with("A", "1").with("B", "2", "3").withAny("C").withOptional("D").with("E", "1").withOptional("E").get();
+    final ValueProperties requirement =
+        ValueProperties.with("A", "1").with("B", "2", "3").withAny("C").withOptional("D").with("E", "1").withOptional("E").get();
     ValueProperties offering = ValueProperties.with("A", "1").with("B", "2", "3").withAny("C").get();
     ValueProperties props = offering.compose(requirement);
     assertSame(offering, props);
@@ -260,7 +262,7 @@ public class ValuePropertiesTest {
   private static void compare(final ValueProperties lesser, final ValueProperties greater) {
     final int c1 = lesser.compareTo(greater);
     final int c2 = greater.compareTo(lesser);
-    final String message = ("lesser = " + c1 + ", greater = " + c2);
+    final String message = "lesser = " + c1 + ", greater = " + c2;
     assertTrue(message, lesser.compareTo(greater) < 0);
     assertTrue(message, greater.compareTo(lesser) > 0);
   }
@@ -307,19 +309,19 @@ public class ValuePropertiesTest {
     assertEquals(ValueProperties.with("Ccy", "USD").get(), ValueProperties.parse("Ccy=USD"));
     assertEquals(ValueProperties.with("Ccy", "USD", "GBP").get(), ValueProperties.parse("Ccy=[GBP,USD]"));
     assertEquals(ValueProperties.withAny("Foo").get(), ValueProperties.parse("Foo"));
-    ValueProperties twoFooOneBar = ValueProperties.with("Foo", "123", "456").with("Bar", "7").get();
+    final ValueProperties twoFooOneBar = ValueProperties.with("Foo", "123", "456").with("Bar", "7").get();
     assertEquals(twoFooOneBar, ValueProperties.parse("Foo=[123,456],Bar=7"));
     assertEquals(twoFooOneBar, ValueProperties.parse("Foo=[123, 456],Bar=7"));
     assertEquals(twoFooOneBar, ValueProperties.parse("Foo=[123,456], Bar=7"));
     assertEquals(twoFooOneBar, ValueProperties.parse("Bar=7, Foo=[123,456]"));
     assertEquals(ValueProperties.withOptional("Foo").get(), ValueProperties.parse("Foo=[]?"));
     assertEquals(ValueProperties.with("Foo", "1").withOptional("Foo").get(), ValueProperties.parse("Foo=[1]?"));
-    ValueProperties oneOptionalFooTwoBar = ValueProperties.with("Foo", "123").withOptional("Foo").with("Bar", "7", "8").get();
+    final ValueProperties oneOptionalFooTwoBar = ValueProperties.with("Foo", "123").withOptional("Foo").with("Bar", "7", "8").get();
     assertEquals(oneOptionalFooTwoBar, ValueProperties.parse("Foo=[123]?,Bar=[7,8]"));
     assertEquals(oneOptionalFooTwoBar, ValueProperties.parse("Bar=[7,8],Foo=[123]?"));
     assertEquals(ValueProperties.withAny("ValueName").get(), ValueProperties.parse("ValueName="));
     assertEquals(ValueProperties.withAny("ValueName").get(), ValueProperties.parse("ValueName=[]"));
-    ValueProperties allButFoo = ValueProperties.all().withoutAny("Foo");
+    final ValueProperties allButFoo = ValueProperties.all().withoutAny("Foo");
     assertEquals(allButFoo, ValueProperties.parse("INFINITE-{Foo}"));
     assertEquals(allButFoo, ValueProperties.parse("INFINITE-{ Foo }"));
     assertEquals(allButFoo, ValueProperties.parse("INFINITE-{ Foo=[] }"));
@@ -347,9 +349,9 @@ public class ValuePropertiesTest {
     ValueProperties.parse("ValueName=[");
   }
 
-  private static void parseCycle(ValueProperties original) {
-    String vpString = original.toString();
-    ValueProperties parsed = ValueProperties.parse(vpString);
+  private static void parseCycle(final ValueProperties original) {
+    final String vpString = original.toString();
+    final ValueProperties parsed = ValueProperties.parse(vpString);
     assertEquals(original, parsed);
   }
 

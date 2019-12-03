@@ -31,11 +31,11 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class BuilderTestProxyFactory {
 
   interface BuilderTestProxy {
-    FudgeMsg proxy(final Class<?> clazz, FudgeMsg orig);
+    FudgeMsg proxy(Class<?> clazz, FudgeMsg orig);
   }
 
   public BuilderTestProxy getProxy() {
-    String execPath = System.getProperty("com.opengamma.util.test.BuilderTestProxyFactory.ExecBuilderTestProxy.execPath");
+    final String execPath = System.getProperty("com.opengamma.util.test.BuilderTestProxyFactory.ExecBuilderTestProxy.execPath");
     if (execPath != null) {
       return new ExecBuilderTestProxy(execPath);
     }
@@ -44,28 +44,28 @@ public class BuilderTestProxyFactory {
 
   private static class NullBuilderTestProxy implements BuilderTestProxy {
     @Override
-    public FudgeMsg proxy(final Class<?> clazz, FudgeMsg orig) {
+    public FudgeMsg proxy(final Class<?> clazz, final FudgeMsg orig) {
       return orig;
     }
   }
 
   private static class ExecBuilderTestProxy implements BuilderTestProxy {
-    private static final Logger s_logger = LoggerFactory.getLogger(ExecBuilderTestProxy.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExecBuilderTestProxy.class);
 
     private final String _execPath;
 
-    public ExecBuilderTestProxy(String execPath) {
+    ExecBuilderTestProxy(final String execPath) {
       _execPath = execPath;
     }
 
     @Override
-    public FudgeMsg proxy(final Class<?> clazz, FudgeMsg orig) {
-      FudgeContext context = OpenGammaFudgeContext.getInstance();
+    public FudgeMsg proxy(final Class<?> clazz, final FudgeMsg orig) {
+      final FudgeContext context = OpenGammaFudgeContext.getInstance();
 
-      LinkedList<String> command = new LinkedList<String>();
+      final LinkedList<String> command = new LinkedList<>();
       command.add(_execPath);
       command.add(clazz.getName());
-      
+
       final ProcessBuilder processBuilder = new ProcessBuilder(command);
       try {
         final Process proc = processBuilder.start();
@@ -74,21 +74,21 @@ public class BuilderTestProxyFactory {
               new FudgeDataOutputStreamWriter(context, proc.getOutputStream()))) {
             fudgeMsgWriter.writeMessage(orig);
             fudgeMsgWriter.flush();
-            
+
             try (FudgeMsgReader fudgeMsgReader = new FudgeMsgReader(
                 new FudgeDataInputStreamReader(context, proc.getInputStream()))) {
-              ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(3);
-              Future<FudgeMsg> retMsgFuture = scheduledThreadPoolExecutor.submit(new Callable<FudgeMsg>() {
+              final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(3);
+              final Future<FudgeMsg> retMsgFuture = scheduledThreadPoolExecutor.submit(new Callable<FudgeMsg>() {
                 @Override
                 public FudgeMsg call() throws Exception {
                   return fudgeMsgReader.nextMessage();
                 }
               });
-              
-              Future<List<String>> errFuture = scheduledThreadPoolExecutor.submit(new Callable<List<String>>() {
+
+              final Future<List<String>> errFuture = scheduledThreadPoolExecutor.submit(new Callable<List<String>>() {
                 @Override
                 public List<String> call() throws Exception {
-                  InputStream errorStream = proc.getErrorStream();
+                  final InputStream errorStream = proc.getErrorStream();
                   try {
                     return IOUtils.readLines(errorStream);
                   } finally {
@@ -96,11 +96,11 @@ public class BuilderTestProxyFactory {
                   }
                 }
               });
-              
-              for (String err : errFuture.get()) {
-                s_logger.warn(err);
+
+              for (final String err : errFuture.get()) {
+                LOGGER.warn(err);
               }
-              int ret = proc.waitFor();
+              final int ret = proc.waitFor();
               if (ret != 0) {
                 throw new IOException("Exit code not expected: " + ret);
               }
@@ -110,7 +110,7 @@ public class BuilderTestProxyFactory {
         } finally {
           proc.destroy();
         }
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         throw new AssertionError(ex);
       }
     }

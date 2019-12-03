@@ -23,7 +23,7 @@ public class WebUserUris {
    * Creates an instance.
    * @param data  the web data, not null
    */
-  public WebUserUris(WebUserData data) {
+  public WebUserUris(final WebUserData data) {
     _data = data;
   }
 

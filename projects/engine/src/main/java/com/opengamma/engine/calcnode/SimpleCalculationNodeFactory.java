@@ -154,8 +154,8 @@ public class SimpleCalculationNodeFactory implements InitializingBean {
       identifier = SimpleCalculationNode.createNodeId();
     }
     final CalculationNodeLogEventListener logListener = new CalculationNodeLogEventListener(_threadLocalLogListener);
-    final SimpleCalculationNode node = new SimpleCalculationNode(getViewComputationCache(), getFunctionCompilationService(), getFunctionExecutionContext(), identifier, getExecutorService(),
-        getStatisticsGatherer(), logListener);
+    final SimpleCalculationNode node = new SimpleCalculationNode(getViewComputationCache(), getFunctionCompilationService(),
+        getFunctionExecutionContext(), identifier, getExecutorService(), getStatisticsGatherer(), logListener);
     node.setUseWriteBehindSharedCache(isUseWriteBehindSharedCache());
     node.setUseWriteBehindPrivateCache(isUseWriteBehindPrivateCache());
     node.setUseAsynchronousTargetResolve(isUseAsynchronousTargetResolve());

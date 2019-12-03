@@ -21,10 +21,12 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 
+/**
+ *
+ */
 @BeanDefinition
 public class SimpleMultimapMockBean implements ImmutableBean {
 
@@ -102,7 +104,7 @@ public class SimpleMultimapMockBean implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       SimpleMultimapMockBean other = (SimpleMultimapMockBean) obj;
-      return JodaBeanUtils.equal(getSimpleMultimap(), other.getSimpleMultimap());
+      return JodaBeanUtils.equal(_simpleMultimap, other._simpleMultimap);
     }
     return false;
   }
@@ -110,7 +112,7 @@ public class SimpleMultimapMockBean implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSimpleMultimap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_simpleMultimap);
     return hash;
   }
 
@@ -128,7 +130,7 @@ public class SimpleMultimapMockBean implements ImmutableBean {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("simpleMultimap").append('=').append(JodaBeanUtils.toString(getSimpleMultimap())).append(',').append(' ');
+    buf.append("simpleMultimap").append('=').append(JodaBeanUtils.toString(_simpleMultimap)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -266,19 +268,31 @@ public class SimpleMultimapMockBean implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

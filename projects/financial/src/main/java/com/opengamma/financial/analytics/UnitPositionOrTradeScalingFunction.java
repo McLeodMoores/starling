@@ -26,7 +26,8 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Takes as input the result of a function that acts on ComputationTargetType.SECURITY, applies unit scaling ( * 1.0 ) and outputs the result for ComputationTargetType.POSITION_OR_TRADE.
+ * Takes as input the result of a function that acts on ComputationTargetType.SECURITY, applies unit scaling ( * 1.0 ) and outputs the result for
+ * ComputationTargetType.POSITION_OR_TRADE.
  */
 public class UnitPositionOrTradeScalingFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -65,13 +66,16 @@ public class UnitPositionOrTradeScalingFunction extends AbstractFunction.NonComp
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
-    final ValueSpecification specification = new ValueSpecification(_requirementName, target.toSpecification(), getResultProperties(inputs.keySet().iterator().next()));
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
+    final ValueSpecification specification = new ValueSpecification(_requirementName, target.toSpecification(),
+        getResultProperties(inputs.keySet().iterator().next()));
     return Collections.singleton(specification);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement outputValue = desiredValues.iterator().next();
     final ComputedValue inputValue = inputs.getAllValues().iterator().next();
     final ValueSpecification specification = new ValueSpecification(_requirementName, target.toSpecification(), outputValue.getConstraints());

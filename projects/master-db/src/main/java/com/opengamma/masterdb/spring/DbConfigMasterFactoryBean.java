@@ -33,7 +33,7 @@ public class DbConfigMasterFactoryBean extends AbstractDbMasterFactoryBean<DbCon
   //-------------------------------------------------------------------------
   @Override
   protected DbConfigMaster createObject() {
-    DbConfigMaster master = new DbConfigMaster(getDbConnector());
+    final DbConfigMaster master = new DbConfigMaster(getDbConnector());
     if (getUniqueIdScheme() != null) {
       master.setUniqueIdScheme(getUniqueIdScheme());
     }
@@ -41,7 +41,7 @@ public class DbConfigMasterFactoryBean extends AbstractDbMasterFactoryBean<DbCon
       master.setMaxRetries(getMaxRetries());
     }
     if (getJmsConnector() != null) {
-      JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
+      final JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
       master.setChangeManager(cm);
       cm.start();
     }

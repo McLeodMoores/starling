@@ -31,8 +31,9 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.master.security.SecurityDescription;
 
 /**
- *
+ * @deprecated Use {@link com.opengamma.financial.security.credit.StandardCDSSecurity}.
  */
+@Deprecated
 @BeanDefinition
 @SecurityDescription(type = StandardVanillaCDSSecurity.SECURITY_TYPE, description = "Standard vanilla cds")
 public class StandardVanillaCDSSecurity extends StandardCDSSecurity {
@@ -41,7 +42,7 @@ public class StandardVanillaCDSSecurity extends StandardCDSSecurity {
   private static final long serialVersionUID = 2L;
 
   /**
-   * The security type
+   * The security type.
    */
   public static final String SECURITY_TYPE = "STANDARD_VANILLA_CDS";
   /**
@@ -66,16 +67,16 @@ public class StandardVanillaCDSSecurity extends StandardCDSSecurity {
     super(SECURITY_TYPE);
   }
 
-  public StandardVanillaCDSSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer, final ExternalId referenceEntity, //CSIGNORE
-      final DebtSeniority debtSeniority, final RestructuringClause restructuringClause, final ExternalId regionId, final ZonedDateTime startDate,
-      final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate, final StubType stubType, final Frequency couponFrequency, final DayCount dayCount,
-      final BusinessDayConvention businessDayConvention, final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate,
-      final boolean adjustMaturityDate, final InterestRateNotional notional, final boolean includeAccruedPremium,
-      final boolean protectionStart, final double quotedSpread, final InterestRateNotional upfrontAmount, final double coupon,
-      final ZonedDateTime cashSettlementDate, final boolean adjustCashSettlementDate) {
-    super(isBuy, protectionSeller, protectionBuyer, referenceEntity, debtSeniority, restructuringClause, regionId, startDate, effectiveDate, maturityDate, stubType,
-        couponFrequency, dayCount, businessDayConvention, immAdjustMaturityDate, adjustEffectiveDate, adjustMaturityDate, notional, includeAccruedPremium,
-        protectionStart, quotedSpread, upfrontAmount, SECURITY_TYPE);
+  public StandardVanillaCDSSecurity(final boolean isBuy, final ExternalId protectionSeller, final ExternalId protectionBuyer,
+      final ExternalId referenceEntity, final DebtSeniority debtSeniority, final RestructuringClause restructuringClause,
+      final ExternalId regionId, final ZonedDateTime startDate, final ZonedDateTime effectiveDate, final ZonedDateTime maturityDate,
+      final StubType stubType, final Frequency couponFrequency, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+      final boolean immAdjustMaturityDate, final boolean adjustEffectiveDate, final boolean adjustMaturityDate,
+      final InterestRateNotional notional, final boolean includeAccruedPremium, final boolean protectionStart, final double quotedSpread,
+      final InterestRateNotional upfrontAmount, final double coupon, final ZonedDateTime cashSettlementDate, final boolean adjustCashSettlementDate) {
+    super(isBuy, protectionSeller, protectionBuyer, referenceEntity, debtSeniority, restructuringClause, regionId, startDate, effectiveDate, maturityDate,
+        stubType, couponFrequency, dayCount, businessDayConvention, immAdjustMaturityDate, adjustEffectiveDate, adjustMaturityDate, notional,
+        includeAccruedPremium, protectionStart, quotedSpread, upfrontAmount, SECURITY_TYPE);
     setCoupon(coupon);
     setCashSettlementDate(cashSettlementDate);
     setAdjustCashSettlementDate(adjustCashSettlementDate);

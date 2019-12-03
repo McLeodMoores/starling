@@ -9,25 +9,25 @@ import com.opengamma.engine.value.ComputedValueResult;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ViewResultEntry {
-  
+
   private final String _calculationConfiguration;
   private final ComputedValueResult _computedValue;
-  
-  public ViewResultEntry(String calculationConfiguration,
-      ComputedValueResult computedValue) {
+
+  public ViewResultEntry(final String calculationConfiguration,
+      final ComputedValueResult computedValue) {
     ArgumentChecker.notNull(calculationConfiguration, "calculationConfiguration");
     ArgumentChecker.notNull(computedValue, "computedValue");
     _calculationConfiguration = calculationConfiguration;
     _computedValue = computedValue;
   }
-  
+
   public String getCalculationConfiguration() {
     return _calculationConfiguration;
   }
-  
+
   public ComputedValueResult getComputedValue() {
     return _computedValue;
   }
@@ -41,13 +41,13 @@ public class ViewResultEntry {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_calculationConfiguration == null) ? 0 : _calculationConfiguration.hashCode());
-    result = prime * result + ((_computedValue == null) ? 0 : _computedValue.hashCode());
+    result = prime * result + (_calculationConfiguration == null ? 0 : _calculationConfiguration.hashCode());
+    result = prime * result + (_computedValue == null ? 0 : _computedValue.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -57,7 +57,7 @@ public class ViewResultEntry {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    ViewResultEntry other = (ViewResultEntry) obj;
+    final ViewResultEntry other = (ViewResultEntry) obj;
     if (_calculationConfiguration == null) {
       if (other._calculationConfiguration != null) {
         return false;
@@ -74,5 +74,5 @@ public class ViewResultEntry {
     }
     return true;
   }
-  
+
 }

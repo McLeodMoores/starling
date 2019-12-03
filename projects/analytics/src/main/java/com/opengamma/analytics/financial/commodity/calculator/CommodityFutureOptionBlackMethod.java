@@ -127,7 +127,8 @@ public final class CommodityFutureOptionBlackMethod {
   /**
    * @param derivative the OG-Analytics form of the derivative
    * @param marketData the data bundle containing a BlackVolatilitySurface, forward commodity and funding curves
-   * @return the forward delta wrt the forward underlying, ie the sensitivity of the undiscounted price to the forward value of the underlying, d(PV/Z)/d(fwdUnderlying)
+   * @return the forward delta wrt the forward underlying, i.e. the sensitivity of the undiscounted price to the
+   * forward value of the underlying, d(PV/Z)/d(fwdUnderlying).
    */
   public double forwardDelta(final CommodityFutureOption<?> derivative, final StaticReplicationDataBundle marketData) {
     ArgumentChecker.notNull(derivative, "derivative");
@@ -273,7 +274,7 @@ public final class CommodityFutureOptionBlackMethod {
   }
 
   /**
-   * Synonym for Vomma
+   * Synonym for Vomma.
    * @param derivative the OG-Analytics form of the derivative
    * @param marketData the data bundle containing a BlackVolatilitySurface, forward commodity and funding curves
    * @return the spot Volga, ie the 2nd order sensitivity of the spot price to the implied vol,

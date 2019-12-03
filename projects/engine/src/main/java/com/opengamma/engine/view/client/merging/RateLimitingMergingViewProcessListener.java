@@ -16,26 +16,28 @@ import com.opengamma.engine.view.listener.ViewResultListener;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Merges view process results to satisfy a specified maximum downstream update rate (given in terms of a minimum period between updates). This maximum rate can be adjusted on-the-fly.
+ * Merges view process results to satisfy a specified maximum downstream update rate (given in terms of a minimum period between updates). This maximum
+ * rate can be adjusted on-the-fly.
  */
 public class RateLimitingMergingViewProcessListener extends MergingViewProcessListener {
 
   private static final long MIN_PERIOD = 50;
 
   private final ScheduledExecutorService _timer;
-  private ReentrantLock _taskSetupLock = new ReentrantLock();
+  private final ReentrantLock _taskSetupLock = new ReentrantLock();
   private Future<?> _asyncUpdateCheckerTask;
 
   private boolean _isPaused;
 
-  private AtomicLong _minimumUpdatePeriodMillis = new AtomicLong(0);
+  private final AtomicLong _minimumUpdatePeriodMillis = new AtomicLong(0);
 
   /**
    * The time at which an update was last triggered.
    */
-  private AtomicLong _lastUpdateTimeMillis = new AtomicLong();
+  private final AtomicLong _lastUpdateTimeMillis = new AtomicLong();
 
-  public RateLimitingMergingViewProcessListener(ViewResultListener underlying, EngineResourceManagerInternal<?> cycleManager, ScheduledExecutorService timer) {
+  public RateLimitingMergingViewProcessListener(final ViewResultListener underlying, final EngineResourceManagerInternal<?> cycleManager,
+      final ScheduledExecutorService timer) {
     super(underlying, cycleManager);
     ArgumentChecker.notNull(timer, "timer");
     _timer = timer;
@@ -56,11 +58,13 @@ public class RateLimitingMergingViewProcessListener extends MergingViewProcessLi
   }
 
   /**
-   * Sets whether output from the provider is paused. While it is paused, updates are merged into a single update which is released when the provider is resumed.
-   * 
-   * @param isPaused <code>true</code> to indicate that output should be paused, or <code>false</code> to indicate that output should flow normally according to the update rate.
+   * Sets whether output from the provider is paused. While it is paused, updates are merged into a single update which is
+   * released when the provider is resumed.
+   *
+   * @param isPaused <code>true</code> to indicate that output should be paused, or <code>false</code> to indicate that output
+   * should flow normally according to the update rate.
    */
-  public void setPaused(boolean isPaused) {
+  public void setPaused(final boolean isPaused) {
     final Call<?> drain;
     _taskSetupLock.lock();
     try {
@@ -78,7 +82,7 @@ public class RateLimitingMergingViewProcessListener extends MergingViewProcessLi
   //-------------------------------------------------------------------------
   /**
    * Gets the minimum period which must have elapsed since the last update before an update is triggered.
-   * 
+   *
    * @return the minimum period which must have elapsed since the last update before an update is triggered, in milliseconds
    */
   public long getMinimumUpdatePeriodMillis() {
@@ -86,11 +90,11 @@ public class RateLimitingMergingViewProcessListener extends MergingViewProcessLi
   }
 
   /**
-   * Sets the minimum period which must have elapsed since the last update before an update is triggered. The value given is only a minimum, and the actual period between updates may be higher. If
-   * more frequent updates are required then consider using a pass-through provider instead.
-   * 
-   * @param minimumUpdatePeriodMillis the minimum period which must have elapsed since the last update before an update is triggered, in milliseconds. If 0, updates will be passed to listeners
-   *          immediately and synchronously (unless paused).
+   * Sets the minimum period which must have elapsed since the last update before an update is triggered. The value given is only a minimum, and the
+   * actual period between updates may be higher. If more frequent updates are required then consider using a pass-through provider instead.
+   *
+   * @param minimumUpdatePeriodMillis the minimum period which must have elapsed since the last update before an update is triggered, in milliseconds.
+   * If 0, updates will be passed to listeners immediately and synchronously (unless paused).
    */
   public void setMinimumUpdatePeriodMillis(long minimumUpdatePeriodMillis) {
     final Call<?> drain;
@@ -114,15 +118,15 @@ public class RateLimitingMergingViewProcessListener extends MergingViewProcessLi
   //-------------------------------------------------------------------------
   private boolean drainIfRequired() {
 
-    long currentTime = System.currentTimeMillis();
-    long lastUpdateTime = _lastUpdateTimeMillis.get();
-    long lastResultTime = getLastUpdateTimeMillis();
+    final long currentTime = System.currentTimeMillis();
+    final long lastUpdateTime = _lastUpdateTimeMillis.get();
+    final long lastResultTime = getLastUpdateTimeMillis();
     if (lastResultTime < lastUpdateTime) {
       // No more results since the last output
       return false;
     }
 
-    long minimumUpdatePeriodMillis = getMinimumUpdatePeriodMillis();
+    final long minimumUpdatePeriodMillis = getMinimumUpdatePeriodMillis();
     if (currentTime - lastUpdateTime < minimumUpdatePeriodMillis) {
       return false;
     }
@@ -137,7 +141,7 @@ public class RateLimitingMergingViewProcessListener extends MergingViewProcessLi
   }
 
   private Call<?> updateConfiguration() {
-    long minimumUpdatePeriodMillis = getMinimumUpdatePeriodMillis();
+    final long minimumUpdatePeriodMillis = getMinimumUpdatePeriodMillis();
     cancelTimerTask();
     final Call<?> drain = setPassThrough(minimumUpdatePeriodMillis == 0 && !isPaused());
     if (!isPaused() && !isPassThrough()) {

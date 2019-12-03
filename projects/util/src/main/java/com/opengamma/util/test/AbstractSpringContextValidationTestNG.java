@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -28,12 +28,12 @@ import com.opengamma.OpenGammaRuntimeException;
 
 /**
  * Extend from this to verify that a Spring configuration is valid. This is to spot
- * changes made to the code that prevent the beans from being instantiated properly. 
+ * changes made to the code that prevent the beans from being instantiated properly.
  */
 public abstract class AbstractSpringContextValidationTestNG {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractSpringContextValidationTestNG.class);
-  private ThreadLocal<GenericApplicationContext> _springContext = new ThreadLocal<GenericApplicationContext>();
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractSpringContextValidationTestNG.class);
+  private final ThreadLocal<GenericApplicationContext> _springContext = new ThreadLocal<>();
 
   @DataProvider(name = "runModes")
   public static Object[][] data_runMode() {  // CSIGNORE
@@ -48,7 +48,7 @@ public abstract class AbstractSpringContextValidationTestNG {
   }
 
   private GenericApplicationContext createSpringContext() {
-    GenericApplicationContext springContext = new GenericApplicationContext();
+    final GenericApplicationContext springContext = new GenericApplicationContext();
     _springContext.set(springContext);
     return springContext;
   }
@@ -56,26 +56,26 @@ public abstract class AbstractSpringContextValidationTestNG {
   //-------------------------------------------------------------------------
   /**
    * This should be called by the subclass to initialize the test.
-   * 
+   *
    * @param configXml  the Spring XML file, not null
    */
   protected void loadClassPathResource(final String configXml) {
-    GenericApplicationContext springContext = createSpringContext();
-    XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(springContext);
+    final GenericApplicationContext springContext = createSpringContext();
+    final XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(springContext);
     xmlReader.loadBeanDefinitions(new ClassPathResource(configXml));
     springContext.refresh();
   }
 
   protected void loadFileSystemResource(final String path) {
-    GenericApplicationContext springContext = createSpringContext();
-    XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(getSpringContext());
+    final GenericApplicationContext springContext = createSpringContext();
+    final XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(getSpringContext());
     xmlReader.loadBeanDefinitions(new FileSystemResource(path));
     springContext.refresh();
   }
 
   protected void loadXMLResource(final String xml) {
-    GenericApplicationContext springContext = createSpringContext();
-    XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(getSpringContext());
+    final GenericApplicationContext springContext = createSpringContext();
+    final XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(getSpringContext());
     xmlReader.setValidationMode(XmlBeanDefinitionReader.VALIDATION_NONE);
     xmlReader.loadBeanDefinitions(new InputSource(new StringReader(xml)));
     springContext.refresh();
@@ -83,12 +83,12 @@ public abstract class AbstractSpringContextValidationTestNG {
 
   protected void loadUrlResource(final String url) {
     try {
-      GenericApplicationContext springContext = createSpringContext();
-      XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(getSpringContext());
+      final GenericApplicationContext springContext = createSpringContext();
+      final XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(getSpringContext());
       xmlReader.loadBeanDefinitions(new UrlResource(url));
       springContext.refresh();
-      
-    } catch (MalformedURLException ex) {
+
+    } catch (final MalformedURLException ex) {
       throw new OpenGammaRuntimeException("Malformed URL - " + url, ex);
     }
   }
@@ -97,13 +97,13 @@ public abstract class AbstractSpringContextValidationTestNG {
    * Populates the Spring context from multiple XML configuration files.
    * The file paths must have a prefix to indicate what kind of resource
    * they are, e.g. {@code file:} or {@code classpath:}.
-   * 
+   *
    * @param filePaths  the file paths, not null
    */
   protected void loadResources(final String... filePaths) {
-    GenericApplicationContext springContext = createSpringContext();
-    XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(getSpringContext());
-    for (String path : filePaths) {
+    final GenericApplicationContext springContext = createSpringContext();
+    final XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(getSpringContext());
+    for (final String path : filePaths) {
       xmlReader.loadBeanDefinitions(path);
     }
     springContext.refresh();
@@ -124,15 +124,15 @@ public abstract class AbstractSpringContextValidationTestNG {
     if (beans.length == 0) {
       fail("No beans created");
     }
-    s_logger.info("{} beans created by {}", beans.length, getClass());
-    for (String bean : beans) {
-      s_logger.debug("Bean name {}", bean);
+    LOGGER.info("{} beans created by {}", beans.length, getClass());
+    for (final String bean : beans) {
+      LOGGER.debug("Bean name {}", bean);
     }
   }
 
   /**
    * This tests that a specific bean was loaded.
-   * 
+   *
    * @param <T> the bean type
    * @param clazz  the bean class, not null
    * @param name  the bean name, not null

@@ -82,11 +82,13 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
 
   /**
    * Creates an instance.
-   * 
-   * @param bloombergConnector  the Bloomberg connector, not null
-   * @param serviceName  the Bloomberg service to start, not null
+   *
+   * @param bloombergConnector
+   *          the Bloomberg connector, not null
+   * @param serviceName
+   *          the Bloomberg service to start, not null
    */
-  public AbstractBloombergStaticDataProvider(BloombergConnector bloombergConnector, String serviceName) {
+  public AbstractBloombergStaticDataProvider(final BloombergConnector bloombergConnector, final String serviceName) {
     ArgumentChecker.notNull(bloombergConnector, "bloombergConnector");
     ArgumentChecker.notNull(bloombergConnector.getSessionOptions(), "bloombergConnector.sessionOptions");
     ArgumentChecker.notEmpty(serviceName, "serviceName");
@@ -98,17 +100,17 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
   }
 
   private List<String> getServiceNames() {
-    List<String> serviceNames = Lists.newArrayList(_serviceName);
+    final List<String> serviceNames = Lists.newArrayList(_serviceName);
     if (_requiresAuthentication) {
       serviceNames.add(BloombergConstants.AUTH_SVC_NAME);
     }
     return serviceNames;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the Bloomberg session options.
-   * 
+   *
    * @return the session options
    */
   public BloombergConnector getBloombergConnector() {
@@ -117,17 +119,18 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
 
   /**
    * Gets the active logger.
-   * 
+   *
    * @return the logger.
    */
   protected abstract Logger getLogger();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the Bloomberg session.
-   * 
+   *
    * @return the session
-   * @throws OpenGammaRuntimeException If no connection to Bloomberg is available
+   * @throws OpenGammaRuntimeException
+   *           If no connection to Bloomberg is available
    */
   protected Session getSession() {
     return _sessionProvider.getSession();
@@ -135,14 +138,15 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
 
   /**
    * @return The Bloomberg service.
-   * @throws OpenGammaRuntimeException If no connection to Bloomberg is available
+   * @throws OpenGammaRuntimeException
+   *           If no connection to Bloomberg is available
    */
   protected Service getService() {
     return _sessionProvider.getService(_serviceName);
   }
 
   private synchronized void releaseBlockedRequests() {
-    for (Entry<CorrelationID, SettableFuture<List<Element>>> entry : _responseFutures.entrySet()) {
+    for (final Entry<CorrelationID, SettableFuture<List<Element>>> entry : _responseFutures.entrySet()) {
       List<Element> messages = _responseMessages.remove(entry.getKey());
       if (messages == null) {
         messages = new ArrayList<>();
@@ -161,19 +165,20 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
     releaseBlockedRequests();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Sends a request to Bloomberg, waiting for the response.
-   * 
-   * @param request the request to send, not null
+   *
+   * @param request
+   *          the request to send, not null
    * @return the correlation identifier, not null
    */
-  protected Future<List<Element>> submitRequest(Request request) {
-    Session session = getSession();
-    CorrelationID cid = new CorrelationID(generateCorrelationID());
-    
-    SettableFuture<List<Element>> resultFuture = SettableFuture.<List<Element>>create();
-    ArrayList<Element> result = new ArrayList<>();
+  protected Future<List<Element>> submitRequest(final Request request) {
+    final Session session = getSession();
+    final CorrelationID cid = new CorrelationID(generateCorrelationID());
+
+    final SettableFuture<List<Element>> resultFuture = SettableFuture.<List<Element>> create();
+    final ArrayList<Element> result = new ArrayList<>();
     try {
       if (_requiresAuthentication) {
         getLogger().debug("submitting authorized request {} with cid {}", request, cid);
@@ -184,7 +189,7 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
       }
       _responseMessages.put(cid, result);
       _responseFutures.put(cid, resultFuture);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       getLogger().warn("Error executing bloomberg reference data request", ex);
       resultFuture.set(result);
     }
@@ -193,23 +198,25 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
 
   /**
    * Sends an authorization request to Bloomberg, waiting for the response.
-   * 
-   * @param request the request to send, not null
-   * @param userIdentity the user identity, not null
+   *
+   * @param request
+   *          the request to send, not null
+   * @param userIdentity
+   *          the user identity, not null
    * @return the collection of results, not null
    */
-  protected Future<List<Element>> submitAuthorizationRequest(Request request, Identity userIdentity) {
+  protected Future<List<Element>> submitAuthorizationRequest(final Request request, final Identity userIdentity) {
     getLogger().debug("Sending Request={}", request);
-    Session session = getSession();
-    CorrelationID cid = new CorrelationID(generateCorrelationID());
+    final Session session = getSession();
+    final CorrelationID cid = new CorrelationID(generateCorrelationID());
 
-    SettableFuture<List<Element>> resultFuture = SettableFuture.<List<Element>>create();
-    ArrayList<Element> result = new ArrayList<>();
+    final SettableFuture<List<Element>> resultFuture = SettableFuture.<List<Element>> create();
+    final ArrayList<Element> result = new ArrayList<>();
     try {
       session.sendAuthorizationRequest(request, userIdentity, cid);
       _responseMessages.put(cid, result);
       _responseFutures.put(cid, resultFuture);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       getLogger().warn("Error executing bloomberg reference data request", ex);
       resultFuture.set(result);
     }
@@ -218,14 +225,14 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
 
   /**
    * Generates a correlation identifier.
-   * 
+   *
    * @return the correlation identifier, not null
    */
   protected long generateCorrelationID() {
     return _nextCorrelationId.getAndIncrement();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Starts the Bloomberg service.
    */
@@ -244,18 +251,17 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
     getLogger().info("Bloomberg event processor started");
     getLogger().info("Bloomberg started");
 
-
     if (_requiresAuthentication) {
       // we need authorization done
-      BloombergBpipeApplicationUserIdentityProvider identityProvider = new BloombergBpipeApplicationUserIdentityProvider(_sessionProvider);
+      final BloombergBpipeApplicationUserIdentityProvider identityProvider = new BloombergBpipeApplicationUserIdentityProvider(_sessionProvider);
       _applicationIdentity = identityProvider.getIdentity();
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if the Bloomberg service is running.
-   * 
+   *
    * @return true if running
    */
   @Override
@@ -271,18 +277,18 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
    */
   protected void ensureStarted() {
     getSession();
-    if (_thread == null || _thread.isAlive() == false) {
+    if (_thread == null || !_thread.isAlive()) {
       throw new IllegalStateException("Event polling thread not alive; has start() been called?");
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Stops the Bloomberg service.
    */
   @Override
   public synchronized void stop() {
-    if (isRunning() == false) {
+    if (!isRunning()) {
       getLogger().info("Bloomberg already stopped");
       return;
     }
@@ -290,7 +296,7 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
     _eventProcessor.terminate();
     try {
       _thread.join();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.interrupted();
     }
     _eventProcessor = null;
@@ -302,7 +308,7 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
     getLogger().info("Bloomberg event processor stopped");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Thread runner that handles Bloomberg events.
    */
@@ -316,36 +322,36 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
       Event event;
       try {
         event = getSession().nextEvent(1000L);
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         Thread.interrupted();
         getLogger().warn("Unable to retrieve the next event available for processing on this session", e);
         return;
-      } catch (ConnectionUnavailableException e) {
+      } catch (final ConnectionUnavailableException e) {
         getLogger().warn("No connection to Bloomberg available, failed to get next event", e);
         try {
           Thread.sleep(RETRY_PERIOD);
-        } catch (InterruptedException e1) {
+        } catch (final InterruptedException e1) {
           getLogger().warn("Interrupted waiting to retry", e1);
         }
         return;
-      } catch (RuntimeException e) {
+      } catch (final RuntimeException e) {
         getLogger().warn("Unable to retrieve the next event available for processing on this session", e);
         return;
       }
       if (event == null) {
-        //getLogger().debug("Got NULL event");
+        // getLogger().debug("Got NULL event");
         return;
       }
       getLogger().debug("Got event of type {}", event.eventType());
       if (getLogger().isDebugEnabled()) {
-        for (Message msg : event) {
+        for (final Message msg : event) {
           getLogger().debug("{}", msg);
         }
       }
 
-      MessageIterator msgIter = event.messageIterator();
+      final MessageIterator msgIter = event.messageIterator();
       while (msgIter.hasNext()) {
-        Message msg = msgIter.next();
+        final Message msg = msgIter.next();
         if (event.eventType() == Event.EventType.SESSION_STATUS) {
           if (msg.messageType().toString().equals("SessionTerminated")) {
             getLogger().error("Session terminated");
@@ -356,10 +362,10 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
         }
 
         final CorrelationID responseCid = msg.correlationID();
-        Element element = msg.asElement();
+        final Element element = msg.asElement();
         getLogger().debug("got msg with cid={} msg.asElement={}", responseCid, msg.asElement());
         if (responseCid != null) {
-          List<Element> messages = _responseMessages.get(responseCid);
+          final List<Element> messages = _responseMessages.get(responseCid);
           if (messages != null) {
             messages.add(element);
           }
@@ -367,11 +373,11 @@ public abstract class AbstractBloombergStaticDataProvider implements Lifecycle {
       }
 
       if (event.eventType() == Event.EventType.RESPONSE) {
-        for (Message message : event) {
-          CorrelationID correlationID = message.correlationID();
-          List<Element> result = _responseMessages.remove(correlationID);
+        for (final Message message : event) {
+          final CorrelationID correlationID = message.correlationID();
+          final List<Element> result = _responseMessages.remove(correlationID);
           if (result != null) {
-            SettableFuture<List<Element>> responseFuture = _responseFutures.remove(correlationID);
+            final SettableFuture<List<Element>> responseFuture = _responseFutures.remove(correlationID);
             if (responseFuture != null) {
               responseFuture.set(result);
             }

@@ -7,7 +7,6 @@ package com.opengamma.analytics.financial.interestrate.payments.derivative;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -32,9 +31,13 @@ public abstract class Payment implements InstrumentDerivative {
 
   /**
    * Constructor for a Payment.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param fundingCurveName Name of the funding curve.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
+   * @param fundingCurveName
+   *          Name of the funding curve.
    * @deprecated Use the constructor that does not take a curve name
    */
   @Deprecated
@@ -49,8 +52,11 @@ public abstract class Payment implements InstrumentDerivative {
 
   /**
    * Constructor for a Payment.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentTime
+   *          Time (in years) up to the payment.
    */
   public Payment(final Currency currency, final double paymentTime) {
     ArgumentChecker.notNull(currency, "currency");
@@ -62,6 +68,7 @@ public abstract class Payment implements InstrumentDerivative {
 
   /**
    * Gets the _paymentTime field.
+   * 
    * @return the payment time
    */
   public double getPaymentTime() {
@@ -70,8 +77,9 @@ public abstract class Payment implements InstrumentDerivative {
 
   /**
    * Gets the _fundingCurveName field.
+   *
    * @return The funding curve name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getFundingCurveName() {
@@ -83,6 +91,7 @@ public abstract class Payment implements InstrumentDerivative {
 
   /**
    * Gets the _currency field.
+   * 
    * @return The currency
    */
   public Currency getCurrency() {
@@ -90,16 +99,19 @@ public abstract class Payment implements InstrumentDerivative {
   }
 
   /**
-   * Return a reference amount. For coupon it is the notional, for simple payments it is the paid amount. Used mainly to assess if the amount is paid or received.
+   * Return a reference amount. For coupon it is the notional, for simple payments it is the paid amount. Used mainly to assess if the amount is paid or
+   * received.
+   * 
    * @return The amount.
    */
   public abstract double getReferenceAmount();
 
   /**
    * Check if the payment is of the type CouponFixed or CouponIbor. Used to check that payment are of vanilla type.
-   * @return  True if IborCoupon or FixedCoupon
+   * 
+   * @return True if IborCoupon or FixedCoupon
    */
-  public boolean isIborOrFixed() { //TODO: is this method necessary?
+  public boolean isIborOrFixed() { // TODO: is this method necessary?
     return this instanceof CouponFixed || this instanceof CouponIbor;
   }
 

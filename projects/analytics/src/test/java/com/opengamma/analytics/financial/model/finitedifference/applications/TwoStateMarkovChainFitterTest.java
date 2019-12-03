@@ -21,11 +21,12 @@ import com.opengamma.analytics.financial.model.finitedifference.MeshingFunction;
 import com.opengamma.analytics.financial.model.finitedifference.PDEFullResults1D;
 import com.opengamma.analytics.financial.model.finitedifference.PDEGrid1D;
 import com.opengamma.analytics.financial.model.interestrate.curve.ForwardCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWithTransform;
 import com.opengamma.util.monitor.OperationTimer;
@@ -41,7 +42,8 @@ import com.opengamma.util.tuple.Pairs;
 public class TwoStateMarkovChainFitterTest {
   //TODO just put this in to stop failures
   private static final Interpolator1D INTERPOLATOR_1D =
-      CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.FLAT_EXTRAPOLATOR, Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+      NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME,
+          FlatExtrapolator1dAdapter.NAME);
   private static final GridInterpolator2D GRID_INTERPOLATOR2D = new GridInterpolator2D(INTERPOLATOR_1D, INTERPOLATOR_1D);
 
   private static final double THETA = 0.55;

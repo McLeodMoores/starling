@@ -47,7 +47,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * 
+ *
  */
 public class SecurityPriceSeriesFunction extends AbstractFunction.NonCompiledInvoker {
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
@@ -64,7 +64,8 @@ public class SecurityPriceSeriesFunction extends AbstractFunction.NonCompiledInv
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final Security security = target.getSecurity();
     final Clock snapshotClock = executionContext.getValuationClock();
     final LocalDate now = ZonedDateTime.now(snapshotClock).toLocalDate();
@@ -84,7 +85,7 @@ public class SecurityPriceSeriesFunction extends AbstractFunction.NonCompiledInv
     }
     final Schedule scheduleCalculator = getScheduleCalculator(scheduleCalculatorName);
     final TimeSeriesSamplingFunction samplingFunction = getSamplingFunction(samplingFunctionName);
-    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR); //REVIEW emcleod should "fromEnd" be hard-coded?
+    final LocalDate[] schedule = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(startDate, now, true, false), WEEKEND_CALENDAR);
     final LocalDateDoubleTimeSeries resultTS = samplingFunction.getSampledTimeSeries(ts, schedule);
     final ValueProperties resultProperties = createValueProperties()
         .with(ValuePropertyNames.SAMPLING_PERIOD, samplingPeriodName)
@@ -108,11 +109,12 @@ public class SecurityPriceSeriesFunction extends AbstractFunction.NonCompiledInv
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> samplingPeriods = desiredValue.getConstraints().getValues(ValuePropertyNames.SAMPLING_PERIOD);
-    if ((samplingPeriods == null) || (samplingPeriods.size() != 1)) {
+    if (samplingPeriods == null || samplingPeriods.size() != 1) {
       return null;
     }
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
-    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(target.getSecurity().getExternalIdBundle(), null, null, null, _fieldName, _resolutionKey);
+    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(target.getSecurity().getExternalIdBundle(), null, null, null, _fieldName,
+        _resolutionKey);
     if (timeSeries == null) {
       return null;
     }
@@ -124,16 +126,17 @@ public class SecurityPriceSeriesFunction extends AbstractFunction.NonCompiledInv
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final ValueProperties.Builder properties = createValueProperties();
     properties
-        .withAny(ValuePropertyNames.SAMPLING_PERIOD)
-        .withAny(ValuePropertyNames.SCHEDULE_CALCULATOR)
-        .withAny(ValuePropertyNames.SAMPLING_FUNCTION)
-        .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode());
+    .withAny(ValuePropertyNames.SAMPLING_PERIOD)
+    .withAny(ValuePropertyNames.SCHEDULE_CALCULATOR)
+    .withAny(ValuePropertyNames.SAMPLING_FUNCTION)
+    .with(ValuePropertyNames.CURRENCY, FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode());
     return Collections.singleton(new ValueSpecification(ValueRequirementNames.PRICE_SERIES, target.toSpecification(), properties.get()));
   }
 
   @Override
   public ComputationTargetType getTargetType() {
-    // REVIEW 2013-05-14 Andrew -- Instead of relying on "canApplyTo", putting only the classes for which "getCurrency" will return a happy value would be faster
+    // REVIEW 2013-05-14 Andrew -- Instead of relying on "canApplyTo", putting only the classes for which "getCurrency"
+    // will return a happy value would be faster
     return TYPE;
   }
 

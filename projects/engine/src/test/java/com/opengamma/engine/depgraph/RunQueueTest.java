@@ -75,14 +75,14 @@ public class RunQueueTest {
         } while (time < 5000000000L);
       }
       synchronized (speed) {
-        speed[0] += (double) isEmpty / ((double) time / 1e9);
-        speed[1] += (double) take / ((double) time / 1e9);
-        speed[2] += (double) add / ((double) time / 1e9);
+        speed[0] += isEmpty / (time / 1.e9);
+        speed[1] += take / (time / 1.e9);
+        speed[2] += add / (time / 1.e9);
       }
       barrier.await();
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
-    } catch (BrokenBarrierException e) {
+    } catch (final BrokenBarrierException e) {
       throw new OpenGammaRuntimeException("Broken barrier", e);
     }
   }

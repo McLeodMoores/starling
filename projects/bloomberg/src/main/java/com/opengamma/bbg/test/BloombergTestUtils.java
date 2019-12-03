@@ -43,7 +43,7 @@ public final class BloombergTestUtils {
   //-------------------------------------------------------------------------
   /**
    * Creates a Bloomberg connector for testing.
-   * 
+   *
    * @return the connector, not null
    */
   public static BloombergConnector getBloombergConnector() {
@@ -52,7 +52,7 @@ public final class BloombergTestUtils {
 
   /**
    * Creates a Bloomberg connector for testing.
-   * 
+   *
    * @return the connector, not null
    */
   public static BloombergConnector getBloombergBipeConnector() {
@@ -64,11 +64,11 @@ public final class BloombergTestUtils {
    * This must be started before use by the caller.
    * This must be closed after use by the caller.
    * It is typically also wrapped in a caching provider.
-   * 
+   *
    * @return the provider, not null
    */
   public static BloombergReferenceDataProvider getBloombergReferenceDataProvider() {
-    BloombergConnector bbgConnector = BloombergTestUtils.getBloombergConnector();
+    final BloombergConnector bbgConnector = BloombergTestUtils.getBloombergConnector();
     return new BloombergReferenceDataProvider(bbgConnector);
   }
 
@@ -78,24 +78,24 @@ public final class BloombergTestUtils {
 
   /**
    * Creates Bloomberg session options for testing.
-   * 
+   *
    * @return the session options, not null
    */
-  private static SessionOptions getSessionOptions(String bbgServerHostName, String bbgServerPortName, String applicationKey) {
-    SessionOptions options = new SessionOptions();
-    Properties properties = TestProperties.getTestProperties();
-    String serverHost = properties.getProperty(bbgServerHostName);
+  private static SessionOptions getSessionOptions(final String bbgServerHostName, final String bbgServerPortName, final String applicationKey) {
+    final SessionOptions options = new SessionOptions();
+    final Properties properties = TestProperties.getTestProperties();
+    final String serverHost = properties.getProperty(bbgServerHostName);
     if (StringUtils.isBlank(serverHost)) {
       throw new OpenGammaRuntimeException(bbgServerHostName + " is missing in tests.properties");
     }
-    String serverPort = properties.getProperty(bbgServerPortName);
+    final String serverPort = properties.getProperty(bbgServerPortName);
     if (StringUtils.isBlank(serverPort)) {
       throw new OpenGammaRuntimeException(bbgServerPortName + " is missing in tests.properties");
     }
     options.setServerHost(serverHost);
     options.setServerPort(Integer.parseInt(serverPort));
     if (applicationKey != null) {
-      String applicationName = properties.getProperty(applicationKey);
+      final String applicationName = properties.getProperty(applicationKey);
       if (applicationName != null) {
         options.setAuthenticationOptions(BloombergConstants.AUTH_APP_PREFIX + applicationName);
       }
@@ -106,14 +106,14 @@ public final class BloombergTestUtils {
   //-------------------------------------------------------------------------
   /**
    * Creates a Mongo connector for testing.
-   * 
+   *
    * @return the connector, not null
    */
   public static MongoConnector getMongoConnector() {
-    Properties testProperties = TestProperties.getTestProperties();
-    String mongoHost = testProperties.getProperty("mongoServer.host");
-    int mongoPort = Integer.parseInt(testProperties.getProperty("mongoServer.port"));
-    MongoConnectorFactoryBean mongoFactory = new MongoConnectorFactoryBean();
+    final Properties testProperties = TestProperties.getTestProperties();
+    final String mongoHost = testProperties.getProperty("mongoServer.host");
+    final int mongoPort = Integer.parseInt(testProperties.getProperty("mongoServer.port"));
+    final MongoConnectorFactoryBean mongoFactory = new MongoConnectorFactoryBean();
     mongoFactory.setName("BloombergTestUtils");
     mongoFactory.setHost(mongoHost);
     mongoFactory.setPort(mongoPort);
@@ -124,26 +124,26 @@ public final class BloombergTestUtils {
 
   /**
    * Creates a Mongo caching reference data provider for testing.
-   * 
+   *
    * @param bbgProvider  the Bloomberg provider to wrap, not null
    * @return the provider, not null
    */
-  public static ReferenceDataProvider getMongoCachingReferenceDataProvider(BloombergReferenceDataProvider bbgProvider) {
-    MongoConnector mongoConnector = BloombergTestUtils.getMongoConnector();
+  public static ReferenceDataProvider getMongoCachingReferenceDataProvider(final BloombergReferenceDataProvider bbgProvider) {
+    final MongoConnector mongoConnector = BloombergTestUtils.getMongoConnector();
     return new MongoDBValueCachingReferenceDataProvider(bbgProvider, mongoConnector);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates a random tick.
-   * 
+   *
    * @param random  the source of randomness, not null
    * @param fudgeMsgFactory  the Fudge message factory, not null
    * @return the message, not null
    */
-  public static MutableFudgeMsg makeRandomStandardTick(Random random, FudgeMsgFactory fudgeMsgFactory) {
-    MutableFudgeMsg result = fudgeMsgFactory.newMessage();
-    MutableFudgeMsg bbgTickAsFudgMsg = fudgeMsgFactory.newMessage();
+  public static MutableFudgeMsg makeRandomStandardTick(final Random random, final FudgeMsgFactory fudgeMsgFactory) {
+    final MutableFudgeMsg result = fudgeMsgFactory.newMessage();
+    final MutableFudgeMsg bbgTickAsFudgMsg = fudgeMsgFactory.newMessage();
     bbgTickAsFudgMsg.add("BID", String.valueOf(random.nextDouble()));
     bbgTickAsFudgMsg.add("ASK", String.valueOf(random.nextDouble()));
     bbgTickAsFudgMsg.add("BEST_BID", String.valueOf(random.nextDouble()));
@@ -187,19 +187,19 @@ public final class BloombergTestUtils {
 
   /**
    * Gets an example equity option ticker directly from Bloomberg reference data.
-   * 
+   *
    * @return the ticker, not null
    */
   public static String getSampleEquityOptionTicker() {
-    BloombergReferenceDataProvider rdp = new BloombergReferenceDataProvider(getBloombergConnector());
+    final BloombergReferenceDataProvider rdp = new BloombergReferenceDataProvider(getBloombergConnector());
     rdp.start();
-    
-    Set<ExternalId> options = BloombergDataUtils.getOptionChain(rdp, "AAPL US Equity");
+
+    final Set<ExternalId> options = BloombergDataUtils.getOptionChain(rdp, "AAPL US Equity");
     assertEquals(false, options.isEmpty());
-    ExternalId aaplOptionId = options.iterator().next();
-    
+    final ExternalId aaplOptionId = options.iterator().next();
+
     rdp.stop();
-    
+
     return aaplOptionId.getValue();
   }
 

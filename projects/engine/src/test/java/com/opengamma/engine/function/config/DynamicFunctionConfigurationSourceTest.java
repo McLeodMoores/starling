@@ -43,7 +43,7 @@ public class DynamicFunctionConfigurationSourceTest {
     final DynamicFunctionConfigurationSource source = new BeanDynamicFunctionConfigurationSource(DummyChangeManager.INSTANCE) {
 
       @Override
-      protected boolean isPropogateEvent(ChangeEvent event) {
+      protected boolean isPropogateEvent(final ChangeEvent event) {
         throw new UnsupportedOperationException();
       }
 
@@ -66,7 +66,7 @@ public class DynamicFunctionConfigurationSourceTest {
     final DynamicFunctionConfigurationSource source = new BeanDynamicFunctionConfigurationSource(cm) {
 
       @Override
-      protected boolean isPropogateEvent(ChangeEvent event) {
+      protected boolean isPropogateEvent(final ChangeEvent event) {
         throw new UnsupportedOperationException();
       }
 
@@ -100,7 +100,7 @@ public class DynamicFunctionConfigurationSourceTest {
     final DynamicFunctionConfigurationSource source = new BeanDynamicFunctionConfigurationSource(cm) {
 
       @Override
-      protected boolean isPropogateEvent(ChangeEvent event) {
+      protected boolean isPropogateEvent(final ChangeEvent event) {
         return event.getObjectId().getValue().equals("Bar");
       }
 

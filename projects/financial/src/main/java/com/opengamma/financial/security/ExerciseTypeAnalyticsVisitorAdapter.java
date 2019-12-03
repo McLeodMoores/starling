@@ -18,10 +18,10 @@ import com.opengamma.financial.security.option.ExerciseTypeVisitor;
  *
  */
 public final class ExerciseTypeAnalyticsVisitorAdapter implements ExerciseTypeVisitor<ExerciseDecisionType> {
-  private static final ExerciseTypeAnalyticsVisitorAdapter s_instance = new ExerciseTypeAnalyticsVisitorAdapter();
+  private static final ExerciseTypeAnalyticsVisitorAdapter INSTANCE = new ExerciseTypeAnalyticsVisitorAdapter();
 
   public static ExerciseTypeAnalyticsVisitorAdapter getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
   /**
    *
@@ -30,22 +30,22 @@ public final class ExerciseTypeAnalyticsVisitorAdapter implements ExerciseTypeVi
   }
 
   @Override
-  public ExerciseDecisionType visitAmericanExerciseType(AmericanExerciseType exerciseType) {
+  public ExerciseDecisionType visitAmericanExerciseType(final AmericanExerciseType exerciseType) {
     return ExerciseDecisionType.AMERICAN;
   }
 
   @Override
-  public ExerciseDecisionType visitAsianExerciseType(AsianExerciseType exerciseType) {
+  public ExerciseDecisionType visitAsianExerciseType(final AsianExerciseType exerciseType) {
     throw new NotImplementedException();
   }
 
   @Override
-  public ExerciseDecisionType visitBermudanExerciseType(BermudanExerciseType exerciseType) {
+  public ExerciseDecisionType visitBermudanExerciseType(final BermudanExerciseType exerciseType) {
     throw new NotImplementedException();
   }
 
   @Override
-  public ExerciseDecisionType visitEuropeanExerciseType(EuropeanExerciseType exerciseType) {
+  public ExerciseDecisionType visitEuropeanExerciseType(final EuropeanExerciseType exerciseType) {
     return ExerciseDecisionType.EUROPEAN;
   }
 

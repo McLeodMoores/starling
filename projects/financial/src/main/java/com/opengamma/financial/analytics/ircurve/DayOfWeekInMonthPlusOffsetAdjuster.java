@@ -21,14 +21,14 @@ public class DayOfWeekInMonthPlusOffsetAdjuster implements TemporalAdjuster {
   private final DayOfWeek _day;
   private final int _offset;
 
-  public DayOfWeekInMonthPlusOffsetAdjuster(int week, DayOfWeek day, int offset) {
+  public DayOfWeekInMonthPlusOffsetAdjuster(final int week, final DayOfWeek day, final int offset) {
     _week = week;
     _day = day;
     _offset = offset;
   }
 
   @Override
-  public Temporal adjustInto(Temporal temporal) {
+  public Temporal adjustInto(final Temporal temporal) {
     final TemporalAdjuster unadjustedDayInMonth = TemporalAdjusters.dayOfWeekInMonth(_week, _day);
     return temporal.with(unadjustedDayInMonth).plus(_offset, DAYS);
   }

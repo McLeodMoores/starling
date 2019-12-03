@@ -31,7 +31,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class FunctionInvocationStatisticsSenderTest {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(FunctionInvocationStatisticsSenderTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunctionInvocationStatisticsSenderTest.class);
   
   private FunctionCosts _cost = new FunctionCosts ();
   
@@ -51,7 +51,7 @@ public class FunctionInvocationStatisticsSenderTest {
       @Override
       public void send(final FudgeMsg message) {
         messages.incrementAndGet ();
-        s_logger.debug ("Received {}", message);
+        LOGGER.debug ("Received {}", message);
         receiver.messageReceived(getFudgeContext (), new FudgeMsgEnvelope (message));
       }
       

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution;
@@ -9,24 +9,18 @@ import java.util.Date;
 
 import org.apache.commons.lang.Validate;
 
+import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.special.InverseIncompleteBetaFunction;
+
 import cern.jet.random.StudentT;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
-import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.function.special.InverseIncompleteBetaFunction;
-
 /**
- * Student's T-distribution is a continuous probability distribution with probability density function
- * $$
- * \begin{align*}
- * f(x) = \frac{\Gamma\left(\frac{\nu + 1}{2}\right)}{\sqrt{\nu\pi}\Gamma(\left(\frac{\nu}{2}\right)}\left(1 + \frac{x^2}{\nu}\right)^{-\frac{1}{2}(\nu + 1)}
- * \end{align*}
- * $$
- * where $\nu$ is the number of degrees of freedom and $\Gamma$ is the Gamma function ({@link com.opengamma.analytics.math.function.special.GammaFunction}).
+ * Student's T-distribution.
  * <p>
- * This class is a wrapper for the <a href="http://acs.lbl.gov/software/colt/api/cern/jet/random/StudentT.html">Colt</a> implementation of Student's T-distribution for cdf and pdf calculations
- * and Student's T-distributed random number generation.
+ * This class is a wrapper for the <a href="http://acs.lbl.gov/software/colt/api/cern/jet/random/StudentT.html">Colt</a> implementation of Student's
+ * T-distribution for cdf and pdf calculations and Student's T-distributed random number generation.
  */
 public class StudentTDistribution implements ProbabilityDistribution<Double> {
   // TODO need a better seed
@@ -81,16 +75,16 @@ public class StudentTDistribution implements ProbabilityDistribution<Double> {
 
   /**
    * {@inheritDoc}
-   * The inverse cdf is given by:
-   * $$
-   * \begin{align*}
-   * F(P) &= \mathrm{sign}(p - \frac{1}{2})\sqrt{\frac{\nu}{x - 1}}\\
-   * x &= B(2 \min(p, 1-p)) 
-   * \end{align*}
-   * $$
-   * where $B$ is the inverse incomplete Beta function ({@link com.opengamma.analytics.math.function.special.InverseIncompleteBetaFunction}).
    */
   @Override
+  // * The inverse cdf is given by:
+  // * $$
+  // * \begin{align*}
+  // * F(P) &= \mathrm{sign}(p - \frac{1}{2})\sqrt{\frac{\nu}{x - 1}}\\
+  // * x &= B(2 \min(p, 1-p))
+  // * \end{align*}
+  // * $$
+  // * where $B$ is the inverse incomplete Beta function ({@link com.opengamma.analytics.math.function.special.InverseIncompleteBetaFunction}).
   public double getInverseCDF(final Double p) {
     Validate.notNull(p);
     Validate.isTrue(p >= 0 && p <= 1, "Probability must be >= 0 and <= 1");
@@ -111,7 +105,7 @@ public class StudentTDistribution implements ProbabilityDistribution<Double> {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_degFreedom);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

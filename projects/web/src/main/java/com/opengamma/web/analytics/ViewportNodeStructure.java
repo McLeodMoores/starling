@@ -23,54 +23,53 @@ import com.opengamma.util.ArgumentChecker;
  */
 /* package */ final class ViewportNodeStructure {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewportNodeStructure.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewportNodeStructure.class);
 
   private final AnalyticsNode _rootNode;
   private final Map<Integer, List<String>> _rowToPath = Maps.newHashMap();
 
-  /* package */ ViewportNodeStructure(AnalyticsNode root, TargetLookup targetLookup) {
-    Set<List<String>>  expandedNodes = new HashSet<>();
+  /* package */ ViewportNodeStructure(final AnalyticsNode root, final TargetLookup targetLookup) {
+    final Set<List<String>>  expandedNodes = new HashSet<>();
     _rootNode = createNode(root, targetLookup, expandedNodes);
   }
 
-  /* package */ ViewportNodeStructure(AnalyticsNode root, TargetLookup targetLookup, Set<List<String>> expandedNodes) {
+  /* package */ ViewportNodeStructure(final AnalyticsNode root, final TargetLookup targetLookup, final Set<List<String>> expandedNodes) {
     _rootNode = createNode(root, targetLookup, expandedNodes);
   }
 
-  /* package */ AnalyticsNode createNode(AnalyticsNode root, TargetLookup targetLookup, Set<List<String>> expandedNodes) {
+  /* package */ AnalyticsNode createNode(final AnalyticsNode root, final TargetLookup targetLookup, final Set<List<String>> expandedNodes) {
     ArgumentChecker.notNull(targetLookup, "targetLookup");
     // root can be null if a view only contains primitives and doesn't have a portfolio
     if (root == null) {
       return null;
-    } else {
-      return createNode(root, Collections.<String>emptyList(), targetLookup, expandedNodes);
     }
+    return createNode(root, Collections.<String>emptyList(), targetLookup, expandedNodes);
   }
 
-  private AnalyticsNode createNode(AnalyticsNode gridStructureNode,
-                                   List<String> parentPath,
-                                   TargetLookup targetLookup,
-                                   Set<List<String>> expandedNodes) {
-    List<String> path = Lists.newArrayList(parentPath);
+  private AnalyticsNode createNode(final AnalyticsNode gridStructureNode,
+      final List<String> parentPath,
+      final TargetLookup targetLookup,
+      final Set<List<String>> expandedNodes) {
+    final List<String> path = Lists.newArrayList(parentPath);
     path.add(targetLookup.getRow(gridStructureNode.getStartRow()).getName());
-    boolean expanded = expandedNodes.contains(path);
+    final boolean expanded = expandedNodes.contains(path);
     if (expanded) {
-      s_logger.debug("Building expanded node {}", path);
+      LOGGER.debug("Building expanded node {}", path);
     }
-    List<AnalyticsNode> viewportStructureChildNodes = Lists.newArrayList();
-    for (AnalyticsNode gridStructureChildNode : gridStructureNode.getChildren()) {
-      AnalyticsNode viewportStructureChildNode = createNode(gridStructureChildNode, path, targetLookup, expandedNodes);
+    final List<AnalyticsNode> viewportStructureChildNodes = Lists.newArrayList();
+    for (final AnalyticsNode gridStructureChildNode : gridStructureNode.getChildren()) {
+      final AnalyticsNode viewportStructureChildNode = createNode(gridStructureChildNode, path, targetLookup, expandedNodes);
       viewportStructureChildNodes.add(viewportStructureChildNode);
     }
     _rowToPath.put(gridStructureNode.getStartRow(), Collections.unmodifiableList(path));
 
     return new AnalyticsNode(gridStructureNode.getStartRow(),
-                             gridStructureNode.getEndRow(),
-                             viewportStructureChildNodes,
-                             !expanded);
+        gridStructureNode.getEndRow(),
+        viewportStructureChildNodes,
+        !expanded);
   }
 
-  /* package */ List<String> getPathForRow(int rowIndex) {
+  /* package */ List<String> getPathForRow(final int rowIndex) {
     return _rowToPath.get(rowIndex);
   }
 

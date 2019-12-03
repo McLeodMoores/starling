@@ -5,17 +5,18 @@
  */
 package com.opengamma.provider.security.impl;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
+import com.opengamma.core.security.Security;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.provider.security.SecurityProviderRequest;
 import com.opengamma.provider.security.SecurityProviderResult;
-import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -26,25 +27,31 @@ public class NoneFoundSecurityProviderTest {
 
   private static final ExternalIdBundle BUNDLE = ExternalIdBundle.of("A", "B");
 
-  @Test
-  public void test_get_single() {
-    NoneFoundSecurityProvider test = new NoneFoundSecurityProvider();
-    assertEquals(null, test.getSecurity(BUNDLE));
+  /**
+   * Tests trying to get a single security.
+   */
+  public void testGetSingle() {
+    final NoneFoundSecurityProvider test = new NoneFoundSecurityProvider();
+    assertNull(test.getSecurity(BUNDLE));
   }
 
-  @Test
-  public void test_get_bulk() {
-    NoneFoundSecurityProvider test = new NoneFoundSecurityProvider();
-    HashMap<ExternalIdBundle, LocalDateDoubleTimeSeries> expected = new HashMap<ExternalIdBundle, LocalDateDoubleTimeSeries>();
+  /**
+   * Tests attempting to get multiple securities.
+   */
+  public void testGetBulk() {
+    final NoneFoundSecurityProvider test = new NoneFoundSecurityProvider();
+    final HashMap<ExternalIdBundle, Security> expected = new HashMap<>();
     expected.put(BUNDLE, null);
-    assertEquals(expected, test.getSecurities(ImmutableSet.of(BUNDLE)));
+    assertEquals(test.getSecurities(ImmutableSet.of(BUNDLE)), expected);
   }
 
-  @Test
-  public void test_get_request() {
-    NoneFoundSecurityProvider test = new NoneFoundSecurityProvider();
-    SecurityProviderRequest request = SecurityProviderRequest.createGet(BUNDLE, "FOO");
-    SecurityProviderResult expected = new SecurityProviderResult();
+  /**
+   * Tests attempting to get securities using a get request.
+   */
+  public void testGetRequest() {
+    final NoneFoundSecurityProvider test = new NoneFoundSecurityProvider();
+    final SecurityProviderRequest request = SecurityProviderRequest.createGet(BUNDLE, "FOO");
+    final SecurityProviderResult expected = new SecurityProviderResult();
     expected.getResultMap().put(BUNDLE, null);
     assertEquals(expected, test.getSecurities(request));
   }

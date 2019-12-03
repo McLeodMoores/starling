@@ -13,12 +13,13 @@ import com.opengamma.analytics.financial.interestrate.sensitivity.PresentValueBl
  * Computes the par rate for different instrument. The meaning of "par rate" is instrument dependent.
  */
 public final class FuturesPVBlackSTIRFuturesSensitivityFromPriceBlackSensitivityCalculator
-    extends InstrumentDerivativeVisitorAdapter<PresentValueBlackSTIRFuturesCubeSensitivity, PresentValueBlackSTIRFuturesCubeSensitivity> {
+extends InstrumentDerivativeVisitorAdapter<PresentValueBlackSTIRFuturesCubeSensitivity, PresentValueBlackSTIRFuturesCubeSensitivity> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final FuturesPVBlackSTIRFuturesSensitivityFromPriceBlackSensitivityCalculator INSTANCE = new FuturesPVBlackSTIRFuturesSensitivityFromPriceBlackSensitivityCalculator();
+  private static final FuturesPVBlackSTIRFuturesSensitivityFromPriceBlackSensitivityCalculator INSTANCE =
+      new FuturesPVBlackSTIRFuturesSensitivityFromPriceBlackSensitivityCalculator();
 
   /**
    * Gets the calculator instance.

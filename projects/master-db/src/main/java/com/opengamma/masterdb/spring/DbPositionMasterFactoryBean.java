@@ -33,7 +33,7 @@ public class DbPositionMasterFactoryBean extends AbstractDbMasterFactoryBean<DbP
   //-------------------------------------------------------------------------
   @Override
   public DbPositionMaster createObject() {
-    DbPositionMaster master = new DbPositionMaster(getDbConnector());
+    final DbPositionMaster master = new DbPositionMaster(getDbConnector());
     if (getUniqueIdScheme() != null) {
       master.setUniqueIdScheme(getUniqueIdScheme());
     }
@@ -41,7 +41,7 @@ public class DbPositionMasterFactoryBean extends AbstractDbMasterFactoryBean<DbP
       master.setMaxRetries(getMaxRetries());
     }
     if (getJmsConnector() != null) {
-      JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
+      final JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
       master.setChangeManager(cm);
       cm.start();
     }

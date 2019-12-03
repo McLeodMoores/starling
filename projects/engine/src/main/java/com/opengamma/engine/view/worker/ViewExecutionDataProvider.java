@@ -91,9 +91,10 @@ public class ViewExecutionDataProvider {
   }
 
   /**
-   * Divides up the specifications into a set for each underlying provider. The values from each underlying will have been tagged with a provider property which indicates the underlying they came
-   * from. This is removed from the returned result so the original value specifications as used by the underlying are returned.
-   * 
+   * Divides up the specifications into a set for each underlying provider. The values from each underlying will have been tagged with a provider
+   * property which indicates the underlying they came from. This is removed from the returned result so the original value specifications as used
+   * by the underlying are returned.
+   *
    * @param numProviders the number of providers in total
    * @param specifications The market data specifications
    * @return A set of specifications for each underlying provider, in the same order as the providers
@@ -101,35 +102,35 @@ public class ViewExecutionDataProvider {
   protected static List<Set<ValueSpecification>> partitionSpecificationsByProvider(final int numProviders, final Set<ValueSpecification> specifications) {
     if (numProviders == 1) {
       return Collections.singletonList(specifications);
-    } else {
-      final List<Set<ValueSpecification>> result = Lists.newArrayListWithCapacity(numProviders);
-      for (int i = 0; i < numProviders; i++) {
-        result.add(Sets.<ValueSpecification>newHashSet());
-      }
-      for (final ValueSpecification specification : specifications) {
-        String provider = specification.getProperty(ValuePropertyNames.DATA_PROVIDER);
-        if (provider != null) {
-          final ValueProperties.Builder underlyingProperties = specification.getProperties().copy().withoutAny(ValuePropertyNames.DATA_PROVIDER);
-          final int slash = provider.indexOf('/');
-          if (slash > 0) {
-            underlyingProperties.with(ValuePropertyNames.DATA_PROVIDER, provider.substring(0, slash));
-            provider = provider.substring(slash + 1);
-          }
-          try {
-            result.get(Integer.parseInt(provider)).add(new ValueSpecification(specification.getValueName(), specification.getTargetSpecification(), underlyingProperties.get()));
-          } catch (final NumberFormatException e) {
-            // Ignore
-          }
+    }
+    final List<Set<ValueSpecification>> result = Lists.newArrayListWithCapacity(numProviders);
+    for (int i = 0; i < numProviders; i++) {
+      result.add(Sets.<ValueSpecification>newHashSet());
+    }
+    for (final ValueSpecification specification : specifications) {
+      String provider = specification.getProperty(ValuePropertyNames.DATA_PROVIDER);
+      if (provider != null) {
+        final ValueProperties.Builder underlyingProperties = specification.getProperties().copy().withoutAny(ValuePropertyNames.DATA_PROVIDER);
+        final int slash = provider.indexOf('/');
+        if (slash > 0) {
+          underlyingProperties.with(ValuePropertyNames.DATA_PROVIDER, provider.substring(0, slash));
+          provider = provider.substring(slash + 1);
+        }
+        try {
+          result.get(Integer.parseInt(provider)).add(
+              new ValueSpecification(specification.getValueName(), specification.getTargetSpecification(), underlyingProperties.get()));
+        } catch (final NumberFormatException e) {
+          // Ignore
         }
       }
-      return result;
     }
+    return result;
   }
 
   /**
-   * Identifies the provider a given specification is used for. The values from the underlying will have been tagged with a provider property which indicates the underlying. Thsi is removed from the
-   * result so the original value specification as used by the underlying is returned.
-   * 
+   * Identifies the provider a given specification is used for. The values from the underlying will have been tagged with a provider property which
+   * indicates the underlying. Thsi is removed from the result so the original value specification as used by the underlying is returned.
+   *
    * @param specification the specification to test
    * @return the provider index and the underlying's specification, or null if it could not be found
    */
@@ -143,7 +144,8 @@ public class ViewExecutionDataProvider {
         provider = provider.substring(slash + 1);
       }
       try {
-        return Pairs.of(Integer.parseInt(provider), new ValueSpecification(specification.getValueName(), specification.getTargetSpecification(), underlyingProperties.get()));
+        return Pairs.of(Integer.parseInt(provider),
+            new ValueSpecification(specification.getValueName(), specification.getTargetSpecification(), underlyingProperties.get()));
       } catch (final NumberFormatException e) {
         // Ignore
       }
@@ -152,9 +154,10 @@ public class ViewExecutionDataProvider {
   }
 
   /**
-   * Converts a value specification as used by a given underlying to one that can be used by this provider. An integer identifier for the underlying provider will be put into a property that the
-   * {@link #partitionSpecificationsByProvider} helper will use to map the specification back to the originating underlying.
-   * 
+   * Converts a value specification as used by a given underlying to one that can be used by this provider. An integer identifier for the
+   * underlying provider will be put into a property that the {@link #partitionSpecificationsByProvider} helper will use to map the
+   * specification back to the originating underlying.
+   *
    * @param providerId the index of the provider in the list
    * @param underlying the value specification as used by the underlying
    * @return a value specification for external use
@@ -171,14 +174,14 @@ public class ViewExecutionDataProvider {
   }
 
   /**
-   * {@link MarketDataPermissionProvider} that checks the permissions using the underlying {@link MarketDataProvider}s. The underlying provider will be the one that returned the original availability
-   * of the data.
+   * {@link MarketDataPermissionProvider} that checks the permissions using the underlying {@link MarketDataProvider}s. The underlying provider
+   * will be the one that returned the original availability of the data.
    */
   private class CompositePermissionProvider implements MarketDataPermissionProvider {
 
     /**
      * Checks permissions with the underlying providers and returns any requirements for which the user has no permissions with any provider.
-     * 
+     *
      * @param user The user whose market data permissions should be checked
      * @param specifications The market data to check access to
      * @return Values for which the user has no permissions with any of the underlying providers

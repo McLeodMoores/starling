@@ -29,7 +29,7 @@ public final class GICSCodeFudgeSecondaryType extends SecondaryFieldType<GICSCod
   }
 
   @Override
-  public Integer secondaryToPrimary(GICSCode object) {
+  public Integer secondaryToPrimary(final GICSCode object) {
     return object.getCodeInt();
   }
 
@@ -39,7 +39,7 @@ public final class GICSCodeFudgeSecondaryType extends SecondaryFieldType<GICSCod
   }
 
   @Override
-  public boolean canConvertPrimary(Class<? extends Integer> clazz) {
+  public boolean canConvertPrimary(final Class<? extends Integer> clazz) {
     return Integer.class.isAssignableFrom(clazz) || Integer.TYPE.isAssignableFrom(clazz);
   }
 

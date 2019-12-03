@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -22,7 +22,7 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * 
+ *
  */
 public class JuZhongModel extends AnalyticOptionModel<AmericanVanillaOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -98,7 +98,8 @@ public class JuZhongModel extends AnalyticOptionModel<AmericanVanillaOptionDefin
     return (1 - h) * alpha * lambdaDash / (2 * (2 * lambda + beta - 1));
   }
 
-  protected double getD(final double h, final double alpha, final double derivative, final double hA, final double lambdaDash, final double lambda, final double beta) {
+  protected double getD(final double h, final double alpha, final double derivative, final double hA, final double lambdaDash, final double lambda,
+      final double beta) {
     final double denom = 2 * lambda + beta - 1;
     return (1 - h) * alpha * (derivative / hA + 1 / h + lambdaDash / denom) / denom;
   }
@@ -107,10 +108,12 @@ public class JuZhongModel extends AnalyticOptionModel<AmericanVanillaOptionDefin
     final double df = Math.exp(t * (r - b));
     final double d1 = getD1(sEstimate, k, t, sigma, b);
     final double d2 = getD2(d1, sigma, t);
-    return sEstimate * NORMAL.getPDF(d1) * sigma * df / (2 * r * Math.sqrt(t)) - phi * b * sEstimate * NORMAL.getCDF(phi * d1) * df / r + phi * k * NORMAL.getCDF(phi * d2);
+    return sEstimate * NORMAL.getPDF(d1) * sigma * df / (2 * r * Math.sqrt(t)) - phi * b * sEstimate * NORMAL.getCDF(phi * d1) * df / r
+        + phi * k * NORMAL.getCDF(phi * d2);
   }
 
-  protected Function1D<Double, Double> getFunction(final double phi, final double df, final double k, final double t, final double sigma, final double b, final double lambda,
+  protected Function1D<Double, Double> getFunction(final double phi, final double df, final double k, final double t, final double sigma, final double b,
+      final double lambda,
       final OptionDefinition definition, final StandardOptionDataBundle data) {
     return new Function1D<Double, Double>() {
 

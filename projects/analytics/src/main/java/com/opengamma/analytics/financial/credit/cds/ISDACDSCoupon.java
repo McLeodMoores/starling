@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.cds;
@@ -14,12 +14,12 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Represent a CDS coupon payment as understood by the ISDA standard model.
- * 
+ *
  * The payment year fraction, accrual period start and end times and the payment time
  * must be computed using day counts and conventions to match the ISDA standard model.
  * These calculations are the responsibility of {@link ISDACDSCouponDefinition} and
  * {@link ISDACDSPremiumDefinition}.
- * 
+ *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  * @see CouponFixed
  * @see ISDACDSDerivative
@@ -47,8 +47,9 @@ public class ISDACDSCoupon extends CouponFixed {
    * @deprecated Use the constructor that does not take curve names
    */
   @Deprecated
-  public ISDACDSCoupon(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction, final double notional, final double rate,
-      final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double accrualStartTime, final double accrualEndTime) {
+  public ISDACDSCoupon(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction,
+      final double notional, final double rate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+      final double accrualStartTime, final double accrualEndTime) {
     super(currency, paymentTime, fundingCurveName, paymentYearFraction, notional, rate, accrualStartDate, accrualEndDate);
 
     _accrualStartTime = accrualStartTime;
@@ -67,8 +68,8 @@ public class ISDACDSCoupon extends CouponFixed {
    * @param accrualStartTime The start time of the coupon accrual period.
    * @param accrualEndTime The end time of the coupon accrual period.
    */
-  public ISDACDSCoupon(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final double rate, final ZonedDateTime accrualStartDate,
-      final ZonedDateTime accrualEndDate, final double accrualStartTime, final double accrualEndTime) {
+  public ISDACDSCoupon(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional,
+      final double rate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double accrualStartTime, final double accrualEndTime) {
     super(currency, paymentTime, paymentYearFraction, notional, rate, accrualStartDate, accrualEndDate);
 
     _accrualStartTime = accrualStartTime;
@@ -97,9 +98,9 @@ public class ISDACDSCoupon extends CouponFixed {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_accrualStartTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_accrualEndTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

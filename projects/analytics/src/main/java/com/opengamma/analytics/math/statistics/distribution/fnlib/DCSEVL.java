@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution.fnlib;
@@ -8,9 +8,8 @@ package com.opengamma.analytics.math.statistics.distribution.fnlib;
 import com.opengamma.analytics.math.MathException;
 
 /**
- * Computes the n-term Chebychev series at point 'x'
- * This code is an approximate translation of the equivalent function in the "Public Domain" code from SLATEC, see:
- * http://www.netlib.org/slatec/fnlib/dcsevl.f
+ * Computes the n-term Chebychev series at point 'x'. This code is an approximate translation of the equivalent function in the "Public Domain" code from
+ * SLATEC, see: http://www.netlib.org/slatec/fnlib/dcsevl.f
  */
 public class DCSEVL {
 
@@ -23,13 +22,17 @@ public class DCSEVL {
   }
 
   /**
-   * Computes the n-term Chebychev series at point 'x'
-   * @param x the position for evaluation
-   * @param cs the terms of the Chebychev series 
-   * @param n the number of terms in the double[] cs
+   * Computes the n-term Chebychev series at point 'x'.
+   * 
+   * @param x
+   *          the position for evaluation
+   * @param cs
+   *          the terms of the Chebychev series
+   * @param n
+   *          the number of terms in the double[] cs
    * @return the evaluated series
    */
-  public static double getDCSEVL(double x, double[] cs, int n) {
+  public static double getDCSEVL(final double x, final double[] cs, final int n) {
     if (cs == null) {
       throw new MathException("DCSEVL: cs is null");
     }

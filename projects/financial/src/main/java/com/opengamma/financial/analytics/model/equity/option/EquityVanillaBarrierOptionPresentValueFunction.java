@@ -20,15 +20,15 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Computes the PV of a European Barrier Option by breaking it into a linear and a binary vanilla option,
- * and then modelling the binary as a call spread with provided overhedge and smoothing.
+ * Computes the PV of a European Barrier Option by breaking it into a linear and a binary vanilla option, and then modelling the binary as a call spread with
+ * provided overhedge and smoothing.
  */
 public class EquityVanillaBarrierOptionPresentValueFunction extends EquityVanillaBarrierOptionBlackFunction {
   /** The present value calculator */
-  private static final EquityOptionBlackPresentValueCalculator s_calculator = EquityOptionBlackPresentValueCalculator.getInstance();
+  private static final EquityOptionBlackPresentValueCalculator CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public EquityVanillaBarrierOptionPresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);
@@ -40,7 +40,7 @@ public class EquityVanillaBarrierOptionPresentValueFunction extends EquityVanill
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
     double pv = 0.0;
     for (final EquityIndexOption derivative : vanillaOptions) {
-      pv += s_calculator.visitEquityIndexOption(derivative, market);
+      pv += CALCULATOR.visitEquityIndexOption(derivative, market);
     }
     return Collections.singleton(new ComputedValue(resultSpec, pv));
   }

@@ -42,13 +42,13 @@ public class FilesystemPortfolioSchemaLocatorTest {
 
   @Test
   public void testNoSchemaFoundInEmptyDirectory() throws IOException {
-    FilesystemPortfolioSchemaLocator locator = new FilesystemPortfolioSchemaLocator(createEmptySchemaLocation());
+    final FilesystemPortfolioSchemaLocator locator = new FilesystemPortfolioSchemaLocator(createEmptySchemaLocation());
     assertNull(locator.lookupSchema(new SchemaVersion("1.0")));
   }
 
   @Test
   public void testMatchingSchemaFoundInDirectory() throws IOException {
-    FilesystemPortfolioSchemaLocator locator = new FilesystemPortfolioSchemaLocator(
+    final FilesystemPortfolioSchemaLocator locator = new FilesystemPortfolioSchemaLocator(
         createSchemaLocationWithVersions("1.0", "1.1", "2.0"));
     assertNotNull(locator.lookupSchema(new SchemaVersion("1.0")));
     assertNotNull(locator.lookupSchema(new SchemaVersion("1.1")));
@@ -57,22 +57,22 @@ public class FilesystemPortfolioSchemaLocatorTest {
 
   @Test
   public void testNoSchemaFoundInDirectory() throws IOException {
-    FilesystemPortfolioSchemaLocator locator = new FilesystemPortfolioSchemaLocator(
+    final FilesystemPortfolioSchemaLocator locator = new FilesystemPortfolioSchemaLocator(
         createSchemaLocationWithVersions("1.0", "1.1", "2.0"));
     assertNull(locator.lookupSchema(new SchemaVersion("1.2")));
     assertNull(locator.lookupSchema(new SchemaVersion("2.1")));
     assertNull(locator.lookupSchema(new SchemaVersion("3.0")));
   }
 
-  private File createSchemaLocationWithVersions(String... versions) throws IOException {
-    File dir = Files.createTempDirectory("portfolio-schemas").toFile();
+  private File createSchemaLocationWithVersions(final String... versions) throws IOException {
+    final File dir = Files.createTempDirectory("portfolio-schemas").toFile();
     dir.deleteOnExit();
 
-    for (String version : versions) {
-      File f = new File(dir, "portfolio-schema-" + version + ".xsd");
+    for (final String version : versions) {
+      final File f = new File(dir, "portfolio-schema-" + version + ".xsd");
       f.createNewFile();
 
-      FileWriter writer = new FileWriter(f);
+      final FileWriter writer = new FileWriter(f);
       // Write a minimal schema to the file
       writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?> <xs:schema version=\"1.0\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"> </xs:schema>");
       writer.flush();
@@ -89,7 +89,7 @@ public class FilesystemPortfolioSchemaLocatorTest {
 
   private File createTemporaryFile() throws IOException {
 
-    File file = File.createTempFile("portfolio-schema", ".xsd");
+    final File file = File.createTempFile("portfolio-schema", ".xsd");
     file.deleteOnExit();
     return file;
   }

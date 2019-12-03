@@ -13,7 +13,8 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation.WeightingFunctionFactory;
 import com.opengamma.analytics.financial.model.volatility.smile.function.VolatilityFunctionFactory;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames;
@@ -115,16 +116,16 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
   private String _timeAxis = BlackVolatilitySurfacePropertyNamesAndValues.LOG_TIME;
   private String _yAxis = BlackVolatilitySurfacePropertyNamesAndValues.LOG_Y;
   private String _volatilityTransform = BlackVolatilitySurfacePropertyNamesAndValues.INTEGRATED_VARIANCE;
-  private String _timeInterpolator = Interpolator1DFactory.DOUBLE_QUADRATIC;
-  private String _timeLeftExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-  private String _timeRightExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+  private String _timeInterpolator = DoubleQuadraticInterpolator1dAdapter.NAME;
+  private String _timeLeftExtrapolator = LinearExtrapolator1dAdapter.NAME;
+  private String _timeRightExtrapolator = LinearExtrapolator1dAdapter.NAME;
   private String _sabrModel = VolatilityFunctionFactory.HAGAN;
   private String _weightingFunction = WeightingFunctionFactory.SINE_WEIGHTING_FUNCTION_NAME;
-  private boolean _useExternalBeta /*= false*/;
+  private boolean _useExternalBeta /* = false */;
   private double _externalBeta = 0.5;
-  private String _splineInterpolator = Interpolator1DFactory.DOUBLE_QUADRATIC;
-  private String _splineLeftExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
-  private String _splineRightExtrapolator = Interpolator1DFactory.LINEAR_EXTRAPOLATOR;
+  private String _splineInterpolator = DoubleQuadraticInterpolator1dAdapter.NAME;
+  private String _splineLeftExtrapolator = LinearExtrapolator1dAdapter.NAME;
+  private String _splineRightExtrapolator = LinearExtrapolator1dAdapter.NAME;
   private String _splineExtrapolatorFailBehaviour = BlackVolatilitySurfacePropertyNamesAndValues.FLAT_SPLINE_EXTRAPOLATOR_FAILURE;
 
   public void setPerCurrencyInfo(final Map<String, CurrencyInfo> perCurrencyInfo) {
@@ -308,7 +309,8 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
     final String[] args = new String[getPerCurrencyPairInfo().size() * 4];
     int i = 0;
     for (final Map.Entry<Pair<String, String>, CurrencyPairInfo> e : getPerCurrencyPairInfo().entrySet()) {
-      args[i++] = (e.getKey().getFirst().compareTo(e.getKey().getSecond()) < 0) ? e.getKey().getFirst() + e.getKey().getSecond() : e.getKey().getSecond() + e.getKey().getFirst();
+      args[i++] = e.getKey().getFirst().compareTo(e.getKey().getSecond()) < 0 ? e.getKey().getFirst() + e.getKey().getSecond()
+          : e.getKey().getSecond() + e.getKey().getFirst();
       args[i++] = e.getValue().getCurveName();
       args[i++] = e.getValue().getCurveCalculationMethod();
       args[i++] = e.getValue().getSurfaceName();
@@ -321,11 +323,14 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
 
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-    functions.add(functionConfiguration(BlackVolatilitySurfaceMixedLogNormalDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(), getTimeInterpolator(), getTimeLeftExtrapolator(),
+    functions.add(functionConfiguration(BlackVolatilitySurfaceMixedLogNormalDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(),
+        getTimeInterpolator(), getTimeLeftExtrapolator(),
         getTimeRightExtrapolator(), getWeightingFunction()));
-    functions.add(functionConfiguration(BlackVolatilitySurfaceSABRDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(), getTimeInterpolator(), getTimeLeftExtrapolator(),
+    functions.add(functionConfiguration(BlackVolatilitySurfaceSABRDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(), getTimeInterpolator(),
+        getTimeLeftExtrapolator(),
         getTimeRightExtrapolator(), getSabrModel(), getWeightingFunction(), isUseExternalBeta() ? "true" : "false", Double.toString(getExternalBeta())));
-    functions.add(functionConfiguration(BlackVolatilitySurfaceSplineDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(), getTimeInterpolator(), getTimeLeftExtrapolator(),
+    functions.add(functionConfiguration(BlackVolatilitySurfaceSplineDefaults.class, getTimeAxis(), getYAxis(), getVolatilityTransform(), getTimeInterpolator(),
+        getTimeLeftExtrapolator(),
         getTimeRightExtrapolator(), getSplineInterpolator(), getSplineLeftExtrapolator(), getSplineRightExtrapolator(), getSplineExtrapolatorFailBehaviour()));
     if (!getPerCurrencyInfo().isEmpty()) {
       addCommodityBlackDefaults(functions);

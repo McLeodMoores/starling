@@ -21,38 +21,40 @@ public class EnumWithDescriptionBean extends EnumBean {
     super();
   }
 
-  public EnumWithDescriptionBean(String name, String description) {
+  public EnumWithDescriptionBean(final String name, final String description) {
     super(name);
     _description = description;
   }
-  
-  
+
+
   public String getDescription() {
     return _description;
   }
-  
-  public void setDescription(String description) {
+
+  public void setDescription(final String description) {
     _description = description;
   }
-  
-  public boolean equals(Object o) {
+
+  @Override
+  public boolean equals(final Object o) {
     if (!(o instanceof EnumWithDescriptionBean)) {
       return false;
     }
-    EnumWithDescriptionBean ewd = (EnumWithDescriptionBean) o;
+    final EnumWithDescriptionBean ewd = (EnumWithDescriptionBean) o;
     if (getId() != -1 && ewd.getId() != -1) {
       return getId().longValue() == ewd.getId().longValue();
     }
     return new EqualsBuilder().append(getName(), ewd.getName()).append(getDescription(), ewd.getDescription()).isEquals();
   }
-  
+
+  @Override
   public int hashCode() {
     return new HashCodeBuilder().append(getName()).append(getDescription()).toHashCode();
   }
-  
+
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
-  
+
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -12,8 +12,8 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
  * A one-dimensional step interpolator using the upper bound value.
- * <P>The interpolated value of the function
- * <i>x</i> with <i>x<sub>1</sub> <= x < x<sub>2</sub></i> is given by: <i>y = y<sub>1</sub></i>
+ * <P>
+ * The interpolated value of the function <i>x</i> with <i>x<sub>1</sub> &le; x &lt; x<sub>2</sub></i> is given by: <i>y = y<sub>1</sub></i>
  */
 public class StepUpperInterpolator1D extends Interpolator1D {
   private static final long serialVersionUID = 1L;
@@ -23,7 +23,7 @@ public class StepUpperInterpolator1D extends Interpolator1D {
     Validate.notNull(x, "value");
     Validate.notNull(data, "data bundle");
     // For x equal to a key
-    Double exactValue = data.get(x);
+    final Double exactValue = data.get(x);
     if (exactValue != null) {
       return exactValue;
     }
@@ -49,7 +49,7 @@ public class StepUpperInterpolator1D extends Interpolator1D {
   }
 
   @Override
-  public double[] getNodeSensitivitiesForValue(Interpolator1DDataBundle data, Double value) {
+  public double[] getNodeSensitivitiesForValue(final Interpolator1DDataBundle data, final Double value) {
     return getFiniteDifferenceSensitivities(data, value);
   }
 

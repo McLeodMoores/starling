@@ -36,13 +36,13 @@ public abstract class PortfolioConversion {
   public static final File SCHEMA_DIRECTORY;
 
   static {
-    URL resource = PortfolioConversion.class.getClassLoader().getResource(SCHEMA_LOCATION);
+    final URL resource = PortfolioConversion.class.getClassLoader().getResource(SCHEMA_LOCATION);
     if (resource == null) {
       throw new OpenGammaRuntimeException("File not found in classpath: " + SCHEMA_LOCATION);
     }
     try {
       SCHEMA_DIRECTORY = new File(resource.toURI());
-    } catch (URISyntaxException e) {
+    } catch (final URISyntaxException e) {
       throw new OpenGammaRuntimeException("File not found in classpath: " + SCHEMA_LOCATION);
     }
   }
@@ -60,17 +60,17 @@ public abstract class PortfolioConversion {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param schemaVersion  the schema version, not null
    * @param portfolioDocumentClass  the portfolio class, not null
    * @param converter  the converter, not null
    * @param idRefResolverFactory  the resolver, not null
    */
   @SuppressWarnings("unchecked")
-  public PortfolioConversion(SchemaVersion schemaVersion,
-                             Class<?> portfolioDocumentClass,
-                             PortfolioDocumentConverter<?> converter,
-                             IdRefResolverFactory idRefResolverFactory) {
+  public PortfolioConversion(final SchemaVersion schemaVersion,
+                             final Class<?> portfolioDocumentClass,
+                             final PortfolioDocumentConverter<?> converter,
+                             final IdRefResolverFactory idRefResolverFactory) {
 
     _portfolioDocumentClass = portfolioDocumentClass;
     _portfolioConverter = (PortfolioDocumentConverter<Object>) converter;
@@ -83,22 +83,22 @@ public abstract class PortfolioConversion {
   //-------------------------------------------------------------------------
   /**
    * Converts the portfolio.
-   * 
+   *
    * @param inputStream  the inputStream to read, not null
    * @return the converted file, not null
    */
-  public Iterable<VersionedPortfolioHandler> convertPortfolio(InputStream inputStream) {
+  public Iterable<VersionedPortfolioHandler> convertPortfolio(final InputStream inputStream) {
     try {
-      Unmarshaller unmarshaller = createUnmarshaller();
+      final Unmarshaller unmarshaller = createUnmarshaller();
       return _portfolioConverter.convert(unmarshaller.unmarshal(inputStream));
-    } catch (JAXBException e) {
+    } catch (final JAXBException e) {
       throw new OpenGammaRuntimeException("Error parsing XML content", e);
     }
   }
 
   private Unmarshaller createUnmarshaller() throws JAXBException {
-    JAXBContext jc = JAXBContext.newInstance(_portfolioDocumentClass);
-    Unmarshaller unmarshaller = jc.createUnmarshaller();
+    final JAXBContext jc = JAXBContext.newInstance(_portfolioDocumentClass);
+    final Unmarshaller unmarshaller = jc.createUnmarshaller();
 
     unmarshaller.setSchema(_schema);
 

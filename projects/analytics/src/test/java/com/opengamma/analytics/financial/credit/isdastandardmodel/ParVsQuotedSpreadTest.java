@@ -185,67 +185,67 @@ public class ParVsQuotedSpreadTest extends ISDABaseTest {
     System.out.print("\n");
 
     //The spreads at the pillar date (which are IMM dates) are quoted spreads - convert to equivalent par spread 
-    final double[] pillar_parSpreads = PUF_CONVERTER.quotedSpreadToParSpreads(pillarCDSs_IMM, imm_coupon, YIELD_CURVE, pillar_qSpreads);
+    final double[] pillarParSpreads = PUF_CONVERTER.quotedSpreadToParSpreads(pillarCDSs_IMM, imm_coupon, YIELD_CURVE, pillar_qSpreads);
 
     final int nIMMDates = IMM_DATES.length;
     final int nNonIMMDates = NON_IMM_DATES.length;
 
-    final double[] parellelCS01_IMM = new double[nIMMDates];
-    final double[][] bucketedCS01_IMM_qSpread = new double[nIMMDates][];
-    final double[][] bucketedCS01_IMM_pSpread = new double[nIMMDates][];
-    final double[][] bucketedCS01_IMM_flatSpread = new double[nIMMDates][];
+    final double[] parellelCS01Imm = new double[nIMMDates];
+    final double[][] bucketedCS01ImmQuotedSpread = new double[nIMMDates][];
+    final double[][] bucketedCS01ImParSpread = new double[nIMMDates][];
+    final double[][] bucketedCS01ImmFlatSpread = new double[nIMMDates][];
 
     for (int i = 0; i < nIMMDates; i++) {
       final CDSAnalytic pricingCDS = new CDSAnalytic(TRADE_DATE, EFFECTIVE_DATE, CASH_SETTLE_DATE, STARTDATE, IMM_DATES[i], PAY_ACC_ON_DEFAULT, PAYMENT_INTERVAL, STUB, PROCTECTION_START, RECOVERY);
       final double[] flatSpreadTS = new double[nPillars];
       Arrays.fill(flatSpreadTS, ((QuotedSpread) IMM_QUOTES.get(i)).getQuotedSpread());
 
-      parellelCS01_IMM[i] = CS01_CAL.parallelCS01(pricingCDS, IMM_QUOTES.get(i), YIELD_CURVE, ONE_BP);
-      bucketedCS01_IMM_qSpread[i] = CS01_CAL.bucketedCS01FromPillarQuotes(pricingCDS, imm_coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_quotes, ONE_BP);
-      bucketedCS01_IMM_pSpread[i] = CS01_CAL.bucketedCS01FromParSpreads(pricingCDS, imm_coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_parSpreads, ONE_BP, BumpType.ADDITIVE);
-      bucketedCS01_IMM_flatSpread[i] = CS01_CAL.bucketedCS01FromParSpreads(pricingCDS, imm_coupon, YIELD_CURVE, pillarCDSs_IMM, flatSpreadTS, ONE_BP, BumpType.ADDITIVE);
+      parellelCS01Imm[i] = CS01_CAL.parallelCS01(pricingCDS, IMM_QUOTES.get(i), YIELD_CURVE, ONE_BP);
+      bucketedCS01ImmQuotedSpread[i] = CS01_CAL.bucketedCS01FromPillarQuotes(pricingCDS, imm_coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_quotes, ONE_BP);
+      bucketedCS01ImParSpread[i] = CS01_CAL.bucketedCS01FromParSpreads(pricingCDS, imm_coupon, YIELD_CURVE, pillarCDSs_IMM, pillarParSpreads, ONE_BP, BumpType.ADDITIVE);
+      bucketedCS01ImmFlatSpread[i] = CS01_CAL.bucketedCS01FromParSpreads(pricingCDS, imm_coupon, YIELD_CURVE, pillarCDSs_IMM, flatSpreadTS, ONE_BP, BumpType.ADDITIVE);
     }
 
-    final double[] parellelCS01_nonIMM_pSpread = new double[nNonIMMDates];
-    final double[] parellelCS01_nonIMM_qSpread = new double[nNonIMMDates];
-    final double[] parellelCS01_nonIMM_qSpread_SA = new double[nNonIMMDates];
-    final double[] parellelCS01_nonIMM_qSpread_bumped = new double[nNonIMMDates];
-    final double[][] bucketedCS01_nonIMM_pSpread = new double[nNonIMMDates][];
-    final double[][] bucketedCS01_nonIMM_qSpread = new double[nNonIMMDates][];
-    final double[][] bucketedCS01_nonIMM_qSpread_SA = new double[nNonIMMDates][];
-    final double[][] bucketedCS01_nonIMM_qSpread_bumped = new double[nNonIMMDates][];
+    final double[] parellelCS01NonImmParSpread = new double[nNonIMMDates];
+    final double[] parellelCS01NonImmQuotedSpread = new double[nNonIMMDates];
+    final double[] parellelCS01NonImmQuotedSpreadSA = new double[nNonIMMDates];
+    final double[] parellelCS01NonImmQuotedSpreadBumped = new double[nNonIMMDates];
+    final double[][] bucketedCS01NonImmParSpread = new double[nNonIMMDates][];
+    final double[][] bucketedCS01NonImmQuotedSpread = new double[nNonIMMDates][];
+    final double[][] bucketedCS01NonImmQuotedSpreadSA = new double[nNonIMMDates][];
+    final double[][] bucketedCS01NonImmQuotedSpreadBumped = new double[nNonIMMDates][];
 
     for (int i = 0; i < nNonIMMDates; i++) {
       final CDSAnalytic pricingCDS = new CDSAnalytic(TRADE_DATE, EFFECTIVE_DATE, CASH_SETTLE_DATE, STARTDATE, NON_IMM_DATES[i], PAY_ACC_ON_DEFAULT, NON_IMM_TENOR, STUB, PROCTECTION_START, RECOVERY);
       final double coupon = NON_IMM_QUOTES.get(i).getCoupon();
 
       //convert pillar spreads to par spreads first 
-      parellelCS01_nonIMM_pSpread[i] = CS01_CAL.parallelCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_parSpreads, ONE_BP, BumpType.ADDITIVE);
-      bucketedCS01_nonIMM_pSpread[i] = CS01_CAL.bucketedCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_parSpreads, ONE_BP, BumpType.ADDITIVE);
+      parellelCS01NonImmParSpread[i] = CS01_CAL.parallelCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillarParSpreads, ONE_BP, BumpType.ADDITIVE);
+      bucketedCS01NonImmParSpread[i] = CS01_CAL.bucketedCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillarParSpreads, ONE_BP, BumpType.ADDITIVE);
 
       //treat the pillar quotes (which are quoted spreads) as par spreads 
-      parellelCS01_nonIMM_qSpread[i] = CS01_CAL.parallelCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_qSpreads, ONE_BP, BumpType.ADDITIVE);
-      bucketedCS01_nonIMM_qSpread[i] = CS01_CAL.bucketedCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_qSpreads, ONE_BP, BumpType.ADDITIVE);
+      parellelCS01NonImmQuotedSpread[i] = CS01_CAL.parallelCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_qSpreads, ONE_BP, BumpType.ADDITIVE);
+      bucketedCS01NonImmQuotedSpread[i] = CS01_CAL.bucketedCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_qSpreads, ONE_BP, BumpType.ADDITIVE);
 
       //treat the pillar quotes (which are quoted spreads) as par spreads  with SA coupon interval
-      parellelCS01_nonIMM_qSpread_SA[i] = CS01_CAL.parallelCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_nonIMM, pillar_qSpreads, ONE_BP, BumpType.ADDITIVE);
-      bucketedCS01_nonIMM_qSpread_SA[i] = CS01_CAL.bucketedCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_nonIMM, pillar_qSpreads, ONE_BP, BumpType.ADDITIVE);
+      parellelCS01NonImmQuotedSpreadSA[i] = CS01_CAL.parallelCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_nonIMM, pillar_qSpreads, ONE_BP, BumpType.ADDITIVE);
+      bucketedCS01NonImmQuotedSpreadSA[i] = CS01_CAL.bucketedCS01FromParSpreads(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_nonIMM, pillar_qSpreads, ONE_BP, BumpType.ADDITIVE);
 
-      parellelCS01_nonIMM_qSpread_bumped[i] = CS01_CAL.parallelCS01FromPillarQuotes(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_quotes, ONE_BP);
-      bucketedCS01_nonIMM_qSpread_bumped[i] = CS01_CAL.bucketedCS01FromPillarQuotes(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_quotes, ONE_BP);
+      parellelCS01NonImmQuotedSpreadBumped[i] = CS01_CAL.parallelCS01FromPillarQuotes(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_quotes, ONE_BP);
+      bucketedCS01NonImmQuotedSpreadBumped[i] = CS01_CAL.bucketedCS01FromPillarQuotes(pricingCDS, coupon, YIELD_CURVE, pillarCDSs_IMM, pillar_quotes, ONE_BP);
 
       //debug
 
     }
 
-    output("CS01 IMM quoted spreads", IMM_DATES, TENORS, bucketedCS01_IMM_qSpread, parellelCS01_IMM, scale);
-    output("CS01 IMM par spreads", IMM_DATES, TENORS, bucketedCS01_IMM_pSpread, parellelCS01_IMM, scale);
-    output("CS01 IMM flat spread term structure", IMM_DATES, TENORS, bucketedCS01_IMM_flatSpread, parellelCS01_IMM, scale);
+    output("CS01 IMM quoted spreads", IMM_DATES, TENORS, bucketedCS01ImmQuotedSpread, parellelCS01Imm, scale);
+    output("CS01 IMM par spreads", IMM_DATES, TENORS, bucketedCS01ImParSpread, parellelCS01Imm, scale);
+    output("CS01 IMM flat spread term structure", IMM_DATES, TENORS, bucketedCS01ImmFlatSpread, parellelCS01Imm, scale);
 
-    output("CS01 non-IMM par spreads", NON_IMM_DATES, TENORS, bucketedCS01_nonIMM_pSpread, parellelCS01_nonIMM_pSpread, scale);
-    output("CS01 non-IMM quoted spreads", NON_IMM_DATES, TENORS, bucketedCS01_nonIMM_qSpread, parellelCS01_nonIMM_qSpread, scale);
-    output("CS01 non-IMM quoted spreads (SA)", NON_IMM_DATES, TENORS, bucketedCS01_nonIMM_qSpread_SA, parellelCS01_nonIMM_qSpread_SA, scale);
-    output("CS01 non-IMM quoted spreads bumped", NON_IMM_DATES, TENORS, bucketedCS01_nonIMM_qSpread_bumped, parellelCS01_nonIMM_qSpread_bumped, scale);
+    output("CS01 non-IMM par spreads", NON_IMM_DATES, TENORS, bucketedCS01NonImmParSpread, parellelCS01NonImmParSpread, scale);
+    output("CS01 non-IMM quoted spreads", NON_IMM_DATES, TENORS, bucketedCS01NonImmQuotedSpread, parellelCS01NonImmQuotedSpread, scale);
+    output("CS01 non-IMM quoted spreads (SA)", NON_IMM_DATES, TENORS, bucketedCS01NonImmQuotedSpreadSA, parellelCS01NonImmQuotedSpreadSA, scale);
+    output("CS01 non-IMM quoted spreads bumped", NON_IMM_DATES, TENORS, bucketedCS01NonImmQuotedSpreadBumped, parellelCS01NonImmQuotedSpreadBumped, scale);
   }
 
   private void output(final String name, final LocalDate[] maturities, final Period[] pillars, final double[][] bCS01, final double[] pCS01, final double scale) {

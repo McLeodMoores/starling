@@ -65,11 +65,11 @@ public class PermissionedPositionMaster implements PositionMaster {
    * Wraps an underlying master if appropriate.
    * <p>
    * No wrapping occurs if permissions are not in use.
-   * 
+   *
    * @param underlying  the underlying master, not null
    * @return the master, not null
    */
-  public static PositionMaster wrap(PositionMaster underlying) {
+  public static PositionMaster wrap(final PositionMaster underlying) {
     if (AuthUtils.isPermissive()) {
       return underlying;
     }
@@ -79,17 +79,17 @@ public class PermissionedPositionMaster implements PositionMaster {
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying position master, not null
    */
-  public PermissionedPositionMaster(PositionMaster underlying) {
+  public PermissionedPositionMaster(final PositionMaster underlying) {
     _underlying = ArgumentChecker.notNull(underlying, "underlying");
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying position master.
-   * 
+   *
    * @return the underlying master, not null
    */
   protected PositionMaster getUnderlying() {
@@ -98,37 +98,37 @@ public class PermissionedPositionMaster implements PositionMaster {
 
   //-------------------------------------------------------------------------
   @Override
-  public PositionDocument get(UniqueId uniqueId) {
+  public PositionDocument get(final UniqueId uniqueId) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().get(uniqueId);
   }
 
   @Override
-  public PositionDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public PositionDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().get(objectId, versionCorrection);
   }
 
   @Override
-  public ManageableTrade getTrade(UniqueId tradeId) {
+  public ManageableTrade getTrade(final UniqueId tradeId) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().getTrade(tradeId);
   }
 
   @Override
-  public Map<UniqueId, PositionDocument> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, PositionDocument> get(final Collection<UniqueId> uniqueIds) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().get(uniqueIds);
   }
 
   @Override
-  public PositionSearchResult search(PositionSearchRequest request) {
+  public PositionSearchResult search(final PositionSearchRequest request) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().search(request);
   }
 
   @Override
-  public PositionHistoryResult history(PositionHistoryRequest request) {
+  public PositionHistoryResult history(final PositionHistoryRequest request) {
     AuthUtils.getSubject().checkPermission(PERMISSION_VIEW);
     return getUnderlying().history(request);
   }
@@ -140,61 +140,61 @@ public class PermissionedPositionMaster implements PositionMaster {
   }
 
   @Override
-  public PositionDocument add(PositionDocument document) {
+  public PositionDocument add(final PositionDocument document) {
     AuthUtils.getSubject().checkPermission(PERMISSION_ADD);
     return getUnderlying().add(document);
   }
 
   @Override
-  public PositionDocument update(PositionDocument document) {
+  public PositionDocument update(final PositionDocument document) {
     AuthUtils.getSubject().checkPermission(PERMISSION_UPDATE);
     return getUnderlying().update(document);
   }
 
   @Override
-  public void remove(ObjectIdentifiable oid) {
+  public void remove(final ObjectIdentifiable oid) {
     AuthUtils.getSubject().checkPermission(PERMISSION_REMOVE);
     getUnderlying().remove(oid);
   }
 
   @Override
-  public PositionDocument correct(PositionDocument document) {
+  public PositionDocument correct(final PositionDocument document) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().correct(document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<PositionDocument> replacementDocuments) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<PositionDocument> replacementDocuments) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<PositionDocument> replacementDocuments) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(PositionDocument replacementDocument) {
+  public UniqueId replaceVersion(final PositionDocument replacementDocument) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     getUnderlying().removeVersion(uniqueId);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, PositionDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final PositionDocument documentToAdd) {
     AuthUtils.getSubject().checkPermission(PERMISSION_CORRECT);
     return getUnderlying().addVersion(objectId, documentToAdd);
   }

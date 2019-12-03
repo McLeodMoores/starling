@@ -53,4 +53,4 @@ create table user_to_user_group (
     constraint fk_user_to_user_group2user_group foreign key (user_group_id) references user_group(id) ON DELETE CASCADE
 );
 
-create sequence auth_hibernate_sequence start with 1 increment by 1;
+create sequence if not exists auth_hibernate_sequence start with 1 increment by 1;

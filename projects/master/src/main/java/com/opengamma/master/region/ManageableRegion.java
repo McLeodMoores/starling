@@ -49,46 +49,40 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
   private static final long serialVersionUID = 1L;
 
   /**
-   * The unique identifier of the region.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * The unique identifier of the region. This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private UniqueId _uniqueId;
   /**
-   * The bundle of identifiers that define the region.
-   * This will include the country, currency and time-zone.
+   * The bundle of identifiers that define the region. This will include the country, currency and time-zone.
    * This field must not be null for the object to be valid.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
-   * The classification of the region.
-   * This field must not be null for the object to be valid.
+   * The classification of the region. This field must not be null for the object to be valid.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private RegionClassification _classification;
   /**
-   * The unique identifiers of the parent regions.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
+   * The unique identifiers of the parent regions. For example, a country might be a member of the World, UN, European Union and NATO.
    */
-  @PropertyDefinition(set = "setClearAddAll")
-  private Set<UniqueId> _parentRegionIds = new HashSet<UniqueId>();
+  @PropertyDefinition(set = "setClearAddAll", overrideGet = true)
+  private final Set<UniqueId> _parentRegionIds = new HashSet<>();
   /**
-   * The short descriptive name for the region.
-   * This field must not be null for the object to be valid.
+   * The short descriptive name for the region. This field must not be null for the object to be valid.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _name;
   /**
    * The full descriptive name for the region.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _fullName;
   /**
-   * The extensible data store for additional information, not null.
-   * Applications may store additional region based information here.
+   * The extensible data store for additional information, not null. Applications may store additional region based information here.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private final FlexiBean _data = new FlexiBean();
 
   /**
@@ -101,8 +95,9 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
    * Create an instance from another region instance.
    * <p>
    * This copies the specified region creating an independent copy.
-   * 
-   * @param region  the region to copy, not null
+   *
+   * @param region
+   *          the region to copy, not null
    */
   public ManageableRegion(final Region region) {
     ArgumentChecker.notNull(region, "region");
@@ -115,78 +110,86 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
     setData(region.getData());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle representing this region.
-   * 
-   * @param identifier  the identifier to add, not null
+   *
+   * @param identifier
+   *          the identifier to add, not null
    */
-  public void addExternalId(ExternalId identifier) {
+  public void addExternalId(final ExternalId identifier) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(identifier));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the country.
+   *
    * @return the value of the property
    */
+  @Override
   public Country getCountry() {
-    String code = _externalIdBundle.getValue(ExternalSchemes.ISO_COUNTRY_ALPHA2);
-    return (code != null ? Country.of(code) : null);
+    final String code = _externalIdBundle.getValue(ExternalSchemes.ISO_COUNTRY_ALPHA2);
+    return code != null ? Country.of(code) : null;
   }
 
   /**
    * Sets the country, stored in the identifier set.
-   * 
-   * @param country  the country to set, null to remove any defined country
+   *
+   * @param country
+   *          the country to set, null to remove any defined country
    */
-  public void setCountry(Country country) {
+  public void setCountry(final Country country) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_CURRENCY_ALPHA3));
     if (country != null) {
       addExternalId(ExternalSchemes.countryRegionId(country));
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the currency.
+   *
    * @return the value of the property
    */
+  @Override
   public Currency getCurrency() {
-    String code = _externalIdBundle.getValue(ExternalSchemes.ISO_CURRENCY_ALPHA3);
-    return (code != null ? Currency.of(code) : null);
+    final String code = _externalIdBundle.getValue(ExternalSchemes.ISO_CURRENCY_ALPHA3);
+    return code != null ? Currency.of(code) : null;
   }
 
   /**
    * Sets the currency, stored in the identifier set.
-   * 
-   * @param currency  the currency to set, null to remove any currency
+   *
+   * @param currency
+   *          the currency to set, null to remove any currency
    */
-  public void setCurrency(Currency currency) {
+  public void setCurrency(final Currency currency) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.ISO_CURRENCY_ALPHA3));
     if (currency != null) {
       addExternalId(ExternalSchemes.currencyRegionId(currency));
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Gets the time-zone.
-   * For larger regions, there can be multiple time-zones, so this is only reliable
-   * for municipalities.
+   * Gets the time-zone. For larger regions, there can be multiple time-zones, so this is only reliable for municipalities.
+   *
    * @return the value of the property
    */
+  @Override
   public ZoneId getTimeZone() {
-    String id = _externalIdBundle.getValue(ExternalSchemes.TZDB_TIME_ZONE);
-    return (id != null ? ZoneId.of(id) : null);
+    final String id = _externalIdBundle.getValue(ExternalSchemes.TZDB_TIME_ZONE);
+    return id != null ? ZoneId.of(id) : null;
   }
 
   /**
    * Sets the time-zone, stored in the identifier set.
-   * 
-   * @param timeZone  the time-zone to set, null to remove any time-zone
+   *
+   * @param timeZone
+   *          the time-zone to set, null to remove any time-zone
    */
-  public void setTimeZone(ZoneId timeZone) {
+  public void setTimeZone(final ZoneId timeZone) {
     setExternalIdBundle(getExternalIdBundle().withoutScheme(ExternalSchemes.TZDB_TIME_ZONE));
     if (timeZone != null) {
       addExternalId(ExternalSchemes.timeZoneRegionId(timeZone));
@@ -214,17 +217,16 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifier of the region.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Gets the unique identifier of the region. This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
 
   /**
-   * Sets the unique identifier of the region.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Sets the unique identifier of the region. This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
   public void setUniqueId(UniqueId uniqueId) {
@@ -233,7 +235,6 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   /**
    * Gets the the {@code uniqueId} property.
-   * This must be null when adding to a master and not null when retrieved from a master.
    * @return the property, not null
    */
   public final Property<UniqueId> uniqueId() {
@@ -242,18 +243,17 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bundle of identifiers that define the region.
-   * This will include the country, currency and time-zone.
+   * Gets the bundle of identifiers that define the region. This will include the country, currency and time-zone.
    * This field must not be null for the object to be valid.
    * @return the value of the property
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
 
   /**
-   * Sets the bundle of identifiers that define the region.
-   * This will include the country, currency and time-zone.
+   * Sets the bundle of identifiers that define the region. This will include the country, currency and time-zone.
    * This field must not be null for the object to be valid.
    * @param externalIdBundle  the new value of the property
    */
@@ -263,7 +263,6 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   /**
    * Gets the the {@code externalIdBundle} property.
-   * This will include the country, currency and time-zone.
    * This field must not be null for the object to be valid.
    * @return the property, not null
    */
@@ -273,17 +272,16 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the classification of the region.
-   * This field must not be null for the object to be valid.
+   * Gets the classification of the region. This field must not be null for the object to be valid.
    * @return the value of the property
    */
+  @Override
   public RegionClassification getClassification() {
     return _classification;
   }
 
   /**
-   * Sets the classification of the region.
-   * This field must not be null for the object to be valid.
+   * Sets the classification of the region. This field must not be null for the object to be valid.
    * @param classification  the new value of the property
    */
   public void setClassification(RegionClassification classification) {
@@ -292,7 +290,6 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   /**
    * Gets the the {@code classification} property.
-   * This field must not be null for the object to be valid.
    * @return the property, not null
    */
   public final Property<RegionClassification> classification() {
@@ -301,27 +298,26 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifiers of the parent regions.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
-   * @return the value of the property
+   * Gets the unique identifiers of the parent regions. For example, a country might be a member of the World, UN, European Union and NATO.
+   * @return the value of the property, not null
    */
+  @Override
   public Set<UniqueId> getParentRegionIds() {
     return _parentRegionIds;
   }
 
   /**
-   * Sets the unique identifiers of the parent regions.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
-   * @param parentRegionIds  the new value of the property
+   * Sets the unique identifiers of the parent regions. For example, a country might be a member of the World, UN, European Union and NATO.
+   * @param parentRegionIds  the new value of the property, not null
    */
   public void setParentRegionIds(Set<UniqueId> parentRegionIds) {
+    JodaBeanUtils.notNull(parentRegionIds, "parentRegionIds");
     this._parentRegionIds.clear();
     this._parentRegionIds.addAll(parentRegionIds);
   }
 
   /**
    * Gets the the {@code parentRegionIds} property.
-   * For example, a country might be a member of the World, UN, European Union and NATO.
    * @return the property, not null
    */
   public final Property<Set<UniqueId>> parentRegionIds() {
@@ -330,17 +326,16 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the short descriptive name for the region.
-   * This field must not be null for the object to be valid.
+   * Gets the short descriptive name for the region. This field must not be null for the object to be valid.
    * @return the value of the property
    */
+  @Override
   public String getName() {
     return _name;
   }
 
   /**
-   * Sets the short descriptive name for the region.
-   * This field must not be null for the object to be valid.
+   * Sets the short descriptive name for the region. This field must not be null for the object to be valid.
    * @param name  the new value of the property
    */
   public void setName(String name) {
@@ -349,7 +344,6 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   /**
    * Gets the the {@code name} property.
-   * This field must not be null for the object to be valid.
    * @return the property, not null
    */
   public final Property<String> name() {
@@ -361,6 +355,7 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
    * Gets the full descriptive name for the region.
    * @return the value of the property
    */
+  @Override
   public String getFullName() {
     return _fullName;
   }
@@ -383,17 +378,16 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the extensible data store for additional information, not null.
-   * Applications may store additional region based information here.
+   * Gets the extensible data store for additional information, not null. Applications may store additional region based information here.
    * @return the value of the property, not null
    */
+  @Override
   public FlexiBean getData() {
     return _data;
   }
 
   /**
-   * Sets the extensible data store for additional information, not null.
-   * Applications may store additional region based information here.
+   * Sets the extensible data store for additional information, not null. Applications may store additional region based information here.
    * @param data  the new value of the property, not null
    */
   public void setData(FlexiBean data) {
@@ -404,7 +398,6 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
   /**
    * Gets the the {@code data} property.
-   * Applications may store additional region based information here.
    * @return the property, not null
    */
   public final Property<FlexiBean> data() {
@@ -682,6 +675,7 @@ public class ManageableRegion extends DirectBean implements Region, Serializable
 
     @Override
     protected void validate(Bean bean) {
+      JodaBeanUtils.notNull(((ManageableRegion) bean)._parentRegionIds, "parentRegionIds");
       JodaBeanUtils.notNull(((ManageableRegion) bean)._data, "data");
     }
 

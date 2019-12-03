@@ -33,13 +33,13 @@ public final class MagnitudeDoublesPairComparator implements Comparator<DoublesP
   }
 
   @Override
-  public int compare(DoublesPair p1, DoublesPair p2) {
-    double x1 = p1.first;
-    double y1 = p1.second;
-    double x2 = p2.first;
-    double y2 = p2.second;
-    double z1 = x1 * x1 + y1 * y1;
-    double z2 = x2 * x2 + y2 * y2;
+  public int compare(final DoublesPair p1, final DoublesPair p2) {
+    final double x1 = p1.first;
+    final double y1 = p1.second;
+    final double x2 = p2.first;
+    final double y2 = p2.second;
+    final double z1 = x1 * x1 + y1 * y1;
+    final double z2 = x2 * x2 + y2 * y2;
     if (z1 == z2) {
       return QuadrantPairComparator.INSTANCE.compare(p1, p2);
     }

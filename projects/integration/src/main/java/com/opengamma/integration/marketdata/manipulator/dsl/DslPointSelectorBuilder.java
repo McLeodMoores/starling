@@ -12,13 +12,13 @@ import groovy.lang.Closure;
  */
 /* package */ final class DslPointSelectorBuilder extends PointSelector.Builder {
 
-  /* package */ DslPointSelectorBuilder(Scenario scenario) {
+  /* package */ DslPointSelectorBuilder(final Scenario scenario) {
     super(scenario);
   }
 
   @SuppressWarnings("unused")
-  public void apply(Closure<?> body) {
-    PointManipulatorBuilder builder = new PointManipulatorBuilder(getScenario(), getSelector());
+  public void apply(final Closure<?> body) {
+    final PointManipulatorBuilder builder = new PointManipulatorBuilder(getScenario(), getSelector());
     body.setDelegate(builder);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);
     body.call();

@@ -15,20 +15,20 @@ public class OpenGammaRuntimeException extends RuntimeException {
 
   /**
    * Creates an exception with a message.
-   * 
+   *
    * @param message  the message, may be null
    */
-  public OpenGammaRuntimeException(String message) {
+  public OpenGammaRuntimeException(final String message) {
     super(message);
   }
 
   /**
    * Creates an exception with a message.
-   * 
+   *
    * @param message  the message, may be null
    * @param cause  the underlying cause, may be null
    */
-  public OpenGammaRuntimeException(String message, Throwable cause) {
+  public OpenGammaRuntimeException(final String message, final Throwable cause) {
     super(message, cause);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention.calendar;
@@ -19,12 +19,12 @@ public class CalendarNoHoliday extends ExceptionCalendar {
    * Creates an instance.
    * @param name The calendar name. Not null.
    */
-  public CalendarNoHoliday(String name) {
+  public CalendarNoHoliday(final String name) {
     super(name);
   }
 
   @Override
-  protected boolean isNormallyWorkingDay(LocalDate date) {
+  protected boolean isNormallyWorkingDay(final LocalDate date) {
     return true;
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.cds;
@@ -23,22 +23,24 @@ import com.opengamma.masterdb.security.hibernate.OperationContext;
 import com.opengamma.masterdb.security.hibernate.swap.NotionalBeanOperation;
 
 /**
- * 
+ *
  */
-public final class StdRecoveryLockCDSSecurityBeanOperation extends AbstractSecurityBeanOperation<StandardRecoveryLockCDSSecurity, StandardRecoveryLockCDSSecurityBean> {
+public final class StdRecoveryLockCDSSecurityBeanOperation
+    extends AbstractSecurityBeanOperation<StandardRecoveryLockCDSSecurity, StandardRecoveryLockCDSSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final StdRecoveryLockCDSSecurityBeanOperation INSTANCE = new StdRecoveryLockCDSSecurityBeanOperation();
-  
+
   private StdRecoveryLockCDSSecurityBeanOperation() {
     super(StandardRecoveryLockCDSSecurity.SECURITY_TYPE, StandardRecoveryLockCDSSecurity.class, StandardRecoveryLockCDSSecurityBean.class);
   }
 
   @Override
-  public StandardRecoveryLockCDSSecurityBean createBean(OperationContext context, HibernateSecurityMasterDao secMasterSession, StandardRecoveryLockCDSSecurity security) {
-    StandardRecoveryLockCDSSecurityBean bean = new StandardRecoveryLockCDSSecurityBean();
+  public StandardRecoveryLockCDSSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final StandardRecoveryLockCDSSecurity security) {
+    final StandardRecoveryLockCDSSecurityBean bean = new StandardRecoveryLockCDSSecurityBean();
     CreditDefaultSwapBeanOperation.createBean(secMasterSession, bean, security);
     bean.setQuotedSpread(security.getQuotedSpread());
     bean.setUpfrontAmount(NotionalBeanOperation.createBean(secMasterSession, security.getUpfrontAmount()));
@@ -47,30 +49,30 @@ public final class StdRecoveryLockCDSSecurityBeanOperation extends AbstractSecur
   }
 
   @Override
-  public StandardRecoveryLockCDSSecurity createSecurity(OperationContext context, StandardRecoveryLockCDSSecurityBean bean) {
-    StandardRecoveryLockCDSSecurity security = new StandardRecoveryLockCDSSecurity(
-        bean.getBuy(), 
-        externalIdBeanToExternalId(bean.getProtectionSeller()), 
-        externalIdBeanToExternalId(bean.getProtectionBuyer()), 
-        externalIdBeanToExternalId(bean.getReferenceEntity()), 
-        debtSeniorityBeanToDebtSeniority(bean.getDebtSeniority()), 
-        restructuringClauseBeanToRestructuringClause(bean.getRestructuringClause()), 
-        externalIdBeanToExternalId(bean.getRegionId()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()), 
-        zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()), 
-        stubTypeBeanToStubType(bean.getStubType()), 
-        frequencyBeanToFrequency(bean.getCouponFrequency()), 
-        dayCountBeanToDayCount(bean.getDayCount()), 
-        businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()), 
-        bean.getImmAdjustMaturityDate(), 
-        bean.getAdjustEffectiveDate(), 
-        bean.getAdjustMaturityDate(), 
-        (InterestRateNotional) createNotional(bean.getNotional()), 
-        bean.getRecoveryRate(), 
-        bean.getIncludeAccruedPremium(), 
-        bean.getProtectionStart(), 
-        bean.getQuotedSpread(), 
+  public StandardRecoveryLockCDSSecurity createSecurity(final OperationContext context, final StandardRecoveryLockCDSSecurityBean bean) {
+    final StandardRecoveryLockCDSSecurity security = new StandardRecoveryLockCDSSecurity(
+        bean.getBuy(),
+        externalIdBeanToExternalId(bean.getProtectionSeller()),
+        externalIdBeanToExternalId(bean.getProtectionBuyer()),
+        externalIdBeanToExternalId(bean.getReferenceEntity()),
+        debtSeniorityBeanToDebtSeniority(bean.getDebtSeniority()),
+        restructuringClauseBeanToRestructuringClause(bean.getRestructuringClause()),
+        externalIdBeanToExternalId(bean.getRegionId()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getEffectiveDate()),
+        zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate()),
+        stubTypeBeanToStubType(bean.getStubType()),
+        frequencyBeanToFrequency(bean.getCouponFrequency()),
+        dayCountBeanToDayCount(bean.getDayCount()),
+        businessDayConventionBeanToBusinessDayConvention(bean.getBusinessDayConvention()),
+        bean.getImmAdjustMaturityDate(),
+        bean.getAdjustEffectiveDate(),
+        bean.getAdjustMaturityDate(),
+        (InterestRateNotional) createNotional(bean.getNotional()),
+        bean.getRecoveryRate(),
+        bean.getIncludeAccruedPremium(),
+        bean.getProtectionStart(),
+        bean.getQuotedSpread(),
         (InterestRateNotional) createNotional(bean.getUpfrontAmount()));
     return security;
   }

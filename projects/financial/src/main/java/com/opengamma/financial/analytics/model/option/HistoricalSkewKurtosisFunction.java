@@ -52,7 +52,8 @@ public class HistoricalSkewKurtosisFunction extends AbstractFunction.NonCompiled
   private final String _dataProvider;
   private final String _field;
 
-  public HistoricalSkewKurtosisFunction(final String returnCalculatorName, final String skewCalculatorName, final String kurtosisCalculatorName, final String isPearson, final String startDate,
+  public HistoricalSkewKurtosisFunction(final String returnCalculatorName, final String skewCalculatorName, final String kurtosisCalculatorName,
+      final String isPearson, final String startDate,
       final String dataSource, final String dataProvider, final String field) {
     Validate.notNull(returnCalculatorName, "return calculator name");
     Validate.notNull(skewCalculatorName, "skew calculator name");
@@ -71,7 +72,8 @@ public class HistoricalSkewKurtosisFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final HistoricalTimeSeries tsObject = (HistoricalTimeSeries) inputs.getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
     final DoubleTimeSeries<?> returnTS = _returnCalculator.evaluate(tsObject.getTimeSeries());
     final double skew = _skewCalculator.evaluate(returnTS);
@@ -84,10 +86,12 @@ public class HistoricalSkewKurtosisFunction extends AbstractFunction.NonCompiled
       fisher = kurtosis;
       pearson = fisher + 3;
     }
-    final Set<ComputedValue> results = new HashSet<ComputedValue>();
+    final Set<ComputedValue> results = new HashSet<>();
     results.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.SKEW, target.toSpecification(), createValueProperties().get()), skew));
-    results.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.PEARSON_KURTOSIS, target.toSpecification(), createValueProperties().get()), pearson));
-    results.add(new ComputedValue(new ValueSpecification(ValueRequirementNames.FISHER_KURTOSIS, target.toSpecification(), createValueProperties().get()), fisher));
+    results.add(
+        new ComputedValue(new ValueSpecification(ValueRequirementNames.PEARSON_KURTOSIS, target.toSpecification(), createValueProperties().get()), pearson));
+    results
+        .add(new ComputedValue(new ValueSpecification(ValueRequirementNames.FISHER_KURTOSIS, target.toSpecification(), createValueProperties().get()), fisher));
     return results;
   }
 
@@ -99,16 +103,18 @@ public class HistoricalSkewKurtosisFunction extends AbstractFunction.NonCompiled
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
-    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(target.getSecurity().getExternalIdBundle(), null, _dataSource, _dataProvider, _field, null);
+    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(target.getSecurity().getExternalIdBundle(), null, _dataSource, _dataProvider,
+        _field, null);
     if (timeSeries == null) {
       return null;
     }
-    return Collections.singleton(HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, _field, DateConstraint.of(_startDate), true, DateConstraint.VALUATION_TIME, true));
+    return Collections.singleton(
+        HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, _field, DateConstraint.of(_startDate), true, DateConstraint.VALUATION_TIME, true));
   }
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ValueProperties properties = createValueProperties().get();
     results.add(new ValueSpecification(ValueRequirementNames.SKEW, targetSpec, properties));

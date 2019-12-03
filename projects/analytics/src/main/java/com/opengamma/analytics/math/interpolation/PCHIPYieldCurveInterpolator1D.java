@@ -18,10 +18,10 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.ParallelArrayBinarySort;
 
 /**
- * Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) for use in yield curves. The yield curve r(t) is such that P(0,t) = exp(-t*r(t)) is the
- * discount factor for time t. Here we actually interpolate on the quantity f(t) = t*r(t) (which must be monotonically increasing) rather than r(t) itself.
- * However the inputs are still the set {t_i,r_i}, and the interpolate method returns r(t) rather than f(t). If t_0 != 0 an extra data point at zero is inserted
- * such that t_0 = 0 (the value of r_0 is irrelevant)
+ * Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) for use in yield curves. The yield curve r(t) is such that P(0,t) = exp(-t*r(t)) is the discount
+ * factor for time t. Here we actually interpolate on the quantity f(t) = t*r(t) (which must be monotonically increasing) rather than r(t) itself. However the
+ * inputs are still the set {t_i,r_i}, and the interpolate method returns r(t) rather than f(t). If t_0 != 0 an extra data point at zero is inserted such that
+ * t_0 = 0 (the value of r_0 is irrelevant)
  *
  */
 public class PCHIPYieldCurveInterpolator1D extends Interpolator1D {
@@ -115,8 +115,9 @@ public class PCHIPYieldCurveInterpolator1D extends Interpolator1D {
       }
     }
 
-    //    final PiecewisePolynomialResult poly = BASE.interpolate(xx, xy);
-    return new Interpolator1DPiecewisePoynomialDataBundle(new ArrayInterpolator1DDataBundle(xx, xy, true), new PiecewiseCubicHermiteSplineInterpolatorWithSensitivity());
+    // final PiecewisePolynomialResult poly = BASE.interpolate(xx, xy);
+    return new Interpolator1DPiecewisePoynomialDataBundle(new ArrayInterpolator1DDataBundle(xx, xy, true),
+        new PiecewiseCubicHermiteSplineInterpolatorWithSensitivity());
   }
 
 }

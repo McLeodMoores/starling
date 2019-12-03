@@ -23,7 +23,7 @@ import com.opengamma.util.ArgumentChecker;
  * This class can be used on its own, however it is best used by creating a subclass.
  * <p>
  * This class is mutable and thread-safe via internal synchronization.
- * 
+ *
  * @param <T>  the type of the delegate
  */
 public class UniqueIdSchemeDelegator<T> {
@@ -35,11 +35,11 @@ public class UniqueIdSchemeDelegator<T> {
   /**
    * The map of registered delegates.
    */
-  private final ConcurrentMap<String, T> _schemeToDelegateMap = new ConcurrentHashMap<String, T>();
+  private final ConcurrentMap<String, T> _schemeToDelegateMap = new ConcurrentHashMap<>();
 
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultDelegate  the delegate to use when no scheme matches, not null
    */
   public UniqueIdSchemeDelegator(final T defaultDelegate) {
@@ -49,7 +49,7 @@ public class UniqueIdSchemeDelegator<T> {
 
   /**
    * Creates an instance specifying the default delegate.
-   * 
+   *
    * @param defaultDelegate  the delegate to use when no scheme matches, not null
    * @param schemePrefixToDelegateMap  the map of delegates by scheme to switch on, not null
    */
@@ -57,7 +57,7 @@ public class UniqueIdSchemeDelegator<T> {
     ArgumentChecker.notNull(defaultDelegate, "defaultDelegate");
     ArgumentChecker.notNull(schemePrefixToDelegateMap, "schemePrefixToDelegateMap");
     _defaultDelegate = defaultDelegate;
-    for (Map.Entry<String, T> delegate : schemePrefixToDelegateMap.entrySet()) {
+    for (final Map.Entry<String, T> delegate : schemePrefixToDelegateMap.entrySet()) {
       registerDelegate(delegate.getKey(), delegate.getValue());
     }
   }
@@ -65,7 +65,7 @@ public class UniqueIdSchemeDelegator<T> {
   //-------------------------------------------------------------------------
   /**
    * Gets the default delegate.
-   * 
+   *
    * @return the default delegate, not null
    */
   public T getDefaultDelegate() {
@@ -74,16 +74,16 @@ public class UniqueIdSchemeDelegator<T> {
 
   /**
    * Gets the map of registered delegates.
-   * 
+   *
    * @return the registered delegates, unmodifiable, not null
    */
   public Map<String, T> getDelegates() {
     return ImmutableMap.copyOf(_schemeToDelegateMap);
   }
-  
+
   /**
    * Returns the default delegate followed by the mapped one.
-   * 
+   *
    * @return all delegates
    */
   public Iterable<T> getAllDelegates() {
@@ -93,22 +93,22 @@ public class UniqueIdSchemeDelegator<T> {
   //-------------------------------------------------------------------------
   /**
    * Chooses the delegate for a specific identifier scheme.
-   * 
+   *
    * @param scheme  the identifier scheme, not null
    * @return the delegate, not null
    */
   public T chooseDelegate(final String scheme) {
     ArgumentChecker.notNull(scheme, "scheme");
-    String[] schemeParts = StringUtils.split(scheme, "-", 2);
-    String schemePrefix = schemeParts[0];
+    final String[] schemeParts = StringUtils.split(scheme, "-", 2);
+    final String schemePrefix = schemeParts[0];
     final T delegate = _schemeToDelegateMap.get(schemePrefix);
-    return (delegate != null) ? delegate : _defaultDelegate;
+    return delegate != null ? delegate : _defaultDelegate;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Registers a delegate based on a scheme.
-   * 
+   *
    * @param scheme  the scheme to match, not null
    * @param delegate  the delegate to use, not null
    * @return false if a delegate with the given scheme was previously registered, true otherwise
@@ -121,7 +121,7 @@ public class UniqueIdSchemeDelegator<T> {
 
   /**
    * Removes a delegate from those being used.
-   * 
+   *
    * @param scheme  the scheme to remove, not null
    */
   public void removeDelegate(final String scheme) {

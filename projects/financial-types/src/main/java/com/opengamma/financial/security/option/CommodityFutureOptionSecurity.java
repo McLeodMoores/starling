@@ -69,7 +69,7 @@ public class CommodityFutureOptionSecurity extends FinancialSecurity {
    * The point value.
    */
   @PropertyDefinition
-  private double _pointValue;  
+  private double _pointValue;
   /**
    * The currency.
    */
@@ -86,12 +86,36 @@ public class CommodityFutureOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private OptionType _optionType;
 
-  CommodityFutureOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  CommodityFutureOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public CommodityFutureOptionSecurity(String tradingExchange, String settlementExchange, Expiry expiry, ExerciseType exerciseType, ExternalId underlyingIdentifier,
-                                       double pointValue, Currency currency, double strike, OptionType optionType) {
+  /**
+   * @param tradingExchange
+   *          the exchange name, not null
+   * @param settlementExchange
+   *          the exchange name, not null
+   * @param expiry
+   *          the expiry, not null
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param underlyingIdentifier
+   *          the identifier of the underlying index, not null
+   * @param pointValue
+   *          the value of a point, not null
+   * @param currency
+   *          the currency, not null
+   * @param strike
+   *          the strike
+   * @param optionType
+   *          the option type, not null
+   */
+  public CommodityFutureOptionSecurity(final String tradingExchange, final String settlementExchange, final Expiry expiry, final ExerciseType exerciseType,
+      final ExternalId underlyingIdentifier,
+      final double pointValue, final Currency currency, final double strike, final OptionType optionType) {
     super(SECURITY_TYPE);
     setTradingExchange(tradingExchange);
     setSettlementExchange(settlementExchange);
@@ -104,9 +128,9 @@ public class CommodityFutureOptionSecurity extends FinancialSecurity {
     setOptionType(optionType);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitCommodityFutureOptionSecurity(this);
   }
 

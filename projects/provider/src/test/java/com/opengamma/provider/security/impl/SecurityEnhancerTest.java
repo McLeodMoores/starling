@@ -5,7 +5,7 @@
  */
 package com.opengamma.provider.security.impl;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,70 +30,78 @@ public class SecurityEnhancerTest {
   private static final SimpleSecurity SECURITY1 = new SimpleSecurity("A1");
   private static final SimpleSecurity SECURITY2 = new SimpleSecurity("A2");
 
-  @Test
-  public void test_get_single() {
-    final int invoked[] = new int[1];
-    SecurityEnhancer test = new AbstractSecurityEnhancer() {
+  /**
+   * Tests getting a single enhanced security.
+   */
+  public void testGetSingle() {
+    final int[] invoked = new int[1];
+    final SecurityEnhancer test = new AbstractSecurityEnhancer() {
       @Override
-      protected SecurityEnhancerResult doBulkEnhance(SecurityEnhancerRequest request) {
+      protected SecurityEnhancerResult doBulkEnhance(final SecurityEnhancerRequest request) {
         invoked[0]++;
-        SecurityEnhancerResult r = new SecurityEnhancerResult();
+        final SecurityEnhancerResult r = new SecurityEnhancerResult();
         r.getResultList().add(SECURITY2);
         return r;
       }
     };
-    Security result = test.enhanceSecurity(SECURITY1);
-    assertEquals(SECURITY2, result);
-    assertEquals(1, invoked[0]);
+    final Security result = test.enhanceSecurity(SECURITY1);
+    assertEquals(result, SECURITY2);
+    assertEquals(invoked[0], 1);
   }
 
-  @Test
-  public void test_get_bulk() {
-    final int invoked[] = new int[1];
-    SecurityEnhancer test = new AbstractSecurityEnhancer() {
+  /**
+   * Tests getting multiple enhanced securities.
+   */
+  public void testGetBulk() {
+    final int[] invoked = new int[1];
+    final SecurityEnhancer test = new AbstractSecurityEnhancer() {
       @Override
-      protected SecurityEnhancerResult doBulkEnhance(SecurityEnhancerRequest request) {
+      protected SecurityEnhancerResult doBulkEnhance(final SecurityEnhancerRequest request) {
         invoked[0]++;
         return new SecurityEnhancerResult(request.getSecurities());
       }
     };
-    List<Security> result = test.enhanceSecurities(Arrays.<Security>asList(SECURITY1, SECURITY2));
-    assertEquals(Arrays.asList(SECURITY1, SECURITY2), result);
-    assertEquals(1, invoked[0]);
+    final List<Security> result = test.enhanceSecurities(Arrays.<Security>asList(SECURITY1, SECURITY2));
+    assertEquals(result, Arrays.asList(SECURITY1, SECURITY2));
+    assertEquals(invoked[0], 1);
   }
 
-  @Test
-  public void test_get_bulkMap() {
-    final int invoked[] = new int[1];
-    SecurityEnhancer test = new AbstractSecurityEnhancer() {
+  /**
+   * Tests getting multiple enhanced securities.
+   */
+  public void testGetBulkMap() {
+    final int[] invoked = new int[1];
+    final SecurityEnhancer test = new AbstractSecurityEnhancer() {
       @Override
-      protected SecurityEnhancerResult doBulkEnhance(SecurityEnhancerRequest request) {
+      protected SecurityEnhancerResult doBulkEnhance(final SecurityEnhancerRequest request) {
         invoked[0]++;
         return new SecurityEnhancerResult(request.getSecurities());
       }
     };
-    Map<String, Security> map = new HashMap<>();
+    final Map<String, Security> map = new HashMap<>();
     map.put("A", SECURITY1);
     map.put("B", SECURITY2);
-    Map<String, Security> result = test.enhanceSecurities(map);
-    assertEquals(map, result);
-    assertEquals(1, invoked[0]);
+    final Map<String, Security> result = test.enhanceSecurities(map);
+    assertEquals(result, map);
+    assertEquals(invoked[0], 1);
   }
 
-  @Test
-  public void test_get_request() {
-    final int invoked[] = new int[1];
-    SecurityEnhancer test = new AbstractSecurityEnhancer() {
+  /**
+   * Tests getting multiple enhanced securities using a get request.
+   */
+  public void testGetRequest() {
+    final int[] invoked = new int[1];
+    final SecurityEnhancer test = new AbstractSecurityEnhancer() {
       @Override
-      protected SecurityEnhancerResult doBulkEnhance(SecurityEnhancerRequest request) {
+      protected SecurityEnhancerResult doBulkEnhance(final SecurityEnhancerRequest request) {
         invoked[0]++;
         return new SecurityEnhancerResult(request.getSecurities());
       }
     };
-    SecurityEnhancerRequest request = SecurityEnhancerRequest.create(SECURITY1, SECURITY2);
-    SecurityEnhancerResult result = test.enhanceSecurities(request);
-    assertEquals(Arrays.asList(SECURITY1, SECURITY2), result.getResultList());
-    assertEquals(1, invoked[0]);
+    final SecurityEnhancerRequest request = SecurityEnhancerRequest.create(SECURITY1, SECURITY2);
+    final SecurityEnhancerResult result = test.enhanceSecurities(request);
+    assertEquals(result.getResultList(), Arrays.asList(SECURITY1, SECURITY2));
+    assertEquals(invoked[0], 1);
   }
 
 }

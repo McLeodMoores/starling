@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.config;
 
@@ -34,10 +34,9 @@ import com.opengamma.scripts.Scriptable;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Creates a {@link CurrencyMatrix} and {@link CurrencyPairs} configuration and writes them as xml files
- * or stores them in the config master, depending on the options used. The currency matrix name must be
- * specified, but the currency pairs name is set to {@link CurrencyPairs#DEFAULT_CURRENCY_PAIRS}, as this
- * value is hard-coded in many OpenGamma integration functions.
+ * Creates a {@link CurrencyMatrix} and {@link CurrencyPairs} configuration and writes them as xml files or stores them in the config master, depending on the
+ * options used. The currency matrix name must be specified, but the currency pairs name is set to {@link CurrencyPairs#DEFAULT_CURRENCY_PAIRS}, as this value
+ * is hard-coded in many OpenGamma integration functions.
  */
 @Scriptable
 public class QuandlCurrencyConfigurationsLoader extends AbstractTool<ToolContext> {
@@ -62,7 +61,9 @@ public class QuandlCurrencyConfigurationsLoader extends AbstractTool<ToolContext
 
   /**
    * Main method to run the tool.
-   * @param args The arguments
+   *
+   * @param args
+   *          The arguments
    */
   public static void main(final String[] args) {
     new QuandlCurrencyConfigurationsLoader().invokeAndTerminate(args);
@@ -80,6 +81,7 @@ public class QuandlCurrencyConfigurationsLoader extends AbstractTool<ToolContext
 
   /**
    * Create the option to save the configurations to file.
+   *
    * @return The option
    */
   private static Option createFileOption() {
@@ -92,6 +94,7 @@ public class QuandlCurrencyConfigurationsLoader extends AbstractTool<ToolContext
 
   /**
    * Creates the option to persist the configurations to the config master.
+   *
    * @return The option
    */
   private static Option createPersistOption() {
@@ -104,6 +107,7 @@ public class QuandlCurrencyConfigurationsLoader extends AbstractTool<ToolContext
 
   /**
    * Creates the currency matrix name option.
+   *
    * @return The option
    */
   private static Option createCurrencyMatrixNameOption() {
@@ -116,6 +120,7 @@ public class QuandlCurrencyConfigurationsLoader extends AbstractTool<ToolContext
 
   /**
    * Creates the currency pairs name option.
+   *
    * @return The option
    */
   private static Option createCurrencyPairsNameOption() {
@@ -159,7 +164,7 @@ public class QuandlCurrencyConfigurationsLoader extends AbstractTool<ToolContext
         LOGGER.warn("Saving configurations to file");
         Path path = Paths.get(currencyPairsName + ".xml");
         final byte[] xmlString = JodaBeanSer.PRETTY.xmlWriter().write(currencyPairs).getBytes();
-        try (final OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
+        try (OutputStream out = Files.newOutputStream(path, StandardOpenOption.CREATE_NEW)) {
           out.write(xmlString);
         } catch (final IOException e) {
           LOGGER.warn(e.getMessage());

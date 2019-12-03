@@ -9,30 +9,36 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * Contains the results of matrix decomposition. The decomposed matrices (e.g. the L and U matrices for LU decomposition) are stored in this class.
- * There are methods that allow calculations to be performed using these matrices.  
+ * Contains the results of matrix decomposition. The decomposed matrices (e.g. the L and U matrices for LU decomposition) are stored in this class. There are
+ * methods that allow calculations to be performed using these matrices.
  */
 public interface DecompositionResult {
 
   /**
-   * Solves $\mathbf{A}x = b$ where $\mathbf{A}$ is a (decomposed) matrix and $b$ is a vector. 
-   * @param b a vector, not null
+   * Solves $\mathbf{A}x = b$ where $\mathbf{A}$ is a (decomposed) matrix and $b$ is a vector.
+   * 
+   * @param b
+   *          a vector, not null
    * @return the vector x
    */
-  DoubleMatrix1D solve(final DoubleMatrix1D b);
+  DoubleMatrix1D solve(DoubleMatrix1D b);
 
   /**
-   * Solves $\mathbf{A}x = b$ where $\mathbf{A}$ is a (decomposed) matrix and $b$ is a vector. 
-   * @param b vector, not null
-   * @return the vector x 
+   * Solves $\mathbf{A}x = b$ where $\mathbf{A}$ is a (decomposed) matrix and $b$ is a vector.
+   * 
+   * @param b
+   *          vector, not null
+   * @return the vector x
    */
-  double[] solve(final double[] b);
+  double[] solve(double[] b);
 
   /**
    * Solves $\mathbf{A}x = \mathbf{B}$ where $\mathbf{A}$ is a (decomposed) matrix and $\mathbf{B}$ is a matrix.
-   * @param b matrix, not null
+   * 
+   * @param b
+   *          matrix, not null
    * @return the matrix x
    */
-  DoubleMatrix2D solve(final DoubleMatrix2D b);
+  DoubleMatrix2D solve(DoubleMatrix2D b);
 
 }

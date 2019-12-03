@@ -42,7 +42,7 @@ public abstract class FuturesTransactionDefinition<FS extends FuturesSecurityDef
    * @param tradeDate The transaction date.
    * @param tradePrice The transaction price (in the convention of the futures).
    */
-  public FuturesTransactionDefinition(final FS underlyingSecurity, long quantity, ZonedDateTime tradeDate, double tradePrice) {
+  public FuturesTransactionDefinition(final FS underlyingSecurity, final long quantity, final ZonedDateTime tradeDate, final double tradePrice) {
     super();
     ArgumentChecker.notNull(underlyingSecurity, "Underlying futures");
     ArgumentChecker.notNull(tradeDate, "Trade date");
@@ -118,17 +118,17 @@ public abstract class FuturesTransactionDefinition<FS extends FuturesSecurityDef
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + (int) (_quantity ^ (_quantity >>> 32));
+    result = prime * result + (int) (_quantity ^ _quantity >>> 32);
     result = prime * result + _tradeDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_tradePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingSecurity.hashCode();
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -138,7 +138,7 @@ public abstract class FuturesTransactionDefinition<FS extends FuturesSecurityDef
     if (getClass() != obj.getClass()) {
       return false;
     }
-    FuturesTransactionDefinition<?> other = (FuturesTransactionDefinition<?>) obj;
+    final FuturesTransactionDefinition<?> other = (FuturesTransactionDefinition<?>) obj;
     if (_quantity != other._quantity) {
       return false;
     }

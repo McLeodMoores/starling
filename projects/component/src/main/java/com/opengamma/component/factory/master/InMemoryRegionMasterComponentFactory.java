@@ -48,7 +48,7 @@ public class InMemoryRegionMasterComponentFactory extends AbstractComponentFacto
    */
   @PropertyDefinition(validate = "notNull")
   private String _classifier;
-  
+
   /**
    * Whether to use change management. If true, requires jms settings to be non-null.
    */
@@ -78,11 +78,11 @@ public class InMemoryRegionMasterComponentFactory extends AbstractComponentFacto
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    ComponentInfo info = new ComponentInfo(RegionMaster.class, getClassifier());
-    
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final ComponentInfo info = new ComponentInfo(RegionMaster.class, getClassifier());
+
     // create
-    String scheme = (getUniqueIdScheme() != null ? getUniqueIdScheme() : InMemoryRegionMaster.DEFAULT_OID_SCHEME);
+    final String scheme = getUniqueIdScheme() != null ? getUniqueIdScheme() : InMemoryRegionMaster.DEFAULT_OID_SCHEME;
     ChangeManager cm = new BasicChangeManager();
     if (isEnableChangeManagement() && isValidJmsConfiguration(getClassifier(), getClass(), getJmsConnector(), getJmsChangeManagerTopic())) {
       cm = new JmsChangeManager(getJmsConnector(), getJmsChangeManagerTopic());
@@ -92,9 +92,9 @@ public class InMemoryRegionMasterComponentFactory extends AbstractComponentFacto
       }
       info.addAttribute(ComponentInfoAttributes.JMS_CHANGE_MANAGER_TOPIC, getJmsChangeManagerTopic());
     }
-    InMemoryRegionMaster master = new InMemoryRegionMaster(new ObjectIdSupplier(scheme), cm);
+    final InMemoryRegionMaster master = new InMemoryRegionMaster(new ObjectIdSupplier(scheme), cm);
     RegionFileReader.createPopulated(master);
-    
+
     // register
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
@@ -102,7 +102,7 @@ public class InMemoryRegionMasterComponentFactory extends AbstractComponentFacto
     }
     info.addAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME, scheme);
     repo.registerComponent(info, master);
-    
+
     // publish
     if (isPublishRest()) {
       repo.getRestComponents().publish(info, new DataRegionMasterResource(master));

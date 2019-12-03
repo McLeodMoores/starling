@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -46,7 +46,8 @@ public final class FunctionBlacklistRule {
     setTarget(target);
   }
 
-  public FunctionBlacklistRule(final ParameterizedFunction function, final ComputationTargetSpecification target, final Set<ValueSpecification> inputs, final Set<ValueSpecification> outputs) {
+  public FunctionBlacklistRule(final ParameterizedFunction function, final ComputationTargetSpecification target, final Set<ValueSpecification> inputs,
+      final Set<ValueSpecification> outputs) {
     setFunction(function);
     setTarget(target);
     setInputs(inputs);
@@ -89,7 +90,7 @@ public final class FunctionBlacklistRule {
 
   public void setInputs(final Collection<ValueSpecification> inputs) {
     if (inputs != null) {
-      _inputs = Collections.unmodifiableSet(new HashSet<ValueSpecification>(inputs));
+      _inputs = Collections.unmodifiableSet(new HashSet<>(inputs));
     } else {
       _inputs = null;
     }
@@ -109,7 +110,7 @@ public final class FunctionBlacklistRule {
 
   public void setOutputs(final Collection<ValueSpecification> outputs) {
     if (outputs != null) {
-      _outputs = Collections.unmodifiableSet(new HashSet<ValueSpecification>(outputs));
+      _outputs = Collections.unmodifiableSet(new HashSet<>(outputs));
     } else {
       _outputs = null;
     }
@@ -153,9 +154,9 @@ public final class FunctionBlacklistRule {
         && ObjectUtils.equals(_functionParameters, other._functionParameters)
         && ObjectUtils.equals(_target, other._target)
         && ObjectUtils.equals(_inputs, other._inputs)
-        && (_inputsExactMatch == other._inputsExactMatch)
+        && _inputsExactMatch == other._inputsExactMatch
         && ObjectUtils.equals(_outputs, other._outputs)
-        && (_outputsExactMatch == other._outputsExactMatch);
+        && _outputsExactMatch == other._outputsExactMatch;
   }
 
   @Override

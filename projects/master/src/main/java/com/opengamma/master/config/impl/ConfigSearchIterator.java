@@ -20,7 +20,7 @@ import com.opengamma.util.ArgumentChecker;
  * Large systems may store a large amount of data in each master.
  * A simple search request that pulls back the entire database is unrealistic.
  * This remote iterator allows the database to be queried in a consistent way remotely.
- * 
+ *
  * @param <T>  the type of the configuration item
  */
 public class ConfigSearchIterator<T> extends AbstractSearchIterator<ConfigDocument, ConfigMaster, ConfigSearchRequest<T>> {
@@ -29,7 +29,7 @@ public class ConfigSearchIterator<T> extends AbstractSearchIterator<ConfigDocume
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param <R>  the type of the configuration item
    * @param master  the underlying master, not null
    * @param request  the request object, not null
@@ -41,7 +41,7 @@ public class ConfigSearchIterator<T> extends AbstractSearchIterator<ConfigDocume
     return new Iterable<ConfigDocument>() {
       @Override
       public Iterator<ConfigDocument> iterator() {
-        return new ConfigSearchIterator<R>(master, request);
+        return new ConfigSearchIterator<>(master, request);
       }
     };
   }
@@ -50,17 +50,17 @@ public class ConfigSearchIterator<T> extends AbstractSearchIterator<ConfigDocume
    * Creates an instance based on a request.
    * <p>
    * The request will be altered during the iteration.
-   * 
+   *
    * @param master  the underlying master, not null
    * @param request  the request object, not null
    */
-  public ConfigSearchIterator(ConfigMaster master, ConfigSearchRequest<T> request) {
+  public ConfigSearchIterator(final ConfigMaster master, final ConfigSearchRequest<T> request) {
     super(master, request);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  protected ConfigSearchResult<T> doSearch(ConfigSearchRequest<T> request) {
+  protected ConfigSearchResult<T> doSearch(final ConfigSearchRequest<T> request) {
     return getMaster().search(request);
   }
 

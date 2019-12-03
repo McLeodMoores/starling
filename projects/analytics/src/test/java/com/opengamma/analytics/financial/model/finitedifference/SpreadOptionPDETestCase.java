@@ -52,13 +52,10 @@ public class SpreadOptionPDETestCase {
 
   static {
 
-    final Function<Double, Double> bZeroBoundary = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... tx) {
-        Validate.isTrue(tx.length == 2);
-        final double x = tx[1];
-        return x;
-      }
+    final Function<Double, Double> bZeroBoundary = tx -> {
+      Validate.isTrue(tx.length == 2);
+      final double x = tx[1];
+      return x;
     };
 
     A_LOWER = new DirichletBoundaryCondition2D(0.0, 0.0);
@@ -71,82 +68,62 @@ public class SpreadOptionPDETestCase {
     B_LOWER = new DirichletBoundaryCondition2D(FunctionalDoublesSurface.from(bZeroBoundary), 0.0);// option value = Spot_A when Spot_B = 0
     B_UPPER = new SecondDerivativeBoundaryCondition2D(0.0, 5 * SPOT_B);
 
-    final Function<Double, Double> a = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        final double x = txy[1];
-        return -x * x * VOL_A * VOL_A / 2;
-      }
+    final Function<Double, Double> a = txy -> {
+      Validate.isTrue(txy.length == 3);
+      final double x = txy[1];
+      return -x * x * VOL_A * VOL_A / 2;
     };
     A = FunctionalDoublesCube.from(a);
 
-    final Function<Double, Double> b = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        final double x = txy[1];
-        return -x * RATE;
-      }
+    final Function<Double, Double> b = txy -> {
+      Validate.isTrue(txy.length == 3);
+      final double x = txy[1];
+      return -x * RATE;
     };
     B = FunctionalDoublesCube.from(b);
 
-    final Function<Double, Double> c = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        return RATE;
-      }
+    final Function<Double, Double> c = txy -> {
+      Validate.isTrue(txy.length == 3);
+      return RATE;
     };
     C = FunctionalDoublesCube.from(c);
 
-    final Function<Double, Double> d = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        final double y = txy[2];
-        return -y * y * VOL_B * VOL_B / 2;
-      }
+    final Function<Double, Double> d = txy -> {
+      Validate.isTrue(txy.length == 3);
+      final double y = txy[2];
+      return -y * y * VOL_B * VOL_B / 2;
     };
     D = FunctionalDoublesCube.from(d);
 
-    final Function<Double, Double> e = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        final double x = txy[1];
-        final double y = txy[2];
+    final Function<Double, Double> e = txy -> {
+      Validate.isTrue(txy.length == 3);
+      final double x = txy[1];
+      final double y = txy[2];
 
-        return -x * y * VOL_A * VOL_B * RHO;
-      }
+      return -x * y * VOL_A * VOL_B * RHO;
     };
     E = FunctionalDoublesCube.from(e);
 
-    final Function<Double, Double> f = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... txy) {
-        Validate.isTrue(txy.length == 3);
-        final double y = txy[2];
-        return -y * RATE;
-      }
+    final Function<Double, Double> f = txy -> {
+      Validate.isTrue(txy.length == 3);
+      final double y = txy[2];
+      return -y * RATE;
     };
     F = FunctionalDoublesCube.from(f);
 
-    final Function<Double, Double> payoff = new Function<Double, Double>() {
-      @Override
-      public Double evaluate(final Double... xy) {
-        Validate.isTrue(xy.length == 2);
-        final double x = xy[0];
-        final double y = xy[1];
-        return Math.max(x - y, 0);// debug
-        // return Math.max(x - SPOT_A, 0);
-      }
+    final Function<Double, Double> payoff = xy -> {
+      Validate.isTrue(xy.length == 2);
+      final double x = xy[0];
+      final double y = xy[1];
+      return Math.max(x - y, 0);// debug
+      // return Math.max(x - SPOT_A, 0);
     };
 
     DATA = new ConvectionDiffusion2DPDEDataBundle(A, B, C, D, E, F, FunctionalDoublesSurface.from(payoff));
   }
 
-  void testAgainstBSPrice(final ConvectionDiffusionPDESolver2D solver, final int timeSteps, final int spotASteps, final int spotBSteps) {
+  static void testAgainstBSPrice(final ConvectionDiffusionPDESolver2D solver, final int timeSteps, final int spotASteps,
+      final int spotBSteps) {
 
     final double[][] res = solver.solve(DATA, timeSteps, spotASteps, spotBSteps, T, A_LOWER, A_UPPER, B_LOWER, B_UPPER);
 
@@ -166,7 +143,8 @@ public class SpreadOptionPDETestCase {
     final Function1D<BlackFunctionData, Double> func = pricer.getPriceFunction(option);
     final double price = func.evaluate(data);
 
-    final double pdfPrice = res[(int) (SPOT_A * spotASteps / (A_UPPER.getLevel() - A_LOWER.getLevel()))][(int) (SPOT_B * spotBSteps / (B_UPPER.getLevel() - B_LOWER.getLevel()))];
+    final double pdfPrice = res[(int) (SPOT_A * spotASteps / (A_UPPER.getLevel() - A_LOWER.getLevel()))][(int) (SPOT_B * spotBSteps
+        / (B_UPPER.getLevel() - B_LOWER.getLevel()))];
 
     // System.out.println(price+"\t"+pdfPrice);
 

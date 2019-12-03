@@ -5,8 +5,6 @@
  */
 package com.opengamma.util.tuple;
 
-import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
-
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -24,6 +22,8 @@ import org.joda.convert.FromString;
 import org.joda.convert.ToString;
 
 import com.opengamma.util.ArgumentChecker;
+
+import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
 
 /**
  * An immutable pair consisting of an {@code long} and {@code double}.
@@ -49,7 +49,7 @@ public class LongDoublePair
   //-------------------------------------------------------------------------
   /**
    * Obtains a {@code LongDoublePair} from a {@code Pair}.
-   * 
+   *
    * @param pair  the pair to convert, not null
    * @return a pair formed by extracting values from the pair, not null
    */
@@ -65,7 +65,7 @@ public class LongDoublePair
 
   /**
    * Obtains a {@code LongDoublePair} from two values.
-   * 
+   *
    * @param first  the first element
    * @param second  the second element
    * @return a pair formed from the two parameters, not null
@@ -79,7 +79,7 @@ public class LongDoublePair
    * Parses an {@code LongDoublePair} from the standard string format.
    * <p>
    * The standard format is '[$first, $second]'. Spaces around the values are trimmed.
-   * 
+   *
    * @param pairStr  the text to parse, not null
    * @return the parsed pair, not null
    */
@@ -95,25 +95,25 @@ public class LongDoublePair
     if (pairStr.charAt(pairStr.length() - 1) != ']') {
       throw new IllegalArgumentException("Invalid pair format, must end with ]: " + pairStr);
     }
-    String[] split = StringUtils.split(pairStr.substring(1, pairStr.length() - 1), ',');
+    final String[] split = StringUtils.split(pairStr.substring(1, pairStr.length() - 1), ',');
     if (split.length != 2) {
       throw new IllegalArgumentException("Invalid pair format, must have two values: " + pairStr);
     }
-    long first = Long.parseLong(split[0].trim());
-    double second = Double.parseDouble(split[1].trim());
+    final long first = Long.parseLong(split[0].trim());
+    final double second = Double.parseDouble(split[1].trim());
     return new LongDoublePair(first, second);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Constructs a pair.
-   * 
+   *
    * @param first  the first element
    * @param second  the second element
    * @deprecated Use public factory of(long,double)
    */
   @Deprecated
-  public LongDoublePair(final long first, final double second) {
+  public LongDoublePair(final long first, final double second) { // CSIGNORE
     this.first = first;
     this.second = second;
   }
@@ -131,7 +131,7 @@ public class LongDoublePair
 
   /**
    * Gets the first element as a primitive {@code long}.
-   * 
+   *
    * @return the primitive
    */
   public long getFirstLong() {
@@ -140,7 +140,7 @@ public class LongDoublePair
 
   /**
    * Gets the second element as a primitive {@code double}.
-   * 
+   *
    * @return the primitive
    */
   public double getSecondDouble() {
@@ -163,6 +163,7 @@ public class LongDoublePair
     throw new UnsupportedOperationException("Immutable");
   }
 
+  // CSOFF
   //-------------------------------------------------------------------------
   /**
    * The meta-bean for {@code LongDoublePair}.
@@ -182,7 +183,7 @@ public class LongDoublePair
   }
 
   @Override
-  public <R> Property<R> property(String propertyName) {
+  public <R> Property<R> property(final String propertyName) {
     return metaBean().<R>metaProperty(propertyName).createProperty(this);
   }
 
@@ -198,7 +199,7 @@ public class LongDoublePair
 
   //-------------------------------------------------------------------------
   @Override
-  public int compareTo(Pair<Long, Double> other) {
+  public int compareTo(final Pair<Long, Double> other) {
     if (other instanceof LongDoublePair) {
       return compareTo((LongDoublePair) other);
     }
@@ -209,11 +210,11 @@ public class LongDoublePair
    * Compares this pair to another.
    * <p>
    * This compares the first elements, then the second elements.
-   * 
+   *
    * @param other  the other pair
    * @return negative if this is less, zero if equal, positive if greater
    */
-  public int compareTo(LongDoublePair other) {
+  public int compareTo(final LongDoublePair other) {
     int cmp = Long.compare(first, other.first);
     if (cmp == 0) {
       cmp = Double.compare(second, other.second);
@@ -223,7 +224,7 @@ public class LongDoublePair
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -238,14 +239,14 @@ public class LongDoublePair
   public int hashCode() {
     // see Map.Entry API specification
     final long s = Double.doubleToLongBits(second);
-    return ((int) (first ^ (first >>> 32))) ^ ((int) (s ^ (s >>> 32)));
+    return (int) (first ^ first >>> 32) ^ (int) (s ^ s >>> 32);
   }
 
   /**
    * Gets the pair using a standard string format.
    * <p>
    * The standard format is '[$first, $second]'. Spaces around the values are trimmed.
-   * 
+   *
    * @return the pair as a string, not null
    */
   @Override
@@ -294,7 +295,7 @@ public class LongDoublePair
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
       switch (propertyName) {
         case "first":
           return _first;
@@ -338,7 +339,7 @@ public class LongDoublePair
 
     //-----------------------------------------------------------------------
     @Override
-    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
+    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName) {
         case "first":
           return ((LongDoublePair) bean).getFirst();
@@ -349,7 +350,7 @@ public class LongDoublePair
     }
 
     @Override
-    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
+    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
       metaProperty(propertyName);
       if (quiet) {
         return;
@@ -379,7 +380,7 @@ public class LongDoublePair
 
     //-----------------------------------------------------------------------
     @Override
-    public Builder set(String propertyName, Object newValue) {
+    public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
         case "first":
           _first = (Long) newValue;
@@ -394,7 +395,7 @@ public class LongDoublePair
     }
 
     @Override
-    public Builder setString(String propertyName, String value) {
+    public Builder setString(final String propertyName, final String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }

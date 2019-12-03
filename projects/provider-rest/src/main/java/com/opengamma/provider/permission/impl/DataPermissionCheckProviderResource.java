@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.permission.impl;
@@ -35,7 +35,7 @@ public class DataPermissionCheckProviderResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying permission check provider over REST.
-   * 
+   *
    * @param permissionCheckProvider the underlying permission check provider, not null
    */
   public DataPermissionCheckProviderResource(final PermissionCheckProvider permissionCheckProvider) {
@@ -46,7 +46,7 @@ public class DataPermissionCheckProviderResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the permissionCheckProvider.
-   * 
+   *
    * @return the permissionCheckProvider, not null
    */
   public PermissionCheckProvider getPermissionCheckProvider() {
@@ -55,7 +55,7 @@ public class DataPermissionCheckProviderResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -69,8 +69,8 @@ public class DataPermissionCheckProviderResource extends AbstractDataResource {
 
   @POST  // should be a get, but query is too large
   @Path("permissionCheckGet")
-  public Response getPermissionCheck(PermissionCheckProviderRequest request) {
-    PermissionCheckProviderResult result = getPermissionCheckProvider().isPermitted(request);
+  public Response getPermissionCheck(final PermissionCheckProviderRequest request) {
+    final PermissionCheckProviderResult result = getPermissionCheckProvider().isPermitted(request);
     return responseOkObject(result);
   }
 

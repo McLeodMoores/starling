@@ -14,7 +14,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 /**
  * Calculator of the present value as a multiple currency amount for Black smile cap/floor provider.
  */
-public final class PresentValueBlackSmileShiftCapCalculator extends InstrumentDerivativeVisitorAdapter<BlackSmileShiftCapProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueBlackSmileShiftCapCalculator
+extends InstrumentDerivativeVisitorAdapter<BlackSmileShiftCapProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -23,6 +24,7 @@ public final class PresentValueBlackSmileShiftCapCalculator extends InstrumentDe
 
   /**
    * Gets the calculator instance.
+   *
    * @return The calculator.
    */
   public static PresentValueBlackSmileShiftCapCalculator getInstance() {
@@ -40,7 +42,7 @@ public final class PresentValueBlackSmileShiftCapCalculator extends InstrumentDe
    */
   private static final CapFloorIborBlackSmileShiftMethod METHOD_CAP = CapFloorIborBlackSmileShiftMethod.getInstance();
 
-  // -----     Payments     ------
+  // ----- Payments ------
 
   @Override
   public MultipleCurrencyAmount visitCapFloorIbor(final CapFloorIbor cap, final BlackSmileShiftCapProviderInterface black) {

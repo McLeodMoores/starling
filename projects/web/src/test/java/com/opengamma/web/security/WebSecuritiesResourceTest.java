@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.security;
@@ -28,29 +28,29 @@ import com.opengamma.util.test.TestGroup;
 public class WebSecuritiesResourceTest extends AbstractWebSecurityResourceTestCase {
 
   public void testGetMetaDataJSON() throws Exception {
-    String metaDataJSON = _webSecuritiesResource.getMetaDataJSON(null);
+    final String metaDataJSON = _webSecuritiesResource.getMetaDataJSON(null);
     assertNotNull(metaDataJSON);
-    JSONObject actualJson = new JSONObject(metaDataJSON); 
+    final JSONObject actualJson = new JSONObject(metaDataJSON);
     assertJSONObjectEquals(expectedSecurityTypes(), actualJson);
   }
 
-  private JSONObject expectedSecurityTypes() {
-    SecurityTypesDescriptionProvider s_secTypesProvider = SecurityTypesDescriptionProvider.getInstance();
-    Map<String, Object> result = new HashMap<>();
+  private static JSONObject expectedSecurityTypes() {
+    final SecurityTypesDescriptionProvider s_secTypesProvider = SecurityTypesDescriptionProvider.getInstance();
+    final Map<String, Object> result = new HashMap<>();
     result.put("description2type", s_secTypesProvider.getDescription2Type());
     result.put("types", s_secTypesProvider.getDescription2Type().values());
     return new JSONObject(result);
   }
 
   public void testGetAllSecurities() throws Exception {
-    MultivaluedMap<String, String> queryParameters = _uriInfo.getQueryParameters();
+    final MultivaluedMap<String, String> queryParameters = _uriInfo.getQueryParameters();
     queryParameters.putSingle("name", StringUtils.EMPTY);
     queryParameters.putSingle("identifier", StringUtils.EMPTY);
     queryParameters.putSingle("type", StringUtils.EMPTY);
     queryParameters.put("securityId", Collections.<String>emptyList());
-    
-    String resultJson = _webSecuritiesResource.getJSON(null, null, null, null, null, 
-        queryParameters.getFirst("name"), queryParameters.getFirst("identifier"), 
+
+    final String resultJson = _webSecuritiesResource.getJSON(null, null, null, null, null,
+        queryParameters.getFirst("name"), queryParameters.getFirst("identifier"),
         queryParameters.getFirst("type"), queryParameters.get("securityId"), _uriInfo);
     assertNotNull(resultJson);
     assertJSONObjectEquals(loadJson("com/opengamma/web/security/allSecuritiesJson.txt"), new JSONObject(resultJson));

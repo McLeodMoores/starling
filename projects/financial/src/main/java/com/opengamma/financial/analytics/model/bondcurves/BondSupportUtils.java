@@ -21,38 +21,40 @@ import com.opengamma.financial.security.future.BondFutureSecurity;
  * Utility methods for establishing if a bond or bill is supported.
  */
 public class BondSupportUtils {
-  private static final Set<YieldConvention> s_supportedYieldConventions = new HashSet<>();
-  private static final Set<String> s_supportedCouponTypes = new HashSet<>();
+  private static final Set<YieldConvention> SUPPORTED_YIELD_CONVENTIONS = new HashSet<>();
+  private static final Set<String> SUPPORTED_COUPON_TYPES = new HashSet<>();
 
   static {
-    s_supportedYieldConventions.add(SimpleYieldConvention.US_STREET);
-    s_supportedYieldConventions.add(SimpleYieldConvention.GERMAN_BOND);
-    s_supportedYieldConventions.add(SimpleYieldConvention.AUSTRALIA_EX_DIVIDEND);
-    s_supportedYieldConventions.add(SimpleYieldConvention.UK_BUMP_DMO_METHOD);
-    s_supportedYieldConventions.add(SimpleYieldConvention.FRANCE_COMPOUND_METHOD);
-    s_supportedYieldConventions.add(SimpleYieldConvention.ITALY_TREASURY_BONDS);
-    s_supportedCouponTypes.add("FIXED");
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.US_STREET);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.GERMAN_BOND);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.AUSTRALIA_EX_DIVIDEND);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.UK_BUMP_DMO_METHOD);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.FRANCE_COMPOUND_METHOD);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.ITALY_TREASURY_BONDS);
+    SUPPORTED_COUPON_TYPES.add("FIXED");
   }
 
-  public static boolean isSupported(Security security) {
+  public static boolean isSupported(final Security security) {
     if (security instanceof BondSecurity && !(security instanceof InflationBondSecurity)) {
-      BondSecurity bondSecurity = (BondSecurity) security;
-      if (s_supportedYieldConventions.contains(bondSecurity.getYieldConvention()) && s_supportedCouponTypes.contains(bondSecurity.getCouponType())) {
+      final BondSecurity bondSecurity = (BondSecurity) security;
+      if (SUPPORTED_YIELD_CONVENTIONS.contains(bondSecurity.getYieldConvention()) && SUPPORTED_COUPON_TYPES.contains(bondSecurity.getCouponType())) {
         return true;
       }
       return false;
     } else if (security instanceof BondFutureSecurity) {
       @SuppressWarnings("unused")
+      final
       BondFutureSecurity bondFutureSecurity = (BondFutureSecurity) security;
       return true;
     } else if (security instanceof BillSecurity) {
-      BillSecurity billSecurity = (BillSecurity) security;
-      if (s_supportedYieldConventions.contains(billSecurity.getYieldConvention())) {
+      final BillSecurity billSecurity = (BillSecurity) security;
+      if (SUPPORTED_YIELD_CONVENTIONS.contains(billSecurity.getYieldConvention())) {
         return true;
       }
       return false;
     } else if (security instanceof FloatingRateNoteSecurity) {
       @SuppressWarnings("unused")
+      final
       FloatingRateNoteSecurity floatingRateNoteSecurity = (FloatingRateNoteSecurity) security;
       return true;
     }

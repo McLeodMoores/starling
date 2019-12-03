@@ -26,17 +26,17 @@ public class LiveDataAvailabilityNotificationListener extends AvailabilityNotifi
    * @param factories Factories that will be notified when a market data provider becomes available
    * @param jmsConnector For receiving JMS messages
    */
-  public LiveDataAvailabilityNotificationListener(String topic,
-                                                  Collection<LiveDataFactory> factories,
-                                                  JmsConnector jmsConnector) {
+  public LiveDataAvailabilityNotificationListener(final String topic,
+                                                  final Collection<LiveDataFactory> factories,
+                                                  final JmsConnector jmsConnector) {
     super(topic, jmsConnector);
     ArgumentChecker.notEmpty(factories, "factories");
     _factories = factories;
   }
 
   @Override
-  protected void notificationReceived(Set<ExternalScheme> schemes) {
-    for (LiveDataFactory factory : _factories) {
+  protected void notificationReceived(final Set<ExternalScheme> schemes) {
+    for (final LiveDataFactory factory : _factories) {
       factory.resubscribe(schemes);
     }
   }

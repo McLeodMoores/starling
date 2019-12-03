@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.fudgemsg;
@@ -31,7 +31,7 @@ public final class YieldConventionFudgeSecondaryType extends SecondaryFieldType<
   }
 
   @Override
-  public String secondaryToPrimary(YieldConvention object) {
+  public String secondaryToPrimary(final YieldConvention object) {
     return object.getName();
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.lazy;
@@ -40,13 +40,13 @@ public final class TargetResolverPortfolio extends TargetResolverObject implemen
   }
 
   @Override
-  public void setAttributes(Map<String, String> attributes) {
+  public void setAttributes(final Map<String, String> attributes) {
     _attributes.clear();
     _attributes.putAll(attributes);
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     _attributes.put(key, value);
   }
 

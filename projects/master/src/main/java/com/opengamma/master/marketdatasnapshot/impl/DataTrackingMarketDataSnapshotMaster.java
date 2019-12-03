@@ -16,25 +16,26 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotSearchResult;
 /**
  * MarketDataSnapshot master which tracks accesses using UniqueIds.
  */
-public class DataTrackingMarketDataSnapshotMaster extends AbstractDataTrackingMaster<MarketDataSnapshotDocument, MarketDataSnapshotMaster> implements MarketDataSnapshotMaster {
-  
-  public DataTrackingMarketDataSnapshotMaster(MarketDataSnapshotMaster delegate) {
+public class DataTrackingMarketDataSnapshotMaster extends AbstractDataTrackingMaster<MarketDataSnapshotDocument, MarketDataSnapshotMaster>
+implements MarketDataSnapshotMaster {
+
+  public DataTrackingMarketDataSnapshotMaster(final MarketDataSnapshotMaster delegate) {
     super(delegate);
   }
 
   @Override
-  public MarketDataSnapshotSearchResult search(MarketDataSnapshotSearchRequest request) {
-    MarketDataSnapshotSearchResult searchResult = delegate().search(request);
+  public MarketDataSnapshotSearchResult search(final MarketDataSnapshotSearchRequest request) {
+    final MarketDataSnapshotSearchResult searchResult = delegate().search(request);
     trackDocs(searchResult.getDocuments());
     return searchResult;
   }
 
   @Override
-  public MarketDataSnapshotHistoryResult history(MarketDataSnapshotHistoryRequest request) {
-    MarketDataSnapshotHistoryResult historyResult = delegate().history(request);
+  public MarketDataSnapshotHistoryResult history(final MarketDataSnapshotHistoryRequest request) {
+    final MarketDataSnapshotHistoryResult historyResult = delegate().history(request);
     trackDocs(historyResult.getDocuments());
     return historyResult;
   }
-  
-  
+
+
 }

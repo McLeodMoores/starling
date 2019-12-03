@@ -38,7 +38,7 @@ public class ConnectionManagerImpl implements ConnectionManager {
   /** Period for the tasks that check for idle clients */
   private final long _timeoutCheckPeriod;
   /** Connections keyed on client ID */
-  private final Map<String, ClientConnection> _connectionsByClientId = new ConcurrentHashMap<String, ClientConnection>();
+  private final Map<String, ClientConnection> _connectionsByClientId = new ConcurrentHashMap<>();
   /** Timer for tasks that check for idle clients */
   private final Timer _timer = new Timer();
   /** For listening for changes in entity data */
@@ -46,21 +46,21 @@ public class ConnectionManagerImpl implements ConnectionManager {
   /** For listening for changes to any data in a master */
   private final MasterChangeManager _masterChangeManager;
 
-  public ConnectionManagerImpl(ChangeManager changeManager,
-                               MasterChangeManager masterChangeManager,
-                               LongPollingConnectionManager longPollingConnectionManager) {
+  public ConnectionManagerImpl(final ChangeManager changeManager,
+      final MasterChangeManager masterChangeManager,
+      final LongPollingConnectionManager longPollingConnectionManager) {
     this(changeManager,
-         masterChangeManager,
-         longPollingConnectionManager,
-         DEFAULT_TIMEOUT,
-         DEFAULT_TIMEOUT_CHECK_PERIOD);
+        masterChangeManager,
+        longPollingConnectionManager,
+        DEFAULT_TIMEOUT,
+        DEFAULT_TIMEOUT_CHECK_PERIOD);
   }
 
-  public ConnectionManagerImpl(ChangeManager changeManager,
-                               MasterChangeManager masterChangeManager,
-                               LongPollingConnectionManager longPollingConnectionManager,
-                               long timeout,
-                               long timeoutCheckPeriod) {
+  public ConnectionManagerImpl(final ChangeManager changeManager,
+      final MasterChangeManager masterChangeManager,
+      final LongPollingConnectionManager longPollingConnectionManager,
+      final long timeout,
+      final long timeoutCheckPeriod) {
     _changeManager = changeManager;
     _longPollingConnectionManager = longPollingConnectionManager;
     _timeout = timeout;
@@ -76,11 +76,11 @@ public class ConnectionManagerImpl implements ConnectionManager {
    * @return The client ID of the new connection, must be supplied by the client when subscribing for updates
    */
   @Override
-  public String clientConnected(String userId) {
-    String clientId = Long.toString(_clientConnectionId.getAndIncrement());
-    ConnectionTimeoutTask timeoutTask = new ConnectionTimeoutTask(this, userId, clientId, _timeout);
-    LongPollingUpdateListener updateListener = _longPollingConnectionManager.handshake(userId, clientId, timeoutTask);
-    ClientConnection connection = new ClientConnection(userId, clientId, updateListener, timeoutTask);
+  public String clientConnected(final String userId) {
+    final String clientId = Long.toString(_clientConnectionId.getAndIncrement());
+    final ConnectionTimeoutTask timeoutTask = new ConnectionTimeoutTask(this, userId, clientId, _timeout);
+    final LongPollingUpdateListener updateListener = _longPollingConnectionManager.handshake(userId, clientId, timeoutTask);
+    final ClientConnection connection = new ClientConnection(userId, clientId, updateListener, timeoutTask);
     _changeManager.addChangeListener(connection);
     _masterChangeManager.addChangeListener(connection);
     _connectionsByClientId.put(clientId, connection);
@@ -89,8 +89,8 @@ public class ConnectionManagerImpl implements ConnectionManager {
   }
 
   @Override
-  public void clientDisconnected(String userId, String clientId) {
-    ClientConnection connection = getConnectionByClientId(userId, clientId);
+  public void clientDisconnected(final String userId, final String clientId) {
+    final ClientConnection connection = getConnectionByClientId(userId, clientId);
     _connectionsByClientId.remove(clientId);
     _changeManager.removeChangeListener(connection);
     _masterChangeManager.removeChangeListener(connection);
@@ -99,12 +99,12 @@ public class ConnectionManagerImpl implements ConnectionManager {
   }
 
   @Override
-  public void subscribe(String userId, String clientId, UniqueId uid, String url) {
+  public void subscribe(final String userId, final String clientId, final UniqueId uid, final String url) {
     getConnectionByClientId(userId, clientId).subscribe(uid, url);
   }
 
   @Override
-  public void subscribe(String userId, String clientId, MasterType masterType, String url) {
+  public void subscribe(final String userId, final String clientId, final MasterType masterType, final String url) {
     getConnectionByClientId(userId, clientId).subscribe(masterType, url);
   }
 
@@ -115,19 +115,19 @@ public class ConnectionManagerImpl implements ConnectionManager {
    * @return The connection
    * @throws DataNotFoundException If there is no connection for the specified ID, the user ID is invalid or if
    * the client and user IDs don't correspond
-   * TODO not sure this should be public
-   * TODO or should it be specified in ClientConnection?
    */
+  // TODO not sure this should be public
+  // TODO or should it be specified in ClientConnection?
   @Override
-  public ClientConnection getConnectionByClientId(String userId, String clientId) {
+  public ClientConnection getConnectionByClientId(final String userId, final String clientId) {
     ArgumentChecker.notEmpty(clientId, "clientId");
-    ClientConnection connection = _connectionsByClientId.get(clientId);
+    final ClientConnection connection = _connectionsByClientId.get(clientId);
     if (connection == null) {
       throw new DataNotFoundException("Unknown client ID: " + clientId);
     }
-    userId = ("permissive".equals(userId) ? null : userId);
-    if (!Objects.equal(userId, connection.getUserId())) {
-      throw new DataNotFoundException("User ID " + userId + " is not associated with client ID " + clientId);
+    final String uId = "permissive".equals(userId) ? null : userId;
+    if (!Objects.equal(uId, connection.getUserId())) {
+      throw new DataNotFoundException("User ID " + uId + " is not associated with client ID " + clientId);
     }
     return connection;
   }

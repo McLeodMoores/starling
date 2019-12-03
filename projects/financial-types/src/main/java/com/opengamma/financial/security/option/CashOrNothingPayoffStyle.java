@@ -41,16 +41,16 @@ public class CashOrNothingPayoffStyle extends PayoffStyle {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param payment  the payment
    */
-  public CashOrNothingPayoffStyle(double payment) {
+  public CashOrNothingPayoffStyle(final double payment) {
     setPayment(payment);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(PayoffStyleVisitor<T> visitor) {
+  public <T> T accept(final PayoffStyleVisitor<T> visitor) {
     return visitor.visitCashOrNothingPayoffStyle(this);
   }
 

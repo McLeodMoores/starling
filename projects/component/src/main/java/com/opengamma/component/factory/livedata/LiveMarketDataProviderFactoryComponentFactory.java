@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.livedata;
@@ -64,8 +64,8 @@ import com.opengamma.util.metric.OpenGammaMetricRegistry;
 @BeanDefinition
 public class LiveMarketDataProviderFactoryComponentFactory extends AbstractComponentFactory {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(LiveMarketDataProviderFactoryComponentFactory.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(LiveMarketDataProviderFactoryComponentFactory.class);
+
   /**
    * The classifier under which to publish.
    */
@@ -84,36 +84,37 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
   @PropertyDefinition(validate = "notNull")
   private String _defaultProviders;
   /**
-   * JMS topic for notifications when market data providers become available
+   * JMS topic for notifications when market data providers become available.
    */
   @PropertyDefinition
   private String _jmsMarketDataAvailabilityTopic;
-  
+
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     if (StringUtils.isBlank(getDefaultProviders())) {
       throw new OpenGammaRuntimeException(defaultProviders().name() + " cannot be empty");
     }
-    List<String> defaultProviders = ImmutableList.copyOf(getDefaultProviders().split(","));
+    final List<String> defaultProviders = ImmutableList.copyOf(getDefaultProviders().split(","));
     initLiveMarketDataProviderFactory(repo.getInstances(LiveDataMetaDataProvider.class), defaultProviders, repo);
   }
 
-  private LiveMarketDataProviderFactory initLiveMarketDataProviderFactory(Collection<LiveDataMetaDataProvider> metaDataProviders, List<String> defaultProviders, ComponentRepository repo) {
-    Map<String, LiveDataFactory> factories = Maps.newLinkedHashMap();
-    for (LiveDataMetaDataProvider metaDataProvider : metaDataProviders) {
-      MarketDataAvailabilityFilter filter = createMarketDataAvailabilityFilter(metaDataProvider);
+  private LiveMarketDataProviderFactory initLiveMarketDataProviderFactory(final Collection<LiveDataMetaDataProvider> metaDataProviders,
+      final List<String> defaultProviders, final ComponentRepository repo) {
+    final Map<String, LiveDataFactory> factories = Maps.newLinkedHashMap();
+    for (final LiveDataMetaDataProvider metaDataProvider : metaDataProviders) {
+      final MarketDataAvailabilityFilter filter = createMarketDataAvailabilityFilter(metaDataProvider);
       if (filter == null) {
         continue;
       }
-      LiveDataClient client = createLiveDataClient(metaDataProvider);
+      final LiveDataClient client = createLiveDataClient(metaDataProvider);
       if (client == null) {
         continue;
       }
       factories.put(metaDataProvider.metaData().getDescription(), new LiveDataFactory(client, filter));
     }
-    
+
     LiveDataFactory defaultFactory = null;
-    for (String defaultProvider : defaultProviders) {
+    for (final String defaultProvider : defaultProviders) {
       if (factories.containsKey(defaultProvider)) {
         defaultFactory = factories.get(defaultProvider);
         break;
@@ -123,93 +124,102 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
       throw new OpenGammaRuntimeException("Unable to find a default provider matching one of [" + StringUtils.join(defaultProviders, ", ")
           + "] from available providers [" + StringUtils.join(factories.keySet(), ", ") + "]");
     }
-    
-    InMemoryLKVLiveMarketDataProviderFactory liveMarketDataProviderFactory = new InMemoryLKVLiveMarketDataProviderFactory(defaultFactory, ImmutableMap.copyOf(factories));
+
+    final InMemoryLKVLiveMarketDataProviderFactory liveMarketDataProviderFactory = new InMemoryLKVLiveMarketDataProviderFactory(defaultFactory,
+        ImmutableMap.copyOf(factories));
     ComponentInfo info = new ComponentInfo(LiveMarketDataProviderFactory.class, getClassifier());
     repo.registerComponent(info, liveMarketDataProviderFactory);
-    
+
     // REVIEW jonathan 2013-08-23 -- Didn't want to break backwards compatibility, but shouldn't the repository take care of supertypes?
     info = new ComponentInfo(MarketDataProviderFactory.class, getClassifier());
     repo.registerComponent(info, liveMarketDataProviderFactory);
-    
+
     if (!StringUtils.isBlank(getJmsMarketDataAvailabilityTopic())) {
-      LiveDataAvailabilityNotificationListener availabilityNotificationListener =
-          new LiveDataAvailabilityNotificationListener(getJmsMarketDataAvailabilityTopic(), factories.values(), getJmsConnector());
+      final LiveDataAvailabilityNotificationListener availabilityNotificationListener = new LiveDataAvailabilityNotificationListener(
+          getJmsMarketDataAvailabilityTopic(), factories.values(), getJmsConnector());
       repo.registerLifecycle(availabilityNotificationListener);
     }
 
     return liveMarketDataProviderFactory;
   }
-  
+
   /**
    * Creates a live data client based on the information in the remote metadata.
-   * 
-   * @param provider the metadata provider, null returns null
+   *
+   * @param provider
+   *          the metadata provider, null returns null
    * @return the client
    */
-  protected LiveDataClient createLiveDataClient(LiveDataMetaDataProvider provider) {
+  protected LiveDataClient createLiveDataClient(final LiveDataMetaDataProvider provider) {
     return createLiveDataClient(provider, getJmsConnector());
   }
-  
+
   /**
    * Creates a live data client based on the information in the remote metadata.
-   * 
-   * @param provider the metadata provider, null returns null
-   * @param jmsConnector the JMS connector, not null
+   *
+   * @param provider
+   *          the metadata provider, null returns null
+   * @param jmsConnector
+   *          the JMS connector, not null
    * @return the client
    */
   @SuppressWarnings("deprecation")
-  public static LiveDataClient createLiveDataClient(LiveDataMetaDataProvider provider, JmsConnector jmsConnector) {
+  public static LiveDataClient createLiveDataClient(final LiveDataMetaDataProvider provider, final JmsConnector jmsConnector) {
     ArgumentChecker.notNull(jmsConnector, "jmsConnector");
-    LiveDataMetaData metaData = provider.metaData();
-    URI jmsUri = metaData.getJmsBrokerUri();
+    JmsConnector jmsc = jmsConnector;
+    final LiveDataMetaData metaData = provider.metaData();
+    final URI jmsUri = metaData.getJmsBrokerUri();
     if (metaData.getServerType() != LiveDataServerTypes.STANDARD || jmsUri == null) {
-      s_logger.warn("Unsupported live data server type " + metaData.getServerType() + " for " + metaData.getDescription() + " live data provider. This provider will not be available.");
+      LOGGER.warn("Unsupported live data server type " + metaData.getServerType() + " for " + metaData.getDescription()
+          + " live data provider. This provider will not be available.");
       return null;
     }
-    if (!jmsConnector.getClientBrokerUri().equals(jmsUri)) {
-      JmsConnectorFactoryBean jmsFactory = new JmsConnectorFactoryBean(jmsConnector);
+    if (!jmsc.getClientBrokerUri().equals(jmsUri)) {
+      final JmsConnectorFactoryBean jmsFactory = new JmsConnectorFactoryBean(jmsc);
       jmsFactory.setClientBrokerUri(jmsUri);
-      jmsConnector = jmsFactory.getObjectCreating();
+      jmsc = jmsFactory.getObjectCreating();
     }
-    
-    JmsTemplate jmsTemplate = jmsConnector.getJmsTemplateTopic();
-    
+
+    final JmsTemplate jmsTemplate = jmsc.getJmsTemplateTopic();
+
     JmsByteArrayRequestSender jmsSubscriptionRequestSender;
 
     if (metaData.getJmsSubscriptionQueue() != null) {
-      JmsTemplate subscriptionRequestTemplate = jmsConnector.getJmsTemplateQueue();
+      final JmsTemplate subscriptionRequestTemplate = jmsc.getJmsTemplateQueue();
       jmsSubscriptionRequestSender = new JmsByteArrayRequestSender(metaData.getJmsSubscriptionQueue(), subscriptionRequestTemplate);
     } else {
       jmsSubscriptionRequestSender = new JmsByteArrayRequestSender(metaData.getJmsSubscriptionTopic(), jmsTemplate);
     }
-    ByteArrayFudgeRequestSender fudgeSubscriptionRequestSender = new ByteArrayFudgeRequestSender(jmsSubscriptionRequestSender);
-    
-    JmsByteArrayRequestSender jmsEntitlementRequestSender = new JmsByteArrayRequestSender(metaData.getJmsEntitlementTopic(), jmsTemplate);
-    ByteArrayFudgeRequestSender fudgeEntitlementRequestSender = new ByteArrayFudgeRequestSender(jmsEntitlementRequestSender);
-    
-    final JmsLiveDataClient liveDataClient = new JmsLiveDataClient(fudgeSubscriptionRequestSender,
-        fudgeEntitlementRequestSender, jmsConnector, OpenGammaFudgeContext.getInstance(), JmsLiveDataClient.DEFAULT_NUM_SESSIONS);
+    final ByteArrayFudgeRequestSender fudgeSubscriptionRequestSender = new ByteArrayFudgeRequestSender(jmsSubscriptionRequestSender);
+
+    final JmsByteArrayRequestSender jmsEntitlementRequestSender = new JmsByteArrayRequestSender(metaData.getJmsEntitlementTopic(), jmsTemplate);
+    final ByteArrayFudgeRequestSender fudgeEntitlementRequestSender = new ByteArrayFudgeRequestSender(jmsEntitlementRequestSender);
+
+    final JmsLiveDataClient liveDataClient = new JmsLiveDataClient(fudgeSubscriptionRequestSender, fudgeEntitlementRequestSender, jmsc,
+        OpenGammaFudgeContext.getInstance(), JmsLiveDataClient.DEFAULT_NUM_SESSIONS);
     liveDataClient.setFudgeContext(OpenGammaFudgeContext.getInstance());
     if (metaData.getJmsHeartbeatTopic() != null) {
-      JmsByteArrayMessageSender jmsHeartbeatSender = new JmsByteArrayMessageSender(metaData.getJmsHeartbeatTopic(), jmsTemplate);
+      final JmsByteArrayMessageSender jmsHeartbeatSender = new JmsByteArrayMessageSender(metaData.getJmsHeartbeatTopic(), jmsTemplate);
       liveDataClient.setHeartbeatMessageSender(jmsHeartbeatSender);
     }
     liveDataClient.start();
-    liveDataClient.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "LiveDataClient - " + provider.metaData().getDescription());
+    liveDataClient.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(),
+        "LiveDataClient - " + provider.metaData().getDescription());
     return liveDataClient;
   }
-  
+
   /**
    * Creates a market data availability filter for a metadata provider.
-   * 
-   * @param metaDataProvider  the metadata provider, not null
+   *
+   * @param metaDataProvider
+   *          the metadata provider, not null
    * @return the availability filter, null if none can be created
    */
-  protected MarketDataAvailabilityFilter createMarketDataAvailabilityFilter(LiveDataMetaDataProvider metaDataProvider) {
-    List<ExternalScheme> supportedSchemes = metaDataProvider.metaData().getSupportedSchemes();
+  protected MarketDataAvailabilityFilter createMarketDataAvailabilityFilter(final LiveDataMetaDataProvider metaDataProvider) {
+    final List<ExternalScheme> supportedSchemes = metaDataProvider.metaData().getSupportedSchemes();
     if (supportedSchemes == null || supportedSchemes.isEmpty()) {
-      s_logger.warn("No supported external identifier schemes declared for " + metaDataProvider.metaData().getDescription() + " live data provider. This provider will not be available.");
+      LOGGER.warn("No supported external identifier schemes declared for " + metaDataProvider.metaData().getDescription()
+          + " live data provider. This provider will not be available.");
       return null;
     }
     final Set<ExternalScheme> acceptableSchemes = ImmutableSet.copyOf(supportedSchemes);
@@ -218,7 +228,8 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
   }
 
   protected Set<String> getMarketDataRequirementNames() {
-    return MarketDataRequirementNamesHelper.constructValidRequirementNames();
+    final Set<String> validNames = MarketDataRequirementNamesHelper.constructValidRequirementNames();
+    return validNames;
   }
 
   //------------------------- AUTOGENERATED START -------------------------
@@ -326,7 +337,7 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
 
   //-----------------------------------------------------------------------
   /**
-   * Gets jMS topic for notifications when market data providers become available
+   * Gets jMS topic for notifications when market data providers become available.
    * @return the value of the property
    */
   public String getJmsMarketDataAvailabilityTopic() {
@@ -334,7 +345,7 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
   }
 
   /**
-   * Sets jMS topic for notifications when market data providers become available
+   * Sets jMS topic for notifications when market data providers become available.
    * @param jmsMarketDataAvailabilityTopic  the new value of the property
    */
   public void setJmsMarketDataAvailabilityTopic(String jmsMarketDataAvailabilityTopic) {

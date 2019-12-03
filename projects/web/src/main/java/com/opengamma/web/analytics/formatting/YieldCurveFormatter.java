@@ -38,7 +38,7 @@ import com.opengamma.financial.analytics.ircurve.YieldCurveInterpolatingFunction
   public List<Double[]> formatCell(final YieldCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
     if (value.getCurve() instanceof InterpolatedDoublesCurve) {
       final InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getCurve();
-      final List<Double[]> data = new ArrayList<Double[]>();
+      final List<Double[]> data = new ArrayList<>();
       final double[] xData = interpolatedCurve.getXDataAsPrimitive();
       final double[] yData = interpolatedCurve.getYDataAsPrimitive();
       for (int i = 0; i < interpolatedCurve.size(); i++) {
@@ -49,9 +49,9 @@ import com.opengamma.financial.analytics.ircurve.YieldCurveInterpolatingFunction
     return getSampledCurve(value.getCurve());
   }
 
-  private List<Double[]> formatExpanded(final YieldCurve value) {
+  private static List<Double[]> formatExpanded(final YieldCurve value) {
     final NodalDoublesCurve detailedCurve = YieldCurveInterpolatingFunction.interpolateCurve(value.getCurve());
-    final List<Double[]> detailedData = new ArrayList<Double[]>();
+    final List<Double[]> detailedData = new ArrayList<>();
     final Double[] xs = detailedCurve.getXData();
     final Double[] ys = detailedCurve.getYData();
     for (int i = 0; i < ys.length; i++) {
@@ -65,9 +65,9 @@ import com.opengamma.financial.analytics.ircurve.YieldCurveInterpolatingFunction
     return DataType.CURVE;
   }
 
-  private List<Double[]> getSampledCurve(final DoublesCurve curve) {
+  private static List<Double[]> getSampledCurve(final DoublesCurve curve) {
     final int n = 34;
-    final List<Double[]> data = new ArrayList<Double[]>();
+    final List<Double[]> data = new ArrayList<>();
     final double[] xData = new double[n];
     final double[] yData = new double[n];
     for (int i = 0; i < n; i++) {

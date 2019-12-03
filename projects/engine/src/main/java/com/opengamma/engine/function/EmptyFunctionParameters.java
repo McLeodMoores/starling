@@ -6,13 +6,13 @@
 package com.opengamma.engine.function;
 
 /**
- * 
+ *
  */
 public final class EmptyFunctionParameters implements FunctionParameters {
 
   /**
-   * A default instance. Parameterizations will typically be used to customize behaviours of functions - the normal, default case is likely to be much more common so use this instead of allocating a
-   * new instance whenever it is needed.
+   * A default instance. Parameterizations will typically be used to customize behaviours of functions - the normal, default case is
+   * likely to be much more common so use this instead of allocating a new instance whenever it is needed.
    */
   public static final EmptyFunctionParameters INSTANCE = new EmptyFunctionParameters();
 
@@ -25,7 +25,7 @@ public final class EmptyFunctionParameters implements FunctionParameters {
 
   @Override
   public boolean equals(final Object obj) {
-    return (obj instanceof EmptyFunctionParameters);
+    return obj instanceof EmptyFunctionParameters;
   }
 
   @Override

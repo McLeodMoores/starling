@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.impl.flexi.FlexiBean;
 
+import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.portfolio.ManageablePortfolioNode;
 import com.opengamma.master.portfolio.PortfolioDocument;
@@ -46,13 +47,13 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
   @POST
   @Produces(MediaType.TEXT_HTML)
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-  public Response postHTML(@FormParam("positionurl") String positionUrlStr) {
+  public Response postHTML(@FormParam("positionurl") final String positionUrlStr) {
     final PortfolioDocument doc = data().getPortfolio();
     if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(new MinimalWebPortfolioNodeResource(this).getHTML()).build();
     }
-    positionUrlStr = StringUtils.trimToNull(positionUrlStr);
-    if (positionUrlStr == null) {
+    final String trimmedPositionUrlStr = StringUtils.trimToNull(positionUrlStr);
+    if (trimmedPositionUrlStr == null) {
       final FlexiBean out = createRootData();
       out.put("err_positionUrlMissing", true);
       final String html = getFreemarker().build(HTML_DIR + "portfolionodepositions-add.ftl", out);
@@ -60,8 +61,8 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
     }
     UniqueId positionId = null;
     try {
-      new URI(positionUrlStr);  // validates whole URI
-      String uniqueIdStr = StringUtils.substringAfterLast(positionUrlStr, "/positions/");
+      new URI(trimmedPositionUrlStr); // validates whole URI
+      String uniqueIdStr = StringUtils.substringAfterLast(trimmedPositionUrlStr, "/positions/");
       uniqueIdStr = StringUtils.substringBefore(uniqueIdStr, "/");
       positionId = UniqueId.parse(uniqueIdStr);
       data().getPositionMaster().get(positionId);  // validate position exists
@@ -83,18 +84,18 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response postJSON(@FormParam("uid") String uniqueIdStr) {
+  public Response postJSON(@FormParam("uid") final String uniqueIdStr) {
     final PortfolioDocument doc = data().getPortfolio();
     if (!doc.isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(new MinimalWebPortfolioNodeResource(this).getHTML()).build();
     }
-    uniqueIdStr = StringUtils.trimToNull(uniqueIdStr);
-    if (uniqueIdStr == null) {
+    final String trimmedUniqueIdStr = StringUtils.trimToNull(uniqueIdStr);
+    if (trimmedUniqueIdStr == null) {
       return Response.status(Status.BAD_REQUEST).build();
     }
     UniqueId positionId = null;
     try {
-      positionId = UniqueId.parse(uniqueIdStr);
+      positionId = UniqueId.parse(trimmedUniqueIdStr);
       data().getPositionMaster().get(positionId);  // validate position exists
     } catch (final Exception ex) {
       return Response.status(Status.BAD_REQUEST).build();
@@ -111,8 +112,9 @@ public class MinimalWebPortfolioNodePositionsResource extends AbstractMinimalWeb
    */
   private URI addPosition(final PortfolioDocument doc, final UniqueId positionId) {
     final ManageablePortfolioNode node = data().getNode();
+    final ObjectId objectId = positionId.getObjectId();
     final URI uri = MinimalWebPortfolioNodeResource.uri(data());  // lock URI before updating data()
-    if (!node.getPositionIds().contains(positionId)) {
+    if (!node.getPositionIds().contains(objectId)) {
       node.addPosition(positionId);
       data().setPortfolio(data().getPortfolioMaster().update(doc));
     }

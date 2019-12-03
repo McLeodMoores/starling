@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.historicaltimeseries.impl;
@@ -40,7 +40,8 @@ public class RemoteHistoricalTimeSeriesMaster
   /**
    * Creates an instance.
    *
-   * @param baseUri  the base target URI for all RESTful web services, not null
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
    */
   public RemoteHistoricalTimeSeriesMaster(final URI baseUri) {
     super(baseUri);
@@ -49,206 +50,206 @@ public class RemoteHistoricalTimeSeriesMaster
   /**
    * Creates an instance.
    *
-   * @param baseUri  the base target URI for all RESTful web services, not null
-   * @param changeManager  the change manager, not null
+   * @param baseUri
+   *          the base target URI for all RESTful web services, not null
+   * @param changeManager
+   *          the change manager, not null
    */
-  public RemoteHistoricalTimeSeriesMaster(final URI baseUri, ChangeManager changeManager) {
+  public RemoteHistoricalTimeSeriesMaster(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri, changeManager);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public HistoricalTimeSeriesInfoMetaDataResult metaData(HistoricalTimeSeriesInfoMetaDataRequest request) {
+  public HistoricalTimeSeriesInfoMetaDataResult metaData(final HistoricalTimeSeriesInfoMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
 
-    URI uri = DataHistoricalTimeSeriesMasterUris.uriMetaData(getBaseUri(), request);
+    final URI uri = DataHistoricalTimeSeriesMasterUris.uriMetaData(getBaseUri(), request);
     return accessRemote(uri).get(HistoricalTimeSeriesInfoMetaDataResult.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoSearchResult search(final HistoricalTimeSeriesInfoSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
 
-    URI uri = DataHistoricalTimeSeriesMasterUris.uriSearch(getBaseUri());
+    final URI uri = DataHistoricalTimeSeriesMasterUris.uriSearch(getBaseUri());
     return accessRemote(uri).post(HistoricalTimeSeriesInfoSearchResult.class, request);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoDocument get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
     if (uniqueId.isVersioned()) {
-      URI uri = (new DataHistoricalTimeSeriesUris()).uriVersion(getBaseUri(), uniqueId);
+      final URI uri = new DataHistoricalTimeSeriesUris().uriVersion(getBaseUri(), uniqueId);
       return accessRemote(uri).get(HistoricalTimeSeriesInfoDocument.class);
-    } else {
-      return get(uniqueId, VersionCorrection.LATEST);
     }
+    return get(uniqueId, VersionCorrection.LATEST);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
 
-    URI uri = (new DataHistoricalTimeSeriesUris()).uri(getBaseUri(), objectId, versionCorrection);
+    final URI uri = new DataHistoricalTimeSeriesUris().uri(getBaseUri(), objectId, versionCorrection);
     return accessRemote(uri).get(HistoricalTimeSeriesInfoDocument.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoDocument add(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getInfo(), "document.info");
 
-    URI uri = DataHistoricalTimeSeriesMasterUris.uriAdd(getBaseUri());
+    final URI uri = DataHistoricalTimeSeriesMasterUris.uriAdd(getBaseUri());
     return accessRemote(uri).post(HistoricalTimeSeriesInfoDocument.class, document);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoDocument update(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getInfo(), "document.info");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = (new DataHistoricalTimeSeriesUris()).uri(getBaseUri(), document.getUniqueId(), null);
+    final URI uri = new DataHistoricalTimeSeriesUris().uri(getBaseUri(), document.getUniqueId(), null);
     return accessRemote(uri).post(HistoricalTimeSeriesInfoDocument.class, document);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
 
-    URI uri = (new DataHistoricalTimeSeriesUris()).uri(getBaseUri(), objectIdentifiable, null);
+    final URI uri = new DataHistoricalTimeSeriesUris().uri(getBaseUri(), objectIdentifiable, null);
     accessRemote(uri).delete();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoHistoryResult history(final HistoricalTimeSeriesInfoHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getObjectId(), "request.objectId");
 
-    URI uri = (new DataHistoricalTimeSeriesUris()).uriVersions(getBaseUri(), request.getObjectId(), request);
+    final URI uri = new DataHistoricalTimeSeriesUris().uriVersions(getBaseUri(), request.getObjectId(), request);
     return accessRemote(uri).get(HistoricalTimeSeriesInfoHistoryResult.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public HistoricalTimeSeriesInfoDocument correct(final HistoricalTimeSeriesInfoDocument document) {
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getInfo(), "document.info");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
 
-    URI uri = (new DataHistoricalTimeSeriesUris()).uriVersion(getBaseUri(), document.getUniqueId());
+    final URI uri = new DataHistoricalTimeSeriesUris().uriVersion(getBaseUri(), document.getUniqueId());
     return accessRemote(uri).post(HistoricalTimeSeriesInfoDocument.class, document);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(UniqueId uniqueId) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
     if (uniqueId.isVersioned()) {
-      URI uri = DataHistoricalDataPointsUris.uriVersion(getBaseUri(), uniqueId, null);
+      final URI uri = DataHistoricalDataPointsUris.uriVersion(getBaseUri(), uniqueId, null);
       return accessRemote(uri).get(ManageableHistoricalTimeSeries.class);
-    } else {
-      return getTimeSeries(uniqueId, VersionCorrection.LATEST);
     }
+    return getTimeSeries(uniqueId, VersionCorrection.LATEST);
   }
 
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(UniqueId uniqueId, HistoricalTimeSeriesGetFilter filter) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final UniqueId uniqueId, final HistoricalTimeSeriesGetFilter filter) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
 
     if (uniqueId.isVersioned()) {
-      URI uri = DataHistoricalDataPointsUris.uriVersion(getBaseUri(), uniqueId, filter);
+      final URI uri = DataHistoricalDataPointsUris.uriVersion(getBaseUri(), uniqueId, filter);
       return accessRemote(uri).get(ManageableHistoricalTimeSeries.class);
-    } else {
-      return getTimeSeries(uniqueId, VersionCorrection.LATEST);
     }
+    return getTimeSeries(uniqueId, VersionCorrection.LATEST);
   }
 
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
 
-    URI uri = DataHistoricalDataPointsUris.uri(getBaseUri(), objectId, versionCorrection, null);
+    final URI uri = DataHistoricalDataPointsUris.uri(getBaseUri(), objectId, versionCorrection, null);
     return accessRemote(uri).get(ManageableHistoricalTimeSeries.class);
   }
 
   @Override
-  public ManageableHistoricalTimeSeries getTimeSeries(ObjectIdentifiable objectId, VersionCorrection versionCorrection, HistoricalTimeSeriesGetFilter filter) {
+  public ManageableHistoricalTimeSeries getTimeSeries(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection,
+      final HistoricalTimeSeriesGetFilter filter) {
     ArgumentChecker.notNull(objectId, "objectId");
 
-    URI uri = DataHistoricalDataPointsUris.uri(getBaseUri(), objectId, versionCorrection, filter);
+    final URI uri = DataHistoricalDataPointsUris.uri(getBaseUri(), objectId, versionCorrection, filter);
     return accessRemote(uri).get(ManageableHistoricalTimeSeries.class);
   }
 
   @Override
-  public UniqueId updateTimeSeriesDataPoints(ObjectIdentifiable objectId, LocalDateDoubleTimeSeries series) {
+  public UniqueId updateTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDateDoubleTimeSeries series) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(series, "series");
 
-    URI uri = DataHistoricalDataPointsUris.uriUpdates(getBaseUri(), objectId);
+    final URI uri = DataHistoricalDataPointsUris.uriUpdates(getBaseUri(), objectId);
     return accessRemote(uri).post(UniqueId.class, series);
   }
 
   @Override
-  public UniqueId correctTimeSeriesDataPoints(ObjectIdentifiable objectId, LocalDateDoubleTimeSeries series) {
+  public UniqueId correctTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDateDoubleTimeSeries series) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(series, "series");
 
-    URI uri = DataHistoricalDataPointsUris.uriCorrections(getBaseUri(), objectId);
+    final URI uri = DataHistoricalDataPointsUris.uriCorrections(getBaseUri(), objectId);
     return accessRemote(uri).post(UniqueId.class, series);
   }
 
   @Override
-  public UniqueId removeTimeSeriesDataPoints(ObjectIdentifiable objectId, LocalDate fromDateInclusive, LocalDate toDateInclusive) {
+  public UniqueId removeTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDate fromDateInclusive, final LocalDate toDateInclusive) {
     ArgumentChecker.notNull(objectId, "objectId");
 
-    URI uri = DataHistoricalDataPointsUris.uriRemovals(getBaseUri(), objectId, fromDateInclusive, toDateInclusive);
+    final URI uri = DataHistoricalDataPointsUris.uriRemovals(getBaseUri(), objectId, fromDateInclusive, toDateInclusive);
     return accessRemote(uri).delete(UniqueId.class);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (HistoricalTimeSeriesInfoDocument replacementDocument : replacementDocuments) {
+    for (final HistoricalTimeSeriesInfoDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "documentToAdd");
       ArgumentChecker.notNull(replacementDocument.getInfo(), "document.info");
     }
-    URI uri = (new DataHistoricalTimeSeriesUris()).uriVersion(getBaseUri(), uniqueId);
+    final URI uri = new DataHistoricalTimeSeriesUris().uriVersion(getBaseUri(), uniqueId);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (HistoricalTimeSeriesInfoDocument replacementDocument : replacementDocuments) {
+    for (final HistoricalTimeSeriesInfoDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "documentToAdd");
       ArgumentChecker.notNull(replacementDocument.getInfo(), "document.info");
     }
-    URI uri = (new DataHistoricalTimeSeriesUris()).uriAll(getBaseUri(), objectId, null);
+    final URI uri = new DataHistoricalTimeSeriesUris().uriAll(getBaseUri(), objectId, null);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<HistoricalTimeSeriesInfoDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
-    for (HistoricalTimeSeriesInfoDocument replacementDocument : replacementDocuments) {
+    for (final HistoricalTimeSeriesInfoDocument replacementDocument : replacementDocuments) {
       ArgumentChecker.notNull(replacementDocument, "documentToAdd");
       ArgumentChecker.notNull(replacementDocument.getInfo(), "document.info");
     }
-    URI uri = (new DataHistoricalTimeSeriesUris()).uri(getBaseUri(), objectId, null);
+    final URI uri = new DataHistoricalTimeSeriesUris().uri(getBaseUri(), objectId, null);
     return accessRemote(uri).put(new GenericType<List<UniqueId>>() {
     }, replacementDocuments);
   }

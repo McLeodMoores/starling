@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -19,21 +19,22 @@ import com.opengamma.masterdb.security.hibernate.HibernateSecurityMasterDao;
 import com.opengamma.masterdb.security.hibernate.OperationContext;
 
 /**
- * EquityIndexOptionSecurityBeanOperation
+ * EquityIndexOptionSecurityBeanOperation.
  */
-public final class EquityOptionSecurityBeanOperation  extends AbstractSecurityBeanOperation<EquityOptionSecurity, EquityOptionSecurityBean> {
+public final class EquityOptionSecurityBeanOperation extends AbstractSecurityBeanOperation<EquityOptionSecurity, EquityOptionSecurityBean> {
 
   /**
-   * Singleton
+   * Singleton.
    */
   public static final EquityOptionSecurityBeanOperation INSTANCE = new EquityOptionSecurityBeanOperation();
-  
+
   private EquityOptionSecurityBeanOperation() {
     super(EquityOptionSecurity.SECURITY_TYPE, EquityOptionSecurity.class, EquityOptionSecurityBean.class);
   }
 
   @Override
-  public EquityOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final EquityOptionSecurity security) {
+  public EquityOptionSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final EquityOptionSecurity security) {
     final EquityOptionSecurityBean bean = new EquityOptionSecurityBean();
     bean.setOptionExerciseType(OptionExerciseType.identify(security.getExerciseType()));
     bean.setOptionType(security.getOptionType());
@@ -47,16 +48,16 @@ public final class EquityOptionSecurityBeanOperation  extends AbstractSecurityBe
   }
 
   @Override
-  public EquityOptionSecurity createSecurity(OperationContext context, EquityOptionSecurityBean bean) {
+  public EquityOptionSecurity createSecurity(final OperationContext context, final EquityOptionSecurityBean bean) {
     final ExerciseType exerciseType = bean.getOptionExerciseType().accept(new ExerciseTypeVisitorImpl());
 
-    EquityOptionSecurity sec = new EquityOptionSecurity(bean.getOptionType(), 
-        bean.getStrike(), 
-        currencyBeanToCurrency(bean.getCurrency()), 
-        externalIdBeanToExternalId(bean.getUnderlying()), 
-        exerciseType, 
-        expiryBeanToExpiry(bean.getExpiry()), 
-        bean.getPointValue(), 
+    final EquityOptionSecurity sec = new EquityOptionSecurity(bean.getOptionType(),
+        bean.getStrike(),
+        currencyBeanToCurrency(bean.getCurrency()),
+        externalIdBeanToExternalId(bean.getUnderlying()),
+        exerciseType,
+        expiryBeanToExpiry(bean.getExpiry()),
+        bean.getPointValue(),
         bean.getExchange().getName());
     return sec;
   }

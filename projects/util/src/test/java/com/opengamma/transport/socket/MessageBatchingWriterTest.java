@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.socket;
@@ -33,17 +33,20 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class MessageBatchingWriterTest {
 
+  /**
+   *
+   */
   private static final class DelayingOutputStream extends OutputStream {
 
-    private final Map<Thread, AtomicInteger> _writes = new HashMap<Thread, AtomicInteger>();
+    private final Map<Thread, AtomicInteger> _writes = new HashMap<>();
     private final AtomicBoolean _writing = new AtomicBoolean();
 
     @Override
-    public void write(int b) throws IOException {
+    public void write(final int b) throws IOException {
       assertFalse(_writing.getAndSet(true));
       try {
         Thread.sleep(10);
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
       AtomicInteger count = _writes.get(Thread.currentThread());
@@ -61,12 +64,18 @@ public class MessageBatchingWriterTest {
   private DelayingOutputStream _out;
   private MessageBatchingWriter _writer;
 
+  /**
+   *
+   */
   @BeforeMethod
-  public void init() throws IOException {
+  public void init() {
     _out = new DelayingOutputStream();
     _writer = new MessageBatchingWriter(FudgeContext.GLOBAL_DEFAULT, _out);
   }
 
+  /**
+   *
+   */
   public void sequentialWritesNoBatching() {
     final int count = 10;
     for (int i = 0; i < count; i++) {
@@ -78,6 +87,10 @@ public class MessageBatchingWriterTest {
     assertEquals(count * FudgeSize.calculateMessageEnvelopeSize(FudgeContext.EMPTY_MESSAGE), _out._writes.get(Thread.currentThread()).intValue());
   }
 
+  /**
+   * @throws InterruptedException
+   *           if there is a problem
+   */
   @Test(invocationCount = 5, successPercentage = 19)
   public void concurrentWritesWithBatching() throws InterruptedException {
     final Thread[] threads = new Thread[6];
@@ -88,7 +101,7 @@ public class MessageBatchingWriterTest {
         public void run() {
           try {
             Thread.sleep(10);
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
             fail();
           }
           switch (id) {
@@ -98,19 +111,23 @@ public class MessageBatchingWriterTest {
             case 4:
               threads[id + 1].start();
               break;
+            default:
+              break;
           }
           _writer.write(FudgeContext.EMPTY_MESSAGE);
           switch (id) {
             case 0:
               threads[3].start();
               break;
+            default:
+              break;
           }
         }
       };
     }
     threads[0].start();
-    for (int i = 0; i < threads.length; i++) {
-      threads[i].join();
+    for (final Thread thread : threads) {
+      thread.join();
     }
     // Thread 0 should have written 1 message.
     // Thread 1 should have batched up 2 messages.

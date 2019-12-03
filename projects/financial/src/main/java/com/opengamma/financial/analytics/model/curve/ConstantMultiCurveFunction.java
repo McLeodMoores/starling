@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.model.curve;
 
@@ -89,15 +89,14 @@ import com.opengamma.util.tuple.Pairs;
 /**
  * Produces yield curves using the {@link CurveCalculationPropertyNamesAndValues#CONSTANT_FROM_RATE} method.
  * <p>
- * This function uses information from the {@link ConstantCurveSpecification} referenced in the
- * {@link CurveConstructionConfiguration} to create a curve bundle that contains a yield curve with underlying
- * type {@link ConstantDoublesCurve}. This means that this function handles only configurations where all
- * referenced curves are constant curves.
+ * This function uses information from the {@link ConstantCurveSpecification} referenced in the {@link CurveConstructionConfiguration} to create a curve bundle
+ * that contains a yield curve with underlying type {@link ConstantDoublesCurve}. This means that this function handles only configurations where all referenced
+ * curves are constant curves.
  * <p>
  * The market data id in the specification is assumed to be a <b>rate</b> and so no transformations are performed on this value.
  */
 public class ConstantMultiCurveFunction extends
-  MultiCurveFunction<MulticurveProviderInterface, MulticurveDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
+    MultiCurveFunction<MulticurveProviderInterface, MulticurveDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
   /** The logger. */
   /* package */static final Logger LOGGER = LoggerFactory.getLogger(ConstantMultiCurveFunction.class);
   /** A curve construction configuration source */
@@ -106,7 +105,8 @@ public class ConstantMultiCurveFunction extends
   private CurveDefinitionSource _curveDefinitionSource;
 
   /**
-   * @param curveConfigurationName  the curve configuration name, not null
+   * @param curveConfigurationName
+   *          the curve configuration name, not null
    */
   public ConstantMultiCurveFunction(final String curveConfigurationName) {
     super(curveConfigurationName);
@@ -136,14 +136,14 @@ public class ConstantMultiCurveFunction extends
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
-    //TODO work out a way to use dependency graph to get curve information for this config
+    // TODO work out a way to use dependency graph to get curve information for this config
     final String curveConstructionConfigurationName = getCurveConstructionConfigurationName();
-    final CurveConstructionConfiguration curveConstructionConfiguration =
-        _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationName);
+    final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource
+        .getCurveConstructionConfiguration(curveConstructionConfigurationName);
     if (curveConstructionConfiguration == null) {
       throw new OpenGammaRuntimeException("Could not get curve construction configuration called " + curveConstructionConfigurationName);
     }
-    boolean allCurvesConstant = false;;
+    boolean allCurvesConstant = false;
     for (final CurveGroupConfiguration group : curveConstructionConfiguration.getCurveGroups()) {
       for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
         final AbstractCurveDefinition definition = _curveDefinitionSource.getDefinition(entry.getKey());
@@ -158,7 +158,7 @@ public class ConstantMultiCurveFunction extends
     if (curveConstructionConfiguration.getExogenousConfigurations() != null) {
       final List<String> exogenousConfigurations = curveConstructionConfiguration.getExogenousConfigurations();
       for (final String name : exogenousConfigurations) {
-        //TODO deal with arbitrary depth
+        // TODO deal with arbitrary depth
         final ValueProperties properties = ValueProperties.builder()
             .with(CURVE_CONSTRUCTION_CONFIG, name)
             .with(CURVE_CALCULATION_METHOD, DIRECT)
@@ -199,13 +199,20 @@ public class ConstantMultiCurveFunction extends
     private final boolean _allCurvesConstant;
 
     /**
-     * @param earliestInvocation  the earliest time for which this function is valid, null if there is no bound
-     * @param latestInvocation  the latest time for which this function is valid, null if there is no bound
-     * @param curveNames  the names of the curves produced by this function, not null
-     * @param exogenousRequirements  the exogenous requirements, not null
-     * @param curveConstructionConfiguration  the curve construction configuration, not null
-     * @param currencies  not used
-     * @param allCurvesConstant  true if all curves in the configuration are constant curves
+     * @param earliestInvocation
+     *          the earliest time for which this function is valid, null if there is no bound
+     * @param latestInvocation
+     *          the latest time for which this function is valid, null if there is no bound
+     * @param curveNames
+     *          the names of the curves produced by this function, not null
+     * @param exogenousRequirements
+     *          the exogenous requirements, not null
+     * @param curveConstructionConfiguration
+     *          the curve construction configuration, not null
+     * @param currencies
+     *          not used
+     * @param allCurvesConstant
+     *          true if all curves in the configuration are constant curves
      */
     protected ConstantMultiCurveCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation,
         final String[] curveNames, final Set<ValueRequirement> exogenousRequirements,
@@ -215,12 +222,18 @@ public class ConstantMultiCurveFunction extends
     }
 
     /**
-     * @param earliestInvocation  the earliest time for which this function is valid, null if there is no bound
-     * @param latestInvocation  the latest time for which this function is valid, null if there is no bound
-     * @param curveNames  the names of the curves produced by this function, not null
-     * @param exogenousRequirements  the exogenous requirements, not null
-     * @param curveConstructionConfiguration  the curve construction configuration, not null
-     * @param allCurvesConstant  true if all curves in the configuration are constant curves
+     * @param earliestInvocation
+     *          the earliest time for which this function is valid, null if there is no bound
+     * @param latestInvocation
+     *          the latest time for which this function is valid, null if there is no bound
+     * @param curveNames
+     *          the names of the curves produced by this function, not null
+     * @param exogenousRequirements
+     *          the exogenous requirements, not null
+     * @param curveConstructionConfiguration
+     *          the curve construction configuration, not null
+     * @param allCurvesConstant
+     *          true if all curves in the configuration are constant curves
      */
     @SuppressWarnings("deprecation")
     protected ConstantMultiCurveCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation,
@@ -253,15 +266,15 @@ public class ConstantMultiCurveFunction extends
       final ValueProperties.Builder propertiesBuilder = desiredValues.iterator().next().getConstraints().copy()
           .withoutAny(CURVE)
           .with(CURVE, Arrays.asList(getCurveNames()));
-      final ValueProperties properties  = propertiesBuilder.get();
+      final ValueProperties properties = propertiesBuilder.get();
       final ValueSpecification bundleSpec = new ValueSpecification(CURVE_BUNDLE, ComputationTargetSpecification.NULL, properties);
       final ValueSpecification jacobianSpec = new ValueSpecification(JACOBIAN_BUNDLE, ComputationTargetSpecification.NULL, properties);
       final MulticurveProviderDiscount curveBundle = (MulticurveProviderDiscount) getKnownData(inputs);
       final LinkedHashMap<String, Pair<Integer, Integer>> unitMap = new LinkedHashMap<>();
       final LinkedHashMap<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> unitBundles = new LinkedHashMap<>();
       int totalCurves = 0;
-      for (final CurveGroupConfiguration group: _curveConstructionConfiguration.getCurveGroups()) {
-        for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry: group.getTypesForCurves().entrySet()) {
+      for (final CurveGroupConfiguration group : _curveConstructionConfiguration.getCurveGroups()) {
+        for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
           final String curveName = entry.getKey();
           final List<? extends CurveTypeConfiguration> types = entry.getValue();
           final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, curveName).get();
@@ -270,15 +283,15 @@ public class ConstantMultiCurveFunction extends
             throw new OpenGammaRuntimeException("Could not get yield curve data");
           }
           final SnapshotDataBundle marketData = (SnapshotDataBundle) dataObject;
-          final ConstantCurveSpecification specification =
-              (ConstantCurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
+          final ConstantCurveSpecification specification = (ConstantCurveSpecification) inputs
+              .getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
           final Double marketValue = marketData.getDataPoint(specification.getIdentifier());
           if (marketValue == null) {
             throw new OpenGammaRuntimeException("Could not get market value for " + specification.getIdentifier());
           }
           final ConstantDoublesCurve constantCurve = ConstantDoublesCurve.from(marketValue, curveName);
           final YieldCurve yieldCurve = new YieldCurve(curveName, constantCurve);
-          for (final CurveTypeConfiguration type: types) {
+          for (final CurveTypeConfiguration type : types) {
             if (type instanceof DiscountingCurveTypeConfiguration) {
               final Currency currency = Currency.parse(((DiscountingCurveTypeConfiguration) type).getReference());
               curveBundle.setCurve(currency, yieldCurve);
@@ -296,14 +309,14 @@ public class ConstantMultiCurveFunction extends
               curveBundle.setCurve(index, yieldCurve);
             }
           }
-          final double[][] jacobian = new double[][] {{1}};
+          final double[][] jacobian = new double[][] { { 1 } };
           unitMap.put(curveName, Pairs.of(totalCurves, 1));
           unitBundles.put(curveName, Pairs.of(new CurveBuildingBlock(unitMap), new DoubleMatrix2D(jacobian)));
           totalCurves++;
         }
       }
-      final Pair<MulticurveProviderInterface, CurveBuildingBlockBundle> pair =
-          Pairs.of((MulticurveProviderInterface) curveBundle, new CurveBuildingBlockBundle(unitBundles));
+      final Pair<MulticurveProviderInterface, CurveBuildingBlockBundle> pair = Pairs.of((MulticurveProviderInterface) curveBundle,
+          new CurveBuildingBlockBundle(unitBundles));
       return getResults(bundleSpec, jacobianSpec, properties, pair);
     }
 
@@ -390,7 +403,8 @@ public class ConstantMultiCurveFunction extends
     /**
      * Gets the result properties for a curve.
      *
-     * @param curveName The curve name
+     * @param curveName
+     *          The curve name
      * @return The result properties
      */
     @Override
@@ -407,8 +421,10 @@ public class ConstantMultiCurveFunction extends
     /**
      * Gets the result properties for a curve bundle.
      *
-     * @param curveNames All of the curves produced by this function
-     * @param sensitivityCurrencies The set of currencies to which the curves produce sensitivities
+     * @param curveNames
+     *          All of the curves produced by this function
+     * @param sensitivityCurrencies
+     *          The set of currencies to which the curves produce sensitivities
      * @return The result properties
      */
     @Override

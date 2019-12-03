@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine;
@@ -23,41 +23,41 @@ import com.opengamma.util.WeakInstanceCache;
  */
 public final class MemoryUtils {
 
-  // TODO: Why do we need value specifications everywhere; can't we just work with the longs that go into the jobs? Converting ValueSpecifications to/from the longs
-  // is cheap enough - if in the cache, map operations no more costly than the approach here
+  // TODO: Why do we need value specifications everywhere; can't we just work with the longs that go into the jobs?
+  // Converting ValueSpecifications to/from the longs is cheap enough - if in the cache, map operations no more
+  // costly than the approach here
 
-  private static final WeakInstanceCache<? extends ComputationTargetReference> s_computationTargetReference = new NormalizingWeakInstanceCache<ComputationTargetReference>() {
+  private static final WeakInstanceCache<? extends ComputationTargetReference> COMPUTATION_TARGET_REFERENCE =
+      new NormalizingWeakInstanceCache<ComputationTargetReference>() {
     @Override
     protected ComputationTargetReference normalize(final ComputationTargetReference value) {
       return value.normalize();
     }
   };
 
-  private static final WeakInstanceCache<ValueProperties> s_valueProperties = new WeakInstanceCache<ValueProperties>();
+  private static final WeakInstanceCache<ValueProperties> VALUE_PROPERTIES = new WeakInstanceCache<>();
 
-  private static final WeakInstanceCache<ValueRequirement> s_valueRequirement = new NormalizingWeakInstanceCache<ValueRequirement>() {
+  private static final WeakInstanceCache<ValueRequirement> VALUE_REQUIREMENT = new NormalizingWeakInstanceCache<ValueRequirement>() {
     @Override
     protected ValueRequirement normalize(final ValueRequirement valueRequirement) {
       final ComputationTargetReference ctspec = instance(valueRequirement.getTargetReference());
       final ValueProperties constraints = instance(valueRequirement.getConstraints());
-      if ((ctspec == valueRequirement.getTargetReference()) && (constraints == valueRequirement.getConstraints())) {
+      if (ctspec == valueRequirement.getTargetReference() && constraints == valueRequirement.getConstraints()) {
         return valueRequirement;
-      } else {
-        return new ValueRequirement(valueRequirement.getValueName(), ctspec, constraints);
       }
+      return new ValueRequirement(valueRequirement.getValueName(), ctspec, constraints);
     }
   };
 
-  private static final WeakInstanceCache<ValueSpecification> s_valueSpecification = new NormalizingWeakInstanceCache<ValueSpecification>() {
+  private static final WeakInstanceCache<ValueSpecification> VALUE_SPECIFICATION = new NormalizingWeakInstanceCache<ValueSpecification>() {
     @Override
     protected ValueSpecification normalize(final ValueSpecification valueSpecification) {
       final ComputationTargetSpecification ctspec = instance(valueSpecification.getTargetSpecification());
       final ValueProperties properties = instance(valueSpecification.getProperties());
-      if ((ctspec == valueSpecification.getTargetSpecification()) && (properties == valueSpecification.getProperties())) {
+      if (ctspec == valueSpecification.getTargetSpecification() && properties == valueSpecification.getProperties()) {
         return valueSpecification;
-      } else {
-        return new ValueSpecification(valueSpecification.getValueName(), ctspec, properties);
       }
+      return new ValueSpecification(valueSpecification.getValueName(), ctspec, properties);
     }
   };
 
@@ -66,24 +66,24 @@ public final class MemoryUtils {
 
   @SuppressWarnings("unchecked")
   public static <T extends ComputationTargetReference> T instance(final T computationTargetReference) {
-    return ((WeakInstanceCache<T>) s_computationTargetReference).get(computationTargetReference);
+    return ((WeakInstanceCache<T>) COMPUTATION_TARGET_REFERENCE).get(computationTargetReference);
   }
 
   public static ValueProperties instance(final ValueProperties valueProperties) {
-    return s_valueProperties.get(valueProperties);
+    return VALUE_PROPERTIES.get(valueProperties);
   }
 
   public static ValueRequirement instance(final ValueRequirement valueRequirement) {
-    return s_valueRequirement.get(valueRequirement);
+    return VALUE_REQUIREMENT.get(valueRequirement);
   }
 
   public static ValueSpecification instance(final ValueSpecification valueSpecification) {
-    return s_valueSpecification.get(valueSpecification);
+    return VALUE_SPECIFICATION.get(valueSpecification);
   }
 
   /**
    * Estimate the size of an object in memory. This is based on its serialized form which is crude but better than nothing.
-   * 
+   *
    * @param object the object to estimate the size of
    * @return the size estimate in bytes
    */
@@ -97,7 +97,7 @@ public final class MemoryUtils {
       out.writeObject(object);
       out.close();
       return baos.toByteArray().length;
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("I/O error", e);
     }
   }

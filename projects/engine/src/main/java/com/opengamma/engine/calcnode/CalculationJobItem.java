@@ -1,13 +1,9 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode;
-
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.LongSet;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,8 +18,12 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.engine.view.ExecutionLog;
 import com.opengamma.engine.view.ExecutionLogMode;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+
 /**
- * 
+ *
  */
 public final class CalculationJobItem implements IdentifierEncodedValueSpecifications {
 
@@ -42,9 +42,9 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
 
   private final ExecutionLogMode _logMode;
 
-  public CalculationJobItem(String functionUniqueIdentifier, FunctionParameters functionParameters,
-      ComputationTargetSpecification computationTargetSpecification, Collection<ValueSpecification> inputs,
-      Collection<ValueSpecification> outputs, ExecutionLogMode logMode) {
+  public CalculationJobItem(final String functionUniqueIdentifier, final FunctionParameters functionParameters,
+      final ComputationTargetSpecification computationTargetSpecification, final Collection<ValueSpecification> inputs,
+      final Collection<ValueSpecification> outputs, final ExecutionLogMode logMode) {
     _functionUniqueIdentifier = functionUniqueIdentifier;
     _functionParameters = functionParameters;
     _computationTargetSpecification = computationTargetSpecification;
@@ -55,7 +55,7 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
 
   /**
    * Constructs a job item corresponding to a node in a dependency graph.
-   * 
+   *
    * @param functionUniqueIdentifier the function identifier, not null
    * @param functionParameters the function parameters, not null
    * @param computationTargetSpecification the function's target, never null
@@ -63,9 +63,9 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
    * @param outputs the mapped identifiers for the function's output, never null
    * @param logMode the log capturing mode, not null
    */
-  public CalculationJobItem(String functionUniqueIdentifier, FunctionParameters functionParameters,
-      ComputationTargetSpecification computationTargetSpecification, ValueSpecification[] inputs, ValueSpecification[] outputs,
-      ExecutionLogMode logMode) {
+  public CalculationJobItem(final String functionUniqueIdentifier, final FunctionParameters functionParameters,
+      final ComputationTargetSpecification computationTargetSpecification, final ValueSpecification[] inputs, final ValueSpecification[] outputs,
+      final ExecutionLogMode logMode) {
     _functionUniqueIdentifier = functionUniqueIdentifier;
     _functionParameters = functionParameters;
     _computationTargetSpecification = computationTargetSpecification;
@@ -76,7 +76,7 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
 
   /**
    * Constructs a job item based on the data used in the network message.
-   * 
+   *
    * @param functionUniqueIdentifier the function identifier to execute, never null
    * @param functionParameters the function's execution parameters, never null
    * @param computationTargetSpecification the function's target, never null
@@ -84,9 +84,9 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
    * @param outputs the mapped identifiers for the function's output, never null
    * @param logMode the log capturing mode, not null
    */
-  public CalculationJobItem(String functionUniqueIdentifier, FunctionParameters functionParameters,
-      ComputationTargetSpecification computationTargetSpecification, long[] inputs, long[] outputs,
-      ExecutionLogMode logMode) {
+  public CalculationJobItem(final String functionUniqueIdentifier, final FunctionParameters functionParameters,
+      final ComputationTargetSpecification computationTargetSpecification, final long[] inputs, final long[] outputs,
+      final ExecutionLogMode logMode) {
     _functionUniqueIdentifier = functionUniqueIdentifier;
     _functionParameters = functionParameters;
     _computationTargetSpecification = computationTargetSpecification;
@@ -108,8 +108,9 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   }
 
   /**
-   * Returns the identifiers of the function inputs. The identifier will only be populated after deserialization from a Fudge message or after {@link #convertIdentifiers} has been called.
-   * 
+   * Returns the identifiers of the function inputs. The identifier will only be populated after deserialization from a Fudge
+   * message or after {@link #convertIdentifiers} has been called.
+   *
    * @return the identifiers or null if they have not been converted
    */
   public long[] getInputIdentifiers() {
@@ -117,8 +118,9 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   }
 
   /**
-   * Returns the function input specifications. If the item has been deserialized the specifications will only be populated after {@link #resolveIdentifiers} has been called
-   * 
+   * Returns the function input specifications. If the item has been deserialized the specifications will only be populated after {@link #convertIdentifiers}
+   * has been called
+   *
    * @return the input specifications or null if they have not been resolved
    */
   public ValueSpecification[] getInputs() {
@@ -126,8 +128,9 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   }
 
   /**
-   * Returns the identifiers of the function outputs. The identifiers will only be populated after deserialization from a Fudge message or after {@link #convertIdentifiers} has been called.
-   * 
+   * Returns the identifiers of the function outputs. The identifiers will only be populated after deserialization from a
+   * Fudge message or after {@link #convertIdentifiers} has been called.
+   *
    * @return the identifiers or null if they have not been converted
    */
   public long[] getOutputIdentifiers() {
@@ -135,8 +138,9 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   }
 
   /**
-   * Returns the function output specifications. If the item has been deserialized the specifications will only be populated after {@link #resolveIdentifiers} has been called.
-   * 
+   * Returns the function output specifications. If the item has been deserialized the specifications will only be populated after {@link #convertIdentifiers}
+   * has been called.
+   *
    * @return the output specifications or null if they have not been converted
    */
   public ValueSpecification[] getOutputs() {
@@ -152,7 +156,7 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
 
   /**
    * Gets the execution log mode, controlling the level of detail in the {@link ExecutionLog} present in the results.
-   * 
+   *
    * @return the execution log mode, not null
    */
   public ExecutionLogMode getLogMode() {
@@ -186,10 +190,10 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
 
   @Override
   public void collectIdentifiers(final LongSet identifiers) {
-    for (long identifier : _inputIdentifiers) {
+    for (final long identifier : _inputIdentifiers) {
       identifiers.add(identifier);
     }
-    for (long identifier : _outputIdentifiers) {
+    for (final long identifier : _outputIdentifiers) {
       identifiers.add(identifier);
     }
   }
@@ -220,10 +224,10 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
 
   @Override
   public void collectValueSpecifications(final Set<ValueSpecification> valueSpecifications) {
-    for (ValueSpecification input : _inputSpecifications) {
+    for (final ValueSpecification input : _inputSpecifications) {
       valueSpecifications.add(input);
     }
-    for (ValueSpecification output : _outputSpecifications) {
+    for (final ValueSpecification output : _outputSpecifications) {
       valueSpecifications.add(output);
     }
   }
@@ -231,7 +235,8 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
   //-------------------------------------------------------------------------
   @Override
   public String toString() {
-    return new ToStringBuilder(this).append("Function unique ID", getFunctionUniqueIdentifier()).append("Computation target", getComputationTargetSpecification()).toString();
+    return new ToStringBuilder(this).append("Function unique ID", getFunctionUniqueIdentifier()).append("Computation target",
+        getComputationTargetSpecification()).toString();
   }
 
   //-------------------------------------------------------------------------
@@ -241,8 +246,8 @@ public final class CalculationJobItem implements IdentifierEncodedValueSpecifica
       return false;
     }
     final CalculationJobItem other = (CalculationJobItem) o;
-    return _functionUniqueIdentifier.equals(other._functionUniqueIdentifier) && _computationTargetSpecification.equals(other._computationTargetSpecification) &&
-        Arrays.deepEquals(_inputSpecifications, other._inputSpecifications) && Arrays.deepEquals(_outputSpecifications, other._outputSpecifications);
+    return _functionUniqueIdentifier.equals(other._functionUniqueIdentifier) && _computationTargetSpecification.equals(other._computationTargetSpecification)
+        && Arrays.deepEquals(_inputSpecifications, other._inputSpecifications) && Arrays.deepEquals(_outputSpecifications, other._outputSpecifications);
   }
 
   @Override

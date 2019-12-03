@@ -26,7 +26,7 @@ import com.opengamma.util.OpenGammaClock;
  */
 class DbClock extends Clock {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbClock.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbClock.class);
 
   /**
    * The connector.
@@ -51,7 +51,7 @@ class DbClock extends Clock {
   /**
    * The last "now" instant returned. Any "now"s subsequently returned must not be before this.
    */
-  private final AtomicReference<Instant> _previousNow = new AtomicReference<Instant>();
+  private final AtomicReference<Instant> _previousNow = new AtomicReference<>();
   /**
    * The {@link System#nanoTime} of the now instant.
    */
@@ -59,23 +59,24 @@ class DbClock extends Clock {
 
   /**
    * Creates the clock.
-   * 
+   *
    * @param connector the connector, not null
    */
-  DbClock(DbConnector connector) {
+  DbClock(final DbConnector connector) {
     this(connector, OpenGammaClock.getZone());
   }
 
   /**
    * Creates the clock.
-   * 
+   *
    * @param connector the connector, not null
+   * @param zone  the time zone, not null
    */
-  DbClock(DbConnector connector, ZoneId zone) {
+  DbClock(final DbConnector connector, final ZoneId zone) {
     _connector = Objects.requireNonNull(connector, "connector");
     _precision = _connector.getDialect().getTimestampPrecision();
     _zone = zone;
-    long now = System.nanoTime();
+    final long now = System.nanoTime();
     long base = now - 2_000_000_000L;
     if (base > now) { // overflow
       base = Long.MIN_VALUE;
@@ -96,9 +97,8 @@ class DbClock extends Clock {
           _nowInstant = DbDateUtils.fromSqlTimestamp(_connector.nowDb()).truncatedTo(_precision);
           _nowNanoTime = System.nanoTime();
           return _nowInstant;
-        } else {
-          _lock.readLock().lock(); // safely downgrade to read lock
         }
+        _lock.readLock().lock(); // safely downgrade to read lock
       } finally {
         _lock.writeLock().unlock();
       }
@@ -108,8 +108,8 @@ class DbClock extends Clock {
     try {
       nowNanos = System.nanoTime();
       long interpolate = Math.max(nowNanos - _nowNanoTime, 0);
-      int precisionNano = _precision.getDuration().getNano();
-      interpolate = (interpolate / precisionNano) * precisionNano;
+      final int precisionNano = _precision.getDuration().getNano();
+      interpolate = interpolate / precisionNano * precisionNano;
       result = _nowInstant.plusNanos(interpolate);
     } finally {
       _lock.readLock().unlock();
@@ -125,16 +125,15 @@ class DbClock extends Clock {
       if (_previousNow.compareAndSet(null, instant)) {
         // This is the first result
         return instant;
-      } else {
-        // Another thread did the first result; check against that
-        previous = _previousNow.get();
-        // [PLAT-3965] This might not be necessary. I think the problem is more to do with two successive calls from the same thread getting invalid times
       }
+      // Another thread did the first result; check against that
+      previous = _previousNow.get();
+      // [PLAT-3965] This might not be necessary. I think the problem is more to do with two successive calls from the same thread getting invalid times
     }
     do {
       if (previous.isAfter(instant)) {
         // Can't have time going backwards; have it stand still instead
-        s_logger.debug("Returning previous time instant {} instead of {}", previous, instant);
+        LOGGER.debug("Returning previous time instant {} instead of {}", previous, instant);
         return previous;
       }
       // Time has progressed; update the reference

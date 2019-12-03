@@ -5,6 +5,7 @@
  */
 package com.opengamma.web.convention;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.core.UriInfo;
@@ -27,6 +28,7 @@ import com.opengamma.master.convention.ConventionDocument;
 import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.convention.ManageableConvention;
 import com.opengamma.web.WebPerRequestData;
+import com.opengamma.web.json.JSONBuilder;
 
 /**
  * Data class for web-based convention management.
@@ -69,6 +71,16 @@ public class WebConventionData extends WebPerRequestData {
    */
   @PropertyDefinition(set = "setClearPutAll")
   private final BiMap<String, Class<? extends ManageableConvention>> _typeMap = HashBiMap.create();
+  /**
+   * The valid map of convention class names.
+   */
+  @PropertyDefinition(set = "setClearPutAll")
+  private final BiMap<String, Class<? extends ManageableConvention>> _classNameMap = HashBiMap.create();
+  /**
+   * The valid map of templates.
+   */
+  @PropertyDefinition
+  private final Map<Class<?>, JSONBuilder<?>> _jsonBuilderMap = new HashMap<>();
 
   /**
    * Creates an instance.
@@ -78,16 +90,20 @@ public class WebConventionData extends WebPerRequestData {
 
   /**
    * Creates an instance.
-   * @param uriInfo  the URI information
+   * 
+   * @param uriInfo
+   *          the URI information
    */
   public WebConventionData(final UriInfo uriInfo) {
     setUriInfo(uriInfo);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the best available convention id.
-   * @param overrideId  the override id, null derives the result from the data
+   * 
+   * @param overrideId
+   *          the override id, null derives the result from the data
    * @return the id, may be null
    */
   public String getBestConventionUriId(final UniqueId overrideId) {
@@ -294,6 +310,60 @@ public class WebConventionData extends WebPerRequestData {
   }
 
   //-----------------------------------------------------------------------
+  /**
+   * Gets the valid map of convention class names.
+   * @return the value of the property, not null
+   */
+  public BiMap<String, Class<? extends ManageableConvention>> getClassNameMap() {
+    return _classNameMap;
+  }
+
+  /**
+   * Sets the valid map of convention class names.
+   * @param classNameMap  the new value of the property, not null
+   */
+  public void setClassNameMap(BiMap<String, Class<? extends ManageableConvention>> classNameMap) {
+    JodaBeanUtils.notNull(classNameMap, "classNameMap");
+    this._classNameMap.clear();
+    this._classNameMap.putAll(classNameMap);
+  }
+
+  /**
+   * Gets the the {@code classNameMap} property.
+   * @return the property, not null
+   */
+  public final Property<BiMap<String, Class<? extends ManageableConvention>>> classNameMap() {
+    return metaBean().classNameMap().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
+  /**
+   * Gets the valid map of templates.
+   * @return the value of the property, not null
+   */
+  public Map<Class<?>, JSONBuilder<?>> getJsonBuilderMap() {
+    return _jsonBuilderMap;
+  }
+
+  /**
+   * Sets the valid map of templates.
+   * @param jsonBuilderMap  the new value of the property, not null
+   */
+  public void setJsonBuilderMap(Map<Class<?>, JSONBuilder<?>> jsonBuilderMap) {
+    JodaBeanUtils.notNull(jsonBuilderMap, "jsonBuilderMap");
+    this._jsonBuilderMap.clear();
+    this._jsonBuilderMap.putAll(jsonBuilderMap);
+  }
+
+  /**
+   * Gets the the {@code jsonBuilderMap} property.
+   * @return the property, not null
+   */
+  public final Property<Map<Class<?>, JSONBuilder<?>>> jsonBuilderMap() {
+    return metaBean().jsonBuilderMap().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
   @Override
   public WebConventionData clone() {
     return JodaBeanUtils.cloneAlways(this);
@@ -313,6 +383,8 @@ public class WebConventionData extends WebPerRequestData {
           JodaBeanUtils.equal(getConvention(), other.getConvention()) &&
           JodaBeanUtils.equal(getVersioned(), other.getVersioned()) &&
           JodaBeanUtils.equal(getTypeMap(), other.getTypeMap()) &&
+          JodaBeanUtils.equal(getClassNameMap(), other.getClassNameMap()) &&
+          JodaBeanUtils.equal(getJsonBuilderMap(), other.getJsonBuilderMap()) &&
           super.equals(obj);
     }
     return false;
@@ -328,12 +400,14 @@ public class WebConventionData extends WebPerRequestData {
     hash = hash * 31 + JodaBeanUtils.hashCode(getConvention());
     hash = hash * 31 + JodaBeanUtils.hashCode(getVersioned());
     hash = hash * 31 + JodaBeanUtils.hashCode(getTypeMap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getClassNameMap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getJsonBuilderMap());
     return hash ^ super.hashCode();
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(256);
+    StringBuilder buf = new StringBuilder(320);
     buf.append("WebConventionData{");
     int len = buf.length();
     toString(buf);
@@ -354,6 +428,8 @@ public class WebConventionData extends WebPerRequestData {
     buf.append("convention").append('=').append(JodaBeanUtils.toString(getConvention())).append(',').append(' ');
     buf.append("versioned").append('=').append(JodaBeanUtils.toString(getVersioned())).append(',').append(' ');
     buf.append("typeMap").append('=').append(JodaBeanUtils.toString(getTypeMap())).append(',').append(' ');
+    buf.append("classNameMap").append('=').append(JodaBeanUtils.toString(getClassNameMap())).append(',').append(' ');
+    buf.append("jsonBuilderMap").append('=').append(JodaBeanUtils.toString(getJsonBuilderMap())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -404,6 +480,18 @@ public class WebConventionData extends WebPerRequestData {
     private final MetaProperty<BiMap<String, Class<? extends ManageableConvention>>> _typeMap = DirectMetaProperty.ofReadWrite(
         this, "typeMap", WebConventionData.class, (Class) BiMap.class);
     /**
+     * The meta-property for the {@code classNameMap} property.
+     */
+    @SuppressWarnings({"unchecked", "rawtypes" })
+    private final MetaProperty<BiMap<String, Class<? extends ManageableConvention>>> _classNameMap = DirectMetaProperty.ofReadWrite(
+        this, "classNameMap", WebConventionData.class, (Class) BiMap.class);
+    /**
+     * The meta-property for the {@code jsonBuilderMap} property.
+     */
+    @SuppressWarnings({"unchecked", "rawtypes" })
+    private final MetaProperty<Map<Class<?>, JSONBuilder<?>>> _jsonBuilderMap = DirectMetaProperty.ofReadWrite(
+        this, "jsonBuilderMap", WebConventionData.class, (Class) Map.class);
+    /**
      * The meta-properties.
      */
     private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
@@ -414,7 +502,9 @@ public class WebConventionData extends WebPerRequestData {
         "uriVersionId",
         "convention",
         "versioned",
-        "typeMap");
+        "typeMap",
+        "classNameMap",
+        "jsonBuilderMap");
 
     /**
      * Restricted constructor.
@@ -439,6 +529,10 @@ public class WebConventionData extends WebPerRequestData {
           return _versioned;
         case -853107774:  // typeMap
           return _typeMap;
+        case 1757575737:  // classNameMap
+          return _classNameMap;
+        case 1444420297:  // jsonBuilderMap
+          return _jsonBuilderMap;
       }
       return super.metaPropertyGet(propertyName);
     }
@@ -515,6 +609,22 @@ public class WebConventionData extends WebPerRequestData {
       return _typeMap;
     }
 
+    /**
+     * The meta-property for the {@code classNameMap} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<BiMap<String, Class<? extends ManageableConvention>>> classNameMap() {
+      return _classNameMap;
+    }
+
+    /**
+     * The meta-property for the {@code jsonBuilderMap} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<Map<Class<?>, JSONBuilder<?>>> jsonBuilderMap() {
+      return _jsonBuilderMap;
+    }
+
     //-----------------------------------------------------------------------
     @Override
     protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
@@ -533,6 +643,10 @@ public class WebConventionData extends WebPerRequestData {
           return ((WebConventionData) bean).getVersioned();
         case -853107774:  // typeMap
           return ((WebConventionData) bean).getTypeMap();
+        case 1757575737:  // classNameMap
+          return ((WebConventionData) bean).getClassNameMap();
+        case 1444420297:  // jsonBuilderMap
+          return ((WebConventionData) bean).getJsonBuilderMap();
       }
       return super.propertyGet(bean, propertyName, quiet);
     }
@@ -562,6 +676,12 @@ public class WebConventionData extends WebPerRequestData {
         case -853107774:  // typeMap
           ((WebConventionData) bean).setTypeMap((BiMap<String, Class<? extends ManageableConvention>>) newValue);
           return;
+        case 1757575737:  // classNameMap
+          ((WebConventionData) bean).setClassNameMap((BiMap<String, Class<? extends ManageableConvention>>) newValue);
+          return;
+        case 1444420297:  // jsonBuilderMap
+          ((WebConventionData) bean).setJsonBuilderMap((Map<Class<?>, JSONBuilder<?>>) newValue);
+          return;
       }
       super.propertySet(bean, propertyName, newValue, quiet);
     }
@@ -569,6 +689,8 @@ public class WebConventionData extends WebPerRequestData {
     @Override
     protected void validate(Bean bean) {
       JodaBeanUtils.notNull(((WebConventionData) bean)._typeMap, "typeMap");
+      JodaBeanUtils.notNull(((WebConventionData) bean)._classNameMap, "classNameMap");
+      JodaBeanUtils.notNull(((WebConventionData) bean)._jsonBuilderMap, "jsonBuilderMap");
       super.validate(bean);
     }
 

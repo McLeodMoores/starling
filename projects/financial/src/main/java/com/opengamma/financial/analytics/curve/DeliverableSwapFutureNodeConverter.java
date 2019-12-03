@@ -10,6 +10,7 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.future.SwapFuturesPriceDeliverableSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.future.SwapFuturesPriceDeliverableTransactionDefinition;
@@ -39,12 +40,10 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Convert a swap futures node into an Instrument definition.
- * The dates of the futures are computed in the following way:
- * - The start date is the valuation date plus the "StartTenor" without convention.
- * - The last trade date is computed from the expiry calculator from the start date, plus the number of futures.
- * - The delivery date is computed from the last trade date adding the "Settlement Days" (i.e. the number of business days) of the swap convention.
- * The futures notional is 1. The futures PVBP is 1. The PBVP is not used in the par spread on which the curve calibration is based.
+ * Convert a swap futures node into an Instrument definition. The dates of the futures are computed in the following way: - The start date is the valuation date
+ * plus the "StartTenor" without convention. - The last trade date is computed from the expiry calculator from the start date, plus the number of futures. - The
+ * delivery date is computed from the last trade date adding the "Settlement Days" (i.e. the number of business days) of the swap convention. The futures
+ * notional is 1. The futures PVBP is 1. The PBVP is not used in the par spread on which the curve calibration is based.
  */
 public class DeliverableSwapFutureNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinition<?>> {
   /** The convention source */
@@ -61,12 +60,18 @@ public class DeliverableSwapFutureNodeConverter extends CurveNodeVisitorAdapter<
   private final ZonedDateTime _valuationTime;
 
   /**
-   * @param conventionSource The convention source, not null
-   * @param holidaySource The holiday source, not null
-   * @param regionSource The region source, not null
-   * @param marketData The market data, not null
-   * @param dataId The id of the market data, not null
-   * @param valuationTime The valuation time, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param holidaySource
+   *          The holiday source, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param marketData
+   *          The market data, not null
+   * @param dataId
+   *          The id of the market data, not null
+   * @param valuationTime
+   *          The valuation time, not null
    */
   public DeliverableSwapFutureNodeConverter(final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
@@ -86,26 +91,27 @@ public class DeliverableSwapFutureNodeConverter extends CurveNodeVisitorAdapter<
 
   @Override
   public InstrumentDefinition<?> visitDeliverableSwapFutureNode(final DeliverableSwapFutureNode swapFuture) {
-    Double price = _marketData.getDataPoint(_dataId);
+    final Double price = _marketData.getDataPoint(_dataId);
     if (price == null) {
-      price = 0.99;
-//      throw new OpenGammaRuntimeException("Could not get market data for " + _dataId);
+      throw new OpenGammaRuntimeException("Could not get market data for " + _dataId);
     }
-    final DeliverablePriceQuotedSwapFutureConvention futureConvention =
-        _conventionSource.getSingle(swapFuture.getFutureConvention(), DeliverablePriceQuotedSwapFutureConvention.class);
+    final DeliverablePriceQuotedSwapFutureConvention futureConvention = _conventionSource.getSingle(swapFuture.getFutureConvention(),
+        DeliverablePriceQuotedSwapFutureConvention.class);
     final SwapConvention underlyingSwapConvention = _conventionSource.getSingle(swapFuture.getSwapConvention(), SwapConvention.class);
     final Tenor maturityTenor = swapFuture.getUnderlyingTenor();
     final SwapFixedLegConvention fixedLegConvention = _conventionSource.getSingle(underlyingSwapConvention.getPayLegConvention(), SwapFixedLegConvention.class);
-    final VanillaIborLegConvention iborLegConvention = _conventionSource.getSingle(underlyingSwapConvention.getReceiveLegConvention(), VanillaIborLegConvention.class);
+    final VanillaIborLegConvention iborLegConvention = _conventionSource.getSingle(underlyingSwapConvention.getReceiveLegConvention(),
+        VanillaIborLegConvention.class);
     final String expiryCalculatorName = futureConvention.getExpiryConvention().getValue();
     final ZonedDateTime startDate = _valuationTime.plus(swapFuture.getStartTenor().getPeriod());
     final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, futureConvention.getExchangeCalendar());
-    final ExchangeTradedInstrumentExpiryCalculator expiryCalculator = ExchangeTradedInstrumentExpiryCalculatorFactory.getCalculator(expiryCalculatorName);
+    final ExchangeTradedInstrumentExpiryCalculator expiryCalculator = ExchangeTradedInstrumentExpiryCalculatorFactory.of(expiryCalculatorName);
     final LocalTime time = startDate.toLocalTime();
     final ZoneId timeZone = startDate.getZone();
     final double notional = 1.0;
     final int spotLagSwap = fixedLegConvention.getSettlementDays();
-    final ZonedDateTime lastTradeDate = ZonedDateTime.of(expiryCalculator.getExpiryDate(swapFuture.getFutureNumber(), startDate.toLocalDate(), calendar), time, timeZone);
+    final ZonedDateTime lastTradeDate = ZonedDateTime.of(expiryCalculator.getExpiryDate(swapFuture.getFutureNumber(), startDate.toLocalDate(), calendar), time,
+        timeZone);
     final ZonedDateTime deliveryDate = ScheduleCalculator.getAdjustedDate(lastTradeDate, spotLagSwap, calendar);
     final IborIndexConvention indexConvention = _conventionSource.getSingle(iborLegConvention.getIborIndexConvention(), IborIndexConvention.class);
     final Currency currency = indexConvention.getCurrency();
@@ -115,9 +121,12 @@ public class DeliverableSwapFutureNodeConverter extends CurveNodeVisitorAdapter<
     final Period indexTenor = iborLegConvention.getResetTenor().getPeriod();
     final int spotLagIndex = indexConvention.getSettlementDays();
     final IborIndex iborIndex = new IborIndex(currency, indexTenor, spotLagIndex, dayCount, businessDayConvention, eom, indexConvention.getName());
-    final GeneratorSwapFixedIbor generator = new GeneratorSwapFixedIbor("", fixedLegConvention.getPaymentTenor().getPeriod(), fixedLegConvention.getDayCount(), iborIndex, calendar);
-    final SwapFixedIborDefinition underlying = SwapFixedIborDefinition.from(deliveryDate, maturityTenor.getPeriod(), generator, notional, 0.0, false); //FIXME: rate of underlying?
-    final SwapFuturesPriceDeliverableSecurityDefinition securityDefinition = new SwapFuturesPriceDeliverableSecurityDefinition(lastTradeDate, underlying, notional);
+    final GeneratorSwapFixedIbor generator = new GeneratorSwapFixedIbor("", fixedLegConvention.getPaymentTenor().getPeriod(), fixedLegConvention.getDayCount(),
+        iborIndex, calendar);
+    // FIXME rate of underlyimg?
+    final SwapFixedIborDefinition underlying = SwapFixedIborDefinition.from(deliveryDate, maturityTenor.getPeriod(), generator, notional, 0.0, false);
+    final SwapFuturesPriceDeliverableSecurityDefinition securityDefinition = new SwapFuturesPriceDeliverableSecurityDefinition(lastTradeDate, underlying,
+        notional);
     return new SwapFuturesPriceDeliverableTransactionDefinition(securityDefinition, 1, _valuationTime, price);
   }
 

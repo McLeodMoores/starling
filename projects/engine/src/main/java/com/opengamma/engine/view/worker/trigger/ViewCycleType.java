@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.worker.trigger;
@@ -14,14 +14,14 @@ public enum ViewCycleType {
    * Indicates a preference to perform a delta cycle where unchanged calculations in the dependency graph are reused.
    */
   DELTA,
-  
+
   /**
    * Indicates a preference to perform a full cycle.
    */
   FULL;
-  
+
   //-------------------------------------------------------------------------
-  public static ViewCycleType merge(ViewCycleType a, ViewCycleType b) {
+  public static ViewCycleType merge(final ViewCycleType a, final ViewCycleType b) {
     if (a == null) {
       return b;
     }
@@ -31,5 +31,5 @@ public enum ViewCycleType {
     // Declared in increasing order of importance
     return values()[Math.max(a.ordinal(), b.ordinal())];
   }
-  
+
 }

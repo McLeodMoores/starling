@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.loader;
@@ -49,12 +49,12 @@ public abstract class AbstractSecurityLoaderComponentFactory extends AbstractCom
   /**
    * Initializes the security loader, setting up component information and REST.
    * Override using {@link #createSecurityLoader(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     final SecurityLoader loader = createSecurityLoader(repo);
     final ComponentInfo info = new ComponentInfo(SecurityLoader.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
@@ -69,7 +69,7 @@ public abstract class AbstractSecurityLoaderComponentFactory extends AbstractCom
 
   /**
    * Creates the loader, without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the loader, not null
    */

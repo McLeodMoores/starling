@@ -13,17 +13,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.commons.io.IOUtils;
+
+import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.util.ArgumentChecker;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.ConfigurationFactory;
-
-import org.apache.commons.io.IOUtils;
-
-import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.util.ArgumentChecker;
 
 /**
  * Utilities for working with EHCache.
@@ -54,7 +54,7 @@ public final class EHCacheUtils {
    * @param uniqueName  the unique name, typically a test case class
    * @return the unique cache manager, not null
    */
-  public static CacheManager createTestCacheManager(Class<?> uniqueName) {
+  public static CacheManager createTestCacheManager(final Class<?> uniqueName) {
     ArgumentChecker.notNull(uniqueName, "uniqueName");
     return createTestCacheManager(uniqueName.getName());
   }
@@ -65,18 +65,18 @@ public final class EHCacheUtils {
    * @param uniqueName  the unique name, typically a test case class name
    * @return the unique cache manager, not null
    */
-  public static CacheManager createTestCacheManager(String uniqueName) {
+  public static CacheManager createTestCacheManager(final String uniqueName) {
     ArgumentChecker.notNull(uniqueName, "uniqueName");
     if (UNIQUE_TEST_NAMES.putIfAbsent(uniqueName, uniqueName) != null) {
       throw new OpenGammaRuntimeException("CacheManager has already been created with unique name: " + uniqueName);
     }
     try {
-      InputStream configStream = getTestEhCacheConfig();
-      Configuration config = ConfigurationFactory.parseConfiguration(configStream);
+      final InputStream configStream = getTestEhCacheConfig();
+      final Configuration config = ConfigurationFactory.parseConfiguration(configStream);
       config.setName(uniqueName);
       config.setUpdateCheck(false);
       return CacheManager.newInstance(config);
-    } catch (CacheException ex) {
+    } catch (final CacheException ex) {
       throw new OpenGammaRuntimeException("Unable to create CacheManager", ex);
     }
   }
@@ -85,17 +85,17 @@ public final class EHCacheUtils {
     byte[] bytes = CONFIG_TEST_FILE_BYTES.get();
     if (bytes == null) {
       String ehcacheConfigFile = DEFAULT_TEST_EHCACHE_CONFIG_FILE;
-      String overrideEhcacheConfigFile = System.getProperty("ehcache.config"); // passed in by Ant
+      final String overrideEhcacheConfigFile = System.getProperty("ehcache.config"); // passed in by Ant
       if (overrideEhcacheConfigFile != null) {
         ehcacheConfigFile = overrideEhcacheConfigFile;
         System.err.println("Using ehcache.config from system property: " + ehcacheConfigFile);
       } else {
         System.err.println("Using default test ehcache.config file name: " + ehcacheConfigFile);
       }
-      InputStream in = EHCacheUtils.class.getResourceAsStream(ehcacheConfigFile);
+      final InputStream in = EHCacheUtils.class.getResourceAsStream(ehcacheConfigFile);
       try {
         bytes = IOUtils.toByteArray(in);
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         throw new OpenGammaRuntimeException("Unable to read cache configuration", ex);
       }
       CONFIG_TEST_FILE_BYTES.compareAndSet(null, bytes);
@@ -130,14 +130,14 @@ public final class EHCacheUtils {
   public static CacheManager createCacheManager() {
     try {
       return CacheManager.newInstance(getEhCacheConfig());
-    } catch (CacheException ex) {
+    } catch (final CacheException ex) {
       throw new OpenGammaRuntimeException("Unable to create CacheManager", ex);
     }
   }
 
   private static synchronized Configuration getEhCacheConfig() {
     String ehcacheConfigFile = DEFAULT_EHCACHE_CONFIG_FILE;
-    String overrideEhcacheConfigFile = System.getProperty("ehcache.config"); // passed in by Ant
+    final String overrideEhcacheConfigFile = System.getProperty("ehcache.config"); // passed in by Ant
     if (overrideEhcacheConfigFile != null) {
       ehcacheConfigFile = overrideEhcacheConfigFile;
       System.err.println("Using ehcache.config from system property: " + ehcacheConfigFile);
@@ -145,10 +145,10 @@ public final class EHCacheUtils {
       System.err.println("Using default ehcache.config file name: " + ehcacheConfigFile);
     }
     try (InputStream resource = EHCacheUtils.class.getResourceAsStream(ehcacheConfigFile)) {
-      Configuration config = ConfigurationFactory.parseConfiguration(resource);
+      final Configuration config = ConfigurationFactory.parseConfiguration(resource);
       config.setUpdateCheck(false);
       return config;
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Unable to read ehcache file", ex);
     }
   }
@@ -159,7 +159,7 @@ public final class EHCacheUtils {
    *
    * @param cacheManager  the cache manager, not null
    */
-  public static void clear(CacheManager cacheManager) {
+  public static void clear(final CacheManager cacheManager) {
     ArgumentChecker.notNull(cacheManager, "cacheManager");
     cacheManager.clearAll();
   }
@@ -170,10 +170,10 @@ public final class EHCacheUtils {
    * @param cacheManager  the cache manager, not null
    * @param cacheName  the cache name, not null
    */
-  public static void clear(CacheManager cacheManager, String cacheName) {
+  public static void clear(final CacheManager cacheManager, final String cacheName) {
     ArgumentChecker.notNull(cacheManager, "cacheManager");
     ArgumentChecker.notNull(cacheName, "cacheName");
-    Cache cache = cacheManager.getCache(cacheName);
+    final Cache cache = cacheManager.getCache(cacheName);
     if (cache != null) {
       cache.removeAll();
     }
@@ -187,13 +187,13 @@ public final class EHCacheUtils {
    * @param manager  the cache manager, not null
    * @param cache  the cache, not null
    */
-  public static void addCache(CacheManager manager, Cache cache) {
+  public static void addCache(final CacheManager manager, final Cache cache) {
     ArgumentChecker.notNull(manager, "manager");
     ArgumentChecker.notNull(cache, "cache");
     if (!manager.cacheExists(cache.getName())) {
       try {
         manager.addCache(cache);
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         throw new OpenGammaRuntimeException("Unable to add cache " + cache.getName(), ex);
       }
     }
@@ -211,7 +211,7 @@ public final class EHCacheUtils {
     if (!manager.cacheExists(name)) {
       try {
         manager.addCache(name);
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         throw new OpenGammaRuntimeException("Unable to create cache " + name, ex);
       }
     }
@@ -223,10 +223,10 @@ public final class EHCacheUtils {
    * @param name  the cache name, not null
    * @return the cache, not null
    */
-  public static Cache getCacheFromManager(CacheManager manager, String name) {
+  public static Cache getCacheFromManager(final CacheManager manager, final String name) {
     try {
       return manager.getCache(name);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new OpenGammaRuntimeException(
           "Unable to retrieve from CacheManager, cache: " + name, ex);
     }
@@ -282,11 +282,11 @@ public final class EHCacheUtils {
    * @param cacheManager  the cache manager, null ignored
    * @return null
    */
-  public static CacheManager shutdownQuiet(CacheManager cacheManager) {
+  public static CacheManager shutdownQuiet(final CacheManager cacheManager) {
     if (cacheManager != null) {
       try {
         cacheManager.shutdown();
-      } catch (RuntimeException ex) {
+      } catch (final RuntimeException ex) {
         // ignore
       }
     }

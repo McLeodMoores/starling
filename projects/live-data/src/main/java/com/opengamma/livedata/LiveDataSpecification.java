@@ -41,50 +41,50 @@ public class LiveDataSpecification implements Serializable {
 
   /**
    * Creates an instance by copying another instance.
-   * 
+   *
    * @param specificationToCopy  the original to copy, not null
    */
-  public LiveDataSpecification(LiveDataSpecification specificationToCopy) {
+  public LiveDataSpecification(final LiveDataSpecification specificationToCopy) {
     this(specificationToCopy.getNormalizationRuleSetId(), specificationToCopy.getIdentifiers());
   }
 
   /**
    * Creates an instance from a set of external identifiers.
-   * 
+   *
    * @param normalizationRuleSetId  the rule defining the data format to return, not null
    * @param externalIds  the external identifiers defining the data to fetch, not null
    */
-  public LiveDataSpecification(String normalizationRuleSetId, ExternalId... externalIds) {
+  public LiveDataSpecification(final String normalizationRuleSetId, final ExternalId... externalIds) {
     this(normalizationRuleSetId, ExternalIdBundle.of(externalIds));
   }
 
   /**
    * Creates an instance from a set of external identifiers.
-   * 
+   *
    * @param normalizationRuleSetId  the rule defining the data format to return, not null
    * @param externalIds  the external identifiers defining the data to fetch, not null
    */
-  public LiveDataSpecification(String normalizationRuleSetId, Collection<ExternalId> externalIds) {
+  public LiveDataSpecification(final String normalizationRuleSetId, final Collection<ExternalId> externalIds) {
     this(normalizationRuleSetId, ExternalIdBundle.of(externalIds));
   }
 
   /**
    * Creates an instance from a single external identifier.
-   * 
+   *
    * @param normalizationRuleSetId  the rule defining the data format to return, not null
    * @param externalId  the external identifiers defining the data to fetch, not null
    */
-  public LiveDataSpecification(String normalizationRuleSetId, ExternalId externalId) {
+  public LiveDataSpecification(final String normalizationRuleSetId, final ExternalId externalId) {
     this(normalizationRuleSetId, ExternalIdBundle.of(externalId));
   }
 
   /**
    * Creates an instance from an external identifier bundle.
-   * 
+   *
    * @param normalizationRuleSetId  the rule defining the data format to return, not null
    * @param bundle  the external identifier bundle defining the data to fetch, not null
    */
-  public LiveDataSpecification(String normalizationRuleSetId, ExternalIdBundle bundle) {
+  public LiveDataSpecification(final String normalizationRuleSetId, final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(normalizationRuleSetId, "normalizationRuleSetId");
     ArgumentChecker.notNull(bundle, "bundle");
     _externalIdBundle = bundle;
@@ -94,7 +94,7 @@ public class LiveDataSpecification implements Serializable {
   //-------------------------------------------------------------------------
   /**
    * Gets the format that the data should be sent to the client.
-   * 
+   *
    * @return the data format, not null
    */
   public String getNormalizationRuleSetId() {
@@ -103,7 +103,7 @@ public class LiveDataSpecification implements Serializable {
 
   /**
    * Gets the external identifier bundle specifying the data to obtain.
-   * 
+   *
    * @return the bundle, not null
    */
   public ExternalIdBundle getIdentifiers() {
@@ -112,22 +112,22 @@ public class LiveDataSpecification implements Serializable {
 
   /**
    * Gets the value of an identifier by scheme.
-   * 
+   *
    * @param scheme  the scheme to query, null returns null
    * @return the value for the scheme, null if not found
    */
-  public String getIdentifier(ExternalScheme scheme) {
+  public String getIdentifier(final ExternalScheme scheme) {
     return _externalIdBundle.getValue(scheme);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof LiveDataSpecification) {
-      LiveDataSpecification other = (LiveDataSpecification) obj;
+      final LiveDataSpecification other = (LiveDataSpecification) obj;
       return _externalIdBundle.equals(other._externalIdBundle) && _normalizationRuleSetId.equals(other._normalizationRuleSetId);
     }
     return false;
@@ -140,7 +140,7 @@ public class LiveDataSpecification implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder();
+    final StringBuilder buf = new StringBuilder();
     buf.append("LiveDataSpecification[");
     buf.append(_externalIdBundle.toString());
     buf.append(":").append(_normalizationRuleSetId);

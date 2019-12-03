@@ -49,7 +49,7 @@ public abstract class SkewKurtosisDataOptionModelFunction extends StandardOption
     if (canApplyTo(context, target)) {
       final UniqueId uid = target.getSecurity().getUniqueId();
       final Set<ValueRequirement> standardRequirements = super.getRequirements(context, target, desiredValue);
-      final Set<ValueRequirement> result = new HashSet<ValueRequirement>();
+      final Set<ValueRequirement> result = new HashSet<>();
       result.addAll(standardRequirements);
       result.add(new ValueRequirement(ValueRequirementNames.SKEW, ComputationTargetType.SECURITY, uid));
       result.add(new ValueRequirement(ValueRequirementNames.PEARSON_KURTOSIS, ComputationTargetType.SECURITY, uid));

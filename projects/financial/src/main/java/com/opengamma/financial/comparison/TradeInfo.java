@@ -20,9 +20,9 @@ import com.opengamma.util.money.Currency;
 
   private final Map<String, String> _attributes;
 
-  public TradeInfo(final ComparisonContext context, final Trade trade) {
+  TradeInfo(final ComparisonContext context, final Trade trade) {
     super(context, trade);
-    _attributes = context.isIgnoreTradeAttributes() ? Collections.<String, String>emptyMap() : trade.getAttributes();
+    _attributes = context.isIgnoreTradeAttributes() ? Collections.<String, String> emptyMap() : trade.getAttributes();
   }
 
   public Counterparty getCounterparty() {
@@ -56,12 +56,13 @@ import com.opengamma.util.money.Currency;
   public Map<String, String> getAttributes() {
     return _attributes;
   }
-  
+
   @Override
   public String toString() {
-    return "TradeInfo[quantity=" + getQuantity() + ", security=" + getSecurity() + ", counterparty=" +
-        getCounterparty() + ", tradeDate=" + getTradeDate() + ", tradeTime=" + getTradeTime() + ", premium=" + getPremium() +
-        ", premiumCurrency=" + getPremiumCurrency() + ", premiumDate=" + getPremiumDate() + ", premiumTime=" + getPremiumTime() + ", attributes=" + getAttributes() + "]";
+    return "TradeInfo[quantity=" + getQuantity() + ", security=" + getSecurity() + ", counterparty="
+        + getCounterparty() + ", tradeDate=" + getTradeDate() + ", tradeTime=" + getTradeTime() + ", premium=" + getPremium()
+        + ", premiumCurrency=" + getPremiumCurrency() + ", premiumDate=" + getPremiumDate() + ", premiumTime=" + getPremiumTime() + ", attributes="
+        + getAttributes() + "]";
   }
 
   @Override

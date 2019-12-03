@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -26,9 +26,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class FunctionBlacklistRuleListenerTest {
 
-  private final FunctionBlacklistRule RULE_1 = new FunctionBlacklistRule();
-  private final FunctionBlacklistRule RULE_2 = new FunctionBlacklistRule(ComputationTargetSpecification.of(UniqueId.of("test", "foo")));
-  private final FunctionBlacklistRule RULE_3 = new FunctionBlacklistRule(ComputationTargetSpecification.of(UniqueId.of("test", "bar")));
+  private static final FunctionBlacklistRule RULE_1 = new FunctionBlacklistRule();
+  private static final FunctionBlacklistRule RULE_2 = new FunctionBlacklistRule(ComputationTargetSpecification.of(UniqueId.of("test", "foo")));
+  private static final FunctionBlacklistRule RULE_3 = new FunctionBlacklistRule(ComputationTargetSpecification.of(UniqueId.of("test", "bar")));
 
   private class MockBlacklist extends HashSet<FunctionBlacklistRule> implements FunctionBlacklist {
 

@@ -51,7 +51,7 @@ public abstract class AbstractCdsAggregationFunction_BAK<T> implements Aggregati
    * @param securitySource the security source used for resolution of the CDS security, not null
    * @param redCodeHandler the extractor which will process the red code and return the required type, not null
    */
-  public AbstractCdsAggregationFunction_BAK(String name, SecuritySource securitySource, RedCodeHandler<T> redCodeHandler) {
+  public AbstractCdsAggregationFunction_BAK(final String name, final SecuritySource securitySource, final RedCodeHandler<T> redCodeHandler) {
 
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(securitySource, "securitySource");
@@ -67,13 +67,13 @@ public abstract class AbstractCdsAggregationFunction_BAK<T> implements Aggregati
   }
 
   @Override
-  public String classifyPosition(Position position) {
+  public String classifyPosition(final Position position) {
 
-    Security security = resolveSecurity(position);
+    final Security security = resolveSecurity(position);
 
     if (security instanceof CreditDefaultSwapSecurity) {
-      CreditDefaultSwapSecurity cds = (CreditDefaultSwapSecurity) security;
-      T extracted = _redCodeExtractor.extract(cds);
+      final CreditDefaultSwapSecurity cds = (CreditDefaultSwapSecurity) security;
+      final T extracted = _redCodeExtractor.extract(cds);
       if (extracted != null) {
 
         return handleExtractedData(extracted);
@@ -91,9 +91,9 @@ public abstract class AbstractCdsAggregationFunction_BAK<T> implements Aggregati
    */
   protected abstract String handleExtractedData(T extracted);
 
-  private Security resolveSecurity(Position position) {
+  private Security resolveSecurity(final Position position) {
 
-    Security security = position.getSecurityLink().getTarget();
+    final Security security = position.getSecurityLink().getTarget();
     return security != null ? security : position.getSecurityLink().resolveQuiet(_securitySource);
   }
 
@@ -108,7 +108,7 @@ public abstract class AbstractCdsAggregationFunction_BAK<T> implements Aggregati
   }
 
   @Override
-  public int compare(String sector1, String sector2) {
+  public int compare(final String sector1, final String sector2) {
     return sector1.compareTo(sector2);
   }
 }

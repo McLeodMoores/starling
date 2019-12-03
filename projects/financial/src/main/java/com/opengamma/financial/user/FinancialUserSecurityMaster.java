@@ -42,74 +42,74 @@ public class FinancialUserSecurityMaster extends AbstractFinancialUserMaster<Sec
    * @param client  the client, not null
    * @param underlying  the underlying master, not null
    */
-  public FinancialUserSecurityMaster(FinancialClient client, SecurityMaster underlying) {
+  public FinancialUserSecurityMaster(final FinancialClient client, final SecurityMaster underlying) {
     super(client, FinancialUserDataType.SECURITY);
     _underlying = underlying;
     _changeProvidingMaster = ChangeProvidingDecorator.wrap(underlying);
   }
 
   @Override
-  public SecurityDocument add(SecurityDocument document) {
+  public SecurityDocument add(final SecurityDocument document) {
     return _changeProvidingMaster.add(document);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, SecurityDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final SecurityDocument documentToAdd) {
     return _changeProvidingMaster.addVersion(objectId, documentToAdd);
   }
 
   @Override
-  public SecurityDocument correct(SecurityDocument document) {
+  public SecurityDocument correct(final SecurityDocument document) {
     return _changeProvidingMaster.correct(document);
   }
 
   @Override
-  public SecurityDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public SecurityDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     return _changeProvidingMaster.get(objectId, versionCorrection);
   }
 
   @Override
-  public SecurityDocument get(UniqueId uniqueId) {
+  public SecurityDocument get(final UniqueId uniqueId) {
     return _changeProvidingMaster.get(uniqueId);
   }
 
   @Override
-  public Map<UniqueId, SecurityDocument> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, SecurityDocument> get(final Collection<UniqueId> uniqueIds) {
     return _changeProvidingMaster.get(uniqueIds);
   }
 
   @Override
-  public void remove(ObjectIdentifiable oid) {
+  public void remove(final ObjectIdentifiable oid) {
     _changeProvidingMaster.remove(oid);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     _changeProvidingMaster.removeVersion(uniqueId);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<SecurityDocument> replacementDocuments) {
     return _changeProvidingMaster.replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(SecurityDocument replacementDocument) {
+  public UniqueId replaceVersion(final SecurityDocument replacementDocument) {
     return _changeProvidingMaster.replaceVersion(replacementDocument);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<SecurityDocument> replacementDocuments) {
     return _changeProvidingMaster.replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<SecurityDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<SecurityDocument> replacementDocuments) {
     return _changeProvidingMaster.replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public SecurityDocument update(SecurityDocument document) {
+  public SecurityDocument update(final SecurityDocument document) {
     return _changeProvidingMaster.update(document);
   }
 
@@ -119,17 +119,17 @@ public class FinancialUserSecurityMaster extends AbstractFinancialUserMaster<Sec
   }
 
   @Override
-  public SecurityHistoryResult history(SecurityHistoryRequest request) {
+  public SecurityHistoryResult history(final SecurityHistoryRequest request) {
     return _underlying.history(request);
   }
 
   @Override
-  public SecurityMetaDataResult metaData(SecurityMetaDataRequest request) {
+  public SecurityMetaDataResult metaData(final SecurityMetaDataRequest request) {
     return _underlying.metaData(request);
   }
 
   @Override
-  public SecuritySearchResult search(SecuritySearchRequest request) {
+  public SecuritySearchResult search(final SecuritySearchRequest request) {
     return _underlying.search(request);
   }
 }

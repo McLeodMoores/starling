@@ -26,10 +26,10 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve.
- * The computation is done by shifting each node point in each curve; the curves must be interpolated yield curves for discount curve and DoublesCurve for forward curves.
- * The return format is ParameterSensitivity object.
- * This is a very inefficient way to compute the sensitivities. It should be used only for tests purposes or when speed is irrelevant.
+ * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve. The computation is done
+ * by shifting each node point in each curve; the curves must be interpolated yield curves for discount curve and DoublesCurve for forward curves. The return
+ * format is ParameterSensitivity object. This is a very inefficient way to compute the sensitivities. It should be used only for tests purposes or when speed
+ * is irrelevant.
  */
 public class ParameterSensitivityMulticurveForwardInterpolatedFDCalculator {
 
@@ -43,21 +43,28 @@ public class ParameterSensitivityMulticurveForwardInterpolatedFDCalculator {
   private final double _shift;
 
   /**
-   * Constructor
-   * @param valueCalculator The value calculator.
-   * @param shift The shift used for finite difference.
+   * Constructor.
+   *
+   * @param valueCalculator
+   *          The value calculator.
+   * @param shift
+   *          The shift used for finite difference.
    */
-  public ParameterSensitivityMulticurveForwardInterpolatedFDCalculator(final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyAmount> valueCalculator, final double shift) {
+  public ParameterSensitivityMulticurveForwardInterpolatedFDCalculator(
+      final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyAmount> valueCalculator, final double shift) {
     ArgumentChecker.notNull(valueCalculator, "Calculator");
     _valueCalculator = valueCalculator;
     _shift = shift;
   }
 
   /**
-   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves.
-   * Only the discounting and forward curves sensitivity is computed.
-   * @param instrument The instrument.
-   * @param market The market (all discounting and forward curves should be of the type YieldCurve with InterpolatedDoublesCurve.
+   * Compute the sensitivity by finite difference on all points. The curves must be interpolated yield curves. Only the discounting and forward curves
+   * sensitivity is computed.
+   *
+   * @param instrument
+   *          The instrument.
+   * @param market
+   *          The market (all discounting and forward curves should be of the type YieldCurve with InterpolatedDoublesCurve.
    * @return The parameter sensitivity.
    */
   public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final MulticurveProviderForward market) {
@@ -82,7 +89,8 @@ public class ParameterSensitivityMulticurveForwardInterpolatedFDCalculator {
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumped = curveInt.getYDataAsPrimitive().clone();
         yieldBumped[loopnode] += _shift;
-        final YieldAndDiscountCurve dscBumped = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
+        final YieldAndDiscountCurve dscBumped = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
         final MulticurveProviderForward marketDscBumped = market.withDiscountFactor(ccy, dscBumped);
         final MultipleCurrencyAmount pvBumped = instrument.accept(_valueCalculator, marketDscBumped);
         final MultipleCurrencyAmount pvDiff = pvBumped.plus(pvInitMinus);
@@ -108,7 +116,8 @@ public class ParameterSensitivityMulticurveForwardInterpolatedFDCalculator {
       for (int loopnode = 0; loopnode < nbNodePoint; loopnode++) {
         final double[] yieldBumped = curveInt.getYDataAsPrimitive().clone();
         yieldBumped[loopnode] += _shift;
-        final YieldAndDiscountCurve fwdBumped = new YieldCurve(curveInt.getName(), new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
+        final YieldAndDiscountCurve fwdBumped = new YieldCurve(curveInt.getName(),
+            new InterpolatedDoublesCurve(curveInt.getXDataAsPrimitive(), yieldBumped, curveInt.getInterpolator(), true));
         final MulticurveProviderForward marketFwdBumped = market.withForward(index, fwdBumped);
         final MultipleCurrencyAmount pvBumped = instrument.accept(_valueCalculator, marketFwdBumped);
         final MultipleCurrencyAmount pvDiff = pvBumped.plus(pvInitMinus);

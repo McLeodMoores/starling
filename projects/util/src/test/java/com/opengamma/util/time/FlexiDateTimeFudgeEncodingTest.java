@@ -5,6 +5,9 @@
  */
 package com.opengamma.util.time;
 
+import static org.testng.Assert.assertEquals;
+
+import org.fudgemsg.MutableFudgeMsg;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
@@ -20,29 +23,82 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class FlexiDateTimeFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  public void test_LD() {
-    FlexiDateTime ld = FlexiDateTime.of(LocalDate.of(2010, 7, 1));
+  /**
+   * Tests a cycle.
+   */
+  @Test
+  public void testLd() {
+    final FlexiDateTime ld = FlexiDateTime.of(LocalDate.of(2010, 7, 1));
     assertEncodeDecodeCycle(FlexiDateTime.class, ld);
   }
 
-  public void test_LDT() {
-    FlexiDateTime ldt = FlexiDateTime.of(LocalDateTime.of(2010, 7, 1, 13, 0, 0));
+  /**
+   * Tests a cycle.
+   */
+  @Test
+  public void testLdt() {
+    final FlexiDateTime ldt = FlexiDateTime.of(LocalDateTime.of(2010, 7, 1, 13, 0, 0));
     assertEncodeDecodeCycle(FlexiDateTime.class, ldt);
   }
 
-  public void test_ODT() {
-    FlexiDateTime odt = FlexiDateTime.of(LocalDateTime.of(2010, 7, 1, 13, 0, 0).atOffset(ZoneOffset.ofHours(3)));
+  /**
+   * Tests a cycle.
+   */
+  @Test
+  public void testOdt() {
+    final FlexiDateTime odt = FlexiDateTime.of(LocalDateTime.of(2010, 7, 1, 13, 0, 0).atOffset(ZoneOffset.ofHours(3)));
     assertEncodeDecodeCycle(FlexiDateTime.class, odt);
   }
 
-  public void test_ZDT_UTC() {
-    FlexiDateTime zdtUTC = FlexiDateTime.of(LocalDateTime.of(2010, 7, 1, 13, 0, 0, 0).atZone(ZoneOffset.UTC));
+  /**
+   * Tests a cycle.
+   */
+  @Test
+  public void testZdtUtc() {
+    final FlexiDateTime zdtUTC = FlexiDateTime.of(LocalDateTime.of(2010, 7, 1, 13, 0, 0, 0).atZone(ZoneOffset.UTC));
     assertEncodeDecodeCycle(FlexiDateTime.class, zdtUTC);
   }
 
-  public void test_ZDT_newYork() {
-    FlexiDateTime zdtPST = FlexiDateTime.of(LocalDateTime.of(2010, 7, 1, 13, 0, 0, 0).atZone(ZoneId.of("America/New_York")));
+  /**
+   * Tests a cycle.
+   */
+  @Test
+  public void testZdtNewYork() {
+    final FlexiDateTime zdtPST = FlexiDateTime.of(LocalDateTime.of(2010, 7, 1, 13, 0, 0, 0).atZone(ZoneId.of("America/New_York")));
     assertEncodeDecodeCycle(FlexiDateTime.class, zdtPST);
   }
 
+  /**
+   * Tests the behaviour when there is no date in the message.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testNoDateInMessage() {
+    FlexiDateTimeFudgeBuilder.fromFudgeMsg(getFudgeDeserializer(), getFudgeContext().newMessage());
+  }
+
+  /**
+   * Tests the behaviour when the message is null.
+   */
+  @Test
+  public void testNullMessage() {
+    FlexiDateTimeFudgeBuilder.fromFudgeMsg(getFudgeDeserializer(), null);
+  }
+
+  /**
+   * Tests a cycle.
+   */
+  @Test
+  public void testCycle() {
+    final FlexiDateTime date = FlexiDateTime.of(LocalDate.now());
+    final MutableFudgeMsg msg = FlexiDateTimeFudgeBuilder.toFudgeMsg(getFudgeSerializer(), date);
+    assertEquals(FlexiDateTimeFudgeBuilder.fromFudgeMsg(getFudgeDeserializer(), msg), date);
+  }
+
+  /**
+   * Tests the behaviour when the date is null.
+   */
+  @Test
+  public void testNullDate() {
+    FlexiDateTimeFudgeBuilder.toFudgeMsg(getFudgeSerializer(), null);
+  }
 }

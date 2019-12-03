@@ -18,7 +18,7 @@ import com.opengamma.engine.view.impl.ExecutionLogModeSource;
  */
 public interface GraphExecutionPlanner {
 
-  GraphExecutionPlan createPlan(DependencyGraph graph, ExecutionLogModeSource logModeSource, long functionInitialisationId, Set<ValueSpecification> sharedValues,
-      Map<ValueSpecification, FunctionParameters> parameters);
+  GraphExecutionPlan createPlan(DependencyGraph graph, ExecutionLogModeSource logModeSource, long functionInitialisationId,
+      Set<ValueSpecification> sharedValues, Map<ValueSpecification, FunctionParameters> parameters);
 
 }

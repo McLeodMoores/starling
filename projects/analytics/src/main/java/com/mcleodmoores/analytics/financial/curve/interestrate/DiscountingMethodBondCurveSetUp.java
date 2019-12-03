@@ -55,7 +55,7 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
     _curveNames = setup._curveNames;
     _curveTypes = setup._curveTypes;
     _preConstructedCurves = setup._preConstructedCurves;
-    //TODO currently have to add things in the right order for each curve - need to have comparator for attribute generator tenors
+    // TODO currently have to add things in the right order for each curve - need to have comparator for attribute generator tenors
     _nodes = setup._nodes;
     _fxMatrix = setup._fxMatrix;
     _knownBundle = setup._knownBundle;
@@ -78,7 +78,7 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
     _curveTypes = new HashMap<>(curveTypes);
     _preConstructedCurves = new HashMap<>(preConstructedCurves);
     _fxMatrix = fxMatrix;
-    _knownBundle = knownBundle == null ? null : knownBundle; //TODO no copy
+    _knownBundle = knownBundle == null ? null : knownBundle; // TODO no copy
     _absoluteTolerance = absoluteTolerance;
     _relativeTolerance = relativeTolerance;
     _maxSteps = maxSteps;
@@ -115,7 +115,8 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
     final Map<IborIndex, YieldAndDiscountCurve> knownIborCurves = new HashMap<>();
     final Map<IndexON, YieldAndDiscountCurve> knownOvernightCurves = new HashMap<>();
     final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> knownIssuerCurves = new HashMap<>();
-    for (final Map.Entry<DiscountingMethodPreConstructedBondCurveTypeSetUp, YieldAndDiscountCurve> entry : _preConstructedCurves.entrySet()) {
+    for (final Map.Entry<DiscountingMethodPreConstructedBondCurveTypeSetUp, YieldAndDiscountCurve> entry : _preConstructedCurves
+        .entrySet()) {
       final DiscountingMethodPreConstructedBondCurveTypeSetUp setUp = entry.getKey();
       final YieldAndDiscountCurve curve = entry.getValue();
       final UniqueIdentifiable discountingCurveId = setUp.getDiscountingCurveId();
@@ -141,7 +142,8 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
         }
       }
     }
-    return new DiscountingMethodBondCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, issuerCurves, _nodes, _curveTypes,
+    return new DiscountingMethodBondCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, issuerCurves, _nodes,
+        _curveTypes,
         _fxMatrix, _preConstructedCurves, _knownBundle, _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
@@ -196,7 +198,7 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
       _nodes.put(curveName, nodesForCurve);
     }
     nodesForCurve.add(definition);
-    //TODO if market data is already present, log then overwrite
+    // TODO if market data is already present, log then overwrite
     return this;
   }
 

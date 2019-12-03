@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph.ambiguity;
@@ -9,13 +9,12 @@ import java.util.Collection;
 
 import com.google.common.collect.ImmutableSet;
 import com.opengamma.engine.depgraph.DependencyNodeFunction;
-import com.opengamma.engine.depgraph.impl.DependencyNodeFunctionImpl;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Representation of a single resolution to a requirement. If ambiguities exist in a view definition or the resolution rules then there may be multiple resolutions possible. These can be held in a
- * {@link FullRequirementResolution} instance.
+ * Representation of a single resolution to a requirement. If ambiguities exist in a view definition or the resolution rules then there may be multiple
+ * resolutions possible. These can be held in a {@link FullRequirementResolution} instance.
  */
 public final class RequirementResolution {
 
@@ -32,8 +31,8 @@ public final class RequirementResolution {
   private final DependencyNodeFunction _function;
 
   /**
-   * The resolution(s) of any inputs to the function. If there is ambiguity such that alternative resolutions are possible, then additional instances of {@link RequirementResolution} will be created
-   * that refer to these same inputs and referenced from the containing {@link FullRequirementResolution}.
+   * The resolution(s) of any inputs to the function. If there is ambiguity such that alternative resolutions are possible, then additional instances of
+   * {@link RequirementResolution} will be created that refer to these same inputs and referenced from the containing {@link FullRequirementResolution}.
    */
   private final Collection<FullRequirementResolution> _inputs;
 
@@ -42,7 +41,8 @@ public final class RequirementResolution {
    */
   private final int _hashCode;
 
-  public RequirementResolution(final ValueSpecification specification, final DependencyNodeFunction function, final Collection<FullRequirementResolution> inputs) {
+  public RequirementResolution(final ValueSpecification specification, final DependencyNodeFunction function,
+      final Collection<FullRequirementResolution> inputs) {
     ArgumentChecker.notNull(specification, "specification");
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(inputs, "inputs");
@@ -50,9 +50,9 @@ public final class RequirementResolution {
     _function = function;
     _inputs = ImmutableSet.copyOf(inputs);
     int hc = getClass().hashCode();
-    hc = (hc * 31) + _specification.hashCode();
-    hc = (hc * 31) + DependencyNodeFunctionImpl.HASHING_STRATEGY.hashCode(_function);
-    hc = (hc * 31) + _inputs.hashCode();
+    hc = hc * 31 + _specification.hashCode();
+    hc = hc * 31 + DependencyNodeFunction.HASHING_STRATEGY.hashCode(_function);
+    hc = hc * 31 + _inputs.hashCode();
     _hashCode = hc;
   }
 
@@ -70,10 +70,14 @@ public final class RequirementResolution {
 
   /**
    * Tests whether the given resolution is present in any of the inputs to this resolution. This prevents recursive structures from being constructed.
+   *
+   * @param parent
+   *          the parent resolution
+   * @return true if the resolution is present in the inputs
    */
   /* package */boolean contains(final FullRequirementResolution parent) {
-    for (FullRequirementResolution input : _inputs) {
-      if ((input == parent) || input.contains(parent)) {
+    for (final FullRequirementResolution input : _inputs) {
+      if (input == parent || input.contains(parent)) {
         return true;
       }
     }
@@ -82,9 +86,11 @@ public final class RequirementResolution {
 
   /**
    * Tests whether any of the inputs to this resolution contain any ambiguity.
+   * 
+   * @return true if the inputs contain ambiguity
    */
   /* package */boolean isAmbiguous() {
-    for (FullRequirementResolution input : _inputs) {
+    for (final FullRequirementResolution input : _inputs) {
       if (input.isDeeplyAmbiguous()) {
         return true;
       }
@@ -103,8 +109,10 @@ public final class RequirementResolution {
       return false;
     }
     final RequirementResolution other = (RequirementResolution) o;
-    return (hashCode() == other.hashCode()) && getSpecification().equals(other.getSpecification()) && DependencyNodeFunctionImpl.HASHING_STRATEGY.equals(getFunction(), other.getFunction()) &&
-        getInputs().equals(other.getInputs());
+    return hashCode() == other.hashCode()
+        && getSpecification().equals(other.getSpecification())
+        && DependencyNodeFunction.HASHING_STRATEGY.equals(getFunction(), other.getFunction())
+        && getInputs().equals(other.getInputs());
   }
 
   @Override

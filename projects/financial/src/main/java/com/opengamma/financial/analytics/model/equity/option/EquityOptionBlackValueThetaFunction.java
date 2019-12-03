@@ -31,7 +31,7 @@ public class EquityOptionBlackValueThetaFunction extends EquityOptionBlackFuncti
   private static final ValueThetaCalculator CALCULATOR = ValueThetaCalculator.getInstance();
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA}
+   * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA}.
    */
   public EquityOptionBlackValueThetaFunction() {
     super(ValueRequirementNames.VALUE_THETA);

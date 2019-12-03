@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.function;
@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.CompareUtils;
 
 /**
- * From the paper Johnson & Nonas, Arbitrage-free construction of the swaption cube (2009). <b>Note:</b> truncation weight does not seem to work
+ * From the paper Johnson &amp; Nonas, Arbitrage-free construction of the swaption cube (2009). <b>Note:</b> truncation weight does not seem to work
  */
 public class SABRJohnsonVolatilityFunction extends VolatilityFunctionProvider<SABRFormulaData> {
   private static final double EPS = 1e-15;
@@ -34,7 +34,7 @@ public class SABRJohnsonVolatilityFunction extends VolatilityFunctionProvider<SA
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public final Double evaluate(final SABRFormulaData data) {
+      public Double evaluate(final SABRFormulaData data) {
         Validate.notNull(data, "data");
         final double alpha = data.getAlpha();
         final double beta = data.getBeta();

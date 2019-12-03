@@ -40,12 +40,12 @@ import com.opengamma.util.test.TestGroup;
 public class RemoteDependencyGraphTraceProviderTest {
 
   private RemoteDependencyGraphTraceProvider _provider;
-  private String _baseUrl = "http://host.com/";
+  private final String _baseUrl = "http://host.com/";
 
   @BeforeMethod
   public void beforeMethod() throws URISyntaxException {
 
-    URI uri = new URI(_baseUrl);
+    final URI uri = new URI(_baseUrl);
     _provider = new RemoteDependencyGraphTraceProvider(uri);
 
   }
@@ -53,9 +53,9 @@ public class RemoteDependencyGraphTraceProviderTest {
   @Test
   public void getTraceDefaults() {
 
-    URI uri = _provider.buildUri(new DependencyGraphTraceBuilderProperties());
+    final URI uri = _provider.buildUri(new DependencyGraphTraceBuilderProperties());
 
-    String uriStr = decode(uri);
+    final String uriStr = decode(uri);
 
     //assert default values are there
     assertTrue(uriStr.contains("calculationConfigurationName/Default"));
@@ -70,9 +70,9 @@ public class RemoteDependencyGraphTraceProviderTest {
 
     properties = properties.calculationConfigurationName("test");
 
-    URI uri = _provider.buildUri(properties);
+    final URI uri = _provider.buildUri(properties);
 
-    String uriStr = decode(uri);
+    final String uriStr = decode(uri);
 
     assertTrue(uriStr.contains("calculationConfigurationName/test"));
 
@@ -82,15 +82,15 @@ public class RemoteDependencyGraphTraceProviderTest {
   public void getTraceDefaultProperties() {
     DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
 
-    String defaultPropertiesStr1 = "{A=[foo,bar],B=[*]}";
-    String defaultPropertiesStr2 = "{A=[bar,foo],B=[*]}";
-    ValueProperties parsed = ValueProperties.parse(defaultPropertiesStr1);
+    final String defaultPropertiesStr1 = "{A=[foo,bar],B=[*]}";
+    final String defaultPropertiesStr2 = "{A=[bar,foo],B=[*]}";
+    final ValueProperties parsed = ValueProperties.parse(defaultPropertiesStr1);
 
     properties = properties.defaultProperties(parsed);
 
-    URI uri = _provider.buildUri(properties);
+    final URI uri = _provider.buildUri(properties);
 
-    String uriStr = decode(uri);
+    final String uriStr = decode(uri);
     assertTrue(uriStr.contains("defaultProperties/" + defaultPropertiesStr1) || uriStr.contains("defaultProperties/" + defaultPropertiesStr2));
 
   }
@@ -99,14 +99,14 @@ public class RemoteDependencyGraphTraceProviderTest {
   public void getTraceMarketDataUser() {
     DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
 
-    String snapshotId = "Foo~1";
-    UserMarketDataSpecification marketData = MarketData.user(UniqueId.parse(snapshotId));
+    final String snapshotId = "Foo~1";
+    final UserMarketDataSpecification marketData = MarketData.user(UniqueId.parse(snapshotId));
 
     properties = properties.addMarketData(marketData);
 
-    URI uri = _provider.buildUri(properties);
+    final URI uri = _provider.buildUri(properties);
 
-    String uriStr = decode(uri);
+    final String uriStr = decode(uri);
     assertTrue(uriStr.contains("marketDataSnapshot/" + snapshotId));
 
   }
@@ -115,13 +115,13 @@ public class RemoteDependencyGraphTraceProviderTest {
   public void getTraceMarketDataLiveDefault() {
     DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
 
-    MarketDataSpecification marketData = MarketData.live();
+    final MarketDataSpecification marketData = MarketData.live();
 
     properties = properties.addMarketData(marketData);
 
-    URI uri = _provider.buildUri(properties);
+    final URI uri = _provider.buildUri(properties);
 
-    String uriStr = decode(uri);
+    final String uriStr = decode(uri);
     assertTrue(uriStr.contains("marketDataLiveDefault"));
 
   }
@@ -130,13 +130,13 @@ public class RemoteDependencyGraphTraceProviderTest {
   public void getTraceMarketDataLive() {
     DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
 
-    MarketDataSpecification marketData = MarketData.live("BB");
+    final MarketDataSpecification marketData = MarketData.live("BB");
 
     properties = properties.addMarketData(marketData);
 
-    URI uri = _provider.buildUri(properties);
+    final URI uri = _provider.buildUri(properties);
 
-    String uriStr = decode(uri);
+    final String uriStr = decode(uri);
     assertTrue(uriStr.contains("marketDataLive/BB"));
 
   }
@@ -144,31 +144,31 @@ public class RemoteDependencyGraphTraceProviderTest {
   @Test
   public void getTraceMarketDataHistorical() {
     DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
-    LocalDate now = LocalDate.now();
-    MarketDataSpecification marketData = MarketData.historical(now, "timeseries");
+    final LocalDate now = LocalDate.now();
+    final MarketDataSpecification marketData = MarketData.historical(now, "timeseries");
 
     properties = properties.addMarketData(marketData);
 
-    URI uri = _provider.buildUri(properties);
+    final URI uri = _provider.buildUri(properties);
 
-    String uriStr = decode(uri);
+    final String uriStr = decode(uri);
     assertTrue(uriStr.contains("marketDataHistorical/" + now.toString() + "/timeseries"));
     assertEquals(now, LocalDate.parse(now.toString()));
 
   }
-  
+
   @Test
   public void getTraceResolutionTime() {
     DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
 
-    String rtStr = "V1970-01-01T00:00:01Z.CLATEST";
-    VersionCorrection rt = VersionCorrection.parse(rtStr);
+    final String rtStr = "V1970-01-01T00:00:01Z.CLATEST";
+    final VersionCorrection rt = VersionCorrection.parse(rtStr);
 
     properties = properties.resolutionTime(rt);
 
-    URI uri = _provider.buildUri(properties);
+    final URI uri = _provider.buildUri(properties);
 
-    String uriStr = decode(uri);
+    final String uriStr = decode(uri);
     assertTrue(uriStr.contains("resolutionTime/" + rtStr));
 
   }
@@ -177,14 +177,14 @@ public class RemoteDependencyGraphTraceProviderTest {
   public void getTraceValuationTime() {
     DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
 
-    String instantStr = "2013-06-24T12:18:01.094Z";
-    Instant instant = Instant.parse(instantStr);
+    final String instantStr = "2013-06-24T12:18:01.094Z";
+    final Instant instant = Instant.parse(instantStr);
 
     properties = properties.valuationTime(instant);
 
-    URI uri = _provider.buildUri(properties);
+    final URI uri = _provider.buildUri(properties);
 
-    String uriStr = decode(uri);
+    final String uriStr = decode(uri);
     assertTrue(uriStr.contains("valuationTime/" + instantStr));
 
   }
@@ -193,16 +193,16 @@ public class RemoteDependencyGraphTraceProviderTest {
   public void uriValueRequirementByExternalId() throws UnsupportedEncodingException {
     DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
 
-    String valueName = "test1";
-    String targetType = "POSITION";
-    String idStr = "GOLDMAN~Foo1";
-    ExternalId id = ExternalId.parse(idStr);
+    final String valueName = "test1";
+    final String targetType = "POSITION";
+    final String idStr = "GOLDMAN~Foo1";
+    final ExternalId id = ExternalId.parse(idStr);
 
     properties = properties.addRequirement(new ValueRequirement(valueName, new ComputationTargetRequirement(ComputationTargetType.POSITION, id)));
 
-    URI uri = _provider.buildUri(properties);
+    final URI uri = _provider.buildUri(properties);
 
-    String uriStr = decode(uri);
+    final String uriStr = decode(uri);
     assertTrue(uriStr.contains("requirement/" + valueName + "/" + targetType + "/" + idStr));
 
   }
@@ -211,25 +211,25 @@ public class RemoteDependencyGraphTraceProviderTest {
   public void uriValueRequirementByUniqueId() throws UnsupportedEncodingException {
     DependencyGraphTraceBuilderProperties properties = new DependencyGraphTraceBuilderProperties();
 
-    String valueName = "test1";
-    String targetType = "POSITION";
-    String idStr = "GOLDMAN~Foo1";
-    UniqueId id = UniqueId.parse(idStr);
+    final String valueName = "test1";
+    final String targetType = "POSITION";
+    final String idStr = "GOLDMAN~Foo1";
+    final UniqueId id = UniqueId.parse(idStr);
 
     properties = properties.addRequirement(new ValueRequirement(valueName, new ComputationTargetSpecification(ComputationTargetType.POSITION, id)));
 
-    URI uri = _provider.buildUri(properties);
+    final URI uri = _provider.buildUri(properties);
 
-    String uriStr = decode(uri);
+    final String uriStr = decode(uri);
     assertTrue(uriStr.contains("value/" + valueName + "/" + targetType + "/" + idStr));
 
   }
 
-  private String decode(URI uriDefaultProperties) {
-    String urlStr = uriDefaultProperties.toString();
+  private String decode(final URI uriDefaultProperties) {
+    final String urlStr = uriDefaultProperties.toString();
     try {
       return URLDecoder.decode(urlStr, "UTF-8");
-    } catch (UnsupportedEncodingException ex) {
+    } catch (final UnsupportedEncodingException ex) {
       throw Throwables.propagate(ex);
     }
   }

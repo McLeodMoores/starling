@@ -28,28 +28,28 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
  */
 public class SchemaGenerator {
 
-  public static void main(String[] args) throws JAXBException, IOException {
+  public static void main(final String[] args) throws JAXBException, IOException {
 
-    JAXBContext ctx = JAXBContext.newInstance(PortfolioDocumentV1_0.class);
+    final JAXBContext ctx = JAXBContext.newInstance(PortfolioDocumentV1_0.class);
 
-    DOMResult result = extractSchemaResult(ctx);
+    final DOMResult result = extractSchemaResult(ctx);
 
-    Document document = (Document) result.getNode();
+    final Document document = (Document) result.getNode();
 
-    OutputFormat format = new OutputFormat(document);
+    final OutputFormat format = new OutputFormat(document);
     format.setIndenting(true);
-    XMLSerializer serializer = new XMLSerializer(System.out, format);
+    final XMLSerializer serializer = new XMLSerializer(System.out, format);
     serializer.serialize(document);
   }
 
-  private static DOMResult extractSchemaResult(JAXBContext ctx) throws IOException {
+  private static DOMResult extractSchemaResult(final JAXBContext ctx) throws IOException {
 
     final Set<DOMResult> resultWrapper = new HashSet<>();
 
     ctx.generateSchema(new SchemaOutputResolver() {
       @Override
-      public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
-        DOMResult result = new DOMResult();
+      public Result createOutput(final String namespaceUri, final String suggestedFileName) throws IOException {
+        final DOMResult result = new DOMResult();
         result.setSystemId(suggestedFileName);
         resultWrapper.add(result);
         return result;

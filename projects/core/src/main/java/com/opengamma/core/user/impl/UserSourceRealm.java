@@ -69,22 +69,22 @@ public class UserSourceRealm extends AuthorizingRealm {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param userSource  the user source, not null
    */
-  public UserSourceRealm(UserSource userSource) {
+  public UserSourceRealm(final UserSource userSource) {
     setName("UserSourceRealm");
     _userSource = ArgumentChecker.notNull(userSource, "userSource");
     // clear everything if any user changed
     _userSource.changeManager().addChangeListener(new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
+      public void entityChanged(final ChangeEvent event) {
         if (event.getType() == ChangeType.CHANGED || event.getType() == ChangeType.REMOVED) {
-          Cache<Object, AuthenticationInfo> authnCache = getAuthenticationCache();
+          final Cache<Object, AuthenticationInfo> authnCache = getAuthenticationCache();
           if (authnCache != null) {
             authnCache.clear();
           }
-          Cache<Object, AuthorizationInfo> authzCache = getAuthorizationCache();
+          final Cache<Object, AuthorizationInfo> authzCache = getAuthorizationCache();
           if (authzCache != null) {
             authzCache.clear();
           }
@@ -101,17 +101,17 @@ public class UserSourceRealm extends AuthorizingRealm {
    * <p>
    * This method binds the proxy profile that is stored in the user session
    * to the real profile stored in the cache.
-   * 
+   *
    * @param userName  the user name, not null
    * @return the user profile, null if not found
    */
-  UserProfile getUserProfile(String userName) {
+  UserProfile getUserProfile(final String userName) {
     UserProfile profile = _profiles.get(userName);
     if (profile == null) {
       try {
         profile = _userSource.getAccount(userName).getProfile();
         _profiles.put(userName, profile);
-      } catch (DataNotFoundException ex) {
+      } catch (final DataNotFoundException ex) {
         // ignored
       }
     }
@@ -123,17 +123,17 @@ public class UserSourceRealm extends AuthorizingRealm {
    * <p>
    * This method binds the proxy profile that is stored in the user session
    * to the real profile stored in the cache.
-   * 
+   *
    * @param userName  the user name, not null
    * @return the user principals, null if not found
    */
-  UserPrincipals getUserPrincipals(String userName) {
-    UserPrincipals principals = _principals.get(userName);
+  UserPrincipals getUserPrincipals(final String userName) {
+    final UserPrincipals principals = _principals.get(userName);
     if (principals == null) {
       try {
-        UserAccount account = _userSource.getAccount(userName);
+        final UserAccount account = _userSource.getAccount(userName);
         _principals.put(userName, SimpleUserPrincipals.from(account));
-      } catch (DataNotFoundException ex) {
+      } catch (final DataNotFoundException ex) {
         // ignored
       }
     }
@@ -148,44 +148,41 @@ public class UserSourceRealm extends AuthorizingRealm {
   }
 
   @Override
-  public boolean supports(AuthenticationToken token) {
+  public boolean supports(final AuthenticationToken token) {
     return token instanceof UsernamePasswordToken;
   }
 
   @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+  protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken token) throws AuthenticationException {
     try {
       // load and validate
-      UsernamePasswordToken upToken = (UsernamePasswordToken) token;
-      String enteredUserName = upToken.getUsername();
-      UserAccount account = loadUserByName(enteredUserName);
+      final UsernamePasswordToken upToken = (UsernamePasswordToken) token;
+      final String enteredUserName = upToken.getUsername();
+      final UserAccount account = loadUserByName(enteredUserName);
       account.getStatus().check();
       // make data available in the session
-      String userName = account.getUserName();
+      final String userName = account.getUserName();
       _profiles.put(userName, account.getProfile());
       _principals.put(userName, SimpleUserPrincipals.from(account));
       AuthUtils.getSubject().getSession().setAttribute(UserProfile.ATTRIBUTE_KEY, new ProxyProfile(userName));
       AuthUtils.getSubject().getSession().setAttribute(UserPrincipals.ATTRIBUTE_KEY, new ProxyPrincipals(userName, upToken.getHost()));
       // return Shiro data
-      SimplePrincipalCollection principals = new SimplePrincipalCollection();
+      final SimplePrincipalCollection principals = new SimplePrincipalCollection();
       principals.add(userName, getName());
       return new SimpleAuthenticationInfo(principals, account.getPasswordHash());
-      
-    } catch (AuthenticationException ex) {
-      throw ex;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new AuthenticationException("Unable to load authentication data: " + token, ex);
     }
   }
 
   @Override
-  protected void assertCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) throws AuthenticationException {
+  protected void assertCredentialsMatch(final AuthenticationToken token, final AuthenticationInfo info) throws AuthenticationException {
     // cleanup after login failure
     // Apache Shiro should provide a protected method to handle this better
     try {
       super.assertCredentialsMatch(token, info);
-    } catch (AuthenticationException ex) {
-      String userName = info.getPrincipals().getPrimaryPrincipal().toString();
+    } catch (final AuthenticationException ex) {
+      final String userName = info.getPrincipals().getPrimaryPrincipal().toString();
       _profiles.remove(userName);
       _principals.remove(userName);
       AuthUtils.getSubject().getSession().removeAttribute(UserProfile.ATTRIBUTE_KEY);
@@ -196,39 +193,39 @@ public class UserSourceRealm extends AuthorizingRealm {
 
   //-------------------------------------------------------------------------
   @Override
-  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+  protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals) {
     if (principals == null) {
       throw new AuthorizationException("PrincipalCollection must not be null");
     }
     try {
       // try UniqueId
-      Collection<String> userNames = principals.byType(String.class);
+      final Collection<String> userNames = principals.byType(String.class);
       if (userNames.size() == 0) {
         return null;
       }
       if (userNames.size() > 1) {
         throw new AuthorizationException("PrincipalCollection must not contain two UserAccount instances");
       }
-      String userName = userNames.iterator().next();
-      UserAccount account = loadUserByName(userName);
-      SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+      final String userName = userNames.iterator().next();
+      final UserAccount account = loadUserByName(userName);
+      final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
       info.addRoles(account.getRoles());
-      for (String permStr : account.getPermissions()) {
+      for (final String permStr : account.getPermissions()) {
         info.addObjectPermission(getPermissionResolver().resolvePermission(permStr));
       }
       return info;
-      
-    } catch (AuthorizationException ex) {
+
+    } catch (final AuthorizationException ex) {
       throw ex;
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new AuthorizationException("Unable to load authorization data: " + principals, ex);
     }
   }
 
-  private UserAccount loadUserByName(String userName) {
+  private UserAccount loadUserByName(final String userName) {
     try {
       return _userSource.getAccount(userName);
-    } catch (DataNotFoundException ex) {
+    } catch (final DataNotFoundException ex) {
       throw new UnknownAccountException("User not found: " + userName, ex);
     }
   }
@@ -240,7 +237,10 @@ public class UserSourceRealm extends AuthorizingRealm {
   class ProxyProfile implements UserProfile {
     private final String _userName;
 
-    ProxyProfile(String userName) {
+    /**
+     * @param userName  the user name
+     */
+    ProxyProfile(final String userName) {
       _userName = userName;
     }
 
@@ -288,7 +288,11 @@ public class UserSourceRealm extends AuthorizingRealm {
     private final String _userName;
     private final String _networkAddress;
 
-    ProxyPrincipals(String userName, String networkAddress) {
+    /**
+     * @param userName  the user name
+     * @param networkAddress  the network address
+     */
+    ProxyPrincipals(final String userName, final String networkAddress) {
       _userName = userName;
       _networkAddress = networkAddress;
     }
@@ -329,28 +333,28 @@ public class UserSourceRealm extends AuthorizingRealm {
   }
 
   @Override
-  public boolean isPermitted(PrincipalCollection subjectPrincipal, String requiredPermission) {
-    Permission required = getPermissionResolver().resolvePermission(requiredPermission);
+  public boolean isPermitted(final PrincipalCollection subjectPrincipal, final String requiredPermission) {
+    final Permission required = getPermissionResolver().resolvePermission(requiredPermission);
     return isPermitted(subjectPrincipal, required);
   }
 
   @Override
-  public boolean isPermitted(PrincipalCollection subjectPrincipal, Permission requiredPermission) {
+  public boolean isPermitted(final PrincipalCollection subjectPrincipal, final Permission requiredPermission) {
     return isPermittedAll(subjectPrincipal, ImmutableList.of(requiredPermission));
   }
 
   @Override
-  public boolean isPermittedAll(PrincipalCollection subjectPrincipal, String... requiredPermissions) {
+  public boolean isPermittedAll(final PrincipalCollection subjectPrincipal, final String... requiredPermissions) {
     if (requiredPermissions.length == 0) {
       return true;
     }
-    List<Permission> required = getPermissionResolver().resolvePermissions(requiredPermissions);
+    final List<Permission> required = getPermissionResolver().resolvePermissions(requiredPermissions);
     return isPermittedAll(subjectPrincipal, required);
   }
 
   @Override
-  public boolean isPermittedAll(PrincipalCollection subjectPrincipal, Collection<Permission> requiredPermissions) {
-    AuthorizationInfo info = getAuthorizationInfo(subjectPrincipal);
+  public boolean isPermittedAll(final PrincipalCollection subjectPrincipal, final Collection<Permission> requiredPermissions) {
+    final AuthorizationInfo info = getAuthorizationInfo(subjectPrincipal);
     if (info == null) {
       return false;
     }
@@ -359,27 +363,27 @@ public class UserSourceRealm extends AuthorizingRealm {
 
   //-------------------------------------------------------------------------
   @Override
-  public void checkPermission(PrincipalCollection subjectPrincipal, String requiredPermission) throws AuthorizationException {
-    Permission required = getPermissionResolver().resolvePermission(requiredPermission);
+  public void checkPermission(final PrincipalCollection subjectPrincipal, final String requiredPermission) throws AuthorizationException {
+    final Permission required = getPermissionResolver().resolvePermission(requiredPermission);
     checkPermission(subjectPrincipal, required);
   }
 
   @Override
-  public void checkPermission(PrincipalCollection subjectPrincipal, Permission requiredPermission) throws AuthorizationException {
+  public void checkPermission(final PrincipalCollection subjectPrincipal, final Permission requiredPermission) throws AuthorizationException {
     checkPermissions(subjectPrincipal, ImmutableList.of(requiredPermission));
   }
 
   @Override
-  public void checkPermissions(PrincipalCollection subjectPrincipal, String... requiredPermissions) throws AuthorizationException {
+  public void checkPermissions(final PrincipalCollection subjectPrincipal, final String... requiredPermissions) throws AuthorizationException {
     if (requiredPermissions.length > 0) {
-      List<Permission> required = getPermissionResolver().resolvePermissions(requiredPermissions);
+      final List<Permission> required = getPermissionResolver().resolvePermissions(requiredPermissions);
       checkPermissions(subjectPrincipal, required);
     }
   }
 
   @Override
-  public void checkPermissions(PrincipalCollection subjectPrincipal, Collection<Permission> requiredPermissions) throws AuthorizationException {
-    AuthorizationInfo info = getAuthorizationInfo(subjectPrincipal);
+  public void checkPermissions(final PrincipalCollection subjectPrincipal, final Collection<Permission> requiredPermissions) throws AuthorizationException {
+    final AuthorizationInfo info = getAuthorizationInfo(subjectPrincipal);
     if (info == null) {
       throw new UnauthenticatedException("Permission denied, user not authenticated");
     }

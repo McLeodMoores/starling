@@ -14,12 +14,12 @@ import com.opengamma.id.ExternalId;
 
 /**
  * Class uses an organization source to extract the Obligor from a CDS.
- * 
+ *
  * @param <T>  the value type
  */
 public class CdsRedCodeExtractor<T> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CdsRedCodeExtractor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CdsRedCodeExtractor.class);
 
   /**
    * Handler which will perform further processing of the red code.
@@ -28,10 +28,10 @@ public class CdsRedCodeExtractor<T> {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param redCodeHandler  the handler, not null
    */
-  public CdsRedCodeExtractor(RedCodeHandler<T> redCodeHandler) {
+  public CdsRedCodeExtractor(final RedCodeHandler<T> redCodeHandler) {
     _redCodeHandler = redCodeHandler;
   }
 
@@ -42,15 +42,14 @@ public class CdsRedCodeExtractor<T> {
    * @param cds the CDS to extract the RED code  from
    * @return the RED code if found, null otherwise
    */
-  public T extract(AbstractCreditDefaultSwapSecurity cds) {
-    ExternalId refEntityId = cds.getReferenceEntity();
+  public T extract(final AbstractCreditDefaultSwapSecurity cds) {
+    final ExternalId refEntityId = cds.getReferenceEntity();
     if (refEntityId.isScheme(ExternalSchemes.MARKIT_RED_CODE)) {
 
       return _redCodeHandler.extract(refEntityId.getValue());
-    } else {
-      s_logger.warn("Unable to lookup RED code as reference entity external id uses scheme: {}", refEntityId.getScheme());
-      return null;
     }
+    LOGGER.warn("Unable to lookup RED code as reference entity external id uses scheme: {}", refEntityId.getScheme());
+    return null;
   }
 
 }

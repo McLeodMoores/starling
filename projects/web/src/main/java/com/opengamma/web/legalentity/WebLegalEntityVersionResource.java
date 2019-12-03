@@ -41,22 +41,22 @@ public class WebLegalEntityVersionResource extends AbstractWebLegalEntityResourc
   //-------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(HTML_DIR + "legalentityversion.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getJSON(@Context Request request) {
-    EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
-    ResponseBuilder builder = request.evaluatePreconditions(etag);
+  public Response getJSON(@Context final Request request) {
+    final EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
+    final ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder != null) {
       return builder.build();
     }
-    FlexiBean out = createRootData();
-    LegalEntityDocument doc = data().getVersioned();
+    final FlexiBean out = createRootData();
+    final LegalEntityDocument doc = data().getVersioned();
     out.put("type", data().getTypeMap().inverse().get(doc.getLegalEntity().getClass()));
-    String json = getFreemarker().build(JSON_DIR + "legalentity.ftl", out);
+    final String json = getFreemarker().build(JSON_DIR + "legalentity.ftl", out);
     return Response.ok(json).tag(etag).build();
   }
 
@@ -67,10 +67,11 @@ public class WebLegalEntityVersionResource extends AbstractWebLegalEntityResourc
    *
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    LegalEntityDocument latestDoc = data().getLegalEntity();
-    LegalEntityDocument versionedLegalEntity = data().getVersioned();
+    final FlexiBean out = super.createRootData();
+    final LegalEntityDocument latestDoc = data().getLegalEntity();
+    final LegalEntityDocument versionedLegalEntity = data().getVersioned();
     out.put("latestLegalEntityDoc", latestDoc);
     out.put("latestLegalEntity", latestDoc.getLegalEntity());
     out.put("legalEntityDoc", versionedLegalEntity);
@@ -100,8 +101,8 @@ public class WebLegalEntityVersionResource extends AbstractWebLegalEntityResourc
    * @return the URI, not null
    */
   public static URI uri(final WebLegalEntityData data, final UniqueId overrideVersionId) {
-    String legalEntityId = data.getBestLegalEntityUriId(null);
-    String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
+    final String legalEntityId = data.getBestLegalEntityUriId(null);
+    final String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
     return data.getUriInfo().getBaseUriBuilder().path(WebLegalEntityVersionResource.class).build(legalEntityId, versionId);
   }
 

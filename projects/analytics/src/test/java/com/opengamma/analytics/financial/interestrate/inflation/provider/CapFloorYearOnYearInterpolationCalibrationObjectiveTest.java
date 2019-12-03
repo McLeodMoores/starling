@@ -51,7 +51,6 @@ public class CapFloorYearOnYearInterpolationCalibrationObjectiveTest {
   private static final Currency CUR = Currency.EUR;
   private static final ZonedDateTime SETTLEMENT_DATE = DateUtils.getUTCDate(2011, 9, 9);
   private static final double NOTIONAL = 10000; //100m
-  private static final double[] STRIKES = {-.01, .00, .01, .02, .03, .04 };
   private static final boolean IS_CAP = true;
   private static final InflationIssuerProviderDiscount MARKET = MulticurveProviderDiscountDataSets.createMarket1();
   private static final IndexPrice[] PRICE_INDEXES = MARKET.getPriceIndexes().toArray(new IndexPrice[MARKET.getPriceIndexes().size()]);
@@ -69,8 +68,8 @@ public class CapFloorYearOnYearInterpolationCalibrationObjectiveTest {
   private static final CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod METHOD = CapFloorInflationYearOnYearInterpolationBlackNormalSmileMethod.getInstance();
 
   private static double[] expiryTimes = new double[30];
-  private static final double[] strikes = {-.01, .00, .01, .02, .03, .04 };
-  private static final double[][] volatilities = { {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
+  private static final double[] STRIKES = {-.01, .00, .01, .02, .03, .04 };
+  private static final double[][] VOLATILITIES = { {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
@@ -80,10 +79,10 @@ public class CapFloorYearOnYearInterpolationCalibrationObjectiveTest {
     {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 } };
 
-  private static final int[] availabelTenor = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30 };
-  AnnuityCapFloorInflationYearOnYearInterpolationDefinition[][] CAP_DEFINITIONS = new AnnuityCapFloorInflationYearOnYearInterpolationDefinition[6][availabelTenor.length];
-  Annuity<? extends Payment>[][] CAPS = new Annuity<?>[strikes.length][availabelTenor.length];
-  double[][][] marketPrices = new double[strikes.length][availabelTenor.length][expiryTimes.length];
+  private static final int[] AVAILABLE_TENOR = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30 };
+  AnnuityCapFloorInflationYearOnYearInterpolationDefinition[][] CAP_DEFINITIONS = new AnnuityCapFloorInflationYearOnYearInterpolationDefinition[6][AVAILABLE_TENOR.length];
+  Annuity<? extends Payment>[][] CAPS = new Annuity<?>[STRIKES.length][AVAILABLE_TENOR.length];
+  double[][][] marketPrices = new double[STRIKES.length][AVAILABLE_TENOR.length][expiryTimes.length];
 
   @Test
   /**
@@ -92,66 +91,66 @@ public class CapFloorYearOnYearInterpolationCalibrationObjectiveTest {
   */
   public void calibrationWithAllInstrruments() {
 
-    for (int loop1 = 0; loop1 < strikes.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
-        final Period tenor = Period.ofYears(availabelTenor[loop2]);
+    for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
+        final Period tenor = Period.ofYears(AVAILABLE_TENOR[loop2]);
 
         CAP_DEFINITIONS[loop1][loop2] = AnnuityCapFloorInflationYearOnYearInterpolationDefinition.from(PRICE_INDEX_EUR, SETTLEMENT_DATE, NOTIONAL,
-            tenor, COUPON_PAYMENT_TENOR, BUSINESS_DAY, CALENDAR, IS_EOM, MONTH_LAG, MONTH_LAG, LAST_KNOWN_FIXING_DATE, strikes[loop1], IS_CAP);
+            tenor, COUPON_PAYMENT_TENOR, BUSINESS_DAY, CALENDAR, IS_EOM, MONTH_LAG, MONTH_LAG, LAST_KNOWN_FIXING_DATE, STRIKES[loop1], IS_CAP);
         CAPS[loop1][loop2] = CAP_DEFINITIONS[loop1][loop2].toDerivative(REFERENCE_DATE);
       }
     }
-    for (int loopexp = 0; loopexp < CAPS[0][availabelTenor.length - 1].getNumberOfPayments(); loopexp++) {
-      final CapFloorInflationYearOnYearInterpolation cap = (CapFloorInflationYearOnYearInterpolation) CAPS[0][availabelTenor.length - 1].getNthPayment(loopexp);
+    for (int loopexp = 0; loopexp < CAPS[0][AVAILABLE_TENOR.length - 1].getNumberOfPayments(); loopexp++) {
+      final CapFloorInflationYearOnYearInterpolation cap = (CapFloorInflationYearOnYearInterpolation) CAPS[0][AVAILABLE_TENOR.length - 1].getNthPayment(loopexp);
       expiryTimes[loopexp] = cap.getReferenceEndTime()[1];
     }
-    final InflationYearOnYearCapFloorParameters parameters = new InflationYearOnYearCapFloorParameters(expiryTimes, strikes, volatilities, PRICE_INDEX_EUR);
+    final InflationYearOnYearCapFloorParameters parameters = new InflationYearOnYearCapFloorParameters(expiryTimes, STRIKES, VOLATILITIES, PRICE_INDEX_EUR);
     final SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective objective = new SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective(parameters, CUR);
     final SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationEngine<InflationProviderInterface> calibrationEngine = new SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationEngine<>(
         objective);
-    for (int loop1 = 0; loop1 < strikes.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+    for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
         for (int loop3 = 0; loop3 < CAPS[loop1][loop2].getNumberOfPayments(); loop3++) {
           marketPrices[loop1][loop2][loop3] = METHOD.presentValue(CAPS[loop1][loop2].getNthPayment(loop3), BLACK_INFLATION).getAmount(CUR);
         }
       }
     }
 
-    for (int loop1 = 0; loop1 < strikes.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+    for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
         for (int loop3 = 0; loop3 < CAPS[loop1][loop2].getNumberOfPayments(); loop3++) {
           calibrationEngine.addInstrument(CAPS[loop1][loop2].getNthPayment(loop3), marketPrices[loop1][loop2][loop3]);
         }
       }
     }
     calibrationEngine.calibrate(MARKET.getInflationProvider());
-    final MultipleCurrencyAmount[][][] pvCapYearOnYear = new MultipleCurrencyAmount[STRIKES.length][availabelTenor.length][30];
-    for (int loop1 = 0; loop1 < strikes.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+    final MultipleCurrencyAmount[][][] pvCapYearOnYear = new MultipleCurrencyAmount[STRIKES.length][AVAILABLE_TENOR.length][30];
+    for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
         for (int loop3 = 0; loop3 < CAPS[loop1][loop2].getNumberOfPayments(); loop3++) {
           final Interpolator2D interpolator = objective.getInflationCapYearOnYearProvider().getBlackParameters().getVolatilitySurface().getInterpolator();
-          final BlackSmileCapInflationYearOnYearParameters CalibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
+          final BlackSmileCapInflationYearOnYearParameters calibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
               objective.getInflationCapYearOnYearParameters(), interpolator);
-          final BlackSmileCapInflationYearOnYearProvider CalibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
+          final BlackSmileCapInflationYearOnYearProvider calibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
               .getInflationCapYearOnYearProvider().getInflationProvider(),
-              CalibratedBlackSmileCapInflationYearOnYearParameters);
-          pvCapYearOnYear[loop1][loop2][loop3] = METHOD.presentValue(CAPS[loop1][loop2].getNthPayment(loop3), CalibratedBlackSmileCapInflationYearOnYearProvider);
+              calibratedBlackSmileCapInflationYearOnYearParameters);
+          pvCapYearOnYear[loop1][loop2][loop3] = METHOD.presentValue(CAPS[loop1][loop2].getNthPayment(loop3), calibratedBlackSmileCapInflationYearOnYearProvider);
           assertEquals("Inflaiton year on year calibration: cap/floor " + loop1, pvCapYearOnYear[loop1][loop2][loop3].getAmount(CUR), marketPrices[loop1][loop2][loop3], 1E-2);
         }
       }
     }
   }
 
-  private static double[] expiryTimes_AVAILABLE = new double[availabelTenor.length];
-  private static final double[] strikes_AVAILABLE = {-.01, .00, .01, .02, .03, .04 };
-  private static final double[][] volatilities_AVAILABLE = { {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
+  private static double[] expiryTimes_AVAILABLE = new double[AVAILABLE_TENOR.length];
+  private static final double[] STRIKES_AVAILABLE = {-.01, .00, .01, .02, .03, .04 };
+  private static final double[][] VOLATILITIES_AVAILABLE = { {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 } };
-  AnnuityCapFloorInflationYearOnYearInterpolationDefinition[][] CAP_DEFINITIONS_AVAILABLE = new AnnuityCapFloorInflationYearOnYearInterpolationDefinition[6][availabelTenor.length];
-  Annuity<? extends Payment>[][] CAPS_AVAILABLE = new Annuity<?>[strikes_AVAILABLE.length][availabelTenor.length];
-  double[][] marketPrices_AVAILABLE = new double[strikes_AVAILABLE.length][availabelTenor.length];
+  AnnuityCapFloorInflationYearOnYearInterpolationDefinition[][] CAP_DEFINITIONS_AVAILABLE = new AnnuityCapFloorInflationYearOnYearInterpolationDefinition[6][AVAILABLE_TENOR.length];
+  Annuity<? extends Payment>[][] CAPS_AVAILABLE = new Annuity<?>[STRIKES_AVAILABLE.length][AVAILABLE_TENOR.length];
+  double[][] marketPrices_AVAILABLE = new double[STRIKES_AVAILABLE.length][AVAILABLE_TENOR.length];
 
   @Test
   /**
@@ -160,54 +159,54 @@ public class CapFloorYearOnYearInterpolationCalibrationObjectiveTest {
    */
   public void calibrationWithOnlyAvailableMarketData() {
 
-    for (int loop1 = 0; loop1 < strikes_AVAILABLE.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
-        final Period tenor = Period.ofYears(availabelTenor[loop2]);
+    for (int loop1 = 0; loop1 < STRIKES_AVAILABLE.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
+        final Period tenor = Period.ofYears(AVAILABLE_TENOR[loop2]);
 
         CAP_DEFINITIONS_AVAILABLE[loop1][loop2] = AnnuityCapFloorInflationYearOnYearInterpolationDefinition.from(PRICE_INDEX_EUR, SETTLEMENT_DATE, NOTIONAL,
-            tenor, COUPON_PAYMENT_TENOR, BUSINESS_DAY, CALENDAR, IS_EOM, MONTH_LAG, MONTH_LAG, LAST_KNOWN_FIXING_DATE, strikes_AVAILABLE[loop1], IS_CAP);
+            tenor, COUPON_PAYMENT_TENOR, BUSINESS_DAY, CALENDAR, IS_EOM, MONTH_LAG, MONTH_LAG, LAST_KNOWN_FIXING_DATE, STRIKES_AVAILABLE[loop1], IS_CAP);
         CAPS_AVAILABLE[loop1][loop2] = CAP_DEFINITIONS_AVAILABLE[loop1][loop2].toDerivative(REFERENCE_DATE);
       }
     }
-    for (int loopexp = 0; loopexp < availabelTenor.length; loopexp++) {
+    for (int loopexp = 0; loopexp < AVAILABLE_TENOR.length; loopexp++) {
       final CapFloorInflationYearOnYearInterpolation cap = (CapFloorInflationYearOnYearInterpolation) CAPS_AVAILABLE[0][loopexp].getNthPayment(CAPS_AVAILABLE[0][loopexp].getNumberOfPayments() - 1);
       expiryTimes_AVAILABLE[loopexp] = cap.getReferenceEndTime()[1];
     }
-    final InflationYearOnYearCapFloorParameters parameters = new InflationYearOnYearCapFloorParameters(expiryTimes_AVAILABLE, strikes_AVAILABLE, volatilities_AVAILABLE, PRICE_INDEX_EUR);
+    final InflationYearOnYearCapFloorParameters parameters = new InflationYearOnYearCapFloorParameters(expiryTimes_AVAILABLE, STRIKES_AVAILABLE, VOLATILITIES_AVAILABLE, PRICE_INDEX_EUR);
     final SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective objective = new SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective(parameters, CUR);
     final SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationEngine<InflationProviderDiscount> calibrationEngine = new SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationEngine<>(
         objective);
 
-    for (int loop1 = 0; loop1 < strikes_AVAILABLE.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
-        for (int loop3 = 0; loop3 < availabelTenor[loop2]; loop3++) {
+    for (int loop1 = 0; loop1 < STRIKES_AVAILABLE.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
+        for (int loop3 = 0; loop3 < AVAILABLE_TENOR[loop2]; loop3++) {
           marketPrices_AVAILABLE[loop1][loop2] = marketPrices_AVAILABLE[loop1][loop2] + METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(loop3), BLACK_INFLATION).getAmount(CUR);
         }
       }
     }
 
-    for (int loop1 = 0; loop1 < strikes.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+    for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
 
         calibrationEngine.addInstrument(CAPS_AVAILABLE[loop1][loop2], marketPrices_AVAILABLE[loop1][loop2]);
 
       }
     }
     calibrationEngine.calibrate(MARKET.getInflationProvider());
-    final MultipleCurrencyAmount[][] pvCapYearOnYear = new MultipleCurrencyAmount[STRIKES.length][availabelTenor.length];
-    for (int loop1 = 0; loop1 < strikes.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+    final MultipleCurrencyAmount[][] pvCapYearOnYear = new MultipleCurrencyAmount[STRIKES.length][AVAILABLE_TENOR.length];
+    for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
 
         final Interpolator2D interpolator = objective.getInflationCapYearOnYearProvider().getBlackParameters().getVolatilitySurface().getInterpolator();
-        final BlackSmileCapInflationYearOnYearParameters CalibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
+        final BlackSmileCapInflationYearOnYearParameters calibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
             objective.getInflationCapYearOnYearParameters(), interpolator);
-        final BlackSmileCapInflationYearOnYearProvider CalibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
+        final BlackSmileCapInflationYearOnYearProvider calibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
             .getInflationCapYearOnYearProvider().getInflationProvider(),
-            CalibratedBlackSmileCapInflationYearOnYearParameters);
-        pvCapYearOnYear[loop1][loop2] = METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(0), CalibratedBlackSmileCapInflationYearOnYearProvider);
+            calibratedBlackSmileCapInflationYearOnYearParameters);
+        pvCapYearOnYear[loop1][loop2] = METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(0), calibratedBlackSmileCapInflationYearOnYearProvider);
         for (int loop3 = 1; loop3 < CAPS_AVAILABLE[loop1][loop2].getNumberOfPayments(); loop3++) {
           pvCapYearOnYear[loop1][loop2] = pvCapYearOnYear[loop1][loop2]
-              .plus(METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(loop3), CalibratedBlackSmileCapInflationYearOnYearProvider));
+              .plus(METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(loop3), calibratedBlackSmileCapInflationYearOnYearProvider));
         }
         assertEquals("Inflaiton year on year calibration: cap/floor " + loop1, pvCapYearOnYear[loop1][loop2].getAmount(CUR), marketPrices_AVAILABLE[loop1][loop2], 1E-2);
 
@@ -223,57 +222,57 @@ public class CapFloorYearOnYearInterpolationCalibrationObjectiveTest {
    */
   public void calibrationWithOnlyAvailableMarketDataCapAndFloor() {
 
-    for (int loop1 = 0; loop1 < strikes_AVAILABLE.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
-        final Period tenor = Period.ofYears(availabelTenor[loop2]);
+    for (int loop1 = 0; loop1 < STRIKES_AVAILABLE.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
+        final Period tenor = Period.ofYears(AVAILABLE_TENOR[loop2]);
         boolean isCap = true;
         if (loop1 == 0 || loop1 == 1 || loop1 == 2) {
           isCap = false;
         }
         CAP_DEFINITIONS_AVAILABLE[loop1][loop2] = AnnuityCapFloorInflationYearOnYearInterpolationDefinition.from(PRICE_INDEX_EUR, SETTLEMENT_DATE, NOTIONAL,
-            tenor, COUPON_PAYMENT_TENOR, BUSINESS_DAY, CALENDAR, IS_EOM, MONTH_LAG, MONTH_LAG, LAST_KNOWN_FIXING_DATE, strikes_AVAILABLE[loop1], isCap);
+            tenor, COUPON_PAYMENT_TENOR, BUSINESS_DAY, CALENDAR, IS_EOM, MONTH_LAG, MONTH_LAG, LAST_KNOWN_FIXING_DATE, STRIKES_AVAILABLE[loop1], isCap);
         CAPS_AVAILABLE[loop1][loop2] = CAP_DEFINITIONS_AVAILABLE[loop1][loop2].toDerivative(REFERENCE_DATE);
       }
     }
-    for (int loopexp = 0; loopexp < availabelTenor.length; loopexp++) {
+    for (int loopexp = 0; loopexp < AVAILABLE_TENOR.length; loopexp++) {
       final CapFloorInflationYearOnYearInterpolation cap = (CapFloorInflationYearOnYearInterpolation) CAPS_AVAILABLE[0][loopexp].getNthPayment(CAPS_AVAILABLE[0][loopexp].getNumberOfPayments() - 1);
       expiryTimes_AVAILABLE[loopexp] = cap.getReferenceEndTime()[1];
     }
-    final InflationYearOnYearCapFloorParameters parameters = new InflationYearOnYearCapFloorParameters(expiryTimes_AVAILABLE, strikes_AVAILABLE, volatilities_AVAILABLE, PRICE_INDEX_EUR);
+    final InflationYearOnYearCapFloorParameters parameters = new InflationYearOnYearCapFloorParameters(expiryTimes_AVAILABLE, STRIKES_AVAILABLE, VOLATILITIES_AVAILABLE, PRICE_INDEX_EUR);
     final SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective objective = new SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective(parameters, CUR);
     final SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationEngine<InflationProviderDiscount> calibrationEngine = new SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationEngine<>(
         objective);
 
-    for (int loop1 = 0; loop1 < strikes_AVAILABLE.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
-        for (int loop3 = 0; loop3 < availabelTenor[loop2]; loop3++) {
+    for (int loop1 = 0; loop1 < STRIKES_AVAILABLE.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
+        for (int loop3 = 0; loop3 < AVAILABLE_TENOR[loop2]; loop3++) {
           marketPrices_AVAILABLE[loop1][loop2] = marketPrices_AVAILABLE[loop1][loop2] + METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(loop3), BLACK_INFLATION).getAmount(CUR);
         }
       }
     }
 
-    for (int loop1 = 0; loop1 < strikes.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+    for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
 
         calibrationEngine.addInstrument(CAPS_AVAILABLE[loop1][loop2], marketPrices_AVAILABLE[loop1][loop2]);
 
       }
     }
     calibrationEngine.calibrate(MARKET.getInflationProvider());
-    final MultipleCurrencyAmount[][] pvCapYearOnYear = new MultipleCurrencyAmount[STRIKES.length][availabelTenor.length];
-    for (int loop1 = 0; loop1 < strikes.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+    final MultipleCurrencyAmount[][] pvCapYearOnYear = new MultipleCurrencyAmount[STRIKES.length][AVAILABLE_TENOR.length];
+    for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
 
         final Interpolator2D interpolator = objective.getInflationCapYearOnYearProvider().getBlackParameters().getVolatilitySurface().getInterpolator();
-        final BlackSmileCapInflationYearOnYearParameters CalibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
+        final BlackSmileCapInflationYearOnYearParameters calibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
             objective.getInflationCapYearOnYearParameters(), interpolator);
-        final BlackSmileCapInflationYearOnYearProvider CalibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
+        final BlackSmileCapInflationYearOnYearProvider calibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
             .getInflationCapYearOnYearProvider().getInflationProvider(),
-            CalibratedBlackSmileCapInflationYearOnYearParameters);
-        pvCapYearOnYear[loop1][loop2] = METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(0), CalibratedBlackSmileCapInflationYearOnYearProvider);
+            calibratedBlackSmileCapInflationYearOnYearParameters);
+        pvCapYearOnYear[loop1][loop2] = METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(0), calibratedBlackSmileCapInflationYearOnYearProvider);
         for (int loop3 = 1; loop3 < CAPS_AVAILABLE[loop1][loop2].getNumberOfPayments(); loop3++) {
           pvCapYearOnYear[loop1][loop2] = pvCapYearOnYear[loop1][loop2]
-              .plus(METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(loop3), CalibratedBlackSmileCapInflationYearOnYearProvider));
+              .plus(METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(loop3), calibratedBlackSmileCapInflationYearOnYearProvider));
         }
         assertEquals("Inflaiton year on year calibration: cap/floor " + loop1, pvCapYearOnYear[loop1][loop2].getAmount(CUR), marketPrices_AVAILABLE[loop1][loop2], 1E-2);
 
@@ -283,37 +282,37 @@ public class CapFloorYearOnYearInterpolationCalibrationObjectiveTest {
 
   @Test(enabled = false)
   public void performance() {
-    for (int loop1 = 0; loop1 < strikes_AVAILABLE.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
-        final Period tenor = Period.ofYears(availabelTenor[loop2]);
+    for (int loop1 = 0; loop1 < STRIKES_AVAILABLE.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
+        final Period tenor = Period.ofYears(AVAILABLE_TENOR[loop2]);
         boolean isCap = true;
         if (loop1 == 0 || loop1 == 1 || loop1 == 2) {
           isCap = false;
         }
         CAP_DEFINITIONS_AVAILABLE[loop1][loop2] = AnnuityCapFloorInflationYearOnYearInterpolationDefinition.from(PRICE_INDEX_EUR, SETTLEMENT_DATE, NOTIONAL,
-            tenor, COUPON_PAYMENT_TENOR, BUSINESS_DAY, CALENDAR, IS_EOM, MONTH_LAG, MONTH_LAG, LAST_KNOWN_FIXING_DATE, strikes_AVAILABLE[loop1], isCap);
+            tenor, COUPON_PAYMENT_TENOR, BUSINESS_DAY, CALENDAR, IS_EOM, MONTH_LAG, MONTH_LAG, LAST_KNOWN_FIXING_DATE, STRIKES_AVAILABLE[loop1], isCap);
         CAPS_AVAILABLE[loop1][loop2] = CAP_DEFINITIONS_AVAILABLE[loop1][loop2].toDerivative(REFERENCE_DATE);
       }
     }
-    for (int loopexp = 0; loopexp < availabelTenor.length; loopexp++) {
+    for (int loopexp = 0; loopexp < AVAILABLE_TENOR.length; loopexp++) {
       final CapFloorInflationYearOnYearInterpolation cap = (CapFloorInflationYearOnYearInterpolation) CAPS_AVAILABLE[0][loopexp].getNthPayment(CAPS_AVAILABLE[0][loopexp].getNumberOfPayments() - 1);
       expiryTimes_AVAILABLE[loopexp] = cap.getReferenceEndTime()[1];
     }
-    final InflationYearOnYearCapFloorParameters parameters = new InflationYearOnYearCapFloorParameters(expiryTimes_AVAILABLE, strikes_AVAILABLE, volatilities_AVAILABLE, PRICE_INDEX_EUR);
+    final InflationYearOnYearCapFloorParameters parameters = new InflationYearOnYearCapFloorParameters(expiryTimes_AVAILABLE, STRIKES_AVAILABLE, VOLATILITIES_AVAILABLE, PRICE_INDEX_EUR);
     final SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective objective = new SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationObjective(parameters, CUR);
     final SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationEngine<InflationProviderDiscount> calibrationEngine = new SuccessiveRootFinderInflationYearOnYearCapFloorCalibrationEngine<>(
         objective);
 
-    for (int loop1 = 0; loop1 < strikes_AVAILABLE.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
-        for (int loop3 = 0; loop3 < availabelTenor[loop2]; loop3++) {
+    for (int loop1 = 0; loop1 < STRIKES_AVAILABLE.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
+        for (int loop3 = 0; loop3 < AVAILABLE_TENOR[loop2]; loop3++) {
           marketPrices_AVAILABLE[loop1][loop2] = marketPrices_AVAILABLE[loop1][loop2] + METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(loop3), BLACK_INFLATION).getAmount(CUR);
         }
       }
     }
 
-    for (int loop1 = 0; loop1 < strikes.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+    for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
 
         calibrationEngine.addInstrument(CAPS_AVAILABLE[loop1][loop2], marketPrices_AVAILABLE[loop1][loop2]);
 

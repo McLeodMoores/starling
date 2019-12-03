@@ -12,7 +12,7 @@ import org.threeten.bp.temporal.TemporalAdjusters;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  End of month roll date adjuster
+ * End of month roll date adjuster.
  */
 public final class EndOfMonthRollDateAdjuster implements RollDateAdjuster {
 
@@ -23,23 +23,25 @@ public final class EndOfMonthRollDateAdjuster implements RollDateAdjuster {
 
   /**
    * Returns the single instance of this adjuster.
+   * 
    * @return The adjuster
    */
   public static RollDateAdjuster getAdjuster() {
     return INSTANCE;
   }
-  
+
   /**
    * Private constructor
    */
-  private EndOfMonthRollDateAdjuster() {}
-  
+  private EndOfMonthRollDateAdjuster() {
+  }
+
   @Override
-  public Temporal adjustInto(Temporal temporal) {
+  public Temporal adjustInto(final Temporal temporal) {
     ArgumentChecker.notNull(temporal, "temporal");
     return temporal.with(LAST_DAY_OF_THE_MONTH);
   }
-  
+
   @Override
   public long getMonthsToAdjust() {
     return 0;

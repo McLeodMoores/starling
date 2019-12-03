@@ -38,15 +38,18 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Extracts some type of structured object from a cycle
- * 
- * @param <TKey> the key by which these snaps are ided
- * @param <TCalculatedValue> The type of value which comes out of the engine
- * @param <TSnapshot> The type of value which is stored in the snapshots
+ * Extracts some type of structured object from a cycle.
+ *
+ * @param <TKey>
+ *          the key by which these snaps are ided
+ * @param <TCalculatedValue>
+ *          The type of value which comes out of the engine
+ * @param <TSnapshot>
+ *          The type of value which is stored in the snapshots
  */
 public abstract class StructuredSnapper<TKey, TCalculatedValue, TSnapshot> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(StructuredSnapper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StructuredSnapper.class);
 
   private final String _requirementName;
 
@@ -63,7 +66,7 @@ public abstract class StructuredSnapper<TKey, TCalculatedValue, TSnapshot> {
       final ViewCycle viewCycle) {
     final Map<TKey, TCalculatedValue> calculatedValues = getValues(viewCycle, graphs);
 
-    final Map<TKey, TSnapshot> ret = new HashMap<TKey, TSnapshot>();
+    final Map<TKey, TSnapshot> ret = new HashMap<>();
     for (final Entry<TKey, TCalculatedValue> entry : calculatedValues.entrySet()) {
       final TSnapshot snapshot = buildSnapshot(results, entry.getKey(), entry.getValue());
       ret.put(entry.getKey(), snapshot);
@@ -82,8 +85,8 @@ public abstract class StructuredSnapper<TKey, TCalculatedValue, TSnapshot> {
   }
 
   private Map<TKey, TCalculatedValue> getValues(final ViewCycle viewCycle, final Map<String, DependencyGraph> dependencyGraphs) {
-    final Map<String, Collection<ValueSpecification>> values = getMatchingSpecifications(dependencyGraphs, _requirementName);
-    final Map<TKey, TCalculatedValue> ts = new HashMap<TKey, TCalculatedValue>();
+    final Map<String, Collection<ValueSpecification>> values = getMatchingSpecifications(dependencyGraphs);
+    final Map<TKey, TCalculatedValue> ts = new HashMap<>();
 
     for (final Entry<String, Collection<ValueSpecification>> entry : values.entrySet()) {
       final Iterable<ValueSpecification> requiredSpecsIt = Iterables.filter(entry.getValue(),
@@ -106,7 +109,7 @@ public abstract class StructuredSnapper<TKey, TCalculatedValue, TSnapshot> {
       final ComputationCacheResponse computationCacheResponse = viewCycle.queryComputationCaches(cacheQuery);
 
       if (computationCacheResponse.getResults().size() != requiredSpecs.size()) {
-        s_logger.debug("Failed to get all results from computation cache");
+        LOGGER.debug("Failed to get all results from computation cache");
       }
 
       final Map<TKey, Pair<ValueSpecification, Object>> infos = Maps.uniqueIndex(computationCacheResponse.getResults(),
@@ -127,13 +130,12 @@ public abstract class StructuredSnapper<TKey, TCalculatedValue, TSnapshot> {
     return ts;
   }
 
-  private Map<String, Collection<ValueSpecification>> getMatchingSpecifications(final Map<String, DependencyGraph> graphs,
-      final String specName) {
-    final Map<String, Collection<ValueSpecification>> ret = new HashMap<String, Collection<ValueSpecification>>();
+  private Map<String, Collection<ValueSpecification>> getMatchingSpecifications(final Map<String, DependencyGraph> graphs) {
+    final Map<String, Collection<ValueSpecification>> ret = new HashMap<>();
     for (final Entry<String, DependencyGraph> kvp : graphs.entrySet()) {
       final String config = kvp.getKey();
       final DependencyGraph graph = kvp.getValue();
-      final Set<ValueSpecification> specsSet = new HashSet<ValueSpecification>();
+      final Set<ValueSpecification> specsSet = new HashSet<>();
       final Iterator<DependencyNode> nodes = graph.nodeIterator();
       while (nodes.hasNext()) {
         final DependencyNode node = nodes.next();

@@ -27,7 +27,8 @@ public class EquityVarianceSwapStaticReplicationPresentValueFunction extends Equ
   }
 
   @Override
-  protected Set<ComputedValue> computeValues(final ValueSpecification resultSpec, final FunctionInputs inputs, final VarianceSwap derivative, final StaticReplicationDataBundle market) {
+  protected Set<ComputedValue> computeValues(final ValueSpecification resultSpec, final FunctionInputs inputs, final VarianceSwap derivative,
+      final StaticReplicationDataBundle market) {
     return Collections.singleton(new ComputedValue(resultSpec, PRICER.presentValue(derivative, market)));
   }
 

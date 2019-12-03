@@ -20,7 +20,7 @@ import com.opengamma.engine.value.ValueSpecification;
   }
 
   @Override
-  public String formatCell(Object value, ValueSpecification valueSpec, Object inlineKey) {
+  public String formatCell(final Object value, final ValueSpecification valueSpec, final Object inlineKey) {
     return trim(value.toString());
   }
 
@@ -35,11 +35,10 @@ import com.opengamma.engine.value.ValueSpecification;
    * @param str The string to be trimmed.
    * @return The trimmed string.
    */
-  private static String trim(String str) {
+  private static String trim(final String str) {
     if (str.length() < MAX_VALUE_LENGTH) {
       return str;
-    } else {
-      return str.substring(0, MAX_VALUE_LENGTH) + "...";
     }
+    return str.substring(0, MAX_VALUE_LENGTH) + "...";
   }
 }

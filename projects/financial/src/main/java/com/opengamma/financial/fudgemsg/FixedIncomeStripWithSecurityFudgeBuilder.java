@@ -30,28 +30,28 @@ public class FixedIncomeStripWithSecurityFudgeBuilder implements FudgeBuilder<Fi
   private static final String MATURITY_NAME = "maturity";
   private static final String IDENTIFIER_NAME = "identifier";
   private static final String SECURITY_NAME = "security";
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FixedIncomeStripWithSecurity object) {
-    MutableFudgeMsg message = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FixedIncomeStripWithSecurity object) {
+    final MutableFudgeMsg message = serializer.newMessage();
     serializer.addToMessage(message, STRIP_NAME, null, object.getStrip());
     serializer.addToMessage(message, RESOLVED_TENOR_NAME, null, object.getResolvedTenor());
-    ZonedDateTimeFudgeBuilder zonedDateTimeBuilder = new ZonedDateTimeFudgeBuilder();
-    MutableFudgeMsg subMessage = zonedDateTimeBuilder.buildMessage(serializer, object.getMaturity());
+    final ZonedDateTimeFudgeBuilder zonedDateTimeBuilder = new ZonedDateTimeFudgeBuilder();
+    final MutableFudgeMsg subMessage = zonedDateTimeBuilder.buildMessage(serializer, object.getMaturity());
     serializer.addToMessage(message, MATURITY_NAME, null, subMessage);
     serializer.addToMessage(message, IDENTIFIER_NAME, null, object.getSecurityIdentifier());
     serializer.addToMessageWithClassHeaders(message, SECURITY_NAME, null, object.getSecurity());
-    return message; 
+    return message;
   }
 
   @Override
-  public FixedIncomeStripWithSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-    FixedIncomeStrip strip = deserializer.fieldValueToObject(FixedIncomeStrip.class, message.getByName(STRIP_NAME));
-    Tenor resolvedTenor = deserializer.fieldValueToObject(Tenor.class, message.getByName(RESOLVED_TENOR_NAME));
-    ZonedDateTimeFudgeBuilder zonedDateTimeBuilder = new ZonedDateTimeFudgeBuilder();
-    ZonedDateTime maturity = zonedDateTimeBuilder.buildObject(deserializer, message.getMessage(MATURITY_NAME));
-    ExternalId identifier = deserializer.fieldValueToObject(ExternalId.class, message.getByName(IDENTIFIER_NAME));
-    Security security = (Security) deserializer.fieldValueToObject(message.getByName(SECURITY_NAME));
+  public FixedIncomeStripWithSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final FixedIncomeStrip strip = deserializer.fieldValueToObject(FixedIncomeStrip.class, message.getByName(STRIP_NAME));
+    final Tenor resolvedTenor = deserializer.fieldValueToObject(Tenor.class, message.getByName(RESOLVED_TENOR_NAME));
+    final ZonedDateTimeFudgeBuilder zonedDateTimeBuilder = new ZonedDateTimeFudgeBuilder();
+    final ZonedDateTime maturity = zonedDateTimeBuilder.buildObject(deserializer, message.getMessage(MATURITY_NAME));
+    final ExternalId identifier = deserializer.fieldValueToObject(ExternalId.class, message.getByName(IDENTIFIER_NAME));
+    final Security security = (Security) deserializer.fieldValueToObject(message.getByName(SECURITY_NAME));
     return new FixedIncomeStripWithSecurity(strip, resolvedTenor, maturity, identifier, security);
   }
 

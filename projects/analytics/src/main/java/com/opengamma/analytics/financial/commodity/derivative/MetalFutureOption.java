@@ -10,12 +10,12 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Metal future option commodity derivative
+ * Metal future option commodity derivative.
  */
 public class MetalFutureOption extends CommodityFutureOption<MetalFuture> {
 
   /**
-   * Constructor for future options
+   * Constructor for future options.
    *
    * @param expiry Time (in years as a double) until the date-time at which the future expires
    * @param underlying Underlying future
@@ -23,7 +23,8 @@ public class MetalFutureOption extends CommodityFutureOption<MetalFuture> {
    * @param exerciseType Exercise type - European or American
    * @param isCall Call if true, Put if false
    */
-  public MetalFutureOption(final double expiry, final MetalFuture underlying, final double strike, final ExerciseDecisionType exerciseType, final boolean isCall) {
+  public MetalFutureOption(final double expiry, final MetalFuture underlying, final double strike, final ExerciseDecisionType exerciseType,
+      final boolean isCall) {
     super(expiry, underlying, strike, exerciseType, isCall);
   }
 

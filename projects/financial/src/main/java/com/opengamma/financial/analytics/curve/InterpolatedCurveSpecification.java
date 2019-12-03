@@ -31,12 +31,18 @@ public class InterpolatedCurveSpecification extends CurveSpecification {
   private final String _leftExtrapolatorName;
 
   /**
-   * @param curveDate The curve construction date, not null
-   * @param name The curve name, not null
-   * @param nodes The nodes that are used to construct this curve, not null
-   * @param interpolatorName The interpolator name, not null
-   * @param rightExtrapolatorName The right extrapolator name, not null
-   * @param leftExtrapolatorName The left extrapolator name, not null
+   * @param curveDate
+   *          The curve construction date, not null
+   * @param name
+   *          The curve name, not null
+   * @param nodes
+   *          The nodes that are used to construct this curve, not null
+   * @param interpolatorName
+   *          The interpolator name, not null
+   * @param rightExtrapolatorName
+   *          The right extrapolator name, not null
+   * @param leftExtrapolatorName
+   *          The left extrapolator name, not null
    */
   public InterpolatedCurveSpecification(final LocalDate curveDate, final String name, final Collection<CurveNodeWithIdentifier> nodes,
       final String interpolatorName, final String rightExtrapolatorName, final String leftExtrapolatorName) {
@@ -48,7 +54,8 @@ public class InterpolatedCurveSpecification extends CurveSpecification {
   }
 
   /**
-   * Gets the interpolator name,
+   * Gets the interpolator name.
+   * 
    * @return The interpolator name
    */
   public String getInterpolatorName() {
@@ -57,6 +64,7 @@ public class InterpolatedCurveSpecification extends CurveSpecification {
 
   /**
    * Gets the right extrapolator name.
+   * 
    * @return The right extrapolator name
    */
   public String getRightExtrapolatorName() {
@@ -65,6 +73,7 @@ public class InterpolatedCurveSpecification extends CurveSpecification {
 
   /**
    * Gets the left extrapolator name.
+   * 
    * @return The left extrapolator name
    */
   public String getLeftExtrapolatorName() {

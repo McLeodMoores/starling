@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.server.conversion;
@@ -11,38 +11,60 @@ import java.math.RoundingMode;
 import java.text.DecimalFormatSymbols;
 
 /**
- * 
+ *
  */
 public class DoubleValueSignificantFiguresFormatter extends DoubleValueFormatter {
-  
-  // CSOFF
+  /** A 5 significant figure formatter. */
   public static final DoubleValueSignificantFiguresFormatter NON_CCY_5SF = DoubleValueSignificantFiguresFormatter.of(5, false);
-  // CSON
-  
+
   private final BigDecimal _maxValueForSigFig;
   private final MathContext _sigFigMathContext;
-  
-  public DoubleValueSignificantFiguresFormatter(int significantFigures, boolean isCurrencyAmount) {
+
+  /**
+   * Uses the format of the default locale.
+   *
+   * @param significantFigures
+   *          the number of significant figures to use
+   * @param isCurrencyAmount
+   *          true if the value being formatted is a currency amount
+   */
+  public DoubleValueSignificantFiguresFormatter(final int significantFigures, final boolean isCurrencyAmount) {
     this(significantFigures, isCurrencyAmount, DecimalFormatSymbols.getInstance());
   }
-  
-  public DoubleValueSignificantFiguresFormatter(int significantFigures, boolean isCurrencyAmount, DecimalFormatSymbols formatSymbols) {
+
+  /**
+   * @param significantFigures
+   *          the number of significant figures to use
+   * @param isCurrencyAmount
+   *          true if the value being formatted is a currency amount
+   * @param formatSymbols
+   *          the formatting symbols
+   */
+  public DoubleValueSignificantFiguresFormatter(final int significantFigures, final boolean isCurrencyAmount, final DecimalFormatSymbols formatSymbols) {
     super(isCurrencyAmount, formatSymbols);
     _maxValueForSigFig = BigDecimal.TEN.pow(significantFigures - 1);
     _sigFigMathContext = new MathContext(significantFigures, RoundingMode.HALF_UP);
   }
-  
-  public static DoubleValueSignificantFiguresFormatter of(int significantFigures, boolean isCurrencyAmount) {
+
+  /**
+   * Uses the format of the default locale.
+   *
+   * @param significantFigures
+   *          the number of significant figures to use
+   * @param isCurrencyAmount
+   *          true if the value being formatted is a currency amount
+   * @return the formatter
+   */
+  public static DoubleValueSignificantFiguresFormatter of(final int significantFigures, final boolean isCurrencyAmount) {
     return new DoubleValueSignificantFiguresFormatter(significantFigures, isCurrencyAmount);
   }
-  
+
   @Override
-  public BigDecimal process(BigDecimal bigDecimalValue) {
+  public BigDecimal process(final BigDecimal bigDecimalValue) {
     if (bigDecimalValue.abs().compareTo(_maxValueForSigFig) > 0) {
       return bigDecimalValue.setScale(0, RoundingMode.HALF_UP);
-    } else {
-      return bigDecimalValue.round(_sigFigMathContext);
     }
+    return bigDecimalValue.round(_sigFigMathContext);
   }
-  
+
 }

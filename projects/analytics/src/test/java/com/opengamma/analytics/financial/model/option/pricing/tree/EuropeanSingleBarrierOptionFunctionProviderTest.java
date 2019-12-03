@@ -26,8 +26,8 @@ import com.opengamma.util.test.TestGroup;
 public class EuropeanSingleBarrierOptionFunctionProviderTest {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
-  private static final BinomialTreeOptionPricingModel _model = new BinomialTreeOptionPricingModel();
-  private static final TrinomialTreeOptionPricingModel _modelTrinomial = new TrinomialTreeOptionPricingModel();
+  private static final BinomialTreeOptionPricingModel MODEL = new BinomialTreeOptionPricingModel();
+  private static final TrinomialTreeOptionPricingModel TRINOMIAL = new TrinomialTreeOptionPricingModel();
   private static final double SPOT = 105.;
   private static final double[] STRIKES = new double[] {97., 105., 114. };
   private static final double TIME = 4.2;
@@ -57,13 +57,13 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
                   final OptionFunctionProvider1D function = new EuropeanSingleBarrierOptionFunctionProvider(strike, TIME, nSteps, isCall, barrier,
                       EuropeanSingleBarrierOptionFunctionProvider.BarrierTypes.valueOf(type));
                   double exact = price(SPOT, strike, TIME, vol, interest, dividend, isCall, barrier, type);
-                  final double res = _modelTrinomial.getPrice(lattice, function, SPOT, vol, interest, dividend);
+                  final double res = TRINOMIAL.getPrice(lattice, function, SPOT, vol, interest, dividend);
                   assertEquals(res, exact, Math.max(exact, 1.) * 1.e-2);
 
                   final OptionFunctionProvider1D functionAdm = new EuropeanSingleBarrierOptionFunctionProvider(strike, TIME, nStepsAdm, isCall, barrier,
                       EuropeanSingleBarrierOptionFunctionProvider.BarrierTypes.valueOf(type));
                   final LatticeSpecification latticeAdm = new AdaptiveLatticeSpecification(functionAdm);
-                  final double resAdm = _modelTrinomial.getPrice(latticeAdm, functionAdm, SPOT, vol, interest, dividend);
+                  final double resAdm = TRINOMIAL.getPrice(latticeAdm, functionAdm, SPOT, vol, interest, dividend);
                   assertEquals(resAdm, exact, Math.max(exact, 1.) * 1.e-2);
                 }
               }
@@ -108,7 +108,7 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
                   final double deltaDown = 0.5 * (price - priceSpot2Down) / eps;
                   final double gamma = 0.5 * (deltaUp - deltaDown) / eps;
                   final double theta = -0.5 * (priceTimeUp - priceTimeDown) / eps;
-                  final GreekResultCollection res = _modelTrinomial.getGreeks(lattice, function, SPOT, vol, interest, dividend);
+                  final GreekResultCollection res = TRINOMIAL.getGreeks(lattice, function, SPOT, vol, interest, dividend);
                   assertEquals(res.get(Greek.FAIR_PRICE), price, Math.max(price, 1.) * 1.e-2);
                   assertEquals(res.get(Greek.DELTA), delta, Math.max(delta, 1.) * 1.e-2);
                   assertEquals(res.get(Greek.GAMMA), gamma, Math.max(gamma, 1.) * 1.e-1);
@@ -151,7 +151,7 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
                   final OptionFunctionProvider1D function = new EuropeanSingleBarrierOptionFunctionProvider(strike, TIME, nSteps, isCall, barrier,
                       EuropeanSingleBarrierOptionFunctionProvider.BarrierTypes.valueOf(type));
                   double exact = price(SPOT, strike, TIME, vol, interest, dividend, isCall, barrier, type);
-                  final double res = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
+                  final double res = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
                   assertEquals(res, exact, Math.max(exact, 1.) * 1.e-2);
                 }
               }
@@ -204,7 +204,7 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
                   final double deltaDown = 0.5 * (price - priceSpot2Down) / eps;
                   final double gamma = 0.5 * (deltaUp - deltaDown) / eps;
                   final double theta = -0.5 * (priceTimeUp - priceTimeDown) / eps;
-                  final GreekResultCollection res = _model.getGreeks(lattice, function, SPOT, vol, interest, dividend);
+                  final GreekResultCollection res = MODEL.getGreeks(lattice, function, SPOT, vol, interest, dividend);
                   assertEquals(res.get(Greek.FAIR_PRICE), price, Math.max(price, 1.) * 1.e-2);
                   assertEquals(res.get(Greek.DELTA), delta, Math.max(delta, 1.) * 1.e-2);
                   assertEquals(res.get(Greek.GAMMA), gamma, Math.max(gamma, 1.) * 1.e-1);
@@ -257,8 +257,8 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
 
                 final DividendFunctionProvider cashDividend = new CashDividendFunctionProvider(dividendTimes, cashDividends);
                 final DividendFunctionProvider propDividend = new ProportionalDividendFunctionProvider(dividendTimes, propDividends);
-                final double resMod = _model.getPrice(lattice, function, SPOT, vol, interest, cashDividend);
-                final double resRes = _model.getPrice(lattice, function, SPOT, vol, interest, propDividend);
+                final double resMod = MODEL.getPrice(lattice, function, SPOT, vol, interest, cashDividend);
+                final double resRes = MODEL.getPrice(lattice, function, SPOT, vol, interest, propDividend);
 
                 double exactMod = price(modSpot, strike, TIME, vol, interest, 0., isCall, barrier, type);
                 assertEquals(resMod, exactMod, Math.max(exactMod, 1.) * 1.e-2);
@@ -267,8 +267,8 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
 
                 final OptionFunctionProvider1D functionTri = new EuropeanSingleBarrierOptionFunctionProvider(strike, TIME, nStepsTri, isCall, barrier,
                     EuropeanSingleBarrierOptionFunctionProvider.BarrierTypes.valueOf(type));
-                final double resTriCash = _modelTrinomial.getPrice(latticeTri, functionTri, SPOT, vol, interest, cashDividend);
-                final double resTriProp = _modelTrinomial.getPrice(latticeTri, functionTri, SPOT, vol, interest, propDividend);
+                final double resTriCash = TRINOMIAL.getPrice(latticeTri, functionTri, SPOT, vol, interest, cashDividend);
+                final double resTriProp = TRINOMIAL.getPrice(latticeTri, functionTri, SPOT, vol, interest, propDividend);
                 assertEquals(resTriCash, exactMod, Math.max(exactMod, 1.) * 1.e-1);
                 assertEquals(resTriProp, exactRes, Math.max(exactRes, 1.) * 1.e-1);
               }
@@ -333,13 +333,13 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
                   final double deltaDown = 0.5 * (price - priceSpot2Down) / eps;
                   final double gamma = 0.5 * (deltaUp - deltaDown) / eps;
                   final double theta = -0.5 * (priceTimeUp - priceTimeDown) / eps;
-                  final GreekResultCollection res = _model.getGreeks(lattice, function, SPOT, vol, interest, cashDividend);
+                  final GreekResultCollection res = MODEL.getGreeks(lattice, function, SPOT, vol, interest, cashDividend);
                   assertEquals(res.get(Greek.FAIR_PRICE), price, Math.max(price, 1.) * 1.e-2);
                   assertEquals(res.get(Greek.DELTA), delta, Math.max(delta, 1.) * 1.e-1);
                   assertEquals(res.get(Greek.GAMMA), gamma, Math.max(gamma, 1.) * 1.e-1);
                   assertEquals(res.get(Greek.THETA), theta, Math.max(theta, 1.) * 1.e-1);
 
-                  final GreekResultCollection resTri = _modelTrinomial.getGreeks(latticeTri, functionTri, SPOT, vol, interest, cashDividend);
+                  final GreekResultCollection resTri = TRINOMIAL.getGreeks(latticeTri, functionTri, SPOT, vol, interest, cashDividend);
                   assertEquals(resTri.get(Greek.FAIR_PRICE), price, Math.max(price, 1.) * 1.e-2);
                   assertEquals(resTri.get(Greek.DELTA), delta, Math.max(delta, 1.) * 1.e-1);
                   assertEquals(resTri.get(Greek.GAMMA), gamma, Math.max(gamma, 1.) * 1.e-1);
@@ -358,13 +358,13 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
                   final double deltaDown = 0.5 * (price - priceSpot2Down) / eps;
                   final double gamma = 0.5 * (deltaUp - deltaDown) / eps;
                   final double theta = -0.5 * (priceTimeUp - priceTimeDown) / eps;
-                  final GreekResultCollection res = _model.getGreeks(lattice, function, SPOT, vol, interest, propDividend);
+                  final GreekResultCollection res = MODEL.getGreeks(lattice, function, SPOT, vol, interest, propDividend);
                   assertEquals(res.get(Greek.FAIR_PRICE), price, Math.max(price, 1.) * 1.e-2);
                   assertEquals(res.get(Greek.DELTA), delta, Math.max(delta, 1.) * 1.e-2);
                   assertEquals(res.get(Greek.GAMMA), gamma, Math.max(gamma, 1.) * 1.e-1);
                   assertEquals(res.get(Greek.THETA), theta, Math.max(theta, 1.) * 1.e-1);
 
-                  final GreekResultCollection resTri = _modelTrinomial.getGreeks(latticeTri, functionTri, SPOT, vol, interest, propDividend);
+                  final GreekResultCollection resTri = TRINOMIAL.getGreeks(latticeTri, functionTri, SPOT, vol, interest, propDividend);
                   assertEquals(resTri.get(Greek.FAIR_PRICE), price, Math.max(price, 1.) * 1.e-1);
                   assertEquals(resTri.get(Greek.DELTA), delta, Math.max(delta, 1.) * 1.e-1);
                   assertEquals(resTri.get(Greek.GAMMA), gamma, Math.max(gamma, 1.) * 1.e-1);
@@ -423,20 +423,20 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
             final OptionFunctionProvider1D functionBarrierUp = new EuropeanSingleBarrierOptionFunctionProvider(strike, time, steps, isCall, barrier,
                 EuropeanSingleBarrierOptionFunctionProvider.BarrierTypes.UpAndOut);
 
-            final double resPriceBarrierDown = _model.getPrice(functionBarrierDown, SPOT, vol, rate, dividend);
-            final GreekResultCollection resGreeksBarrierDown = _model.getGreeks(functionBarrierDown, SPOT, vol, rate, dividend);
-            final double resPriceConstBarrierDown = _model.getPrice(lattice1, functionBarrierDown, SPOT, volRef, rateRef, dividend[0]);
-            final GreekResultCollection resGreeksConstBarrierDown = _model.getGreeks(lattice1, functionBarrierDown, SPOT, volRef, rateRef, dividend[0]);
+            final double resPriceBarrierDown = MODEL.getPrice(functionBarrierDown, SPOT, vol, rate, dividend);
+            final GreekResultCollection resGreeksBarrierDown = MODEL.getGreeks(functionBarrierDown, SPOT, vol, rate, dividend);
+            final double resPriceConstBarrierDown = MODEL.getPrice(lattice1, functionBarrierDown, SPOT, volRef, rateRef, dividend[0]);
+            final GreekResultCollection resGreeksConstBarrierDown = MODEL.getGreeks(lattice1, functionBarrierDown, SPOT, volRef, rateRef, dividend[0]);
             assertEquals(resPriceBarrierDown, resPriceConstBarrierDown, Math.max(Math.abs(resPriceConstBarrierDown), 0.1) * 1.e-1);
             assertEquals(resGreeksBarrierDown.get(Greek.FAIR_PRICE), resGreeksConstBarrierDown.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConstBarrierDown.get(Greek.FAIR_PRICE)), 0.1) * 0.1);
             assertEquals(resGreeksBarrierDown.get(Greek.DELTA), resGreeksConstBarrierDown.get(Greek.DELTA), Math.max(Math.abs(resGreeksConstBarrierDown.get(Greek.DELTA)), 0.1) * 0.1);
             assertEquals(resGreeksBarrierDown.get(Greek.GAMMA), resGreeksConstBarrierDown.get(Greek.GAMMA), Math.max(Math.abs(resGreeksConstBarrierDown.get(Greek.GAMMA)), 0.1) * 0.1);
             assertEquals(resGreeksBarrierDown.get(Greek.THETA), resGreeksConstBarrierDown.get(Greek.THETA), Math.max(Math.abs(resGreeksConstBarrierDown.get(Greek.THETA)), 0.1));
 
-            final double resPriceBarrierUp = _model.getPrice(functionBarrierUp, SPOT, vol, rate, dividend);
-            final GreekResultCollection resGreeksBarrierUp = _model.getGreeks(functionBarrierUp, SPOT, vol, rate, dividend);
-            final double resPriceConstBarrierUp = _model.getPrice(lattice1, functionBarrierUp, SPOT, volRef, rateRef, dividend[0]);
-            final GreekResultCollection resGreeksConstBarrierUp = _model.getGreeks(lattice1, functionBarrierUp, SPOT, volRef, rateRef, dividend[0]);
+            final double resPriceBarrierUp = MODEL.getPrice(functionBarrierUp, SPOT, vol, rate, dividend);
+            final GreekResultCollection resGreeksBarrierUp = MODEL.getGreeks(functionBarrierUp, SPOT, vol, rate, dividend);
+            final double resPriceConstBarrierUp = MODEL.getPrice(lattice1, functionBarrierUp, SPOT, volRef, rateRef, dividend[0]);
+            final GreekResultCollection resGreeksConstBarrierUp = MODEL.getGreeks(lattice1, functionBarrierUp, SPOT, volRef, rateRef, dividend[0]);
             assertEquals(resPriceBarrierUp, resPriceConstBarrierUp, Math.max(Math.abs(resPriceConstBarrierUp), 0.1) * 1.e-1);
             assertEquals(resGreeksBarrierUp.get(Greek.FAIR_PRICE), resGreeksConstBarrierUp.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConstBarrierUp.get(Greek.FAIR_PRICE)), 0.1) * 0.1);
             assertEquals(resGreeksBarrierUp.get(Greek.DELTA), resGreeksConstBarrierUp.get(Greek.DELTA), Math.max(Math.abs(resGreeksConstBarrierUp.get(Greek.DELTA)), 0.1) * 0.1);
@@ -448,16 +448,16 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
             final OptionFunctionProvider1D functionBarrierUpTri = new EuropeanSingleBarrierOptionFunctionProvider(strike, time, stepsTri, isCall, barrier,
                 EuropeanSingleBarrierOptionFunctionProvider.BarrierTypes.UpAndOut);
 
-            final double resPriceBarrierDownTri = _modelTrinomial.getPrice(functionBarrierDownTri, SPOT, volTri, rateTri, dividendTri);
-            final GreekResultCollection resGreeksBarrierDownTri = _modelTrinomial.getGreeks(functionBarrierDownTri, SPOT, volTri, rateTri, dividendTri);
+            final double resPriceBarrierDownTri = TRINOMIAL.getPrice(functionBarrierDownTri, SPOT, volTri, rateTri, dividendTri);
+            final GreekResultCollection resGreeksBarrierDownTri = TRINOMIAL.getGreeks(functionBarrierDownTri, SPOT, volTri, rateTri, dividendTri);
             assertEquals(resPriceBarrierDownTri, resPriceConstBarrierDown, Math.max(Math.abs(resPriceConstBarrierDown), 1.) * 1.e-1);
             assertEquals(resGreeksBarrierDownTri.get(Greek.FAIR_PRICE), resGreeksConstBarrierDown.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConstBarrierDown.get(Greek.FAIR_PRICE)), 1.) * 0.1);
             assertEquals(resGreeksBarrierDownTri.get(Greek.DELTA), resGreeksConstBarrierDown.get(Greek.DELTA), Math.max(Math.abs(resGreeksConstBarrierDown.get(Greek.DELTA)), 1.) * 0.1);
             assertEquals(resGreeksBarrierDownTri.get(Greek.GAMMA), resGreeksConstBarrierDown.get(Greek.GAMMA), Math.max(Math.abs(resGreeksConstBarrierDown.get(Greek.GAMMA)), 1.) * 0.1);
             assertEquals(resGreeksBarrierDownTri.get(Greek.THETA), resGreeksConstBarrierDown.get(Greek.THETA), Math.max(Math.abs(resGreeksConstBarrierDown.get(Greek.THETA)), 1.));
 
-            final double resPriceBarrierUpTri = _modelTrinomial.getPrice(functionBarrierUpTri, SPOT, volTri, rateTri, dividendTri);
-            final GreekResultCollection resGreeksBarrierUpTri = _modelTrinomial.getGreeks(functionBarrierUpTri, SPOT, volTri, rateTri, dividendTri);
+            final double resPriceBarrierUpTri = TRINOMIAL.getPrice(functionBarrierUpTri, SPOT, volTri, rateTri, dividendTri);
+            final GreekResultCollection resGreeksBarrierUpTri = TRINOMIAL.getGreeks(functionBarrierUpTri, SPOT, volTri, rateTri, dividendTri);
             assertEquals(resPriceBarrierUpTri, resPriceConstBarrierUp, Math.max(Math.abs(resPriceConstBarrierUp), 1.) * 1.e-1);
             assertEquals(resGreeksBarrierUpTri.get(Greek.FAIR_PRICE), resGreeksConstBarrierUp.get(Greek.FAIR_PRICE), Math.max(Math.abs(resGreeksConstBarrierUp.get(Greek.FAIR_PRICE)), 1.) * 0.1);
             assertEquals(resGreeksBarrierUpTri.get(Greek.DELTA), resGreeksConstBarrierUp.get(Greek.DELTA), Math.max(Math.abs(resGreeksConstBarrierUp.get(Greek.DELTA)), 1.) * 0.1);
@@ -584,7 +584,7 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
     final OptionFunctionProvider1D function = new EuropeanSingleBarrierOptionFunctionProvider(strike, TIME, nSteps, isCall, barrier,
         EuropeanSingleBarrierOptionFunctionProvider.BarrierTypes.valueOf(type));
     double exact = price(SPOT, strike, TIME, vol, interest, dividend, isCall, barrier, type);
-    final double res = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
+    final double res = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
     assertEquals(res, exact, Math.max(exact, 1.) * 1.e-3);
   }
 
@@ -615,7 +615,7 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
           getD(SPOT, strike, TIME, vol, interest, dividend, barrier, -1., 1.);
       exact = exact < 0. ? 0. : exact;
       exact = SPOT <= barrier ? 0. : exact;
-      final double res = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
+      final double res = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
       System.out.println(nSteps + "\t" + (res - exact));
     }
   }
@@ -654,14 +654,14 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
                           getD(SPOT, strike, TIME, vol, interest, dividend, barrier, -1., 1.);
                       exact = exact < 0. ? 0. : exact;
                       exact = SPOT <= barrier ? 0. : exact;
-                      final double res = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
+                      final double res = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
                       System.out.println(barrier + "\t" + strike + "\t" + vol + "\t" + interest + "\t" + dividend + "\t" + isCall);
                       assertEquals(res, exact, Math.max(exact, 1.) * eps);
                     } else {
                       double exact = isCall ? getB(SPOT, strike, TIME, vol, interest, dividend, barrier, 1.) - getD(SPOT, strike, TIME, vol, interest, dividend, barrier, 1., 1.) : 0.;
                       exact = exact < 0. ? 0. : exact;
                       exact = SPOT <= barrier ? 0. : exact;
-                      final double res = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
+                      final double res = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
                       //                        System.out.println(strike + "\t" + vol + "\t" + interest + "\t" + exact + "\t" + res);
                       assertEquals(res, exact, Math.max(exact, 1.) * eps);
                     }
@@ -674,14 +674,14 @@ public class EuropeanSingleBarrierOptionFunctionProviderTest {
                           getD(SPOT, strike, TIME, vol, interest, dividend, barrier, 1., -1.);
                       exact = exact < 0. ? 0. : exact;
                       exact = SPOT >= barrier ? 0. : exact;
-                      final double res = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
+                      final double res = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
                       //                        System.out.println(barrier + "\t" + strike + "\t" + vol + "\t" + interest + "\t" + exact + "\t" + res);
                       assertEquals(res, exact, Math.max(exact, 1.) * eps);
                     } else {
                       double exact = !isCall ? getB(SPOT, strike, TIME, vol, interest, dividend, barrier, -1.) - getD(SPOT, strike, TIME, vol, interest, dividend, barrier, -1., -1.) : 0.;
                       exact = exact < 0. ? 0. : exact;
                       exact = SPOT >= barrier ? 0. : exact;
-                      final double res = _model.getPrice(lattice, function, SPOT, vol, interest, dividend);
+                      final double res = MODEL.getPrice(lattice, function, SPOT, vol, interest, dividend);
                       //                        System.out.println(strike + "\t" + vol + "\t" + interest + "\t" + exact + "\t" + res);
                       assertEquals(res, exact, Math.max(exact, 1.) * eps);
                     }

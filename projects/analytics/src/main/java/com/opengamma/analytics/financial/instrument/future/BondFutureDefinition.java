@@ -23,6 +23,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Description of a bond future (definition version).
+ * 
  * @deprecated Deprecated since 2.2.0.M4. Use the {@link BondFuturesSecurityDefinition} and {@link BondFuturesTransactionDefinition}.
  */
 @Deprecated
@@ -67,14 +68,22 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * Constructor from the trading and notice dates and the basket.
-   * @param tradingLastDate The last trading date.
-   * @param noticeFirstDate The first notice date.
-   * @param noticeLastDate The last notice date.
-   * @param notional The bond future notional.
-   * @param deliveryBasket The basket of deliverable bonds.
-   * @param conversionFactor The conversion factor of each bond in the basket.
+   * 
+   * @param tradingLastDate
+   *          The last trading date.
+   * @param noticeFirstDate
+   *          The first notice date.
+   * @param noticeLastDate
+   *          The last notice date.
+   * @param notional
+   *          The bond future notional.
+   * @param deliveryBasket
+   *          The basket of deliverable bonds.
+   * @param conversionFactor
+   *          The conversion factor of each bond in the basket.
    */
-  public BondFutureDefinition(final ZonedDateTime tradingLastDate, final ZonedDateTime noticeFirstDate, final ZonedDateTime noticeLastDate, final double notional,
+  public BondFutureDefinition(final ZonedDateTime tradingLastDate, final ZonedDateTime noticeFirstDate, final ZonedDateTime noticeLastDate,
+      final double notional,
       final BondFixedSecurityDefinition[] deliveryBasket, final double[] conversionFactor) {
     ArgumentChecker.notNull(tradingLastDate, "Last trading date");
     ArgumentChecker.notNull(noticeFirstDate, "First notice date");
@@ -97,6 +106,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * Gets the last trading date.
+   * 
    * @return The last trading date.
    */
   public ZonedDateTime getTradingLastDate() {
@@ -105,6 +115,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * Gets the first notice date.
+   * 
    * @return The first notice date.
    */
   public ZonedDateTime getNoticeFirstDate() {
@@ -113,6 +124,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * Gets the last notice date.
+   * 
    * @return The last notice date.
    */
   public ZonedDateTime getNoticeLastDate() {
@@ -121,6 +133,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * Gets the first delivery date. It is the first notice date plus the settlement days.
+   * 
    * @return The first delivery date.
    */
   public ZonedDateTime getDeliveryFirstDate() {
@@ -129,6 +142,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * Gets the last delivery date. It is the last notice date plus the settlement days.
+   * 
    * @return The last delivery date.
    */
   public ZonedDateTime getDeliveryLastDate() {
@@ -137,6 +151,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * Gets the number of days between notice date and delivery date.
+   * 
    * @return The number of days between notice date and delivery date.
    */
   public int getSettlementDays() {
@@ -145,6 +160,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * Gets the notional.
+   * 
    * @return The notional.
    */
   public double getNotional() {
@@ -153,6 +169,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * Gets the basket of deliverable bonds.
+   * 
    * @return The basket of deliverable bonds.
    */
   public BondFixedSecurityDefinition[] getDeliveryBasket() {
@@ -161,6 +178,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * Gets the conversion factor of each bond in the basket.
+   * 
    * @return The conversion factors.
    */
   public double[] getConversionFactor() {
@@ -169,6 +187,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * The future currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -177,6 +196,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -188,6 +208,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
@@ -265,7 +286,7 @@ public class BondFutureDefinition implements InstrumentDefinitionWithData<BondFu
     result = prime * result + _noticeLastDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _settlementDays;
     result = prime * result + _tradingLastDate.hashCode();
     return result;

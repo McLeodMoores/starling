@@ -17,15 +17,15 @@ import com.opengamma.util.PublicAPI;
  */
 @PublicAPI
 public class DeltaDefinition {
-  
+
   private DeltaComparer<Number> _numberComparer;
-  
+
   /**
    * Sets a {@link DeltaComparer} to be used for numbers.
-   * 
+   *
    * @param numberComparer  the comparer to use for numbers.
    */
-  public void setNumberComparer(DeltaComparer<Number> numberComparer) {
+  public void setNumberComparer(final DeltaComparer<Number> numberComparer) {
     _numberComparer = numberComparer;
   }
 
@@ -36,7 +36,7 @@ public class DeltaDefinition {
     return _numberComparer;
   }
 
-  public boolean isDelta(ComputedValue previousComputed, ComputedValue newComputed) {
+  public boolean isDelta(final ComputedValue previousComputed, final ComputedValue newComputed) {
     if (previousComputed == null && newComputed == null) {
       return false;
     }
@@ -50,35 +50,35 @@ public class DeltaDefinition {
 
     // REVIEW jonathan 2010-05-10 -- Written with the assumption that we only really want to compare doubles and
     // BigDecimals, hence the specific Number check here rather than anything more generic.
-    Object previousValue = previousComputed.getValue();
-    Object newValue = newComputed.getValue();
+    final Object previousValue = previousComputed.getValue();
+    final Object newValue = newComputed.getValue();
     if (getNumberComparer() != null && previousValue instanceof Number && newValue instanceof Number) {
       return getNumberComparer().isDelta((Number) previousValue, (Number) newValue);
     }
-    
+
     // Finally, fall back onto the most basic check
     return !ObjectUtils.equals(previousValue, newValue);
   }
-  
+
   @Override
   public int hashCode() {
     return ObjectUtils.hashCode(_numberComparer);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (!(obj instanceof DeltaDefinition)) {
       return false;
     }
-    
-    DeltaDefinition other = (DeltaDefinition) obj;
+
+    final DeltaDefinition other = (DeltaDefinition) obj;
     if (getNumberComparer() == null) {
       return other.getNumberComparer() == null;
     }
     return getNumberComparer().equals(other.getNumberComparer());
   }
-  
+
 }

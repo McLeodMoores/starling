@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.deposit;
@@ -26,7 +26,7 @@ import com.opengamma.master.security.SecurityDescription;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ * A security representing a cash deposit with a continually-compounded zero rate.
  */
 @BeanDefinition
 @SecurityDescription(type = ContinuousZeroDepositSecurity.SECURITY_TYPE, description = "Continous zero deposit")
@@ -34,7 +34,7 @@ public class ContinuousZeroDepositSecurity extends FinancialSecurity {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
 
-  /** The security type */
+  /** The security type. */
   public static final String SECURITY_TYPE = "CONTINUOUS_ZERO_DEPOSIT";
 
   /** The currency. */
@@ -57,11 +57,27 @@ public class ContinuousZeroDepositSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private ExternalId _region;
 
+  /**
+   * For the builder.
+   */
   ContinuousZeroDepositSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public ContinuousZeroDepositSecurity(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double rate, final ExternalId region) {
+  /**
+   * @param currency
+   *          the currency, not null
+   * @param startDate
+   *          the start date, not null
+   * @param maturityDate
+   *          the maturity date, not null
+   * @param rate
+   *          the rate
+   * @param region
+   *          the region, not null
+   */
+  public ContinuousZeroDepositSecurity(final Currency currency, final ZonedDateTime startDate, final ZonedDateTime maturityDate, final double rate,
+      final ExternalId region) {
     super(SECURITY_TYPE);
     setCurrency(currency);
     setStartDate(startDate);

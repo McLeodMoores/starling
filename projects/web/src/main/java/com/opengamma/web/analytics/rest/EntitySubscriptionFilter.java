@@ -27,13 +27,12 @@ import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ResourceFilter;
 
 /**
- * Jersey filter that sets up subscriptions for entities returned from REST methods.  When the entity changes
- * a notification is sent to the client containing the REST URL used to request the entity.
- * An instance of the filter is associated with each REST method annotated with {@link Subscribe}.
+ * Jersey filter that sets up subscriptions for entities returned from REST methods. When the entity changes a notification is sent to the client containing the
+ * REST URL used to request the entity. An instance of the filter is associated with each REST method annotated with {@link Subscribe}.
  */
 public class EntitySubscriptionFilter implements ResourceFilter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EntitySubscriptionFilter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EntitySubscriptionFilter.class);
 
   private final HttpContext _httpContext;
   private final List<String> _uidParamNames;
@@ -41,16 +40,19 @@ public class EntitySubscriptionFilter implements ResourceFilter {
   private final HttpServletRequest _servletRequest;
 
   /**
-   * @param uidParamNames Parameter names (specified by {@link PathParam}) that contain {@link UniqueId}s for which
-   * subscriptions should be created
-   * @param connectionManager For setting up the subscriptions
-   * @param httpContext The HTTP context of the request
-   * @param servletRequest The HTTP request
+   * @param uidParamNames
+   *          Parameter names (specified by {@link PathParam}) that contain {@link UniqueId}s for which subscriptions should be created
+   * @param connectionManager
+   *          For setting up the subscriptions
+   * @param httpContext
+   *          The HTTP context of the request
+   * @param servletRequest
+   *          The HTTP request
    */
-  public EntitySubscriptionFilter(List<String> uidParamNames,
-                                  ConnectionManager connectionManager,
-                                  HttpContext httpContext,
-                                  HttpServletRequest servletRequest) {
+  public EntitySubscriptionFilter(final List<String> uidParamNames,
+      final ConnectionManager connectionManager,
+      final HttpContext httpContext,
+      final HttpServletRequest servletRequest) {
     _httpContext = httpContext;
     _uidParamNames = uidParamNames;
     _restUpdateManager = connectionManager;
@@ -66,7 +68,7 @@ public class EntitySubscriptionFilter implements ResourceFilter {
   }
 
   /**
-   * @return A {@link ResponseFilter} for setting up the subscription
+   * @return A {@link ContainerResponseFilter} for setting up the subscription
    */
   @Override
   public ContainerResponseFilter getResponseFilter() {
@@ -74,60 +76,62 @@ public class EntitySubscriptionFilter implements ResourceFilter {
   }
 
   /**
-   * Filter that examines the response and sets up the subscription with
-   * {@link ConnectionManager#subscribe(String, String, UniqueId, String)}.
+   * Filter that examines the response and sets up the subscription with {@link ConnectionManager#subscribe(String, String, UniqueId, String)}.
    */
   private class ResponseFilter implements ContainerResponseFilter {
 
-    private final List<String> uidParamNames;  // CSIGNORE
+    private final List<String> uidParamNames; // CSIGNORE
 
     /**
-     * @param uidParamNames Names of the method parameters that contain {@link UniqueId}s.  These are the names
-     * specified in the {@link PathParam} annotations and they are also annotated with {@link Subscribe}.
+     * @param uidParamNames
+     *          Names of the method parameters that contain {@link UniqueId}s. These are the names specified in the {@link PathParam} annotations and they are
+     *          also annotated with {@link Subscribe}.
      */
-    public ResponseFilter(List<String> uidParamNames) {
+    ResponseFilter(final List<String> uidParamNames) {
       this.uidParamNames = uidParamNames;
     }
 
     /**
-     * Extracts the client ID from the query parameter named {@link LongPollingServlet#CLIENT_ID} and subscribes
-     * for updates for {@link UniqueId}s in the parameters named {@link #uidParamNames}.
-     * @param request The request
-     * @param response The response
-     * @return The unmodified response
-     * TODO this is almost identical to MasterSubscriptionFilter, common superclass? helper method / class?
+     * Extracts the client ID from the query parameter named {@link LongPollingServlet#CLIENT_ID} and subscribes for updates for {@link UniqueId}s in the
+     * parameters named {@link #uidParamNames}.
+     * 
+     * @param request
+     *          The request
+     * @param response
+     *          The response
+     * @return The unmodified response TODO this is almost identical to MasterSubscriptionFilter, common superclass? helper method / class?
      */
     @Override
-    public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
+    public ContainerResponse filter(final ContainerRequest request, final ContainerResponse response) {
       // TODO check the response status, only subscribe if successful
       // TODO don't subscribe if specific version was requested - probably need @NoSubscribe annotation on sub-resource methods for versions
-      String clientId = FilterUtils.getClientId(request, _httpContext);
+      final String clientId = FilterUtils.getClientId(request, _httpContext);
       // don't subscribe if there's no client ID
       if (clientId == null) {
         return response;
       }
-      String userId = (AuthUtils.isPermissive() ? null : FilterUtils.getUserId(_httpContext));
+      final String userId = AuthUtils.isPermissive() ? null : FilterUtils.getUserId(_httpContext);
       subscribe(userId, clientId, _servletRequest.getRequestURI(), _httpContext.getUriInfo().getPathParameters());
       return response;
     }
 
-    private void subscribe(String userId, String clientId, String url, MultivaluedMap<String, String> pathParameters) {
-      for (String paramName : uidParamNames) {
-        List<String> uidStrs = pathParameters.get(paramName);
-        s_logger.debug(paramName + ": " + uidStrs);
-        for (String uidStr : uidStrs) {
+    private void subscribe(final String userId, final String clientId, final String url, final MultivaluedMap<String, String> pathParameters) {
+      for (final String paramName : uidParamNames) {
+        final List<String> uidStrs = pathParameters.get(paramName);
+        LOGGER.debug(paramName + ": " + uidStrs);
+        for (final String uidStr : uidStrs) {
           UniqueId uniqueId = null;
           try {
             uniqueId = UniqueId.parse(uidStr);
-          } catch (IllegalArgumentException e) {
-            s_logger.warn("Unable to parse unique ID: " + uidStr, e);
+          } catch (final IllegalArgumentException e) {
+            LOGGER.warn("Unable to parse unique ID: " + uidStr, e);
           }
           if (uniqueId != null) {
             try {
               _restUpdateManager.subscribe(userId, clientId, uniqueId, url);
-            } catch (OpenGammaRuntimeException e) {
-              s_logger.warn("Failed to subscribe for updates to REST entity, userId: " + userId + ", clientId: "
-                                + clientId + ", url: " + url, e);
+            } catch (final OpenGammaRuntimeException e) {
+              LOGGER.warn("Failed to subscribe for updates to REST entity, userId: " + userId + ", clientId: "
+                  + clientId + ", url: " + url, e);
             }
           }
         }

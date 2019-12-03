@@ -17,8 +17,8 @@ import com.google.common.collect.Maps;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Abstraction of the I/O pattern for the database dump/restore tools. Data is written to a logical sub-directory for each object type with a logical file for each object. Sub-classes may implement
- * this with physical directories and files, or use a structured file format such as a ZIP file.
+ * Abstraction of the I/O pattern for the database dump/restore tools. Data is written to a logical sub-directory for each object type with a logical file for
+ * each object. Sub-classes may implement this with physical directories and files, or use a structured file format such as a ZIP file.
  */
 public abstract class RegressionIO {
 
@@ -34,7 +34,7 @@ public abstract class RegressionIO {
 
     /**
      * Initializes any internal context needed by an I/O instance for {@link #read} operations.
-     * 
+     *
      * @param context the previous context (created by {@link #write} for example) or null if none
      * @return the context object, or null if none required
      */
@@ -42,7 +42,7 @@ public abstract class RegressionIO {
 
     /**
      * Initializes any internal context needed by an I/O instance for {@link #write} operations.
-     * 
+     *
      * @param context the previous context (created by {@link #write} for example) or null if none
      * @return the context object, or null if none required
      */
@@ -50,42 +50,54 @@ public abstract class RegressionIO {
 
     /**
      * Returns a logical file extension, if any.
-     * 
-     * @param context the context object returned by {@link #init}
+     *
+     * @param context
+     *          the context object
      * @return the logical extension, for example ".txt", or null if none
      */
     String getLogicalFileExtension(Object context);
 
     /**
      * Formats an object to an output stream.
-     * 
-     * @param context the context object returned by {@link #init}
-     * @param o the object to write, not null
-     * @param dest the target stream, not null
+     *
+     * @param context
+     *          the context object
+     * @param o
+     *          the object to write, not null
+     * @param dest
+     *          the target stream, not null
+     * @throws IOException
+     *           if there is a problem with the write
      */
     void write(Object context, Object o, OutputStream dest) throws IOException;
 
     /**
      * Decodes an object from an input stream.
-     * 
-     * @param context the context object returned by {@link #init}
-     * @param in the input stream, not null
+     *
+     * @param context
+     *          the context object
+     * @param in
+     *          the input stream, not null
      * @return the object read, not null
+     * @throws IOException
+     *           if there is a problem with the read
      */
     Object read(Object context, InputStream in) throws IOException;
 
     /**
-     * Terminates a context returned by {@link #initRead}.
-     * 
-     * @param context the value returned by a previous call to {@code initRead}.
+     * Terminates a context returned by {@link #openRead}.
+     *
+     * @param context
+     *          the value returned by a previous call to {@code openRead}.
      * @return the updated context, or null if none now exists
      */
     Object closeRead(Object context);
 
     /**
-     * Terminates a context returned by {@link #initWrite}.
-     * 
-     * @param context the value returned by a previous call to {@code initWrite}.
+     * Terminates a context returned by {@link #openWrite}.
+     *
+     * @param context
+     *          the value returned by a previous call to {@code openWrite}.
      * @return the updated context, or null if none now exists
      */
     Object closeWrite(Object context);
@@ -104,7 +116,7 @@ public abstract class RegressionIO {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param baseFile the base file - the exact meaning will depend on the sub-class, not null
    * @param format the format to use for each object, not null
    */
@@ -115,7 +127,7 @@ public abstract class RegressionIO {
 
   /**
    * Returns the base location - the exact meaning will depend on the sub-class.
-   * 
+   *
    * @return the base location, not null
    */
   protected File getBaseFile() {
@@ -124,7 +136,7 @@ public abstract class RegressionIO {
 
   /**
    * Returns the format to use for each object.
-   * 
+   *
    * @return the format, not null
    */
   protected Format getFormat() {
@@ -133,7 +145,7 @@ public abstract class RegressionIO {
 
   /**
    * Returns the current format context.
-   * 
+   *
    * @return the format context, if any
    */
   protected Object getFormatContext() {
@@ -142,6 +154,9 @@ public abstract class RegressionIO {
 
   /**
    * Performs any initialization prior to the first write, such as opening files or preparing caches/buffers.
+   *
+   * @throws IOException
+   *           if there is a problem with the write
    */
   public void beginWrite() throws IOException {
     _formatContext = getFormat().openWrite(_formatContext);
@@ -149,10 +164,15 @@ public abstract class RegressionIO {
 
   /**
    * Writes out an object.
-   * 
-   * @param type the type classifier, null for none
-   * @param o the object to write out, not null
-   * @param identifier the object identifier, must be unique within a given object type, not null
+   *
+   * @param type
+   *          the type classifier, null for none
+   * @param o
+   *          the object to write out, not null
+   * @param identifier
+   *          the object identifier, must be unique within a given object type, not null
+   * @throws IOException
+   *           if there is a problem with the write
    */
   public abstract void write(String type, Object o, String identifier) throws IOException;
 
@@ -160,18 +180,25 @@ public abstract class RegressionIO {
    * Bulk write operation.
    * <p>
    * The default implementation just calls {@link #write} but a sub-class might have a more efficient/appropriate form to use.
-   * 
-   * @param type the type classifier, null for none
-   * @param os the objects to write out, as a map of identifier to value, not null
+   *
+   * @param type
+   *          the type classifier, null for none
+   * @param os
+   *          the objects to write out, as a map of identifier to value, not null
+   * @throws IOException
+   *           if there is a problem with the write
    */
   public void write(final String type, final Map<String, Object> os) throws IOException {
-    for (Map.Entry<String, Object> oe : os.entrySet()) {
+    for (final Map.Entry<String, Object> oe : os.entrySet()) {
       write(type, oe.getValue(), oe.getKey());
     }
   }
 
   /**
    * Performs any finalization after the final write, such as flushing caches/buffers or closing files.
+   *
+   * @throws IOException
+   *           if there is a problem with the write
    */
   public void endWrite() throws IOException {
     _formatContext = getFormat().closeWrite(_formatContext);
@@ -179,6 +206,9 @@ public abstract class RegressionIO {
 
   /**
    * Performs any initialization prior to the first read, such as opening files or preparing caches/buffers.
+   *
+   * @throws IOException
+   *           if there is a problem with the read
    */
   public void beginRead() throws IOException {
     _formatContext = getFormat().openRead(_formatContext);
@@ -186,18 +216,25 @@ public abstract class RegressionIO {
 
   /**
    * Reads an object.
-   * 
-   * @param type the type classifier, null for none
-   * @param identifier the object identifier, must be unique within a given object type, not null
+   *
+   * @param type
+   *          the type classifier, null for none
+   * @param identifier
+   *          the object identifier, must be unique within a given object type, not null
    * @return the read object, not null
+   * @throws IOException
+   *           if there is a problem with the read
    */
   public abstract Object read(String type, String identifier) throws IOException;
 
   /**
    * Enumerates all available objects for a type.
-   * 
-   * @param type the type classifier, null for none
+   *
+   * @param type
+   *          the type classifier, null for none
    * @return the object identifiers, not null
+   * @throws IOException
+   *           if there is a problem with the read
    */
   public abstract List<String> enumObjects(String type) throws IOException;
 
@@ -205,14 +242,18 @@ public abstract class RegressionIO {
    * Bulk read operation to fetch an object sub-set.
    * <p>
    * The default implementation just calls {@link #read(String,String)} but a sub-class might have a more efficient/appropriate form to use.
-   * 
-   * @param type the type classifier, null for none
-   * @param identifiers the object identifiers to read, not null
+   *
+   * @param type
+   *          the type classifier, null for none
+   * @param identifiers
+   *          the object identifiers to read, not null
    * @return the objects as a map from identifiers to values, not null
+   * @throws IOException
+   *           if there is a problem with the read
    */
   public Map<String, Object> read(final String type, final Collection<String> identifiers) throws IOException {
     final Map<String, Object> result = Maps.newHashMapWithExpectedSize(identifiers.size());
-    for (String identifier : identifiers) {
+    for (final String identifier : identifiers) {
       result.put(identifier, read(type, identifier));
     }
     return result;
@@ -221,10 +262,14 @@ public abstract class RegressionIO {
   /**
    * Bulk read operation to fetch all objects.
    * <p>
-   * The default implementation just calls {@link #enumObjects} and {@link #read(String,Collection)} but a sub-class might have a more efficient/appropriate form to use.
-   * 
-   * @param type the type classifier, null for none
+   * The default implementation just calls {@link #enumObjects} and {@link #read(String,Collection)} but a sub-class might have a more efficient/appropriate
+   * form to use.
+   *
+   * @param type
+   *          the type classifier, null for none
    * @return the objects as a map of identifiers to values, not null
+   * @throws IOException
+   *           if there is a problem with the read
    */
   public Map<String, Object> readAll(final String type) throws IOException {
     return read(type, enumObjects(type));
@@ -232,6 +277,9 @@ public abstract class RegressionIO {
 
   /**
    * Performs any finalization after the final read, such as closing files.
+   *
+   * @throws IOException
+   *           if there is a problem with the read
    */
   public void endRead() throws IOException {
     _formatContext = getFormat().closeRead(_formatContext);
@@ -241,18 +289,17 @@ public abstract class RegressionIO {
     final String ext = getFormat().getLogicalFileExtension(getFormatContext());
     if (ext != null) {
       return identifier + ext;
-    } else {
-      return identifier;
     }
+    return identifier;
   }
 
-  protected boolean isIdentifierIncluded(String name) {
-    String ext = getFormat().getLogicalFileExtension(getFormatContext());
+  protected boolean isIdentifierIncluded(final String name) {
+    final String ext = getFormat().getLogicalFileExtension(getFormatContext());
     return ext == null || name.endsWith(ext);
   }
-  
-  protected String stripIdentifierExtension(String name) {
-    String ext = getFormat().getLogicalFileExtension(getFormatContext());
+
+  protected String stripIdentifierExtension(final String name) {
+    final String ext = getFormat().getLogicalFileExtension(getFormatContext());
     if (ext == null) {
       return name;
     } else if (name.endsWith(ext)) {

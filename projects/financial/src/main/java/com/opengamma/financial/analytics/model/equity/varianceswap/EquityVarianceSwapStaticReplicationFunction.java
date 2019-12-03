@@ -59,10 +59,10 @@ public abstract class EquityVarianceSwapStaticReplicationFunction extends Abstra
   private final String _valueRequirementName;
   private EquityVarianceSwapConverter _converter;
 
-  /** CalculationMethod constraint used in configuration to choose this model */
+  /** CalculationMethod constraint used in configuration to choose this model. */
   public static final String CALCULATION_METHOD = "StaticReplication";
-  /** Method may be Strike or Moneyness */
-  //TODO confirm
+  /** Method may be Strike or Moneyness. */
+  // TODO confirm
   public static final String STRIKE_PARAMETERIZATION_METHOD = "StrikeParameterizationMethod";
 
   public EquityVarianceSwapStaticReplicationFunction(final String valueRequirementName) {
@@ -71,7 +71,8 @@ public abstract class EquityVarianceSwapStaticReplicationFunction extends Abstra
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String curveName = desiredValue.getConstraint(ValuePropertyNames.CURVE);
     final String curveCalculationConfig = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
@@ -80,7 +81,7 @@ public abstract class EquityVarianceSwapStaticReplicationFunction extends Abstra
     final EquityVarianceSwapSecurity security = (EquityVarianceSwapSecurity) target.getSecurity();
 
     final Clock snapshotClock = executionContext.getValuationClock();
-    final ZonedDateTime now = ZonedDateTime.now(snapshotClock).minusYears(2); //TODO remove me - just for testing
+    final ZonedDateTime now = ZonedDateTime.now(snapshotClock).minusYears(2); // TODO remove me - just for testing
 
     final VarianceSwapDefinition defn = security.accept(_converter);
     final HistoricalTimeSeries timeSeries = (HistoricalTimeSeries) inputs.getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
@@ -92,14 +93,14 @@ public abstract class EquityVarianceSwapStaticReplicationFunction extends Abstra
       throw new OpenGammaRuntimeException("Could not get Volatility Surface");
     }
     final VolatilitySurface volSurface = (VolatilitySurface) volSurfaceObject;
-    //TODO no choice of other surfaces
+    // TODO no choice of other surfaces
     final BlackVolatilitySurface<?> blackVolSurf = new BlackVolatilitySurfaceStrike(volSurface.getSurface());
 
     final Object discountObject = inputs.getValue(getDiscountCurveRequirement(security, curveName, curveCalculationConfig));
     if (discountObject == null) {
       throw new OpenGammaRuntimeException("Could not get Discount Curve");
     }
-    if (!(discountObject instanceof YieldCurve)) { //TODO: make it more generic
+    if (!(discountObject instanceof YieldCurve)) { // TODO: make it more generic
       throw new IllegalArgumentException("Can only handle YieldCurve");
     }
     final YieldCurve discountCurve = (YieldCurve) discountObject;
@@ -113,7 +114,7 @@ public abstract class EquityVarianceSwapStaticReplicationFunction extends Abstra
     final double expiry = TimeCalculator.getTimeBetween(ZonedDateTime.now(executionContext.getValuationClock()), security.getLastObservationDate());
     final double discountFactor = discountCurve.getDiscountFactor(expiry);
     ArgumentChecker.isTrue(Double.doubleToLongBits(discountFactor) != 0, "The discount curve has returned a zero value for a discount bond. Check rates.");
-    final ForwardCurve forwardCurve = new ForwardCurve(spot, discountCurve.getCurve()); //TODO change this
+    final ForwardCurve forwardCurve = new ForwardCurve(spot, discountCurve.getCurve()); // TODO change this
 
     final StaticReplicationDataBundle market = new StaticReplicationDataBundle(blackVolSurf, discountCurve, forwardCurve);
     final ValueSpecification resultSpec = getValueSpecification(target, curveName, curveCalculationConfig, surfaceName);
@@ -121,14 +122,16 @@ public abstract class EquityVarianceSwapStaticReplicationFunction extends Abstra
     return computeValues(resultSpec, inputs, deriv, market);
   }
 
-  protected abstract Set<ComputedValue> computeValues(final ValueSpecification resultSpec, final FunctionInputs inputs, final VarianceSwap derivative, final StaticReplicationDataBundle market);
+  protected abstract Set<ComputedValue> computeValues(ValueSpecification resultSpec, FunctionInputs inputs, VarianceSwap derivative,
+      StaticReplicationDataBundle market);
 
   protected ValueSpecification getValueSpecification(final ComputationTarget target) {
     final ValueProperties properties = getValueProperties(target);
     return new ValueSpecification(_valueRequirementName, target.toSpecification(), properties);
   }
 
-  protected ValueSpecification getValueSpecification(final ComputationTarget target, final String curveName, final String curveCalculationConfig, final String surfaceName) {
+  protected ValueSpecification getValueSpecification(final ComputationTarget target, final String curveName, final String curveCalculationConfig,
+      final String surfaceName) {
     final ValueProperties properties = getValueProperties(target, curveName, curveCalculationConfig, surfaceName);
     return new ValueSpecification(_valueRequirementName, target.toSpecification(), properties);
   }
@@ -143,7 +146,8 @@ public abstract class EquityVarianceSwapStaticReplicationFunction extends Abstra
         .withAny(ValuePropertyNames.SURFACE).get();
   }
 
-  protected ValueProperties getValueProperties(final ComputationTarget target, final String curveName, final String curveCalculationConfig, final String surfaceName) {
+  protected ValueProperties getValueProperties(final ComputationTarget target, final String curveName, final String curveCalculationConfig,
+      final String surfaceName) {
     final EquityVarianceSwapSecurity security = (EquityVarianceSwapSecurity) target.getSecurity();
     return createValueProperties()
         .with(ValuePropertyNames.CURRENCY, security.getCurrency().getCode())
@@ -171,18 +175,21 @@ public abstract class EquityVarianceSwapStaticReplicationFunction extends Abstra
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.EQUITY_OPTION)
         .get();
     final ExternalId id = security.getSpotUnderlyingId();
-    final ExternalId newId = id.getScheme().equals(ExternalSchemes.BLOOMBERG_TICKER) ? ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), id.getValue()) :
-        ExternalId.of(id.getScheme().getName(), id.getValue());
+    final ExternalId newId = id.getScheme().equals(ExternalSchemes.BLOOMBERG_TICKER)
+        ? ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER_WEAK.getName(), id.getValue())
+        : ExternalId.of(id.getScheme().getName(), id.getValue());
     return new ValueRequirement(ValueRequirementNames.INTERPOLATED_VOLATILITY_SURFACE, ComputationTargetType.PRIMITIVE, newId, properties);
   }
 
   private ValueRequirement getTimeSeriesRequirement(final FunctionCompilationContext context, final EquityVarianceSwapSecurity security) {
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
-    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getSpotUnderlyingId().toBundle(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, null);
+    final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getSpotUnderlyingId().toBundle(), null, null, null,
+        MarketDataRequirementNames.MARKET_VALUE, null);
     if (timeSeries == null) {
       return null;
     }
-    return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, MarketDataRequirementNames.MARKET_VALUE, DateConstraint.NULL, true, DateConstraint.VALUATION_TIME, true);
+    return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, MarketDataRequirementNames.MARKET_VALUE, DateConstraint.NULL, true,
+        DateConstraint.VALUATION_TIME, true);
   }
 
   @Override

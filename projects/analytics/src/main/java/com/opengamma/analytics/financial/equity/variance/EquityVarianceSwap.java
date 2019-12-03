@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance;
@@ -11,17 +11,19 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * An Equity Variance Swap is a forward contract on the realised variance of equity index or single stock. It differs from the more general Variance Swap only in that dividends
- * are paid on equity and the treatment of these in the computation of the realised variance depends on the contract. Dividends are either corrected for (i.e. the realised variance is
- * that of the total returns process - the position where <b>all</b> dividend payments are immediately reinvested in the stock) or not - either way, the expected variance (the variance
- * strike of a zero value swap) will differ from the no dividend case.
+ * An Equity Variance Swap is a forward contract on the realised variance of equity index or single stock.
+ * It differs from the more general Variance Swap only in that dividends are paid on equity and the
+ * treatment of these in the computation of the realised variance depends on the contract. Dividends are
+ * either corrected for (i.e. the realised variance is that of the total returns process - the position
+ * where <b>all</b> dividend payments are immediately reinvested in the stock) or not - either way, the
+ * expected variance (the variance strike of a zero value swap) will differ from the no dividend case.
  */
 public class EquityVarianceSwap extends VarianceSwap {
   /** Are the dividends to be corrected for in pricing */
   private final boolean _dividendsCorrected;
 
   /**
-   * Set up an equity variance swap
+   * Set up an equity variance swap.
    * @param varianceSwap The variance swap
    * @param correctForDividends true if dividend payments are corrected for in the realised variance calculation
    */
@@ -31,7 +33,7 @@ public class EquityVarianceSwap extends VarianceSwap {
   }
 
   /**
-   * Set up an equity variance swap
+   * Set up an equity variance swap.
    * @param timeToObsStart Time of first observation. Negative if observations have begun.
    * @param timeToObsEnd Time of final observation. Negative if observations have finished.
    * @param timeToSettlement Time of cash settlement. If negative, the swap has expired.
@@ -45,10 +47,11 @@ public class EquityVarianceSwap extends VarianceSwap {
    * @param observationWeights Array of weights to give observation returns. If null, all weights are 1. Else, length must be: observations.length-1
    * @param correctForDividends true if dividend payments are corrected for in the realised variance calculation
    */
-  public EquityVarianceSwap(final double timeToObsStart, final double timeToObsEnd, final double timeToSettlement, final double varStrike, final double varNotional,
-      final Currency currency, final double annualizationFactor, final int nObsExpected,
+  public EquityVarianceSwap(final double timeToObsStart, final double timeToObsEnd, final double timeToSettlement, final double varStrike,
+      final double varNotional, final Currency currency, final double annualizationFactor, final int nObsExpected,
       final int nObsDisrupted, final double[] observations, final double[] observationWeights, final boolean correctForDividends) {
-    super(timeToObsStart, timeToObsEnd, timeToSettlement, varStrike, varNotional, currency, annualizationFactor, nObsExpected, nObsDisrupted, observations, observationWeights);
+    super(timeToObsStart, timeToObsEnd, timeToSettlement, varStrike, varNotional, currency, annualizationFactor,
+        nObsExpected, nObsDisrupted, observations, observationWeights);
     _dividendsCorrected = correctForDividends;
   }
 

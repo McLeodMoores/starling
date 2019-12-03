@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate.option;
@@ -21,7 +21,6 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.opengamma.financial.security.option.EquityIndexOptionSecurity;
 import com.opengamma.financial.security.option.OptionType;
 import com.opengamma.masterdb.security.hibernate.CurrencyBean;
 import com.opengamma.masterdb.security.hibernate.ExchangeBean;
@@ -30,7 +29,8 @@ import com.opengamma.masterdb.security.hibernate.ExternalIdBean;
 import com.opengamma.masterdb.security.hibernate.SecurityBean;
 
 /**
- * A Hibernate bean representation of {@link EquityIndexOptionSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.option.EquityIndexOptionSecurity}.
  */
 @BeanDefinition
 public class EquityIndexOptionSecurityBean extends SecurityBean {
@@ -63,30 +63,30 @@ public class EquityIndexOptionSecurityBean extends SecurityBean {
     }
     final EquityIndexOptionSecurityBean option = (EquityIndexOptionSecurityBean) other;
     return new EqualsBuilder()
-      .append(getId(), option.getId())
-      .append(getOptionType(), option.getOptionType())
-      .append(getStrike(), option.getStrike())
-      .append(getExpiry(), option.getExpiry())
-      .append(getUnderlying(), option.getUnderlying())
-      .append(getCurrency(), option.getCurrency())
-      .append(getExchange(), option.getExchange())
-      .append(getPointValue(), option.getPointValue())
-      .append(getOptionExerciseType(), option.getOptionExerciseType())
-      .isEquals();
+        .append(getId(), option.getId())
+        .append(getOptionType(), option.getOptionType())
+        .append(getStrike(), option.getStrike())
+        .append(getExpiry(), option.getExpiry())
+        .append(getUnderlying(), option.getUnderlying())
+        .append(getCurrency(), option.getCurrency())
+        .append(getExchange(), option.getExchange())
+        .append(getPointValue(), option.getPointValue())
+        .append(getOptionExerciseType(), option.getOptionExerciseType())
+        .isEquals();
   }
 
   @Override
   public int hashCode() {
     return new HashCodeBuilder()
-      .append(getOptionType())
-      .append(getStrike())
-      .append(getExpiry())
-      .append(getUnderlying())
-      .append(getCurrency())
-      .append(getExchange())
-      .append(getPointValue())
-      .append(getOptionExerciseType())
-      .toHashCode();
+        .append(getOptionType())
+        .append(getStrike())
+        .append(getExpiry())
+        .append(getUnderlying())
+        .append(getCurrency())
+        .append(getExchange())
+        .append(getPointValue())
+        .append(getOptionExerciseType())
+        .toHashCode();
   }
 
   @Override

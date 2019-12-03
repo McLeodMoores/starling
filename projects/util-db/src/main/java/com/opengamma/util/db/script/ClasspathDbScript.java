@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.db.script;
@@ -20,12 +20,12 @@ import com.opengamma.util.ArgumentChecker;
 public class ClasspathDbScript implements DbScript {
 
   private final URL _scriptResource;
-  
-  public ClasspathDbScript(URL scriptResource) {
+
+  public ClasspathDbScript(final URL scriptResource) {
     ArgumentChecker.notNull(scriptResource, "scriptResource");
     _scriptResource = scriptResource;
   }
-  
+
   @Override
   public String getName() {
     return _scriptResource.getPath();
@@ -35,13 +35,13 @@ public class ClasspathDbScript implements DbScript {
   public boolean exists() {
     try {
       try {
-        InputStream in = _scriptResource.openStream();
+        final InputStream in = _scriptResource.openStream();
         in.close();
-      } catch (IllegalArgumentException e) {
+      } catch (final IllegalArgumentException e) {
         throw new OpenGammaRuntimeException(_scriptResource + " caused exception", e);
       }
       return true;
-    } catch (IOException e) {
+    } catch (final IOException e) {
       return false;
     }
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.sensitivity.multicurve;
@@ -18,8 +18,8 @@ import com.opengamma.analytics.math.matrix.MatrixAlgebraFactory;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class containing the sensitivity of value to specific parameters or market quotes and methods for manipulating these data.
- * The vector of sensitivities is stored with reference to a curve name.
+ * Class containing the sensitivity of value to specific parameters or market quotes and methods for manipulating these data. The vector of sensitivities is
+ * stored with reference to a curve name.
  */
 // TODO: The string should be replace by a curveId at some stage.
 public class SimpleParameterSensitivity {
@@ -38,7 +38,9 @@ public class SimpleParameterSensitivity {
 
   /**
    * Constructor taking a map.
-   * @param sensitivity The map with the sensitivities, not null. A new map is created.
+   * 
+   * @param sensitivity
+   *          The map with the sensitivities, not null. A new map is created.
    */
   public SimpleParameterSensitivity(final LinkedHashMap<String, DoubleMatrix1D> sensitivity) {
     ArgumentChecker.notNull(sensitivity, "sensitivity");
@@ -46,10 +48,13 @@ public class SimpleParameterSensitivity {
   }
 
   /**
-   * Create a copy of the sensitivity and add a given named sensitivity to it. If the name / currency pair is in the map, the two sensitivity matrices are added.
-   * Otherwise, a new entry is put into the map
-   * @param name The name. Not null.
-   * @param sensitivity The sensitivity to add, not null
+   * Create a copy of the sensitivity and add a given named sensitivity to it. If the name / currency pair is in the map, the two sensitivity matrices are
+   * added. Otherwise, a new entry is put into the map.
+   * 
+   * @param name
+   *          The name. Not null.
+   * @param sensitivity
+   *          The sensitivity to add, not null
    * @return The total sensitivity.
    */
   public SimpleParameterSensitivity plus(final String name, final DoubleMatrix1D sensitivity) {
@@ -68,7 +73,9 @@ public class SimpleParameterSensitivity {
 
   /**
    * Create a copy of the sensitivity and add a given sensitivity to it.
-   * @param other The sensitivity to add.
+   * 
+   * @param other
+   *          The sensitivity to add.
    * @return The total sensitivity.
    */
   public SimpleParameterSensitivity plus(final SimpleParameterSensitivity other) {
@@ -89,7 +96,9 @@ public class SimpleParameterSensitivity {
 
   /**
    * Create a copy of the object with all the sensitivities multiplied by a common factor.
-   * @param factor The factor.
+   * 
+   * @param factor
+   *          The factor.
    * @return The multiplied sensitivity.
    */
   public SimpleParameterSensitivity multipliedBy(final double factor) {
@@ -102,7 +111,8 @@ public class SimpleParameterSensitivity {
   }
 
   /**
-   * Returns the sensitivities wrapped in an unmodifiable map
+   * Returns the sensitivities wrapped in an unmodifiable map.
+   * 
    * @return The sensitivities
    */
   public Map<String, DoubleMatrix1D> getSensitivities() {
@@ -111,7 +121,9 @@ public class SimpleParameterSensitivity {
 
   /**
    * Returns the sensitivity for a given name.
-   * @param name The name.
+   * 
+   * @param name
+   *          The name.
    * @return The sensitivity.
    */
   public DoubleMatrix1D getSensitivity(final String name) {
@@ -121,6 +133,7 @@ public class SimpleParameterSensitivity {
 
   /**
    * Returns a set with all the curve names.
+   * 
    * @return The set of names.
    */
   public Set<String> getAllNames() {

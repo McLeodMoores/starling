@@ -30,7 +30,7 @@ public final class ExecutionOrderNodeIterator extends HashSet<DependencyNode> im
   // _index[_stack] is the child index last used from _node[_stack]
 
   private static int defaultLoadFactorSize(final int elements) {
-    return elements + (elements / 3);
+    return elements + elements / 3;
   }
 
   public ExecutionOrderNodeIterator(final DependencyGraph graph) {
@@ -109,26 +109,25 @@ public final class ExecutionOrderNodeIterator extends HashSet<DependencyNode> im
         if (root >= _rootCount) {
           _stack = -1;
           return false;
-        } else {
-          _index[0] = root;
-          _next = _graph.getRootNode(root);
-          assert !contains(_next); // Already visited this root; this is bad - the roots should not be present elsewhere
-          while (_next.getInputCount() != 0) {
-            final int nextIndex = ++_stack;
-            if (nextIndex >= _node.length) {
-              resize();
-            }
-            _node[nextIndex] = _next;
-            _index[nextIndex] = 0;
-            _next = _next.getInputNode(0);
-            if (contains(_next)) {
-              // Already visited this child
-              continue nextNode;
-            }
-          }
-          add(_next);
-          return true;
         }
+        _index[0] = root;
+        _next = _graph.getRootNode(root);
+        assert !contains(_next); // Already visited this root; this is bad - the roots should not be present elsewhere
+        while (_next.getInputCount() != 0) {
+          final int nextIndex = ++_stack;
+          if (nextIndex >= _node.length) {
+            resize();
+          }
+          _node[nextIndex] = _next;
+          _index[nextIndex] = 0;
+          _next = _next.getInputNode(0);
+          if (contains(_next)) {
+            // Already visited this child
+            continue nextNode;
+          }
+        }
+        add(_next);
+        return true;
       } else {
         return false;
       }
@@ -142,7 +141,7 @@ public final class ExecutionOrderNodeIterator extends HashSet<DependencyNode> im
         throw new NoSuchElementException();
       }
     }
-    DependencyNode next = _next;
+    final DependencyNode next = _next;
     _next = null;
     return next;
   }

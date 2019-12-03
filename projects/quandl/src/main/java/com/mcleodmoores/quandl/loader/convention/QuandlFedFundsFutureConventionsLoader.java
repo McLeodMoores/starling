@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.convention;
 
@@ -13,16 +13,16 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.convention.QuandlFedFundsFutureConvention;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
- * Creates {@link QuandlFedFundsFutureConvention}s from a csv file called "fed-funds-future-conventions.csv". These
- * conventions contain information that required to construct interest rate futures.
+ * Creates {@link QuandlFedFundsFutureConvention}s from a csv file called "fed-funds-future-conventions.csv". These conventions contain information that
+ * required to construct interest rate futures.
  */
 public final class QuandlFedFundsFutureConventionsLoader implements ConventionsLoader<QuandlFedFundsFutureConvention> {
   /** An instance of this loader. */
@@ -40,8 +40,10 @@ public final class QuandlFedFundsFutureConventionsLoader implements ConventionsL
 
   /**
    * Generates {@link QuandlFedFundsFutureConvention}s from a csv file.
-   * @return  a set of conventions, or an empty set if the file was not available or no conventions could be created
-   * @throws Exception  if there is a problem reading the file
+   * 
+   * @return a set of conventions, or an empty set if the file was not available or no conventions could be created
+   * @throws Exception
+   *           if there is a problem reading the file
    */
   @Override
   public Set<QuandlFedFundsFutureConvention> loadConventionsFromFile() throws Exception {

@@ -45,9 +45,9 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
  * Calculates an absolute return series from a time-series of FX spot rates.
  */
 public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker {
-  /** Absolute returns */
+  /** Absolute returns. */
   public static final String ABSOLUTE_RETURNS = "Absolute";
-  /** Relative returns */
+  /** Relative returns. */
   public static final String RELATIVE_RETURNS = "Relative";
   /** Removes weekends */
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
@@ -65,6 +65,7 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
 
   /**
    * Gets the result properties for an FX return series with no transformation method set.
+   *
    * @return The result properties
    */
   protected ValueProperties getResultProperties() {
@@ -125,11 +126,13 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
           .get();
       return Collections.singleton(new ValueRequirement(ValueRequirementNames.RETURN_SERIES, target.toSpecification(), newConstraints));
     }
-    return ImmutableSet.of(ConventionBasedFXRateFunction.getHistoricalTimeSeriesRequirement((UnorderedCurrencyPair) target.getValue(), start, includeStart, end, includeEnd));
+    return ImmutableSet
+        .of(ConventionBasedFXRateFunction.getHistoricalTimeSeriesRequirement((UnorderedCurrencyPair) target.getValue(), start, includeStart, end, includeEnd));
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     if (ValueRequirementNames.RETURN_SERIES.equals(input.getValueName())) {
       return Collections.singleton(input);
@@ -143,7 +146,8 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ComputedValue timeSeriesValue = inputs.getComputedValue(ValueRequirementNames.HISTORICAL_FX_TIME_SERIES);
     final DateDoubleTimeSeries<?> timeSeries = (DateDoubleTimeSeries<?>) timeSeriesValue.getValue();
-    final boolean includeStart = HistoricalTimeSeriesFunctionUtils.parseBoolean(timeSeriesValue.getSpecification().getProperty(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
+    final boolean includeStart = HistoricalTimeSeriesFunctionUtils
+        .parseBoolean(timeSeriesValue.getSpecification().getProperty(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
     final LocalDate spotSeriesStart = DateConstraint.evaluate(executionContext, getSpotSeriesStart(desiredValue.getConstraints()));
     final LocalDate returnSeriesStart = DateConstraint.evaluate(executionContext, getReturnSeriesStart(desiredValue.getConstraints()));
     if (spotSeriesStart.isAfter(returnSeriesStart)) {
@@ -154,20 +158,25 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
     final String samplingFunctionName = desiredValue.getConstraint(ValuePropertyNames.SAMPLING_FUNCTION);
     final Schedule scheduleCalculator = ScheduleCalculatorFactory.getScheduleCalculator(scheduleCalculatorName);
     final TimeSeriesSamplingFunction samplingFunction = TimeSeriesSamplingFunctionFactory.getFunction(samplingFunctionName);
-    final LocalDate[] dates = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(spotSeriesStart, returnSeriesEnd, true, false), WEEKEND_CALENDAR);
+    final LocalDate[] dates = HOLIDAY_REMOVER.getStrippedSchedule(scheduleCalculator.getSchedule(spotSeriesStart, returnSeriesEnd, true, false),
+        WEEKEND_CALENDAR);
     LocalDateDoubleTimeSeries sampledTimeSeries = samplingFunction.getSampledTimeSeries(timeSeries, dates);
-    sampledTimeSeries = sampledTimeSeries.reciprocal(); // Implementation note: to obtain the series for one unit of non-base currency expressed in base currency.
+    sampledTimeSeries = sampledTimeSeries.reciprocal(); // Implementation note: to obtain the series for one unit of non-base currency expressed in base
+                                                        // currency.
     LocalDateDoubleTimeSeries returnSeries = getReturnSeries(sampledTimeSeries, desiredValue);
 
     // Clip the time-series to the range originally asked for
     returnSeries = returnSeries.subSeries(returnSeriesStart, includeStart, returnSeries.getLatestTime(), true);
 
-    return ImmutableSet.of(new ComputedValue(new ValueSpecification(ValueRequirementNames.RETURN_SERIES, target.toSpecification(), desiredValue.getConstraints()), returnSeries));
+    return ImmutableSet.of(
+        new ComputedValue(new ValueSpecification(ValueRequirementNames.RETURN_SERIES, target.toSpecification(), desiredValue.getConstraints()), returnSeries));
   }
 
   /**
    * Gets the spot series start date from the desired value constraints.
-   * @param constraints The constraints
+   *
+   * @param constraints
+   *          The constraints
    * @return The spot series start date
    */
   protected String getSpotSeriesStart(final ValueProperties constraints) {
@@ -176,7 +185,9 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
 
   /**
    * Gets the return series start date from the desired value constraints.
-   * @param constraints The constraints
+   *
+   * @param constraints
+   *          The constraints
    * @return The return series start date
    */
   protected String getReturnSeriesStart(final ValueProperties constraints) {
@@ -189,7 +200,9 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
 
   /**
    * Gets the return series end date from the desired value constraints.
-   * @param constraints The constraints
+   *
+   * @param constraints
+   *          The constraints
    * @return The return series end date
    */
   protected String getReturnSeriesEnd(final ValueProperties constraints) {
@@ -202,8 +215,11 @@ public class FXReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker 
 
   /**
    * Gets the return series from the spot series.
-   * @param spotSeries The spot FX series
-   * @param desiredValue The desired return series requirement
+   *
+   * @param spotSeries
+   *          The spot FX series
+   * @param desiredValue
+   *          The desired return series requirement
    * @return The FX return series
    */
   protected LocalDateDoubleTimeSeries getReturnSeries(final LocalDateDoubleTimeSeries spotSeries, final ValueRequirement desiredValue) {

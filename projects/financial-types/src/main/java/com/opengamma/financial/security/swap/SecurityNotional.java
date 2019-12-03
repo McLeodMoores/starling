@@ -43,16 +43,16 @@ public class SecurityNotional extends Notional {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param notionalIdentifier  the unique identifier, not null
    */
-  public SecurityNotional(UniqueId notionalIdentifier) {
+  public SecurityNotional(final UniqueId notionalIdentifier) {
     setNotionalId(notionalIdentifier);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public <T> T accept(NotionalVisitor<T> visitor) {
+  public <T> T accept(final NotionalVisitor<T> visitor) {
     return visitor.visitSecurityNotional(this);
   }
 

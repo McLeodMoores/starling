@@ -44,12 +44,12 @@ import com.opengamma.util.money.CurrencyAmount;
 
   // is this likely to change? will it ever by dynamic? i.e. client specifies what types it wants history for?
   /** Types of result values for which history is stored. */
-  private static final Set<Class<?>> s_historyTypes =
+  private static final Set<Class<?>> HISTORY_TYPES =
       ImmutableSet.of(Double.class, BigDecimal.class, CurrencyAmount.class, LocalDateLabelledMatrix1D.class);
   /** Empty result for types that don't have history, makes for cleaner code than using null. */
-  private static final Result s_emptyResult = Result.empty();
+  private static final Result EMPTY_RESULT = Result.empty();
   /** Empty result for types that have history, makes for cleaner code than using null. */
-  private static final Result s_emptyResultWithHistory = Result.emptyWithHistory();
+  private static final Result EMPTY_RESULT_WITH_HISTORY = Result.emptyWithHistory();
 
   /** The cached results. */
   private final Map<ResultKey, CacheItem> _results = Maps.newHashMap();
@@ -69,19 +69,19 @@ import com.opengamma.util.money.CurrencyAmount;
    * Puts a set of main grid results into the cache.
    * @param results The results, not null
    */
-  /* package */ void put(ViewResultModel results) {
+  /* package */ void put(final ViewResultModel results) {
     ArgumentChecker.notNull(results, "results");
     _lastUpdateId++;
     _lastCalculationDuration = results.getCalculationDuration();
     _valuationTime = results.getViewCycleExecutionOptions().getValuationTime();
-    List<ViewResultEntry> allResults = results.getAllResults();
-    Set<ResultKey> updatedKeys = Sets.newHashSet();
-    for (ViewResultEntry result : allResults) {
+    final List<ViewResultEntry> allResults = results.getAllResults();
+    final Set<ResultKey> updatedKeys = Sets.newHashSet();
+    for (final ViewResultEntry result : allResults) {
       put(result.getCalculationConfiguration(), result.getComputedValue());
       updatedKeys.add(new ResultKey(result.getCalculationConfiguration(), result.getComputedValue().getSpecification()));
     }
     // duplicate the last history item for anything that hasn't changed this cycle
-    for (Map.Entry<ResultKey, CacheItem> entry : _results.entrySet()) {
+    for (final Map.Entry<ResultKey, CacheItem> entry : _results.entrySet()) {
       if (entry.getValue().getHistory() != null && !updatedKeys.contains(entry.getKey())) {
         entry.getValue().valueUnchanged();
       }
@@ -94,10 +94,10 @@ import com.opengamma.util.money.CurrencyAmount;
    * @param results The results
    * @param duration Duration of the calculation cycle that produced the results
    */
-  /* package */ void put(String calcConfigName, Map<ValueSpecification, ComputedValueResult> results, Duration duration) {
+  /* package */ void put(final String calcConfigName, final Map<ValueSpecification, ComputedValueResult> results, final Duration duration) {
     _lastUpdateId++;
     _lastCalculationDuration = duration;
-    for (ComputedValueResult result : results.values()) {
+    for (final ComputedValueResult result : results.values()) {
       put(calcConfigName, result);
     }
   }
@@ -107,11 +107,11 @@ import com.opengamma.util.money.CurrencyAmount;
    * @param calcConfigName The name of the calculation configuration used to calculate the results
    * @param result The result value and associated data
    */
-  private void put(String calcConfigName, ComputedValueResult result) {
-    ValueSpecification spec = result.getSpecification();
-    Object value = result.getValue();
-    ResultKey key = new ResultKey(calcConfigName, spec);
-    CacheItem cacheResult = _results.get(key);
+  private void put(final String calcConfigName, final ComputedValueResult result) {
+    final ValueSpecification spec = result.getSpecification();
+    final Object value = result.getValue();
+    final ResultKey key = new ResultKey(calcConfigName, spec);
+    final CacheItem cacheResult = _results.get(key);
     if (cacheResult == null) {
       _results.put(key, new CacheItem(value, result.getAggregatedExecutionLog(), _lastUpdateId));
     } else {
@@ -119,10 +119,10 @@ import com.opengamma.util.money.CurrencyAmount;
     }
   }
 
-  /* package */ void put(List<UniqueIdentifiable> entities) {
+  /* package */ void put(final List<UniqueIdentifiable> entities) {
     ArgumentChecker.notNull(entities, "entities");
     _lastUpdateId++;
-    for (UniqueIdentifiable entity : entities) {
+    for (final UniqueIdentifiable entity : entities) {
       // TODO why is this failing sometimes?
       //ArgumentChecker.notNull(entity, "entity");
       if (entity != null) {
@@ -131,20 +131,20 @@ import com.opengamma.util.money.CurrencyAmount;
     }
   }
 
-  /* package */ void put(UniqueIdentifiable entity) {
+  /* package */ void put(final UniqueIdentifiable entity) {
     ArgumentChecker.notNull(entity, "entity");
     ++_lastUpdateId;
     putEntity(entity);
   }
 
-  /* package */ void remove(ObjectId id) {
+  /* package */ void remove(final ObjectId id) {
     ++_lastUpdateId;
     _entities.remove(id);
   }
 
-  private void putEntity(UniqueIdentifiable entity) {
-    ObjectId id = entity.getUniqueId().getObjectId();
-    CacheItem cacheResult = _entities.get(id);
+  private void putEntity(final UniqueIdentifiable entity) {
+    final ObjectId id = entity.getUniqueId().getObjectId();
+    final CacheItem cacheResult = _entities.get(id);
     if (cacheResult == null) {
       _entities.put(id, new CacheItem(entity, null, _lastUpdateId));
     } else {
@@ -152,15 +152,14 @@ import com.opengamma.util.money.CurrencyAmount;
     }
   }
 
-  /* package */ Result getEntity(ObjectId id) {
-    CacheItem item = _entities.get(id);
+  /* package */ Result getEntity(final ObjectId id) {
+    final CacheItem item = _entities.get(id);
     if (item != null) {
       // flag whether this result was updated by the last set of results that were put into the cache
-      boolean updatedByLastResults = (item.getLastUpdateId() == _lastUpdateId);
+      final boolean updatedByLastResults = item.getLastUpdateId() == _lastUpdateId;
       return Result.forValue(item.getValue(), null, null, updatedByLastResults);
-    } else {
-      return s_emptyResult;
     }
+    return EMPTY_RESULT;
   }
 
   /**
@@ -172,19 +171,17 @@ import com.opengamma.util.money.CurrencyAmount;
    * provided for missing values.
    * @return A cache result, not null
    */
-  /* package */ Result getResult(String calcConfigName, ValueSpecification valueSpec, Class<?> columnType) {
-    CacheItem item = _results.get(new ResultKey(calcConfigName, valueSpec));
+  /* package */ Result getResult(final String calcConfigName, final ValueSpecification valueSpec, final Class<?> columnType) {
+    final CacheItem item = _results.get(new ResultKey(calcConfigName, valueSpec));
     if (item != null) {
       // flag whether this result was updated by the last set of results that were put into the cache
-      boolean updatedByLastResults = (item.getLastUpdateId() == _lastUpdateId);
+      final boolean updatedByLastResults = item.getLastUpdateId() == _lastUpdateId;
       return Result.forValue(item.getValue(), item.getHistory(), item.getAggregatedExecutionLog(), updatedByLastResults);
-    } else {
-      if (s_historyTypes.contains(columnType)) {
-        return s_emptyResultWithHistory;
-      } else {
-        return s_emptyResult;
-      }
     }
+    if (HISTORY_TYPES.contains(columnType)) {
+      return EMPTY_RESULT_WITH_HISTORY;
+    }
+    return EMPTY_RESULT;
   }
 
   /**
@@ -193,7 +190,7 @@ import com.opengamma.util.money.CurrencyAmount;
   /* package */ Duration getLastCalculationDuration() {
     return _lastCalculationDuration;
   }
-  
+
   /**
    * Gets the lastCalculationTime.
    * @return the lastCalculationTime
@@ -208,12 +205,11 @@ import com.opengamma.util.money.CurrencyAmount;
    * @param type The type, possibly null
    * @return The history, possibly null
    */
-  /* package */ Collection<Object> emptyHistory(Class<?> type) {
-    if (s_historyTypes.contains(type)) {
+  /* package */ Collection<Object> emptyHistory(final Class<?> type) {
+    if (HISTORY_TYPES.contains(type)) {
       return Collections.emptyList();
-    } else {
-      return null;
     }
+    return null;
   }
 
   /**
@@ -227,7 +223,7 @@ import com.opengamma.util.money.CurrencyAmount;
     private final boolean _updated;
     private final AggregatedExecutionLog _aggregatedExecutionLog;
 
-    private Result(Object value, Collection<Object> history, AggregatedExecutionLog aggregatedExecutionLog, boolean updated) {
+    private Result(final Object value, final Collection<Object> history, final AggregatedExecutionLog aggregatedExecutionLog, final boolean updated) {
       _value = value;
       _history = history;
       _aggregatedExecutionLog = aggregatedExecutionLog;
@@ -256,10 +252,10 @@ import com.opengamma.util.money.CurrencyAmount;
       return _updated;
     }
 
-    private static Result forValue(Object value,
-                                   Collection<Object> history,
-                                   AggregatedExecutionLog aggregatedExecutionLog,
-                                   boolean updated) {
+    private static Result forValue(final Object value,
+        final Collection<Object> history,
+        final AggregatedExecutionLog aggregatedExecutionLog,
+        final boolean updated) {
       ArgumentChecker.notNull(value, "value");
       return new Result(value, history, aggregatedExecutionLog, updated);
     }
@@ -293,7 +289,7 @@ import com.opengamma.util.money.CurrencyAmount;
     private long _lastUpdateId = -1;
     private AggregatedExecutionLog _aggregatedExecutionLog;
 
-    private CacheItem(Object value, AggregatedExecutionLog executionLog, long lastUpdateId) {
+    private CacheItem(final Object value, final AggregatedExecutionLog executionLog, final long lastUpdateId) {
       setLatestValue(value, executionLog, lastUpdateId);
     }
 
@@ -304,7 +300,7 @@ import com.opengamma.util.money.CurrencyAmount;
      * @param lastUpdateId ID of the set of results that calculated it
      */
     @SuppressWarnings("unchecked")
-    private void setLatestValue(Object latestValue, AggregatedExecutionLog executionLog, long lastUpdateId) {
+    private void setLatestValue(final Object latestValue, final AggregatedExecutionLog executionLog, final long lastUpdateId) {
       ArgumentChecker.notNull(latestValue, "latestValue");
       _latestValue = latestValue;
       _lastUpdateId = lastUpdateId;
@@ -313,7 +309,7 @@ import com.opengamma.util.money.CurrencyAmount;
       // data subscriptions take time to set up. in that case the history will initially be null (because error
       // sentinel types aren't in s_historyTypes) and then when a valid value arrives the type can be checked and
       // history created if required
-      if (_history == null && s_historyTypes.contains(latestValue.getClass())) {
+      if (_history == null && HISTORY_TYPES.contains(latestValue.getClass())) {
         _history = new CircularFifoBuffer(MAX_HISTORY_SIZE);
       }
       if (_history != null) {
@@ -328,9 +324,8 @@ import com.opengamma.util.money.CurrencyAmount;
     /* package */ Collection<Object> getHistory() {
       if (_history != null) {
         return Collections.unmodifiableCollection(_history);
-      } else {
-        return null;
       }
+      return null;
     }
 
     /**
@@ -362,20 +357,20 @@ import com.opengamma.util.money.CurrencyAmount;
     private final String _calcConfigName;
     private final ValueSpecification _valueSpec;
 
-    private ResultKey(String calcConfigName, ValueSpecification valueSpec) {
+    private ResultKey(final String calcConfigName, final ValueSpecification valueSpec) {
       _calcConfigName = calcConfigName;
       _valueSpec = valueSpec;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
       if (this == o) {
         return true;
       }
       if (o == null || getClass() != o.getClass()) {
         return false;
       }
-      ResultKey resultKey = (ResultKey) o;
+      final ResultKey resultKey = (ResultKey) o;
       if (!_calcConfigName.equals(resultKey._calcConfigName)) {
         return false;
       }

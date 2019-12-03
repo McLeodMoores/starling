@@ -44,23 +44,23 @@ import com.opengamma.util.tuple.Pairs;
     _fixedColumnGroup = GridColumnGroup.empty();
     _nonFixedColumnGroups = GridColumnGroups.empty();
     _valueMappings = new UnversionedValueMappings();
-    _targetLookup = new TargetLookup(_valueMappings, Collections.<Row>emptyList());
+    _targetLookup = new TargetLookup(_valueMappings, Collections.<Row> emptyList());
     _rootNode = null;
   }
 
   // TODO refactor this to pass in columns instead of column keys?
   // column would need to return its key (null for static and blotter columns)
   // could pass all columns in a single List<GridColumnGroup> or GridColumnGroups instance
-  /* package */ MainGridStructure(GridColumnGroup fixedColumns,
-                                  GridColumnGroups nonFixedColumns,
-                                  TargetLookup targetLookup,
-                                  AnalyticsNode rootNode,
-                                  UnversionedValueMappings valueMappings) {
+  /* package */ MainGridStructure(final GridColumnGroup fixedColumns,
+      final GridColumnGroups nonFixedColumns,
+      final TargetLookup targetLookup,
+      final AnalyticsNode rootNode,
+      final UnversionedValueMappings valueMappings) {
     ArgumentChecker.notNull(targetLookup, "targetLookup");
     ArgumentChecker.notNull(nonFixedColumns, "nonFixedColumns");
     ArgumentChecker.notNull(fixedColumns, "fixedColumns");
     ArgumentChecker.notNull(valueMappings, "valueMappings");
-    List<GridColumnGroup> columnGroups = Lists.newArrayList(fixedColumns);
+    final List<GridColumnGroup> columnGroups = Lists.newArrayList(fixedColumns);
     columnGroups.addAll(nonFixedColumns.getGroups());
     _rootNode = rootNode;
     _columnGroups = new GridColumnGroups(columnGroups);
@@ -70,15 +70,15 @@ import com.opengamma.util.tuple.Pairs;
     _valueMappings = valueMappings;
   }
 
-  /* package */ MainGridStructure(GridColumnGroup fixedColumns,
-                                  GridColumnGroups nonFixedColumns,
-                                  TargetLookup targetLookup,
-                                  UnversionedValueMappings valueMappings) {
+  /* package */ MainGridStructure(final GridColumnGroup fixedColumns,
+      final GridColumnGroups nonFixedColumns,
+      final TargetLookup targetLookup,
+      final UnversionedValueMappings valueMappings) {
     ArgumentChecker.notNull(targetLookup, "targetLookup");
     ArgumentChecker.notNull(nonFixedColumns, "nonFixedColumns");
     ArgumentChecker.notNull(fixedColumns, "fixedColumns");
     ArgumentChecker.notNull(valueMappings, "valueMappings");
-    List<GridColumnGroup> columnGroups = Lists.newArrayList(fixedColumns);
+    final List<GridColumnGroup> columnGroups = Lists.newArrayList(fixedColumns);
     columnGroups.addAll(nonFixedColumns.getGroups());
     _columnGroups = new GridColumnGroups(columnGroups);
     _targetLookup = targetLookup;
@@ -88,33 +88,39 @@ import com.opengamma.util.tuple.Pairs;
     _valueMappings = valueMappings;
   }
 
-    /**
-     * Returns the calculation configuration name and value specification for a cell in the grid.
-     * @param rowIndex The row index
-     * @param colIndex The column index
-     * @return Pair of value spec and calculation config name.
-     * TODO need to specify row using a stable target ID for the row to cope with dynamic aggregation
-     */
+  /**
+   * Returns the calculation configuration name and value specification for a cell in the grid.
+   *
+   * @param rowIndex
+   *          The row index
+   * @param colIndex
+   *          The column index
+   * @return Pair of value spec and calculation config name. TODO need to specify row using a stable target ID for the row to cope with dynamic aggregation
+   */
   @Override
-  public Pair<String, ValueSpecification> getValueSpecificationForCell(int rowIndex, int colIndex) {
+  public Pair<String, ValueSpecification> getValueSpecificationForCell(final int rowIndex, final int colIndex) {
     if (rowIndex < 0 || rowIndex >= getRowCount() || colIndex < 0 || colIndex >= getColumnCount()) {
-      throw new IllegalArgumentException("Cell is outside grid bounds: row=" + rowIndex + ", col=" + colIndex +
-                                             ", rowCount=" + getRowCount() + ", colCount=" + getColumnCount());
+      throw new IllegalArgumentException("Cell is outside grid bounds: row=" + rowIndex + ", col=" + colIndex
+          + ", rowCount=" + getRowCount() + ", colCount=" + getColumnCount());
     }
     return _targetLookup.getTargetForCell(rowIndex, _columnGroups.getColumn(colIndex).getSpecification());
   }
+
   /**
    * Returns the calculation configuration name and value requirement for a cell in the grid.
-   * @param rowIndex The row index
-   * @param colIndex The column index
-   * @return Pair of value requirement and calculation config name.
-   * TODO need to specify row using a stable target ID for the row to cope with dynamic aggregation
+   *
+   * @param rowIndex
+   *          The row index
+   * @param colIndex
+   *          The column index
+   * @return Pair of value requirement and calculation config name. TODO need to specify row using a stable target ID for the row to cope with dynamic
+   *         aggregation
    */
   @Override
-  public Pair<String, ValueRequirement> getValueRequirementForCell(int rowIndex, int colIndex) {
+  public Pair<String, ValueRequirement> getValueRequirementForCell(final int rowIndex, final int colIndex) {
     if (rowIndex < 0 || rowIndex >= getRowCount() || colIndex < 0 || colIndex >= getColumnCount()) {
-      throw new IllegalArgumentException("Cell is outside grid bounds: row=" + rowIndex + ", col=" + colIndex +
-                                             ", rowCount=" + getRowCount() + ", colCount=" + getColumnCount());
+      throw new IllegalArgumentException("Cell is outside grid bounds: row=" + rowIndex + ", col=" + colIndex
+          + ", rowCount=" + getRowCount() + ", colCount=" + getColumnCount());
     }
     return _targetLookup.getRequirementForCell(rowIndex, _columnGroups.getColumn(colIndex).getSpecification());
   }
@@ -160,14 +166,14 @@ import com.opengamma.util.tuple.Pairs;
     return "MainGridStructure [_columnGroups=" + _columnGroups + "]";
   }
 
-  public Pair<ViewportResults, Viewport.State> createResults(ViewportDefinition viewportDefinition,
-                                                                    ResultsCache cache) {
+  public Pair<ViewportResults, Viewport.State> createResults(final ViewportDefinition viewportDefinition,
+      final ResultsCache cache) {
     boolean updated = false;
     boolean hasData = false;
-    List<ResultsCell> results = Lists.newArrayList();
-    for (GridCell cell : viewportDefinition) {
-      GridColumn column = _columnGroups.getColumn(cell.getColumn());
-      ResultsCell resultsCell = column.buildResults(cell.getRow(), cell.getFormat(), cache);
+    final List<ResultsCell> results = Lists.newArrayList();
+    for (final GridCell cell : viewportDefinition) {
+      final GridColumn column = _columnGroups.getColumn(cell.getColumn());
+      final ResultsCell resultsCell = column.buildResults(cell.getRow(), cell.getFormat(), cache);
       updated = updated || resultsCell.isUpdated();
       if (resultsCell.getValue() != null) {
         hasData = true;
@@ -182,10 +188,10 @@ import com.opengamma.util.tuple.Pairs;
     } else {
       state = Viewport.State.EMPTY;
     }
-    ViewportResults viewportResults = new ViewportResults(results,
-                                                          viewportDefinition,
-                                                          _columnGroups,
-                                                          cache.getLastCalculationDuration(), cache.getValuationTime());
+    final ViewportResults viewportResults = new ViewportResults(results,
+        viewportDefinition,
+        _columnGroups,
+        cache.getLastCalculationDuration(), cache.getValuationTime());
     return Pairs.of(viewportResults, state);
   }
 
@@ -206,7 +212,7 @@ import com.opengamma.util.tuple.Pairs;
     /** The row label. */
     private final String _name;
 
-    /* package */ Row(ComputationTargetReference target, String name) {
+    /* package */ Row(final ComputationTargetReference target, final String name) {
       ArgumentChecker.notNull(target, "target");
       ArgumentChecker.notNull(name, "name");
       _target = target;

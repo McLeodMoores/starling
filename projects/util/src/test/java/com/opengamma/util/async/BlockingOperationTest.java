@@ -20,11 +20,17 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class BlockingOperationTest {
 
+  /**
+   *
+   */
   public void testDefaultState() {
     assertTrue(BlockingOperation.isOn());
     assertFalse(BlockingOperation.isOff());
   }
 
+  /**
+   *
+   */
   public void testSingleCall() {
     BlockingOperation.off();
     try {
@@ -35,6 +41,9 @@ public class BlockingOperationTest {
     }
   }
 
+  /**
+   *
+   */
   public void testNestedCall() {
     BlockingOperation.off();
     try {
@@ -54,31 +63,43 @@ public class BlockingOperationTest {
     }
   }
 
+  /**
+   *
+   */
   public void testBlockingCallWithBlockingOn() {
     operation(true);
   }
 
+  /**
+   *
+   */
   public void testBlockingCallWithBlockingOff() {
     BlockingOperation.off();
     try {
       operation(true);
       fail();
-    } catch (BlockingOperation e) {
+    } catch (final BlockingOperation e) {
       assertNotNull(e);
     } finally {
       BlockingOperation.on();
     }
   }
 
+  /**
+   *
+   */
   public void testNonBlockingCallWithBlockingOn() {
     operation(false);
   }
 
+  /**
+   *
+   */
   public void testNonBlockingCallWithBlockingOff() {
     BlockingOperation.off();
     try {
       operation(false);
-    } catch (BlockingOperation e) {
+    } catch (final BlockingOperation e) {
       fail();
     } finally {
       BlockingOperation.on();

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.security;
@@ -45,11 +45,11 @@ public class BloombergBpipeSecurityProviderTest {
   }
 
   protected SecurityProvider createSecurityProvider() throws Exception {
-    BloombergConnector connector = BloombergTestUtils.getBloombergBipeConnector();
-    BloombergReferenceDataProvider refDataProvider = new BloombergReferenceDataProvider(connector);
+    final BloombergConnector connector = BloombergTestUtils.getBloombergBipeConnector();
+    final BloombergReferenceDataProvider refDataProvider = new BloombergReferenceDataProvider(connector);
     refDataProvider.start();
     _refDataProvider = refDataProvider;
-    ExchangeDataProvider exchangeProvider = DefaultExchangeDataProvider.getInstance();
+    final ExchangeDataProvider exchangeProvider = DefaultExchangeDataProvider.getInstance();
     return new BloombergSecurityProvider(refDataProvider, exchangeProvider);
   }
 
@@ -59,9 +59,9 @@ public class BloombergBpipeSecurityProviderTest {
     _securityProvider = null;
   }
 
-  protected void stopSecurityProvider(SecurityProvider provider) throws Exception {
+  protected void stopSecurityProvider(final SecurityProvider provider) throws Exception {
     if (_refDataProvider != null) {
-      BloombergReferenceDataProvider dataProvider = _refDataProvider;
+      final BloombergReferenceDataProvider dataProvider = _refDataProvider;
       _refDataProvider = null;
       dataProvider.stop();
     }
@@ -72,12 +72,12 @@ public class BloombergBpipeSecurityProviderTest {
     assertIbm(_securityProvider.getSecurity(ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId(IBM_TICKER))));
   }
 
-  protected void assertIbm(Security sec) {
+  protected void assertIbm(final Security sec) {
     assertNotNull(sec);
     assertTrue(sec instanceof EquitySecurity);
-    EquitySecurity finSecurity = (EquitySecurity) sec;
+    final EquitySecurity finSecurity = (EquitySecurity) sec;
     assertNotNull(finSecurity.getRequiredPermissions());
-    Set<String> permissions = finSecurity.getRequiredPermissions();
+    final Set<String> permissions = finSecurity.getRequiredPermissions();
     assertEquals(1, permissions.size());
     assertTrue(permissions.contains(BloombergConstants.BLOOMBERG_DATA_SOURCE_NAME + ":" + 39491));
     assertEquals("INTL BUSINESS MACHINES CORP", finSecurity.getName());

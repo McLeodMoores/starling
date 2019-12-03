@@ -45,7 +45,7 @@ public class FixedVarianceSwapLeg extends VarianceSwapLeg {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dayCount The day count convention, not null
    * @param frequency The frequency, not null
    * @param regionId The region ID, not null
@@ -55,14 +55,14 @@ public class FixedVarianceSwapLeg extends VarianceSwapLeg {
    * @param strike The strike
    * @param type The variance swap type, not null
    */
-  public FixedVarianceSwapLeg(DayCount dayCount,
-                              Frequency frequency,
-                              ExternalId regionId,
-                              BusinessDayConvention businessDayConvention,
-                              Notional notional,
-                              boolean eom,
-                              double strike,
-                              VarianceSwapType type) {
+  public FixedVarianceSwapLeg(final DayCount dayCount,
+                              final Frequency frequency,
+                              final ExternalId regionId,
+                              final BusinessDayConvention businessDayConvention,
+                              final Notional notional,
+                              final boolean eom,
+                              final double strike,
+                              final VarianceSwapType type) {
     super(dayCount, frequency, regionId, businessDayConvention, notional, eom);
     setStrike(strike);
     setType(type);
@@ -75,7 +75,7 @@ public class FixedVarianceSwapLeg extends VarianceSwapLeg {
   }
 
   @Override
-  public <T> T accept(SwapLegVisitor<T> visitor) {
+  public <T> T accept(final SwapLegVisitor<T> visitor) {
     return visitor.visitFixedVarianceSwapLeg(this);
   }
 

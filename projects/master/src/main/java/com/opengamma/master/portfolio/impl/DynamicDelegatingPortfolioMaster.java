@@ -32,13 +32,13 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A portfolio master that uses the scheme of the unique identifier to determine which
  * underlying master should handle the request.
- * <p/>
+ * <p>
  * The underlying masters, or delegates, can be registered or deregistered at run time.
  * By default there is an {@link InMemoryPortfolioMaster} that will be used if specific scheme/delegate
  * combinations have not been registered.
- * <p/>
+ * <p>
  * Change events are aggregated from the different masters and presented through a single change manager.
- * <p/>
+ * <p>
  * The {@link #register(String, PortfolioMaster)}, {@link #deregister(String)} and
  * {@link #add(String, PortfolioDocument)} methods are public API outside
  * of the normal Master interface. Therefore to properly use this class the caller must have
@@ -69,7 +69,7 @@ public class DynamicDelegatingPortfolioMaster implements PortfolioMaster {
 
   /**
    * Registers a scheme and delegate pair.
-   * <p/>
+   * <p>
    * The caller is responsible for creating a delegate and registering it before making calls
    * to the DynamicDelegatingPortfolioMaster
    *
@@ -85,7 +85,7 @@ public class DynamicDelegatingPortfolioMaster implements PortfolioMaster {
 
   /**
    * Deregisters a scheme and delegate pair.
-   * <p/>
+   * <p>
    * The caller is responsible for deregistering a delegate when it is no longer needed.
    * For example, if delegates are made up of InMemoryMasters and data is no longer needed,
    * call deregister will free up memory
@@ -109,54 +109,54 @@ public class DynamicDelegatingPortfolioMaster implements PortfolioMaster {
   }
 
   @Override
-  public PortfolioSearchResult search(PortfolioSearchRequest request) {
+  public PortfolioSearchResult search(final PortfolioSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    Collection<ObjectId> ids = request.getPortfolioObjectIds();
+    final Collection<ObjectId> ids = request.getPortfolioObjectIds();
     return chooseDelegate(ids.iterator().next().getScheme()).search(request);
   }
 
   @Override
-  public PortfolioHistoryResult history(PortfolioHistoryRequest request) {
+  public PortfolioHistoryResult history(final PortfolioHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
     return chooseDelegate(request.getObjectId().getScheme()).history(request);
   }
 
   @Override
-  public ManageablePortfolioNode getNode(UniqueId nodeId) {
+  public ManageablePortfolioNode getNode(final UniqueId nodeId) {
     ArgumentChecker.notNull(nodeId, "nodeId");
     return chooseDelegate(nodeId.getScheme()).getNode(nodeId);
   }
 
   @Override
-  public PortfolioDocument get(UniqueId uniqueId) {
+  public PortfolioDocument get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).get(uniqueId);
   }
 
   @Override
-  public PortfolioDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public PortfolioDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return chooseDelegate(objectId.getObjectId().getScheme()).get(objectId, versionCorrection);
   }
 
   @Override
-  public Map<UniqueId, PortfolioDocument> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, PortfolioDocument> resultMap = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
-      PortfolioDocument doc = get(uniqueId);
+  public Map<UniqueId, PortfolioDocument> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, PortfolioDocument> resultMap = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
+      final PortfolioDocument doc = get(uniqueId);
       resultMap.put(uniqueId, doc);
     }
     return resultMap;
   }
 
   @Override
-  public PortfolioDocument add(PortfolioDocument document) {
+  public PortfolioDocument add(final PortfolioDocument document) {
     throw new UnsupportedOperationException("Cannot add document without explicitly specifying the scheme");
   }
 
   @Override
-  public PortfolioDocument update(PortfolioDocument document) {
+  public PortfolioDocument update(final PortfolioDocument document) {
     ArgumentChecker.notNull(document, "document");
     Validate.notNull(document.getUniqueId(), "document has no unique id");
     Validate.notNull(document.getObjectId(), "document has no object id");
@@ -164,53 +164,53 @@ public class DynamicDelegatingPortfolioMaster implements PortfolioMaster {
   }
 
   @Override
-  public void remove(ObjectIdentifiable oid) {
+  public void remove(final ObjectIdentifiable oid) {
     ArgumentChecker.notNull(oid, "objectIdentifiable");
     chooseDelegate(oid.getObjectId().getScheme()).remove(oid);
   }
 
   @Override
-  public PortfolioDocument correct(PortfolioDocument document) {
+  public PortfolioDocument correct(final PortfolioDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getObjectId().getScheme()).correct(document);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<PortfolioDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<PortfolioDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(uniqueId.getScheme()).replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<PortfolioDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<PortfolioDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<PortfolioDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<PortfolioDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(PortfolioDocument replacementDocument) {
+  public UniqueId replaceVersion(final PortfolioDocument replacementDocument) {
     ArgumentChecker.notNull(replacementDocument, "replacementDocument");
     ArgumentChecker.notNull(replacementDocument.getObjectId(), "replacementDocument.getObjectId");
     return chooseDelegate(replacementDocument.getObjectId().getScheme()).replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     chooseDelegate(uniqueId.getScheme()).removeVersion(uniqueId);
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, PortfolioDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final PortfolioDocument documentToAdd) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(documentToAdd, "documentToAdd");
     return chooseDelegate(objectId.getObjectId().getScheme()).addVersion(objectId, documentToAdd);

@@ -14,14 +14,14 @@ import org.slf4j.LoggerFactory;
 
 /**
  * An abstract class to assist with writing JAX-RS exception mappers.
- * 
+ *
  * @param <T> the mapped exception type
  */
 public abstract class AbstractSpecificExceptionMapper<T extends Throwable>
     extends AbstractExceptionMapper<T> {
 
   /** Logger. */
-  protected static final Logger s_logger = LoggerFactory.getLogger(AbstractSpecificExceptionMapper.class);
+  protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractSpecificExceptionMapper.class);
 
   /**
    * The status to use.
@@ -38,12 +38,12 @@ public abstract class AbstractSpecificExceptionMapper<T extends Throwable>
 
   //-------------------------------------------------------------------------
   @Override
-  protected Response doHtmlResponse(T exception, String htmlPage) {
+  protected Response doHtmlResponse(final T exception, final String htmlPage) {
     return Response.status(_status).entity(htmlPage).build();
   }
 
   @Override
-  protected Response doRestfulResponse(T exception) {
+  protected Response doRestfulResponse(final T exception) {
     // perform transparent exception tunneling for Fudge messages
     return Response.status(_status)
       .header(ExceptionThrowingClientFilter.EXCEPTION_TYPE, exception.getClass().getName())

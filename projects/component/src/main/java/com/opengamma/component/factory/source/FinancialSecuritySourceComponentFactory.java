@@ -8,8 +8,6 @@ package com.opengamma.component.factory.source;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -32,6 +30,8 @@ import com.opengamma.financial.security.FinancialSecuritySource;
 import com.opengamma.financial.security.MasterFinancialSecuritySource;
 import com.opengamma.financial.security.RemoteFinancialSecuritySource;
 import com.opengamma.master.security.SecurityMaster;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory providing the {@code FinancialSecuritySource}.
@@ -64,15 +64,15 @@ public class FinancialSecuritySourceComponentFactory extends AbstractComponentFa
   /**
    * Initializes the financial security source, setting up component information and REST.
    * Override using {@link #createFinancialSecuritySource(ComponentRepository)}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param configuration  the remaining configuration, not null
    */
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    FinancialSecuritySource source = createFinancialSecuritySource(repo);
-    
-    ComponentInfo info = new ComponentInfo(SecuritySource.class, getClassifier());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final FinancialSecuritySource source = createFinancialSecuritySource(repo);
+
+    final ComponentInfo info = new ComponentInfo(SecuritySource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteFinancialSecuritySource.class);
@@ -85,11 +85,11 @@ public class FinancialSecuritySourceComponentFactory extends AbstractComponentFa
 
   /**
    * Creates the financial security source without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the financial security source, not null
    */
-  protected FinancialSecuritySource createFinancialSecuritySource(ComponentRepository repo) {
+  protected FinancialSecuritySource createFinancialSecuritySource(final ComponentRepository repo) {
     FinancialSecuritySource source = new MasterFinancialSecuritySource(getSecurityMaster());
     if (getCacheManager() != null) {
       source = new EHCachingFinancialSecuritySource(source, getCacheManager());

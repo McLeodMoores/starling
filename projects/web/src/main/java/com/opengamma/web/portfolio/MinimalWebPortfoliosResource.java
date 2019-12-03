@@ -134,15 +134,15 @@ public class MinimalWebPortfoliosResource extends AbstractMinimalWebPortfolioRes
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
-  public Response postHTML(@FormParam("name") String name) {
-    name = StringUtils.trimToNull(name);
-    if (name == null) {
+  public Response postHTML(@FormParam("name") final String name) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    if (trimmedName == null) {
       final FlexiBean out = createRootData();
       out.put("err_nameMissing", true);
       final String html = getFreemarker().build(HTML_DIR + "portfolios-add.ftl", out);
       return Response.ok(html).build();
     }
-    final URI uri = createPortfolio(name);
+    final URI uri = createPortfolio(trimmedName);
     return Response.seeOther(uri).build();
   }
 
@@ -156,9 +156,9 @@ public class MinimalWebPortfoliosResource extends AbstractMinimalWebPortfolioRes
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response postJSON(@FormParam("name") String name) {
-    name = StringUtils.trimToNull(name);
-    final URI uri = createPortfolio(name);
+  public Response postJSON(@FormParam("name") final String name) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final URI uri = createPortfolio(trimmedName);
     return Response.created(uri).build();
   }
 

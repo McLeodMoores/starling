@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.config;
@@ -18,18 +18,19 @@ import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Maps;
 import com.opengamma.core.config.Config;
+import com.opengamma.core.config.ConfigGroups;
 
 /**
- * Provides all supported configuration types
+ * Provides all supported configuration types.
  */
 public final class ConfigTypesProvider {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ConfigTypesProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConfigTypesProvider.class);
   /**
    * Singleton instance.
    */
-  private static final ConfigTypesProvider s_instance = new ConfigTypesProvider();
+  private static final ConfigTypesProvider INSTANCE = new ConfigTypesProvider();
 
   /**
    * Map of config types.
@@ -44,51 +45,51 @@ public final class ConfigTypesProvider {
    */
   private final Map<String, Map<String, String>> _configGroupMap;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the provider, not null
    */
   public static ConfigTypesProvider getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Restricted constructor
    */
   private ConfigTypesProvider() {
     _configGroupMap = new TreeMap<>();
-    Map<String, Class<?>> result = Maps.newHashMap();
-    ImmutableSortedMap.Builder<String, String> descriptions = ImmutableSortedMap.naturalOrder();
-    AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
-    Set<Class<?>> configClasses = reflector.getReflector().getTypesAnnotatedWith(Config.class);
-    for (Class<?> configClass : configClasses) {
-      Config configValueAnnotation = configClass.getAnnotation(Config.class);
-      if (configValueAnnotation != null) {
+    final Map<String, Class<?>> result = Maps.newHashMap();
+    final ImmutableSortedMap.Builder<String, String> descriptions = ImmutableSortedMap.naturalOrder();
+    final AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
+    final Set<Class<?>> configClasses = reflector.getReflector().getTypesAnnotatedWith(Config.class);
+    for (final Class<?> configClass : configClasses) {
+      final Config configValueAnnotation = configClass.getAnnotation(Config.class);
+      if (configValueAnnotation != null && !configValueAnnotation.group().equals(ConfigGroups.CURVES_LEGACY)) {
         // extract config type
         Class<?> configType = configValueAnnotation.searchType();
         if (configType == Object.class) {
           configType = configClass;
         }
         // extract grouping
-        String group = configValueAnnotation.group();
+        final String group = configValueAnnotation.group();
         // extract description
         String description = configValueAnnotation.description();
         if (description.length() == 0) {
           description = configType.getSimpleName();
         }
         // store
-        Class<?> old = result.put(configType.getSimpleName(), configType);
+        final Class<?> old = result.put(configType.getSimpleName(), configType);
         if (old != null) {
-          s_logger.warn("Two classes exist with the same name: " + configType.getSimpleName());
+          LOGGER.warn("Two classes exist with the same name: " + configType.getSimpleName());
         }
         descriptions.put(configType.getSimpleName(), description);
         if (_configGroupMap.containsKey(group)) {
           _configGroupMap.get(group).put(configType.getSimpleName(), description);
         } else {
-          Map<String, String> value = new TreeMap<>();
+          final Map<String, String> value = new TreeMap<>();
           value.put(configType.getSimpleName(), description);
           _configGroupMap.put(group, value);
         }
@@ -97,13 +98,12 @@ public final class ConfigTypesProvider {
     }
     _configTypeMap = ImmutableSortedMap.copyOf(result);
     _configDescriptionMap = descriptions.build();
-
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the set of config keys.
-   * 
+   *
    * @return the types, not null
    */
   public ImmutableSortedSet<String> getConfigTypes() {
@@ -112,7 +112,7 @@ public final class ConfigTypesProvider {
 
   /**
    * Gets the map of config types by short key.
-   * 
+   *
    * @return the map, not null
    */
   public ImmutableSortedMap<String, Class<?>> getConfigTypeMap() {
@@ -121,7 +121,7 @@ public final class ConfigTypesProvider {
 
   /**
    * Gets the map of config descriptions by short key.
-   * 
+   *
    * @return the map, not null
    */
   public ImmutableSortedMap<String, String> getDescriptionMap() {
@@ -139,17 +139,18 @@ public final class ConfigTypesProvider {
 
   /**
    * Gets the description for a type.
-   * 
-   * @param type  the type, not null
+   *
+   * @param type
+   *          the type, not null
    * @return the description, not null
    */
-  public String getDescription(Class<?> type) {
-    String key = HashBiMap.create(_configTypeMap).inverse().get(type);
+  public String getDescription(final Class<?> type) {
+    final String key = HashBiMap.create(_configTypeMap).inverse().get(type);
     String description = null;
     if (key != null) {
       description = _configDescriptionMap.get(key);
     }
-    return (description != null ? description : type.getSimpleName());
+    return description != null ? description : type.getSimpleName();
   }
 
 }

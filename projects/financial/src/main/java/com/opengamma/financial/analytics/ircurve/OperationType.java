@@ -9,7 +9,7 @@ package com.opengamma.financial.analytics.ircurve;
  *
  */
 public enum OperationType {
-  /** Add */
+  /** Add. */
   ADD {
 
     @Override
@@ -17,7 +17,7 @@ public enum OperationType {
       return "+";
     }
   },
-  /** Subtract */
+  /** Subtract. */
   SUBTRACT {
 
     @Override
@@ -25,7 +25,7 @@ public enum OperationType {
       return "-";
     }
   },
-  /** Multiply */
+  /** Multiply. */
   MULTIPLY {
 
     @Override
@@ -33,7 +33,7 @@ public enum OperationType {
       return "x";
     }
   },
-  /** Divide */
+  /** Divide. */
   DIVIDE {
 
     @Override

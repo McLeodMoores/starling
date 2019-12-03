@@ -7,7 +7,6 @@ package com.opengamma.master.historicaltimeseries.impl;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -59,34 +58,34 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
   //-------------------------------------------------------------------------
   /**
    * Obtains an instance of {@code HistoricalTimeSeriesRating}.
-   * 
+   *
    * @param rules  the rules, not null and not empty
    * @return the rating, not null
    */
-  public static HistoricalTimeSeriesRating of(Collection<HistoricalTimeSeriesRatingRule> rules) {
+  public static HistoricalTimeSeriesRating of(final Collection<HistoricalTimeSeriesRatingRule> rules) {
     return new HistoricalTimeSeriesRating(rules);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param rules  the rules, not null and not empty
    */
   @ImmutableConstructor
-  private HistoricalTimeSeriesRating(Collection<HistoricalTimeSeriesRatingRule> rules) {
+  private HistoricalTimeSeriesRating(final Collection<HistoricalTimeSeriesRatingRule> rules) {
     ArgumentChecker.notEmpty(rules, "rules");
     _rules = ImmutableSet.copyOf(rules);
     _rulesByFieldType = buildRuleDb();
   }
 
   private ImmutableMap<String, Map<String, Integer>> buildRuleDb() {
-    Map<String, Map<String, Integer>> map = Maps.newHashMap();
-    for (HistoricalTimeSeriesRatingRule rule : _rules) {
-      String fieldName = rule.getFieldName();
+    final Map<String, Map<String, Integer>> map = Maps.newHashMap();
+    for (final HistoricalTimeSeriesRatingRule rule : _rules) {
+      final String fieldName = rule.getFieldName();
       Map<String, Integer> ruleDb = map.get(fieldName);
       if (ruleDb == null) {
-        ruleDb = new HashMap<String, Integer>();
+        ruleDb = new HashMap<>();
         map.put(fieldName, ruleDb);
       }
       ruleDb.put(rule.getFieldValue(), rule.getRating());
@@ -97,13 +96,13 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
   //-------------------------------------------------------------------------
   /**
    * Rates historical time-series info based on the stored rules.
-   * 
+   *
    * @param series  the series to rate, not null
    * @return the rating
    */
-  public int rate(ManageableHistoricalTimeSeriesInfo series) {
-    String dataSource = series.getDataSource();
-    Map<String, Integer> dataSourceMap = _rulesByFieldType.get(HistoricalTimeSeriesRatingFieldNames.DATA_SOURCE_NAME);
+  public int rate(final ManageableHistoricalTimeSeriesInfo series) {
+    final String dataSource = series.getDataSource();
+    final Map<String, Integer> dataSourceMap = _rulesByFieldType.get(HistoricalTimeSeriesRatingFieldNames.DATA_SOURCE_NAME);
     Integer dsRating = dataSourceMap.get(dataSource);
     if (dsRating == null) {
       dsRating = dataSourceMap.get(HistoricalTimeSeriesRatingFieldNames.STAR_VALUE);
@@ -111,8 +110,8 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
         throw new OpenGammaRuntimeException("There must be a star match if no match with given dataSource: " + dataSource);
       }
     }
-    String dataProvider = series.getDataProvider();
-    Map<String, Integer> dataProviderMap = _rulesByFieldType.get(HistoricalTimeSeriesRatingFieldNames.DATA_PROVIDER_NAME);
+    final String dataProvider = series.getDataProvider();
+    final Map<String, Integer> dataProviderMap = _rulesByFieldType.get(HistoricalTimeSeriesRatingFieldNames.DATA_PROVIDER_NAME);
     Integer dpRating = dataProviderMap.get(dataProvider);
     if (dpRating == null) {
       dpRating = dataProviderMap.get(HistoricalTimeSeriesRatingFieldNames.STAR_VALUE);
@@ -185,7 +184,7 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       HistoricalTimeSeriesRating other = (HistoricalTimeSeriesRating) obj;
-      return JodaBeanUtils.equal(getRules(), other.getRules());
+      return JodaBeanUtils.equal(_rules, other._rules);
     }
     return false;
   }
@@ -193,7 +192,7 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getRules());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_rules);
     return hash;
   }
 
@@ -201,7 +200,7 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("HistoricalTimeSeriesRating{");
-    buf.append("rules").append('=').append(JodaBeanUtils.toString(getRules()));
+    buf.append("rules").append('=').append(JodaBeanUtils.toString(_rules));
     buf.append('}');
     return buf.toString();
   }
@@ -341,19 +340,31 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

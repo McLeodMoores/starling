@@ -19,10 +19,10 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
  */
 public class RawFXVolatilitySurfaceDataFunction extends RawVolatilitySurfaceDataFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(RawFXVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RawFXVolatilitySurfaceDataFunction.class);
 
   /**
-   * Default constructor
+   * Default constructor.
    */
   public RawFXVolatilitySurfaceDataFunction() {
     super(InstrumentTypeProperties.FOREX);
@@ -34,12 +34,13 @@ public class RawFXVolatilitySurfaceDataFunction extends RawVolatilitySurfaceData
   }
 
   /**
-   * Tries the unordered currency pair both ways. If the target is UnorderedCurrencyPair~EURUSD, and the surface name is OPENGAMMA, will look for OPENGAMMA_EURUSD_FX_VANILLA_OPTION and
-   * OPENGAMMA_USDEUR_FX_VANILLA_OPTION. {@inheritDoc}
+   * Tries the unordered currency pair both ways. If the target is UnorderedCurrencyPair~EURUSD, and the surface name is OPENGAMMA, will look
+   * for OPENGAMMA_EURUSD_FX_VANILLA_OPTION and OPENGAMMA_USDEUR_FX_VANILLA_OPTION.
+   * {@inheritDoc}
    */
   @Override
-  protected VolatilitySurfaceDefinition<?, ?> getDefinition(final VolatilitySurfaceDefinitionSource definitionSource, final VersionCorrection versionCorrection, final ComputationTarget target,
-      final String definitionName) {
+  protected VolatilitySurfaceDefinition<?, ?> getDefinition(final VolatilitySurfaceDefinitionSource definitionSource, final VersionCorrection versionCorrection,
+      final ComputationTarget target, final String definitionName) {
     final UnorderedCurrencyPair pair = UnorderedCurrencyPair.of(target.getUniqueId());
     String name = pair.getFirstCurrency().getCode() + pair.getSecondCurrency().getCode();
     String fullDefinitionName = definitionName + "_" + name;
@@ -49,7 +50,7 @@ public class RawFXVolatilitySurfaceDataFunction extends RawVolatilitySurfaceData
       fullDefinitionName = definitionName + "_" + name;
       definition = definitionSource.getDefinition(fullDefinitionName, InstrumentTypeProperties.FOREX);
       if (definition == null) {
-        s_logger.error("Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + InstrumentTypeProperties.FOREX);
+        LOGGER.error("Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + InstrumentTypeProperties.FOREX);
         return null;
       }
     }
@@ -57,22 +58,25 @@ public class RawFXVolatilitySurfaceDataFunction extends RawVolatilitySurfaceData
   }
 
   /**
-   * Tries the unordered currency pair both ways. If the target is UnorderedCurrencyPair~EURUSD, and the surface name is OPENGAMMA, will look for OPENGAMMA_EURUSD_FX_VANILLA_OPTION and
-   * OPENGAMMA_USDEUR_FX_VANILLA_OPTION. {@inheritDoc}
+   * Tries the unordered currency pair both ways. If the target is UnorderedCurrencyPair~EURUSD, and the surface name is OPENGAMMA,
+   * will look for OPENGAMMA_EURUSD_FX_VANILLA_OPTION and OPENGAMMA_USDEUR_FX_VANILLA_OPTION. {@inheritDoc}
    */
   @Override
-  protected VolatilitySurfaceSpecification getSpecification(final VolatilitySurfaceSpecificationSource specificationSource, final VersionCorrection versionCorrection, final ComputationTarget target,
+  protected VolatilitySurfaceSpecification getSpecification(final VolatilitySurfaceSpecificationSource specificationSource,
+      final VersionCorrection versionCorrection, final ComputationTarget target,
       final String specificationName) {
     final UnorderedCurrencyPair pair = UnorderedCurrencyPair.of(target.getUniqueId());
     String name = pair.getFirstCurrency().getCode() + pair.getSecondCurrency().getCode();
     String fullSpecificationName = specificationName + "_" + name;
-    VolatilitySurfaceSpecification specification = specificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.FOREX, versionCorrection);
+    VolatilitySurfaceSpecification specification =
+        specificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.FOREX, versionCorrection);
     if (specification == null) {
       name = pair.getSecondCurrency().getCode() + pair.getFirstCurrency().getCode();
       fullSpecificationName = specificationName + "_" + name;
       specification = specificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.FOREX);
       if (specification == null) {
-        s_logger.error("Could not get volatility surface specification named " + fullSpecificationName + " for instrument type " + InstrumentTypeProperties.FOREX);
+        LOGGER.error("Could not get volatility surface specification named " + fullSpecificationName + " for instrument type "
+            + InstrumentTypeProperties.FOREX);
         return null;
       }
     }

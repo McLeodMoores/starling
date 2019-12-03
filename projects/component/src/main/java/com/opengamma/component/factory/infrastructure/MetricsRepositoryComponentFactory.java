@@ -1,12 +1,9 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.infrastructure;
-
-import info.ganglia.gmetric4j.gmetric.GMetric;
-import info.ganglia.gmetric4j.gmetric.GMetric.UDPAddressingMode;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -36,6 +33,9 @@ import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.metric.OpenGammaMetricRegistry;
+
+import info.ganglia.gmetric4j.gmetric.GMetric;
+import info.ganglia.gmetric4j.gmetric.GMetric.UDPAddressingMode;
 
 /**
  * Component Factory to setup the metrics server.
@@ -88,9 +88,9 @@ public class MetricsRepositoryComponentFactory extends AbstractComponentFactory 
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    MetricRegistry summaryRegistry = new MetricRegistry();
-    MetricRegistry detailedRegistry = new MetricRegistry();
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+    final MetricRegistry summaryRegistry = new MetricRegistry();
+    final MetricRegistry detailedRegistry = new MetricRegistry();
     if (isJmxPublish()) {
       initJmxPublish(repo, summaryRegistry, detailedRegistry);
     }
@@ -106,23 +106,23 @@ public class MetricsRepositoryComponentFactory extends AbstractComponentFactory 
 
   /**
    * Initialize publishing by JMX.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param summaryRegistry  the summary metrics registry, not null
    * @param detailedRegistry  the detailed metrics registry, not null
    */
-  protected void initJmxPublish(ComponentRepository repo, MetricRegistry summaryRegistry, MetricRegistry detailedRegistry) {
+  protected void initJmxPublish(final ComponentRepository repo, final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry) {
     repo.registerLifecycle(new JmxReporterLifecycle(repo, summaryRegistry, detailedRegistry));
   }
 
   /**
    * Initialize publishing by SLF4J.
-   * 
+   *
    * @param repo  the component repository, not null
    * @param summaryRegistry  the summary metrics registry, not null
    * @param detailedRegistry  the detailed metrics registry, not null
    */
-  protected void initSlf4jPublish(ComponentRepository repo, MetricRegistry summaryRegistry, MetricRegistry detailedRegistry) {
+  protected void initSlf4jPublish(final ComponentRepository repo, final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry) {
     Slf4jReporter logReporter = Slf4jReporter.forRegistry(summaryRegistry)
         .outputTo(LoggerFactory.getLogger(OpenGammaMetricRegistry.class))
         .convertRatesTo(TimeUnit.SECONDS)
@@ -141,18 +141,24 @@ public class MetricsRepositoryComponentFactory extends AbstractComponentFactory 
    * Initialize publishing by Ganglia.
    * <p>
    * Only the summary registry is published.
-   * 
-   * @param repo  the component repository, not null
-   * @param summaryRegistry  the summary metrics registry, not null
-   * @param detailedRegistry  the detailed metrics registry, not null
+   *
+   * @param repo
+   *          the component repository, not null
+   * @param summaryRegistry
+   *          the summary metrics registry, not null
+   * @param detailedRegistry
+   *          the detailed metrics registry, not null
+   * @throws IOException
+   *           if there is a problem
    */
-  protected void initGangliaPublish(ComponentRepository repo, MetricRegistry summaryRegistry, MetricRegistry detailedRegistry) throws IOException {
+  protected void initGangliaPublish(final ComponentRepository repo, final MetricRegistry summaryRegistry,
+      final MetricRegistry detailedRegistry) throws IOException {
     ArgumentChecker.notNull(getGangliaAddress(), "gangliaAddress");
     ArgumentChecker.notNull(getGangliaPort(), "gangliaPort");
     ArgumentChecker.notNull(getGangliaAddressingMode(), "gangliaAddressingMode");
     ArgumentChecker.notNull(getGangliaTtl(), "gangliaTtl");
-    GMetric ganglia = new GMetric(getGangliaAddress(), getGangliaPort(), UDPAddressingMode.valueOf(getGangliaAddressingMode()), getGangliaTtl(), true);
-    GangliaReporter gangliaReporter = GangliaReporter.forRegistry(summaryRegistry)
+    final GMetric ganglia = new GMetric(getGangliaAddress(), getGangliaPort(), UDPAddressingMode.valueOf(getGangliaAddressingMode()), getGangliaTtl(), true);
+    final GangliaReporter gangliaReporter = GangliaReporter.forRegistry(summaryRegistry)
         .convertRatesTo(TimeUnit.SECONDS)
         .convertDurationsTo(TimeUnit.MILLISECONDS)
         .build(ganglia);
@@ -170,14 +176,14 @@ public class MetricsRepositoryComponentFactory extends AbstractComponentFactory 
     private final MetricRegistry _detailedRegistry;
     private volatile JmxReporter _summaryReporter;
     private volatile JmxReporter _detailedReporter;
-    JmxReporterLifecycle(ComponentRepository repo, MetricRegistry summaryRegistry, MetricRegistry detailedRegistry) {
+    JmxReporterLifecycle(final ComponentRepository repo, final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry) {
       _repo = repo;
       _summaryRegistry = summaryRegistry;
       _detailedRegistry = detailedRegistry;
     }
     @Override
     public void start() {
-      MBeanServer mbeanServer = _repo.findInstance(MBeanServer.class);
+      final MBeanServer mbeanServer = _repo.findInstance(MBeanServer.class);
       if (mbeanServer != null) {
         _summaryReporter = JmxReporter.forRegistry(_summaryRegistry).registerWith(mbeanServer).build();
         _detailedReporter = JmxReporter.forRegistry(_detailedRegistry).registerWith(mbeanServer).build();
@@ -212,7 +218,7 @@ public class MetricsRepositoryComponentFactory extends AbstractComponentFactory 
    */
   static final class GangliaReporterLifecycle implements Lifecycle {
     private volatile GangliaReporter _gangliaReporter;
-    public GangliaReporterLifecycle(GangliaReporter gangliaReporter) {
+    GangliaReporterLifecycle(final GangliaReporter gangliaReporter) {
       _gangliaReporter = gangliaReporter;
     }
     @Override
@@ -230,7 +236,7 @@ public class MetricsRepositoryComponentFactory extends AbstractComponentFactory 
     }
     @Override
     public boolean isRunning() {
-      return (_gangliaReporter != null);
+      return _gangliaReporter != null;
     }
   }
 

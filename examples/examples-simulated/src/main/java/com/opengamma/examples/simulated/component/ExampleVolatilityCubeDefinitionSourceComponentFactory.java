@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.JodaBeanUtils;
@@ -27,7 +28,6 @@ import com.opengamma.financial.analytics.volatility.cube.AggregatingVolatilityCu
 import com.opengamma.financial.analytics.volatility.cube.ConfigDBVolatilityCubeDefinitionSource;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
 import com.opengamma.financial.analytics.volatility.cube.rest.DataVolatilityCubeDefinitionSourceResource;
-import org.joda.beans.Bean;
 
 /**
  * Component factory providing the {@code VolatilityCubeDefinitionSource}.
@@ -53,11 +53,11 @@ public class ExampleVolatilityCubeDefinitionSourceComponentFactory extends Abstr
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    ComponentInfo info = new ComponentInfo(VolatilityCubeDefinitionSource.class, getClassifier());
-    VolatilityCubeDefinitionSource base = new ConfigDBVolatilityCubeDefinitionSource(getConfigSource());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final ComponentInfo info = new ComponentInfo(VolatilityCubeDefinitionSource.class, getClassifier());
+    final VolatilityCubeDefinitionSource base = new ConfigDBVolatilityCubeDefinitionSource(getConfigSource());
     //VolatilityCubeDefinitionSource bbg = new ExampleVolatilityCubeDefinitionSource();
-    VolatilityCubeDefinitionSource combined = new AggregatingVolatilityCubeDefinitionSource(Arrays.asList(base));
+    final VolatilityCubeDefinitionSource combined = new AggregatingVolatilityCubeDefinitionSource(Arrays.asList(base));
     repo.registerComponent(info, combined);
     if (isPublishRest()) {
       repo.getRestComponents().publish(info, new DataVolatilityCubeDefinitionSourceResource(combined));

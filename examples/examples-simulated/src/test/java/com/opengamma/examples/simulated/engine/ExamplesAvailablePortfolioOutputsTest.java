@@ -46,7 +46,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class ExamplesAvailablePortfolioOutputsTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ExamplesAvailablePortfolioOutputsTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExamplesAvailablePortfolioOutputsTest.class);
 
   private static final String SWAP_PORTFOLIO = "Swap Portfolio";
   private static final String MIXED_EXAMPLE_PORTFOLIO = "Equity Option Portfolio";
@@ -100,29 +100,29 @@ public class ExamplesAvailablePortfolioOutputsTest {
     final long t3 = System.nanoTime();
     final AvailableOutputs outputs = new AvailablePortfolioOutputs(portfolio, _functionRepository, _functionExclusionGroups, _marketDataAvailability, "?");
     final long t4 = System.nanoTime();
-    s_logger.info("Fetch={}ms, Resolve={}ms, Outputs={}ms", new Object[] {(t2 - t1) / 1e6, (t3 - t2) / 1e6, (t4 - t3) / 1e6 });
-    s_logger.info("Outputs for {}", portfolio.getName());
+    LOGGER.info("Fetch={}ms, Resolve={}ms, Outputs={}ms", new Object[] {(t2 - t1) / 1e6, (t3 - t2) / 1e6, (t4 - t3) / 1e6 });
+    LOGGER.info("Outputs for {}", portfolio.getName());
     for (final AvailableOutput output : outputs.getOutputs()) {
-      s_logger.info("{}", output);
+      LOGGER.info("{}", output);
     }
-    s_logger.info("Portfolio node outputs for {}", portfolio.getName());
+    LOGGER.info("Portfolio node outputs for {}", portfolio.getName());
     for (final AvailableOutput output : outputs.getPortfolioNodeOutputs()) {
-      s_logger.info("{}", output);
+      LOGGER.info("{}", output);
     }
-    s_logger.info("Position outputs for {}", portfolio.getName());
+    LOGGER.info("Position outputs for {}", portfolio.getName());
     for (final AvailableOutput output : outputs.getPositionOutputs()) {
-      s_logger.info("{}", output);
+      LOGGER.info("{}", output);
     }
     for (final String securityType : outputs.getSecurityTypes()) {
-      s_logger.info("{} security outputs for {}", securityType, portfolio.getName());
+      LOGGER.info("{} security outputs for {}", securityType, portfolio.getName());
       for (final AvailableOutput output : outputs.getPositionOutputs(securityType)) {
-        s_logger.info("{}", output);
+        LOGGER.info("{}", output);
       }
     }
     System.err.println(portfolioName);
-    for (String securityType : outputs.getSecurityTypes()) {
-      final Set<String> values = new HashSet<String>();
-      for (AvailableOutput output : outputs.getPositionOutputs(securityType)) {
+    for (final String securityType : outputs.getSecurityTypes()) {
+      final Set<String> values = new HashSet<>();
+      for (final AvailableOutput output : outputs.getPositionOutputs(securityType)) {
         if (values.add(output.getValueName())) {
           System.err.println("\tassertPositionOutput(outputs, \"" + securityType + "\", \"" + output.getValueName() + "\");");
         }

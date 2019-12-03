@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity;
@@ -16,7 +16,7 @@ import com.opengamma.analytics.financial.model.option.pricing.analytic.RollGeske
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public final class EqyOptRollGeskeWhaleyPresentValueCalculator extends InstrumentDerivativeVisitorAdapter<StaticReplicationDataBundle, Double> {
   /** A static instance */
@@ -25,7 +25,7 @@ public final class EqyOptRollGeskeWhaleyPresentValueCalculator extends Instrumen
   private static final RollGeskeWhaleyModel MODEL = new RollGeskeWhaleyModel();
 
   /**
-   * Gets the static instance
+   * Gets the static instance.
    * @return The static instance
    */
   public static EqyOptRollGeskeWhaleyPresentValueCalculator getInstance() {
@@ -89,7 +89,8 @@ public final class EqyOptRollGeskeWhaleyPresentValueCalculator extends Instrumen
     return getPresetValue(pointValue, s, k, t, r, data);
   }
 
-  private double getPresetValue(final double factor, final double spot, final double strike, final double time, final double interestRate, final StaticReplicationDataBundle data) {
+  private double getPresetValue(final double factor, final double spot, final double strike, final double time, final double interestRate,
+      final StaticReplicationDataBundle data) {
     final ForwardCurve fCurve = data.getForwardCurve();
     double[] divTime = null;
     double[] divAmount = null;

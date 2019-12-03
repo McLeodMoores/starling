@@ -38,9 +38,9 @@ import com.sleepycat.je.OperationStatus;
  */
 public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository implements Lifecycle {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BerkeleyDBTempTargetRepository.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BerkeleyDBTempTargetRepository.class);
 
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   private static final class Generation {
 
@@ -50,7 +50,7 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
 
     private final Database _id2LastAccessed;
 
-    public Generation(final Environment environment, final int generation) {
+    Generation(final Environment environment, final int generation) {
       final DatabaseConfig config = new DatabaseConfig();
       config.setAllowCreate(true);
       config.setTemporary(true);
@@ -67,16 +67,15 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
         final TempTarget target = fromByteArray(value.getData());
         LongBinding.longToEntry(System.nanoTime(), value);
         _id2LastAccessed.put(null, key, value);
-        if (s_logger.isDebugEnabled()) {
-          s_logger.debug("Found record {} for {} in {}", new Object[] {target, uid, _id2Target.getDatabaseName() });
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("Found record {} for {} in {}", new Object[] { target, uid, _id2Target.getDatabaseName() });
         }
         return target;
-      } else {
-        if (s_logger.isDebugEnabled()) {
-          s_logger.debug("No record found for {} in {}", uid, _id2Target.getDatabaseName());
-        }
-        return null;
       }
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("No record found for {} in {}", uid, _id2Target.getDatabaseName());
+      }
+      return null;
     }
 
     public Long find(final byte[] targetNoUid) {
@@ -88,9 +87,8 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
         LongBinding.longToEntry(System.nanoTime(), value);
         _id2LastAccessed.put(null, key, value);
         return result;
-      } else {
-        return null;
       }
+      return null;
     }
 
     public long store(final long newId, final byte[] targetWithUid, final byte[] targetNoUid) {
@@ -112,7 +110,7 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
       // Write was unsuccessful; won't be using the new identifier so remove the marker
       _id2Target.delete(null, idEntry);
       if (status != OperationStatus.KEYEXIST) {
-        s_logger.error("Error removing {} from {}", newId, _id2Target.getDatabaseName());
+        LOGGER.error("Error removing {} from {}", newId, _id2Target.getDatabaseName());
         throw new OpenGammaRuntimeException("Couldn't update to database");
       }
       if (_target2Id.get(null, targetEntry, idEntry, LockMode.READ_UNCOMMITTED) != OperationStatus.SUCCESS) {
@@ -125,14 +123,14 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
 
     public void delete() {
       // These are temporary databases; the close operation should delete them
-      s_logger.info("Deleting {}", this);
+      LOGGER.info("Deleting {}", this);
       _id2Target.close();
       _target2Id.close();
       _id2LastAccessed.close();
     }
 
     public void copyLiveObjects(final long deadTime, final Generation next, final List<Long> deletes) {
-      s_logger.debug("Copying objects from {} to {}", this, next);
+      LOGGER.debug("Copying objects from {} to {}", this, next);
       final DatabaseEntry identifier = new DatabaseEntry();
       final DatabaseEntry target = new DatabaseEntry();
       final DatabaseEntry accessed = new DatabaseEntry();
@@ -154,7 +152,7 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
         }
       }
       cursor.close();
-      s_logger.info("Copied {} objects from {} to {}", new Object[] {count, this, next });
+      LOGGER.info("Copied {} objects from {} to {}", new Object[] { count, this, next });
     }
 
     @Override
@@ -173,11 +171,11 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
   }
 
   private static Database openTruncated(final Environment environment, final DatabaseConfig config, final String name) {
-    s_logger.debug("Opening {}", name);
+    LOGGER.debug("Opening {}", name);
     Database handle = environment.openDatabase(null, name, config);
     if (handle.count() > 0) {
       handle.close();
-      s_logger.info("Truncating existing {}", name);
+      LOGGER.info("Truncating existing {}", name);
       environment.truncateDatabase(null, name, false);
       handle = environment.openDatabase(null, name, config);
     }
@@ -196,8 +194,9 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
 
   /**
    * Creates a new temporary target repository.
-   * 
-   * @param dbDir the folder to use for the repository, it will be created if it doesn't exist. If it contains existing files they may be destroyed.
+   *
+   * @param dbDir
+   *          the folder to use for the repository, it will be created if it doesn't exist. If it contains existing files they may be destroyed.
    */
   public BerkeleyDBTempTargetRepository(final File dbDir) {
     this(SCHEME, dbDir);
@@ -205,9 +204,11 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
 
   /**
    * Creates a new temporary target repository.
-   * 
-   * @param scheme the scheme to use for unique identifiers allocated by this repository
-   * @param dbDir the folder to use for the repository, it will be created if it doesn't exist. If it contains existing files they may be destroyed.
+   *
+   * @param scheme
+   *          the scheme to use for unique identifiers allocated by this repository
+   * @param dbDir
+   *          the folder to use for the repository, it will be created if it doesn't exist. If it contains existing files they may be destroyed.
    */
   public BerkeleyDBTempTargetRepository(final String scheme, final File dbDir) {
     super(scheme);
@@ -216,12 +217,12 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
   }
 
   private static byte[] toByteArray(final FudgeMsg msg) {
-    return s_fudgeContext.toByteArray(msg);
+    return FUDGE_CONTEXT.toByteArray(msg);
   }
 
   private static TempTarget fromByteArray(final byte[] data) {
-    final FudgeDeserializer deserializer = new FudgeDeserializer(s_fudgeContext);
-    return deserializer.fudgeMsgToObject(TempTarget.class, s_fudgeContext.deserialize(data).getMessage());
+    final FudgeDeserializer deserializer = new FudgeDeserializer(FUDGE_CONTEXT);
+    return deserializer.fudgeMsgToObject(TempTarget.class, FUDGE_CONTEXT.deserialize(data).getMessage());
   }
 
   protected Generation getOrCreateNewGeneration() {
@@ -230,11 +231,11 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
         if (_new == null) {
           final int identifier = _generation++;
           try {
-            s_logger.info("Creating disk storage for generation {}", identifier);
+            LOGGER.info("Creating disk storage for generation {}", identifier);
             _new = new Generation(_environment, identifier);
           } catch (final RuntimeException e) {
-            s_logger.error("Couldn't create generation {}", identifier);
-            s_logger.warn("Caught exception", e);
+            LOGGER.error("Couldn't create generation {}", identifier);
+            LOGGER.warn("Caught exception", e);
             throw e;
           }
         }
@@ -250,10 +251,9 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
     final Generation gen = _old;
     if (gen != null) {
       return gen.get(uid);
-    } else {
-      s_logger.debug("No old generation to lookup {} in", uid);
-      return null;
     }
+    LOGGER.debug("No old generation to lookup {} in", uid);
+    return null;
   }
 
   @Override
@@ -261,10 +261,9 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
     final Generation gen = _new;
     if (gen != null) {
       return gen.get(uid);
-    } else {
-      s_logger.debug("No new generation to lookup {} in", uid);
-      return null;
     }
+    LOGGER.debug("No new generation to lookup {} in", uid);
+    return null;
   }
 
   @Override
@@ -282,7 +281,7 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
     final FudgeSerializer serializer;
     final MutableFudgeMsg msg;
     final byte[] targetNoUid;
-    serializer = new FudgeSerializer(s_fudgeContext);
+    serializer = new FudgeSerializer(FUDGE_CONTEXT);
     msg = serializer.newMessage();
     target.toFudgeMsgImpl(serializer, msg);
     FudgeSerializer.addClassHeader(msg, target.getClass(), TempTarget.class);
@@ -313,14 +312,14 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
   protected boolean copyOldToNewGeneration(final long deadTime, final List<Long> deletes) {
     final Generation newGen = _new;
     if (newGen == null) {
-      s_logger.debug("No new generation to copy values to");
+      LOGGER.debug("No new generation to copy values to");
       return false;
     }
     final Generation oldGen = _old;
     if (oldGen != null) {
       oldGen.copyLiveObjects(deadTime, newGen, deletes);
     } else {
-      s_logger.debug("No old generation to copy values from");
+      LOGGER.debug("No old generation to copy values from");
     }
     return true;
   }
@@ -336,12 +335,12 @@ public class BerkeleyDBTempTargetRepository extends RollingTempTargetRepository 
   }
 
   private void reportStatistics() {
-    if (s_logger.isInfoEnabled()) {
+    if (LOGGER.isInfoEnabled()) {
       Generation gen = _old;
-      final String oldGenStats = (gen != null) ? gen.getStatistics() : "<none>";
+      final String oldGenStats = gen != null ? gen.getStatistics() : "<none>";
       gen = _new;
-      final String newGenStats = (gen != null) ? gen.getStatistics() : "<none>";
-      s_logger.info("Database statistics - old:({}), new:({})", oldGenStats, newGenStats);
+      final String newGenStats = gen != null ? gen.getStatistics() : "<none>";
+      LOGGER.info("Database statistics - old:({}), new:({})", oldGenStats, newGenStats);
     }
   }
 

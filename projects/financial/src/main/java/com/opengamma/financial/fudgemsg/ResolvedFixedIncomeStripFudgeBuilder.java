@@ -23,19 +23,19 @@ import com.opengamma.id.ExternalId;
 public class ResolvedFixedIncomeStripFudgeBuilder implements FudgeBuilder<FixedIncomeStripWithIdentifier> {
   private static final String STRIP_NAME = "strip";
   private static final String IDENTIFIER_NAME = "identifier";
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FixedIncomeStripWithIdentifier object) {
-    MutableFudgeMsg message = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FixedIncomeStripWithIdentifier object) {
+    final MutableFudgeMsg message = serializer.newMessage();
     serializer.addToMessage(message, STRIP_NAME, null, object.getStrip());
     serializer.addToMessage(message, IDENTIFIER_NAME, null, object.getSecurity());
-    return message; 
+    return message;
   }
 
   @Override
-  public FixedIncomeStripWithIdentifier buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
-    FixedIncomeStrip type = deserializer.fieldValueToObject(FixedIncomeStrip.class, message.getByName(STRIP_NAME));
-    ExternalId security = deserializer.fieldValueToObject(ExternalId.class, message.getByName(IDENTIFIER_NAME));
+  public FixedIncomeStripWithIdentifier buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+    final FixedIncomeStrip type = deserializer.fieldValueToObject(FixedIncomeStrip.class, message.getByName(STRIP_NAME));
+    final ExternalId security = deserializer.fieldValueToObject(ExternalId.class, message.getByName(IDENTIFIER_NAME));
     return new FixedIncomeStripWithIdentifier(type, security);
   }
 

@@ -11,20 +11,11 @@ import com.opengamma.analytics.financial.timeseries.analysis.DoubleTimeSeriesSta
 import com.opengamma.timeseries.DoubleTimeSeries;
 
 /**
- * The Jensen alpha computes the abnormal return of an asset or portfolio over
- * the theoretical expected return i.e. the difference between the average
- * return of the asset and the average return of a benchmark portfolio whose
- * market risk is the same as that of the fund.
+ * The Jensen alpha computes the abnormal return of an asset or portfolio over the theoretical expected return i.e. the difference between the average return of
+ * the asset and the average return of a benchmark portfolio whose market risk is the same as that of the fund.
  * <p>
- * The Jensen alpha is defined as:
- * $$
- * \begin{eqnarray*}
- * \alpha_J = R_i - [R_f + \beta_{iM}(R_M - R_f)]
- * \end{eqnarray*}
- * $$
- * where $R_i$ is the asset return, $R_f$ is the risk-free rate, $\beta_{iM}$
- * is the beta of the asset with respect to the market and $R_M$ is the market
- * return. 
+ * The Jensen alpha is defined as: $$ \begin{eqnarray*} \alpha_J = R_i - [R_f + \beta_{iM}(R_M - R_f)] \end{eqnarray*} $$ where $R_i$ is the asset return, $R_f$
+ * is the risk-free rate, $\beta_{iM}$ is the beta of the asset with respect to the market and $R_M$ is the market return.
  */
 public class JensenAlphaCalculator {
   private final DoubleTimeSeriesStatisticsCalculator _expectedAssetReturnCalculator;
@@ -42,14 +33,20 @@ public class JensenAlphaCalculator {
   }
 
   /**
-   * Calculates Jensen's alpha
-   * @param assetReturnTS The return time series of the asset
-   * @param riskFreeReturnTS The risk-free return series 
-   * @param beta The beta of the asset to the market
-   * @param marketReturnTS The market return series
+   * Calculates Jensen's alpha.
+   * 
+   * @param assetReturnTS
+   *          The return time series of the asset
+   * @param riskFreeReturnTS
+   *          The risk-free return series
+   * @param beta
+   *          The beta of the asset to the market
+   * @param marketReturnTS
+   *          The market return series
    * @return The Jensen alpha
    */
-  public double evaluate(final DoubleTimeSeries<?> assetReturnTS, final DoubleTimeSeries<?> riskFreeReturnTS, final double beta, final DoubleTimeSeries<?> marketReturnTS) {
+  public double evaluate(final DoubleTimeSeries<?> assetReturnTS, final DoubleTimeSeries<?> riskFreeReturnTS, final double beta,
+      final DoubleTimeSeries<?> marketReturnTS) {
     Validate.notNull(assetReturnTS, "asset return time series");
     Validate.notNull(riskFreeReturnTS, "risk-free return time series");
     Validate.notNull(marketReturnTS, "market return time series");

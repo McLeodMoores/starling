@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention.daycount;
@@ -28,26 +28,36 @@ public class ActualActualICMA extends ActualTypeDayCount {
   }
 
   @Override
-  public double getAccruedInterest(final LocalDate previousCouponDate, final LocalDate date, final LocalDate nextCouponDate, final double coupon, final double paymentsPerYear) {
+  public double getAccruedInterest(final LocalDate previousCouponDate, final LocalDate date, final LocalDate nextCouponDate, final double coupon,
+      final double paymentsPerYear) {
     return getAccruedInterest(previousCouponDate, date, nextCouponDate, coupon, paymentsPerYear, StubType.NONE);
   }
 
   /**
    * Computes the accrued interest for a specific stub-type.
-   * @param previousCouponDate  the previous coupon date, not null
-   * @param date  the evaluated coupon date, not null
-   * @param nextCouponDate  the next coupon date, not null
-   * @param coupon  the coupon value
-   * @param paymentsPerYear  the number of payments per year, one, two, three, four, six or twelve
-   * @param stubType The stub type.
+   * 
+   * @param previousCouponDate
+   *          the previous coupon date, not null
+   * @param date
+   *          the evaluated coupon date, not null
+   * @param nextCouponDate
+   *          the next coupon date, not null
+   * @param coupon
+   *          the coupon value
+   * @param paymentsPerYear
+   *          the number of payments per year, one, two, three, four, six or twelve
+   * @param stubType
+   *          The stub type.
    * @return The accrued interest.
    */
-  public double getAccruedInterest(final ZonedDateTime previousCouponDate, final ZonedDateTime date, final ZonedDateTime nextCouponDate, final double coupon, final double paymentsPerYear,
+  public double getAccruedInterest(final ZonedDateTime previousCouponDate, final ZonedDateTime date, final ZonedDateTime nextCouponDate, final double coupon,
+      final double paymentsPerYear,
       final StubType stubType) {
     return getAccruedInterest(previousCouponDate.toLocalDate(), date.toLocalDate(), nextCouponDate.toLocalDate(), coupon, paymentsPerYear, stubType);
   }
 
-  public double getAccruedInterest(final LocalDate previousCouponDate, final LocalDate date, final LocalDate nextCouponDate, final double coupon, final double paymentsPerYear,
+  public double getAccruedInterest(final LocalDate previousCouponDate, final LocalDate date, final LocalDate nextCouponDate, final double coupon,
+      final double paymentsPerYear,
       final StubType stubType) {
     testDates(previousCouponDate, date, nextCouponDate);
     Validate.notNull(stubType, "stub type");
@@ -89,8 +99,10 @@ public class ActualActualICMA extends ActualTypeDayCount {
         return coupon * daysBetween / daysBetweenCoupons / paymentsPerYear;
       }
       case LONG_END: {
-        final long firstNotionalJulian = getEOMAdjustedDate(previousCouponDate, previousCouponDate.plusMonths(months)).getLong(JulianFields.MODIFIED_JULIAN_DAY);
-        final long secondNotionalJulian = getEOMAdjustedDate(previousCouponDate, previousCouponDate.plusMonths(2 * months)).getLong(JulianFields.MODIFIED_JULIAN_DAY);
+        final long firstNotionalJulian = getEOMAdjustedDate(previousCouponDate, previousCouponDate.plusMonths(months))
+            .getLong(JulianFields.MODIFIED_JULIAN_DAY);
+        final long secondNotionalJulian = getEOMAdjustedDate(previousCouponDate, previousCouponDate.plusMonths(2 * months))
+            .getLong(JulianFields.MODIFIED_JULIAN_DAY);
         final long daysBetweenPreviousAndFirstNotional = firstNotionalJulian - previousCouponDateJulian;
         if (dateJulian < firstNotionalJulian) {
           daysBetween = dateJulian - previousCouponDateJulian;
@@ -113,9 +125,11 @@ public class ActualActualICMA extends ActualTypeDayCount {
   // -------------------------------------------------------------------------
   /**
    * Adjusts the date to the last day of month if necessary.
-   * 
-   * @param comparison  the date to check as to being the last day of month, not null
-   * @param date  the date to adjust, not null
+   *
+   * @param comparison
+   *          the date to check as to being the last day of month, not null
+   * @param date
+   *          the date to adjust, not null
    * @return the adjusted date, not null
    */
   private static LocalDate getEOMAdjustedDate(final LocalDate comparison, final LocalDate date) {

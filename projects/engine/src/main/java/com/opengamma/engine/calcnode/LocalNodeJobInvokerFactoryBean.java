@@ -10,7 +10,8 @@ import java.util.Collection;
 import com.opengamma.util.SingletonFactoryBean;
 
 /**
- * Factory bean for creating a {@link LocalNodeJobInvoker} instance. The local invoker is created with the supplied set of nodes and then registered with the job dispatcher (if supplied).
+ * Factory bean for creating a {@link LocalNodeJobInvoker} instance. The local invoker is created with the supplied set of nodes
+ * and then registered with the job dispatcher (if supplied).
  */
 public class LocalNodeJobInvokerFactoryBean extends SingletonFactoryBean<LocalNodeJobInvoker> {
 

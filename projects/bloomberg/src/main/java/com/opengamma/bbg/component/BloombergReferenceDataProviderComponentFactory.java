@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.component;
@@ -8,8 +8,6 @@ package com.opengamma.bbg.component;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import net.sf.ehcache.CacheManager;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -41,6 +39,8 @@ import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.mongo.MongoConnector;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the Bloomberg reference data provider.
@@ -76,7 +76,7 @@ public class BloombergReferenceDataProviderComponentFactory extends AbstractComp
    */
   @PropertyDefinition
   private CacheManager _cacheManager;
-  
+
   /**
    * A config source. If specified, overrides will be pulled from
    * here.
@@ -86,7 +86,7 @@ public class BloombergReferenceDataProviderComponentFactory extends AbstractComp
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     final ReferenceDataProvider provider = initReferenceDataProvider(repo);
     final ComponentInfo info = new ComponentInfo(ReferenceDataProvider.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
@@ -101,55 +101,56 @@ public class BloombergReferenceDataProviderComponentFactory extends AbstractComp
 
   /**
    * Creates the provider.
-   * 
+   *
    * @param repo  the repository, not null
    * @return the provider, not null
    */
-  protected ReferenceDataProvider initReferenceDataProvider(ComponentRepository repo) {
-    BloombergReferenceDataProvider underlying = createBloombergReferenceDataProvider();
+  protected ReferenceDataProvider initReferenceDataProvider(final ComponentRepository repo) {
+    final BloombergReferenceDataProvider underlying = createBloombergReferenceDataProvider();
     repo.registerLifecycle(underlying);
-    
+
     ReferenceDataProvider effectiveProvider = underlying;
     if (getConfigSource() != null) {
       effectiveProvider = applyFieldOverrides(effectiveProvider);
     }
-    
-    MongoConnector mongoConnector = getMongoConnector();
-    CacheManager cacheManager = getCacheManager();
+
+    final MongoConnector mongoConnector = getMongoConnector();
+    final CacheManager cacheManager = getCacheManager();
     if (mongoConnector != null) {
-      MongoDBInvalidFieldCachingReferenceDataProvider fieldCached = new MongoDBInvalidFieldCachingReferenceDataProvider(effectiveProvider, mongoConnector);
+      final MongoDBInvalidFieldCachingReferenceDataProvider fieldCached =
+          new MongoDBInvalidFieldCachingReferenceDataProvider(effectiveProvider, mongoConnector);
       return new MongoDBValueCachingReferenceDataProvider(fieldCached, mongoConnector);
-      
+
     } else if (cacheManager != null) {
-      ReferenceDataProvider fieldCached = new InMemoryInvalidFieldCachingReferenceDataProvider(effectiveProvider);  // TODO: EHcached version
+      final ReferenceDataProvider fieldCached = new InMemoryInvalidFieldCachingReferenceDataProvider(effectiveProvider);  // TODO: EHcached version
       return new EHValueCachingReferenceDataProvider(fieldCached, cacheManager);
-      
+
     } else {
       return new InMemoryInvalidFieldCachingReferenceDataProvider(effectiveProvider);
     }
   }
 
   protected BloombergReferenceDataProvider createBloombergReferenceDataProvider() {
-    BloombergReferenceDataProvider underlying = new BloombergReferenceDataProvider(getBloombergConnector());
+    final BloombergReferenceDataProvider underlying = new BloombergReferenceDataProvider(getBloombergConnector());
     return underlying;
   }
 
   /**
-   * Loads overrides from the config source and applies them to the passed 
+   * Loads overrides from the config source and applies them to the passed
    * reference data provider via a wrapper (a {@link PatchableReferenceDataProvider}).
    * @param underlying the provider to patch
    * @return a patched provider
    */
-  private PatchableReferenceDataProvider applyFieldOverrides(ReferenceDataProvider underlying) {
-    Collection<ConfigItem<BloombergFieldOverride>> overrideItems = getConfigSource().getAll(BloombergFieldOverride.class, VersionCorrection.LATEST);
-    
-    PatchableReferenceDataProvider patchableReferenceDataProvider = new PatchableReferenceDataProvider(underlying);
-    
-    for (ConfigItem<BloombergFieldOverride> configItem : overrideItems) {
-      BloombergFieldOverride fieldOverride = configItem.getValue();
-      
+  private PatchableReferenceDataProvider applyFieldOverrides(final ReferenceDataProvider underlying) {
+    final Collection<ConfigItem<BloombergFieldOverride>> overrideItems = getConfigSource().getAll(BloombergFieldOverride.class, VersionCorrection.LATEST);
+
+    final PatchableReferenceDataProvider patchableReferenceDataProvider = new PatchableReferenceDataProvider(underlying);
+
+    for (final ConfigItem<BloombergFieldOverride> configItem : overrideItems) {
+      final BloombergFieldOverride fieldOverride = configItem.getValue();
+
       patchableReferenceDataProvider.setPatch(fieldOverride.getBloombergId(), fieldOverride.getFieldName(), fieldOverride.getOverrideValue());
-      
+
     }
     return patchableReferenceDataProvider;
 

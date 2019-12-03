@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.cogda.msg;
@@ -11,24 +11,24 @@ import org.fudgemsg.FudgeMsg;
  * An enumeration of all message types to support ease of event loop processing.
  */
 public enum CogdaMessageType {
-  /** {@see ConnectionRequestMessage} */
+  /** {@link ConnectionRequestMessage}. */
   CONNECTION_REQUEST,
-  /** {@see ConnectionResponseMessage} */
+  /** {@link ConnectionResponseMessage}. */
   CONNECTION_RESPONSE,
-  /** {@see CogdaLiveDataSnapshotRequestMessage} */
+  /** {@link CogdaLiveDataSnapshotRequestMessage}. */
   SNAPSHOT_REQUEST,
-  /** {@see CogdaLiveDataSnapshotResponseMessage} */
+  /** {@link CogdaLiveDataSnapshotResponseMessage}. */
   SNAPSHOT_RESPONSE,
-  /** {@see CogdaLiveDataSubscriptionRequestMessage} */
+  /** {@link CogdaLiveDataSubscriptionRequestMessage}. */
   SUBSCRIPTION_REQUEST,
-  /** {@see CogdaLiveDataSubscriptionResponseMessage} */
+  /** {@link CogdaLiveDataSubscriptionResponseMessage}. */
   SUBSCRIPTION_RESPONSE,
-  /** {@see CogdaLiveDataUnsubscribeMessage} */
+  /** {@link CogdaLiveDataUnsubscribeMessage}. */
   UNSUBSCRIBE,
-  /** {@see CogdaLiveDataUpdateMessage} */
+  /** {@link CogdaLiveDataUpdateMessage}. */
   LIVE_DATA_UPDATE;
-  
-  public static CogdaMessageType getFromMessage(FudgeMsg msg) {
+
+  public static CogdaMessageType getFromMessage(final FudgeMsg msg) {
     if (msg == null) {
       return null;
     }

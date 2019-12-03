@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class InterestRateFutureYieldCurveNodePnLDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureYieldCurveNodePnLDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureYieldCurveNodePnLDefaults.class);
   private final String _samplingPeriod;
   private final String _scheduleCalculator;
   private final String _samplingFunction;
@@ -49,7 +49,7 @@ public class InterestRateFutureYieldCurveNodePnLDefaults extends DefaultProperty
     _samplingPeriod = samplingPeriod;
     _scheduleCalculator = scheduleCalculator;
     _samplingFunction = samplingFunction;
-    _currencyAndCurveConfigNames = new HashMap<String, String>();
+    _currencyAndCurveConfigNames = new HashMap<>();
     for (int i = 0; i < currencyAndCurveConfigNames.length; i += 2) {
       _currencyAndCurveConfigNames.put(currencyAndCurveConfigNames[i], currencyAndCurveConfigNames[i + 1]);
     }
@@ -83,7 +83,7 @@ public class InterestRateFutureYieldCurveNodePnLDefaults extends DefaultProperty
       final String currencyName = FinancialSecurityUtils.getCurrency(target.getPositionOrTrade().getSecurity()).getCode();
       final String configName = _currencyAndCurveConfigNames.get(currencyName);
       if (configName == null) {
-        s_logger.error("Could not get config for currency " + currencyName + "; should never happen");
+        LOGGER.error("Could not get config for currency " + currencyName + "; should never happen");
         return null;
       }
       return Collections.singleton(configName);

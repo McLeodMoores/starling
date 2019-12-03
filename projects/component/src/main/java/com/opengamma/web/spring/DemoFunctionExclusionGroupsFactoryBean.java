@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.spring;
@@ -22,8 +22,9 @@ import com.opengamma.util.SingletonFactoryBean;
 /**
  * Creates FunctionExclusionGroups appropriate for the {@link DemoStandardFunctionConfiguration} functions.
  * <p>
- * The implementation created will look for the {@link OpenGammaFunctionExclusions} marker interface and use the returned string as a key. Keys are ordered with a numbering from large positive
- * integers downwards. If the key string starts with a number, that number is used, otherwise they are given a unique negative number.
+ * The implementation created will look for the {@link OpenGammaFunctionExclusions} marker interface and use the returned string as a key. Keys are ordered with
+ * a numbering from large positive integers downwards. If the key string starts with a number, that number is used, otherwise they are given a unique negative
+ * number.
  */
 public class DemoFunctionExclusionGroupsFactoryBean extends SingletonFactoryBean<FunctionExclusionGroups> {
 
@@ -32,7 +33,7 @@ public class DemoFunctionExclusionGroupsFactoryBean extends SingletonFactoryBean
     return new AbstractFunctionExclusionGroups() {
 
       private final AtomicInteger _nextIdentifier = new AtomicInteger();
-      private final ConcurrentMap<Integer, Object> _used = new ConcurrentHashMap<Integer, Object>();
+      private final ConcurrentMap<Integer, Object> _used = new ConcurrentHashMap<>();
 
       private boolean notUsed(final Integer intValue, final Object key) {
         final Object existing = _used.putIfAbsent(intValue, key);
@@ -46,15 +47,15 @@ public class DemoFunctionExclusionGroupsFactoryBean extends SingletonFactoryBean
       protected String getKey(final FunctionDefinition function) {
         if (function instanceof OpenGammaFunctionExclusions) {
           return ((OpenGammaFunctionExclusions) function).getMutualExclusionGroup();
-        } else {
-          return null;
         }
+        return null;
       }
 
       @Override
-      protected FunctionExclusionGroup createExclusionGroup(Object key, String displayName) {
+      protected FunctionExclusionGroup createExclusionGroup(final Object key, final String displayName) {
         final String keyString = key.toString();
         Integer keyInteger;
+        String name = displayName;
         do {
           if (keyString.length() > 0) {
             char c = keyString.charAt(0);
@@ -66,23 +67,23 @@ public class DemoFunctionExclusionGroupsFactoryBean extends SingletonFactoryBean
                 if (!Character.isDigit(c)) {
                   break;
                 }
-                i = (i * 10) + (c - '0');
+                i = i * 10 + c - '0';
               }
               keyInteger = i;
-              displayName = displayName.substring(j);
+              name = name.substring(j);
               assert notUsed(keyInteger, key);
               break;
             }
           }
           keyInteger = _nextIdentifier.decrementAndGet();
         } while (false);
-        return super.createExclusionGroup(keyInteger, displayName);
+        return super.createExclusionGroup(keyInteger, name);
       }
 
       @Override
       public boolean isExcluded(final FunctionExclusionGroup group, final Collection<FunctionExclusionGroup> existing) {
         final int groupKey = (Integer) getKey(group);
-        for (FunctionExclusionGroup toCheck : existing) {
+        for (final FunctionExclusionGroup toCheck : existing) {
           final Integer toCheckKey = (Integer) getKey(toCheck);
           if (groupKey >= toCheckKey.intValue()) {
             return true;
@@ -93,7 +94,7 @@ public class DemoFunctionExclusionGroupsFactoryBean extends SingletonFactoryBean
 
       @Override
       public Collection<FunctionExclusionGroup> withExclusion(final Collection<FunctionExclusionGroup> existing, final FunctionExclusionGroup newGroup) {
-        final List<FunctionExclusionGroup> result = new ArrayList<FunctionExclusionGroup>(existing.size());
+        final List<FunctionExclusionGroup> result = new ArrayList<>(existing.size());
         result.addAll(existing);
         result.add(newGroup);
         return result;

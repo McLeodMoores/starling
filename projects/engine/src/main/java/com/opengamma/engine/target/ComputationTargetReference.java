@@ -20,8 +20,8 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.PublicAPI;
 
 /**
- * A reference to a particular computation target that will be resolved later to a real target. The reference may be "strict" and refer to a specific object or concept by {@link UniqueId} or "loose"
- * and refer to it by a broader identifier bundle that must first be resolved.
+ * A reference to a particular computation target that will be resolved later to a real target. The reference may be "strict" and refer to a
+ * specific object or concept by {@link UniqueId} or "loose" and refer to it by a broader identifier bundle that must first be resolved.
  */
 @PublicAPI
 public abstract class ComputationTargetReference implements Serializable {
@@ -60,12 +60,12 @@ public abstract class ComputationTargetReference implements Serializable {
   private static final Integer ZERO = 0;
   private static final Integer ONE = 1;
 
-  private static final ComputationTargetTypeVisitor<Void, Integer> s_getTypeDepth = new ComputationTargetTypeVisitor<Void, Integer>() {
+  private static final ComputationTargetTypeVisitor<Void, Integer> GET_TYPE_DEPTH = new ComputationTargetTypeVisitor<Void, Integer>() {
 
     @Override
     public Integer visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
       Integer depth = null;
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         final Integer typeDepth = type.accept(this, data);
         if (depth == null) {
           depth = typeDepth;
@@ -79,7 +79,7 @@ public abstract class ComputationTargetReference implements Serializable {
     @Override
     public Integer visitNestedComputationTargetTypes(final List<ComputationTargetType> types, final Void data) {
       int depth = 0;
-      for (ComputationTargetType type : types) {
+      for (final ComputationTargetType type : types) {
         depth += type.accept(this, data);
       }
       return depth;
@@ -99,13 +99,13 @@ public abstract class ComputationTargetReference implements Serializable {
 
   /**
    * Tests the depth of a typed context. If the type does not describe an object of uniform depth it is rejected.
-   * 
+   *
    * @param type the type to test, not null
    * @return the depth
    * @throws IllegalArgumentException if the type does not have a uniform depth
    */
   public/* should be package visible */static int getTypeDepth(final ComputationTargetType type) {
-    return type.accept(s_getTypeDepth, null);
+    return type.accept(GET_TYPE_DEPTH, null);
   }
 
   public ComputationTargetRequirement containing(final ComputationTargetType type, final ExternalId identifier) {
@@ -122,7 +122,7 @@ public abstract class ComputationTargetReference implements Serializable {
 
   /**
    * Gets the type of the target.
-   * 
+   *
    * @return the type, not null
    */
   public ComputationTargetType getType() {
@@ -131,7 +131,7 @@ public abstract class ComputationTargetReference implements Serializable {
 
   /**
    * Gets the parent reference when this is used in context.
-   * 
+   *
    * @return the parent reference or null if the target is not within a context
    */
   public ComputationTargetReference getParent() {
@@ -139,9 +139,9 @@ public abstract class ComputationTargetReference implements Serializable {
   }
 
   /**
-   * Returns this as a target requirement if it is one. If it is not a requirement, an exception will be thrown. Use the visitor pattern to deal with the alternative types; such as to resolve a
-   * requirement to a specification using the compilation context.
-   * 
+   * Returns this as a target requirement if it is one. If it is not a requirement, an exception will be thrown. Use the visitor pattern to deal
+   * with the alternative types; such as to resolve a requirement to a specification using the compilation context.
+   *
    * @return the computation target requirement instance, not null
    * @throws IllegalStateException if this is not a {@link ComputationTargetRequirement}
    */
@@ -150,9 +150,9 @@ public abstract class ComputationTargetReference implements Serializable {
   }
 
   /**
-   * Returns this as a target specification if it is one. If it is not a specification, an exception will be thrown. Use the visitor pattern to deal with the alternative types; such as to resolve a
-   * requirement to a specification using the compilation context.
-   * 
+   * Returns this as a target specification if it is one. If it is not a specification, an exception will be thrown. Use the visitor pattern to
+   * deal with the alternative types; such as to resolve a requirement to a specification using the compilation context.
+   *
    * @return the computation target specification instance, not null
    * @throws IllegalStateException if this is not a {@link ComputationTargetSpecification}
    */
@@ -171,12 +171,12 @@ public abstract class ComputationTargetReference implements Serializable {
   public int hashCode() {
     // Sub-classes must override
     //getName() and hashCode() results are cached on their objects
-    return (getClass().getName().hashCode() * 31 * 31) + ObjectUtils.hashCode(getParent()) * 31 + getType().hashCode();
+    return getClass().getName().hashCode() * 31 * 31 + ObjectUtils.hashCode(getParent()) * 31 + getType().hashCode();
   }
 
   /**
    * Applies the visitor operation to this reference.
-   * 
+   *
    * @param <T> the return type of the visitor
    * @param visitor the visitor operation, not null
    * @return the result of the visitor operation
@@ -187,23 +187,22 @@ public abstract class ComputationTargetReference implements Serializable {
 
   /**
    * Normalizes the parent reference using {@link MemoryUtils} to reduce the memory footprint.
-   * 
+   *
    * @return this instance or an equivalent object that references a shared parent instance
    */
   public ComputationTargetReference normalize() {
     if (getParent() == null) {
       return this;
-    } else {
-      final ComputationTargetReference parent = MemoryUtils.instance(getParent());
-      if (parent == getParent()) {
-        return this;
-      } else {
-        return create(parent, getType());
-      }
     }
+    final ComputationTargetReference parent = MemoryUtils.instance(getParent());
+    if (parent == getParent()) {
+      return this;
+    }
+    return create(parent, getType());
   }
 
-  private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> s_getParentType = new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
+  private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> GET_PARENT_TYPE =
+      new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
 
     @Override
     public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
@@ -234,29 +233,26 @@ public abstract class ComputationTargetReference implements Serializable {
 
   /**
    * Returns a new reference with the same identifiers but a different target type.
-   * 
+   *
    * @param newType the type of the new object, not null
    * @return the new reference object, not null
    */
   public ComputationTargetReference replaceType(final ComputationTargetType newType) {
     if (newType == getType()) {
       return this;
-    } else {
-      // TODO: should be checking the type
-      final ComputationTargetReference parent = getParent();
-      if (parent != null) {
-        final ComputationTargetType parentType = newType.accept(s_getParentType, null);
-        if (parentType == null) {
-          // Truncate the parent
-          return create(null, newType);
-        } else {
-          // Update the parent
-          return create(parent.replaceType(parentType), newType);
-        }
-      } else {
+    }
+    // TODO: should be checking the type
+    final ComputationTargetReference parent = getParent();
+    if (parent != null) {
+      final ComputationTargetType parentType = newType.accept(GET_PARENT_TYPE, null);
+      if (parentType == null) {
+        // Truncate the parent
         return create(null, newType);
       }
+      // Update the parent
+      return create(parent.replaceType(parentType), newType);
     }
+    return create(null, newType);
   }
 
   protected abstract String getIdStringImpl();
@@ -264,14 +260,13 @@ public abstract class ComputationTargetReference implements Serializable {
   protected String getIdString() {
     if (getParent() != null) {
       return getParent().getIdString() + "/" + getIdStringImpl();
-    } else {
-      return getIdStringImpl();
     }
+    return getIdStringImpl();
   }
 
   /**
    * Returns a new reference with the same type (and parent) but a different leaf identifier.
-   * 
+   *
    * @param identifier the new identifier, not null
    * @return the new reference object
    */

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.volatility.surface;
@@ -31,7 +31,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class VolatilitySurfaceShiftFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(VolatilitySurfaceShiftFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VolatilitySurfaceShiftFunction.class);
 
   /**
    * Property to shift a volatility surface.
@@ -57,7 +57,7 @@ public class VolatilitySurfaceShiftFunction extends AbstractFunction.NonCompiled
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> shift = constraints.getValues(SHIFT);
-    if ((shift == null) || shift.isEmpty() || constraints.isOptional(SHIFT)) {
+    if (shift == null || shift.isEmpty() || constraints.isOptional(SHIFT)) {
       return null;
     }
     final ValueProperties properties = desiredValue.getConstraints().copy().withoutAny(SHIFT).with(SHIFT, "0").withOptional(SHIFT).get();
@@ -69,14 +69,16 @@ public class VolatilitySurfaceShiftFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     final ValueProperties properties = createValueProperties(input).withAny(SHIFT).get();
     return Collections.singleton(new ValueSpecification(input.getValueName(), input.getTargetSpecification(), properties));
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ComputedValue input = inputs.getAllValues().iterator().next();
     final ValueSpecification inputSpec = input.getSpecification();
     VolatilitySurface volatilitySurface = (VolatilitySurface) input.getValue();
@@ -86,10 +88,11 @@ public class VolatilitySurfaceShiftFunction extends AbstractFunction.NonCompiled
     try {
       final double shiftAmount = Double.parseDouble(shift);
       volatilitySurface = volatilitySurface.withConstantMultiplicativeShift(shiftAmount);
-    } catch (NumberFormatException e) {
-      s_logger.error("Volatility surface shift not valid - {}", shift);
+    } catch (final NumberFormatException e) {
+      LOGGER.error("Volatility surface shift not valid - {}", shift);
     }
-    return Collections.singleton(new ComputedValue(new ValueSpecification(inputSpec.getValueName(), inputSpec.getTargetSpecification(), properties.get()), volatilitySurface));
+    return Collections.singleton(
+        new ComputedValue(new ValueSpecification(inputSpec.getValueName(), inputSpec.getTargetSpecification(), properties.get()), volatilitySurface));
   }
 
 }

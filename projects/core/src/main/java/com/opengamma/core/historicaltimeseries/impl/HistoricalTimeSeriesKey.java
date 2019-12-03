@@ -26,7 +26,8 @@ import com.opengamma.id.ExternalIdBundle;
   private final String _dataField;
   private final String _configName;
 
-  /* package */ HistoricalTimeSeriesKey(String configName, LocalDate currentDate, ExternalIdBundle bundle, String dataSource, String dataProvider, String field) {
+  /* package */ HistoricalTimeSeriesKey(final String configName, final LocalDate currentDate, final ExternalIdBundle bundle,
+      final String dataSource, final String dataProvider, final String field) {
     _externalIdBundle = bundle;
     _dataSource = dataSource;
     _dataProvider = dataProvider;
@@ -60,31 +61,30 @@ import com.opengamma.id.ExternalIdBundle;
   }
 
   @Override
-  public boolean equals(Object object) {
+  public boolean equals(final Object object) {
     if (object == this) {
       return true;
     }
-    if ((object instanceof HistoricalTimeSeriesKey)) {
-      HistoricalTimeSeriesKey other = (HistoricalTimeSeriesKey) object;
-      return
-          ObjectUtils.equals(_externalIdBundle, other._externalIdBundle) &&
-          ObjectUtils.equals(_currentDate, other._currentDate) &&
-          ObjectUtils.equals(_dataProvider, other._dataProvider) &&
-          ObjectUtils.equals(_dataSource, other._dataSource) &&
-          ObjectUtils.equals(_dataField, other._dataField) &&
-          ObjectUtils.equals(_configName, other._configName);
+    if (object instanceof HistoricalTimeSeriesKey) {
+      final HistoricalTimeSeriesKey other = (HistoricalTimeSeriesKey) object;
+      return ObjectUtils.equals(_externalIdBundle, other._externalIdBundle)
+          && ObjectUtils.equals(_currentDate, other._currentDate)
+          && ObjectUtils.equals(_dataProvider, other._dataProvider)
+          && ObjectUtils.equals(_dataSource, other._dataSource)
+          && ObjectUtils.equals(_dataField, other._dataField)
+          && ObjectUtils.equals(_configName, other._configName);
     }
     return false;
   }
 
   @Override
   public int hashCode() {
-    return ObjectUtils.hashCode(_externalIdBundle) ^
-            ObjectUtils.hashCode(_currentDate) ^
-            ObjectUtils.hashCode(_dataProvider) ^
-            ObjectUtils.hashCode(_dataSource) ^
-            ObjectUtils.hashCode(_dataField) ^
-            ObjectUtils.hashCode(_configName);
+    return ObjectUtils.hashCode(_externalIdBundle)
+           ^ ObjectUtils.hashCode(_currentDate)
+           ^ ObjectUtils.hashCode(_dataProvider)
+           ^ ObjectUtils.hashCode(_dataSource)
+           ^ ObjectUtils.hashCode(_dataField)
+           ^ ObjectUtils.hashCode(_configName);
   }
 
 }

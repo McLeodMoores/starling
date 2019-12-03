@@ -18,7 +18,7 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.CompareUtils;
 
 /**
- * 
+ *
  */
 public class EuropeanStandardBarrierOptionModel extends AnalyticOptionModel<EuropeanStandardBarrierOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -45,7 +45,7 @@ public class EuropeanStandardBarrierOptionModel extends AnalyticOptionModel<Euro
         final double rebate = definition.getRebate();
         final double k = definition.getStrike();
         final double r = data.getInterestRate(t);
-        final double sigma = data.getVolatility(t, h); //REVIEW emcleod 19-7-10 will only work if volatility is constant
+        final double sigma = data.getVolatility(t, h); // REVIEW emcleod 19-7-10 will only work if volatility is constant
         final double df1 = Math.exp(t * (b - r));
         final double df2 = Math.exp(-r * t);
         if (CompareUtils.closeEquals(sigma, 0, 1e-16)) {
@@ -97,15 +97,18 @@ public class EuropeanStandardBarrierOptionModel extends AnalyticOptionModel<Euro
     return phi * (s * df1 * NORMAL.getCDF(phi * x) - k * df2 * NORMAL.getCDF(phi * (x - sigmaT)));
   }
 
-  private double getC(final double s, final double k, final double df1, final double df2, final double y, final double sigmaT, final double h, final double mu, final double phi, final double eta) {
+  private double getC(final double s, final double k, final double df1, final double df2, final double y, final double sigmaT, final double h, final double mu,
+      final double phi, final double eta) {
     return phi * (s * df1 * Math.pow(h / s, 2 * (mu + 1)) * NORMAL.getCDF(eta * y) - k * df2 * Math.pow(h / s, 2 * mu) * NORMAL.getCDF(eta * (y - sigmaT)));
   }
 
-  private double getE(final double s, final double rebate, final double df2, final double x, final double y, final double sigmaT, final double h, final double mu, final double eta) {
+  private double getE(final double s, final double rebate, final double df2, final double x, final double y, final double sigmaT, final double h,
+      final double mu, final double eta) {
     return rebate * df2 * (NORMAL.getCDF(eta * (x - sigmaT)) - Math.pow(h / s, 2 * mu) * NORMAL.getCDF(eta * (y - sigmaT)));
   }
 
-  private double getF(final double s, final double rebate, final double z, final double sigmaT, final double h, final double mu, final double lambda, final double eta) {
+  private double getF(final double s, final double rebate, final double z, final double sigmaT, final double h, final double mu, final double lambda,
+      final double eta) {
     return rebate * (Math.pow(h / s, mu + lambda) * NORMAL.getCDF(eta * z) + Math.pow(h / s, mu - lambda) * NORMAL.getCDF(eta * (z - 2 * lambda * sigmaT)));
   }
 }

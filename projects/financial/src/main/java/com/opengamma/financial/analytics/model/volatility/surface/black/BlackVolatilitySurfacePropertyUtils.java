@@ -54,7 +54,7 @@ import com.opengamma.id.ExternalId;
  *
  */
 public class BlackVolatilitySurfacePropertyUtils {
-  private static final Logger s_logger = LoggerFactory.getLogger(BlackVolatilitySurfacePropertyUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlackVolatilitySurfacePropertyUtils.class);
 
   static boolean useLogTime(final String property) {
     if (property.equals(LOG_TIME)) {
@@ -98,7 +98,8 @@ public class BlackVolatilitySurfacePropertyUtils {
         .with(PROPERTY_SMILE_INTERPOLATOR, smileInterpolator);
   }
 
-  public static ValueProperties.Builder addCommonVolatilityInterpolatorProperties(final ValueProperties properties, final ValueRequirement desiredValue, final String smileInterpolator) {
+  public static ValueProperties.Builder addCommonVolatilityInterpolatorProperties(final ValueProperties properties, final ValueRequirement desiredValue,
+      final String smileInterpolator) {
     final String timeAxis = desiredValue.getConstraint(PROPERTY_TIME_AXIS);
     final String yAxis = desiredValue.getConstraint(PROPERTY_Y_AXIS);
     final String volatilityTransform = desiredValue.getConstraint(PROPERTY_VOLATILITY_TRANSFORM);
@@ -195,7 +196,8 @@ public class BlackVolatilitySurfacePropertyUtils {
         .withAny(PROPERTY_MIXED_LOG_NORMAL_WEIGHTING_FUNCTION).get(), MIXED_LOG_NORMAL);
   }
 
-  public static ValueProperties.Builder addMixedLogNormalVolatilityInterpolatorProperties(final ValueProperties properties, final ValueRequirement desiredValue) {
+  public static ValueProperties.Builder addMixedLogNormalVolatilityInterpolatorProperties(final ValueProperties properties,
+      final ValueRequirement desiredValue) {
     final String weightingFunction = desiredValue.getConstraint(PROPERTY_MIXED_LOG_NORMAL_WEIGHTING_FUNCTION);
     return addCommonVolatilityInterpolatorProperties(properties.copy()
         .with(PROPERTY_MIXED_LOG_NORMAL_WEIGHTING_FUNCTION, weightingFunction).get(), desiredValue, MIXED_LOG_NORMAL);
@@ -292,7 +294,8 @@ public class BlackVolatilitySurfacePropertyUtils {
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, instrumentType);
   }
 
-  public static ValueProperties.Builder addBlackSurfaceProperties(final ValueProperties properties, final String instrumentType, final ValueRequirement desiredValue) {
+  public static ValueProperties.Builder addBlackSurfaceProperties(final ValueProperties properties, final String instrumentType,
+      final ValueRequirement desiredValue) {
     final String surface = desiredValue.getConstraint(SURFACE);
     final String forwardCurveCalculationMethod = desiredValue.getConstraint(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD);
     final String curve = desiredValue.getConstraint(CURVE);
@@ -303,11 +306,13 @@ public class BlackVolatilitySurfacePropertyUtils {
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, instrumentType);
   }
 
-  public static ValueProperties.Builder addAllBlackSurfaceProperties(final ValueProperties properties, final String instrumentType, final String smileInterpolator) {
+  public static ValueProperties.Builder addAllBlackSurfaceProperties(final ValueProperties properties, final String instrumentType,
+      final String smileInterpolator) {
     return addBlackSurfaceProperties(addVolatilityInterpolatorProperties(properties, smileInterpolator).get(), instrumentType);
   }
 
-  public static ValueProperties.Builder addAllBlackSurfaceProperties(final ValueProperties properties, final String instrumentType, final ValueRequirement desiredValue) {
+  public static ValueProperties.Builder addAllBlackSurfaceProperties(final ValueProperties properties, final String instrumentType,
+      final ValueRequirement desiredValue) {
     return addBlackSurfaceProperties(addVolatilityInterpolatorProperties(properties, desiredValue).get(), instrumentType, desiredValue);
   }
 
@@ -354,7 +359,8 @@ public class BlackVolatilitySurfacePropertyUtils {
     return requirements;
   }
 
-  public static ValueRequirement getSurfaceRequirement(final ValueRequirement desiredValue, final ValueProperties additionalConstraints, final String surfaceName,
+  public static ValueRequirement getSurfaceRequirement(final ValueRequirement desiredValue, final ValueProperties additionalConstraints,
+      final String surfaceName,
       final String forwardCurveName, final String instrumentType, final ComputationTargetType targetType, final ExternalId surfaceId) {
     final ValueProperties constraints = desiredValue.getConstraints();
     final String calculationMethod = constraints.getStrictValue(ValuePropertyNames.SURFACE_CALCULATION_METHOD);
@@ -365,7 +371,7 @@ public class BlackVolatilitySurfacePropertyUtils {
     }
     final String interpolationMethod = desiredValue.getConstraint(PROPERTY_SMILE_INTERPOLATOR);
     if (interpolationMethod == null) {
-      s_logger.error("No value set for interpolation method");
+      LOGGER.error("No value set for interpolation method");
       return null;
     }
     ValueProperties interpolationProperties = addBlackSurfaceProperties(additionalConstraints, instrumentType).get();
@@ -376,7 +382,7 @@ public class BlackVolatilitySurfacePropertyUtils {
     } else if (interpolationMethod.equals(MIXED_LOG_NORMAL)) {
       interpolationProperties = addMixedLogNormalVolatilityInterpolatorProperties(interpolationProperties).get();
     } else {
-      s_logger.error("Could not handle interpolation method {}", interpolationMethod);
+      LOGGER.error("Could not handle interpolation method {}", interpolationMethod);
       return null;
     }
     final ValueProperties.Builder allProperties = interpolationProperties.copy()

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution;
@@ -13,32 +13,7 @@ import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
 /**
- * The Laplace distribution is a continuous probability distribution with probability density function
- * $$
- * \begin{align*}
- * f(x)=\frac{1}{2b}e^{-\frac{|x-\mu|}{b}}
- * \end{align*}
- * $$
- * where $\mu$ is the location parameter and $b$ is the scale parameter. The
- * cumulative distribution function and its inverse are defined as:
- * $$
- * \begin{align*}
- * F(x)&=
- * \begin{cases}
- * \frac{1}{2}e^{\frac{x-\mu}{b}} & \text{if } x < \mu\\
- * 1-\frac{1}{2}e^{-\frac{x-\mu}{b}} & \text{if } x\geq \mu
- * \end{cases}\\
- * F^{-1}(p)&=\mu-b\text{ sgn}(p-0.5)\ln(1-2|p-0.5|)
- * \end{align*}
- * $$
- * Given a uniform random variable $U$ drawn from the interval $(-\frac{1}{2}, \frac{1}{2}]$,  
- * a Laplace-distributed random variable with parameters $\mu$ and $b$ is given by:
- * $$
- * \begin{align*}
- * X=\mu-b\text{ sgn}(U)\ln(1-2|U|)
- * \end{align*}
- * $$
- * 
+ * A Laplace distribution.
  */
 public class LaplaceDistribution implements ProbabilityDistribution<Double> {
   // TODO need a better seed
@@ -124,9 +99,9 @@ public class LaplaceDistribution implements ProbabilityDistribution<Double> {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_b);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_mu);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

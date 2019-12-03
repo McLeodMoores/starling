@@ -35,7 +35,8 @@ import com.opengamma.master.security.RawSecurity;
 public class ExternallyProvidedSecurityMarkFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final RawSecurity security = (RawSecurity) target.getSecurity();
     final SecurityEntryData securityEntryData = RawSecurityUtils.decodeSecurityEntryData(security);
     final Object latestDataPointObject = inputs.getValue(ValueRequirementNames.HISTORICAL_TIME_SERIES_LATEST);
@@ -44,8 +45,9 @@ public class ExternallyProvidedSecurityMarkFunction extends AbstractFunction.Non
     }
     final Double price = (Double) latestDataPointObject / 100d; // REVIEW: jim 9/11/2012 -- this needs to go into the normalisation map.
 
-    return Collections.<ComputedValue>singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.PRESENT_VALUE, target.toSpecification(), createValueProperties().with(
-        ValuePropertyNames.CURRENCY, securityEntryData.getCurrency().getCode()).get()), price));
+    return Collections.<ComputedValue> singleton(
+        new ComputedValue(new ValueSpecification(ValueRequirementNames.PRESENT_VALUE, target.toSpecification(), createValueProperties().with(
+            ValuePropertyNames.CURRENCY, securityEntryData.getCurrency().getCode()).get()), price));
   }
 
   @Override
@@ -70,8 +72,9 @@ public class ExternallyProvidedSecurityMarkFunction extends AbstractFunction.Non
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final RawSecurity security = (RawSecurity) target.getSecurity();
     final SecurityEntryData securityEntryData = RawSecurityUtils.decodeSecurityEntryData(security);
-    return Collections.<ValueSpecification>singleton(new ValueSpecification(ValueRequirementNames.MARK, target.toSpecification(), createValueProperties().with(ValuePropertyNames.CURRENCY,
-        securityEntryData.getCurrency().getCode()).get()));
+    return Collections.<ValueSpecification> singleton(
+        new ValueSpecification(ValueRequirementNames.MARK, target.toSpecification(), createValueProperties().with(ValuePropertyNames.CURRENCY,
+            securityEntryData.getCurrency().getCode()).get()));
   }
 
   @Override

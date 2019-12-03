@@ -12,7 +12,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.HullW
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueHullWhiteIssuerCalculator extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, MultipleCurrencyAmount> {
 
@@ -29,6 +29,7 @@ public final class PresentValueHullWhiteIssuerCalculator extends InstrumentDeriv
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static PresentValueHullWhiteIssuerCalculator getInstance() {
@@ -40,7 +41,7 @@ public final class PresentValueHullWhiteIssuerCalculator extends InstrumentDeriv
    */
   private static final BondFuturesTransactionHullWhiteMethod METHOD_BONDFUT_TRA = BondFuturesTransactionHullWhiteMethod.getInstance();
 
-  //     -----     Futures     -----
+  // ----- Futures -----
 
   @Override
   public MultipleCurrencyAmount visitBondFuturesTransaction(final BondFuturesTransaction futures, final HullWhiteIssuerProviderInterface hullWhite) {

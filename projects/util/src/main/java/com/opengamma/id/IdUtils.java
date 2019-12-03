@@ -34,7 +34,7 @@ public final class IdUtils {
    * @param object  the object to set into
    * @param uniqueId  the unique identifier to set, may be null
    */
-  public static void setInto(Object object, UniqueId uniqueId) {
+  public static void setInto(final Object object, final UniqueId uniqueId) {
     if (object instanceof MutableUniqueIdentifiable) {
       ((MutableUniqueIdentifiable) object).setUniqueId(uniqueId);
     }
@@ -47,10 +47,10 @@ public final class IdUtils {
    * @param ids  the ids to convert, null returns empty list
    * @return the string list, not null
    */
-  public static List<String> toStringList(Iterable<? extends ObjectIdentifiable> ids) {
-    List<String> strs = new ArrayList<String>();
+  public static List<String> toStringList(final Iterable<? extends ObjectIdentifiable> ids) {
+    final List<String> strs = new ArrayList<>();
     if (ids != null) {
-      for (ObjectIdentifiable obj : ids) {
+      for (final ObjectIdentifiable obj : ids) {
         if (obj instanceof UniqueId) {
           strs.add(obj.toString());
         } else {
@@ -67,10 +67,10 @@ public final class IdUtils {
    * @param uniqueIdStrs  the identifiers to convert, null returns empty list
    * @return the list of unique identifiers, not null
    */
-  public static List<UniqueId> parseUniqueIds(Iterable<String> uniqueIdStrs) {
-    List<UniqueId> uniqueIds = new ArrayList<UniqueId>();
+  public static List<UniqueId> parseUniqueIds(final Iterable<String> uniqueIdStrs) {
+    final List<UniqueId> uniqueIds = new ArrayList<>();
     if (uniqueIdStrs != null) {
-      for (String uniqueIdStr : uniqueIdStrs) {
+      for (final String uniqueIdStr : uniqueIdStrs) {
         uniqueIds.add(UniqueId.parse(uniqueIdStr));
       }
     }
@@ -83,10 +83,10 @@ public final class IdUtils {
    * @param objectIdStrs  the identifiers to convert, null returns empty list
    * @return the list of unique identifiers, not null
    */
-  public static List<ObjectId> parseObjectIds(Iterable<String> objectIdStrs) {
-    List<ObjectId> objectIds = new ArrayList<ObjectId>();
+  public static List<ObjectId> parseObjectIds(final Iterable<String> objectIdStrs) {
+    final List<ObjectId> objectIds = new ArrayList<>();
     if (objectIdStrs != null) {
-      for (String objectIdStr : objectIdStrs) {
+      for (final String objectIdStr : objectIdStrs) {
         objectIds.add(ObjectId.parse(objectIdStr));
       }
     }

@@ -20,26 +20,26 @@ public final class BundleUtils {
 
   /**
    * Builds the imports for a bundle.
-   * 
+   *
    * @param bundle  the bundle, not null
    * @param webBundleUris  the URI helper, not null
    * @return the bundle HTML import text, not null
    */
-  public static String buildImports(Bundle bundle, WebBundlesUris webBundleUris) {
+  public static String buildImports(final Bundle bundle, final WebBundlesUris webBundleUris) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(webBundleUris, "webBundleUris");
-    
-    StringBuilder buf = new StringBuilder();
-    List<BundleNode> childNodes = bundle.getChildNodes();
-    for (BundleNode node : childNodes) {
+
+    final StringBuilder buf = new StringBuilder();
+    final List<BundleNode> childNodes = bundle.getChildNodes();
+    for (final BundleNode node : childNodes) {
       if (node instanceof Bundle) {
-        Bundle nodeBundle = (Bundle) node;
+        final Bundle nodeBundle = (Bundle) node;
         buf.append("@import url('");
         buf.append(webBundleUris.bundle(DeployMode.DEV, nodeBundle.getId()).getPath());
         buf.append("');\n");
       }
       if (node instanceof Fragment) {
-        Fragment fragment = (Fragment) node;
+        final Fragment fragment = (Fragment) node;
         buf.append("@import url('" + fragment.getPath() + "');\n");
       }
     }
@@ -48,18 +48,18 @@ public final class BundleUtils {
 
   /**
    * Reads and combines a bundle.
-   * 
+   *
    * @param bundle  the bundle to read, not null
    * @return the combined source code, not null
    */
-  public static String readBundleSource(Bundle bundle) {
-    List<Fragment> allFragments = bundle.getAllFragments();
-    StringBuilder buf = new StringBuilder(1024);
-    for (Fragment fragment : allFragments) {
+  public static String readBundleSource(final Bundle bundle) {
+    final List<Fragment> allFragments = bundle.getAllFragments();
+    final StringBuilder buf = new StringBuilder(1024);
+    for (final Fragment fragment : allFragments) {
       try {
         buf.append(IOUtils.toString(fragment.getUri()));
         buf.append("\n");
-      } catch (IOException ex) {
+      } catch (final IOException ex) {
         throw new DataNotFoundException("IOException reading " + fragment.getUri());
       }
     }

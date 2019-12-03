@@ -27,12 +27,10 @@ import com.opengamma.util.money.Currency;
 /**
  * ISDA definition for a CDS premium (i.e. a stream of ISDA CDS coupon payments).
  *
- * This class encodes only the structure of the payment schedule, it does not represent
- * survival probabilities.
+ * This class encodes only the structure of the payment schedule, it does not represent survival probabilities.
  *
- * Note the dates recorded for accrual period start and end are not offset as per ISDA,
- * they are the actual start and end dates. Instead, offsetting happens when the ISDA
- * method is applied.
+ * Note the dates recorded for accrual period start and end are not offset as per ISDA, they are the actual start and end dates. Instead, offsetting happens
+ * when the ISDA method is applied.
  *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  *
@@ -42,26 +40,38 @@ import com.opengamma.util.money.Currency;
 public class ISDACDSPremiumDefinition extends AnnuityCouponFixedDefinition {
 
   /**
-   * @param payments The payments
-   * @param calendar The calendar
+   * @param payments
+   *          The payments
+   * @param calendar
+   *          The calendar
    */
   public ISDACDSPremiumDefinition(final ISDACDSCouponDefinition[] payments, final Calendar calendar) {
     super(payments, calendar);
   }
 
   /**
-   * An ISDA-compliant annuity builder for a CDS contract
+   * An ISDA-compliant annuity builder for a CDS contract.
    *
-   * @param startDate The (original unadjusted) start of the CDS contract
-   * @param maturity The (unadjusted) maturity date
-   * @param frequency The payment frequency
-   * @param convention The convention data
-   * @param stubType The stub type
-   * @param protectStart Whether the start date is protected
-   * @param notional The notional
-   * @param spread The spread (coupon rate)
-   * @param currency The currency
-   * @param calendar The calendar
+   * @param startDate
+   *          The (original unadjusted) start of the CDS contract
+   * @param maturity
+   *          The (unadjusted) maturity date
+   * @param frequency
+   *          The payment frequency
+   * @param convention
+   *          The convention data
+   * @param stubType
+   *          The stub type
+   * @param protectStart
+   *          Whether the start date is protected
+   * @param notional
+   *          The notional
+   * @param spread
+   *          The spread (coupon rate)
+   * @param currency
+   *          The currency
+   * @param calendar
+   *          The calendar
    * @return An ISDA-compliant definition for the CDS premium
    */
   public static ISDACDSPremiumDefinition from(final ZonedDateTime startDate, final ZonedDateTime maturity,
@@ -75,7 +85,8 @@ public class ISDACDSPremiumDefinition extends AnnuityCouponFixedDefinition {
     ArgumentChecker.notNull(convention, "convention");
 
     final DayCount dayCount = convention.getDayCount();
-    ArgumentChecker.isTrue(!(dayCount instanceof ActualActualICMA) | !(dayCount instanceof ActualActualICMANormal), "Coupon per year required for Actual Actual ICMA");
+    ArgumentChecker.isTrue(!(dayCount instanceof ActualActualICMA) | !(dayCount instanceof ActualActualICMANormal),
+        "Coupon per year required for Actual Actual ICMA");
 
     // TODO: Handle stubType == StubType.NONE
     final boolean isStubShort = stubType == StubType.SHORT_START || stubType == StubType.SHORT_END;
@@ -102,7 +113,7 @@ public class ISDACDSPremiumDefinition extends AnnuityCouponFixedDefinition {
       }
 
       // Accrual end date is not adjusted for the last coupon
-      coupons[maturityIndex] =  new ISDACDSCouponDefinition(currency, paymentDates[maturityIndex], paymentDates[maturityIndex - 1], maturity,
+      coupons[maturityIndex] = new ISDACDSCouponDefinition(currency, paymentDates[maturityIndex], paymentDates[maturityIndex - 1], maturity,
           dayCount.getDayCountFraction(paymentDates[maturityIndex - 1], maturityWithOffset), notional, spread);
 
     } else {
@@ -117,6 +128,7 @@ public class ISDACDSPremiumDefinition extends AnnuityCouponFixedDefinition {
 
   /**
    * {@inheritDoc}
+   *
    * @deprecated Use the method that does not use yield curve names
    */
   @Deprecated

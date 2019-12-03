@@ -26,15 +26,15 @@ public class BlotterGridStructure extends PortfolioGridStructure {
   /** The view definition that's driving the grid. */
   private final ViewDefinition _viewDef;
 
-  /* package */ BlotterGridStructure(List<PortfolioGridRow> rows,
-                                     GridColumnGroup fixedColumns,
-                                     GridColumnGroup blotterColumns,
-                                     List<GridColumnGroup> analyticsColumns,
-                                     AnalyticsNode rootNode,
-                                     TargetLookup targetLookup,
-                                     SecurityAttributeMapper columnMapper,
-                                     UnversionedValueMappings valueMappings,
-                                     ViewDefinition viewDef) {
+  /* package */ BlotterGridStructure(final List<PortfolioGridRow> rows,
+                                     final GridColumnGroup fixedColumns,
+                                     final GridColumnGroup blotterColumns,
+                                     final List<GridColumnGroup> analyticsColumns,
+                                     final AnalyticsNode rootNode,
+                                     final TargetLookup targetLookup,
+                                     final SecurityAttributeMapper columnMapper,
+                                     final UnversionedValueMappings valueMappings,
+                                     final ViewDefinition viewDef) {
     super(rows, fixedColumns, createGroups(blotterColumns, analyticsColumns), rootNode, targetLookup, valueMappings, viewDef);
     ArgumentChecker.notNull(columnMapper, "columnMapper");
     ArgumentChecker.notNull(viewDef, "viewDef");
@@ -42,16 +42,16 @@ public class BlotterGridStructure extends PortfolioGridStructure {
     _columnMapper = columnMapper;
   }
 
-  private static GridColumnGroups createGroups(GridColumnGroup blotterColumns, List<GridColumnGroup> analyticsColumns) {
-    List<GridColumnGroup> groups = Lists.newArrayList(blotterColumns);
+  private static GridColumnGroups createGroups(final GridColumnGroup blotterColumns, final List<GridColumnGroup> analyticsColumns) {
+    final List<GridColumnGroup> groups = Lists.newArrayList(blotterColumns);
     groups.addAll(analyticsColumns);
     return new GridColumnGroups(groups);
   }
 
-  /* package */ static BlotterGridStructure create(Portfolio portfolio, SecurityAttributeMapper columnMapper) {
-    List<PortfolioGridRow> rows = buildRows(portfolio);
-    UnversionedValueMappings valueMappings = new UnversionedValueMappings();
-    TargetLookup targetLookup = new TargetLookup(valueMappings, rows);
+  /* package */ static BlotterGridStructure create(final Portfolio portfolio, final SecurityAttributeMapper columnMapper) {
+    final List<PortfolioGridRow> rows = buildRows(portfolio);
+    final UnversionedValueMappings valueMappings = new UnversionedValueMappings();
+    final TargetLookup targetLookup = new TargetLookup(valueMappings, rows);
     return new BlotterGridStructure(rows,
                                     GridColumnGroup.empty(),
                                     GridColumnGroup.empty(),
@@ -64,10 +64,10 @@ public class BlotterGridStructure extends PortfolioGridStructure {
   }
 
 
-  private static GridColumnGroup buildBlotterColumns(SecurityAttributeMapper columnMapper, List<PortfolioGridRow> rows) {
-    GridColumn quantityColumn = new GridColumn(SecurityAttribute.QUANTITY.getName(), "", Double.class,
+  private static GridColumnGroup buildBlotterColumns(final SecurityAttributeMapper columnMapper, final List<PortfolioGridRow> rows) {
+    final GridColumn quantityColumn = new GridColumn(SecurityAttribute.QUANTITY.getName(), "", Double.class,
                                                new BlotterColumnRenderer(SecurityAttribute.QUANTITY, columnMapper, rows));
-    List<GridColumn> columns = Lists.newArrayList(
+    final List<GridColumn> columns = Lists.newArrayList(
         blotterColumn(SecurityAttribute.TYPE, columnMapper, rows),
         blotterColumn(SecurityAttribute.PRODUCT, columnMapper, rows),
         quantityColumn,
@@ -81,44 +81,44 @@ public class BlotterGridStructure extends PortfolioGridStructure {
     return new GridColumnGroup("Blotter", columns, false);
   }
 
-  private static GridColumn blotterColumn(SecurityAttribute column,
-                                          SecurityAttributeMapper columnMappings,
-                                          List<PortfolioGridRow> rows) {
+  private static GridColumn blotterColumn(final SecurityAttribute column,
+                                          final SecurityAttributeMapper columnMappings,
+                                          final List<PortfolioGridRow> rows) {
     return new GridColumn(column.getName(), "", String.class, new BlotterColumnRenderer(column, columnMappings, rows));
   }
 
   // TODO combine with the method below
   @Override
-  /* package */ BlotterGridStructure withUpdatedRows(Portfolio portfolio) {
-    AnalyticsNode rootNode = AnalyticsNode.portfolioRoot(portfolio);
-    List<PortfolioGridRow> rows = buildRows(portfolio);
-    TargetLookup targetLookup = new TargetLookup(getValueMappings(), rows);
-    GridColumnGroup fixedColumns = buildFixedColumns(rows);
-    GridColumnGroup blotterColumns = buildBlotterColumns(_columnMapper, rows);
-    List<GridColumnGroup> analyticsColumns = Collections.emptyList();
+  /* package */ BlotterGridStructure withUpdatedRows(final Portfolio portfolio) {
+    final AnalyticsNode rootNode = AnalyticsNode.portfolioRoot(portfolio);
+    final List<PortfolioGridRow> rows = buildRows(portfolio);
+    final TargetLookup targetLookup = new TargetLookup(getValueMappings(), rows);
+    final GridColumnGroup fixedColumns = buildFixedColumns(rows);
+    final GridColumnGroup blotterColumns = buildBlotterColumns(_columnMapper, rows);
+    final List<GridColumnGroup> analyticsColumns = Collections.emptyList();
     //List<GridColumnGroup> analyticsColumns = buildAnalyticsColumns(_viewDef, targetLookup);
     return new BlotterGridStructure(rows, fixedColumns, blotterColumns, analyticsColumns, rootNode, targetLookup,
                                     _columnMapper, getValueMappings(), _viewDef);
   }
 
   @Override
-  /* package */ BlotterGridStructure withUpdatedStructure(CompiledViewDefinition compiledViewDef, Portfolio portfolio) {
-    AnalyticsNode rootNode = AnalyticsNode.portfolioRoot(portfolio);
-    List<PortfolioGridRow> rows = buildRows(portfolio);
-    UnversionedValueMappings valueMappings = new UnversionedValueMappings(compiledViewDef);
-    TargetLookup targetLookup = new TargetLookup(valueMappings, rows);
-    ViewDefinition viewDef = compiledViewDef.getViewDefinition();
-    List<GridColumnGroup> analyticsColumns = Collections.emptyList();
+  /* package */ BlotterGridStructure withUpdatedStructure(final CompiledViewDefinition compiledViewDef, final Portfolio portfolio) {
+    final AnalyticsNode rootNode = AnalyticsNode.portfolioRoot(portfolio);
+    final List<PortfolioGridRow> rows = buildRows(portfolio);
+    final UnversionedValueMappings valueMappings = new UnversionedValueMappings(compiledViewDef);
+    final TargetLookup targetLookup = new TargetLookup(valueMappings, rows);
+    final ViewDefinition viewDef = compiledViewDef.getViewDefinition();
+    final List<GridColumnGroup> analyticsColumns = Collections.emptyList();
     //List<GridColumnGroup> analyticsColumns = buildAnalyticsColumns(viewDef, targetLookup);
-    GridColumnGroup fixedColumns = buildFixedColumns(rows);
-    GridColumnGroup blotterColumns = buildBlotterColumns(_columnMapper, rows);
+    final GridColumnGroup fixedColumns = buildFixedColumns(rows);
+    final GridColumnGroup blotterColumns = buildBlotterColumns(_columnMapper, rows);
     return new BlotterGridStructure(rows, fixedColumns, blotterColumns, analyticsColumns, rootNode, targetLookup,
                                     _columnMapper, valueMappings, viewDef);
   }
 
   // TODO handle inlining of values into columns
   @Override
-  PortfolioGridStructure withUpdatedStructure(ResultsCache cache) {
+  PortfolioGridStructure withUpdatedStructure(final ResultsCache cache) {
     return this;
   }
 }

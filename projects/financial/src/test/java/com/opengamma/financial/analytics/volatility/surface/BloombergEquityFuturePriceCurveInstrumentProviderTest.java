@@ -47,19 +47,19 @@ public class BloombergEquityFuturePriceCurveInstrumentProviderTest extends Finan
 
   @Test
   public void testExpiryMonth() {
-    assertEquals(Month.FEBRUARY, EXPIRY_CALC.getExpiryMonth(1, DATE).getMonth());    
-    assertEquals(Month.MARCH, EXPIRY_CALC.getExpiryMonth(2,DATE).getMonth());
-    assertEquals(Month.APRIL, EXPIRY_CALC.getExpiryMonth(3,DATE).getMonth());
-    assertEquals(Month.MAY, EXPIRY_CALC.getExpiryMonth(4,DATE).getMonth());
-    assertEquals(Month.JUNE, EXPIRY_CALC.getExpiryMonth(5,DATE).getMonth());
-    assertEquals(Month.JULY, EXPIRY_CALC.getExpiryMonth(6,DATE).getMonth());
-    assertEquals(Month.SEPTEMBER, EXPIRY_CALC.getExpiryMonth(8,DATE).getMonth());
-    assertEquals(Month.DECEMBER, EXPIRY_CALC.getExpiryMonth(11,DATE).getMonth());
+    assertEquals(Month.FEBRUARY, EXPIRY_CALC.getExpiryMonth(1, DATE).getMonth());
+    assertEquals(Month.MARCH, EXPIRY_CALC.getExpiryMonth(2, DATE).getMonth());
+    assertEquals(Month.APRIL, EXPIRY_CALC.getExpiryMonth(3, DATE).getMonth());
+    assertEquals(Month.MAY, EXPIRY_CALC.getExpiryMonth(4, DATE).getMonth());
+    assertEquals(Month.JUNE, EXPIRY_CALC.getExpiryMonth(5, DATE).getMonth());
+    assertEquals(Month.JULY, EXPIRY_CALC.getExpiryMonth(6, DATE).getMonth());
+    assertEquals(Month.SEPTEMBER, EXPIRY_CALC.getExpiryMonth(8, DATE).getMonth());
+    assertEquals(Month.DECEMBER, EXPIRY_CALC.getExpiryMonth(11, DATE).getMonth());
   }
 
   @Test
   public void testExpiryDate() {
-    assertEquals(LocalDate.of(2013, 2, 15), EXPIRY_CALC.getExpiryDate(1, DATE, WEEKEND_CALENDAR));    
+    assertEquals(LocalDate.of(2013, 2, 15), EXPIRY_CALC.getExpiryDate(1, DATE, WEEKEND_CALENDAR));
     assertEquals(LocalDate.of(2013, 3, 15), EXPIRY_CALC.getExpiryDate(2, DATE, WEEKEND_CALENDAR));
     assertEquals(LocalDate.of(2013, 9, 20), EXPIRY_CALC.getExpiryDate(8, DATE, WEEKEND_CALENDAR));
     assertEquals(LocalDate.of(2014, 2, 21), EXPIRY_CALC.getExpiryDate(13, DATE, WEEKEND_CALENDAR));

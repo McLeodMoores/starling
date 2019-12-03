@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.equity;
@@ -18,11 +18,11 @@ import org.threeten.bp.temporal.TemporalAdjusters;
  */
 public class SaturdayAfterThirdFridayAdjuster implements TemporalAdjuster {
 
-  private static final TemporalAdjuster s_thirdFriday = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.FRIDAY);
+  private static final TemporalAdjuster THIRD_FRIDAY = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.FRIDAY);
 
   @Override
-  public Temporal adjustInto(Temporal temporal) {
-    return temporal.with(s_thirdFriday).plus(1, DAYS);
+  public Temporal adjustInto(final Temporal temporal) {
+    return temporal.with(THIRD_FRIDAY).plus(1, DAYS);
   }
 
 }

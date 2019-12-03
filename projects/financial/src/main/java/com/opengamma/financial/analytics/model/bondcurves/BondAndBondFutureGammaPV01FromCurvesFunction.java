@@ -17,7 +17,6 @@ import com.opengamma.analytics.financial.provider.calculator.issuer.PresentValue
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterIssuerProviderInterface;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.value.ValueProperties;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 
 /**
@@ -29,8 +28,9 @@ public class BondAndBondFutureGammaPV01FromCurvesFunction extends BondAndBondFut
       new GammaPV01CurveParametersCalculator<>(PresentValueCurveSensitivityIssuerCalculator.getInstance());
 
   /**
-   * Sets the value requirement name to {@link ValueRequirementNames#GAMMA_PV01} and
-   * the calculator to {@link GammaPV01CurveParametersCalculator}.
+   * Sets the value requirement name to
+   * {@link com.opengamma.engine.value.ValueRequirementNames#GAMMA_PV01} and the
+   * calculator to {@link GammaPV01CurveParametersCalculator}.
    */
   public BondAndBondFutureGammaPV01FromCurvesFunction() {
     super(GAMMA_PV01, CALCULATOR);

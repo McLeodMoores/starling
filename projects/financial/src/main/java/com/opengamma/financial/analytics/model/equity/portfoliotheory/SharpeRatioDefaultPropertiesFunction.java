@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.equity.portfoliotheory;
@@ -18,7 +18,7 @@ import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class SharpeRatioDefaultPropertiesFunction extends DefaultPropertyFunction {
   private final String _samplingPeriodName;
@@ -27,7 +27,7 @@ public class SharpeRatioDefaultPropertiesFunction extends DefaultPropertyFunctio
   private final String _returnCalculatorName;
   private final String _stdDevCalculatorName;
   private final String _excessReturnCalculatorName;
-  
+
   public SharpeRatioDefaultPropertiesFunction(final String samplingPeriodName, final String scheduleCalculatorName, final String samplingFunctionName,
       final String returnCalculatorName, final String stdDevCalculatorName, final String excessReturnCalculatorName, final ComputationTargetType type) {
     super(type, true);
@@ -54,9 +54,10 @@ public class SharpeRatioDefaultPropertiesFunction extends DefaultPropertyFunctio
     defaults.addValuePropertyName(ValueRequirementNames.SHARPE_RATIO, ValuePropertyNames.STD_DEV_CALCULATOR);
     defaults.addValuePropertyName(ValueRequirementNames.SHARPE_RATIO, ValuePropertyNames.EXCESS_RETURN_CALCULATOR);
   }
-  
+
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (ValuePropertyNames.SAMPLING_PERIOD.equals(propertyName)) {
       return Collections.singleton(_samplingPeriodName);
     }

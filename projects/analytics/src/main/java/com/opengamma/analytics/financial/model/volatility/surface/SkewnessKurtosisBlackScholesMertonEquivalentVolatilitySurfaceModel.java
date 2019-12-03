@@ -12,9 +12,10 @@ import com.opengamma.analytics.financial.model.option.definition.SkewKurtosisOpt
 import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 
 /**
- * 
+ *
  */
-public class SkewnessKurtosisBlackScholesMertonEquivalentVolatilitySurfaceModel implements VolatilitySurfaceModel<OptionDefinition, SkewKurtosisOptionDataBundle> {
+public class SkewnessKurtosisBlackScholesMertonEquivalentVolatilitySurfaceModel
+    implements VolatilitySurfaceModel<OptionDefinition, SkewKurtosisOptionDataBundle> {
 
   @Override
   public VolatilitySurface getSurface(final OptionDefinition option, final SkewKurtosisOptionDataBundle data) {

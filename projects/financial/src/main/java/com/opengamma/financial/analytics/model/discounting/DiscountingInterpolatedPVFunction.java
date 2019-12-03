@@ -26,7 +26,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.fixedincome.InterestRateInstrumentType;
 import com.opengamma.financial.security.FinancialSecurity;
@@ -37,15 +36,15 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of instruments using curves constructed using
- * the interpolated construction method.
+ * Calculates the present value of instruments using curves constructed using the interpolated construction method.
  */
 public class DiscountingInterpolatedPVFunction extends DiscountingInterpolatedFunction {
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyAmount> CALCULATOR = PresentValueDiscountingCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyAmount> CALCULATOR = PresentValueDiscountingCalculator
+      .getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#PRESENT_VALUE}
+   * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#PRESENT_VALUE}.
    */
   public DiscountingInterpolatedPVFunction() {
     super(PRESENT_VALUE);

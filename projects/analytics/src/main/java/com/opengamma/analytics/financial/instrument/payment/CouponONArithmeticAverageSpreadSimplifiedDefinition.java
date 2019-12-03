@@ -20,10 +20,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Class describing a Fed Fund swap-like floating coupon (arithmetic average on overnight rates) with a spread.
- * Simplified definition which contains only the starting date and end date (not all intermediary dates). The fixing and accrual dates are equal.
- * Can not be used for "aged" coupon but only for forward coupons when all the details of intermediary fixing are not required.
- * In particular can be used for
+ * Class describing a Fed Fund swap-like floating coupon (arithmetic average on overnight rates) with a spread. Simplified definition which contains only the
+ * starting date and end date (not all intermediary dates). The fixing and accrual dates are equal. Can not be used for "aged" coupon but only for forward
+ * coupons when all the details of intermediary fixing are not required. In particular can be used for
  */
 public class CouponONArithmeticAverageSpreadSimplifiedDefinition extends CouponDefinition {
 
@@ -42,16 +41,26 @@ public class CouponONArithmeticAverageSpreadSimplifiedDefinition extends CouponD
 
   /**
    * Constructor from all the coupon details.
-   * @param currency The payment currency.
-   * @param paymentDate Coupon payment date.
-   * @param accrualStartDate Start date of the accrual period.
-   * @param accrualEndDate End date of the accrual period.
-   * @param paymentYearFraction Accrual factor of the accrual period.
-   * @param notional Coupon notional.
-   * @param index The OIS-like index on which the coupon fixes.
-   * @param spread The spread rate paid above the arithmetic average.
+   * 
+   * @param currency
+   *          The payment currency.
+   * @param paymentDate
+   *          Coupon payment date.
+   * @param accrualStartDate
+   *          Start date of the accrual period.
+   * @param accrualEndDate
+   *          End date of the accrual period.
+   * @param paymentYearFraction
+   *          Accrual factor of the accrual period.
+   * @param notional
+   *          Coupon notional.
+   * @param index
+   *          The OIS-like index on which the coupon fixes.
+   * @param spread
+   *          The spread rate paid above the arithmetic average.
    */
-  public CouponONArithmeticAverageSpreadSimplifiedDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+  public CouponONArithmeticAverageSpreadSimplifiedDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate,
+      final ZonedDateTime accrualEndDate,
       final double paymentYearFraction, final double notional, final IndexON index, final double spread) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, paymentYearFraction, notional);
     ArgumentChecker.notNull(index, "CouponOISDefinition: index");
@@ -62,46 +71,69 @@ public class CouponONArithmeticAverageSpreadSimplifiedDefinition extends CouponD
   }
 
   /**
-   * Builder from financial details. The accrual and fixing start and end dates are the same. The day count for the payment is the same as the one for the index.
-   * The payment date is adjusted by the publication lag and the settlement days.
-   * @param index The OIS index.
-   * @param fixingPeriodStartDate The coupon settlement date and start of the fixing period.
-   * @param tenor The coupon tenor.
-   * @param notional The notional.
-   * @param paymentLag The number of days between last fixing date and the payment date (also called payment delay).
-   * @param businessDayConvention The business day convention to compute the end date of the coupon.
-   * @param isEOM The end-of-month convention to compute the end date of the coupon.
-   * @param spread The spread rate paid above the arithmetic average.
-   * @param calendar The holiday calendar for the overnight index.
+   * Builder from financial details. The accrual and fixing start and end dates are the same. The day count for the payment is the same as the one for the
+   * index. The payment date is adjusted by the publication lag and the settlement days.
+   * 
+   * @param index
+   *          The OIS index.
+   * @param fixingPeriodStartDate
+   *          The coupon settlement date and start of the fixing period.
+   * @param tenor
+   *          The coupon tenor.
+   * @param notional
+   *          The notional.
+   * @param paymentLag
+   *          The number of days between last fixing date and the payment date (also called payment delay).
+   * @param businessDayConvention
+   *          The business day convention to compute the end date of the coupon.
+   * @param isEOM
+   *          The end-of-month convention to compute the end date of the coupon.
+   * @param spread
+   *          The spread rate paid above the arithmetic average.
+   * @param calendar
+   *          The holiday calendar for the overnight index.
    * @return The OIS coupon.
    */
-  public static CouponONArithmeticAverageSpreadSimplifiedDefinition from(final IndexON index, final ZonedDateTime fixingPeriodStartDate, final Period tenor, final double notional,
+  public static CouponONArithmeticAverageSpreadSimplifiedDefinition from(final IndexON index, final ZonedDateTime fixingPeriodStartDate, final Period tenor,
+      final double notional,
       final int paymentLag, final BusinessDayConvention businessDayConvention, final boolean isEOM, final double spread, final Calendar calendar) {
     final ZonedDateTime fixingPeriodEndDate = ScheduleCalculator.getAdjustedDate(fixingPeriodStartDate, tenor, businessDayConvention, calendar, isEOM);
     return from(index, fixingPeriodStartDate, fixingPeriodEndDate, notional, paymentLag, spread, calendar);
   }
 
   /**
-   * Builder from financial details. The accrual and fixing start and end dates are the same. The day count for the payment is the same as the one for the index.
-   * The payment date is adjusted by the publication lag and the settlement days.
-   * @param index The OIS index.
-   * @param fixingPeriodStartDate The coupon settlement date and start of the fixing period.
-   * @param fixingPeriodEndDate The last date of the fixing period. Interest accrues up to this date. If publicationLag==0, 1 day following publication. If lag==1, the publication date.
-   * @param notional The notional.
-   * @param paymentLag The number of days between last fixing date and the payment date (also called payment delay).
-   * @param spread The spread rate paid above the arithmetic average.
-   * @param calendar The holiday calendar for the overnight index.
+   * Builder from financial details. The accrual and fixing start and end dates are the same. The day count for the payment is the same as the one for the
+   * index. The payment date is adjusted by the publication lag and the settlement days.
+   * 
+   * @param index
+   *          The OIS index.
+   * @param fixingPeriodStartDate
+   *          The coupon settlement date and start of the fixing period.
+   * @param fixingPeriodEndDate
+   *          The last date of the fixing period. Interest accrues up to this date. If publicationLag==0, 1 day following publication. If lag==1, the
+   *          publication date.
+   * @param notional
+   *          The notional.
+   * @param paymentLag
+   *          The number of days between last fixing date and the payment date (also called payment delay).
+   * @param spread
+   *          The spread rate paid above the arithmetic average.
+   * @param calendar
+   *          The holiday calendar for the overnight index.
    * @return The OIS coupon.
    */
-  public static CouponONArithmeticAverageSpreadSimplifiedDefinition from(final IndexON index, final ZonedDateTime fixingPeriodStartDate, final ZonedDateTime fixingPeriodEndDate,
+  public static CouponONArithmeticAverageSpreadSimplifiedDefinition from(final IndexON index, final ZonedDateTime fixingPeriodStartDate,
+      final ZonedDateTime fixingPeriodEndDate,
       final double notional, final int paymentLag, final double spread, final Calendar calendar) {
     final ZonedDateTime paymentDate = ScheduleCalculator.getAdjustedDate(fixingPeriodEndDate, -1 + index.getPublicationLag() + paymentLag, calendar);
     final double paymentYearFraction = index.getDayCount().getDayCountFraction(fixingPeriodStartDate, fixingPeriodEndDate, calendar);
-    return new CouponONArithmeticAverageSpreadSimplifiedDefinition(index.getCurrency(), paymentDate, fixingPeriodStartDate, fixingPeriodEndDate, paymentYearFraction, notional, index, spread);
+    return new CouponONArithmeticAverageSpreadSimplifiedDefinition(index.getCurrency(), paymentDate, fixingPeriodStartDate, fixingPeriodEndDate,
+        paymentYearFraction, notional, index, spread);
   }
 
   /**
    * Gets the OIS index of the instrument.
+   * 
    * @return The index.
    */
   public IndexON getIndex() {
@@ -110,6 +142,7 @@ public class CouponONArithmeticAverageSpreadSimplifiedDefinition extends CouponD
 
   /**
    * Returns the spread rate paid above the arithmetic average.
+   * 
    * @return The spread.
    */
   public double getSpread() {
@@ -118,6 +151,7 @@ public class CouponONArithmeticAverageSpreadSimplifiedDefinition extends CouponD
 
   /**
    * Returns the fixed amount related to the spread.
+   * 
    * @return The amount.
    */
   public double getSpreadAmount() {
@@ -126,22 +160,26 @@ public class CouponONArithmeticAverageSpreadSimplifiedDefinition extends CouponD
 
   /**
    * {@inheritDoc}
+   * 
    * @deprecated Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public CouponONArithmeticAverageSpreadSimplified toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
-    ArgumentChecker.isTrue(!getAccrualStartDate().plusDays(_index.getPublicationLag()).isBefore(date), "First fixing publication strictly before reference date");
+    ArgumentChecker.isTrue(!getAccrualStartDate().plusDays(_index.getPublicationLag()).isBefore(date),
+        "First fixing publication strictly before reference date");
     return toDerivative(date);
   }
 
   @Override
   public CouponONArithmeticAverageSpreadSimplified toDerivative(final ZonedDateTime date) {
-    ArgumentChecker.isTrue(!getAccrualStartDate().plusDays(_index.getPublicationLag()).isBefore(date), "First fixing publication strictly before reference date");
+    ArgumentChecker.isTrue(!getAccrualStartDate().plusDays(_index.getPublicationLag()).isBefore(date),
+        "First fixing publication strictly before reference date");
     final double paymentTime = TimeCalculator.getTimeBetween(date, getPaymentDate());
     final double fixingPeriodStartTimes = TimeCalculator.getTimeBetween(date, getAccrualStartDate());
     final double fixingPeriodEndTimes = TimeCalculator.getTimeBetween(date, getAccrualEndDate());
-    return CouponONArithmeticAverageSpreadSimplified.from(paymentTime, getPaymentYearFraction(), getNotional(), _index, fixingPeriodStartTimes, fixingPeriodEndTimes,
+    return CouponONArithmeticAverageSpreadSimplified.from(paymentTime, getPaymentYearFraction(), getNotional(), _index, fixingPeriodStartTimes,
+        fixingPeriodEndTimes,
         getPaymentYearFraction(), _spread);
   }
 
@@ -164,9 +202,9 @@ public class CouponONArithmeticAverageSpreadSimplifiedDefinition extends CouponD
     result = prime * result + _index.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spreadAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

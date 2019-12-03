@@ -26,25 +26,25 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A subscription handle is kept by the client while a subscription is being established.
  * After the subscription has been established, it is no longer needed.
- * 
+ *
  * @author kirk
  */
 public class SubscriptionHandle {
-  
-  private static final Logger s_logger = LoggerFactory.getLogger(SubscriptionHandle.class);
-  
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SubscriptionHandle.class);
+
   private final UserPrincipal _user;
   private final SubscriptionType _subscriptionType;
   private final LiveDataSpecification _requestedSpecification;
   private final LiveDataListener _listener;
-  private final List<LiveDataValueUpdateBean> _ticksOnHold = new ArrayList<LiveDataValueUpdateBean>();
+  private final List<LiveDataValueUpdateBean> _ticksOnHold = new ArrayList<>();
   private LiveDataValueUpdateBean _snapshotOnHold; // = null;
-  
+
   public SubscriptionHandle(
-      UserPrincipal user,
-      SubscriptionType subscriptionType,
-      LiveDataSpecification requestedSpecification,
-      LiveDataListener listener) {
+      final UserPrincipal user,
+      final SubscriptionType subscriptionType,
+      final LiveDataSpecification requestedSpecification,
+      final LiveDataListener listener) {
     ArgumentChecker.notNull(user, "User credentials");
     ArgumentChecker.notNull(subscriptionType, "Subscription type");
     ArgumentChecker.notNull(requestedSpecification, "Requested Specification");
@@ -61,7 +61,7 @@ public class SubscriptionHandle {
   public UserPrincipal getUser() {
     return _user;
   }
-  
+
   public SubscriptionType getSubscriptionType() {
     return _subscriptionType;
   }
@@ -84,66 +84,66 @@ public class SubscriptionHandle {
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
-  
+
   /**
-   * Informs the client listener about the response received from the server 
-   * 
+   * Informs the client listener about the response received from the server.
+   *
    * @param response Response received, not null
    */
-  public void subscriptionResultReceived(LiveDataSubscriptionResponse response) {
-    if (s_logger.isDebugEnabled()) {
+  public void subscriptionResultReceived(final LiveDataSubscriptionResponse response) {
+    if (LOGGER.isDebugEnabled()) {
       if (_subscriptionType == SubscriptionType.SNAPSHOT) {
         if (response.getSubscriptionResult() == LiveDataSubscriptionResult.SUCCESS) {
-          s_logger.debug("Got snapshot {}", getRequestedSpecification());
+          LOGGER.debug("Got snapshot {}", getRequestedSpecification());
         } else {
-          s_logger.debug("Failed to snapshot {}. Result was {}, msg = {}",
+          LOGGER.debug("Failed to snapshot {}. Result was {}, msg = {}",
               new Object[] {getRequestedSpecification(), response.getSubscriptionResult(), response.getUserMessage() });
         }
       } else {
         if (response.getSubscriptionResult() == LiveDataSubscriptionResult.SUCCESS) {
-          s_logger.debug("Established subscription to {}", getRequestedSpecification());
+          LOGGER.debug("Established subscription to {}", getRequestedSpecification());
         } else if (response.getSubscriptionResult() == LiveDataSubscriptionResult.INTERNAL_ERROR) {
-          s_logger.debug("Failed to establish subscription, {} {}, request = {}",
+          LOGGER.debug("Failed to establish subscription, {} {}, request = {}",
               new Object[] {response.getSubscriptionResult(), response.getUserMessage(), getRequestedSpecification() });
         } else {
-          s_logger.debug("Failed to establish subscription, {} {}, request = {}",
+          LOGGER.debug("Failed to establish subscription, {} {}, request = {}",
               new Object[] {response.getSubscriptionResult(), response.getUserMessage(), getRequestedSpecification() });
         }
       }
     }
-    
+
     getListener().subscriptionResultReceived(response);
   }
-  
+
   /**
-   * In a two-phase subscription procedure (see LIV-18), after a subscription is established, 
+   * In a two-phase subscription procedure (see LIV-18), after a subscription is established,
    * the client needs to get a snapshot from the server.
    * Between establishing the subscription and getting the snapshot, all ticks
    * must be kept in memory and only released after the snapshot is received.
-   * 
+   *
    * @param tick Tick to add to temporary memory store
    */
-  public synchronized void addTickOnHold(LiveDataValueUpdateBean tick) {
+  public synchronized void addTickOnHold(final LiveDataValueUpdateBean tick) {
     _ticksOnHold.add(tick);
   }
-  
+
   /**
-   * In a two-phase subscription procedure (see LIV-18), after a subscription is established, 
-   * the client needs to get a snapshot from the server. This method is used 
+   * In a two-phase subscription procedure (see LIV-18), after a subscription is established,
+   * the client needs to get a snapshot from the server. This method is used
    * to store that snapshot.
-   * 
+   *
    * @param snapshot The snapshot to be placed on hold
    */
-  public synchronized void addSnapshotOnHold(LiveDataValueUpdateBean snapshot) {
+  public synchronized void addSnapshotOnHold(final LiveDataValueUpdateBean snapshot) {
     if (_snapshotOnHold != null) {
       throw new IllegalStateException("Snapshot has already been set");
     }
-    
+
     _snapshotOnHold = snapshot;
   }
-  
+
   /**
-   * Releases the snapshot and ticks stored in memory. 
+   * Releases the snapshot and ticks stored in memory.
    * For an explanation of why we need to do this, see LIV-18.
    * The method copes with server restarts during the subscription process
    * by assuming that the server sends a full image to the client
@@ -152,52 +152,52 @@ public class SubscriptionHandle {
   public synchronized void releaseTicksOnHold() {
     if (_snapshotOnHold == null) {
       // this will happen if the snapshot failed.
-      s_logger.debug("No ticks to send to {}. {}", getListener(), getRequestedSpecification());
-      return; 
+      LOGGER.debug("No ticks to send to {}. {}", getListener(), getRequestedSpecification());
+      return;
     }
-    
-    long snapshotSequenceNo = _snapshotOnHold.getSequenceNumber();
-    
+
+    final long snapshotSequenceNo = _snapshotOnHold.getSequenceNumber();
+
     // Find the LAST reset (in theory, there could be multiple resets although
     // this is a highly theoretical case)
     Integer resetIndex = null;
     for (int i = 0; i < _ticksOnHold.size(); i++) {
-      LiveDataValueUpdateBean tick = _ticksOnHold.get(i);
+      final LiveDataValueUpdateBean tick = _ticksOnHold.get(i);
       if (tick.getSequenceNumber() == LiveDataValueUpdate.SEQUENCE_START) {
-        resetIndex = i;                
+        resetIndex = i;
       }
     }
-    
+
     if (resetIndex == null) {
-      s_logger.debug("{}: Sending snapshot and {} ticks on hold to {}", 
+      LOGGER.debug("{}: Sending snapshot and {} ticks on hold to {}",
           new Object[] {getRequestedSpecification(), _ticksOnHold.size(), getListener() });
-      
+
       // No resets. This is the normal case. Use the snapshot
       // and any subsequent ticks. The subsequent ticks
       // are not sorted, but are played back in the order received,
-      // which hopefully should be the sequence number order (i.e., no sorting necessary). 
+      // which hopefully should be the sequence number order (i.e., no sorting necessary).
       _listener.valueUpdate(_snapshotOnHold);
-      
-      for (LiveDataValueUpdateBean tick : _ticksOnHold) {
+
+      for (final LiveDataValueUpdateBean tick : _ticksOnHold) {
         if (tick.getSequenceNumber() > snapshotSequenceNo) {
           _listener.valueUpdate(tick);
         }
       }
     } else {
-      s_logger.debug("{}: Reset detected. Sending {} ticks on hold to {}", 
+      LOGGER.debug("{}: Reset detected. Sending {} ticks on hold to {}",
           new Object[] {getRequestedSpecification(), _ticksOnHold.size() - resetIndex, getListener() });
-      
+
       // This happens when the server is reset (rebooted/migrated) while subscribing.
       // We assume that the tick with sequence number = 0
       // is a full update (as LiveDataValueUpdate.getSequenceNumber() specifies).
       // Using this assumption, we first use the tick with sequence number = 0, which
       // acts as the snapshot, and then simply send any subsequent ticks in order.
       for (int i = resetIndex; i < _ticksOnHold.size(); i++) {
-        LiveDataValueUpdateBean tick = _ticksOnHold.get(i);
+        final LiveDataValueUpdateBean tick = _ticksOnHold.get(i);
         _listener.valueUpdate(tick);
       }
     }
-      
+
     _ticksOnHold.clear();
     _snapshotOnHold = null;
   }

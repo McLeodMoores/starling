@@ -24,8 +24,8 @@ import com.opengamma.core.config.ConfigGroups;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNode;
 
 /**
- * Definition for interpolated curves. It contains the curve name, nodes and information about the interpolators. The interpolation method
- * must be provided, but the left and right extrapolation methods are optional.
+ * Definition for interpolated curves. It contains the curve name, nodes and information about the interpolators. The interpolation method must be provided, but
+ * the left and right extrapolation methods are optional.
  */
 @BeanDefinition
 @Config(description = "Interpolated curve definition", group = ConfigGroups.CURVES)
@@ -55,13 +55,16 @@ public class InterpolatedCurveDefinition extends CurveDefinition {
   /**
    * For the builder.
    */
-  /* package*/InterpolatedCurveDefinition() {
+  /* package */ InterpolatedCurveDefinition() {
   }
 
   /**
-   * @param name The name of the curve, not null
-   * @param nodes The nodes of the curve, not null
-   * @param interpolatorName The interpolator name, not null
+   * @param name
+   *          The name of the curve, not null
+   * @param nodes
+   *          The nodes of the curve, not null
+   * @param interpolatorName
+   *          The interpolator name, not null
    */
   public InterpolatedCurveDefinition(final String name, final Set<CurveNode> nodes, final String interpolatorName) {
     super(name, nodes);
@@ -69,10 +72,14 @@ public class InterpolatedCurveDefinition extends CurveDefinition {
   }
 
   /**
-   * @param name The name of the curve, not null
-   * @param nodes The nodes of the curve, not null
-   * @param interpolatorName The interpolator name, not null
-   * @param extrapolatorName The name of the left and right extrapolators
+   * @param name
+   *          The name of the curve, not null
+   * @param nodes
+   *          The nodes of the curve, not null
+   * @param interpolatorName
+   *          The interpolator name, not null
+   * @param extrapolatorName
+   *          The name of the left and right extrapolators
    */
   public InterpolatedCurveDefinition(final String name, final Set<CurveNode> nodes, final String interpolatorName, final String extrapolatorName) {
     super(name, nodes);
@@ -82,13 +89,19 @@ public class InterpolatedCurveDefinition extends CurveDefinition {
   }
 
   /**
-   * @param name The name of the curve, not null
-   * @param nodes The nodes of the curve, not null
-   * @param interpolatorName The interpolator name, not null
-   * @param rightExtrapolatorName The right extrapolator name
-   * @param leftExtrapolatorName The left extrapolator name
+   * @param name
+   *          The name of the curve, not null
+   * @param nodes
+   *          The nodes of the curve, not null
+   * @param interpolatorName
+   *          The interpolator name, not null
+   * @param rightExtrapolatorName
+   *          The right extrapolator name
+   * @param leftExtrapolatorName
+   *          The left extrapolator name
    */
-  public InterpolatedCurveDefinition(final String name, final Set<CurveNode> nodes, final String interpolatorName, final String rightExtrapolatorName, final String leftExtrapolatorName) {
+  public InterpolatedCurveDefinition(final String name, final Set<CurveNode> nodes, final String interpolatorName, final String rightExtrapolatorName,
+      final String leftExtrapolatorName) {
     super(name, nodes);
     setInterpolatorName(interpolatorName);
     setRightExtrapolatorName(rightExtrapolatorName);

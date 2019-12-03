@@ -26,55 +26,55 @@ public class FutureBundleBean {
 
   public FutureBundleBean() {
   }
-  
+
   public Long getId() {
     return _id;
   }
-  
-  public void setId(Long id) {
+
+  public void setId(final Long id) {
     _id = id;
   }
-  
+
   public FutureSecurityBean getFuture() {
     return _future;
   }
-  
+
   public void setFuture(final FutureSecurityBean future) {
     _future = future;
   }
-  
+
   public Date getStartDate() {
     return _startDate;
   }
-  
+
   public void setStartDate(final Date startDate) {
     _startDate = startDate;
   }
-  
+
   public Date getEndDate() {
     return _endDate;
   }
-  
+
   public void setEndDate(final Date endDate) {
     _endDate = endDate;
   }
-  
+
   public double getConversionFactor() {
     return _conversionFactor;
   }
-  
+
   public void setConversionFactor(final double conversionFactor) {
     _conversionFactor = conversionFactor;
   }
-  
+
   public Set<ExternalIdBean> getIdentifiers() {
     return _identifiers;
   }
-  
+
   public void setIdentifiers(final Set<ExternalIdBean> identifiers) {
     _identifiers = identifiers;
   }
-  
+
   @Override
   public boolean equals(final Object o) {
     if (o == this) {
@@ -91,7 +91,7 @@ public class FutureBundleBean {
         && ObjectUtils.equals(getConversionFactor(), other.getConversionFactor())
         && ObjectUtils.equals(getIdentifiers(), other.getIdentifiers());
   }
-  
+
   @Override
   public int hashCode() {
     int hc = 1;
@@ -99,5 +99,5 @@ public class FutureBundleBean {
     hc = hc * 17 + ObjectUtils.hashCode(getIdentifiers());
     return hc;
   }
-  
+
 }

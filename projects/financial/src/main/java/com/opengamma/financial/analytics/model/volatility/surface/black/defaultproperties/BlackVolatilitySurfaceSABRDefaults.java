@@ -21,15 +21,17 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class BlackVolatilitySurfaceSABRDefaults extends BlackVolatilitySurfaceDefaults {
-  private static final Logger s_logger = LoggerFactory.getLogger(BlackVolatilitySurfaceSABRDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlackVolatilitySurfaceSABRDefaults.class);
   private final String _sabrModel;
   private final String _weightingFunction;
   private final String _useExternalBeta;
   private final String _externalBeta;
 
   public BlackVolatilitySurfaceSABRDefaults(final String timeAxis, final String yAxis, final String volatilityTransform, final String timeInterpolator,
-      final String timeLeftExtrapolator, final String timeRightExtrapolator, final String sabrModel, final String weightingFunction, final String useExternalBeta, final String externalBeta) {
-    super(timeAxis, yAxis, volatilityTransform, timeInterpolator, timeLeftExtrapolator, timeRightExtrapolator, BlackVolatilitySurfacePropertyNamesAndValues.SABR);
+      final String timeLeftExtrapolator, final String timeRightExtrapolator, final String sabrModel, final String weightingFunction,
+      final String useExternalBeta, final String externalBeta) {
+    super(timeAxis, yAxis, volatilityTransform, timeInterpolator, timeLeftExtrapolator, timeRightExtrapolator,
+        BlackVolatilitySurfacePropertyNamesAndValues.SABR);
     ArgumentChecker.notNull(sabrModel, "SABR model");
     ArgumentChecker.notNull(weightingFunction, "weighting function");
     ArgumentChecker.notNull(useExternalBeta, "use external beta");
@@ -52,7 +54,8 @@ public class BlackVolatilitySurfaceSABRDefaults extends BlackVolatilitySurfaceDe
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     final Set<String> commonProperties = super.getDefaultValue(context, target, desiredValue, propertyName);
     if (commonProperties != null) {
       return commonProperties;
@@ -69,7 +72,7 @@ public class BlackVolatilitySurfaceSABRDefaults extends BlackVolatilitySurfaceDe
     if (BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SABR_EXTERNAL_BETA.equals(propertyName)) {
       return Collections.singleton(_externalBeta);
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 }

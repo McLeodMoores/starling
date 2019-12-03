@@ -1,39 +1,39 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.pnl;
 
 /**
- * 
+ *
  */
-//TODO this is wrong
+// TODO this is wrong
 public enum UnderlyingType {
-  /** Spot price */
+  /** Spot price. */
   SPOT_PRICE,
-  /** Spot volatility */
+  /** Spot volatility. */
   SPOT_VOLATILITY,
-  /** Implied volatility */
+  /** Implied volatility. */
   IMPLIED_VOLATILITY,
-  /** Interest rate */
+  /** Interest rate. */
   INTEREST_RATE,
-  /** Cost of carry */
+  /** Cost of carry. */
   COST_OF_CARRY,
-  /** Strike */
+  /** Strike. */
   STRIKE,
-  /** Time */
+  /** Time. */
   TIME,
-  /** Implied variance */
+  /** Implied variance. */
   IMPLIED_VARIANCE,
-  /** Yield */
+  /** Yield. */
   YIELD,
-  /** The yield curve */
+  /** The yield curve. */
   YIELD_CURVE,
-  /** Bond yield */
+  /** Bond yield. */
   BOND_YIELD,
-  /** Forward */
+  /** Forward. */
   FORWARD,
-  /** Volatility surface */
+  /** Volatility surface. */
   VOLATILITY_SURFACE
 }

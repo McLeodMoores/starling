@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.worker.trigger;
@@ -23,13 +23,13 @@ public class RecomputationPeriodTrigger implements ViewCycleTrigger {
   private long _eligibleForFullComputationFromNanos = Long.MIN_VALUE;
   private long _fullComputationRequiredByNanos = Long.MIN_VALUE;
 
-  public RecomputationPeriodTrigger(Supplier<ViewDefinition> viewDefinition) {
+  public RecomputationPeriodTrigger(final Supplier<ViewDefinition> viewDefinition) {
     ArgumentChecker.notNull(viewDefinition, "viewComputationJob");
     _viewDefinition = viewDefinition;
   }
 
   @Override
-  public ViewCycleTriggerResult query(long cycleTimeNanos) {
+  public ViewCycleTriggerResult query(final long cycleTimeNanos) {
     if (_fullComputationRequiredByNanos < cycleTimeNanos) {
       return new ViewCycleTriggerResult(ViewCycleEligibility.FORCE, ViewCycleType.FULL);
     }
@@ -37,7 +37,7 @@ public class RecomputationPeriodTrigger implements ViewCycleTrigger {
       return new ViewCycleTriggerResult(ViewCycleEligibility.FORCE, ViewCycleType.DELTA);
     }
 
-    long nanosWhenRequired = Math.min(_fullComputationRequiredByNanos, _deltaComputationRequiredByNanos);
+    final long nanosWhenRequired = Math.min(_fullComputationRequiredByNanos, _deltaComputationRequiredByNanos);
     if (_eligibleForFullComputationFromNanos < cycleTimeNanos) {
       return new ViewCycleTriggerResult(ViewCycleEligibility.ELIGIBLE, ViewCycleType.FULL, nanosWhenRequired);
     }
@@ -45,28 +45,28 @@ public class RecomputationPeriodTrigger implements ViewCycleTrigger {
       return new ViewCycleTriggerResult(ViewCycleEligibility.ELIGIBLE, ViewCycleType.DELTA, nanosWhenRequired);
     }
 
-    long nanosWhenEligible = Math.min(_eligibleForDeltaComputationFromNanos, _eligibleForFullComputationFromNanos);
+    final long nanosWhenEligible = Math.min(_eligibleForDeltaComputationFromNanos, _eligibleForFullComputationFromNanos);
     return ViewCycleTriggerResult.preventUntil(nanosWhenEligible);
   }
 
   @Override
-  public void cycleTriggered(long cycleTimeNanos, ViewCycleType cycleType) {
+  public void cycleTriggered(final long cycleTimeNanos, final ViewCycleType cycleType) {
     updateComputationTimes(cycleTimeNanos, cycleType == ViewCycleType.DELTA);
   }
 
   @Override
   public String toString() {
-    return "RecomputationPeriodTrigger[eligibleForDeltaFrom=" + _eligibleForDeltaComputationFromNanos +
-        ", deltaRequiredBy=" + _deltaComputationRequiredByNanos + ", eligibleForFullFrom=" + _eligibleForFullComputationFromNanos +
-        ", _fullRequiredBy=" + _fullComputationRequiredByNanos + "]";
+    return "RecomputationPeriodTrigger[eligibleForDeltaFrom=" + _eligibleForDeltaComputationFromNanos
+        + ", deltaRequiredBy=" + _deltaComputationRequiredByNanos + ", eligibleForFullFrom=" + _eligibleForFullComputationFromNanos
+        + ", _fullRequiredBy=" + _fullComputationRequiredByNanos + "]";
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   private ViewDefinition getViewDefinition() {
     return _viewDefinition.get();
   }
 
-  private void updateComputationTimes(long currentNanos, boolean deltaOnly) {
+  private void updateComputationTimes(final long currentNanos, final boolean deltaOnly) {
     _eligibleForDeltaComputationFromNanos = getUpdatedTime(currentNanos, getViewDefinition().getMinDeltaCalculationPeriod(), 0);
     _deltaComputationRequiredByNanos = getUpdatedTime(currentNanos, getViewDefinition().getMaxDeltaCalculationPeriod(), Long.MAX_VALUE);
 
@@ -76,11 +76,11 @@ public class RecomputationPeriodTrigger implements ViewCycleTrigger {
     }
   }
 
-  private long getUpdatedTime(long currentNanos, Long computationPeriod, long nullEquivalent) {
+  private long getUpdatedTime(final long currentNanos, final Long computationPeriod, final long nullEquivalent) {
     if (computationPeriod == null) {
       return nullEquivalent;
     }
-    long result = currentNanos + NANOS_PER_MILLISECOND * computationPeriod;
+    final long result = currentNanos + NANOS_PER_MILLISECOND * computationPeriod;
     // Check for overflow
     return result < currentNanos ? Long.MAX_VALUE : result;
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.test;
@@ -22,8 +22,6 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeParseException;
-
-import au.com.bytecode.opencsv.CSVParser;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -50,12 +48,14 @@ import com.opengamma.util.ResourceUtils;
 import com.opengamma.util.csv.CSVDocumentReader;
 import com.opengamma.util.money.Currency;
 
+import au.com.bytecode.opencsv.CSVParser;
+
 /**
- * 
+ *
  */
 public class IRSwapTradeParser {
-  private static final Logger s_logger = LoggerFactory.getLogger(IRSwapTradeParser.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParser.class);
+
   private static final String EFFECTIVE_DATE = "Effective Date";
   private static final String MATURITY_DATE = "Maturity Date";
   private static final String DIRECTION = "Direction";
@@ -69,7 +69,7 @@ public class IRSwapTradeParser {
   private static final String PAY_LEG_EOM = "LEG1_ROLL_CONV";
   private static final String PAY_LEG_FIXED_RATE = "LEG1_FIXED_RATE";
   private static final String PAY_LEG_INDEX = "LEG1_INDEX";
-  
+
   private static final String RECIEVE_LEG_TYPE = "LEG2_TYPE";
   private static final String RECIEVE_LEG_BUS_DAY_CONV = "LEG2_PAY_ADJ_BUS_DAY_CONV";
   private static final String RECIEVE_LEG_DAYCOUNT = "LEG2_DAYCOUNT";
@@ -86,34 +86,34 @@ public class IRSwapTradeParser {
   private static final String PRODUCT_TYPE = "PRODUCT_TYPE";
   private static final String CME_SWAP_INDICATOR = "CME Swap Indicator";
   private static final String CLIENT_ID = "Client ID";
- 
-  private static final DateTimeFormatter s_dateFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
-  private static final Properties s_dayCountMapping = getDayCountMapping();
-  private static final Properties s_businessDayConventionMapping = getBusinessDayConventionMapping();
-  private static final Map<String, com.opengamma.financial.convention.FloatingIndex> s_floatingIndexMapping = getFloatingIndexMapping();
-  private static final List<String> s_unSupportedProductTypes = Lists.newArrayList("FRA", "ZCS");
-  private static final List<String> s_stubTrades = Lists.newArrayList("shortfront", "longfront", "shortback", "longback");
-  private static final List<String> s_compoundTrades = Lists.newArrayList("cmpd", "straightcmpnd", "flatcmpnd");
+
+  private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy");
+  private static final Properties DAY_COUNT_MAPPING = getDayCountMapping();
+  private static final Properties BUSINESS_DAY_CONVENTION_MAPPING = getBusinessDayConventionMapping();
+  private static final Map<String, com.opengamma.financial.convention.FloatingIndex> FLOATING_INDEX_MAPPING = getFloatingIndexMapping();
+  private static final List<String> UNSUPPORTED_PRODUCT_TYPES = Lists.newArrayList("FRA", "ZCS");
+  private static final List<String> STUB_TRADES = Lists.newArrayList("shortfront", "longfront", "shortback", "longback");
+  private static final List<String> COMPOUND_TRADES = Lists.newArrayList("cmpd", "straightcmpnd", "flatcmpnd");
 
   private final Random _random = new Random();
 
-  
-  public List<IRSwapSecurity> parseCSVFile(URL tradeFileUrl) {
+
+  public List<IRSwapSecurity> parseCSVFile(final URL tradeFileUrl) {
     ArgumentChecker.notNull(tradeFileUrl, "tradeFileUrl");
-            
-    List<IRSwapSecurity> trades = Lists.newArrayList();
-    CSVDocumentReader csvDocumentReader = new CSVDocumentReader(tradeFileUrl, CSVParser.DEFAULT_SEPARATOR, 
+
+    final List<IRSwapSecurity> trades = Lists.newArrayList();
+    final CSVDocumentReader csvDocumentReader = new CSVDocumentReader(tradeFileUrl, CSVParser.DEFAULT_SEPARATOR,
         CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_ESCAPE_CHARACTER, new FudgeContext());
-    
-    List<FudgeMsg> rowsWithError = Lists.newArrayList();
-    List<FudgeMsg> unsupportedProdTypes = Lists.newArrayList();
-    List<FudgeMsg> stubTrades = Lists.newArrayList();
-    List<FudgeMsg> compoundTrades = Lists.newArrayList();
-    List<FudgeMsg> missingPV = Lists.newArrayList();
-    List<FudgeMsg> terminatedTrades = Lists.newArrayList();
-    
+
+    final List<FudgeMsg> rowsWithError = Lists.newArrayList();
+    final List<FudgeMsg> unsupportedProdTypes = Lists.newArrayList();
+    final List<FudgeMsg> stubTrades = Lists.newArrayList();
+    final List<FudgeMsg> compoundTrades = Lists.newArrayList();
+    final List<FudgeMsg> missingPV = Lists.newArrayList();
+    final List<FudgeMsg> terminatedTrades = Lists.newArrayList();
+
     int count = 1;
-    for (FudgeMsg row : csvDocumentReader) {
+    for (final FudgeMsg row : csvDocumentReader) {
       count++;
       SwapSecurity swapSecurity = null;
       try {
@@ -139,45 +139,45 @@ public class IRSwapTradeParser {
         }
         swapSecurity = createSwapSecurity(row);
         trades.add(IRSwapSecurity.of(swapSecurity, row));
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         ex.printStackTrace();
         rowsWithError.add(row);
       }
     }
-    
+
     logErrors("unsupportedProdTypes", unsupportedProdTypes, count);
     logErrors("stubTrades", stubTrades, count);
     logErrors("compoundTrades", compoundTrades, count);
     logErrors("missingPV", missingPV, count);
     logErrors("terminatedTrades", terminatedTrades, count);
-        
-    s_logger.warn("Total unprocessed rows: {} out of {}", rowsWithError.size(), count);
-    for (FudgeMsg fudgeMsg : rowsWithError) {
-      s_logger.warn("{}", fudgeMsg);
+
+    LOGGER.warn("Total unprocessed rows: {} out of {}", rowsWithError.size(), count);
+    for (final FudgeMsg fudgeMsg : rowsWithError) {
+      LOGGER.warn("{}", fudgeMsg);
     }
     return trades;
   }
 
-  private void logErrors(String type, List<FudgeMsg> unsupportedProdTypes, int totalRows) {
-    s_logger.warn("Total {} rows: {} out of {}", type, unsupportedProdTypes.size(), totalRows);
-    for (FudgeMsg fudgeMsg : unsupportedProdTypes) {
-      s_logger.warn("{}", fudgeMsg);
+  private static void logErrors(final String type, final List<FudgeMsg> unsupportedProdTypes, final int totalRows) {
+    LOGGER.warn("Total {} rows: {} out of {}", type, unsupportedProdTypes.size(), totalRows);
+    for (final FudgeMsg fudgeMsg : unsupportedProdTypes) {
+      LOGGER.warn("{}", fudgeMsg);
     }
   }
 
-  private boolean isTeminatedTrade(FudgeMsg row) {
-    String status = row.getString(STATUS);
+  private static boolean isTeminatedTrade(final FudgeMsg row) {
+    final String status = row.getString(STATUS);
     return "TERMINATED".equalsIgnoreCase(status);
   }
 
-  private boolean isErsPVMissing(FudgeMsg row) {
+  private static boolean isErsPVMissing(final FudgeMsg row) {
     return row.getString(ERS_PV) == null;
   }
 
-  private boolean isCompoundTrade(FudgeMsg row) {
-    String clientId = row.getString(CLIENT_ID);
+  private static boolean isCompoundTrade(final FudgeMsg row) {
+    final String clientId = row.getString(CLIENT_ID);
     if (clientId != null) {
-      for (String cmpKeyWord : s_compoundTrades) {
+      for (final String cmpKeyWord : COMPOUND_TRADES) {
         if (clientId.toLowerCase().contains(cmpKeyWord)) {
           return true;
         }
@@ -186,10 +186,10 @@ public class IRSwapTradeParser {
     return false;
   }
 
-  private boolean isStubTrade(FudgeMsg row) {
-    String clientId = row.getString(CLIENT_ID);
+  private static boolean isStubTrade(final FudgeMsg row) {
+    final String clientId = row.getString(CLIENT_ID);
     if (clientId != null) {
-      for (String stubKeyWord : s_stubTrades) {
+      for (final String stubKeyWord : STUB_TRADES) {
         if (clientId.toLowerCase().contains(stubKeyWord)) {
           return true;
         }
@@ -198,17 +198,17 @@ public class IRSwapTradeParser {
     return false;
   }
 
-  private boolean isUnsupportedProductType(FudgeMsg row) {
-    String productType = row.getString(PRODUCT_TYPE);
+  private static boolean isUnsupportedProductType(final FudgeMsg row) {
+    final String productType = row.getString(PRODUCT_TYPE);
     if (productType == null) {
       return true;
     }
-    return s_unSupportedProductTypes.contains(productType.toUpperCase());
+    return UNSUPPORTED_PRODUCT_TYPES.contains(productType.toUpperCase());
   }
 
   private static Map<String, FloatingIndex> getFloatingIndexMapping() {
-    Map<String, FloatingIndex> result = Maps.newHashMap();
-    for (FloatingIndex floatingIndex : FloatingIndex.values()) {
+    final Map<String, FloatingIndex> result = Maps.newHashMap();
+    for (final FloatingIndex floatingIndex : FloatingIndex.values()) {
       result.put(floatingIndex.getIsdaName().toUpperCase(), floatingIndex);
     }
     return result;
@@ -222,33 +222,33 @@ public class IRSwapTradeParser {
     return loadPropertiesFromClassPath("classpath:com/opengamma/financial/analytics/test/dayCountMapping.properties");
   }
 
-  private static Properties loadPropertiesFromClassPath(String resourceLocation) {
-    Resource resource = ResourceUtils.createResource(resourceLocation);
-    Properties properties = new Properties();
+  private static Properties loadPropertiesFromClassPath(final String resourceLocation) {
+    final Resource resource = ResourceUtils.createResource(resourceLocation);
+    final Properties properties = new Properties();
     try (InputStream stream = resource.getInputStream()) {
       properties.load(stream);
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Error loading " + resourceLocation + " from classpath", ex);
-    }  
+    }
     return properties;
   }
 
-  private SwapSecurity createSwapSecurity(FudgeMsg row) {
-    LocalDate effectiveDate = parseDate(row, EFFECTIVE_DATE);
-    LocalDate maturityDate = parseDate(row, MATURITY_DATE);
+  private SwapSecurity createSwapSecurity(final FudgeMsg row) {
+    final LocalDate effectiveDate = parseDate(row, EFFECTIVE_DATE);
+    final LocalDate maturityDate = parseDate(row, MATURITY_DATE);
     SwapLeg payLeg = parsePayLeg(row);
     SwapLeg receiveLeg = parseReceiveLeg(row);
-    
-    String direction = row.getString(DIRECTION);
+
+    final String direction = row.getString(DIRECTION);
     if (direction != null) {
       if (direction.equalsIgnoreCase("R")) {
-        SwapLeg temp = payLeg;
+        final SwapLeg temp = payLeg;
         payLeg = receiveLeg;
         receiveLeg = temp;
       }
     }
 
-    SwapSecurity swap = new SwapSecurity(effectiveDate.atStartOfDay(ZoneOffset.UTC),
+    final SwapSecurity swap = new SwapSecurity(effectiveDate.atStartOfDay(ZoneOffset.UTC),
         effectiveDate.atStartOfDay(ZoneOffset.UTC),
         maturityDate.atStartOfDay(ZoneOffset.UTC),
         "Cpty " + _random.nextInt(100), payLeg, receiveLeg);
@@ -257,7 +257,7 @@ public class IRSwapTradeParser {
     return swap;
   }
 
-  private String getSwapName(FudgeMsg row, SwapSecurity swap) {
+  private static String getSwapName(final FudgeMsg row, final SwapSecurity swap) {
     FixedInterestRateLeg fixedLeg = null;
     FloatingInterestRateLeg floatingLeg = null;
     if (swap.getPayLeg() instanceof FixedInterestRateLeg) {
@@ -267,11 +267,11 @@ public class IRSwapTradeParser {
       fixedLeg = (FixedInterestRateLeg) swap.getReceiveLeg();
       floatingLeg = (FloatingInterestRateLeg) swap.getPayLeg();
     }
-   
-    InterestRateNotional notional = (InterestRateNotional) fixedLeg.getNotional();
-    return String.format("#%s %s : pay %s%% fixed vs %s, start=%s, maturity=%s, notional=%s %s", row.getString(CLEARED_TRADE_ID), 
-        row.getString(CME_SWAP_INDICATOR), 
-        (fixedLeg.getRate() * 100.0), 
+
+    final InterestRateNotional notional = (InterestRateNotional) fixedLeg.getNotional();
+    return String.format("#%s %s : pay %s%% fixed vs %s, start=%s, maturity=%s, notional=%s %s", row.getString(CLEARED_TRADE_ID),
+        row.getString(CME_SWAP_INDICATOR),
+        fixedLeg.getRate() * 100.0,
         floatingLeg.getFloatingReferenceRateId().getValue(),
         swap.getEffectiveDate().toLocalDate(),
         swap.getMaturityDate().toLocalDate(),
@@ -279,210 +279,210 @@ public class IRSwapTradeParser {
         notional.getAmount());
   }
 
-  private SwapLeg parseReceiveLeg(FudgeMsg row) {
+  private static SwapLeg parseReceiveLeg(final FudgeMsg row) {
     SwapLeg swapLeg = null;
-    String legType = row.getString(RECIEVE_LEG_TYPE);
+    final String legType = row.getString(RECIEVE_LEG_TYPE);
     if (legType != null) {
-      DayCount payDayCount = parseDayCount(row, RECIEVE_LEG_DAYCOUNT);
-      Frequency payFrequency = parseFrequency(row, RECIEVE_LEG_FREQUENCY);
-      ExternalId payRegionId = parseRegionId(row, RECIEVE_LEG_REGION);
-      BusinessDayConvention payDayConvention = parseBusinessDayConvention(row, RECIEVE_LEG_BUS_DAY_CONV);
-      Boolean payEom = parseEOM(row, RECIEVE_LEG_EOM);
-      Notional payNotional = parseNotional(row, RECIEVE_NOTIONAL, RECIEVE_CURRENCY);
-      
+      final DayCount payDayCount = parseDayCount(row, RECIEVE_LEG_DAYCOUNT);
+      final Frequency payFrequency = parseFrequency(row, RECIEVE_LEG_FREQUENCY);
+      final ExternalId payRegionId = parseRegionId(row, RECIEVE_LEG_REGION);
+      final BusinessDayConvention payDayConvention = parseBusinessDayConvention(row, RECIEVE_LEG_BUS_DAY_CONV);
+      final Boolean payEom = parseEOM(row, RECIEVE_LEG_EOM);
+      final Notional payNotional = parseNotional(row, RECIEVE_NOTIONAL, RECIEVE_CURRENCY);
+
       switch (legType) {
         case "FIXED":
-          Double payFixedRate = parseFixedRate(row, RECIEVE_LEG_FIXED_RATE);
+          final Double payFixedRate = parseFixedRate(row, RECIEVE_LEG_FIXED_RATE);
           try {
-            swapLeg = new FixedInterestRateLeg(payDayCount, payFrequency, payRegionId, 
+            swapLeg = new FixedInterestRateLeg(payDayCount, payFrequency, payRegionId,
                 payDayConvention, payNotional, payEom, payFixedRate);
-          } catch (Exception ex) {
-            s_logger.warn(String.format("Error creating swap security from %s", row), ex);
+          } catch (final Exception ex) {
+            LOGGER.warn(String.format("Error creating swap security from %s", row), ex);
           }
           break;
         case "FLOAT":
-          ExternalId payFloatingRateId = parseFloatingRateId(row, RECIEVE_LEG_INDEX, payFrequency);
+          final ExternalId payFloatingRateId = parseFloatingRateId(row, RECIEVE_LEG_INDEX, payFrequency);
           try {
-            swapLeg = new FloatingInterestRateLeg(payDayCount, payFrequency, payRegionId, payDayConvention, 
+            swapLeg = new FloatingInterestRateLeg(payDayCount, payFrequency, payRegionId, payDayConvention,
                 payNotional, payEom, payFloatingRateId, FloatingRateType.IBOR);
-          } catch (Exception ex) {
-            s_logger.warn(String.format("Error creating swap security from %s", row), ex);
+          } catch (final Exception ex) {
+            LOGGER.warn(String.format("Error creating swap security from %s", row), ex);
           }
           break;
         default:
-          s_logger.warn("Unsupported leg type: {} in {}", legType, row);
+          LOGGER.warn("Unsupported leg type: {} in {}", legType, row);
           break;
       }
     } else {
-      s_logger.warn("Missing leg type value in column:{} in row:{}", RECIEVE_LEG_TYPE, row);
+      LOGGER.warn("Missing leg type value in column:{} in row:{}", RECIEVE_LEG_TYPE, row);
     }
     return swapLeg;
   }
 
-  private SwapLeg parsePayLeg(FudgeMsg row) {
+  private static SwapLeg parsePayLeg(final FudgeMsg row) {
     SwapLeg swapLeg = null;
-    String legType = row.getString(PAY_LEG_TYPE);
+    final String legType = row.getString(PAY_LEG_TYPE);
     if (legType != null) {
-      DayCount payDayCount = parseDayCount(row, PAY_LEG_DAYCOUNT);
-      Frequency payFrequency = parseFrequency(row, PAY_LEG_FREQUENCY);
-      ExternalId payRegionId = parseRegionId(row, PAY_LEG_REGION);
-      BusinessDayConvention payDayConvention = parseBusinessDayConvention(row, PAY_LEG_BUS_DAY_CONV);
-      Boolean payEom = parseEOM(row, PAY_LEG_EOM);
-      Notional payNotional = parseNotional(row, PAY_NOTIONAL, PAY_CURRENCY);
+      final DayCount payDayCount = parseDayCount(row, PAY_LEG_DAYCOUNT);
+      final Frequency payFrequency = parseFrequency(row, PAY_LEG_FREQUENCY);
+      final ExternalId payRegionId = parseRegionId(row, PAY_LEG_REGION);
+      final BusinessDayConvention payDayConvention = parseBusinessDayConvention(row, PAY_LEG_BUS_DAY_CONV);
+      final Boolean payEom = parseEOM(row, PAY_LEG_EOM);
+      final Notional payNotional = parseNotional(row, PAY_NOTIONAL, PAY_CURRENCY);
       switch (legType) {
         case "FIXED":
-          Double payFixedRate = parseFixedRate(row, PAY_LEG_FIXED_RATE);
+          final Double payFixedRate = parseFixedRate(row, PAY_LEG_FIXED_RATE);
           try {
-            swapLeg = new FixedInterestRateLeg(payDayCount, payFrequency, payRegionId, 
+            swapLeg = new FixedInterestRateLeg(payDayCount, payFrequency, payRegionId,
                 payDayConvention, payNotional, payEom, payFixedRate);
-          } catch (Exception ex) {
-            s_logger.warn(String.format("Error creating swap security from %s", row), ex);
+          } catch (final Exception ex) {
+            LOGGER.warn(String.format("Error creating swap security from %s", row), ex);
           }
           break;
         case "FLOAT":
-          ExternalId payFloatingRateId = parseFloatingRateId(row, PAY_LEG_INDEX, payFrequency);
+          final ExternalId payFloatingRateId = parseFloatingRateId(row, PAY_LEG_INDEX, payFrequency);
           try {
-            swapLeg = new FloatingInterestRateLeg(payDayCount, payFrequency, payRegionId, payDayConvention, 
+            swapLeg = new FloatingInterestRateLeg(payDayCount, payFrequency, payRegionId, payDayConvention,
                 payNotional, payEom, payFloatingRateId, FloatingRateType.IBOR);
-          } catch (Exception ex) {
-            s_logger.warn(String.format("Error creating swap security from %s", row), ex);
+          } catch (final Exception ex) {
+            LOGGER.warn(String.format("Error creating swap security from %s", row), ex);
           }
           break;
         default:
-          s_logger.warn("Unsupported leg type:{} in {}", legType, row);
+          LOGGER.warn("Unsupported leg type:{} in {}", legType, row);
           break;
       }
     } else {
-      s_logger.warn("Missing leg type value in column:{} in row:{}", PAY_LEG_TYPE, row);
+      LOGGER.warn("Missing leg type value in column:{} in row:{}", PAY_LEG_TYPE, row);
     }
     return swapLeg;
   }
 
-  private ExternalId parseFloatingRateId(FudgeMsg row, String columnName, Frequency frequency) {
+  private static ExternalId parseFloatingRateId(final FudgeMsg row, final String columnName, final Frequency frequency) {
     ExternalId floatingRateId = null;
     if (frequency != null) {
-      String floatingIndexStr = row.getString(columnName);
+      final String floatingIndexStr = row.getString(columnName);
       if (floatingIndexStr != null) {
-        FloatingIndex floatingIndex = s_floatingIndexMapping.get(floatingIndexStr.toUpperCase());
+        final FloatingIndex floatingIndex = FLOATING_INDEX_MAPPING.get(floatingIndexStr.toUpperCase());
         if (floatingIndex != null) {
           floatingRateId = floatingIndex.toFrequencySpecificExternalId(frequency);
         } else {
-          s_logger.warn("Unsupported floating Index: {} in row:{}", floatingIndexStr, row);
+          LOGGER.warn("Unsupported floating Index: {} in row:{}", floatingIndexStr, row);
         }
       }
     }
     return floatingRateId;
   }
 
-  private Double parseFixedRate(FudgeMsg row, String columnName) {
+  private static Double parseFixedRate(final FudgeMsg row, final String columnName) {
     Double rate = null;
-    String rateStr = row.getString(columnName);
+    final String rateStr = row.getString(columnName);
     try {
       rate = Double.parseDouble(rateStr);
-    } catch (Exception ex) {
-      s_logger.warn("Missing or invalid value for fixed rate in column:{} in row:{}", columnName, row);
+    } catch (final Exception ex) {
+      LOGGER.warn("Missing or invalid value for fixed rate in column:{} in row:{}", columnName, row);
     }
     return rate;
   }
 
-  private Boolean parseEOM(FudgeMsg row, String columnName) {
+  private static Boolean parseEOM(final FudgeMsg row, final String columnName) {
     Boolean isEom = null;
-    String rollConvStr = row.getString(columnName);
+    final String rollConvStr = row.getString(columnName);
     if (rollConvStr != null) {
       isEom = rollConvStr.equals("EOM");
     } else {
-      s_logger.warn("Missing roll convention in column:{} in row:{}", columnName, row);
+      LOGGER.warn("Missing roll convention in column:{} in row:{}", columnName, row);
     }
     return isEom;
   }
 
-  private Notional parseNotional(FudgeMsg row, String notionalColumn, String ccyColumn) {
+  private static Notional parseNotional(final FudgeMsg row, final String notionalColumn, final String ccyColumn) {
     Notional notional = null;
-    String ccyStr = row.getString(ccyColumn);
+    final String ccyStr = row.getString(ccyColumn);
     if (ccyStr != null) {
-      Currency currency = Currency.of(ccyStr);
+      final Currency currency = Currency.of(ccyStr);
       String notionalAmount = row.getString(notionalColumn);
       notionalAmount = notionalAmount.replace(",", "");
       if (notionalAmount != null) {
         notional = new InterestRateNotional(currency, Double.valueOf(notionalAmount));
       } else {
-        s_logger.warn("Missing notional value in column:{} in row:{}", notionalColumn, row);
+        LOGGER.warn("Missing notional value in column:{} in row:{}", notionalColumn, row);
       }
     } else {
-      s_logger.warn("Missing currency in column:{} in row:{}", ccyColumn, row);
+      LOGGER.warn("Missing currency in column:{} in row:{}", ccyColumn, row);
     }
     return notional;
   }
 
-  private ExternalId parseRegionId(FudgeMsg row, String columnName) {
+  private static ExternalId parseRegionId(final FudgeMsg row, final String columnName) {
     ExternalId regionId = null;
-    String regionIdStr = row.getString(columnName);
+    final String regionIdStr = row.getString(columnName);
     if (regionIdStr != null) {
-      String[] ids = regionIdStr.split(",");
+      final String[] ids = regionIdStr.split(",");
       regionId = ExternalSchemes.isdaHoliday(ids[0]);
     } else {
-      s_logger.warn("Missing RegionId in column:{} in row:{}", columnName, row);
+      LOGGER.warn("Missing RegionId in column:{} in row:{}", columnName, row);
     }
     return regionId;
   }
 
-  private Frequency parseFrequency(FudgeMsg row, String columnName) {
+  private static Frequency parseFrequency(final FudgeMsg row, final String columnName) {
     Frequency frequency = null;
-    String frequencyStr = row.getString(columnName);
+    final String frequencyStr = row.getString(columnName);
     if (frequencyStr != null) {
       try {
         frequency = SimpleFrequencyFactory.of(frequencyStr.toLowerCase());
-      } catch (IllegalArgumentException ex) {
-        s_logger.warn("Unknown freqency: {} in  column: {} in row: {}", frequencyStr, columnName, row);
+      } catch (final IllegalArgumentException ex) {
+        LOGGER.warn("Unknown freqency: {} in  column: {} in row: {}", frequencyStr, columnName, row);
       }
     } else {
-      s_logger.warn("Missing frequency in column:{} in row:{}", columnName, row);
+      LOGGER.warn("Missing frequency in column:{} in row:{}", columnName, row);
     }
     return frequency;
   }
 
-  private DayCount parseDayCount(FudgeMsg row, String columnName) {
+  private static DayCount parseDayCount(final FudgeMsg row, final String columnName) {
     DayCount dayCount = null;
-    String dayCountStr = row.getString(columnName);
+    final String dayCountStr = row.getString(columnName);
     if (dayCountStr != null) {
-      String ogDayCount = s_dayCountMapping.getProperty(dayCountStr, null);
+      final String ogDayCount = DAY_COUNT_MAPPING.getProperty(dayCountStr, null);
       if (ogDayCount != null) {
         dayCount = DayCountFactory.of(ogDayCount);
       } else {
-        s_logger.warn("Missing dayCount mapping for {} in column:{} in row:{}", dayCountStr, columnName, row);
+        LOGGER.warn("Missing dayCount mapping for {} in column:{} in row:{}", dayCountStr, columnName, row);
       }
-      
+
     } else {
-      s_logger.warn("Missing day count in column:{} in row:{}", columnName, row);
+      LOGGER.warn("Missing day count in column:{} in row:{}", columnName, row);
     }
     return dayCount;
   }
 
-  private BusinessDayConvention parseBusinessDayConvention(FudgeMsg row, String columnName) {
+  private static BusinessDayConvention parseBusinessDayConvention(final FudgeMsg row, final String columnName) {
     BusinessDayConvention convention = null;
-    String conventionStr = row.getString(columnName);
+    final String conventionStr = row.getString(columnName);
     if (conventionStr != null) {
-      String ogBusDayConvention = s_businessDayConventionMapping.getProperty(conventionStr, null);
+      final String ogBusDayConvention = BUSINESS_DAY_CONVENTION_MAPPING.getProperty(conventionStr, null);
       if (ogBusDayConvention != null) {
         convention = BusinessDayConventionFactory.of(ogBusDayConvention);
       } else {
-        s_logger.warn("Missing convention mapping for {}", conventionStr);
+        LOGGER.warn("Missing convention mapping for {}", conventionStr);
       }
-      
+
     } else {
-      s_logger.warn("Missing business day convention in column:{}", columnName);
+      LOGGER.warn("Missing business day convention in column:{}", columnName);
     }
     return convention;
   }
 
-  private LocalDate parseDate(FudgeMsg row, String columnName) {
+  private static LocalDate parseDate(final FudgeMsg row, final String columnName) {
     LocalDate result = null;
-    String dateStr = row.getString(columnName);
+    final String dateStr = row.getString(columnName);
     if (dateStr != null) {
       try {
-        result = LocalDate.parse(dateStr, s_dateFormatter);
-      } catch (DateTimeParseException ex) {
-        s_logger.error("Invalid dateValue:{} in column:{}, skipping...", dateStr, columnName);
+        result = LocalDate.parse(dateStr, DATE_FORMATTER);
+      } catch (final DateTimeParseException ex) {
+        LOGGER.error("Invalid dateValue:{} in column:{}, skipping...", dateStr, columnName);
       }
     }
     return result;

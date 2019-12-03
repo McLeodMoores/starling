@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.cds;
@@ -11,27 +11,26 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 
 import com.google.common.collect.ImmutableSortedSet;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
-import org.joda.beans.BeanBuilder;
 
 /**
- * Immutable set of tenors that represents the CreditDefaultSwapIndex security terms
+ * Immutable set of tenors that represents the CreditDefaultSwapIndex security terms.
  */
 @BeanDefinition(builderScope = "private")
 public final class CDSIndexTerms
@@ -43,7 +42,7 @@ public final class CDSIndexTerms
   /**
    * Singleton empty cdsIndex terms.
    */
-  public static final CDSIndexTerms EMPTY = new CDSIndexTerms(ImmutableSortedSet.<Tenor>of());
+  public static final CDSIndexTerms EMPTY = new CDSIndexTerms(ImmutableSortedSet.<Tenor> of());
 
   /**
    * The set of tenors.
@@ -51,44 +50,47 @@ public final class CDSIndexTerms
   @PropertyDefinition(validate = "notNull")
   private final ImmutableSortedSet<Tenor> _tenors;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Obtains a {@link CDSIndexTerms} from a tenor.
-   * 
-   * @param tenor  the tenor to warp in the terms, not null
+   *
+   * @param tenor
+   *          the tenor to warp in the terms, not null
    * @return the terms, not null
    */
-  public static CDSIndexTerms of(Tenor tenor) {
+  public static CDSIndexTerms of(final Tenor tenor) {
     ArgumentChecker.notNull(tenor, "tenor");
     return new CDSIndexTerms(ImmutableSortedSet.of(tenor));
   }
 
   /**
    * Obtains an {@link CDSIndexTerms} from an array of tenors.
-   * 
-   * @param tenors  an array of tenors, no nulls, not null
+   *
+   * @param tenors
+   *          an array of tenors, no nulls, not null
    * @return the terms, not null
    */
-  public static CDSIndexTerms of(Tenor... tenors) {
+  public static CDSIndexTerms of(final Tenor... tenors) {
     ArgumentChecker.noNulls(tenors, "tenors");
     return new CDSIndexTerms(ImmutableSortedSet.copyOf(tenors));
   }
 
   /**
    * Obtains an {@link CDSIndexTerms} from a collection of tenors.
-   * 
-   * @param tenors  the collection of tenors, no nulls, not null
+   *
+   * @param tenors
+   *          the collection of tenors, no nulls, not null
    * @return the terms, not null
    */
-  public static CDSIndexTerms of(Iterable<Tenor> tenors) {
+  public static CDSIndexTerms of(final Iterable<Tenor> tenors) {
     ArgumentChecker.noNulls(tenors, "tenors");
     return new CDSIndexTerms(ImmutableSortedSet.copyOf(tenors));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns an iterator over the tenors in the terms.
-   * 
+   *
    * @return the tenors in the terms, not null
    */
   @Override
@@ -148,7 +150,7 @@ public final class CDSIndexTerms
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CDSIndexTerms other = (CDSIndexTerms) obj;
-      return JodaBeanUtils.equal(getTenors(), other.getTenors());
+      return JodaBeanUtils.equal(_tenors, other._tenors);
     }
     return false;
   }
@@ -156,7 +158,7 @@ public final class CDSIndexTerms
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTenors());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_tenors);
     return hash;
   }
 
@@ -164,7 +166,7 @@ public final class CDSIndexTerms
   public String toString() {
     StringBuilder buf = new StringBuilder(64);
     buf.append("CDSIndexTerms{");
-    buf.append("tenors").append('=').append(JodaBeanUtils.toString(getTenors()));
+    buf.append("tenors").append('=').append(JodaBeanUtils.toString(_tenors));
     buf.append('}');
     return buf.toString();
   }
@@ -256,7 +258,7 @@ public final class CDSIndexTerms
   /**
    * The bean-builder for {@code CDSIndexTerms}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<CDSIndexTerms> {
+  private static final class Builder extends DirectPrivateBeanBuilder<CDSIndexTerms> {
 
     private SortedSet<Tenor> _tenors = ImmutableSortedSet.of();
 
@@ -264,6 +266,7 @@ public final class CDSIndexTerms
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -287,30 +290,6 @@ public final class CDSIndexTerms
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

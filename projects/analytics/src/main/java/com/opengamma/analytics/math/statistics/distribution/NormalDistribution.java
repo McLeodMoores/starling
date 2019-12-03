@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.distribution;
@@ -9,26 +9,18 @@ import java.util.Date;
 
 import org.apache.commons.lang.Validate;
 
+import com.opengamma.analytics.math.statistics.distribution.fnlib.DERFC;
+
 import cern.jet.random.Normal;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 import cern.jet.stat.Probability;
 
-import com.opengamma.analytics.math.statistics.distribution.fnlib.DERFC;
-
 /**
- * The normal distribution is a continuous probability distribution with probability density function
- * $$
- * \begin{align*}
- * f(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x - \mu)^2}{2\sigma^2}}
- * \end{align*}
- * $$
- * where $\mu$ is the mean and $\sigma$ the standard deviation of
- * the distribution.
+ * The normal distribution.
  * <p>
- * For values of the cumulative distribution function $|x| > 7.6$ this class calculates the cdf
- * directly. For all other methods and values of $x$, this class is a wrapper for the
- * <a href="http://acs.lbl.gov/software/colt/api/cern/jet/random/Normal.html">Colt</a> implementation of the normal distribution.
+ * For values of the cumulative distribution function $|x| &gt; 7.6$ this class calculates the cdf directly. For all other methods and values of $x$, this class
+ * is a wrapper for the <a href="http://acs.lbl.gov/software/colt/api/cern/jet/random/Normal.html">Colt</a> implementation of the normal distribution.
  */
 public class NormalDistribution implements ProbabilityDistribution<Double> {
   private static final double ROOT2 = Math.sqrt(2);
@@ -115,9 +107,9 @@ public class NormalDistribution implements ProbabilityDistribution<Double> {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_mean);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_standardDeviation);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

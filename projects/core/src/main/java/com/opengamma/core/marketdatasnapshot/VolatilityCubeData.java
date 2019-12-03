@@ -36,12 +36,14 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Triple;
 
 /**
- * Data structure to hold a particular volatility cube's data points.
- * Note no interpolation or fitting is done in this code.
- * 
- * @param <X> Type of the x-data
- * @param <Y> Type of the y-data
- * @param <Z> Type of the z-data
+ * Data structure to hold a particular volatility cube's data points. Note no interpolation or fitting is done in this code.
+ *
+ * @param <X>
+ *          Type of the x-data
+ * @param <Y>
+ *          Type of the y-data
+ * @param <Z>
+ *          Type of the z-data
  */
 @BeanDefinition
 public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
@@ -100,61 +102,65 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
   private String _yLabel;
 
   /**
-   * The z axis label
+   * The z axis label.
    */
   @PropertyDefinition(validate = "notNull")
   private String _zLabel;
 
   /**
-   * The x values
+   * The x values.
    */
   @PropertyDefinition(validate = "notNull")
   private X[] _xs;
 
   /**
-   * The y values
+   * The y values.
    */
   @PropertyDefinition(validate = "notNull")
   private Y[] _ys;
 
   /**
-   * The z values
+   * The z values.
    */
   @PropertyDefinition(validate = "notNull")
   private Z[] _zs;
 
   /**
-   * The volatilities
+   * The volatilities.
    */
   @PropertyDefinition(validate = "notNull")
   private Double[] _vs;
 
   /**
-   * A set of unique x values
+   * A set of unique x values.
    */
   private transient SortedSet<X> _uniqueXs;
 
   /**
-   * A set of unique y values
+   * A set of unique y values.
    */
   private transient SortedSet<Y> _uniqueYs;
 
   /**
-   * A set of strips in the xy plane
+   * A set of strips in the xy plane.
    */
   private transient Map<X, Map<Y, List<ObjectsPair<Z, Double>>>> _strips;
 
   /**
    * For the builder.
    */
-  /* package */VolatilityCubeData() {
+  /* package */ VolatilityCubeData() {
   }
 
   /**
    * Constructor that uses the default axis labels.
-   * @param definitionName The definition name, not null
-   * @param specificationName The specification name, not null
-   * @param values The (x, y, z, volatility) points, not null
+   * 
+   * @param definitionName
+   *          The definition name, not null
+   * @param specificationName
+   *          The specification name, not null
+   * @param values
+   *          The (x, y, z, volatility) points, not null
    */
   public VolatilityCubeData(final String definitionName,
       final String specificationName,
@@ -163,12 +169,18 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
   }
 
   /**
-   * @param definitionName The definition name, not null
-   * @param specificationName The specification name, not null
-   * @param xLabel The x axis label, not null
-   * @param yLabel The y axis label, not null
-   * @param zLabel The z axis label, not null
-   * @param values The (x, y, z volatility) points, not null
+   * @param definitionName
+   *          The definition name, not null
+   * @param specificationName
+   *          The specification name, not null
+   * @param xLabel
+   *          The x axis label, not null
+   * @param yLabel
+   *          The y axis label, not null
+   * @param zLabel
+   *          The z axis label, not null
+   * @param values
+   *          The (x, y, z volatility) points, not null
    */
   public VolatilityCubeData(final String definitionName,
       final String specificationName,
@@ -187,7 +199,9 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   /**
    * Initializes data structures and divides the cube into x-y strips.
-   * @param values The values, not null
+   * 
+   * @param values
+   *          The values, not null
    */
   @SuppressWarnings("unchecked")
   private void init(final Map<Triple<X, Y, Z>, Double> values) {
@@ -227,6 +241,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   /**
    * Gets the number of points in this cube.
+   * 
    * @return The number of points
    */
   public int size() {
@@ -235,9 +250,13 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   /**
    * Gets the volatility for a particular x, y, z point.
-   * @param x The x value
-   * @param y The y value
-   * @param z The z value
+   * 
+   * @param x
+   *          The x value
+   * @param y
+   *          The y value
+   * @param z
+   *          The z value
    * @return The volatility
    */
   public Double getVolatility(final X x, final Y y, final Z z) {
@@ -246,6 +265,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   /**
    * Gets a sorted set of unique x values.
+   * 
    * @return The unique x values
    */
   public SortedSet<X> getUniqueXValues() {
@@ -254,6 +274,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   /**
    * Gets a sorted set of unique y values.
+   * 
    * @return The unique y values
    */
   public SortedSet<Y> getUniqueYValues() {
@@ -262,8 +283,11 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   /**
    * Gets a slice through the surface in the x, y plane.
-   * @param x The x value, not null
-   * @param y The y value
+   * 
+   * @param x
+   *          The x value, not null
+   * @param y
+   *          The y value
    * @return A slice of the cube
    */
   public List<ObjectsPair<Z, Double>> getZValuesForXandY(final X x, final Y y) {
@@ -282,6 +306,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   /**
    * Gets the cube data as a map.
+   * 
    * @return The cube data
    */
   public Map<Triple<X, Y, Z>, Double> asMap() {
@@ -290,7 +315,9 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   /**
    * Sets a (x, y, z) to volatility map.
-   * @param values  the new value of the property, not null
+   * 
+   * @param values
+   *          the new value of the property, not null
    */
   public void setValues(final Map<Triple<X, Y, Z>, Double> values) {
     ArgumentChecker.notNull(values, "values");
@@ -466,7 +493,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the z axis label
+   * Gets the z axis label.
    * @return the value of the property, not null
    */
   public String getZLabel() {
@@ -474,7 +501,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
   }
 
   /**
-   * Sets the z axis label
+   * Sets the z axis label.
    * @param zLabel  the new value of the property, not null
    */
   public void setZLabel(String zLabel) {
@@ -492,7 +519,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the x values
+   * Gets the x values.
    * @return the value of the property, not null
    */
   public X[] getXs() {
@@ -500,7 +527,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
   }
 
   /**
-   * Sets the x values
+   * Sets the x values.
    * @param xs  the new value of the property, not null
    */
   public void setXs(X[] xs) {
@@ -518,7 +545,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the y values
+   * Gets the y values.
    * @return the value of the property, not null
    */
   public Y[] getYs() {
@@ -526,7 +553,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
   }
 
   /**
-   * Sets the y values
+   * Sets the y values.
    * @param ys  the new value of the property, not null
    */
   public void setYs(Y[] ys) {
@@ -544,7 +571,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the z values
+   * Gets the z values.
    * @return the value of the property, not null
    */
   public Z[] getZs() {
@@ -552,7 +579,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
   }
 
   /**
-   * Sets the z values
+   * Sets the z values.
    * @param zs  the new value of the property, not null
    */
   public void setZs(Z[] zs) {
@@ -570,7 +597,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the volatilities
+   * Gets the volatilities.
    * @return the value of the property, not null
    */
   public Double[] getVs() {
@@ -578,7 +605,7 @@ public class VolatilityCubeData<X, Y, Z> implements Bean, Serializable {
   }
 
   /**
-   * Sets the volatilities
+   * Sets the volatilities.
    * @param vs  the new value of the property, not null
    */
   public void setVs(Double[] vs) {

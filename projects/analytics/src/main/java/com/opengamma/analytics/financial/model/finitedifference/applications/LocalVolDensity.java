@@ -25,11 +25,15 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 public class LocalVolDensity {
 
   /**
-   * Get the coefficients (a, b and c) for the PDE governing the evolution of the transition density for a single underlying (i.e. 1 spatial dimension). The PDE is of the form
-   * $frac{\partial V}{\partial t} + a(x,t)\frac{\partial^2V}{\partial x^2}+b(x,t)\frac{\partial V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the density
-   * @param forward the forward curve
-   * @param localVol the local volatility surface (parameterised by strike)
-   * @return The coefficients a, b & c - which are all functions of time and asset value (space)
+   * Get the coefficients (a, b and c) for the PDE governing the evolution of the transition density for a single underlying (i.e. 1 spatial dimension). The PDE
+   * is of the form $frac{\partial V}{\partial t} + a(x,t)\frac{\partial^2V}{\partial x^2}+b(x,t)\frac{\partial V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the
+   * density
+   *
+   * @param forward
+   *          the forward curve
+   * @param localVol
+   *          the local volatility surface (parameterised by strike)
+   * @return The coefficients a, b &amp; c - which are all functions of time and asset value (space)
    */
   public static ConvectionDiffusionPDE1DCoefficients getStandardCoefficients(final ForwardCurve forward, final LocalVolatilitySurfaceStrike localVol) {
 
@@ -67,37 +71,42 @@ public class LocalVolDensity {
         final double lv1Div = getLocalVolFirstDiv(localVol, t, s);
         final double lv2Div = getLocalVolSecondDiv(localVol, t, s);
         final double lv = localVol.getVolatility(t, s);
-        final double temp1 = (lv + s * lv1Div);
+        final double temp1 = lv + s * lv1Div;
         final double temp2 = lv * s * (s * lv2Div + 2 * lv1Div);
 
         return forward.getDrift(t) - temp1 * temp1 - temp2;
       }
     };
 
-    //    //using a log-normal distribution with a very small Standard deviation as a proxy for a Dirac delta
-    //    final Function1D<Double, Double> initialCondition = new Function1D<Double, Double>() {
-    //      private final double _volRootTOffset = 0.01;
+    // //using a log-normal distribution with a very small Standard deviation as a proxy for a Dirac delta
+    // final Function1D<Double, Double> initialCondition = new Function1D<Double, Double>() {
+    // private final double _volRootTOffset = 0.01;
     //
-    //      @Override
-    //      public Double evaluate(final Double s) {
-    //        if (s == 0) {
-    //          return 0.0;
-    //        }
-    //        final double x = Math.log(s / forward.getSpot());
-    //        final NormalDistribution dist = new NormalDistribution(0, _volRootTOffset);
-    //        return dist.getPDF(x) / s;
-    //      }
-    //    };
+    // @Override
+    // public Double evaluate(final Double s) {
+    // if (s == 0) {
+    // return 0.0;
+    // }
+    // final double x = Math.log(s / forward.getSpot());
+    // final NormalDistribution dist = new NormalDistribution(0, _volRootTOffset);
+    // return dist.getPDF(x) / s;
+    // }
+    // };
 
-    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c));
+    return new ConvectionDiffusionPDE1DStandardCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        FunctionalDoublesSurface.from(c));
   }
 
   /**
-   * Get the coefficients (a, b, c, $\alpha$ & $\beta$) for the PDE governing the evolution of the transition density for a single underlying (i.e. 1 spatial dimension).
-   * The PDE is of the form $frac{\partial V}{\partial t} + a(x,t)\frac{\alpha(x,t)\partial^2V}{\partial x^2}+b(x,t)\frac{\beta(x,t)\partial V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the density
-   * @param forward the forward curve
-   * @param localVol the local volatility surface (parameterised by strike)
-   * @return The coefficients a, b, c, $\alpha$ & $\beta$ - which are all functions of time and asset value (space)
+   * Get the coefficients (a, b, c, $\alpha$ &amp; $\beta$) for the PDE governing the evolution of the transition density for a single underlying (i.e. 1
+   * spatial dimension). The PDE is of the form $frac{\partial V}{\partial t} + a(x,t)\frac{\alpha(x,t)\partial^2V}{\partial x^2}+b(x,t)\frac{\beta(x,t)\partial
+   * V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the density
+   *
+   * @param forward
+   *          the forward curve
+   * @param localVol
+   *          the local volatility surface (parameterised by strike)
+   * @return The coefficients a, b, c, $\alpha$ &amp; $\beta$ - which are all functions of time and asset value (space)
    */
   public static ConvectionDiffusionPDE1DFullCoefficients getFullCoefficients(final ForwardCurve forward, final LocalVolatilitySurfaceStrike localVol) {
 
@@ -149,11 +158,13 @@ public class LocalVolDensity {
       }
     };
 
-    return new ConvectionDiffusionPDE1DFullCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c), FunctionalDoublesSurface.from(alpha),
+    return new ConvectionDiffusionPDE1DFullCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
+        FunctionalDoublesSurface.from(alpha),
         FunctionalDoublesSurface.from(beta));
   }
 
-  public static ExtendedCoupledPDEDataBundle getExtendedCoupledPDEDataBundle(final ForwardCurve forward, final LocalVolatilitySurfaceStrike localVol, final double lambda1, final double lambda2,
+  public static ExtendedCoupledPDEDataBundle getExtendedCoupledPDEDataBundle(final ForwardCurve forward, final LocalVolatilitySurfaceStrike localVol,
+      final double lambda1, final double lambda2,
       final double initialProb) {
 
     final Function<Double, Double> a = new Function<Double, Double>() {
@@ -204,7 +215,7 @@ public class LocalVolDensity {
       }
     };
 
-    //using a log-normal distribution with a very small Standard deviation as a proxy for a Dirac delta
+    // using a log-normal distribution with a very small Standard deviation as a proxy for a Dirac delta
     final Function1D<Double, Double> initialCondition = new Function1D<Double, Double>() {
       private final double _volRootTOffset = 0.01;
 
@@ -219,12 +230,13 @@ public class LocalVolDensity {
       }
     };
 
-    return new ExtendedCoupledPDEDataBundle(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c), FunctionalDoublesSurface.from(alpha),
+    return new ExtendedCoupledPDEDataBundle(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
+        FunctionalDoublesSurface.from(alpha),
         FunctionalDoublesSurface.from(beta), lambda2, initialCondition);
 
   }
 
-  //TODO handle with a central calculator
+  // TODO handle with a central calculator
   private static double getLocalVolFirstDiv(final LocalVolatilitySurfaceStrike localVol, final double t, final double s) {
     final double eps = 1e-4;
     final double up = localVol.getVolatility(t, s + eps);

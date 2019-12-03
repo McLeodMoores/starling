@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport;
@@ -52,9 +52,8 @@ public class FudgeConnectionFactoryBean extends SingletonFactoryBean<FudgeConnec
     if (_endPointDescriptionProvider != null) {
       ArgumentChecker.notNull(getFudgeContext(), "fudgeContext");
       return _endPointDescriptionProvider.getEndPointDescription(getFudgeContext());
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -62,7 +61,8 @@ public class FudgeConnectionFactoryBean extends SingletonFactoryBean<FudgeConnec
     final FudgeMsg endPoint = resolveEndPointDescription();
     ArgumentChecker.notNull(endPoint, "endPointDescription");
     if (SocketEndPointDescriptionProvider.TYPE_VALUE.equals(endPoint.getString(SocketEndPointDescriptionProvider.TYPE_KEY))) {
-      final SocketFudgeConnection connection = (getExecutorService() != null) ? new SocketFudgeConnection(getFudgeContext(), getExecutorService()) : new SocketFudgeConnection(getFudgeContext());
+      final SocketFudgeConnection connection = getExecutorService() != null
+          ? new SocketFudgeConnection(getFudgeContext(), getExecutorService()) : new SocketFudgeConnection(getFudgeContext());
       connection.setServer(endPoint);
       return connection;
     }

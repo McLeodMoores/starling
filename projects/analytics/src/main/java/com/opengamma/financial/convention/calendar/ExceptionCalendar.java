@@ -25,7 +25,9 @@ public abstract class ExceptionCalendar extends AbstractCalendar {
 
   /**
    * Creates an instance.
-   * @param name  the convention name, not null
+   *
+   * @param name
+   *          the convention name, not null
    */
   protected ExceptionCalendar(final String name) {
     super(name);
@@ -34,6 +36,7 @@ public abstract class ExceptionCalendar extends AbstractCalendar {
   // -------------------------------------------------------------------------
   /**
    * Map of exception dates and whether they are working or non-working.
+   *
    * @return the map, not null
    */
   protected ConcurrentMap<LocalDate, Boolean> getWorkingDays() {
@@ -43,36 +46,26 @@ public abstract class ExceptionCalendar extends AbstractCalendar {
   @Override
   protected boolean isWorkingDayException(final LocalDate date) {
     final Boolean workingDay = getWorkingDays().get(date);
-    if (workingDay == null) {
-      // no exception
+    if (workingDay == null || workingDay) {
       return false;
-    } else if (workingDay) {
-      // this shouldn't happen if things are populated sensibly
-      return false;
-    } else {
-      // it's not a working day, so exception
-      return true;
     }
+    return true;
   }
 
   @Override
   protected boolean isNonWorkingDayException(final LocalDate date) {
     final Boolean workingDay = getWorkingDays().get(date);
-    if (workingDay == null) {
-      // no exception
-      return false;
-    } else if (workingDay) {
-      // it is a working day, so exception
-      return true;
-    } else {
-      // this shouldn't happen if things are populated sensibly
+    if (workingDay == null || !workingDay) {
       return false;
     }
+    return true;
   }
 
   /**
    * Mark a day as an exception - it is a working day.
-   * @param date  the working date to add, not null
+   *
+   * @param date
+   *          the working date to add, not null
    */
   protected void addWorkingDay(final LocalDate date) {
     getWorkingDays().put(date, true);
@@ -80,7 +73,9 @@ public abstract class ExceptionCalendar extends AbstractCalendar {
 
   /**
    * Mark a day as an exception - it is a non-working day.
-   * @param date  the non-working date to add, not null
+   *
+   * @param date
+   *          the non-working date to add, not null
    */
   protected void addNonWorkingDay(final LocalDate date) {
     getWorkingDays().put(date, false);

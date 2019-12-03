@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.volatility.surface;
@@ -31,9 +31,12 @@ public class ExampleFXOptionVolatilitySurfaceInstrumentProvider implements Surfa
   private final String _dataFieldName;
 
   /**
-   * @param fxPrefix The prefix, not null
-   * @param postfix The postfix, not null
-   * @param dataFieldName The data field name, not null
+   * @param fxPrefix
+   *          The prefix, not null
+   * @param postfix
+   *          The postfix, not null
+   * @param dataFieldName
+   *          The data field name, not null
    */
   public ExampleFXOptionVolatilitySurfaceInstrumentProvider(final String fxPrefix, final String postfix, final String dataFieldName) {
     ArgumentChecker.notNull(fxPrefix, "fx prefix");
@@ -46,6 +49,7 @@ public class ExampleFXOptionVolatilitySurfaceInstrumentProvider implements Surfa
 
   /**
    * Gets the prefix.
+   * 
    * @return the prefix
    */
   public String getFXPrefix() {
@@ -54,6 +58,7 @@ public class ExampleFXOptionVolatilitySurfaceInstrumentProvider implements Surfa
 
   /**
    * Gets the postfix.
+   * 
    * @return the postfix
    */
   public String getPostfix() {
@@ -101,7 +106,7 @@ public class ExampleFXOptionVolatilitySurfaceInstrumentProvider implements Surfa
           throw new OpenGammaRuntimeException("Should never happen - have all quote types in enum");
       }
     }
-    //TODO I'm sure this isn't the best way to do this
+    // TODO I'm sure this isn't the best way to do this
     if (tenor.getPeriod().getYears() != 0) {
       bbgCode += tenor.getPeriod().getYears() + "Y";
     } else if (tenor.getPeriod().getMonths() != 0) {
@@ -130,8 +135,8 @@ public class ExampleFXOptionVolatilitySurfaceInstrumentProvider implements Surfa
       return false;
     }
     final ExampleFXOptionVolatilitySurfaceInstrumentProvider other = (ExampleFXOptionVolatilitySurfaceInstrumentProvider) obj;
-    return getFXPrefix().equals(other.getFXPrefix()) &&
-        getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName());
+    return getFXPrefix().equals(other.getFXPrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName());
   }
 }

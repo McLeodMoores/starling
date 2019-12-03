@@ -19,8 +19,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Pricing method for inflation zero-coupon. The price is computed by index estimation, discounting and using a convexity adjustment.
- * See note "Inflation convexity adjustment" by Arroub Zine-eddine for details.
+ * Pricing method for inflation zero-coupon. The price is computed by index estimation, discounting and using a convexity adjustment. See note "Inflation
+ * convexity adjustment" by Arroub Zine-eddine for details.
  */
 public class CouponInflationZeroCouponInterpolationConvexityAdjustmentMethod {
 
@@ -31,8 +31,11 @@ public class CouponInflationZeroCouponInterpolationConvexityAdjustmentMethod {
 
   /**
    * Computes the estimated index with the weight and the two reference end dates.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The net amount.
    */
   public double indexEstimation(final CouponInflationZeroCouponInterpolation coupon, final InflationConvexityAdjustmentProviderInterface inflation) {
@@ -43,8 +46,11 @@ public class CouponInflationZeroCouponInterpolationConvexityAdjustmentMethod {
 
   /**
    * Computes the net amount of the zero-coupon coupon with reference index at start of the month.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The net amount.
    */
   public MultipleCurrencyAmount netAmount(final CouponInflationZeroCouponInterpolation coupon, final InflationConvexityAdjustmentProviderInterface inflation) {
@@ -58,11 +64,15 @@ public class CouponInflationZeroCouponInterpolationConvexityAdjustmentMethod {
 
   /**
    * Computes the present value of the zero-coupon coupon with reference index at start of the month.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValue(final CouponInflationZeroCouponInterpolation coupon, final InflationConvexityAdjustmentProviderInterface inflation) {
+  public MultipleCurrencyAmount presentValue(final CouponInflationZeroCouponInterpolation coupon,
+      final InflationConvexityAdjustmentProviderInterface inflation) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(inflation, "Inflation");
     final double discountFactor = inflation.getInflationProvider().getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
@@ -71,28 +81,38 @@ public class CouponInflationZeroCouponInterpolationConvexityAdjustmentMethod {
 
   /**
    * Computes the par spread of the zero-coupon swap with the fixed rate of the fixed leg of inflation zero-coupon swap.
-   * @param coupon The zero-coupon payment.
-   * @param inflation The inflation provider.
-   * @param tenor the teno as used in the fixed leg
-   * @param fixedRate the fixed rate
+   * 
+   * @param coupon
+   *          The zero-coupon payment.
+   * @param inflation
+   *          The inflation provider.
+   * @param tenor
+   *          the teno as used in the fixed leg
+   * @param fixedRate
+   *          the fixed rate
    * @return The present value.
    */
-  public double parSpread(final CouponInflationZeroCouponInterpolation coupon, final InflationConvexityAdjustmentProviderInterface inflation, final int tenor, final double fixedRate) {
+  public double parSpread(final CouponInflationZeroCouponInterpolation coupon, final InflationConvexityAdjustmentProviderInterface inflation, final int tenor,
+      final double fixedRate) {
     ArgumentChecker.notNull(tenor, "Tenor");
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(inflation, "Inflation");
     final double estimatedIndex = indexEstimation(coupon, inflation);
     final double convextityAdjustment = CONVEXITY_ADJUSTMENT_FUNCTION.getZeroCouponConvexityAdjustment(coupon, inflation);
-    return Math.pow((estimatedIndex / coupon.getIndexStartValue() * convextityAdjustment - (coupon.payNotional() ? 0.0 : 1.0)), 1 / tenor) - 1 - fixedRate;
+    return Math.pow(estimatedIndex / coupon.getIndexStartValue() * convextityAdjustment - (coupon.payNotional() ? 0.0 : 1.0), 1 / tenor) - 1 - fixedRate;
   }
 
   /**
    * Compute the present value sensitivity to rates of a Inflation coupon.
-   * @param coupon The coupon.
-   * @param inflation The inflation provider.
+   * 
+   * @param coupon
+   *          The coupon.
+   * @param inflation
+   *          The inflation provider.
    * @return The present value sensitivity.
    */
-  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CouponInflationZeroCouponInterpolation coupon, final InflationConvexityAdjustmentProviderInterface inflation) {
+  public MultipleCurrencyInflationSensitivity presentValueCurveSensitivity(final CouponInflationZeroCouponInterpolation coupon,
+      final InflationConvexityAdjustmentProviderInterface inflation) {
     ArgumentChecker.notNull(coupon, "Coupon");
     ArgumentChecker.notNull(inflation, "Inflation");
     final double estimatedIndexMonth0 = inflation.getInflationProvider().getPriceIndex(coupon.getPriceIndex(), coupon.getReferenceEndTime()[0]);
@@ -102,7 +122,8 @@ public class CouponInflationZeroCouponInterpolationConvexityAdjustmentMethod {
     final double discountFactor = inflation.getInflationProvider().getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
     // Backward sweep
     final double pvBar = 1.0;
-    final double discountFactorBar = (estimatedIndex / coupon.getIndexStartValue() * convextityAdjustment - (coupon.payNotional() ? 0.0 : 1.0)) * coupon.getNotional() * pvBar;
+    final double discountFactorBar = (estimatedIndex / coupon.getIndexStartValue() * convextityAdjustment - (coupon.payNotional() ? 0.0 : 1.0))
+        * coupon.getNotional() * pvBar;
     final double estimatedIndexBar = 1.0 / coupon.getIndexStartValue() * convextityAdjustment * discountFactor * coupon.getNotional() * pvBar;
     final double estimatedIndexMonth1Bar = (1 - coupon.getWeight()) * estimatedIndexBar;
     final double estimatedIndexMonth0Bar = coupon.getWeight() * estimatedIndexBar;

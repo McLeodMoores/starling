@@ -29,12 +29,12 @@ public abstract class AbstractRedCodeHandlingCdsAggregationFunction<T> extends A
    * @param securitySource the security source used for resolution of the CDS security, not null
    * @param redCodeHandler the extractor which will process the red code and return the required type, not null
    */
-  public AbstractRedCodeHandlingCdsAggregationFunction(String name, SecuritySource securitySource, final RedCodeHandler<T> redCodeHandler) {
+  public AbstractRedCodeHandlingCdsAggregationFunction(final String name, final SecuritySource securitySource, final RedCodeHandler<T> redCodeHandler) {
     super(name, securitySource, new CdsValueExtractor<T>() {
       private final CdsRedCodeExtractor<T> _redCodeExtractor = new CdsRedCodeExtractor<>(redCodeHandler);
 
       @Override
-      public T extract(AbstractCreditDefaultSwapSecurity cds) {
+      public T extract(final AbstractCreditDefaultSwapSecurity cds) {
         return _redCodeExtractor.extract(cds);
       }
     });
@@ -52,7 +52,7 @@ public abstract class AbstractRedCodeHandlingCdsAggregationFunction<T> extends A
   }
 
   @Override
-  public int compare(String sector1, String sector2) {
+  public int compare(final String sector1, final String sector2) {
     return sector1.compareTo(sector2);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.centralcounterparty;
@@ -14,7 +14,9 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Class to define the characteristics of a central counterparty (for clearing of trades) e.g. ICE, LCH or CME
+ * @deprecated Deprecated
  */
+@Deprecated
 public class CentralCounterpartyDefinition {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------

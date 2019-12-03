@@ -40,7 +40,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbSecurityBeanMasterTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbSecurityBeanMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbSecurityBeanMasterTest.class);
 
   private static final ExternalIdBundle BUNDLE_201 = ExternalIdBundle.of(ExternalId.of("C", "D"), ExternalId.of("E", "F"));
   private static final ExternalIdBundle BUNDLE_102 = ExternalIdBundle.of(ExternalId.of("A", "B"), ExternalId.of("C", "D"), ExternalId.of("GH", "HI"));
@@ -51,9 +51,9 @@ public abstract class AbstractDbSecurityBeanMasterTest extends AbstractDbTest {
   protected Instant _version2Instant;
   protected int _totalSecurities;
 
-  public AbstractDbSecurityBeanMasterTest(String databaseType, String databaseVersion, boolean readOnly) {
+  public AbstractDbSecurityBeanMasterTest(final String databaseType, final String databaseVersion, final boolean readOnly) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -75,7 +75,7 @@ public abstract class AbstractDbSecurityBeanMasterTest extends AbstractDbTest {
   //-------------------------------------------------------------------------
   private void init() {
     _secMaster = new DbSecurityBeanMaster(getDbConnector());
-    
+
 //    id bigint NOT NULL,
 //    oid bigint NOT NULL,
 //    ver_from_instant timestamp without time zone NOT NULL,
@@ -87,12 +87,12 @@ public abstract class AbstractDbSecurityBeanMasterTest extends AbstractDbTest {
 //    sub_type varchar(255) NOT NULL,
 //    java_type varchar(255) NOT NULL,
 //    packed_data blob NOT NULL,
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     _secMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
     _version1Instant = now.minusSeconds(100);
     _version2Instant = now.minusSeconds(50);
-    s_logger.debug("test data now:   {}", _version1Instant);
-    s_logger.debug("test data later: {}", _version2Instant);
+    LOGGER.debug("test data now:   {}", _version1Instant);
+    LOGGER.debug("test data later: {}", _version2Instant);
     final JdbcOperations template = _secMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO secb_document VALUES (?,?,?,?,?, ?,?,?,?,?, ?)",
         101, 101, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP,
@@ -142,26 +142,26 @@ public abstract class AbstractDbSecurityBeanMasterTest extends AbstractDbTest {
         202, 3);
   }
 
-  private Object blob(String name, ExternalIdBundle bundle) {
-    EquitySecurity value = new EquitySecurity("LONDON", "LON", "LSE", Currency.GBP);
+  private Object blob(final String name, final ExternalIdBundle bundle) {
+    final EquitySecurity value = new EquitySecurity("LONDON", "LON", "LSE", Currency.GBP);
     value.setName(name);
     value.setExternalIdBundle(bundle);
-    String xml = JodaBeanSerialization.serializer(false).xmlWriter().write(value);
-    byte[] bytes = ZipUtils.deflateString(xml);
-    SqlLobValue lob = new SqlLobValue(bytes, getDbConnector().getDialect().getLobHandler());
+    final String xml = JodaBeanSerialization.serializer(false).xmlWriter().write(value);
+    final byte[] bytes = ZipUtils.deflateString(xml);
+    final SqlLobValue lob = new SqlLobValue(bytes, getDbConnector().getDialect().getLobHandler());
     return new SqlParameterValue(Types.BLOB, lob);
   }
 
   //-------------------------------------------------------------------------
   protected void assert101(final SecurityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "101", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    EquitySecurity security = (EquitySecurity) test.getSecurity();
+    final EquitySecurity security = (EquitySecurity) test.getSecurity();
     assertNotNull(security);
     assertEquals(uniqueId, security.getUniqueId());
     assertEquals("TestSecurity101", security.getName());
@@ -170,14 +170,14 @@ public abstract class AbstractDbSecurityBeanMasterTest extends AbstractDbTest {
   }
 
   protected void assert102(final SecurityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbSec", "102", "0");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "102", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    EquitySecurity security = (EquitySecurity) test.getSecurity();
+    final EquitySecurity security = (EquitySecurity) test.getSecurity();
     assertNotNull(security);
     assertEquals(uniqueId, security.getUniqueId());
     assertEquals("TestSecurity102", security.getName());
@@ -186,14 +186,14 @@ public abstract class AbstractDbSecurityBeanMasterTest extends AbstractDbTest {
   }
 
   protected void assert201(final SecurityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "201", "0");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(_version2Instant, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    EquitySecurity security = (EquitySecurity) test.getSecurity();
+    final EquitySecurity security = (EquitySecurity) test.getSecurity();
     assertNotNull(security);
     assertEquals(uniqueId, security.getUniqueId());
     assertEquals("TestSecurity201", security.getName());
@@ -202,14 +202,14 @@ public abstract class AbstractDbSecurityBeanMasterTest extends AbstractDbTest {
   }
 
   protected void assert202(final SecurityDocument test) {
-    UniqueId uniqueId = UniqueId.of("DbSec", "201", "1");
+    final UniqueId uniqueId = UniqueId.of("DbSec", "201", "1");
     assertNotNull(test);
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version2Instant, test.getVersionFromInstant());
     assertEquals(null, test.getVersionToInstant());
     assertEquals(_version2Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    EquitySecurity security = (EquitySecurity) test.getSecurity();
+    final EquitySecurity security = (EquitySecurity) test.getSecurity();
     assertNotNull(security);
     assertEquals(uniqueId, security.getUniqueId());
     assertEquals("TestSecurity202", security.getName());

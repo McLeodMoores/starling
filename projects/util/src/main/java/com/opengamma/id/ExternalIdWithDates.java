@@ -20,13 +20,13 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
-import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.impl.direct.DirectPrivateBeanBuilder;
 import org.threeten.bp.LocalDate;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -37,8 +37,7 @@ import com.opengamma.util.ArgumentChecker;
  * This class is immutable and thread-safe.
  */
 @BeanDefinition(builderScope = "private")
-public final class ExternalIdWithDates implements ImmutableBean,
-    ExternalIdentifiable, Comparable<ExternalIdWithDates>, Serializable {
+public final class ExternalIdWithDates implements ImmutableBean, ExternalIdentifiable, Comparable<ExternalIdWithDates>, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -46,7 +45,7 @@ public final class ExternalIdWithDates implements ImmutableBean,
   /**
    * The external identifier.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final ExternalId _externalId;
   /**
    * The valid from date, inclusive, null means far past.
@@ -61,42 +60,48 @@ public final class ExternalIdWithDates implements ImmutableBean,
 
   /**
    * Obtains an {@code ExternalIdWithDates} from an identifier and dates.
-   * 
-   * @param identifier  the identifier, not empty, not null
-   * @param validFrom  the valid from date, inclusive, may be null
-   * @param validTo  the valid to date, inclusive, may be null
+   *
+   * @param identifier
+   *          the identifier, not empty, not null
+   * @param validFrom
+   *          the valid from date, inclusive, may be null
+   * @param validTo
+   *          the valid to date, inclusive, may be null
    * @return the identifier, not null
    */
-  public static ExternalIdWithDates of(ExternalId identifier, LocalDate validFrom, LocalDate validTo) {
+  public static ExternalIdWithDates of(final ExternalId identifier, final LocalDate validFrom, final LocalDate validTo) {
     return new ExternalIdWithDates(identifier, validFrom, validTo);
   }
 
   /**
    * Obtains an {@code ExternalIdWithDates} from an {@code ExternalId}.
-   * @param identifier the identifier, not empty, not null
+   * 
+   * @param identifier
+   *          the identifier, not empty, not null
    * @return the identifier, not null
    */
-  public static ExternalIdWithDates of(ExternalId identifier) {
+  public static ExternalIdWithDates of(final ExternalId identifier) {
     return ExternalIdWithDates.of(identifier, null, null);
   }
 
   /**
    * Parses an {@code ExternalIdWithDates} from a formatted scheme and value.
    * <p>
-   * This parses the identifier from the form produced by {@code toString()}
-   * which is {@code <SCHEME>~<VALUE>~S~<VALID_FROM>~E~<VALID_TO>}.
-   * 
-   * @param str  the identifier to parse, not null
+   * This parses the identifier from the form produced by {@code toString()} which is {@code <SCHEME>~<VALUE>~S~<VALID_FROM>~E~<VALID_TO>}.
+   *
+   * @param str
+   *          the identifier to parse, not null
    * @return the identifier, not null
-   * @throws IllegalArgumentException if the identifier cannot be parsed
+   * @throws IllegalArgumentException
+   *           if the identifier cannot be parsed
    */
-  public static ExternalIdWithDates parse(String str) {
+  public static ExternalIdWithDates parse(final String str) {
     ArgumentChecker.notNull(str, "parse string");
     ExternalId identifier = null;
     LocalDate validFrom = null;
     LocalDate validTo = null;
-    int startPos = str.indexOf("~S~");
-    int endPos = str.indexOf("~E~");
+    final int startPos = str.indexOf("~S~");
+    final int endPos = str.indexOf("~E~");
     if (startPos > 0) {
       identifier = ExternalId.parse(str.substring(0, startPos));
       if (endPos > 0) {
@@ -116,13 +121,16 @@ public final class ExternalIdWithDates implements ImmutableBean,
 
   /**
    * Creates an instance.
-   * 
-   * @param externalId  the identifier, not null
-   * @param validFrom  the valid from date, may be null
-   * @param validTo  the valid to date, may be null
+   *
+   * @param externalId
+   *          the identifier, not null
+   * @param validFrom
+   *          the valid from date, may be null
+   * @param validTo
+   *          the valid to date, may be null
    */
   @ImmutableConstructor
-  private ExternalIdWithDates(ExternalId externalId, LocalDate validFrom, LocalDate validTo) {
+  private ExternalIdWithDates(final ExternalId externalId, final LocalDate validFrom, final LocalDate validTo) {
     ArgumentChecker.notNull(externalId, "externalId");
     if (validFrom != null && validTo != null) {
       ArgumentChecker.isTrue(validTo.isAfter(validFrom) || validTo.equals(validFrom), "validTo (" + validTo + ") is before validFrom (" + validFrom + ")");
@@ -132,55 +140,55 @@ public final class ExternalIdWithDates implements ImmutableBean,
     _validTo = validTo;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Checks if the identifier is valid on the specified date.
-   * 
-   * @param date  the date to check for validity on, null returns true
+   *
+   * @param date
+   *          the date to check for validity on, null returns true
    * @return true if valid on the specified date
    */
-  public boolean isValidOn(LocalDate date) {
+  public boolean isValidOn(final LocalDate date) {
     if (date == null) {
       return true;
     }
-    LocalDate from = Objects.firstNonNull(getValidFrom(), LocalDate.MIN);
-    LocalDate to = Objects.firstNonNull(getValidTo(), LocalDate.MAX);
-    return date.isBefore(from) == false && date.isAfter(to) == false;
+    final LocalDate from = MoreObjects.firstNonNull(getValidFrom(), LocalDate.MIN);
+    final LocalDate to = MoreObjects.firstNonNull(getValidTo(), LocalDate.MAX);
+    return !date.isBefore(from) && !date.isAfter(to);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns the identifier without dates.
-   * 
+   *
    * @return the identifier without dates, not null
    */
   public ExternalId toExternalId() {
     return _externalId;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Compares the external identifiers ignoring the dates.
-   * This ordering is inconsistent with equals.
-   * 
-   * @param other  the other external identifier, not null
+   * Compares the external identifiers ignoring the dates. This ordering is inconsistent with equals.
+   *
+   * @param other
+   *          the other external identifier, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(ExternalIdWithDates other) {
+  public int compareTo(final ExternalIdWithDates other) {
     return _externalId.compareTo(other._externalId);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof ExternalIdWithDates) {
-      ExternalIdWithDates other = (ExternalIdWithDates) obj;
-      return ObjectUtils.equals(_externalId, other._externalId) &&
-          ObjectUtils.equals(_validFrom, other._validFrom) &&
-          ObjectUtils.equals(_validTo, other._validTo);
+      final ExternalIdWithDates other = (ExternalIdWithDates) obj;
+      return ObjectUtils.equals(_externalId, other._externalId) && ObjectUtils.equals(_validFrom, other._validFrom)
+          && ObjectUtils.equals(_validTo, other._validTo);
     }
     return false;
   }
@@ -192,12 +200,12 @@ public final class ExternalIdWithDates implements ImmutableBean,
 
   /**
    * Returns the identifier in the form {@code <SCHEME>~<VALUE>~S~<VALID_FROM>~E~<VALID_TO>}.
-   * 
+   *
    * @return the identifier, not null
    */
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(_externalId.toString());
+    final StringBuilder buf = new StringBuilder(_externalId.toString());
     if (_validFrom != null) {
       buf.append("~S~").append(_validFrom.toString());
     }
@@ -241,6 +249,7 @@ public final class ExternalIdWithDates implements ImmutableBean,
    * Gets the external identifier.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalId getExternalId() {
     return _externalId;
   }
@@ -385,7 +394,7 @@ public final class ExternalIdWithDates implements ImmutableBean,
   /**
    * The bean-builder for {@code ExternalIdWithDates}.
    */
-  private static final class Builder extends DirectFieldsBeanBuilder<ExternalIdWithDates> {
+  private static final class Builder extends DirectPrivateBeanBuilder<ExternalIdWithDates> {
 
     private ExternalId _externalId;
     private LocalDate _validFrom;
@@ -395,6 +404,7 @@ public final class ExternalIdWithDates implements ImmutableBean,
      * Restricted constructor.
      */
     private Builder() {
+      super(meta());
     }
 
     //-----------------------------------------------------------------------
@@ -427,30 +437,6 @@ public final class ExternalIdWithDates implements ImmutableBean,
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
       }
-      return this;
-    }
-
-    @Override
-    public Builder set(MetaProperty<?> property, Object value) {
-      super.set(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(String propertyName, String value) {
-      setString(meta().metaProperty(propertyName), value);
-      return this;
-    }
-
-    @Override
-    public Builder setString(MetaProperty<?> property, String value) {
-      super.setString(property, value);
-      return this;
-    }
-
-    @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
-      super.setAll(propertyValueMap);
       return this;
     }
 

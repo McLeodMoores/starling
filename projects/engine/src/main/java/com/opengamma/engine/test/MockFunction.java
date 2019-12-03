@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.test;
@@ -29,28 +29,31 @@ import com.opengamma.engine.value.ValueSpecification;
 public class MockFunction extends AbstractFunction.NonCompiledInvoker {
 
   /**
-   * default unique id
+   * default unique id.
    */
   public static final String UNIQUE_ID = "mock";
 
   private final ComputationTarget _target;
-  private final Set<ValueRequirement> _requirements = new HashSet<ValueRequirement>();
-  private final Set<ValueSpecification> _resultSpecs = new HashSet<ValueSpecification>();
-  private final Set<ComputedValue> _results = new HashSet<ComputedValue>();
+  private final Set<ValueRequirement> _requirements = new HashSet<>();
+  private final Set<ValueSpecification> _resultSpecs = new HashSet<>();
+  private final Set<ComputedValue> _results = new HashSet<>();
 
   /**
-   * @param uniqueId identifier of the function
-   * @param target Target mock function applies to
-   * @param output What the mock function outputs
+   * @param uniqueId
+   *          identifier of the function
+   * @param target
+   *          Target mock function applies to
+   * @param output
+   *          What the mock function outputs
    * @return A mock function with one input and one output
    */
-  public static MockFunction getMockFunction(String uniqueId, ComputationTarget target, Object output) {
-    MockFunction fn = new MockFunction(uniqueId, target);
+  public static MockFunction getMockFunction(final String uniqueId, final ComputationTarget target, final Object output) {
+    final MockFunction fn = new MockFunction(uniqueId, target);
     fn.addResult(new ValueSpecification("OUTPUT", target.toSpecification(), fn.createValueProperties().get()), output);
     return fn;
   }
 
-  public static MockFunction getMockFunction(ComputationTarget target, Object output) {
+  public static MockFunction getMockFunction(final ComputationTarget target, final Object output) {
     return getMockFunction(UNIQUE_ID, target, output);
   }
 
@@ -60,34 +63,34 @@ public class MockFunction extends AbstractFunction.NonCompiledInvoker {
     return fn;
   }
 
-  public static MockFunction getMockFunction(String uniqueId, ComputationTarget target, Object output, ValueRequirement input) {
-    MockFunction fn = getMockFunction(uniqueId, target, output);
+  public static MockFunction getMockFunction(final String uniqueId, final ComputationTarget target, final Object output, final ValueRequirement input) {
+    final MockFunction fn = getMockFunction(uniqueId, target, output);
     fn.addRequirement(input);
     return fn;
   }
 
-  public static MockFunction getMockFunction(String uniqueId, ComputationTarget target, Object output, MockFunction inputFunction) {
-    MockFunction fn = getMockFunction(uniqueId, target, output);
-    for (ValueSpecification resultSpec : inputFunction.getResultSpecs()) {
+  public static MockFunction getMockFunction(final String uniqueId, final ComputationTarget target, final Object output, final MockFunction inputFunction) {
+    final MockFunction fn = getMockFunction(uniqueId, target, output);
+    for (final ValueSpecification resultSpec : inputFunction.getResultSpecs()) {
       fn.addRequirement(resultSpec.toRequirementSpecification());
     }
     return fn;
   }
 
-  public MockFunction(String uniqueId, ComputationTarget target) {
+  public MockFunction(final String uniqueId, final ComputationTarget target) {
     _target = target;
     setUniqueId(uniqueId);
   }
 
-  public MockFunction(ComputationTarget target) {
+  public MockFunction(final ComputationTarget target) {
     this(UNIQUE_ID, target);
   }
 
-  public void addRequirement(ValueRequirement requirement) {
+  public void addRequirement(final ValueRequirement requirement) {
     addRequirements(Collections.singleton(requirement));
   }
 
-  public void addRequirements(Collection<ValueRequirement> requirements) {
+  public void addRequirements(final Collection<ValueRequirement> requirements) {
     _requirements.addAll(requirements);
   }
 
@@ -95,33 +98,33 @@ public class MockFunction extends AbstractFunction.NonCompiledInvoker {
     return Collections.unmodifiableSet(_requirements);
   }
 
-  public void addResult(ValueSpecification valueSpec, Object result) {
+  public void addResult(final ValueSpecification valueSpec, final Object result) {
     addResult(new ComputedValue(valueSpec, result));
   }
 
-  public void addResult(ComputedValue result) {
+  public void addResult(final ComputedValue result) {
     addResults(Collections.singleton(result));
   }
 
-  public void addResults(Collection<ComputedValue> results) {
+  public void addResults(final Collection<ComputedValue> results) {
     _results.addAll(results);
-    for (ComputedValue result : _results) {
+    for (final ComputedValue result : _results) {
       _resultSpecs.add(result.getSpecification());
     }
   }
 
   @Override
-  public boolean canApplyTo(FunctionCompilationContext context, ComputationTarget target) {
+  public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     return ObjectUtils.equals(target.getUniqueId(), _target.getUniqueId());
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, final ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     return Collections.unmodifiableSet(_requirements);
   }
 
   @Override
-  public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     return getResultSpecs();
   }
 
@@ -162,12 +165,13 @@ public class MockFunction extends AbstractFunction.NonCompiledInvoker {
   }
 
   @Override
-  public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) {
-    Set<ComputedValue> results = new HashSet<ComputedValue>();
-    for (ValueRequirement desiredValue : desiredValues) {
-      for (ComputedValue result : _results) {
-        // PLAT-2290; desiredValue is really a ValueSpecification so can do an equality test 
-        if ((desiredValue.getValueName() == result.getSpecification().getValueName())
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
+    final Set<ComputedValue> results = new HashSet<>();
+    for (final ValueRequirement desiredValue : desiredValues) {
+      for (final ComputedValue result : _results) {
+        // PLAT-2290; desiredValue is really a ValueSpecification so can do an equality test
+        if (desiredValue.getValueName() == result.getSpecification().getValueName()
             && desiredValue.getTargetReference().equals(result.getSpecification().getTargetSpecification())
             && desiredValue.getConstraints().equals(result.getSpecification().getProperties())) {
           results.add(result);

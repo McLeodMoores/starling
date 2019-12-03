@@ -19,16 +19,16 @@ import com.opengamma.util.PublicAPI;
 /**
  * An immutable pair consisting of two elements.
  * <p>
- * This implementation refers to the elements as 'first' and 'second'.
- * The class also implements the {@code Map.Entry} interface where the key is 'first'
- * and the value is 'second'.
+ * This implementation refers to the elements as 'first' and 'second'. The class also implements the {@code Map.Entry} interface where the key is 'first' and
+ * the value is 'second'.
  * <p>
- * Although the implementation is immutable, there is no restriction on the objects
- * that may be stored. If mutable objects are stored in the pair, then the pair itself
- * effectively becomes mutable.
+ * Although the implementation is immutable, there is no restriction on the objects that may be stored. If mutable objects are stored in the pair, then the pair
+ * itself effectively becomes mutable.
  *
- * @param <A> the first element type
- * @param <B> the second element type
+ * @param <A>
+ *          the first element type
+ * @param <B>
+ *          the second element type
  */
 @PublicAPI
 public abstract class Pair<A, B>
@@ -40,81 +40,95 @@ public abstract class Pair<A, B>
 
   /**
    * Creates a pair of {@code Object}s inferring the types.
-   * 
-   * @param <A> the first element type
-   * @param <B> the second element type
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
+   *
+   * @param <A>
+   *          the first element type
+   * @param <B>
+   *          the second element type
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
    * @return a pair formed from the two parameters, not null
    * @deprecated Use {@link Pairs#of(Object, Object)} or {@link ObjectsPair#of(Object, Object)}
    */
   @Deprecated
-  public static <A, B> ObjectsPair<A, B> of(A first, B second) {
+  public static <A, B> ObjectsPair<A, B> of(final A first, final B second) {
     return ObjectsPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code Double}s.
-   * 
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
+   *
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
    * @return a pair formed from the two parameters, not null
    * @deprecated Use {@link Pairs#of(Double, double)} or {@link ObjectsPair#of(Object, Object)}
    */
   @Deprecated
-  public static ObjectsPair<Double, Double> of(Double first, double second) {
+  public static ObjectsPair<Double, Double> of(final Double first, final double second) {
     return ObjectsPair.of(first, (Double) second);
   }
 
   /**
    * Creates a pair of {@code Double}s.
-   * 
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
+   *
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
    * @return a pair formed from the two parameters, not null
    * @deprecated Use {@link Pairs#of(double, Double)} or {@link ObjectsPair#of(Object, Object)}
    */
   @Deprecated
-  public static ObjectsPair<Double, Double> of(double first, Double second) {
+  public static ObjectsPair<Double, Double> of(final double first, final Double second) {
     return ObjectsPair.of((Double) first, second);
   }
 
   /**
    * Creates a pair of {@code double}s.
-   * 
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
+   *
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
    * @return a pair formed from the two parameters, not null
    * @deprecated Use {@link Pairs#of(double, double)} or {@link DoublesPair#of(double, double)}
    */
   @Deprecated
-  public static DoublesPair of(double first, double second) {
+  public static DoublesPair of(final double first, final double second) {
     return DoublesPair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code int} to {@code double}.
-   * 
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
+   *
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
    * @return a pair formed from the two parameters, not null
    * @deprecated Use {@link Pairs#of(int, double)} or {@link IntDoublePair#of(long, double)}
    */
   @Deprecated
-  public static IntDoublePair of(int first, double second) {
+  public static IntDoublePair of(final int first, final double second) {
     return IntDoublePair.of(first, second);
   }
 
   /**
    * Creates a pair of {@code long} to {@code double}.
-   * 
-   * @param first  the first element, may be null
-   * @param second  the second element, may be null
+   *
+   * @param first
+   *          the first element, may be null
+   * @param second
+   *          the second element, may be null
    * @return a pair formed from the two parameters, not null
    * @deprecated Use {@link Pairs#of(long, double)} or {@link LongDoublePair#of(long, double)}
    */
   @Deprecated
-  public static LongDoublePair of(long first, double second) {
+  public static LongDoublePair of(final long first, final double second) {
     return LongDoublePair.of(first, second);
   }
 
@@ -124,12 +138,12 @@ public abstract class Pair<A, B>
   protected Pair() {
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the first element from this pair.
    * <p>
    * When treated as a key-value pair, this is the key.
-   * 
+   *
    * @return the first element, may be null
    */
   public abstract A getFirst();
@@ -138,7 +152,7 @@ public abstract class Pair<A, B>
    * Gets the second element from this pair.
    * <p>
    * When treated as a key-value pair, this is the value.
-   * 
+   *
    * @return the second element, may be null
    */
   public abstract B getSecond();
@@ -146,9 +160,8 @@ public abstract class Pair<A, B>
   /**
    * Gets the key from this pair.
    * <p>
-   * This method implements the {@code Map.Entry} interface returning the
-   * first element as the key.
-   * 
+   * This method implements the {@code Map.Entry} interface returning the first element as the key.
+   *
    * @return the first element as the key, may be null
    */
   @Override
@@ -159,9 +172,8 @@ public abstract class Pair<A, B>
   /**
    * Gets the value from this pair.
    * <p>
-   * This method implements the {@code Map.Entry} interface returning the
-   * second element as the value.
-   * 
+   * This method implements the {@code Map.Entry} interface returning the second element as the value.
+   *
    * @return the second element as the value, may be null
    */
   @Override
@@ -171,28 +183,29 @@ public abstract class Pair<A, B>
 
   /**
    * Throws {@code UnsupportedOperationException} as this class is immutable.
-   * 
-   * @param value  the new value, may be null
+   *
+   * @param value
+   *          the new value, may be null
    * @return never
    */
   @Override
-  public B setValue(B value) {
+  public B setValue(final B value) {
     throw new UnsupportedOperationException("Pair is immutable");
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the elements from this pair as a list.
    * <p>
-   * This method supports auto-casting as they is no way in generics to provide
-   * a more specific type.
-   * 
-   * @param <T> an auto-cast list type
+   * This method supports auto-casting as they is no way in generics to provide a more specific type.
+   *
+   * @param <T>
+   *          an auto-cast list type
    * @return the elements as a list, not null
    */
   @SuppressWarnings("unchecked")
   public <T> List<T> toList() {
-    ArrayList<Object> list = new ArrayList<Object>();
+    final ArrayList<Object> list = new ArrayList<>();
     list.add(getFirst());
     list.add(getSecond());
     return (List<T>) list;
@@ -202,7 +215,7 @@ public abstract class Pair<A, B>
    * Clones this pair, returning an independent copy.
    * <p>
    * Pair subclasses must be immutable, so {@code this} is returned.
-   * 
+   *
    * @return the clone, not null
    */
   @Override
@@ -210,38 +223,39 @@ public abstract class Pair<A, B>
     return this;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Compares the pair based on the first element followed by the second element.
    * <p>
-   * A Pair <i>(x<sub>1</sub>, y<sub>1</sub>)</i> is less than another pair
-   * <i>(x<sub>2</sub>, y<sub>2</sub>)</i> if one of these is true:<br />
+   * A Pair <i>(x<sub>1</sub>, y<sub>1</sub>)</i> is less than another pair <i>(x<sub>2</sub>, y<sub>2</sub>)</i> if one of these is true:<br>
    * <i>x<sub>1</sub> &lt; x<sub>2</sub></i><br>
    * <i>x<sub>1</sub> = x<sub>2</sub></i> and <i>y<sub>1</sub> &lt; y<sub>2</sub></i>
    * <p>
    * The element types must be {@code Comparable}.
-   * 
-   * @param other  the other pair, not null
+   *
+   * @param other
+   *          the other pair, not null
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(Pair<A, B> other) {
+  public int compareTo(final Pair<A, B> other) {
     return new CompareToBuilder()
         .append(getFirst(), other.getFirst())
         .append(getSecond(), other.getSecond())
         .toComparison();
   }
 
+  // CSOFF
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     // see Map.Entry API specification
     if (this == obj) {
       return true;
     }
     if (obj instanceof Map.Entry<?, ?>) {
-      Map.Entry<?, ?> other = (Map.Entry<?, ?>) obj;
-      return ObjectUtils.equals(getKey(), other.getKey()) &&
-          ObjectUtils.equals(getValue(), other.getValue());
+      final Map.Entry<?, ?> other = (Map.Entry<?, ?>) obj;
+      return ObjectUtils.equals(getKey(), other.getKey())
+          && ObjectUtils.equals(getValue(), other.getValue());
     }
     return false;
   }
@@ -249,8 +263,8 @@ public abstract class Pair<A, B>
   @Override
   public int hashCode() {
     // see Map.Entry API specification
-    return (getKey() == null ? 0 : getKey().hashCode()) ^
-        (getValue() == null ? 0 : getValue().hashCode());
+    return (getKey() == null ? 0 : getKey().hashCode())
+        ^ (getValue() == null ? 0 : getValue().hashCode());
   }
 
   @Override

@@ -32,27 +32,27 @@ public class DbConfigMasterComponentFactory extends AbstractDocumentDbMasterComp
   public DbConfigMasterComponentFactory() {
     super("cfg", ConfigMaster.class);
   }
-  
+
   @Override
   protected Class<? extends AbstractRemoteMaster> getRemoteInterface() {
     return RemoteConfigMaster.class;
   }
-  
+
   @Override
   protected DbConfigMaster createDbDocumentMaster() {
-    DbConfigMaster master = new DbConfigMaster(getDbConnector());
+    final DbConfigMaster master = new DbConfigMaster(getDbConnector());
     master.registerMetrics(OpenGammaMetricRegistry.getSummaryInstance(), OpenGammaMetricRegistry.getDetailedInstance(), "DbConfigMaster-" + getClassifier());
     return master;
   }
 
   @Override
-  protected AbstractDataResource createPublishedResource(DbConfigMaster dbMaster, ConfigMaster postProcessedMaster) {
+  protected AbstractDataResource createPublishedResource(final DbConfigMaster dbMaster, final ConfigMaster postProcessedMaster) {
     return new DataConfigMasterResource(postProcessedMaster);
   }
 
 
   @Override
-  protected ConfigMaster wrapMasterWithTrackingInterface(ConfigMaster postProcessedMaster) {
+  protected ConfigMaster wrapMasterWithTrackingInterface(final ConfigMaster postProcessedMaster) {
     return new DataTrackingConfigMaster(postProcessedMaster);
   }
 

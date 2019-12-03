@@ -13,8 +13,9 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * An implementation of a one-dimensional interpolator that can extrapolate if extrapolation methods are supplied.
- * The left and right extrapolation methods can be different.
+ * An implementation of a one-dimensional interpolator that can extrapolate if
+ * extrapolation methods are supplied. The left and right extrapolation methods
+ * can be different.
  */
 public class CombinedInterpolatorExtrapolator extends Interpolator1D {
   /** Serialization version */

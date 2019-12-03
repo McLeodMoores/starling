@@ -5,15 +5,14 @@
  */
 package com.opengamma.masterdb.security.hibernate.forward;
 
-import com.opengamma.financial.security.forward.AgricultureForwardSecurity;
-
 /**
- * A Hibernate bean representation of {@link AgricultureForwardSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.forward.AgricultureForwardSecurity}.
  */
 public class AgricultureForwardSecurityBean extends CommodityForwardSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitAgricultureForwardType(this);
   }
 

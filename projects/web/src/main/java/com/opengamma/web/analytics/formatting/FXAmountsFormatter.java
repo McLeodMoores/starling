@@ -16,16 +16,16 @@ import com.opengamma.util.ArgumentChecker;
 
   private final DoubleFormatter _doubleFormatter;
 
-  /* package */ FXAmountsFormatter(DoubleFormatter doubleFormatter) {
+  /* package */ FXAmountsFormatter(final DoubleFormatter doubleFormatter) {
     super(FXAmounts.class);
     ArgumentChecker.notNull(doubleFormatter, "doubleFormatter");
     _doubleFormatter = doubleFormatter;
   }
 
   @Override
-  public Object formatCell(FXAmounts amounts, ValueSpecification valueSpec, Object inlineKey) {
-    return _doubleFormatter.formatCell(amounts.getBaseAmount(), valueSpec, inlineKey) + " " + amounts.getBaseCurrency() + " / " +
-        _doubleFormatter.formatCell(amounts.getCounterAmount(), valueSpec, inlineKey) + " " + amounts.getCounterCurrency();
+  public Object formatCell(final FXAmounts amounts, final ValueSpecification valueSpec, final Object inlineKey) {
+    return _doubleFormatter.formatCell(amounts.getBaseAmount(), valueSpec, inlineKey) + " " + amounts.getBaseCurrency() + " / "
+        + _doubleFormatter.formatCell(amounts.getCounterAmount(), valueSpec, inlineKey) + " " + amounts.getCounterCurrency();
   }
 
   @Override

@@ -10,15 +10,15 @@ CREATE TABLE usr_schema_version (
 INSERT INTO usr_schema_version (version_key, version_value) VALUES ('schema_patch', '48');
 
 -- Main user tables
-CREATE SEQUENCE usr_user_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS usr_user_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE usr_user_idkey_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS usr_user_idkey_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE usr_user_perm_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS usr_user_perm_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE usr_user_extn_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS usr_user_extn_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE usr_user_event_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS usr_user_event_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 
 CREATE TABLE usr_user (
@@ -109,15 +109,15 @@ CREATE INDEX ix_usr_ueventitem_eventid ON usr_user_event_item(event_id);
 
 
 -- Main role tables
-CREATE SEQUENCE usr_role_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS usr_role_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE usr_role_assocuser_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS usr_role_assocuser_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE usr_role_assocperm_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS usr_role_assocperm_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE usr_role_assocrole_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS usr_role_assocrole_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE usr_role_event_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS usr_role_event_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 
 CREATE TABLE usr_role (

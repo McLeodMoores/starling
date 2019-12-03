@@ -33,7 +33,7 @@ public class DbHolidayMasterFactoryBean extends AbstractDbMasterFactoryBean<DbHo
   //-------------------------------------------------------------------------
   @Override
   public DbHolidayMaster createObject() {
-    DbHolidayMaster master = new DbHolidayMaster(getDbConnector());
+    final DbHolidayMaster master = new DbHolidayMaster(getDbConnector());
     if (getUniqueIdScheme() != null) {
       master.setUniqueIdScheme(getUniqueIdScheme());
     }
@@ -41,7 +41,7 @@ public class DbHolidayMasterFactoryBean extends AbstractDbMasterFactoryBean<DbHo
       master.setMaxRetries(getMaxRetries());
     }
     if (getJmsConnector() != null) {
-      JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
+      final JmsChangeManager cm = new JmsChangeManager(getJmsConnector().ensureTopicName(getJmsChangeManagerTopic()));
       master.setChangeManager(cm);
       cm.start();
     }

@@ -8,7 +8,6 @@ package com.opengamma.integration.regression;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -62,7 +61,7 @@ import com.opengamma.util.ArgumentChecker;
 @BeanDefinition
 public final class CalculationResults implements ImmutableBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CalculationResults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CalculationResults.class);
 
   @PropertyDefinition(validate = "notNull")
   private final Map<CalculationResultKey, CalculatedValue> _values;
@@ -79,61 +78,61 @@ public final class CalculationResults implements ImmutableBean {
   @PropertyDefinition
   private final String _version;
 
-  public static CalculationResults create(ViewComputationResultModel results,
-                                          CompiledViewDefinition viewDef,
-                                          String snapshotName,
-                                          Instant valuationTime,
-                                          String version,
-                                          PositionSource positionSource,
-                                          SecuritySource securitySource) {
+  public static CalculationResults create(final ViewComputationResultModel results,
+                                          final CompiledViewDefinition viewDef,
+                                          final String snapshotName,
+                                          final Instant valuationTime,
+                                          final String version,
+                                          final PositionSource positionSource,
+                                          final SecuritySource securitySource) {
     ArgumentChecker.notNull(viewDef, "viewDef");
     ArgumentChecker.notNull(results, "results");
-    List<ViewResultEntry> allResults = results.getAllResults();
-    Map<CalculationResultKey, CalculatedValue> valueMap = Maps.newHashMapWithExpectedSize(allResults.size());
-    Map<UniqueId, List<String>> nodesToPaths = nodesToPaths(viewDef.getPortfolio().getRootNode(),
+    final List<ViewResultEntry> allResults = results.getAllResults();
+    final Map<CalculationResultKey, CalculatedValue> valueMap = Maps.newHashMapWithExpectedSize(allResults.size());
+    final Map<UniqueId, List<String>> nodesToPaths = nodesToPaths(viewDef.getPortfolio().getRootNode(),
                                                             Collections.<String>emptyList());
-    for (ViewResultEntry entry : allResults) {
-      ComputedValueResult computedValue = entry.getComputedValue();
-      ValueSpecification valueSpec = computedValue.getSpecification();
-      ComputationTargetSpecification targetSpec = valueSpec.getTargetSpecification();
+    for (final ViewResultEntry entry : allResults) {
+      final ComputedValueResult computedValue = entry.getComputedValue();
+      final ValueSpecification valueSpec = computedValue.getSpecification();
+      final ComputationTargetSpecification targetSpec = valueSpec.getTargetSpecification();
 
       if (!targetSpec.getType().equals(ComputationTargetType.PORTFOLIO_NODE)) {
-        String calcConfigName = entry.getCalculationConfiguration();
-        CompiledViewCalculationConfiguration calcConfig = viewDef.getCompiledCalculationConfiguration(calcConfigName);
-        Set<ValueRequirement> valueReqs = calcConfig.getTerminalOutputSpecifications().get(valueSpec);
-        Set<CalculationResultKey> keys = getResultKey(entry, targetSpec, nodesToPaths, positionSource, valueReqs);
-        String targetType = valueSpec.getTargetSpecification().getType().getName();
-        String targetName = getTargetName(valueSpec.getTargetSpecification().getUniqueId(),
+        final String calcConfigName = entry.getCalculationConfiguration();
+        final CompiledViewCalculationConfiguration calcConfig = viewDef.getCompiledCalculationConfiguration(calcConfigName);
+        final Set<ValueRequirement> valueReqs = calcConfig.getTerminalOutputSpecifications().get(valueSpec);
+        final Set<CalculationResultKey> keys = getResultKey(entry, targetSpec, nodesToPaths, positionSource, valueReqs);
+        final String targetType = valueSpec.getTargetSpecification().getType().getName();
+        final String targetName = getTargetName(valueSpec.getTargetSpecification().getUniqueId(),
                                           valueSpec.getTargetSpecification().getType(),
                                           positionSource,
                                           securitySource,
                                           nodesToPaths);
-        for (CalculationResultKey key : keys) {
+        for (final CalculationResultKey key : keys) {
           valueMap.put(key, CalculatedValue.of(computedValue.getValue(), valueSpec.getProperties(), targetType, targetName));
         }
       }
     }
-    Map<CalculationResultKey, CalculatedValue> sortedValueMap = ImmutableSortedMap.copyOf(valueMap);
+    final Map<CalculationResultKey, CalculatedValue> sortedValueMap = ImmutableSortedMap.copyOf(valueMap);
     return new CalculationResults(sortedValueMap, viewDef.getViewDefinition().getName(), snapshotName, valuationTime, version);
   }
 
-  private static String getTargetName(UniqueId targetId,
-                                      ComputationTargetType targetType,
-                                      PositionSource positionSource,
-                                      SecuritySource securitySource,
-                                      Map<UniqueId, List<String>> nodesToPaths) {
+  private static String getTargetName(final UniqueId targetId,
+                                      final ComputationTargetType targetType,
+                                      final PositionSource positionSource,
+                                      final SecuritySource securitySource,
+                                      final Map<UniqueId, List<String>> nodesToPaths) {
     Security security;
     BigDecimal quantity;
     if (targetType.equals(ComputationTargetType.POSITION)) {
-      Position position = positionSource.getPosition(targetId);
+      final Position position = positionSource.getPosition(targetId);
       security = position.getSecurityLink().resolve(securitySource);
       quantity = position.getQuantity();
     } else if (targetType.equals(ComputationTargetType.TRADE)) {
-      Trade trade = positionSource.getTrade(targetId);
+      final Trade trade = positionSource.getTrade(targetId);
       security = trade.getSecurityLink().resolve(securitySource);
       quantity = trade.getQuantity();
     } else if (targetType.equals(ComputationTargetType.PORTFOLIO_NODE)) {
-      List<String> path = nodesToPaths.get(targetId);
+      final List<String> path = nodesToPaths.get(targetId);
       return StringUtils.join(path, " / ");
     } else {
       return targetId.toString();
@@ -146,29 +145,29 @@ public final class CalculationResults implements ImmutableBean {
   //   a) the functions put things in the properties that cause breaks (e.g. unique IDs)
   //   b) there is so much ambiguity in graph building
   // or is it good to flag up the ambiguity?
-  private static Set<CalculationResultKey> getResultKey(ViewResultEntry entry,
-                                                        ComputationTargetSpecification targetSpec,
-                                                        Map<UniqueId, List<String>> nodesToPaths,
-                                                        PositionSource positionSource,
-                                                        Set<ValueRequirement> valueReqs) {
+  private static Set<CalculationResultKey> getResultKey(final ViewResultEntry entry,
+                                                        final ComputationTargetSpecification targetSpec,
+                                                        final Map<UniqueId, List<String>> nodesToPaths,
+                                                        final PositionSource positionSource,
+                                                        final Set<ValueRequirement> valueReqs) {
     CalculationResultKey key;
     // TODO ugh. see AbstractTradeOrDailyPositionPnLFunction CostOfCarryTimeSeries
-    Set<CalculationResultKey> keys = Sets.newHashSet();
-    for (ValueRequirement valueReq : valueReqs) {
-      String valueName = valueReq.getValueName();
-      ValueProperties properties = valueReq.getConstraints();
-      ComputationTargetType targetType = targetSpec.getType();
+    final Set<CalculationResultKey> keys = Sets.newHashSet();
+    for (final ValueRequirement valueReq : valueReqs) {
+      final String valueName = valueReq.getValueName();
+      final ValueProperties properties = valueReq.getConstraints();
+      final ComputationTargetType targetType = targetSpec.getType();
       if (targetType.equals(ComputationTargetType.POSITION)) {
-        ComputationTargetReference nodeRef = targetSpec.getParent();
-        UniqueId positionId = targetSpec.getUniqueId();
+        final ComputationTargetReference nodeRef = targetSpec.getParent();
+        final UniqueId positionId = targetSpec.getUniqueId();
         String idAttr = positionSource.getPosition(positionId).getAttributes().get(DatabaseRestore.REGRESSION_ID);
         if (idAttr == null) {
           idAttr = positionId.getObjectId().toString();
         }
         // position targets can have a parent node but it's not guaranteed
         if (nodeRef != null) {
-          UniqueId nodeId = nodeRef.getSpecification().getUniqueId();
-          List<String> path = nodesToPaths.get(nodeId);
+          final UniqueId nodeId = nodeRef.getSpecification().getUniqueId();
+          final List<String> path = nodesToPaths.get(nodeId);
           key = CalculationResultKey.forPositionWithParentNode(entry.getCalculationConfiguration(),
                                                                valueName,
                                                                properties,
@@ -181,15 +180,15 @@ public final class CalculationResults implements ImmutableBean {
                                                  ObjectId.parse(idAttr));
         }
       } else if (targetType.equals(ComputationTargetType.PORTFOLIO_NODE)) {
-        UniqueId nodeId = targetSpec.getUniqueId();
-        List<String> path = nodesToPaths.get(nodeId);
+        final UniqueId nodeId = targetSpec.getUniqueId();
+        final List<String> path = nodesToPaths.get(nodeId);
         key = CalculationResultKey.forNode(entry.getCalculationConfiguration(), valueName, properties, path);
       } else if (targetType.equals(ComputationTargetType.TRADE)) {
         // TODO this assumes a trade target spec will never have a parent
         // this is true at the moment but subject to change. see PLAT-2286
         // and PortfolioCompilerTraversalCallback.preOrderOperation
-        UniqueId tradeId = targetSpec.getUniqueId();
-        Trade trade = positionSource.getTrade(tradeId);
+        final UniqueId tradeId = targetSpec.getUniqueId();
+        final Trade trade = positionSource.getTrade(tradeId);
         String idAttr = trade.getAttributes().get(DatabaseRestore.REGRESSION_ID);
         if (idAttr == null) {
           idAttr = tradeId.getObjectId().toString();
@@ -209,7 +208,7 @@ public final class CalculationResults implements ImmutableBean {
                                                properties,
                                                targetSpec.getUniqueId().getObjectId());
       } else {
-        s_logger.warn("Ignoring target with type {}", targetType);
+        LOGGER.warn("Ignoring target with type {}", targetType);
         key = null;
       }
       if (key != null) {
@@ -220,12 +219,12 @@ public final class CalculationResults implements ImmutableBean {
   }
 
   // TODO test case
-  private static Map<UniqueId, List<String>> nodesToPaths(PortfolioNode node, List<String> parentPath) {
-    String name = node.getName();
-    List<String> path = ImmutableList.<String>builder().addAll(parentPath).add(name).build();
-    Map<UniqueId, List<String>> map = Maps.newHashMap();
+  private static Map<UniqueId, List<String>> nodesToPaths(final PortfolioNode node, final List<String> parentPath) {
+    final String name = node.getName();
+    final List<String> path = ImmutableList.<String>builder().addAll(parentPath).add(name).build();
+    final Map<UniqueId, List<String>> map = Maps.newHashMap();
     map.put(node.getUniqueId(), path);
-    for (PortfolioNode childNode : node.getChildNodes()) {
+    for (final PortfolioNode childNode : node.getChildNodes()) {
       map.putAll(nodesToPaths(childNode, path));
     }
     return map;
@@ -345,11 +344,11 @@ public final class CalculationResults implements ImmutableBean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CalculationResults other = (CalculationResults) obj;
-      return JodaBeanUtils.equal(getValues(), other.getValues()) &&
-          JodaBeanUtils.equal(getViewDefinitionName(), other.getViewDefinitionName()) &&
-          JodaBeanUtils.equal(getSnapshotName(), other.getSnapshotName()) &&
-          JodaBeanUtils.equal(getValuationTime(), other.getValuationTime()) &&
-          JodaBeanUtils.equal(getVersion(), other.getVersion());
+      return JodaBeanUtils.equal(_values, other._values) &&
+          JodaBeanUtils.equal(_viewDefinitionName, other._viewDefinitionName) &&
+          JodaBeanUtils.equal(_snapshotName, other._snapshotName) &&
+          JodaBeanUtils.equal(_valuationTime, other._valuationTime) &&
+          JodaBeanUtils.equal(_version, other._version);
     }
     return false;
   }
@@ -357,11 +356,11 @@ public final class CalculationResults implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValues());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotName());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getVersion());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_values);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_viewDefinitionName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_snapshotName);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_valuationTime);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_version);
     return hash;
   }
 
@@ -369,11 +368,11 @@ public final class CalculationResults implements ImmutableBean {
   public String toString() {
     StringBuilder buf = new StringBuilder(192);
     buf.append("CalculationResults{");
-    buf.append("values").append('=').append(getValues()).append(',').append(' ');
-    buf.append("viewDefinitionName").append('=').append(getViewDefinitionName()).append(',').append(' ');
-    buf.append("snapshotName").append('=').append(getSnapshotName()).append(',').append(' ');
-    buf.append("valuationTime").append('=').append(getValuationTime()).append(',').append(' ');
-    buf.append("version").append('=').append(JodaBeanUtils.toString(getVersion()));
+    buf.append("values").append('=').append(_values).append(',').append(' ');
+    buf.append("viewDefinitionName").append('=').append(_viewDefinitionName).append(',').append(' ');
+    buf.append("snapshotName").append('=').append(_snapshotName).append(',').append(' ');
+    buf.append("valuationTime").append('=').append(_valuationTime).append(',').append(' ');
+    buf.append("version").append('=').append(JodaBeanUtils.toString(_version));
     buf.append('}');
     return buf.toString();
   }
@@ -613,19 +612,31 @@ public final class CalculationResults implements ImmutableBean {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

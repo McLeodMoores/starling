@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.component;
@@ -54,8 +54,8 @@ public class BloombergHistoricalTimeSeriesLoaderComponentFactory extends Abstrac
 
   //-------------------------------------------------------------------------
   @Override
-  protected HistoricalTimeSeriesLoader createHistoricalTimeSeriesLoader(ComponentRepository repo) {
-    ExternalIdResolver idProvider = new BloombergIdentifierProvider(getReferenceDataProvider());
+  protected HistoricalTimeSeriesLoader createHistoricalTimeSeriesLoader(final ComponentRepository repo) {
+    final ExternalIdResolver idProvider = new BloombergIdentifierProvider(getReferenceDataProvider());
     return new BloombergHistoricalTimeSeriesLoader(getHistoricalTimeSeriesMaster(), getHistoricalTimeSeriesProvider(), idProvider);
   }
 

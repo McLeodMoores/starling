@@ -23,12 +23,12 @@ public class UnsupportedHistoricalTimeSeriesLoader extends AbstractHistoricalTim
 
   //-------------------------------------------------------------------------
   @Override
-  protected HistoricalTimeSeriesLoaderResult doBulkLoad(HistoricalTimeSeriesLoaderRequest request) {
+  protected HistoricalTimeSeriesLoaderResult doBulkLoad(final HistoricalTimeSeriesLoaderRequest request) {
     throw new UnsupportedOperationException("Historical Time Series loading is not supported");
   }
 
   @Override
-  public boolean updateTimeSeries(UniqueId uniqueId) {
+  public boolean updateTimeSeries(final UniqueId uniqueId) {
     throw new UnsupportedOperationException("Historical Time Series update is not supported");
   }
 

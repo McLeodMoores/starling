@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.annotation;
@@ -30,8 +30,8 @@ import com.opengamma.util.SingletonFactoryBean;
  */
 public class AnnotationScanningStringListFactoryBean extends SingletonFactoryBean<List<String>> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AnnotationScanningStringListFactoryBean.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationScanningStringListFactoryBean.class);
+
   private String _cacheFile;
   private String _forceScanSystemProperty;
   private String _annotationClassName;
@@ -39,85 +39,86 @@ public class AnnotationScanningStringListFactoryBean extends SingletonFactoryBea
   public String getCacheFile() {
     return _cacheFile;
   }
-  
-  public void setCacheFile(String cacheFile) {
+
+  public void setCacheFile(final String cacheFile) {
     _cacheFile = cacheFile;
   }
-  
+
   public String getForceScanSystemProperty() {
     return _forceScanSystemProperty;
   }
-  
-  public void setForceScanSystemProperty(String forceScanSystemProperty) {
+
+  public void setForceScanSystemProperty(final String forceScanSystemProperty) {
     _forceScanSystemProperty = forceScanSystemProperty;
   }
-  
+
   public String getAnnotationClassName() {
     return _annotationClassName;
   }
-  
-  public void setAnnotationClassName(String annotationClassName) {
+
+  public void setAnnotationClassName(final String annotationClassName) {
     _annotationClassName = annotationClassName;
   }
-  
+
   @Override
   protected List<String> createObject() {
     try {
-      boolean forceScan = shouldForceScan();
+      final boolean forceScan = shouldForceScan();
       if (!forceScan && getCacheFile() != null) {
-        ClassPathResource cacheFileResource = new ClassPathResource(getCacheFile());
+        final ClassPathResource cacheFileResource = new ClassPathResource(getCacheFile());
         if (cacheFileResource.exists()) {
-          File cacheFile = cacheFileResource.getFile();
-          s_logger.debug("Getting classes containing annotation {} from cache {}", getAnnotationClassName(), cacheFile.getAbsoluteFile());
+          final File cacheFile = cacheFileResource.getFile();
+          LOGGER.debug("Getting classes containing annotation {} from cache {}", getAnnotationClassName(), cacheFile.getAbsoluteFile());
           return getFromCache(cacheFile);
         }
       }
-      s_logger.debug("Scanning for classes containing annotation {}", getAnnotationClassName());
+      LOGGER.debug("Scanning for classes containing annotation {}", getAnnotationClassName());
       return new ArrayList<>(getByScanning(getAnnotationClassName()));
-    } catch (Exception e) {
-      s_logger.warn("Unable to retrieve classes containing annotation " + getAnnotationClassName(), e);
+    } catch (final Exception e) {
+      LOGGER.warn("Unable to retrieve classes containing annotation " + getAnnotationClassName(), e);
       return Collections.emptyList();
     }
   }
-  
+
   private boolean shouldForceScan() {
     if (getForceScanSystemProperty() == null) {
-      s_logger.debug("Force scan system property not specified");
+      LOGGER.debug("Force scan system property not specified");
       return false;
     }
-    String forceScanPropertyValue = System.getProperty(getForceScanSystemProperty());
-    s_logger.debug("Force scan system property set to '{}'", forceScanPropertyValue);
+    final String forceScanPropertyValue = System.getProperty(getForceScanSystemProperty());
+    LOGGER.debug("Force scan system property set to '{}'", forceScanPropertyValue);
     return forceScanPropertyValue != null;
   }
 
-  private List<String> getFromCache(File cacheFile) {
-    List<String> stringList = new ArrayList<String>();
+  private static List<String> getFromCache(final File cacheFile) {
+    final List<String> stringList = new ArrayList<>();
     try (BufferedReader reader = new BufferedReader(new FileReader(cacheFile))) {
       String nextLine;
       while ((nextLine = reader.readLine()) != null) {
         stringList.add(nextLine);
       }
-    } catch (FileNotFoundException e) {
+    } catch (final FileNotFoundException e) {
       throw new IllegalArgumentException("File not found: " + cacheFile.getAbsoluteFile(), e);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new OpenGammaRuntimeException("Error while reading file: " + cacheFile.getAbsoluteFile(), e);
     }
     return stringList;
   }
 
   @SuppressWarnings("unchecked")
-  private Set<String> getByScanning(String annotationClassName) {
+  private static Set<String> getByScanning(final String annotationClassName) {
     Set<Class<?>> annotated;
     try {
-      annotated = AnnotationReflector.getDefaultReflector().getReflector().getTypesAnnotatedWith((Class<? extends Annotation>) Class.forName(annotationClassName));
-    } catch (ClassNotFoundException ex) {
+      annotated =
+          AnnotationReflector.getDefaultReflector().getReflector().getTypesAnnotatedWith((Class<? extends Annotation>) Class.forName(annotationClassName));
+    } catch (final ClassNotFoundException ex) {
       throw new OpenGammaRuntimeException("Annotation " + annotationClassName + " not found", ex);
     }
-    Set<String> annotatedNames = new LinkedHashSet<String>();
-    for (Class<?> clazz : annotated) {
+    final Set<String> annotatedNames = new LinkedHashSet<>();
+    for (final Class<?> clazz : annotated) {
       annotatedNames.add(clazz.getName());
     }
-    s_logger.debug("Found {} classes containing annotation: {}", annotated.size(), annotated);
+    LOGGER.debug("Found {} classes containing annotation: {}", annotated.size(), annotated);
     return annotatedNames;
   }
 

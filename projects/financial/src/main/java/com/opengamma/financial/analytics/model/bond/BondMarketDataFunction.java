@@ -42,7 +42,7 @@ public abstract class BondMarketDataFunction extends NonCompiledInvoker {
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) {
-    final FinancialSecurity security;
+    FinancialSecurity security;
     if (target.getType() == ComputationTargetType.TRADE) {
       security = (FinancialSecurity) target.getTrade().getSecurity();
     } else if (target.getSecurity() instanceof BondSecurity || target.getSecurity() instanceof BillSecurity) {
@@ -71,6 +71,7 @@ public abstract class BondMarketDataFunction extends NonCompiledInvoker {
     return FinancialSecurityTypes.BOND_SECURITY.or(FinancialSecurityTypes.BILL_SECURITY).or(ComputationTargetType.TRADE);
   }
 
-  protected abstract Set<ComputedValue> getComputedValues(final FunctionExecutionContext context, final double value, final FinancialSecurity security, final ComputationTargetSpecification target);
+  protected abstract Set<ComputedValue> getComputedValues(FunctionExecutionContext context, double value, FinancialSecurity security,
+      ComputationTargetSpecification target);
 
 }

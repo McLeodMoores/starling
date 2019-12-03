@@ -23,70 +23,70 @@ public class SpecToRequirementEntryNode implements TreeTableNode {
   private static final String NAME = "ValueSpec->ValueReq";
   private final ValueSpecification _specification;
   private final ValueRequirement _requirement;
-  private List<String> _orderedUnionProperties;
-  
-  public SpecToRequirementEntryNode(ValueSpecification specification, ValueRequirement requirement) {
+  private final List<String> _orderedUnionProperties;
+
+  public SpecToRequirementEntryNode(final ValueSpecification specification, final ValueRequirement requirement) {
     ArgumentChecker.notNull(specification, "specification");
     ArgumentChecker.notNull(requirement, "requirement");
     _specification = specification;
     _requirement = requirement;
     _orderedUnionProperties = new ArrayList<>(getUnionConstraints());
   }
-  
+
   private Set<String> getUnionConstraints() {
-    Set<String> constraintNames = new LinkedHashSet<>(_specification.getProperties().getProperties());
+    final Set<String> constraintNames = new LinkedHashSet<>(_specification.getProperties().getProperties());
     constraintNames.addAll(_specification.getProperties().getProperties());
     return constraintNames;
   }
-  
+
   public String getValueName() {
     return _specification.getValueName();
   }
-  
+
   public String getFunctionUniqueId() {
     return _specification.getFunctionUniqueId();
   }
-  
+
   public ComputationTargetRequirement getRequirementTarget() {
     return (ComputationTargetRequirement) _requirement.getTargetReference();
   }
-  
+
   public ComputationTargetSpecification getSpecificationTarget() {
     return _specification.getTargetSpecification();
   }
-  
-  public SpanningValuePropertyEntryNode getSpanningValuePropertyEntry(int i) {
-    String propertyName = _orderedUnionProperties.get(i);
+
+  public SpanningValuePropertyEntryNode getSpanningValuePropertyEntry(final int i) {
+    final String propertyName = _orderedUnionProperties.get(i);
     return new SpanningValuePropertyEntryNode(propertyName, getRequirementConstraint(propertyName), isOptionalRequirementConstraint(propertyName),
                                           getSpecificationConstraint(propertyName), isOptionalSpecificationConstraint(propertyName));
   }
-  
-  public String getRequirementConstraint(String constraint) {
+
+  public String getRequirementConstraint(final String constraint) {
     return _requirement.getConstraints().getValues(constraint).toString();
   }
-  
-  public boolean isOptionalRequirementConstraint(String constraint) {
+
+  public boolean isOptionalRequirementConstraint(final String constraint) {
     return _requirement.getConstraints().isOptional(constraint);
   }
-  
-  public String getSpecificationConstraint(String constraint) {
+
+  public String getSpecificationConstraint(final String constraint) {
     return _specification.getProperties().getValues(constraint).toString();
   }
-  
-  public boolean isOptionalSpecificationConstraint(String constraint) {
+
+  public boolean isOptionalSpecificationConstraint(final String constraint) {
     return _specification.getProperties().isOptional(constraint);
   }
-  
+
   public ValueSpecification getValueSpecification() {
     return _specification;
   }
-  
+
   public ValueRequirement getValueRequirement() {
     return _requirement;
   }
-  
+
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
@@ -96,17 +96,17 @@ public class SpecToRequirementEntryNode implements TreeTableNode {
     if (!(o instanceof SpecToRequirementEntryNode)) {
       return false;
     }
-    SpecToRequirementEntryNode other = (SpecToRequirementEntryNode) o;
+    final SpecToRequirementEntryNode other = (SpecToRequirementEntryNode) o;
     return _specification.equals(other._specification) && _requirement.equals(other._requirement);
   }
-  
+
   @Override
   public int hashCode() {
     return _specification.hashCode() ^ _requirement.hashCode();
   }
 
   @Override
-  public Object getChildAt(int index) {
+  public Object getChildAt(final int index) {
     switch (index) {
       case 0:
         return new ValueRequirementNode(this, _requirement);
@@ -115,7 +115,7 @@ public class SpecToRequirementEntryNode implements TreeTableNode {
       default:
         return getSpanningValuePropertyEntry(index - 2);
     }
-    
+
   }
 
   @Override
@@ -124,9 +124,9 @@ public class SpecToRequirementEntryNode implements TreeTableNode {
   }
 
   @Override
-  public int getIndexOfChild(Object child) {
+  public int getIndexOfChild(final Object child) {
     if (child instanceof SpanningValuePropertyEntryNode) {
-      SpanningValuePropertyEntryNode node = (SpanningValuePropertyEntryNode) child;
+      final SpanningValuePropertyEntryNode node = (SpanningValuePropertyEntryNode) child;
       return _orderedUnionProperties.indexOf(node.getCommonConstraintName()) + 2;
     } else if (child instanceof ValueRequirementNode) {
       if (child.equals(new ValueRequirementNode(this, _requirement))) {
@@ -141,7 +141,7 @@ public class SpecToRequirementEntryNode implements TreeTableNode {
   }
 
   @Override
-  public Object getColumn(int column) {
+  public Object getColumn(final int column) {
     switch (column) {
       case 0:
         return NAME;
@@ -152,5 +152,5 @@ public class SpecToRequirementEntryNode implements TreeTableNode {
     }
     return null;
   }
-  
+
 }

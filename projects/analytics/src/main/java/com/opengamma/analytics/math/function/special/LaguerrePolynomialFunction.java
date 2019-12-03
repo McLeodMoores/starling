@@ -13,11 +13,11 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 public class LaguerrePolynomialFunction extends OrthogonalPolynomialFunctionGenerator {
-  private static final DoubleFunction1D F1 = new RealPolynomialFunction1D(new double[] {1, -1});
-  private static final DoubleFunction1D DF1 = new RealPolynomialFunction1D(new double[] {-1});
+  private static final DoubleFunction1D F1 = new RealPolynomialFunction1D(new double[] { 1, -1 });
+  private static final DoubleFunction1D DF1 = new RealPolynomialFunction1D(new double[] { -1 });
 
   @Override
   public DoubleFunction1D[] getPolynomials(final int n) {
@@ -36,9 +36,10 @@ public class LaguerrePolynomialFunction extends OrthogonalPolynomialFunctionGene
       if (i == 0) {
         polynomials[i] = getOne();
       } else if (i == 1) {
-        polynomials[i] = new RealPolynomialFunction1D(new double[] {1 + alpha, -1});
+        polynomials[i] = new RealPolynomialFunction1D(new double[] { 1 + alpha, -1 });
       } else {
-        polynomials[i] = (polynomials[i - 1].multiply(2. * i + alpha - 1).subtract(polynomials[i - 1].multiply(getX())).subtract(polynomials[i - 2].multiply((i - 1. + alpha))).divide(i));
+        polynomials[i] = polynomials[i - 1].multiply(2. * i + alpha - 1).subtract(polynomials[i - 1].multiply(getX()))
+            .subtract(polynomials[i - 2].multiply(i - 1. + alpha)).divide(i);
       }
     }
     return polynomials;
@@ -57,8 +58,8 @@ public class LaguerrePolynomialFunction extends OrthogonalPolynomialFunctionGene
       } else {
         p1 = polynomials[i - 1].getFirst();
         p2 = polynomials[i - 2].getFirst();
-        p = (p1.multiply(2. * i + alpha - 1).subtract(p1.multiply(getX())).subtract(p2.multiply((i - 1. + alpha))).divide(i));
-        dp = (p.multiply(i).subtract(p1.multiply(i + alpha))).divide(getX());
+        p = p1.multiply(2. * i + alpha - 1).subtract(p1.multiply(getX())).subtract(p2.multiply(i - 1. + alpha)).divide(i);
+        dp = p.multiply(i).subtract(p1.multiply(i + alpha)).divide(getX());
         polynomials[i] = Pairs.of(p, dp);
       }
     }

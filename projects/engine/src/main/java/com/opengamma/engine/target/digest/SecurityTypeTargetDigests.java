@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.digest;
@@ -20,8 +20,9 @@ import com.opengamma.engine.target.ComputationTargetType;
 /**
  * Basic implementation that returns the security type as the digest.
  * <p>
- * This is supplied mainly for use as an example implementation. The quality of these digests will depend on the function repository and security modeling being used. An implementation that has more
- * detailed knowledge of the analytic functions or targets in use might be necessary to benefit from the target digest algorithm.
+ * This is supplied mainly for use as an example implementation. The quality of these digests will depend on the function repository and security modeling being
+ * used. An implementation that has more detailed knowledge of the analytic functions or targets in use might be necessary to benefit from the target digest
+ * algorithm.
  */
 public class SecurityTypeTargetDigests extends AbstractTargetDigests {
 
@@ -30,7 +31,7 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
     private final Object _label;
     private final Object _user;
 
-    public Digest(final Object label, final Object user) {
+    Digest(final Object label, final Object user) {
       _label = label;
       _user = user;
     }
@@ -67,7 +68,7 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
         if (existing != null) {
           return existing;
         }
-        final Map<K, V> newData = new HashMap<K, V>(data);
+        final Map<K, V> newData = new HashMap<>(data);
         newData.put(key, value);
         _data = newData;
       }
@@ -77,7 +78,8 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
   }
 
   /**
-   * Normalization cache of digests. This is to avoid excessive object creation, and cheapens the comparison operations as any digest may be compared by identity only.
+   * Normalization cache of digests. This is to avoid excessive object creation, and cheapens the comparison operations as any digest may be compared by
+   * identity only.
    */
   protected static final class Digests extends MapImpl<Object, Digest> {
 
@@ -100,48 +102,45 @@ public class SecurityTypeTargetDigests extends AbstractTargetDigests {
   public SecurityTypeTargetDigests() {
     addHandler(ComputationTargetType.POSITION, new TargetDigests() {
       @Override
-      public Object getDigest(FunctionCompilationContext context, ComputationTargetSpecification targetSpec) {
+      public Object getDigest(final FunctionCompilationContext context, final ComputationTargetSpecification targetSpec) {
         final ComputationTarget target = context.getComputationTargetResolver().resolve(targetSpec);
         if (target != null) {
           return getPositionDigest(target.getPosition());
-        } else {
-          return null;
         }
+        return null;
       }
     });
     addHandler(ComputationTargetType.TRADE, new TargetDigests() {
       @Override
-      public Object getDigest(FunctionCompilationContext context, ComputationTargetSpecification targetSpec) {
+      public Object getDigest(final FunctionCompilationContext context, final ComputationTargetSpecification targetSpec) {
         final ComputationTarget target = context.getComputationTargetResolver().resolve(targetSpec);
         if (target != null) {
           return getTradeDigest(target.getTrade());
-        } else {
-          return null;
         }
+        return null;
       }
     });
     addHandler(ComputationTargetType.SECURITY, new TargetDigests() {
       @Override
-      public Object getDigest(FunctionCompilationContext context, ComputationTargetSpecification targetSpec) {
+      public Object getDigest(final FunctionCompilationContext context, final ComputationTargetSpecification targetSpec) {
         final ComputationTarget target = context.getComputationTargetResolver().resolve(targetSpec);
         if (target != null) {
           return getSecurityDigest(target.getSecurity());
-        } else {
-          return null;
         }
+        return null;
       }
     });
   }
 
-  protected Object getPositionDigest(Position position) {
+  protected Object getPositionDigest(final Position position) {
     return _positions.get(getSecurityDigest(position.getSecurity()));
   }
 
-  protected Object getTradeDigest(Trade trade) {
+  protected Object getTradeDigest(final Trade trade) {
     return _trades.get(getSecurityDigest(trade.getSecurity()));
   }
 
-  protected Object getSecurityDigest(Security security) {
+  protected Object getSecurityDigest(final Security security) {
     return security.getSecurityType();
   }
 

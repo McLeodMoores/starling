@@ -29,46 +29,50 @@ public class WebMarketDataSnapshotVersionsResource extends AbstractWebMarketData
 
   /**
    * Creates the resource.
-   * @param parent  the parent resource, not null
+   * 
+   * @param parent
+   *          the parent resource, not null
    */
   public WebMarketDataSnapshotVersionsResource(final AbstractWebMarketDataSnapshotResource parent) {
     super(parent);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @GET
   public String getHTML() {
-    MarketDataSnapshotHistoryRequest request = new MarketDataSnapshotHistoryRequest(data().getSnapshot().getUniqueId());
-    MarketDataSnapshotHistoryResult result = data().getMarketDataSnapshotMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final MarketDataSnapshotHistoryRequest request = new MarketDataSnapshotHistoryRequest(data().getSnapshot().getUniqueId());
+    final MarketDataSnapshotHistoryResult result = data().getMarketDataSnapshotMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getSnapshots());
     return getFreemarker().build(HTML_DIR + "snapshotversions.ftl", out);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the output root data.
+   *
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    MarketDataSnapshotDocument doc = data().getSnapshot();
+    final FlexiBean out = super.createRootData();
+    final MarketDataSnapshotDocument doc = data().getSnapshot();
     out.put("snapshotDoc", doc);
-    out.put("snapshot", doc.getSnapshot());
+    out.put("snapshot", doc.getNamedSnapshot());
     out.put("deleted", !doc.isLatest());
     return out;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path("{versionId}")
-  public WebMarketDataSnapshotVersionResource findVersion(@PathParam("versionId") String idStr) {
+  public WebMarketDataSnapshotVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
-    MarketDataSnapshotDocument doc = data().getSnapshot();
-    UniqueId combined = doc.getUniqueId().withVersion(idStr);
-    if (doc.getUniqueId().equals(combined) == false) {
-      MarketDataSnapshotDocument versioned = data().getMarketDataSnapshotMaster().get(combined);
+    final MarketDataSnapshotDocument doc = data().getSnapshot();
+    final UniqueId combined = doc.getUniqueId().withVersion(idStr);
+    if (!doc.getUniqueId().equals(combined)) {
+      final MarketDataSnapshotDocument versioned = data().getMarketDataSnapshotMaster().get(combined);
       data().setVersioned(versioned);
     } else {
       data().setVersioned(doc);
@@ -76,14 +80,16 @@ public class WebMarketDataSnapshotVersionsResource extends AbstractWebMarketData
     return new WebMarketDataSnapshotVersionResource(this);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Builds a URI for this resource.
-   * @param data  the data, not null
+   * 
+   * @param data
+   *          the data, not null
    * @return the URI, not null
    */
   public static URI uri(final WebMarketDataSnapshotData data) {
-    String snapshotId = data.getBestSnapshotUriId(null);
+    final String snapshotId = data.getBestSnapshotUriId(null);
     return data.getUriInfo().getBaseUriBuilder().path(WebMarketDataSnapshotVersionsResource.class).build(snapshotId);
   }
 

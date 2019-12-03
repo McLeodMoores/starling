@@ -33,21 +33,26 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * A source of market data that aggregates data from multiple underlying {@link MarketDataProvider}s. Each request for market data is handled by one of the underlying providers. When a subscription is
- * made the underlying providers are checked in priority order until one of them is able to provide the data.
+ * A source of market data that aggregates data from multiple underlying {@link MarketDataProvider}s. Each request for market data is handled by one of the
+ * underlying providers. When a subscription is made the underlying providers are checked in priority order until one of them is able to provide the data.
  * <p>
- * All notifications of market data updates and subscription changes are delivered to all listeners. Therefore instances of this class shouldn't be shared between multiple view processes.
+ * All notifications of market data updates and subscription changes are delivered to all listeners. Therefore instances of this class shouldn't be shared
+ * between multiple view processes.
  */
 public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProvider {
 
   private final MarketDataAvailabilityProvider _availabilityProvider;
-  private final CopyOnWriteArraySet<MarketDataListener> _listeners = new CopyOnWriteArraySet<MarketDataListener>();
+  private final CopyOnWriteArraySet<MarketDataListener> _listeners = new CopyOnWriteArraySet<>();
 
   /**
-   * @param user The user requesting the data, not null
-   * @param specs Specifications of the underlying providers in priority order, not empty
-   * @param resolver For resolving market data specifications into providers, not null
-   * @throws IllegalArgumentException If any of the data providers in {@code specs} can't be resolved
+   * @param user
+   *          The user requesting the data, not null
+   * @param specs
+   *          Specifications of the underlying providers in priority order, not empty
+   * @param resolver
+   *          For resolving market data specifications into providers, not null
+   * @throws IllegalArgumentException
+   *           If any of the data providers in {@code specs} can't be resolved
    */
   public SnapshottingViewExecutionDataProvider(final UserPrincipal user,
       final List<MarketDataSpecification> specs,
@@ -60,7 +65,7 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
       _availabilityProvider = provider.getAvailabilityProvider(getSpecifications().get(0));
     } else {
       int index = 0;
-      for (MarketDataProvider provider : getProviders()) {
+      for (final MarketDataProvider provider : getProviders()) {
         provider.addListener(new CompositeListener(index++, listener));
       }
       _availabilityProvider = new CompositeAvailabilityProvider(getProviders(), getSpecifications());
@@ -69,8 +74,9 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
 
   /**
    * Adds a listener that will be notified of market data updates and subscription changes.
-   * 
-   * @param listener The listener, not null
+   *
+   * @param listener
+   *          The listener, not null
    */
   public void addListener(final MarketDataListener listener) {
     ArgumentChecker.notNull(listener, "listener");
@@ -79,17 +85,19 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
 
   /**
    * Removes a listener.
-   * 
-   * @param listener The listener, not null
+   *
+   * @param listener
+   *          The listener, not null
    */
   public void removeListener(final MarketDataListener listener) {
     _listeners.remove(listener);
   }
 
   /**
-   * Sets up subscriptions for market data
-   * 
-   * @param specifications The market data items, not null
+   * Sets up subscriptions for market data.
+   *
+   * @param specifications
+   *          The market data items, not null
    */
   public void subscribe(final Set<ValueSpecification> specifications) {
     ArgumentChecker.notNull(specifications, "specifications");
@@ -104,8 +112,9 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
 
   /**
    * Unsubscribes from market data.
-   * 
-   * @param specifications The subscriptions that should be removed, not null
+   *
+   * @param specifications
+   *          The subscriptions that should be removed, not null
    */
   public void unsubscribe(final Set<ValueSpecification> specifications) {
     ArgumentChecker.notNull(specifications, "requirements");
@@ -151,28 +160,28 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
   private class Listener implements MarketDataListener {
 
     @Override
-    public void subscriptionsSucceeded(Collection<ValueSpecification> valueSpecifications) {
+    public void subscriptionsSucceeded(final Collection<ValueSpecification> valueSpecifications) {
       for (final MarketDataListener listener : _listeners) {
         listener.subscriptionsSucceeded(valueSpecifications);
       }
     }
 
     @Override
-    public void subscriptionFailed(ValueSpecification valueSpecification, final String msg) {
+    public void subscriptionFailed(final ValueSpecification valueSpecification, final String msg) {
       for (final MarketDataListener listener : _listeners) {
         listener.subscriptionFailed(valueSpecification, msg);
       }
     }
 
     @Override
-    public void subscriptionStopped(ValueSpecification valueSpecification) {
+    public void subscriptionStopped(final ValueSpecification valueSpecification) {
       for (final MarketDataListener listener : _listeners) {
         listener.subscriptionStopped(valueSpecification);
       }
     }
 
     @Override
-    public void valuesChanged(Collection<ValueSpecification> valueSpecifications) {
+    public void valuesChanged(final Collection<ValueSpecification> valueSpecifications) {
       for (final MarketDataListener listener : _listeners) {
         listener.valuesChanged(valueSpecifications);
       }
@@ -188,7 +197,7 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
     private final int _providerId;
     private final MarketDataListener _underlying;
 
-    public CompositeListener(final int providerId, final MarketDataListener underlying) {
+    CompositeListener(final int providerId, final MarketDataListener underlying) {
       _providerId = providerId;
       _underlying = underlying;
     }
@@ -198,7 +207,7 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
     }
 
     private Collection<ValueSpecification> convertSpecifications(final Collection<ValueSpecification> valueSpecifications) {
-      final Collection<ValueSpecification> result = new ArrayList<ValueSpecification>(valueSpecifications.size());
+      final Collection<ValueSpecification> result = new ArrayList<>(valueSpecifications.size());
       for (final ValueSpecification valueSpecification : valueSpecifications) {
         result.add(convertSpecification(valueSpecification));
       }
@@ -206,39 +215,39 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
     }
 
     @Override
-    public void subscriptionsSucceeded(Collection<ValueSpecification> valueSpecifications) {
+    public void subscriptionsSucceeded(final Collection<ValueSpecification> valueSpecifications) {
       _underlying.subscriptionsSucceeded(convertSpecifications(valueSpecifications));
     }
 
     @Override
-    public void subscriptionFailed(ValueSpecification valueSpecification, final String msg) {
+    public void subscriptionFailed(final ValueSpecification valueSpecification, final String msg) {
       _underlying.subscriptionFailed(convertSpecification(valueSpecification), msg);
     }
 
     @Override
-    public void subscriptionStopped(ValueSpecification valueSpecification) {
+    public void subscriptionStopped(final ValueSpecification valueSpecification) {
       _underlying.subscriptionStopped(convertSpecification(valueSpecification));
     }
 
     @Override
-    public void valuesChanged(Collection<ValueSpecification> valueSpecifications) {
+    public void valuesChanged(final Collection<ValueSpecification> valueSpecifications) {
       _underlying.valuesChanged(convertSpecifications(valueSpecifications));
     }
 
   }
 
   /**
-   * {@link MarketDataAvailabilityProvider} that checks the underlying providers for availability. If the data is available from any underlying provider then it is available. If it isn't available but
-   * is missing from any of the underlying providers then it is missing. Otherwise it is unavailable.
+   * {@link MarketDataAvailabilityProvider} that checks the underlying providers for availability. If the data is available from any underlying provider then it
+   * is available. If it isn't available but is missing from any of the underlying providers then it is missing. Otherwise it is unavailable.
    */
   private static final class CompositeAvailabilityProvider implements MarketDataAvailabilityProvider {
 
     private final List<MarketDataAvailabilityProvider> _providers;
     private final Serializable _cacheHint;
 
-    public CompositeAvailabilityProvider(final List<MarketDataProvider> providers, final List<MarketDataSpecification> specs) {
-      _providers = new ArrayList<MarketDataAvailabilityProvider>(providers.size());
-      final ArrayList<Serializable> cacheHints = new ArrayList<Serializable>(providers.size());
+    CompositeAvailabilityProvider(final List<MarketDataProvider> providers, final List<MarketDataSpecification> specs) {
+      _providers = new ArrayList<>(providers.size());
+      final ArrayList<Serializable> cacheHints = new ArrayList<>(providers.size());
       for (int i = 0; i < providers.size(); i++) {
         final MarketDataAvailabilityProvider availabilityProvider = providers.get(i).getAvailabilityProvider(specs.get(i));
         _providers.add(availabilityProvider);
@@ -248,7 +257,8 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
     }
 
     /**
-     * @param desiredValue the market data requirement, not null
+     * @param desiredValue
+     *          the market data requirement, not null
      * @return The satisfaction of the requirement from the underlying providers.
      */
     @Override
@@ -267,15 +277,14 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
       }
       if (missing != null) {
         throw missing;
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override
     public MarketDataAvailabilityFilter getAvailabilityFilter() {
-      final List<MarketDataAvailabilityFilter> union = new ArrayList<MarketDataAvailabilityFilter>(_providers.size());
-      for (MarketDataAvailabilityProvider provider : _providers) {
+      final List<MarketDataAvailabilityFilter> union = new ArrayList<>(_providers.size());
+      for (final MarketDataAvailabilityProvider provider : _providers) {
         union.add(provider.getAvailabilityFilter());
       }
       return new UnionMarketDataAvailability.Filter(union);
@@ -292,7 +301,7 @@ public class SnapshottingViewExecutionDataProvider extends ViewExecutionDataProv
 
     private final int _numProviders;
 
-    /* package */ValueSpecificationProvider(final int numProviders) {
+    /* package */ ValueSpecificationProvider(final int numProviders) {
       _numProviders = numProviders;
     }
 

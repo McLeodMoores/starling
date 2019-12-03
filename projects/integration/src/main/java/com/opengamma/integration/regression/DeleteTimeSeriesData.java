@@ -22,23 +22,23 @@ import com.opengamma.util.ArgumentChecker;
  */
 /* package */class DeleteTimeSeriesData {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DeleteTimeSeriesData.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DeleteTimeSeriesData.class);
 
   private final RegressionIO _io;
 
-  public DeleteTimeSeriesData(final RegressionIO io) {
+  DeleteTimeSeriesData(final RegressionIO io) {
     _io = ArgumentChecker.notNull(io, "io");
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(final String[] args) throws IOException {
     if (args.length < 1) {
       System.err.println("arguments: dataDirectory (containing Fudge XML files)");
       System.exit(1);
     }
     try {
       final RegressionIO io = new SubdirsRegressionIO(new File(args[0]), new FudgeXMLFormat(), false);
-      (new DeleteTimeSeriesData(io)).run();
-    } catch (Throwable t) {
+      new DeleteTimeSeriesData(io).run();
+    } catch (final Throwable t) {
       t.printStackTrace();
       System.exit(1);
     }
@@ -51,12 +51,12 @@ import com.opengamma.util.ArgumentChecker;
     // Update the map entries in-situ, setting the time series data to blank
     int deleted = 0;
     int skipped = 0;
-    for (Map.Entry<String, Object> timeSeriesEntry : timeSeriesMap.entrySet()) {
+    for (final Map.Entry<String, Object> timeSeriesEntry : timeSeriesMap.entrySet()) {
       final TimeSeriesWithInfo tswi = (TimeSeriesWithInfo) timeSeriesEntry.getValue();
       final ManageableHistoricalTimeSeries hts = tswi.getTimeSeries();
       final LocalDateDoubleTimeSeries ts = hts.getTimeSeries();
       if (!ts.isEmpty()) {
-        s_logger.debug("Deleting data from {}", timeSeriesEntry.getKey());
+        LOGGER.debug("Deleting data from {}", timeSeriesEntry.getKey());
         hts.setTimeSeries(ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES);
         deleted++;
       } else {
@@ -67,7 +67,7 @@ import com.opengamma.util.ArgumentChecker;
     _io.beginWrite();
     // Write the modified map back out
     _io.write(RegressionUtils.HISTORICAL_TIME_SERIES_MASTER_DATA, timeSeriesMap);
-    s_logger.info("Deleted data from {} time-series, skipped {}", deleted, skipped);
+    LOGGER.info("Deleted data from {} time-series, skipped {}", deleted, skipped);
     _io.endWrite();
   }
 

@@ -5,12 +5,12 @@
  */
 package com.opengamma.master.cache;
 
-import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
-
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.AbstractChangeProvidingMaster;
 import com.opengamma.master.AbstractDocument;
 import com.opengamma.util.ArgumentChecker;
+
+import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 
 /**
  * Cache factory.
@@ -21,13 +21,13 @@ public class UidToDocumentCacheEntryFactory<D extends AbstractDocument> implemen
   /** The underlying master. */
   private final AbstractChangeProvidingMaster<D> _underlying;
 
-  public UidToDocumentCacheEntryFactory(AbstractChangeProvidingMaster<D> underlying) {
+  public UidToDocumentCacheEntryFactory(final AbstractChangeProvidingMaster<D> underlying) {
     ArgumentChecker.notNull(underlying, "underlying");
     _underlying = underlying;
   }
 
   @Override
-  public Object createEntry(Object key) throws Exception {
+  public Object createEntry(final Object key) throws Exception {
     return _underlying.get((UniqueId) key);
   }
 

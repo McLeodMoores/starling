@@ -20,15 +20,15 @@ public class OtcEquityIndexOptionTradeSecurityExtractor extends TradeSecurityExt
    *
    * @param trade the trade to perform extraction on
    */
-  public OtcEquityIndexOptionTradeSecurityExtractor(OtcEquityIndexOptionTrade trade) {
+  public OtcEquityIndexOptionTradeSecurityExtractor(final OtcEquityIndexOptionTrade trade) {
     super(trade);
   }
 
   //-------------------------------------------------------------------------
   @Override
   public ManageableSecurity[] extractSecurities() {
-    OtcEquityIndexOptionTrade trade = getTrade();
-    EquityIndexOptionSecurity security = new EquityIndexOptionSecurity(
+    final OtcEquityIndexOptionTrade trade = getTrade();
+    final EquityIndexOptionSecurity security = new EquityIndexOptionSecurity(
         trade.getOptionType(),
         trade.getStrike().doubleValue(),
         trade.getNotionalCurrency(),

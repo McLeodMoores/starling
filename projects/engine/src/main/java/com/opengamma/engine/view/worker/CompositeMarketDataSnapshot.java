@@ -32,7 +32,8 @@ import com.opengamma.util.tuple.Pair;
   /**
    * @param snapshots The underlying snapshots
    */
-  /* package */CompositeMarketDataSnapshot(final List<MarketDataSnapshot> snapshots, final SnapshottingViewExecutionDataProvider.ValueSpecificationProvider valueMap) {
+  /* package */CompositeMarketDataSnapshot(final List<MarketDataSnapshot> snapshots,
+      final SnapshottingViewExecutionDataProvider.ValueSpecificationProvider valueMap) {
     ArgumentChecker.notEmpty(snapshots, "snapshots");
     ArgumentChecker.notNull(valueMap, "valueMap");
     _snapshots = snapshots;
@@ -72,7 +73,7 @@ import com.opengamma.util.tuple.Pair;
 
   /**
    * Initializes the underlying snapshots.
-   * 
+   *
    * @param values the values required in the snapshot, not null
    * @param timeout the maximum time to wait for the required values
    * @param unit the timeout unit, not null
@@ -97,7 +98,7 @@ import com.opengamma.util.tuple.Pair;
 
   @Override
   public boolean isInitialized() {
-    for (MarketDataSnapshot snapshot : _snapshots) {
+    for (final MarketDataSnapshot snapshot : _snapshots) {
       if (!snapshot.isInitialized()) {
         return false;
       }
@@ -110,7 +111,7 @@ import com.opengamma.util.tuple.Pair;
     if (!isInitialized()) {
       throw new IllegalStateException("Market data snapshot is not initialized");
     }
-    for (MarketDataSnapshot snapshot : _snapshots) {
+    for (final MarketDataSnapshot snapshot : _snapshots) {
       if (!snapshot.isEmpty()) {
         return false;
       }
@@ -134,8 +135,8 @@ import com.opengamma.util.tuple.Pair;
   }
 
   /**
-   * Returns the value from one of the underlying snapshots or null if it isn't available in any of them
-   * 
+   * Returns the value from one of the underlying snapshots or null if it isn't available in any of them.
+   *
    * @param value the value required, not null
    * @return The value from one of the underlying snapshots or null if it isn't available in any of them
    */
@@ -150,8 +151,8 @@ import com.opengamma.util.tuple.Pair;
   }
 
   /**
-   * Returns the values from the underlying snapshots if they are available
-   * 
+   * Returns the values from the underlying snapshots if they are available.
+   *
    * @param values the values required, not null
    * @return The values from the underlying snapshots if they are available, values that aren't available will be missing from the results map
    */

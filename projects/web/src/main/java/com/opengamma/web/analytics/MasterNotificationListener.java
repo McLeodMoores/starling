@@ -13,16 +13,19 @@ import com.opengamma.master.AbstractMaster;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *
+ * @param <D>
+ *          the type of the documents
+ * @param <M>
+ *          the type of the master
  */
 /* package */ class MasterNotificationListener<D extends AbstractDocument,
-                                               M extends AbstractMaster<D> & ChangeProvider>  // CSIGNORE
-    implements ChangeListener, AutoCloseable {
+    M extends AbstractMaster<D> & ChangeProvider> 
+implements ChangeListener, AutoCloseable {
 
   private final M _master;
   private final AnalyticsView _view;
 
-  /* package */ MasterNotificationListener(M master, AnalyticsView view) {
+  /* package */ MasterNotificationListener(final M master, final AnalyticsView view) {
     ArgumentChecker.notNull(master, "master");
     ArgumentChecker.notNull(view, "view");
     _master = master;
@@ -31,7 +34,7 @@ import com.opengamma.util.ArgumentChecker;
   }
 
   @Override
-  public void entityChanged(ChangeEvent event) {
+  public void entityChanged(final ChangeEvent event) {
     _view.entityChanged(new MasterChangeNotification<>(event, _master));
   }
 

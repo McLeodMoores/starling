@@ -16,7 +16,7 @@ public class TestSubResource {
 
   private final String _uid;
 
-  public TestSubResource(String uid) {
+  public TestSubResource(final String uid) {
     _uid = uid;
   }
 

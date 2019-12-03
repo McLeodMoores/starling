@@ -23,7 +23,7 @@ public class WebPositionsUris {
    * Creates an instance.
    * @param data  the web data, not null
    */
-  public WebPositionsUris(WebPositionsData data) {
+  public WebPositionsUris(final WebPositionsData data) {
     _data = data;
   }
 

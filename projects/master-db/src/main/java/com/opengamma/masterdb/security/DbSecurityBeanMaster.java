@@ -50,7 +50,7 @@ public class DbSecurityBeanMaster
   /**
    * SQL order by.
    */
-  protected static final EnumMap<SecuritySearchSortOrder, String> ORDER_BY_MAP = new EnumMap<SecuritySearchSortOrder, String>(SecuritySearchSortOrder.class);
+  protected static final EnumMap<SecuritySearchSortOrder, String> ORDER_BY_MAP = new EnumMap<>(SecuritySearchSortOrder.class);
   static {
     ORDER_BY_MAP.put(SecuritySearchSortOrder.OBJECT_ID_ASC, "oid ASC");
     ORDER_BY_MAP.put(SecuritySearchSortOrder.OBJECT_ID_DESC, "oid DESC");
@@ -69,7 +69,7 @@ public class DbSecurityBeanMaster
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dbConnector  the database connector, not null
    */
   public DbSecurityBeanMaster(final DbConnector dbConnector) {
@@ -78,11 +78,11 @@ public class DbSecurityBeanMaster
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param dbConnector  the database connector, not null
    * @param callback  the callback used to configure the master, not null
    */
-  public DbSecurityBeanMaster(final DbConnector dbConnector, DbSecurityBeanMasterCallback callback) {
+  public DbSecurityBeanMaster(final DbConnector dbConnector, final DbSecurityBeanMasterCallback callback) {
     super(new DbBeanMaster<>(dbConnector, IDENTIFIER_SCHEME_DEFAULT, callback));
     _callback = callback;
   }
@@ -90,7 +90,7 @@ public class DbSecurityBeanMaster
   //-------------------------------------------------------------------------
   /**
    * Gets the callback object.
-   * 
+   *
    * @return the callback object, not null
    */
   protected DbSecurityBeanMasterCallback getCallback() {
@@ -99,8 +99,8 @@ public class DbSecurityBeanMaster
 
   //-------------------------------------------------------------------------
   @Override
-  public SecurityMetaDataResult metaData(SecurityMetaDataRequest request) {
-    SecurityMetaDataResult result = new SecurityMetaDataResult();
+  public SecurityMetaDataResult metaData(final SecurityMetaDataRequest request) {
+    final SecurityMetaDataResult result = new SecurityMetaDataResult();
     if (request.isSecurityTypes()) {
       result.setSecurityTypes(getDelegate().getAllSubTypes());
     }
@@ -111,8 +111,8 @@ public class DbSecurityBeanMaster
   }
 
   @Override
-  public SecuritySearchResult search(SecuritySearchRequest request) {
-    BeanMasterSearchRequest delegatedRequest = new BeanMasterSearchRequest();
+  public SecuritySearchResult search(final SecuritySearchRequest request) {
+    final BeanMasterSearchRequest delegatedRequest = new BeanMasterSearchRequest();
     delegatedRequest.setPagingRequest(request.getPagingRequest());
     delegatedRequest.setVersionCorrection(request.getVersionCorrection());
     delegatedRequest.setObjectIds(request.getObjectIds());
@@ -128,7 +128,7 @@ public class DbSecurityBeanMaster
   }
 
   @Override
-  public SecurityHistoryResult history(SecurityHistoryRequest request) {
+  public SecurityHistoryResult history(final SecurityHistoryRequest request) {
     return getDelegate().history(request, new SecurityHistoryResult());
   }
 

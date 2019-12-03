@@ -10,11 +10,12 @@ import java.util.WeakHashMap;
 
 /**
  * Reduction of common object values to single instances via a normalization callback.
- * 
+ *
  * @param <T> object type to reduce
  */
 public abstract class NormalizingWeakInstanceCache<T> extends WeakInstanceCache<T> {
 
+  @Override
   protected T getImpl(final WeakHashMap<T, WeakReference<T>> data, final T value) {
     synchronized (data) {
       final WeakReference<T> canonRef = data.get(value);
@@ -28,6 +29,6 @@ public abstract class NormalizingWeakInstanceCache<T> extends WeakInstanceCache<
     return super.getImpl(data, normalize(value));
   }
 
-  protected abstract T normalize(final T value);
+  protected abstract T normalize(T value);
 
 }

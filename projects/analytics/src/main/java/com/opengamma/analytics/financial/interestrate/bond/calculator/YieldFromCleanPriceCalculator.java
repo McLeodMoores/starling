@@ -24,14 +24,14 @@ public final class YieldFromCleanPriceCalculator extends InstrumentDerivativeVis
   /**
    * The calculator instance.
    */
-  private static final YieldFromCleanPriceCalculator s_instance = new YieldFromCleanPriceCalculator();
+  private static final YieldFromCleanPriceCalculator INSTANCE = new YieldFromCleanPriceCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static YieldFromCleanPriceCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**
@@ -63,11 +63,10 @@ public final class YieldFromCleanPriceCalculator extends InstrumentDerivativeVis
   }
 
   @Override
-  public Double visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction bond, final Double cleanPrice) {
+  public Double visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction<?> bond, final Double cleanPrice) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(cleanPrice, "clean price");
-    ArgumentChecker.notNull(bond.getBondStandard() instanceof BondCapitalIndexedSecurity<?>, "the bond should be a BondCapitalIndexedSecurity");
-    final BondCapitalIndexedSecurity<?> bondSecurity = (BondCapitalIndexedSecurity<?>) bond.getBondStandard();
+    final BondCapitalIndexedSecurity<?> bondSecurity = bond.getBondStandard();
     return METHOD_INFLATION_BOND_SECURITY.yieldRealFromCleanPrice(bondSecurity, cleanPrice);
   }
 

@@ -25,9 +25,9 @@ public final class CounterpartyExposureFunction implements ExposureFunction {
   public String getName() {
     return NAME;
   }
-  
+
   @Override
-  public List<ExternalId> getIds(Trade trade) {
+  public List<ExternalId> getIds(final Trade trade) {
     return Lists.newArrayList(trade.getCounterparty().getExternalId());
   }
 }

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user.impl;
@@ -28,8 +28,8 @@ import com.sun.jersey.api.client.ClientResponse;
  * Provides access to a remote {@link RoleMaster}.
  */
 public class RemoteRoleMaster
-    extends AbstractRemoteMaster
-    implements RoleMaster {
+extends AbstractRemoteMaster
+implements RoleMaster {
 
   /**
    * Creates an instance.
@@ -46,16 +46,16 @@ public class RemoteRoleMaster
    * @param baseUri  the base target URI for all RESTful web services, not null
    * @param changeManager  the change manager, not null
    */
-  public RemoteRoleMaster(final URI baseUri, ChangeManager changeManager) {
+  public RemoteRoleMaster(final URI baseUri, final ChangeManager changeManager) {
     super(baseUri, changeManager);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean nameExists(String roleName) {
+  public boolean nameExists(final String roleName) {
     ArgumentChecker.notNull(roleName, "roleName");
-    URI uri = DataRoleMasterUris.uriNameExists(getBaseUri(), roleName);
-    ClientResponse response = accessRemote(uri).get(ClientResponse.class);
+    final URI uri = DataRoleMasterUris.uriNameExists(getBaseUri(), roleName);
+    final ClientResponse response = accessRemote(uri).get(ClientResponse.class);
     if (response.getStatus() == Status.NOT_FOUND.getStatusCode()) {
       return false;
     }
@@ -66,76 +66,75 @@ public class RemoteRoleMaster
   }
 
   @Override
-  public ManageableRole getByName(String roleName) {
+  public ManageableRole getByName(final String roleName) {
     ArgumentChecker.notNull(roleName, "roleName");
-    URI uri = DataRoleMasterUris.uriRoleByName(getBaseUri(), roleName);
+    final URI uri = DataRoleMasterUris.uriRoleByName(getBaseUri(), roleName);
     return accessRemote(uri).get(ManageableRole.class);
   }
 
   @Override
-  public ManageableRole getById(ObjectId objectId) {
+  public ManageableRole getById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
-    URI uri = DataRoleMasterUris.uriRoleById(getBaseUri(), objectId);
+    final URI uri = DataRoleMasterUris.uriRoleById(getBaseUri(), objectId);
     return accessRemote(uri).get(ManageableRole.class);
   }
 
   @Override
-  public UniqueId add(ManageableRole role) {
+  public UniqueId add(final ManageableRole role) {
     ArgumentChecker.notNull(role, "role");
-    URI uri = DataRoleMasterUris.uriAdd(getBaseUri());
+    final URI uri = DataRoleMasterUris.uriAdd(getBaseUri());
     return accessRemote(uri).post(UniqueId.class, role);
   }
 
   @Override
-  public UniqueId update(ManageableRole role) {
+  public UniqueId update(final ManageableRole role) {
     ArgumentChecker.notNull(role, "role");
     ArgumentChecker.notNull(role.getUniqueId(), "role.uniqueId");
-    URI uri = DataRoleMasterUris.uriRoleById(getBaseUri(), role.getUniqueId());
+    final URI uri = DataRoleMasterUris.uriRoleById(getBaseUri(), role.getUniqueId());
     return accessRemote(uri).put(UniqueId.class, role);
   }
 
   @Override
-  public UniqueId save(ManageableRole role) {
+  public UniqueId save(final ManageableRole role) {
     ArgumentChecker.notNull(role, "role");
     if (role.getUniqueId() != null) {
       return update(role);
-    } else {
-      return add(role);
     }
+    return add(role);
   }
 
   @Override
-  public void removeByName(String roleName) {
+  public void removeByName(final String roleName) {
     ArgumentChecker.notNull(roleName, "roleName");
-    URI uri = DataRoleMasterUris.uriRoleByName(getBaseUri(), roleName);
+    final URI uri = DataRoleMasterUris.uriRoleByName(getBaseUri(), roleName);
     accessRemote(uri).delete();
   }
 
   @Override
-  public void removeById(ObjectId objectId) {
+  public void removeById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
-    URI uri = DataRoleMasterUris.uriRoleById(getBaseUri(), objectId);
+    final URI uri = DataRoleMasterUris.uriRoleById(getBaseUri(), objectId);
     accessRemote(uri).delete();
   }
 
   @Override
-  public RoleSearchResult search(RoleSearchRequest request) {
+  public RoleSearchResult search(final RoleSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    URI uri = DataRoleMasterUris.uriSearch(getBaseUri());
+    final URI uri = DataRoleMasterUris.uriSearch(getBaseUri());
     return accessRemote(uri).post(RoleSearchResult.class, request);
   }
 
   @Override
-  public RoleEventHistoryResult eventHistory(RoleEventHistoryRequest request) {
+  public RoleEventHistoryResult eventHistory(final RoleEventHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
-    URI uri = DataRoleMasterUris.uriEventHistory(getBaseUri(), request);
+    final URI uri = DataRoleMasterUris.uriEventHistory(getBaseUri(), request);
     return accessRemote(uri).get(RoleEventHistoryResult.class);
   }
 
   @Override
-  public UserAccount resolveAccount(UserAccount account) {
+  public UserAccount resolveAccount(final UserAccount account) {
     ArgumentChecker.notNull(account, "account");
-    URI uri = DataRoleMasterUris.uriResolveRole(getBaseUri(), account);
+    final URI uri = DataRoleMasterUris.uriResolveRole(getBaseUri(), account);
     return accessRemote(uri).post(UserAccount.class, account);
   }
 

@@ -43,15 +43,15 @@ public class NonDeliverableFXOptionSecurityFudgeBuilder extends AbstractFudgeBui
   public static final String EXERCISE_TYPE_FIELD_NAME = "exerciseType";
   /** Field name. */
   public static final String DELIVERY_IN_CALL_CURRENCY_FIELD_NAME = "deliveryInCallCurrency";
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, NonDeliverableFXOptionSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final NonDeliverableFXOptionSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     NonDeliverableFXOptionSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, NonDeliverableFXOptionSecurity  object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final NonDeliverableFXOptionSecurity  object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, PUT_CURRENCY_FIELD_NAME, object.getPutCurrency());
     addToMessage(msg, CALL_CURRENCY_FIELD_NAME, object.getCallCurrency());
@@ -65,13 +65,13 @@ public class NonDeliverableFXOptionSecurityFudgeBuilder extends AbstractFudgeBui
   }
 
   @Override
-  public NonDeliverableFXOptionSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    NonDeliverableFXOptionSecurity object = new NonDeliverableFXOptionSecurity();
+  public NonDeliverableFXOptionSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final NonDeliverableFXOptionSecurity object = new NonDeliverableFXOptionSecurity();
     NonDeliverableFXOptionSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, NonDeliverableFXOptionSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final NonDeliverableFXOptionSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     object.setPutCurrency(msg.getValue(Currency.class, PUT_CURRENCY_FIELD_NAME));
     object.setCallCurrency(msg.getValue(Currency.class, CALL_CURRENCY_FIELD_NAME));

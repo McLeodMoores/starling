@@ -16,6 +16,7 @@ import static org.testng.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -63,19 +64,20 @@ public class ParallelRecompilationViewProcessWorkerTest {
     // Creates workers that will trigger on the first cycle, ignore the second, and then terminate on the third
     final ViewProcessWorkerFactory workerFactory = new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
         Mockito.when(worker.triggerCycle()).thenAnswer(new Answer<Boolean>() {
 
           private int _count = 0;
 
           @Override
-          public Boolean answer(InvocationOnMock invocation) throws Throwable {
+          public Boolean answer(final InvocationOnMock invocation) throws Throwable {
             _count++;
             if (_count == 3) {
               context.workerCompleted();
             }
-            return (_count == 1);
+            return _count == 1;
           }
 
         });
@@ -111,19 +113,20 @@ public class ParallelRecompilationViewProcessWorkerTest {
     // Creates workers that will honor the request on the first cycle, ignore the second, and then terminate on the third
     final ViewProcessWorkerFactory workerFactory = new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
         Mockito.when(worker.requestCycle()).thenAnswer(new Answer<Boolean>() {
 
           private int _count = 0;
 
           @Override
-          public Boolean answer(InvocationOnMock invocation) throws Throwable {
+          public Boolean answer(final InvocationOnMock invocation) throws Throwable {
             _count++;
             if (_count == 3) {
               context.workerCompleted();
             }
-            return (_count == 1);
+            return _count == 1;
           }
 
         });
@@ -131,7 +134,8 @@ public class ParallelRecompilationViewProcessWorkerTest {
       }
     };
     final ViewProcessWorkerContext context = Mockito.mock(ViewProcessWorkerContext.class);
-    final ViewExecutionOptions options = ExecutionOptions.infinite(MarketData.live(), ExecutionFlags.none().ignoreCompilationValidity().get());
+    final ViewExecutionOptions options =
+        ExecutionOptions.infinite(MarketData.live(), ExecutionFlags.none().ignoreCompilationValidity().get());
     final ViewDefinition viewDefinition = Mockito.mock(ViewDefinition.class);
     final ParallelRecompilationViewProcessWorker worker = new ParallelRecompilationViewProcessWorker(workerFactory, context, options, viewDefinition);
     // With no worker
@@ -156,12 +160,14 @@ public class ParallelRecompilationViewProcessWorkerTest {
   }
 
   public void testUpdateViewDefinition() {
-    final List<ViewDefinition> viewDefinitions = ImmutableList.of(Mockito.mock(ViewDefinition.class), Mockito.mock(ViewDefinition.class), Mockito.mock(ViewDefinition.class),
+    final List<ViewDefinition> viewDefinitions =
+        ImmutableList.of(Mockito.mock(ViewDefinition.class), Mockito.mock(ViewDefinition.class), Mockito.mock(ViewDefinition.class),
         Mockito.mock(ViewDefinition.class));
-    final List<ViewProcessWorker> workers = new ArrayList<ViewProcessWorker>(3);
+    final List<ViewProcessWorker> workers = new ArrayList<>(3);
     final ViewProcessWorkerFactory workerFactory = new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
         workers.add(worker);
         assertSame(viewDefinition, viewDefinitions.get(workers.size()));
@@ -198,11 +204,12 @@ public class ParallelRecompilationViewProcessWorkerTest {
   }
 
   public void testTerminate() {
-    final List<ViewProcessWorkerContext> workerContexts = new ArrayList<ViewProcessWorkerContext>(2);
-    final List<ViewProcessWorker> workers = new ArrayList<ViewProcessWorker>(2);
+    final List<ViewProcessWorkerContext> workerContexts = new ArrayList<>(2);
+    final List<ViewProcessWorker> workers = new ArrayList<>(2);
     final ViewProcessWorkerFactory workerFactory = new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         workerContexts.add(context);
         final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
         workers.add(worker);
@@ -234,7 +241,7 @@ public class ParallelRecompilationViewProcessWorkerTest {
   }
 
   @Test(timeOut = 10000)
-  public void testJoin_noWorkers() throws InterruptedException {
+  public void testJoinNoWorkers() throws InterruptedException {
     final ViewProcessWorkerFactory workerFactory = Mockito.mock(ViewProcessWorkerFactory.class);
     final ViewProcessWorkerContext context = Mockito.mock(ViewProcessWorkerContext.class);
     final ViewExecutionOptions options = ExecutionOptions.infinite(MarketData.live(), ExecutionFlags.none().ignoreCompilationValidity().get());
@@ -245,20 +252,21 @@ public class ParallelRecompilationViewProcessWorkerTest {
   }
 
   @Test(timeOut = 10000)
-  public void testJoin_workersTerminateBefore() throws InterruptedException {
+  public void testJoinWorkersTerminateBefore() throws InterruptedException {
     final ViewProcessWorkerFactory workerFactory = new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
         try {
           Mockito.doAnswer(new Answer<Void>() {
             @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
+            public Void answer(final InvocationOnMock invocation) throws Throwable {
               context.workerCompleted();
               return null;
             }
           }).when(worker).join();
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           // Doesn't get thrown
         }
         return worker;
@@ -271,17 +279,18 @@ public class ParallelRecompilationViewProcessWorkerTest {
     // Start workers
     worker.startParallel(options);
     worker.startSecondaryWorker(worker.getPrimary(), options.getExecutionSequence());
-    // Join on the first worker will see the secondary worker promoted, that will join and this will complete 
+    // Join on the first worker will see the secondary worker promoted, that will join and this will complete
     worker.join();
     assertNull(worker.getPrimary());
     assertNull(worker.getSecondary());
   }
 
   @Test(timeOut = 10000)
-  public void testJoin_workersTerminateAfter() throws InterruptedException {
+  public void testJoinWorkersTerminateAfter() throws InterruptedException {
     final ViewProcessWorkerFactory workerFactory = new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         return Mockito.mock(ViewProcessWorker.class);
       }
     };
@@ -292,27 +301,28 @@ public class ParallelRecompilationViewProcessWorkerTest {
     // Start workers
     worker.startParallel(options);
     worker.startSecondaryWorker(worker.getPrimary(), options.getExecutionSequence());
-    // Join on the first worker will see the secondary worker promoted, that will join and this will complete 
+    // Join on the first worker will see the secondary worker promoted, that will join and this will complete
     worker.join();
     assertNull(worker.getPrimary());
     assertNull(worker.getSecondary());
   }
 
   @Test(timeOut = 10000)
-  public void testJoin_timeout_noWorkers() throws InterruptedException {
+  public void testJoinTimeoutNoWorkers() throws InterruptedException {
     final ViewProcessWorkerFactory workerFactory = new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
         try {
-          Mockito.when(worker.join(Mockito.anyLong())).thenAnswer(new Answer<Boolean>() {
+          Mockito.when(worker.join(Matchers.anyLong())).thenAnswer(new Answer<Boolean>() {
             @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-              assertTrue(((Long) invocation.getArguments()[0]) <= 20000);
+            public Boolean answer(final InvocationOnMock invocation) throws Throwable {
+              assertTrue((Long) invocation.getArguments()[0] <= 20000);
               return Boolean.TRUE;
             }
           });
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           // Doesn't get thrown
         }
         return worker;
@@ -330,18 +340,19 @@ public class ParallelRecompilationViewProcessWorkerTest {
   public void testJoin_timeout_workersTerminateBefore() throws InterruptedException {
     final ViewProcessWorkerFactory workerFactory = new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
         try {
           Mockito.doAnswer(new Answer<Boolean>() {
             @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-              assertTrue(((Long) invocation.getArguments()[0]) <= 20000);
+            public Boolean answer(final InvocationOnMock invocation) throws Throwable {
+              assertTrue((Long) invocation.getArguments()[0] <= 20000);
               context.workerCompleted();
               return Boolean.TRUE;
             }
-          }).when(worker).join(Mockito.anyLong());
-        } catch (InterruptedException e) {
+          }).when(worker).join(Matchers.anyLong());
+        } catch (final InterruptedException e) {
           // Doesn't get thrown
         }
         return worker;
@@ -354,7 +365,7 @@ public class ParallelRecompilationViewProcessWorkerTest {
     // Start workers
     worker.startParallel(options);
     worker.startSecondaryWorker(worker.getPrimary(), options.getExecutionSequence());
-    // Join on the first worker will see the secondary worker promoted, that will join and this will complete 
+    // Join on the first worker will see the secondary worker promoted, that will join and this will complete
     assertTrue(worker.join(20000));
     assertNull(worker.getPrimary());
     assertNull(worker.getSecondary());
@@ -364,17 +375,18 @@ public class ParallelRecompilationViewProcessWorkerTest {
   public void testJoin_timeout_workersTerminateAfter() throws InterruptedException {
     final ViewProcessWorkerFactory workerFactory = new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
         try {
-          Mockito.when(worker.join(Mockito.anyLong())).thenAnswer(new Answer<Boolean>() {
+          Mockito.when(worker.join(Matchers.anyLong())).thenAnswer(new Answer<Boolean>() {
             @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-              assertTrue(((Long) invocation.getArguments()[0]) <= 20000);
+            public Boolean answer(final InvocationOnMock invocation) throws Throwable {
+              assertTrue((Long) invocation.getArguments()[0] <= 20000);
               return Boolean.TRUE;
             }
           });
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           // Doesn't get thrown
         }
         return worker;
@@ -387,7 +399,7 @@ public class ParallelRecompilationViewProcessWorkerTest {
     // Start workers
     worker.startParallel(options);
     worker.startSecondaryWorker(worker.getPrimary(), options.getExecutionSequence());
-    // Join on the first worker will see the secondary worker promoted, that will join and this will complete 
+    // Join on the first worker will see the secondary worker promoted, that will join and this will complete
     assertTrue(worker.join(20000));
     assertNull(worker.getPrimary());
     assertNull(worker.getSecondary());
@@ -397,17 +409,18 @@ public class ParallelRecompilationViewProcessWorkerTest {
   public void testJoin_timeout() throws InterruptedException {
     final ViewProcessWorkerFactory workerFactory = new ViewProcessWorkerFactory() {
       @Override
-      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions, final ViewDefinition viewDefinition) {
+      public ViewProcessWorker createWorker(final ViewProcessWorkerContext context, final ViewExecutionOptions executionOptions,
+          final ViewDefinition viewDefinition) {
         final ViewProcessWorker worker = Mockito.mock(ViewProcessWorker.class);
         try {
-          Mockito.when(worker.join(Mockito.anyLong())).thenAnswer(new Answer<Boolean>() {
+          Mockito.when(worker.join(Matchers.anyLong())).thenAnswer(new Answer<Boolean>() {
             @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-              assertTrue(((Long) invocation.getArguments()[0]) <= 20000);
+            public Boolean answer(final InvocationOnMock invocation) throws Throwable {
+              assertTrue((Long) invocation.getArguments()[0] <= 20000);
               return Boolean.FALSE;
             }
           });
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           // Doesn't get thrown
         }
         return worker;
@@ -420,7 +433,7 @@ public class ParallelRecompilationViewProcessWorkerTest {
     // Start workers
     worker.startParallel(options);
     worker.startSecondaryWorker(worker.getPrimary(), options.getExecutionSequence());
-    // Join on the first worker will see the secondary worker promoted, that will join and this will complete 
+    // Join on the first worker will see the secondary worker promoted, that will join and this will complete
     assertFalse(worker.join(20000));
     assertNotNull(worker.getPrimary());
     assertNotNull(worker.getSecondary());

@@ -5,8 +5,6 @@
  */
 package com.opengamma.examples.simulated.generator;
 
-import com.opengamma.lambdava.functions.Function2;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
@@ -16,6 +14,7 @@ import com.opengamma.financial.generator.AbstractPortfolioGeneratorTool;
 import com.opengamma.financial.generator.SecurityGenerator;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.ExternalId;
+import com.opengamma.lambdava.functions.Function2;
 import com.opengamma.util.money.Currency;
 
 /**
@@ -42,10 +41,10 @@ public class SyntheticPortfolioGeneratorTool extends AbstractPortfolioGeneratorT
   }
 
   public static void main(final String[] args) { // CSIGNORE
-    AbstractTool<ToolContext> tool = new AbstractTool<ToolContext>() {
+    final AbstractTool<ToolContext> tool = new AbstractTool<ToolContext>() {
       private final SyntheticPortfolioGeneratorTool _instance = new SyntheticPortfolioGeneratorTool();
       @Override
-      protected Options createOptions(boolean mandatoryConfigArg) {
+      protected Options createOptions(final boolean mandatoryConfigArg) {
         final Options options = super.createOptions(mandatoryConfigArg);
         _instance.createOptions(options);
         return options;

@@ -83,6 +83,7 @@ public class SurfaceFunctions extends AbstractFunctionConfigurationBean {
       return _configMaster;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
       final ConfigSearchRequest<SurfaceDefinition<?, ?>> searchRequest = new ConfigSearchRequest<>();
@@ -102,8 +103,8 @@ public class SurfaceFunctions extends AbstractFunctionConfigurationBean {
 
     /**
      * Returns true if the type is {@link SurfaceDefinition} or {@link SurfaceSpecification}.
-     * @param type
-     * @return
+     * @param type  the type
+     * @return true if the type is a surface specification or definition
      */
     /* package */ static boolean isMonitoredType(final String type) {
       return SurfaceDefinition.class.getName().equals(type) || SurfaceSpecification.class.getName().equals(type);

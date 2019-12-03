@@ -13,8 +13,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 
 /**
- * Container for the results of a least square (minimum chi-square) fit, where some model (with a set of parameters), is calibrated
- * to a data set.
+ * Container for the results of a least square (minimum chi-square) fit, where some model (with a set of parameters), is calibrated to a data set.
  */
 public class LeastSquareResults {
   @Override
@@ -27,7 +26,7 @@ public class LeastSquareResults {
   private final DoubleMatrix2D _covariance;
   private final DoubleMatrix2D _inverseJacobian;
 
-  public LeastSquareResults(LeastSquareResults from) {
+  public LeastSquareResults(final LeastSquareResults from) {
     this(from._chiSq, from._parameters, from._covariance, from._inverseJacobian);
   }
 
@@ -42,7 +41,7 @@ public class LeastSquareResults {
     final int n = parameters.getNumberOfElements();
     Validate.isTrue(covariance.getNumberOfColumns() == n, "covariance matrix not square");
     Validate.isTrue(covariance.getNumberOfRows() == n, "covariance matrix wrong size");
-    //TODO test size of inverse Jacobian
+    // TODO test size of inverse Jacobian
     _chiSq = chiSq;
     _parameters = parameters;
     _covariance = covariance;
@@ -50,7 +49,8 @@ public class LeastSquareResults {
   }
 
   /**
-   * Gets the Chi-square of the fit
+   * Gets the Chi-square of the fit.
+   * 
    * @return the chiSq
    */
   public double getChiSq() {
@@ -58,7 +58,8 @@ public class LeastSquareResults {
   }
 
   /**
-   * Gets the value of the fitting parameters, when the chi-squared is minimised
+   * Gets the value of the fitting parameters, when the chi-squared is minimised.
+   * 
    * @return the parameters
    */
   public DoubleMatrix1D getFitParameters() {
@@ -66,8 +67,9 @@ public class LeastSquareResults {
   }
 
   /**
-   * Gets the estimated covariance matrix of the standard errors in the fitting parameters. <b>Note</b> only in the case of
-   * normally distributed errors, does this have any meaning full mathematical interpretation (See NR third edition, p812-816)
+   * Gets the estimated covariance matrix of the standard errors in the fitting parameters. <b>Note</b> only in the case of normally distributed errors, does
+   * this have any meaning full mathematical interpretation (See NR third edition, p812-816)
+   * 
    * @return the formal covariance matrix
    */
   public DoubleMatrix2D getCovariance() {
@@ -75,9 +77,10 @@ public class LeastSquareResults {
   }
 
   /**
-   * This a matrix where the i,jth element is the (infinitesimal) sensitivity of the ith fitting parameter to the jth data
-   * point (NOT the model point), when the fitting parameter are such that the chi-squared is minimised. So it is a type of (inverse)
-   * Jacobian, but should not be confused with the model jacobian (sensitivity of model data points, to parameters) or its inverse.
+   * This a matrix where the i,jth element is the (infinitesimal) sensitivity of the ith fitting parameter to the jth data point (NOT the model point), when the
+   * fitting parameter are such that the chi-squared is minimised. So it is a type of (inverse) Jacobian, but should not be confused with the model jacobian
+   * (sensitivity of model data points, to parameters) or its inverse.
+   * 
    * @return a matrix
    */
   public DoubleMatrix2D getFittingParameterSensitivityToData() {
@@ -93,7 +96,7 @@ public class LeastSquareResults {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_chiSq);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _covariance.hashCode();
     result = prime * result + _parameters.hashCode();
     result = prime * result + (_inverseJacobian == null ? 0 : _inverseJacobian.hashCode());

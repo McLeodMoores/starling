@@ -80,19 +80,44 @@ public class NonDeliverableFXOptionSecurity extends FinancialSecurity {
    */
   @PropertyDefinition(validate = "notNull")
   private ExerciseType _exerciseType;
-  
+
   /**
    * Whether the currency in which the settlement is made is the call currency (otherwise it's the put currency).
    */
   @PropertyDefinition
   private boolean _deliveryInCallCurrency;
-  
-  NonDeliverableFXOptionSecurity() { //For builder
+
+  /**
+   * For the builder.
+   */
+  NonDeliverableFXOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public NonDeliverableFXOptionSecurity(Currency putCurrency, Currency callCurrency, double putAmount, double callAmount, Expiry expiry,
-      ZonedDateTime settlementDate, boolean isLong, ExerciseType exerciseType, boolean deliveryInCallCurrency) {
+  /**
+   * @param putCurrency
+   *          the put currency, not null
+   * @param callCurrency
+   *          the call currency, not null
+   * @param putAmount
+   *          the put amount
+   * @param callAmount
+   *          the call amount
+   * @param expiry
+   *          the expiry, not null
+   * @param settlementDate
+   *          the settlement date, not null
+   * @param isLong
+   *          true if the option is long, false if it is short
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param deliveryInCallCurrency
+   *          true to deliver the call currency, false to deliver in the put
+   *          currency
+   */
+  public NonDeliverableFXOptionSecurity(final Currency putCurrency, final Currency callCurrency, final double putAmount, final double callAmount,
+      final Expiry expiry,
+      final ZonedDateTime settlementDate, final boolean isLong, final ExerciseType exerciseType, final boolean deliveryInCallCurrency) {
     super(SECURITY_TYPE);
     setPutCurrency(putCurrency);
     setCallCurrency(callCurrency);
@@ -105,20 +130,25 @@ public class NonDeliverableFXOptionSecurity extends FinancialSecurity {
     setDeliveryInCallCurrency(deliveryInCallCurrency);
   }
 
+  /**
+   * Gets the delivery currency.
+   *
+   * @return the delivery currency
+   */
   public Currency getDeliveryCurrency() {
     return isDeliveryInCallCurrency() ? getCallCurrency() : getPutCurrency();
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitNonDeliverableFXOptionSecurity(this);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Checks if the long/short type is long.
-   * 
+   *
    * @return true if long, false if short
    */
   public boolean isLong() {
@@ -127,7 +157,7 @@ public class NonDeliverableFXOptionSecurity extends FinancialSecurity {
 
   /**
    * Checks if the long/short type is short.
-   * 
+   *
    * @return true if short, false if long
    */
   public boolean isShort() {

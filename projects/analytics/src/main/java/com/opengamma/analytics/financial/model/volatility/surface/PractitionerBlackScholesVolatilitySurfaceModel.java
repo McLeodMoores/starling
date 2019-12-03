@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.surface;
@@ -24,11 +24,12 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public class PractitionerBlackScholesVolatilitySurfaceModel implements VolatilitySurfaceModel<Map<OptionDefinition, Double>, StandardOptionDataBundle> {
-  private static final Logger s_logger = LoggerFactory.getLogger(PractitionerBlackScholesVolatilitySurfaceModel.class);
-  private final VolatilitySurfaceModel<Map<OptionDefinition, Double>, StandardOptionDataBundle> _bsmVolatilityModel = new BlackScholesMertonImpliedVolatilitySurfaceModel();
+  private static final Logger LOGGER = LoggerFactory.getLogger(PractitionerBlackScholesVolatilitySurfaceModel.class);
+  private final VolatilitySurfaceModel<Map<OptionDefinition, Double>, StandardOptionDataBundle> _bsmVolatilityModel =
+      new BlackScholesMertonImpliedVolatilitySurfaceModel();
   private static final int DEGREE = 5;
   private final LeastSquaresRegression _regression;
   private static final Double[] EMPTY_ARRAY = new Double[0];
@@ -68,15 +69,17 @@ public class PractitionerBlackScholesVolatilitySurfaceModel implements Volatilit
       k = entry.getKey().getStrike();
       t = entry.getKey().getTimeToExpiry(data.getDate());
       try {
-        sigma = _bsmVolatilityModel.getSurface(Collections.<OptionDefinition, Double>singletonMap(entry.getKey(), entry.getValue()), data).getVolatility(DoublesPair.of(t, k));
+        sigma = _bsmVolatilityModel.getSurface(Collections.<OptionDefinition, Double> singletonMap(entry.getKey(), entry.getValue()), data)
+            .getVolatility(DoublesPair.of(t, k));
         kList.add(k);
         tList.add(t);
         sigmaList.add(sigma);
       } catch (final Exception e) {
-        s_logger.info("Problem getting BSM volatility for " + entry.getKey() + ", not using this option in regression. Error was: ", e);
+        LOGGER.info("Problem getting BSM volatility for " + entry.getKey() + ", not using this option in regression. Error was: ", e);
       }
     }
-    return new VolatilitySurface(FunctionalDoublesSurface.from(new MySurfaceFunction(getRegressionResult(kList.toArray(EMPTY_ARRAY), tList.toArray(EMPTY_ARRAY), sigmaList.toArray(EMPTY_ARRAY)))));
+    return new VolatilitySurface(FunctionalDoublesSurface
+        .from(new MySurfaceFunction(getRegressionResult(kList.toArray(EMPTY_ARRAY), tList.toArray(EMPTY_ARRAY), sigmaList.toArray(EMPTY_ARRAY)))));
   }
 
   private LeastSquaresRegressionResult getRegressionResult(final Double[] kArray, final Double[] tArray, final Double[] sigmaArray) {
@@ -99,7 +102,7 @@ public class PractitionerBlackScholesVolatilitySurfaceModel implements Volatilit
   private class MySurfaceFunction implements Function<Double, Double> {
     private final LeastSquaresRegressionResult _result;
 
-    public MySurfaceFunction(final LeastSquaresRegressionResult result) {
+    MySurfaceFunction(final LeastSquaresRegressionResult result) {
       _result = result;
     }
 

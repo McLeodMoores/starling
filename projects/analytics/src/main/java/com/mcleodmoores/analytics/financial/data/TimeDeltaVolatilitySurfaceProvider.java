@@ -46,17 +46,21 @@ public class TimeDeltaVolatilitySurfaceProvider implements ImmutableBean, Volati
   private final Interpolator1D _deltaInterpolator;
 
   public static TimeDeltaVolatilitySurfaceProvider ofDeltas(final UniqueIdentifiable id, final double[] times, final double[][] deltas,
-      final double[][] volatilities, final boolean isPutDelta, final Interpolator1D timeInterpolator, final Interpolator1D deltaInterpolator) {
+      final double[][] volatilities, final boolean isPutDelta, final Interpolator1D timeInterpolator,
+      final Interpolator1D deltaInterpolator) {
     return new TimeDeltaVolatilitySurfaceProvider(id, times, deltas, volatilities, isPutDelta, timeInterpolator, deltaInterpolator);
   }
 
-  public static TimeDeltaVolatilitySurfaceProvider ofStrangleRiskReversal(final UniqueIdentifiable id, final double[] times, final double[][] deltas,
-      final double[] atms, final double[][] strangles, final double[][] riskReversals, final Interpolator1D timeInterpolator, final Interpolator1D deltaInterpolator) {
+  public static TimeDeltaVolatilitySurfaceProvider ofStrangleRiskReversal(final UniqueIdentifiable id, final double[] times,
+      final double[][] deltas,
+      final double[] atms, final double[][] strangles, final double[][] riskReversals, final Interpolator1D timeInterpolator,
+      final Interpolator1D deltaInterpolator) {
     return new TimeDeltaVolatilitySurfaceProvider(id, times, deltas, atms, strangles, riskReversals, timeInterpolator, deltaInterpolator);
   }
 
   @ImmutableConstructor
-  private TimeDeltaVolatilitySurfaceProvider(final UniqueIdentifiable id, final double[] times, final double[][] deltas, final double[][] volatilities,
+  private TimeDeltaVolatilitySurfaceProvider(final UniqueIdentifiable id, final double[] times, final double[][] deltas,
+      final double[][] volatilities,
       final boolean isPutDelta, final Interpolator1D timeInterpolator, final Interpolator1D deltaInterpolator) {
     _id = ArgumentChecker.notNull(id, "id");
     ArgumentChecker.notNull(times, "times");
@@ -82,8 +86,10 @@ public class TimeDeltaVolatilitySurfaceProvider implements ImmutableBean, Volati
     _deltaInterpolator = ArgumentChecker.notNull(deltaInterpolator, "deltaInterpolator");
   }
 
-  private TimeDeltaVolatilitySurfaceProvider(final UniqueIdentifiable id, final double[] times, final double[][] deltas, final double[] atms,
-      final double[][] strangles, final double[][] riskReversals, final Interpolator1D timeInterpolator, final Interpolator1D deltaInterpolator) {
+  private TimeDeltaVolatilitySurfaceProvider(final UniqueIdentifiable id, final double[] times, final double[][] deltas,
+      final double[] atms,
+      final double[][] strangles, final double[][] riskReversals, final Interpolator1D timeInterpolator,
+      final Interpolator1D deltaInterpolator) {
     _id = ArgumentChecker.notNull(id, "id");
     ArgumentChecker.notNull(times, "times");
     final int n = times.length;
@@ -249,13 +255,13 @@ public class TimeDeltaVolatilitySurfaceProvider implements ImmutableBean, Volati
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       TimeDeltaVolatilitySurfaceProvider other = (TimeDeltaVolatilitySurfaceProvider) obj;
-      return JodaBeanUtils.equal(getId(), other.getId()) &&
-          JodaBeanUtils.equal(getTimes(), other.getTimes()) &&
-          JodaBeanUtils.equal(getDeltas(), other.getDeltas()) &&
-          JodaBeanUtils.equal(getVolatilities(), other.getVolatilities()) &&
-          (isIsPutDelta() == other.isIsPutDelta()) &&
-          JodaBeanUtils.equal(getTimeInterpolator(), other.getTimeInterpolator()) &&
-          JodaBeanUtils.equal(getDeltaInterpolator(), other.getDeltaInterpolator());
+      return JodaBeanUtils.equal(_id, other._id) &&
+          JodaBeanUtils.equal(_times, other._times) &&
+          JodaBeanUtils.equal(_deltas, other._deltas) &&
+          JodaBeanUtils.equal(_volatilities, other._volatilities) &&
+          (_isPutDelta == other._isPutDelta) &&
+          JodaBeanUtils.equal(_timeInterpolator, other._timeInterpolator) &&
+          JodaBeanUtils.equal(_deltaInterpolator, other._deltaInterpolator);
     }
     return false;
   }
@@ -263,13 +269,13 @@ public class TimeDeltaVolatilitySurfaceProvider implements ImmutableBean, Volati
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTimes());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDeltas());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getVolatilities());
-    hash = hash * 31 + JodaBeanUtils.hashCode(isIsPutDelta());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTimeInterpolator());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDeltaInterpolator());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_id);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_times);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_deltas);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_volatilities);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_isPutDelta);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_timeInterpolator);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_deltaInterpolator);
     return hash;
   }
 
@@ -287,13 +293,13 @@ public class TimeDeltaVolatilitySurfaceProvider implements ImmutableBean, Volati
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("id").append('=').append(JodaBeanUtils.toString(getId())).append(',').append(' ');
-    buf.append("times").append('=').append(JodaBeanUtils.toString(getTimes())).append(',').append(' ');
-    buf.append("deltas").append('=').append(JodaBeanUtils.toString(getDeltas())).append(',').append(' ');
-    buf.append("volatilities").append('=').append(JodaBeanUtils.toString(getVolatilities())).append(',').append(' ');
-    buf.append("isPutDelta").append('=').append(JodaBeanUtils.toString(isIsPutDelta())).append(',').append(' ');
-    buf.append("timeInterpolator").append('=').append(JodaBeanUtils.toString(getTimeInterpolator())).append(',').append(' ');
-    buf.append("deltaInterpolator").append('=').append(JodaBeanUtils.toString(getDeltaInterpolator())).append(',').append(' ');
+    buf.append("id").append('=').append(JodaBeanUtils.toString(_id)).append(',').append(' ');
+    buf.append("times").append('=').append(JodaBeanUtils.toString(_times)).append(',').append(' ');
+    buf.append("deltas").append('=').append(JodaBeanUtils.toString(_deltas)).append(',').append(' ');
+    buf.append("volatilities").append('=').append(JodaBeanUtils.toString(_volatilities)).append(',').append(' ');
+    buf.append("isPutDelta").append('=').append(JodaBeanUtils.toString(_isPutDelta)).append(',').append(' ');
+    buf.append("timeInterpolator").append('=').append(JodaBeanUtils.toString(_timeInterpolator)).append(',').append(' ');
+    buf.append("deltaInterpolator").append('=').append(JodaBeanUtils.toString(_deltaInterpolator)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -579,19 +585,31 @@ public class TimeDeltaVolatilitySurfaceProvider implements ImmutableBean, Volati
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

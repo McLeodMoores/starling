@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -26,6 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Convention for exchange-traded interest rate futures.
  */
+@ConventionMetaData(description = "Interest-rate future", group = ConventionGroups.ETF)
 @BeanDefinition
 public class InterestRateFutureConvention extends ExchangeTradedFutureAndOptionConvention {
 
@@ -52,24 +55,28 @@ public class InterestRateFutureConvention extends ExchangeTradedFutureAndOptionC
 
   /**
    * Creates an instance.
-   * 
-   * @param name  the convention name, not null
-   * @param externalIdBundle  the external identifiers for this convention, not null
-   * @param expiryConvention  the expiry convention, not null
-   * @param exchangeCalendar  the exchange calendar, not null
-   * @param indexConvention  the index convention, not null
+   *
+   * @param name
+   *          the convention name, not null
+   * @param externalIdBundle
+   *          the external identifiers for this convention, not null
+   * @param expiryConvention
+   *          the expiry convention, not null
+   * @param exchangeCalendar
+   *          the exchange calendar, not null
+   * @param indexConvention
+   *          the index convention, not null
    */
-  public InterestRateFutureConvention(
-      final String name, final ExternalIdBundle externalIdBundle, final ExternalId expiryConvention,
+  public InterestRateFutureConvention(final String name, final ExternalIdBundle externalIdBundle, final ExternalId expiryConvention,
       final ExternalId exchangeCalendar, final ExternalId indexConvention) {
     super(name, externalIdBundle, expiryConvention, exchangeCalendar);
     setIndexConvention(indexConvention);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override
@@ -80,8 +87,10 @@ public class InterestRateFutureConvention extends ExchangeTradedFutureAndOptionC
   /**
    * Accepts a visitor to manage traversal of the hierarchy.
    *
-   * @param <T>  the result type of the visitor
-   * @param visitor  the visitor, not null
+   * @param <T>
+   *          the result type of the visitor
+   * @param visitor
+   *          the visitor, not null
    * @return the result
    */
   @Override

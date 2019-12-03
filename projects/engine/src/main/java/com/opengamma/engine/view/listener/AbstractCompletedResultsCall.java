@@ -20,14 +20,14 @@ import com.opengamma.engine.view.impl.InMemoryViewDeltaResultModel;
  */
 public abstract class AbstractCompletedResultsCall implements Function<ViewResultListener, Object> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractCompletedResultsCall.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCompletedResultsCall.class);
 
   private ViewComputationResultModel _full;
   private InMemoryViewComputationResultModel _fullCopy;
   private ViewDeltaResultModel _delta;
   private InMemoryViewDeltaResultModel _deltaCopy;
 
-  public AbstractCompletedResultsCall(ViewComputationResultModel full, ViewDeltaResultModel delta) {
+  public AbstractCompletedResultsCall(final ViewComputationResultModel full, final ViewDeltaResultModel delta) {
     update(full, delta);
   }
 
@@ -58,7 +58,7 @@ public abstract class AbstractCompletedResultsCall implements Function<ViewResul
 
   protected abstract void oldResult(ViewComputationResultModel full);
 
-  public void update(ViewComputationResultModel full, ViewDeltaResultModel delta) {
+  public void update(final ViewComputationResultModel full, final ViewDeltaResultModel delta) {
     if (full != null) {
       if (_full != null) {
         final Instant previous = _full.getCalculationTime();
@@ -71,7 +71,7 @@ public abstract class AbstractCompletedResultsCall implements Function<ViewResul
           oldResult(full);
         }
       } else {
-        s_logger.debug("Got initial full result");
+        LOGGER.debug("Got initial full result");
         _full = full;
       }
     }
@@ -81,18 +81,18 @@ public abstract class AbstractCompletedResultsCall implements Function<ViewResul
         final Instant current = delta.getCalculationTime();
         if (previous.isAfter(current)) {
           // This result predates the current value, so swap and merge to get ordering right
-          s_logger.debug("Applying old delta from {} to new baseline delta from {}", previous, current);
+          LOGGER.debug("Applying old delta from {} to new baseline delta from {}", previous, current);
           _deltaCopy = new InMemoryViewDeltaResultModel(delta);
           _deltaCopy.update(_delta);
           _delta = _deltaCopy;
         } else {
           // Merge the new result into the running delta
-          if (s_logger.isDebugEnabled()) {
+          if (LOGGER.isDebugEnabled()) {
             if (previous.equals(current)) {
               // Two results calculated so close together they appear "at the same time". The merge order might be wrong.
-              s_logger.debug("Merging two deltas both calculated at {}", current);
+              LOGGER.debug("Merging two deltas both calculated at {}", current);
             } else {
-              s_logger.debug("Applying new delta from {} to previous delta from {}", current, previous);
+              LOGGER.debug("Applying new delta from {} to previous delta from {}", current, previous);
             }
           }
           if (_deltaCopy == null) {
@@ -102,7 +102,7 @@ public abstract class AbstractCompletedResultsCall implements Function<ViewResul
           _deltaCopy.update(delta);
         }
       } else {
-        s_logger.debug("Got initial delta result");
+        LOGGER.debug("Got initial delta result");
         _delta = delta;
       }
     }

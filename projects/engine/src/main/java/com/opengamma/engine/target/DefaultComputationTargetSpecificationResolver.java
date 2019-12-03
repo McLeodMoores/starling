@@ -29,9 +29,9 @@ import com.opengamma.util.PoolExecutor;
 /**
  * Standard implementation of a {@link ComputationTargetSpecificationResolver}.
  * <p>
- * Note that this is a fairly cheap operation; looking up the resolver and calling that. It should not normally be necessary to provide any caching on top of a specification resolver - if a
- * requirement is being resolved regularly for the same version/correction then there is probably something wrong elsewhere. If a resolver implementation is costly (for example querying an underlying
- * data source) then that is where the caching should lie.
+ * Note that this is a fairly cheap operation; looking up the resolver and calling that. It should not normally be necessary to provide any caching on top of a
+ * specification resolver - if a requirement is being resolved regularly for the same version/correction then there is probably something wrong elsewhere. If a
+ * resolver implementation is costly (for example querying an underlying data source) then that is where the caching should lie.
  */
 public class DefaultComputationTargetSpecificationResolver implements ComputationTargetSpecificationResolver {
 
@@ -54,7 +54,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
     private final ComputationTargetType _type;
     private final IdentifierResolver _resolver;
 
-    public SingleSpecificationResolver(final ComputationTargetType type, final IdentifierResolver resolver) {
+    SingleSpecificationResolver(final ComputationTargetType type, final IdentifierResolver resolver) {
       _type = type;
       _resolver = resolver;
     }
@@ -62,9 +62,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
     private ComputationTargetSpecification resolved(final ComputationTargetReference parent, final UniqueId uid) {
       if (parent != null) {
         return parent.containing(_type, uid);
-      } else {
-        return new ComputationTargetSpecification(_type, uid);
       }
+      return new ComputationTargetSpecification(_type, uid);
     }
 
     @Override
@@ -72,20 +71,19 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
       final UniqueId uid = _resolver.resolveExternalId(requirement.getIdentifiers(), versionCorrection);
       if (uid != null) {
         return resolved(requirement.getParent(), uid);
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override
     public void resolveRequirements(final Collection<ComputationTargetRequirement> requirements, final VersionCorrection versionCorrection,
         final Map<ComputationTargetReference, ComputationTargetSpecification> result) {
       final Set<ExternalIdBundle> identifiers = Sets.newHashSetWithExpectedSize(requirements.size());
-      for (ComputationTargetRequirement requirement : requirements) {
+      for (final ComputationTargetRequirement requirement : requirements) {
         identifiers.add(requirement.getIdentifiers());
       }
       final Map<ExternalIdBundle, UniqueId> resolved = _resolver.resolveExternalIds(identifiers, versionCorrection);
-      for (ComputationTargetRequirement requirement : requirements) {
+      for (final ComputationTargetRequirement requirement : requirements) {
         final UniqueId uid = resolved.get(requirement.getIdentifiers());
         if (uid != null) {
           result.put(requirement, resolved(requirement.getParent(), uid));
@@ -94,24 +92,24 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
     }
 
     @Override
-    public ComputationTargetSpecification resolveObjectId(final ComputationTargetReference parent, final ObjectId identifier, final VersionCorrection versionCorrection) {
+    public ComputationTargetSpecification resolveObjectId(final ComputationTargetReference parent, final ObjectId identifier,
+        final VersionCorrection versionCorrection) {
       final UniqueId uid = _resolver.resolveObjectId(identifier, versionCorrection);
       if (uid != null) {
         return resolved(parent, uid);
-      } else {
-        return null;
       }
+      return null;
     }
 
     @Override
     public void resolveSpecifications(final Collection<ComputationTargetSpecification> specifications, final VersionCorrection versionCorrection,
         final Map<ComputationTargetReference, ComputationTargetSpecification> result) {
       final Set<ObjectId> identifiers = Sets.newHashSetWithExpectedSize(specifications.size());
-      for (ComputationTargetSpecification specification : specifications) {
+      for (final ComputationTargetSpecification specification : specifications) {
         identifiers.add(specification.getUniqueId().getObjectId());
       }
       final Map<ObjectId, UniqueId> resolved = _resolver.resolveObjectIds(identifiers, versionCorrection);
-      for (ComputationTargetSpecification specification : specifications) {
+      for (final ComputationTargetSpecification specification : specifications) {
         final UniqueId uid = resolved.get(specification.getUniqueId().getObjectId());
         if (uid != null) {
           result.put(specification, resolved(specification.getParent(), uid));
@@ -126,7 +124,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
     private final SpecificationResolver _a;
     private final SpecificationResolver _b;
 
-    public FoldedSpecificationResolver(final SpecificationResolver a, final SpecificationResolver b) {
+    FoldedSpecificationResolver(final SpecificationResolver a, final SpecificationResolver b) {
       _a = a;
       _b = b;
     }
@@ -147,8 +145,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
       _a.resolveRequirements(requirements, versionCorrection, result);
       remaining -= result.size();
       if (remaining > 0) {
-        final List<ComputationTargetRequirement> pending = new ArrayList<ComputationTargetRequirement>(remaining);
-        for (ComputationTargetRequirement requirement : requirements) {
+        final List<ComputationTargetRequirement> pending = new ArrayList<>(remaining);
+        for (final ComputationTargetRequirement requirement : requirements) {
           if (!result.containsKey(requirement)) {
             pending.add(requirement);
           }
@@ -158,7 +156,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
     }
 
     @Override
-    public ComputationTargetSpecification resolveObjectId(final ComputationTargetReference parent, final ObjectId identifier, final VersionCorrection versionCorrection) {
+    public ComputationTargetSpecification resolveObjectId(final ComputationTargetReference parent, final ObjectId identifier,
+        final VersionCorrection versionCorrection) {
       final ComputationTargetSpecification a = _a.resolveObjectId(parent, identifier, versionCorrection);
       if (a != null) {
         return a;
@@ -173,8 +172,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
       _a.resolveSpecifications(specifications, versionCorrection, result);
       remaining -= result.size();
       if (remaining > 0) {
-        final List<ComputationTargetSpecification> pending = new ArrayList<ComputationTargetSpecification>(remaining);
-        for (ComputationTargetSpecification specification : specifications) {
+        final List<ComputationTargetSpecification> pending = new ArrayList<>(remaining);
+        for (final ComputationTargetSpecification specification : specifications) {
           if (!result.containsKey(specification)) {
             pending.add(specification);
           }
@@ -185,14 +184,15 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
 
   }
 
-  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> s_fold = new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
+  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD =
+      new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
     @Override
     public SpecificationResolver execute(final SpecificationResolver a, final SpecificationResolver b) {
       return new FoldedSpecificationResolver(a, b);
     }
   };
 
-  private final ComputationTargetTypeMap<SpecificationResolver> _resolve = new ComputationTargetTypeMap<SpecificationResolver>(s_fold);
+  private final ComputationTargetTypeMap<SpecificationResolver> _resolve = new ComputationTargetTypeMap<>(FOLD);
 
   public void addResolver(final ComputationTargetType type, final IdentifierResolver strategy) {
     _resolve.put(type, new SingleSpecificationResolver(type, strategy));
@@ -204,7 +204,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
   }
 
   @Override
-  public Map<ComputationTargetReference, ComputationTargetSpecification> getTargetSpecifications(final Set<ComputationTargetReference> references, final VersionCorrection versionCorrection) {
+  public Map<ComputationTargetReference, ComputationTargetSpecification> getTargetSpecifications(final Set<ComputationTargetReference> references,
+      final VersionCorrection versionCorrection) {
     return atVersionCorrection(versionCorrection).getTargetSpecifications(references);
   }
 
@@ -216,40 +217,36 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
         final PoolExecutor executor = PoolExecutor.instance();
         if (executor != null) {
           return executor.createService(null);
-        } else {
-          return null;
         }
+        return null;
       }
 
       private final ComputationTargetReferenceVisitor<ComputationTargetSpecification> _getTargetSpecification =
           new ComputationTargetReferenceVisitor<ComputationTargetSpecification>() {
 
-            @Override
-            public ComputationTargetSpecification visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
-              final SpecificationResolver resolver = _resolve.get(requirement.getType());
-              if (resolver != null) {
-                return resolver.resolveRequirement(requirement, versionCorrection);
-              } else {
-                return null;
-              }
-            }
+        @Override
+        public ComputationTargetSpecification visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
+          final SpecificationResolver resolver = _resolve.get(requirement.getType());
+          if (resolver != null) {
+            return resolver.resolveRequirement(requirement, versionCorrection);
+          }
+          return null;
+        }
 
-            @Override
-            public ComputationTargetSpecification visitComputationTargetSpecification(final ComputationTargetSpecification specification) {
-              final UniqueId uid = specification.getUniqueId();
-              if ((uid != null) && uid.isLatest()) {
-                final SpecificationResolver resolver = _resolve.get(specification.getType());
-                if (resolver != null) {
-                  return resolver.resolveObjectId(specification.getParent(), uid.getObjectId(), versionCorrection);
-                } else {
-                  return specification;
-                }
-              } else {
-                return specification;
-              }
+        @Override
+        public ComputationTargetSpecification visitComputationTargetSpecification(final ComputationTargetSpecification specification) {
+          final UniqueId uid = specification.getUniqueId();
+          if (uid != null && uid.isLatest()) {
+            final SpecificationResolver resolver = _resolve.get(specification.getType());
+            if (resolver != null) {
+              return resolver.resolveObjectId(specification.getParent(), uid.getObjectId(), versionCorrection);
             }
+            return specification;
+          }
+          return specification;
+        }
 
-          };
+      };
 
       @Override
       public ComputationTargetSpecification getTargetSpecification(final ComputationTargetReference reference) {
@@ -258,9 +255,9 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
 
       @Override
       public Map<ComputationTargetReference, ComputationTargetSpecification> getTargetSpecifications(final Set<ComputationTargetReference> references) {
-        final Map<ComputationTargetReference, ComputationTargetSpecification> result = new ConcurrentHashMap<ComputationTargetReference, ComputationTargetSpecification>();
-        final Map<ComputationTargetType, Set<ComputationTargetRequirement>> requirementByType = new HashMap<ComputationTargetType, Set<ComputationTargetRequirement>>();
-        final Map<ComputationTargetType, Set<ComputationTargetSpecification>> specificationByType = new HashMap<ComputationTargetType, Set<ComputationTargetSpecification>>();
+        final Map<ComputationTargetReference, ComputationTargetSpecification> result = new ConcurrentHashMap<>();
+        final Map<ComputationTargetType, Set<ComputationTargetRequirement>> requirementByType = new HashMap<>();
+        final Map<ComputationTargetType, Set<ComputationTargetSpecification>> specificationByType = new HashMap<>();
         final ComputationTargetReferenceVisitor<Void> visitor = new ComputationTargetReferenceVisitor<Void>() {
 
           @Override
@@ -268,13 +265,13 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
             Set<ComputationTargetRequirement> requirements = requirementByType.get(requirement.getType());
             if (requirements == null) {
               if (_resolve.get(requirement.getType()) != null) {
-                requirements = new HashSet<ComputationTargetRequirement>();
+                requirements = new HashSet<>();
                 requirementByType.put(requirement.getType(), requirements);
                 // Add to the bulk resolution set
                 requirements.add(requirement);
               } else {
                 // No resolver for this type
-                requirementByType.put(requirement.getType(), Collections.<ComputationTargetRequirement>emptySet());
+                requirementByType.put(requirement.getType(), Collections.<ComputationTargetRequirement> emptySet());
               }
             } else {
               if (!requirements.isEmpty()) {
@@ -287,17 +284,17 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
 
           @Override
           public Void visitComputationTargetSpecification(final ComputationTargetSpecification specification) {
-            if ((specification.getUniqueId() != null) && (specification.getUniqueId().isLatest())) {
+            if (specification.getUniqueId() != null && specification.getUniqueId().isLatest()) {
               Set<ComputationTargetSpecification> specifications = specificationByType.get(specification.getType());
               if (specifications == null) {
                 if (_resolve.get(specification.getType()) != null) {
-                  specifications = new HashSet<ComputationTargetSpecification>();
+                  specifications = new HashSet<>();
                   specificationByType.put(specification.getType(), specifications);
                   // Add to the bulk resolution set
                   specifications.add(specification);
                 } else {
                   // No resolver for this type
-                  specificationByType.put(specification.getType(), Collections.<ComputationTargetSpecification>emptySet());
+                  specificationByType.put(specification.getType(), Collections.<ComputationTargetSpecification> emptySet());
                   result.put(specification, specification);
                 }
               } else {
@@ -321,7 +318,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
           reference.accept(visitor);
         }
         final PoolExecutor.Service<Void> jobs = createService();
-        // TODO: sort the target types - some resolvers will cause caching behavior that will help others out (e.g. resolving Portfolio OID will cache all component Position OID/UIDs).
+        // TODO: sort the target types - some resolvers will cause caching behavior that will help others out (e.g. resolving Portfolio OID
+        // will cache all component Position OID/UIDs).
         // TODO: should there be a threshold for single vs bulk - e.g. are two calls in succession quicker than the map/set operations?
         for (final Map.Entry<ComputationTargetType, Set<ComputationTargetRequirement>> entry : requirementByType.entrySet()) {
           switch (entry.getValue().size()) {
@@ -380,7 +378,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
                   @Override
                   public void run() {
                     final ComputationTargetSpecification specification = entry.getValue().iterator().next();
-                    final ComputationTargetSpecification resolved = _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(), specification.getUniqueId().getObjectId(),
+                    final ComputationTargetSpecification resolved = _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(),
+                        specification.getUniqueId().getObjectId(),
                         versionCorrection);
                     if (resolved != null) {
                       result.put(specification, resolved);
@@ -389,7 +388,8 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
                 });
               } else {
                 final ComputationTargetSpecification specification = entry.getValue().iterator().next();
-                final ComputationTargetSpecification resolved = _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(), specification.getUniqueId().getObjectId(), versionCorrection);
+                final ComputationTargetSpecification resolved = _resolve.get(entry.getKey()).resolveObjectId(specification.getParent(),
+                    specification.getUniqueId().getObjectId(), versionCorrection);
                 if (resolved != null) {
                   result.put(specification, resolved);
                 }
@@ -415,7 +415,7 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
         if (jobs != null) {
           try {
             jobs.join();
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
             throw new OpenGammaRuntimeException("Interrupted", e);
           }
         }

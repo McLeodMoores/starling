@@ -23,17 +23,17 @@ public class FudgeSenderFactory implements MarketDataSenderFactory {
 
   /**
    * Creates a sender.
-   * 
+   *
    * @param fudgeMessageSender  the base sender, not null
    */
-  public FudgeSenderFactory(FudgeMessageSender fudgeMessageSender) {
+  public FudgeSenderFactory(final FudgeMessageSender fudgeMessageSender) {
     ArgumentChecker.notNull(fudgeMessageSender, "fudgeMessageSender");
     _fudgeMessageSender = fudgeMessageSender;
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public Collection<MarketDataSender> create(MarketDataDistributor distributor) {
+  public Collection<MarketDataSender> create(final MarketDataDistributor distributor) {
     return Collections.<MarketDataSender>singleton(new FudgeSender(_fudgeMessageSender, distributor));
   }
 

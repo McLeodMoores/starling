@@ -11,7 +11,6 @@ import java.util.Set;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.equity.StaticReplicationDataBundle;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
-import com.opengamma.analytics.financial.model.option.pricing.analytic.BjerksundStenslandModel;
 import com.opengamma.analytics.financial.riskfactor.ValueDeltaCalculator;
 import com.opengamma.analytics.financial.riskfactor.ValueGreekCalculator;
 import com.opengamma.engine.ComputationTarget;
@@ -25,7 +24,8 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * Calculates the value delta of an equity index or equity option using the Bjerksund-Stensland delta.<p>
+ * Calculates the value delta of an equity index or equity option using the Bjerksund-Stensland delta.
+ * <p>
  * See {@link ListedEquityOptionBjerksundStenslandFunction}
  */
 public class ListedEquityOptionBjerksundStenslandValueDeltaFunction extends ListedEquityOptionBjerksundStenslandFunction {
@@ -33,13 +33,15 @@ public class ListedEquityOptionBjerksundStenslandValueDeltaFunction extends List
   /** Value delta calculator */
   private static final ValueGreekCalculator CALCULATOR = ValueDeltaCalculator.getInstance();
 
-  /** Default constructor */
+  /** Default constructor. */
   public ListedEquityOptionBjerksundStenslandValueDeltaFunction() {
     super(ValueRequirementNames.VALUE_DELTA);
   }
+
   @Override
-  protected Set<ComputedValue> computeValues(InstrumentDerivative derivative, StaticReplicationDataBundle market, FunctionInputs inputs, Set<ValueRequirement> desiredValues,
-      ComputationTargetSpecification targetSpec, ValueProperties resultProperties) {
+  protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
+      final Set<ValueRequirement> desiredValues,
+      final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
     final Object deltaObject = inputs.getValue(ValueRequirementNames.DELTA);
     if (deltaObject == null) {

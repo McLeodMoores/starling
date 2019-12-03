@@ -44,13 +44,13 @@ public class FXForwardSecurityFudgeBuilder extends AbstractFudgeBuilder implemen
   public static final String REGION_FIELD_NAME = "region";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FXForwardSecurity object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final FXForwardSecurity object) {
     final MutableFudgeMsg msg = serializer.newMessage();
     FXForwardSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     return msg;
   }
 
-  public static void toFudgeMsg(FudgeSerializer serializer, FXForwardSecurity object, final MutableFudgeMsg msg) {
+  public static void toFudgeMsg(final FudgeSerializer serializer, final FXForwardSecurity object, final MutableFudgeMsg msg) {
     FinancialSecurityFudgeBuilder.toFudgeMsg(serializer, object, msg);
     addToMessage(msg, VERSION_FIELD_NAME, VERSION);
     addToMessage(msg, PAY_CURRENCY_FIELD_NAME, object.getPayCurrency());
@@ -62,13 +62,13 @@ public class FXForwardSecurityFudgeBuilder extends AbstractFudgeBuilder implemen
   }
 
   @Override
-  public FXForwardSecurity buildObject(FudgeDeserializer deserializer, FudgeMsg msg) {
-    FXForwardSecurity object = new FXForwardSecurity();
+  public FXForwardSecurity buildObject(final FudgeDeserializer deserializer, final FudgeMsg msg) {
+    final FXForwardSecurity object = new FXForwardSecurity();
     FXForwardSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     return object;
   }
 
-  public static void fromFudgeMsg(FudgeDeserializer deserializer, FudgeMsg msg, FXForwardSecurity object) {
+  public static void fromFudgeMsg(final FudgeDeserializer deserializer, final FudgeMsg msg, final FXForwardSecurity object) {
     FinancialSecurityFudgeBuilder.fromFudgeMsg(deserializer, msg, object);
     if (msg.getInt(VERSION_FIELD_NAME) != VERSION) {
       throw new OpenGammaRuntimeException("Incorrect version of FXForwardSecurity persisted.  Object model has changed to not include underlying");

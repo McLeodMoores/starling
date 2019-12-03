@@ -28,10 +28,11 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class EquityOptionBlackImpliedVolFunction extends EquityOptionBlackFunction {
   /** Implied volatility calculator */
-  private static final InstrumentDerivativeVisitorAdapter<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackImpliedVolatilityCalculator.getInstance();
+  private static final InstrumentDerivativeVisitorAdapter<StaticReplicationDataBundle, Double> CALCULATOR = EquityOptionBlackImpliedVolatilityCalculator
+      .getInstance();
 
   /**
-   * Sets the result to {@link ValueRequirementNames#IMPLIED_VOLATILITY}
+   * Sets the result to {@link ValueRequirementNames#IMPLIED_VOLATILITY}.
    */
   public EquityOptionBlackImpliedVolFunction() {
     super(ValueRequirementNames.IMPLIED_VOLATILITY);
@@ -46,7 +47,8 @@ public class EquityOptionBlackImpliedVolFunction extends EquityOptionBlackFuncti
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> resultsWithCcy = super.getResults(context, target, inputs);
     return getResultsWithoutCurrency(resultsWithCcy);
   }

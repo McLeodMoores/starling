@@ -18,8 +18,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Abstract implementation of a provider of security information.
  * <p>
- * This provides default implementations of the interface methods that delegate to a
- * protected method that subclasses must implement.
+ * This provides default implementations of the interface methods that delegate to a protected method that subclasses must implement.
  */
 public abstract class AbstractSecurityProvider implements SecurityProvider {
 
@@ -30,41 +29,42 @@ public abstract class AbstractSecurityProvider implements SecurityProvider {
 
   /**
    * Creates an instance.
-   * 
-   * @param dataSourceRegex  the data source regex, not null
+   *
+   * @param dataSourceRegex
+   *          the data source regex, not null
    */
-  public AbstractSecurityProvider(String dataSourceRegex) {
+  public AbstractSecurityProvider(final String dataSourceRegex) {
     ArgumentChecker.notNull(dataSourceRegex, "dataSourceRegex");
     _dataSourceRegex = dataSourceRegex;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public Security getSecurity(ExternalIdBundle externalIdBundle) {
-    SecurityProviderRequest request = SecurityProviderRequest.createGet(externalIdBundle, null);
-    SecurityProviderResult result = getSecurities(request);
+  public Security getSecurity(final ExternalIdBundle externalIdBundle) {
+    final SecurityProviderRequest request = SecurityProviderRequest.createGet(externalIdBundle, null);
+    final SecurityProviderResult result = getSecurities(request);
     return result.getResultMap().get(externalIdBundle);
   }
 
   @Override
-  public Map<ExternalIdBundle, Security> getSecurities(Collection<ExternalIdBundle> externalIdBundles) {
-    SecurityProviderRequest request = SecurityProviderRequest.createGet(externalIdBundles, null);
-    SecurityProviderResult result = getSecurities(request);
+  public Map<ExternalIdBundle, Security> getSecurities(final Collection<ExternalIdBundle> externalIdBundles) {
+    final SecurityProviderRequest request = SecurityProviderRequest.createGet(externalIdBundles, null);
+    final SecurityProviderResult result = getSecurities(request);
     return result.getResultMap();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public SecurityProviderResult getSecurities(SecurityProviderRequest request) {
+  public SecurityProviderResult getSecurities(final SecurityProviderRequest request) {
     ArgumentChecker.notNull(request, "request");
-    ArgumentChecker.isTrue(request.getDataSource() == null ||
-        request.getDataSource().matches(_dataSourceRegex), "Unsupported data source: " + request.getDataSource());
-    
+    ArgumentChecker.isTrue(request.getDataSource() == null
+        || request.getDataSource().matches(_dataSourceRegex), "Unsupported data source: " + request.getDataSource());
+
     // short-cut empty case
     if (request.getExternalIdBundles().isEmpty()) {
       return new SecurityProviderResult();
     }
-    
+
     // get securities
     return doBulkGet(request);
   }
@@ -73,8 +73,9 @@ public abstract class AbstractSecurityProvider implements SecurityProvider {
    * Gets the securities.
    * <p>
    * The data source is checked before this method is invoked.
-   * 
-   * @param request  the request, with a non-empty set of identifiers, not null
+   *
+   * @param request
+   *          the request, with a non-empty set of identifiers, not null
    * @return the result, not null
    */
   protected abstract SecurityProviderResult doBulkGet(SecurityProviderRequest request);

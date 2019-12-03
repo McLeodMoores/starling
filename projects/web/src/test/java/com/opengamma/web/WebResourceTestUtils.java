@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web;
@@ -46,9 +46,9 @@ import com.opengamma.util.time.ExpiryAccuracy;
  * Utility class used by WebResource testcases
  */
 public final class WebResourceTestUtils {
-  
-  public static final ContainerFactory s_sortedJSONObjectFactory = new ContainerFactory() {
-    
+
+  public static final ContainerFactory SORTED_JSON_OBJECT_FACTORY = new ContainerFactory() {
+
     @SuppressWarnings("rawtypes")
     @Override
     public List creatArrayContainer() {
@@ -61,17 +61,17 @@ public final class WebResourceTestUtils {
       return new TreeMap();
     }
   };
-  
+
   private WebResourceTestUtils() {
   }
-  
+
   /**
    * Returns AAPL equity security for testing
-   * 
+   *
    * @return the equity security
    */
   public static EquitySecurity getEquitySecurity() {
-    EquitySecurity equitySecurity = new EquitySecurity("NASDAQ/NGS (GLOBAL SELECT MARKET)", "XNGS", "APPLE INC", Currency.USD);
+    final EquitySecurity equitySecurity = new EquitySecurity("NASDAQ/NGS (GLOBAL SELECT MARKET)", "XNGS", "APPLE INC", Currency.USD);
     equitySecurity.addExternalId(ExternalSchemes.bloombergTickerSecurityId("AAPL US Equity"));
     equitySecurity.addExternalId(ExternalSchemes.bloombergBuidSecurityId("EQ0010169500001000"));
     equitySecurity.addExternalId(ExternalSchemes.cusipSecurityId("037833100"));
@@ -82,16 +82,16 @@ public final class WebResourceTestUtils {
     equitySecurity.setGicsCode(GICSCode.of("45202010"));
     return equitySecurity;
   }
-  
+
   /**
    * Get US bond future security for testing
-   * 
+   *
    * @return the bond future security
    */
   public static BondFutureSecurity getBondFutureSecurity() {
-    Expiry expiry = new Expiry(ZonedDateTime.of(LocalDateTime.of(2010, Month.JUNE, 21, 19, 0),
+    final Expiry expiry = new Expiry(ZonedDateTime.of(LocalDateTime.of(2010, Month.JUNE, 21, 19, 0),
         ZoneOffset.UTC), ExpiryAccuracy.MIN_HOUR_DAY_MONTH_YEAR);
-    Set<BondFutureDeliverable> basket = new HashSet<BondFutureDeliverable>();
+    final Set<BondFutureDeliverable> basket = new HashSet<>();
     basket.add(new BondFutureDeliverable(ExternalIdBundle.of(
         ExternalSchemes.bloombergTickerSecurityId("GV912810EV6")), 1.0858));
     basket.add(new BondFutureDeliverable(ExternalIdBundle.of(
@@ -140,33 +140,32 @@ public final class WebResourceTestUtils {
         ExternalSchemes.bloombergTickerSecurityId("GV912810EW4")), 1.0));
     basket.add(new BondFutureDeliverable(ExternalIdBundle.of(
         ExternalSchemes.bloombergTickerSecurityId("GV912810FA1")), 1.0396));
-    
-    BondFutureSecurity sec = new BondFutureSecurity(expiry, "XCBT", "XCBT", Currency.USD, 1000, basket,
-                                                    LocalDate.of(2010, 6, 01).atStartOfDay(ZoneOffset.UTC), 
-                                                    LocalDate.of(2010, 6, 01).atStartOfDay(ZoneOffset.UTC),
-                                                    "Bond");
+
+    final BondFutureSecurity sec = new BondFutureSecurity(expiry, "XCBT", "XCBT", Currency.USD, 1000, basket,
+        LocalDate.of(2010, 6, 01).atStartOfDay(ZoneOffset.UTC),
+        LocalDate.of(2010, 6, 01).atStartOfDay(ZoneOffset.UTC),
+        "Bond");
     sec.setName("US LONG BOND(CBT) Jun10");
-    Set<ExternalId> identifiers = new HashSet<ExternalId>();
+    final Set<ExternalId> identifiers = new HashSet<>();
     identifiers.add(ExternalSchemes.bloombergBuidSecurityId("IX8530684-0"));
     identifiers.add(ExternalSchemes.cusipSecurityId("USM10"));
     identifiers.add(ExternalSchemes.bloombergTickerSecurityId("USM10 Comdty"));
     sec.setExternalIdBundle(ExternalIdBundle.of(identifiers));
     return sec;
   }
-  
-  public static JSONObject loadJson(String filePath) throws IOException, JSONException, URISyntaxException {
-    URL jsonResource = ClassLoader.getSystemResource(filePath);
+
+  public static JSONObject loadJson(final String filePath) throws IOException, JSONException, URISyntaxException {
+    final URL jsonResource = ClassLoader.getSystemResource(filePath);
     assertNotNull(jsonResource);
-    String jsonText = FileUtils.readFileToString(new File(jsonResource.toURI()));
+    final String jsonText = FileUtils.readFileToString(new File(jsonResource.toURI()));
     return new JSONObject(jsonText);
   }
 
-  @SuppressWarnings("rawtypes")
   public static void assertJSONObjectEquals(final JSONObject expectedJson, final JSONObject actualJson) throws Exception {
     assertNotNull(expectedJson);
     assertNotNull(actualJson);
-    String expectedSorted = JSONValue.toJSONString(new JSONParser().parse(expectedJson.toString(), s_sortedJSONObjectFactory));
-    String actualSorted = JSONValue.toJSONString(new JSONParser().parse(actualJson.toString(), s_sortedJSONObjectFactory));
+    final String expectedSorted = JSONValue.toJSONString(new JSONParser().parse(expectedJson.toString(), SORTED_JSON_OBJECT_FACTORY));
+    final String actualSorted = JSONValue.toJSONString(new JSONParser().parse(actualJson.toString(), SORTED_JSON_OBJECT_FACTORY));
     assertEquals(expectedSorted, actualSorted);
   }
 

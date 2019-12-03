@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -21,13 +21,12 @@ import com.opengamma.analytics.financial.model.finitedifference.ThetaMethodFinit
 import com.opengamma.analytics.financial.model.option.definition.Barrier;
 import com.opengamma.analytics.financial.model.option.definition.Barrier.BarrierType;
 import com.opengamma.analytics.financial.model.option.definition.Barrier.KnockType;
-import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.EuropeanVanillaOption;
 import com.opengamma.analytics.financial.model.volatility.smile.fitting.interpolation.SurfaceArrayUtils;
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * 
+ *
  */
 public class BarrierOptionPricer {
 
@@ -65,22 +64,31 @@ public class BarrierOptionPricer {
 
   /**
    * Computes the price of a barrier option in the Black world.
-   * @param option The underlying European vanilla option.
-   * @param barrier The barrier.
-   * @param rebate The rebate. This is paid <b>immediately</b> if the knock-out barrier is hit and at expiry if the knock-in barrier is not hit
-   * @param spot The spot price.
-   * @param costOfCarry The cost of carry (i.e. the forward = spot*exp(costOfCarry*T) )
-   * @param rate The interest rate.
-   * @param sigma The Black volatility.
+   * 
+   * @param option
+   *          The underlying European vanilla option.
+   * @param barrier
+   *          The barrier.
+   * @param rebate
+   *          The rebate. This is paid <b>immediately</b> if the knock-out barrier is hit and at expiry if the knock-in barrier is not hit
+   * @param spot
+   *          The spot price.
+   * @param costOfCarry
+   *          The cost of carry (i.e. the forward = spot*exp(costOfCarry*T) )
+   * @param rate
+   *          The interest rate.
+   * @param sigma
+   *          The Black volatility.
    * @return The price.
    */
-  public double getPrice(final EuropeanVanillaOption option, final Barrier barrier, final double rebate, final double spot, final double costOfCarry, final double rate, final double sigma) {
+  public double getPrice(final EuropeanVanillaOption option, final Barrier barrier, final double rebate, final double spot, final double costOfCarry,
+      final double rate, final double sigma) {
     Validate.notNull(option, "option");
     Validate.notNull(barrier, "barrier");
-    final boolean isKnockIn = (barrier.getKnockType() == KnockType.IN);
-    final boolean isDown = (barrier.getBarrierType() == BarrierType.DOWN);
+    final boolean isKnockIn = barrier.getKnockType() == KnockType.IN;
+    final boolean isDown = barrier.getBarrierType() == BarrierType.DOWN;
 
-    //in these pathological cases the barrier is hit immediately so the value is just from the rebate (knock-out) or a European option (knock-in)
+    // in these pathological cases the barrier is hit immediately so the value is just from the rebate (knock-out) or a European option (knock-in)
     if (isDown && spot <= barrier.getBarrierLevel() || !isDown && spot >= barrier.getBarrierLevel()) {
       if (isKnockIn) {
         return blackPrice(spot, option.getStrike(), option.getTimeToExpiry(), rate, costOfCarry, sigma, option.isCall());
@@ -94,19 +102,32 @@ public class BarrierOptionPricer {
   }
 
   /**
-   * Computes the price of a one-touch out barrier option in the Black-Scholes world by solving the BS PDE on a finite difference grid. If a barrier is hit at any time before expiry,
-   * the option is cancelled (knocked-out) and a rebate (which is often zero) is paid <b>immediately</b>. If the barrier is not hit, then a normal European option payment is made. <p>
+   * Computes the price of a one-touch out barrier option in the Black-Scholes world by solving the BS PDE on a finite difference grid. If a barrier is hit at
+   * any time before expiry, the option is cancelled (knocked-out) and a rebate (which is often zero) is paid <b>immediately</b>. If the barrier is not hit,
+   * then a normal European option payment is made.
+   * <p>
    * If the barrier is above the spot it is assumed to be an up-and-out barrier (otherwise it would expire immediately) otherwise it is a down-and-out barrier
-   * As there are exact formulae for this case (see {@link BlackBarrierPriceFunction}), this is purely for testing purposes.
-   * @param spot The current (i.e. option price time) of the underlying
-   * @param barrierLevel The barrier level
-   * @param strike The strike of the European option
-   * @param expiry The expiry of the option
-   * @param rate The interest rate.
-   * @param carry The cost-of-carry (i.e. the forward = spot*exp(costOfCarry*T) )
-   * @param vol The Black volatility.
-   * @param isCall true for call
-   * @param rebate The rebate amount.
+   * As there are exact formulae for this case (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction}),
+   * this is purely for testing purposes.
+   * 
+   * @param spot
+   *          The current (i.e. option price time) of the underlying
+   * @param barrierLevel
+   *          The barrier level
+   * @param strike
+   *          The strike of the European option
+   * @param expiry
+   *          The expiry of the option
+   * @param rate
+   *          The interest rate.
+   * @param carry
+   *          The cost-of-carry (i.e. the forward = spot*exp(costOfCarry*T) )
+   * @param vol
+   *          The Black volatility.
+   * @param isCall
+   *          true for call
+   * @param rebate
+   *          The rebate amount.
    * @return The price.
    */
   public double outBarrier(final double spot, final double barrierLevel, final double strike, final double expiry, final double rate, final double carry,
@@ -124,7 +145,7 @@ public class BarrierOptionPricer {
     BoundaryCondition upper;
     if (isUp) {
       sMin = 0.0;
-      sMax = barrierLevel * Math.exp(-adj); //bring the barrier DOWN slightly to adjust for discrete monitoring
+      sMax = barrierLevel * Math.exp(-adj); // bring the barrier DOWN slightly to adjust for discrete monitoring
       if (isCall) {
         lower = new DirichletBoundaryCondition(0.0, sMin);
       } else {
@@ -138,7 +159,7 @@ public class BarrierOptionPricer {
       }
       upper = new DirichletBoundaryCondition(rebate, sMax);
     } else {
-      sMin = barrierLevel * Math.exp(adj); //bring the barrier UP slightly to adjust for discrete monitoring
+      sMin = barrierLevel * Math.exp(adj); // bring the barrier UP slightly to adjust for discrete monitoring
       sMax = spot * Math.exp(_z * Math.sqrt(expiry));
       lower = new DirichletBoundaryCondition(rebate, sMin);
 
@@ -158,10 +179,11 @@ public class BarrierOptionPricer {
     final MeshingFunction tMesh = new ExponentialMeshing(0, expiry, _nTNodes, _lambda);
     final MeshingFunction xMesh = new HyperbolicMeshing(sMin, sMax, spot, _nXNodes, _bunching);
     final PDEGrid1D grid = new PDEGrid1D(tMesh, xMesh);
-    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, intCon, lower, upper, grid);
+    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, intCon, lower, upper,
+        grid);
 
     final PDEResults1D res = SOLVER.solve(pdeData);
-    //for now just do linear interpolation on price. TODO replace this with something more robust
+    // for now just do linear interpolation on price. TODO replace this with something more robust
     final double[] xNodes = grid.getSpaceNodes();
 
     final int index = SurfaceArrayUtils.getLowerBoundIndex(xNodes, spot);
@@ -170,19 +192,30 @@ public class BarrierOptionPricer {
   }
 
   /**
-   * Computes the price of a one-touch in barrier option in the Black-Scholes world by solving the BS PDE on a finite difference grid. If a barrier is hit at any time before expiry,
-   * the option becomes a simple European (call or put). If the barrier is not hit a rebate is paid at the option expiry<p>
-   * If the barrier is above the spot it is assumed to be an up-and-in barrier  otherwise it is a down-and-in barrier
-   * As there are exact formulae for this case (see {@link BlackBarrierPriceFunction}), this is purely for testing purposes.
-   * @param spot The current (i.e. option price time) of the underlying
-   * @param barrierLevel The barrier level
-   * @param strike The strike of the European option
-   * @param expiry The expiry of the option
-   * @param rate The interest rate.
-   * @param carry The cost-of-carry (i.e. the forward = spot*exp(costOfCarry*T) )
-   * @param vol The Black volatility.
-   * @param isCall true for call
-   * @param rebate The rebate amount.
+   * Computes the price of a one-touch in barrier option in the Black-Scholes world by solving the BS PDE on a finite difference grid. If a barrier is hit at
+   * any time before expiry, the option becomes a simple European (call or put). If the barrier is not hit a rebate is paid at the option expiry
+   * <p>
+   * If the barrier is above the spot it is assumed to be an up-and-in barrier otherwise it is a down-and-in barrier As there are exact formulae for this case
+   * (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction}), this is purely for testing purposes.
+   * 
+   * @param spot
+   *          The current (i.e. option price time) of the underlying
+   * @param barrierLevel
+   *          The barrier level
+   * @param strike
+   *          The strike of the European option
+   * @param expiry
+   *          The expiry of the option
+   * @param rate
+   *          The interest rate.
+   * @param carry
+   *          The cost-of-carry (i.e. the forward = spot*exp(costOfCarry*T) )
+   * @param vol
+   *          The Black volatility.
+   * @param isCall
+   *          true for call
+   * @param rebate
+   *          The rebate amount.
    * @return The price.
    */
   public double inBarrier(final double spot, final double barrierLevel, final double strike, final double expiry, final double rate, final double carry,
@@ -193,20 +226,31 @@ public class BarrierOptionPricer {
   }
 
   /**
-   * Computes the price of a one-touch out barrier option in the Black-Scholes world assuming the rebate is paid at the option expiry. This is NOT the case for a out barrier,
-   * but is for an in, and as we must price an in barrier and a European option plus a bond (the rebate) minus an out, we need this special case.
-   * @param spot The current (i.e. option price time) of the underlying
-   * @param barrierLevel The barrier level
-   * @param strike The strike of the European option
-   * @param expiry The expiry of the option
-   * @param rate The interest rate.
-   * @param carry The cost-of-carry (i.e. the forward = spot*exp(costOfCarry*T) )
-   * @param vol The Black volatility.
-   * @param isCall true for call
-   * @param rebate The rebate amount.
+   * Computes the price of a one-touch out barrier option in the Black-Scholes world assuming the rebate is paid at the option expiry. This is NOT the case for
+   * a out barrier, but is for an in, and as we must price an in barrier and a European option plus a bond (the rebate) minus an out, we need this special case.
+   * 
+   * @param spot
+   *          The current (i.e. option price time) of the underlying
+   * @param barrierLevel
+   *          The barrier level
+   * @param strike
+   *          The strike of the European option
+   * @param expiry
+   *          The expiry of the option
+   * @param rate
+   *          The interest rate.
+   * @param carry
+   *          The cost-of-carry (i.e. the forward = spot*exp(costOfCarry*T) )
+   * @param vol
+   *          The Black volatility.
+   * @param isCall
+   *          true for call
+   * @param rebate
+   *          The rebate amount.
    * @return The price.
    */
-  protected double outBarrierSpecial(final double spot, final double barrierLevel, final double strike, final double expiry, final double rate, final double carry,
+  protected double outBarrierSpecial(final double spot, final double barrierLevel, final double strike, final double expiry, final double rate,
+      final double carry,
       final double vol, final boolean isCall, final double rebate) {
 
     final Function1D<Double, Double> intCon = ICP.getEuropeanPayoff(strike, isCall);
@@ -259,10 +303,11 @@ public class BarrierOptionPricer {
     final MeshingFunction tMesh = new ExponentialMeshing(0, expiry, _nTNodes, _lambda);
     final MeshingFunction xMesh = new HyperbolicMeshing(sMin, sMax, spot, _nXNodes, _bunching);
     final PDEGrid1D grid = new PDEGrid1D(tMesh, xMesh);
-    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, intCon, lower, upper, grid);
+    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, intCon, lower, upper,
+        grid);
 
     final PDEResults1D res = SOLVER.solve(pdeData);
-    //for now just do linear interpolation on price. TODO replace this with something more robust
+    // for now just do linear interpolation on price. TODO replace this with something more robust
     final double[] xNodes = grid.getSpaceNodes();
     final int index = SurfaceArrayUtils.getLowerBoundIndex(xNodes, spot);
     final double w = (xNodes[index + 1] - spot) / (xNodes[index + 1] - xNodes[index]);
@@ -302,10 +347,11 @@ public class BarrierOptionPricer {
     final MeshingFunction tMesh = new ExponentialMeshing(0, expiry, _nTNodes, _lambda);
     final MeshingFunction xMesh = new HyperbolicMeshing(sMin, sMax, spot, _nXNodes, _bunching);
     final PDEGrid1D grid = new PDEGrid1D(tMesh, xMesh);
-    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, intCon, lower, upper, grid);
+    final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> pdeData = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(pde, intCon, lower, upper,
+        grid);
 
     final PDEResults1D res = SOLVER.solve(pdeData);
-    //for now just do linear interpolation on price. TODO replace this with something more robust
+    // for now just do linear interpolation on price. TODO replace this with something more robust
     final double[] xNodes = grid.getSpaceNodes();
     final int index = SurfaceArrayUtils.getLowerBoundIndex(xNodes, spot);
     final double w = (xNodes[index + 1] - spot) / (xNodes[index + 1] - xNodes[index]);

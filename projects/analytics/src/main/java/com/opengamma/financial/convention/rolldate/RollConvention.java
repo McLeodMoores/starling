@@ -20,7 +20,7 @@ public enum RollConvention {
    */
   EOM {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return EndOfMonthRollDateAdjuster.getAdjuster();
     }
   },
@@ -30,18 +30,17 @@ public enum RollConvention {
    */
   FRN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numDaysToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numDaysToAdjust) {
       throw new UnsupportedOperationException("FRN not implemented yet.");
     }
   },
 
   /**
-   * IMM settlement dates roll date adjuster.
-   * 3rd Wednesday of March, June, September or December
+   * IMM settlement dates roll date adjuster. 3rd Wednesday of March, June, September or December
    */
   IMM {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       switch (numMonthsToAdjust) {
         case 1:
           return MonthlyIMMRollDateAdjuster.getAdjuster();
@@ -58,7 +57,7 @@ public enum RollConvention {
    */
   IMM_AUD {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       throw new UnsupportedOperationException("IMM_AUD not implemented yet.");
     }
   },
@@ -68,7 +67,7 @@ public enum RollConvention {
    */
   IMM_CAD {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       throw new UnsupportedOperationException("IMM_CAD not implemented yet.");
     }
   },
@@ -78,10 +77,10 @@ public enum RollConvention {
    */
   IMM_NZD {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new TemporalAdjuster() {
         @Override
-        public Temporal adjustInto(Temporal temporal) {
+        public Temporal adjustInto(final Temporal temporal) {
           return temporal.with(new DayOfMonthTemporalAdjuster(9)).with(TemporalAdjusters.nextOrSame(DayOfWeek.WEDNESDAY));
         }
       });
@@ -93,7 +92,7 @@ public enum RollConvention {
    */
   SFE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, TemporalAdjusters.dayOfWeekInMonth(2, DayOfWeek.FRIDAY));
     }
   },
@@ -103,10 +102,10 @@ public enum RollConvention {
    */
   NONE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new TemporalAdjuster() {
         @Override
-        public Temporal adjustInto(Temporal temporal) {
+        public Temporal adjustInto(final Temporal temporal) {
           return temporal;
         }
       });
@@ -118,7 +117,7 @@ public enum RollConvention {
    */
   TBILL {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return MON.getRollDateAdjuster(numMonthsToAdjust);
     }
   },
@@ -128,7 +127,7 @@ public enum RollConvention {
    */
   ONE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(1));
     }
   },
@@ -138,7 +137,7 @@ public enum RollConvention {
    */
   TWO {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(2));
     }
   },
@@ -148,7 +147,7 @@ public enum RollConvention {
    */
   THREE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(3));
     }
   },
@@ -158,7 +157,7 @@ public enum RollConvention {
    */
   FOUR {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(4));
     }
   },
@@ -168,7 +167,7 @@ public enum RollConvention {
    */
   FIVE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(5));
     }
   },
@@ -178,7 +177,7 @@ public enum RollConvention {
    */
   SIX {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(6));
     }
   },
@@ -188,7 +187,7 @@ public enum RollConvention {
    */
   SEVEN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(7));
     }
   },
@@ -198,7 +197,7 @@ public enum RollConvention {
    */
   EIGHT {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(8));
     }
   },
@@ -208,7 +207,7 @@ public enum RollConvention {
    */
   NINE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(9));
     }
   },
@@ -218,7 +217,7 @@ public enum RollConvention {
    */
   TEN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(10));
     }
   },
@@ -228,7 +227,7 @@ public enum RollConvention {
    */
   ELEVEN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(11));
     }
   },
@@ -238,7 +237,7 @@ public enum RollConvention {
    */
   TWELVE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(12));
     }
   },
@@ -248,7 +247,7 @@ public enum RollConvention {
    */
   THIRTEEN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(13));
     }
   },
@@ -258,7 +257,7 @@ public enum RollConvention {
    */
   FOURTEEN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(14));
     }
   },
@@ -268,7 +267,7 @@ public enum RollConvention {
    */
   FIFTEEN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(15));
     }
   },
@@ -278,7 +277,7 @@ public enum RollConvention {
    */
   SIXTEEN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(16));
     }
   },
@@ -288,7 +287,7 @@ public enum RollConvention {
    */
   SEVENTEEN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(17));
     }
   },
@@ -298,7 +297,7 @@ public enum RollConvention {
    */
   EIGHTEEN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(18));
     }
   },
@@ -308,7 +307,7 @@ public enum RollConvention {
    */
   NINETEEN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(19));
     }
   },
@@ -318,7 +317,7 @@ public enum RollConvention {
    */
   TWENTY {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(20));
     }
   },
@@ -328,7 +327,7 @@ public enum RollConvention {
    */
   TWENTY_ONE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(21));
     }
   },
@@ -338,7 +337,7 @@ public enum RollConvention {
    */
   TWENTY_TWO {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(22));
     }
   },
@@ -348,7 +347,7 @@ public enum RollConvention {
    */
   TWENTY_THREE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(23));
     }
   },
@@ -358,7 +357,7 @@ public enum RollConvention {
    */
   TWENTY_FOUR {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(24));
     }
   },
@@ -368,7 +367,7 @@ public enum RollConvention {
    */
   TWENTY_FIVE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(25));
     }
   },
@@ -378,7 +377,7 @@ public enum RollConvention {
    */
   TWENTY_SIX {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(26));
     }
   },
@@ -388,7 +387,7 @@ public enum RollConvention {
    */
   TWENTY_SEVEN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(27));
     }
   },
@@ -398,7 +397,7 @@ public enum RollConvention {
    */
   TWENTY_EIGHT {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(28));
     }
   },
@@ -408,7 +407,7 @@ public enum RollConvention {
    */
   TWENTY_NINE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(29));
     }
   },
@@ -418,7 +417,7 @@ public enum RollConvention {
    */
   THIRTY {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, new DayOfMonthTemporalAdjuster(30));
     }
   },
@@ -428,7 +427,7 @@ public enum RollConvention {
    */
   MON {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
     }
   },
@@ -438,7 +437,7 @@ public enum RollConvention {
    */
   TUE {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, TemporalAdjusters.nextOrSame(DayOfWeek.TUESDAY));
     }
   },
@@ -448,7 +447,7 @@ public enum RollConvention {
    */
   WED {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, TemporalAdjusters.nextOrSame(DayOfWeek.WEDNESDAY));
     }
   },
@@ -458,7 +457,7 @@ public enum RollConvention {
    */
   THU {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, TemporalAdjusters.nextOrSame(DayOfWeek.THURSDAY));
     }
   },
@@ -468,7 +467,7 @@ public enum RollConvention {
    */
   FRI {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, TemporalAdjusters.nextOrSame(DayOfWeek.FRIDAY));
     }
   },
@@ -478,7 +477,7 @@ public enum RollConvention {
    */
   SAT {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
     }
   },
@@ -488,20 +487,22 @@ public enum RollConvention {
    */
   SUN {
     @Override
-    public RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust) {
+    public RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust) {
       return new GeneralRollDateAdjuster(numMonthsToAdjust, TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
     }
   };
 
   /**
    * Get convention for this day of month.
-   * 
-   * @param dayOfMonth  the day of the month
+   *
+   * @param dayOfMonth
+   *          the day of the month
    * @return the convention, not null
-   * @throws IllegalArgumentException if the day of month is invalid
+   * @throws IllegalArgumentException
+   *           if the day of month is invalid
    */
   public static RollConvention dayOfMonth(final int dayOfMonth) {
-    switch(dayOfMonth) {
+    switch (dayOfMonth) {
       case 1:
         return ONE;
       case 2:
@@ -569,10 +570,11 @@ public enum RollConvention {
 
   /**
    * Gets the roll date adjuster.
-   * 
-   * @param numMonthsToAdjust  the number of months to adjust, not null
+   *
+   * @param numMonthsToAdjust
+   *          the number of months to adjust, not null
    * @return the adjuster, not null
    */
-  public abstract RollDateAdjuster getRollDateAdjuster(final int numMonthsToAdjust);
+  public abstract RollDateAdjuster getRollDateAdjuster(int numMonthsToAdjust);
 
 }

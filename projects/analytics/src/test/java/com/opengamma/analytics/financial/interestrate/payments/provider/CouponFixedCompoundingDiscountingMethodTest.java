@@ -42,7 +42,8 @@ public class CouponFixedCompoundingDiscountingMethodTest {
   private static final double RATE = .05;
   private final static Currency CURRENCY = Currency.of("EUR");
 
-  private final static CouponFixedCompoundingDefinition COUPON_DEFINITION = CouponFixedCompoundingDefinition.from(CURRENCY, ACCRUAL_START_DATE, ACCRUAL_END_DATE, NOTIONAL, Y1, RATE);
+  private final static CouponFixedCompoundingDefinition COUPON_DEFINITION = CouponFixedCompoundingDefinition.from(CURRENCY,
+      ACCRUAL_START_DATE, ACCRUAL_END_DATE, NOTIONAL, Y1, RATE);
 
   private static final ZonedDateTime REFERENCE_DATE_BEFORE = DateUtils.getUTCDate(2012, 8, 7);
   private static final CouponFixedCompounding COUPON = COUPON_DEFINITION.toDerivative(REFERENCE_DATE_BEFORE);
@@ -52,12 +53,18 @@ public class CouponFixedCompoundingDiscountingMethodTest {
   private static final double TOLERANCE_PV_DELTA = 1.0E+2;
 
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
-  private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
+  private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator
+      .getInstance();
 
-  private static final ParameterSensitivityParameterCalculator<MulticurveProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(PVCSDC);
+  private static final ParameterSensitivityParameterCalculator<MulticurveProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(
+      PVCSDC);
   private static final double SHIFT = 1.0E-8;
-  private static final ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator PSC_DSC_FD = new ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator(PVDC, SHIFT);
+  private static final ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator PSC_DSC_FD = new ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator(
+      PVDC, SHIFT);
 
+  /**
+   *
+   */
   @Test
   public void presentValueMarketDiscount() {
     final MultipleCurrencyAmount pvComputed = METHOD_COUPON.presentValue(COUPON, MULTICURVES);
@@ -73,17 +80,25 @@ public class CouponFixedCompoundingDiscountingMethodTest {
     assertEquals("CouponIborDiscountingMarketMethod: present value", pvExpected, pvComputed.getAmount(COUPON.getCurrency()), TOLERANCE_PV);
   }
 
+  /**
+   *
+   */
   @Test
   public void presentValueCurveSensitivity() {
     final MultipleCurrencyParameterSensitivity pvpsAnnuityExact = PSC.calculateSensitivity(COUPON, MULTICURVES, MULTICURVES.getAllNames());
     final MultipleCurrencyParameterSensitivity pvpsAnnuityFD = PSC_DSC_FD.calculateSensitivity(COUPON, MULTICURVES);
-    AssertSensitivityObjects.assertEquals("CouponFixedCompoundingDiscountingMethod: presentValueCurveSensitivity ", pvpsAnnuityExact, pvpsAnnuityFD, TOLERANCE_PV_DELTA);
+    AssertSensitivityObjects.assertEquals("CouponFixedCompoundingDiscountingMethod: presentValueCurveSensitivity ", pvpsAnnuityExact,
+        pvpsAnnuityFD, TOLERANCE_PV_DELTA);
   }
 
+  /**
+   *
+   */
   @Test
   public void presentValueMarketSensitivityMethodVsCalculator() {
     final MultipleCurrencyMulticurveSensitivity pvcsMethod = METHOD_COUPON.presentValueCurveSensitivity(COUPON, MULTICURVES);
     final MultipleCurrencyMulticurveSensitivity pvcsCalculator = COUPON.accept(PVCSDC, MULTICURVES);
-    AssertSensitivityObjects.assertEquals("CouponFixedDiscountingMarketMethod: presentValueMarketSensitivity", pvcsMethod, pvcsCalculator, TOLERANCE_PV_DELTA);
+    AssertSensitivityObjects.assertEquals("CouponFixedDiscountingMarketMethod: presentValueMarketSensitivity", pvcsMethod, pvcsCalculator,
+        TOLERANCE_PV_DELTA);
   }
 }

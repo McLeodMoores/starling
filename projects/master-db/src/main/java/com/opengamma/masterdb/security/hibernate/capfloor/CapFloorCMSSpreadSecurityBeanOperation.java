@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -42,10 +42,11 @@ public final class CapFloorCMSSpreadSecurityBeanOperation extends AbstractSecuri
   }
 
   @Override
-  public CapFloorCMSSpreadSecurityBean createBean(final OperationContext context, HibernateSecurityMasterDao secMasterSession, CapFloorCMSSpreadSecurity security) {
+  public CapFloorCMSSpreadSecurityBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession,
+      final CapFloorCMSSpreadSecurity security) {
     validateFrequency(security.getFrequency().getName());
     validateDayCount(security.getDayCount().getName());
-    
+
     final CapFloorCMSSpreadSecurityBean bean = new CapFloorCMSSpreadSecurityBean();
     bean.setCurrency(secMasterSession.getOrCreateCurrencyBean(security.getCurrency().getCode()));
     bean.setDayCount(secMasterSession.getOrCreateDayCountBean(security.getDayCount().getName()));
@@ -62,25 +63,25 @@ public final class CapFloorCMSSpreadSecurityBeanOperation extends AbstractSecuri
   }
 
   @Override
-  public CapFloorCMSSpreadSecurity createSecurity(final OperationContext context, CapFloorCMSSpreadSecurityBean bean) {
-    
-    ZonedDateTime startDate = zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate());
-    ZonedDateTime maturityDate = zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate());
-    ExternalId longIdentifier = externalIdBeanToExternalId(bean.getLongIdentifier());
-    ExternalId shortIdentifier = externalIdBeanToExternalId(bean.getShortIdentifier());
-    Frequency frequency = frequencyBeanToFrequency(bean.getFrequency());
-    Currency currency = currencyBeanToCurrency(bean.getCurrency());
-    DayCount dayCount = dayCountBeanToDayCount(bean.getDayCount());
-    return new CapFloorCMSSpreadSecurity(startDate, 
-        maturityDate, 
-        bean.getNotional(), 
-        longIdentifier, 
+  public CapFloorCMSSpreadSecurity createSecurity(final OperationContext context, final CapFloorCMSSpreadSecurityBean bean) {
+
+    final ZonedDateTime startDate = zonedDateTimeBeanToDateTimeWithZone(bean.getStartDate());
+    final ZonedDateTime maturityDate = zonedDateTimeBeanToDateTimeWithZone(bean.getMaturityDate());
+    final ExternalId longIdentifier = externalIdBeanToExternalId(bean.getLongIdentifier());
+    final ExternalId shortIdentifier = externalIdBeanToExternalId(bean.getShortIdentifier());
+    final Frequency frequency = frequencyBeanToFrequency(bean.getFrequency());
+    final Currency currency = currencyBeanToCurrency(bean.getCurrency());
+    final DayCount dayCount = dayCountBeanToDayCount(bean.getDayCount());
+    return new CapFloorCMSSpreadSecurity(startDate,
+        maturityDate,
+        bean.getNotional(),
+        longIdentifier,
         shortIdentifier,
-        bean.getStrike(), 
-        frequency, 
-        currency, 
-        dayCount, 
-        bean.isPayer(), 
+        bean.getStrike(),
+        frequency,
+        currency,
+        dayCount,
+        bean.isPayer(),
         bean.isCap());
   }
 

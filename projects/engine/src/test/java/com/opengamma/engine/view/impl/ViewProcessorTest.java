@@ -54,20 +54,20 @@ import com.opengamma.util.test.TestLifecycle;
 import com.opengamma.util.test.Timeout;
 
 /**
- * Tests ViewProcessor
+ * Tests ViewProcessor.
  */
 @Test(groups = TestGroup.UNIT)
 public class ViewProcessorTest {
 
   @Mock
-  private ViewResultListenerFactory viewResultListenerFactoryStub;
+  private ViewResultListenerFactory _viewResultListenerFactoryStub;
   @Mock
-  private ViewResultListener viewResultListenerMock;
+  private ViewResultListener _viewResultListenerMock;
 
   @BeforeMethod
   public void setUp() throws Exception {
     initMocks(this);
-    when(viewResultListenerFactoryStub.createViewResultListener(ViewProcessorTestEnvironment.TEST_USER)).thenReturn(viewResultListenerMock);
+    when(_viewResultListenerFactoryStub.createViewResultListener(ViewProcessorTestEnvironment.TEST_USER)).thenReturn(_viewResultListenerMock);
   }
 
   public void testCreateViewProcessor() {
@@ -103,9 +103,11 @@ public class ViewProcessorTest {
     }
   }
 
-  private void waitForCompletionAndShutdown(final ViewProcessorImpl vp, final ViewClient client, final ViewProcessorTestEnvironment env) throws InterruptedException {
+  private void waitForCompletionAndShutdown(final ViewProcessorImpl vp, final ViewClient client,
+      final ViewProcessorTestEnvironment env) throws InterruptedException {
     client.waitForCompletion();
-    // Note: notification of client completion happens before the client computation thread terminates and performs its postRunCycle - must wait for this to happen
+    // Note: notification of client completion happens before the client computation thread terminates and performs
+    // its postRunCycle - must wait for this to happen
     final ViewProcessWorker worker = env.getCurrentWorker(env.getViewProcess(vp, client.getUniqueId()));
     client.shutdown();
     worker.join();
@@ -208,13 +210,14 @@ public class ViewProcessorTest {
     TestLifecycle.begin();
     try {
       final ViewProcessorTestEnvironment env = new ViewProcessorTestEnvironment();
-      env.setViewResultListenerFactory(viewResultListenerFactoryStub);
+      env.setViewResultListenerFactory(_viewResultListenerFactoryStub);
       env.init();
       final ViewProcessorImpl vp = env.getViewProcessor();
       vp.start();
 
       final ViewClient client = vp.createViewClient(ViewProcessorTestEnvironment.TEST_USER);
-      final ViewExecutionOptions executionOptions = ExecutionOptions.batch(generateExecutionSequence(10), ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live())
+      final ViewExecutionOptions executionOptions =
+          ExecutionOptions.batch(generateExecutionSequence(10), ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live())
           .create());
       client.attachToViewProcess(env.getViewDefinition().getUniqueId(), executionOptions);
       waitForCompletionAndShutdown(vp, client, env);
@@ -229,14 +232,14 @@ public class ViewProcessorTest {
     try {
       final ViewProcessorTestEnvironment env = new ViewProcessorTestEnvironment();
 
-      env.setViewResultListenerFactory(viewResultListenerFactoryStub);
+      env.setViewResultListenerFactory(_viewResultListenerFactoryStub);
       env.init();
       final ViewProcessorImpl vp = env.getViewProcessor();
       vp.start();
 
       final ViewClient client = vp.createViewClient(ViewProcessorTestEnvironment.TEST_USER);
       client.setViewCycleAccessSupported(true);
-      final List<EngineResourceReference<? extends ViewCycle>> references = new ArrayList<EngineResourceReference<? extends ViewCycle>>();
+      final List<EngineResourceReference<? extends ViewCycle>> references = new ArrayList<>();
       final ViewResultListener resultListener = new AbstractViewResultListener() {
 
         @Override
@@ -254,7 +257,8 @@ public class ViewProcessorTest {
 
       };
       client.setResultListener(resultListener);
-      final ViewExecutionOptions executionOptions = ExecutionOptions.batch(generateExecutionSequence(10), ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live())
+      final ViewExecutionOptions executionOptions =
+          ExecutionOptions.batch(generateExecutionSequence(10), ViewCycleExecutionOptions.builder().setMarketDataSpecification(MarketData.live())
           .create());
       client.attachToViewProcess(env.getViewDefinition().getUniqueId(), executionOptions);
 
@@ -266,7 +270,7 @@ public class ViewProcessorTest {
       assertEquals(10, references.size());
       assertEquals(10, vp.getViewCycleManager().getResourceCount());
 
-      final Set<UniqueId> cycleIds = new HashSet<UniqueId>();
+      final Set<UniqueId> cycleIds = new HashSet<>();
       for (final EngineResourceReference<? extends ViewCycle> reference : references) {
         assertEquals(viewProcessId, reference.get().getViewProcessId());
         cycleIds.add(reference.get().getUniqueId());
@@ -282,7 +286,7 @@ public class ViewProcessorTest {
   }
 
   private ViewCycleExecutionSequence generateExecutionSequence(final int cycleCount) {
-    final Collection<Instant> valuationTimes = new ArrayList<Instant>(cycleCount);
+    final Collection<Instant> valuationTimes = new ArrayList<>(cycleCount);
     final Instant now = Instant.now();
     for (int i = 0; i < cycleCount; i++) {
       valuationTimes.add(now.plus(i, MINUTES));

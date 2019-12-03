@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.transport.socket;
@@ -81,11 +81,10 @@ public class MessageBatchingWriter {
           // Another thread is already blocked, so tag onto that and return
           _messages.add(message);
           return;
-        } else {
-          // Another thread is already writing
-          messages = new LinkedList<FudgeMsg>();
-          _messages = messages;
         }
+        // Another thread is already writing
+        messages = new LinkedList<>();
+        _messages = messages;
       } else {
         _writingThreadActive = true;
       }
@@ -120,7 +119,7 @@ public class MessageBatchingWriter {
     } else {
       try {
         _writingLock.acquire();
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
       synchronized (this) {

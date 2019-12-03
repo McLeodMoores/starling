@@ -10,7 +10,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.AssertJUnit.assertEquals;
-import net.sf.ehcache.CacheManager;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -30,10 +29,12 @@ import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSerie
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * Test.
  */
-@Test(groups = {TestGroup.UNIT, "ehcache"})
+@Test(groups = { TestGroup.UNIT, "ehcache" })
 public class EHCachingHistoricalTimeSeriesSourceTest {
 
   private static final UniqueId UID = UniqueId.of("A", "B");
@@ -42,16 +43,25 @@ public class EHCachingHistoricalTimeSeriesSourceTest {
   private EHCachingHistoricalTimeSeriesSource _cachingSource;
   private CacheManager _cacheManager;
 
+  /**
+   *
+   */
   @BeforeClass
   public void setUpClass() {
     _cacheManager = EHCacheUtils.createTestCacheManager(EHCachingHistoricalTimeSeriesSourceTest.class);
   }
 
+  /**
+   *
+   */
   @AfterClass
   public void tearDownClass() {
     EHCacheUtils.shutdownQuiet(_cacheManager);
   }
 
+  /**
+   *
+   */
   @BeforeMethod
   public void setUp() {
     _underlyingSource = mock(HistoricalTimeSeriesSource.class);
@@ -59,45 +69,54 @@ public class EHCachingHistoricalTimeSeriesSourceTest {
     _cachingSource = new EHCachingHistoricalTimeSeriesSource(_underlyingSource, _cacheManager);
   }
 
+  /**
+   *
+   */
   @AfterMethod
   public void tearDown() {
     _cachingSource.shutdown();
   }
 
-  //-------------------------------------------------------------------------
-  public void getHistoricalTimeSeries_UniqueId() {
-    LocalDate[] dates = {LocalDate.of(2011, 6, 30)};
-    double[] values = {12.34d};
-    ImmutableLocalDateDoubleTimeSeries timeSeries = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
-    HistoricalTimeSeries series = new SimpleHistoricalTimeSeries(UID, timeSeries);
-    
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void getHistoricalTimeSeriesUniqueId() {
+    final LocalDate[] dates = { LocalDate.of(2011, 6, 30) };
+    final double[] values = { 12.34d };
+    final ImmutableLocalDateDoubleTimeSeries timeSeries = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
+    final HistoricalTimeSeries series = new SimpleHistoricalTimeSeries(UID, timeSeries);
+
     when(_underlyingSource.getHistoricalTimeSeries(UID)).thenReturn(series);
-    
+
     // Fetching same series twice should return same result
-    HistoricalTimeSeries series1 = _cachingSource.getHistoricalTimeSeries(UID);
-    HistoricalTimeSeries series2 = _cachingSource.getHistoricalTimeSeries(UID);
+    final HistoricalTimeSeries series1 = _cachingSource.getHistoricalTimeSeries(UID);
+    final HistoricalTimeSeries series2 = _cachingSource.getHistoricalTimeSeries(UID);
     assertEquals(series, series1);
     assertEquals(series, series2);
     assertEquals(series1, series2);
-    
+
     // underlying source should only have been called once if cache worked as expected
     verify(_underlyingSource, times(1)).getHistoricalTimeSeries(UID);
   }
-  
-  public void getExternalIdBundle_UniqueId() {
-    ExternalId djxTicker = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "DJX Index");
-    ExternalId djxBUID = ExternalId.of(ExternalSchemes.BLOOMBERG_BUID, "EI09JDX");
-    ExternalIdBundle idBundle = ExternalIdBundle.of(djxTicker, djxBUID);
-    
+
+  /**
+   *
+   */
+  public void getExternalIdBundleUniqueId() {
+    final ExternalId djxTicker = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "DJX Index");
+    final ExternalId djxBUID = ExternalId.of(ExternalSchemes.BLOOMBERG_BUID, "EI09JDX");
+    final ExternalIdBundle idBundle = ExternalIdBundle.of(djxTicker, djxBUID);
+
     when(_underlyingSource.getExternalIdBundle(UID)).thenReturn(idBundle);
-    
+
     // Fetching same series twice should return same result
-    ExternalIdBundle bundle1 = _cachingSource.getExternalIdBundle(UID);
-    ExternalIdBundle bundle2 = _cachingSource.getExternalIdBundle(UID);
+    final ExternalIdBundle bundle1 = _cachingSource.getExternalIdBundle(UID);
+    final ExternalIdBundle bundle2 = _cachingSource.getExternalIdBundle(UID);
     assertEquals(idBundle, bundle1);
     assertEquals(idBundle, bundle2);
     assertEquals(bundle1, bundle2);
-    
+
     // underlying source should only have been called once if cache worked as expected
     verify(_underlyingSource, times(1)).getExternalIdBundle(UID);
   }

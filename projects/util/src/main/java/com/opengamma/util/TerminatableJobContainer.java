@@ -18,13 +18,13 @@ public class TerminatableJobContainer {
   /**
    * The queue of active jobs.
    */
-  private final Queue<TerminatableJob> _activeJobs = new LinkedBlockingQueue<TerminatableJob>();
+  private final Queue<TerminatableJob> _activeJobs = new LinkedBlockingQueue<>();
 
   /**
    * Adds a job to the queue.
    * @param job  the job to add, not null
    */
-  public void addJob(TerminatableJob job) {
+  public void addJob(final TerminatableJob job) {
     ArgumentChecker.notNull(job, "job");
     _activeJobs.add(job);
   }
@@ -34,9 +34,9 @@ public class TerminatableJobContainer {
    * @param job  the job to add, not null
    * @param threadName  the thread name
    */
-  public void addJobAndStartThread(TerminatableJob job, String threadName) {
+  public void addJobAndStartThread(final TerminatableJob job, final String threadName) {
     ArgumentChecker.notNull(job, "job");
-    Thread t = new Thread(job, threadName);
+    final Thread t = new Thread(job, threadName);
     t.setDaemon(true);
     _activeJobs.add(job);
     t.start();
@@ -47,9 +47,9 @@ public class TerminatableJobContainer {
    * This removes the job from the queue.
    */
   public void cleanupTerminatedInstances() {
-    Iterator<TerminatableJob> jobIter = _activeJobs.iterator();
+    final Iterator<TerminatableJob> jobIter = _activeJobs.iterator();
     while (jobIter.hasNext()) {
-      TerminatableJob job = jobIter.next();
+      final TerminatableJob job = jobIter.next();
       if (job.isTerminated()) {
         jobIter.remove();
       }

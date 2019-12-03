@@ -66,10 +66,10 @@ public final class Quadruple<A, B, C, D>
    * @param first  the first element, may be null
    * @param second  the second element, may be null
    * @param third  the third element, may be null
-   * @param fourth the fourth element, may be null    
+   * @param fourth the fourth element, may be null
    * @return a quadruple formed from the three parameters, not null
    */
-  public static <A, B, C, D> Quadruple<A, B, C, D> of(A first, B second, C third, D fourth) {
+  public static <A, B, C, D> Quadruple<A, B, C, D> of(final A first, final B second, final C third, final D fourth) {
     return new Quadruple<>(first, second, third, fourth);
   }
 
@@ -81,7 +81,7 @@ public final class Quadruple<A, B, C, D>
    * @param third  the third element, may be null
    * @param fourth the fourth element, may be null
    */
-  private Quadruple(A first, B second, C third, D fourth) {
+  private Quadruple(final A first, final B second, final C third, final D fourth) {
     _first = first;
     _second = second;
     _third = third;
@@ -137,7 +137,7 @@ public final class Quadruple<A, B, C, D>
    */
   @SuppressWarnings("unchecked")
   public <T> List<T> toList() {
-    ArrayList<Object> list = new ArrayList<>();
+    final ArrayList<Object> list = new ArrayList<>();
     list.add(getFirst());
     list.add(getSecond());
     list.add(getThird());
@@ -156,7 +156,7 @@ public final class Quadruple<A, B, C, D>
    * @return negative if this is less, zero if equal, positive if greater
    */
   @Override
-  public int compareTo(Quadruple<A, B, C, D> other) {
+  public int compareTo(final Quadruple<A, B, C, D> other) {
     return new CompareToBuilder()
         .append(_first, other._first)
         .append(_second, other._second)
@@ -165,13 +165,14 @@ public final class Quadruple<A, B, C, D>
         .toComparison();
   }
 
+  // CSOFF
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
     if (obj instanceof Quadruple<?, ?, ?, ?>) {
-      Quadruple<?, ?, ?, ?> other = (Quadruple<?, ?, ?, ?>) obj;
+      final Quadruple<?, ?, ?, ?> other = (Quadruple<?, ?, ?, ?>) obj;
       return ObjectUtils.equals(getFirst(), other.getFirst()) &&
           ObjectUtils.equals(getSecond(), other.getSecond()) &&
           ObjectUtils.equals(getThird(), other.getThird()) &&
@@ -184,10 +185,10 @@ public final class Quadruple<A, B, C, D>
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((getFirst() == null) ? 0 : getFirst().hashCode());
-    result = prime * result + ((getSecond() == null) ? 0 : getSecond().hashCode());
-    result = prime * result + ((getThird() == null) ? 0 : getThird().hashCode());
-    result = prime * result + ((getFourth() == null) ? 0 : getFourth().hashCode());
+    result = prime * result + (getFirst() == null ? 0 : getFirst().hashCode());
+    result = prime * result + (getSecond() == null ? 0 : getSecond().hashCode());
+    result = prime * result + (getThird() == null ? 0 : getThird().hashCode());
+    result = prime * result + (getFourth() == null ? 0 : getFourth().hashCode());
     return result;
   }
 
@@ -219,14 +220,13 @@ public final class Quadruple<A, B, C, D>
     JodaBeanUtils.registerMetaBean(Quadruple.Meta.INSTANCE);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Quadruple.Meta<A, B, C, D> metaBean() {
     return Quadruple.Meta.INSTANCE;
   }
 
   @Override
-  public <R> Property<R> property(String propertyName) {
+  public <R> Property<R> property(final String propertyName) {
     return metaBean().<R>metaProperty(propertyName).createProperty(this);
   }
 
@@ -288,7 +288,7 @@ public final class Quadruple<A, B, C, D>
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
       switch (propertyName) {
         case "first":
           return _first;
@@ -354,7 +354,7 @@ public final class Quadruple<A, B, C, D>
     //-----------------------------------------------------------------------
     @Override
     @SuppressWarnings("rawtypes")
-    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
+    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName) {
         case "first":
           return ((Quadruple) bean).getFirst();
@@ -369,7 +369,7 @@ public final class Quadruple<A, B, C, D>
     }
 
     @Override
-    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
+    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
       metaProperty(propertyName);
       if (quiet) {
         return;
@@ -404,7 +404,7 @@ public final class Quadruple<A, B, C, D>
 
     //-----------------------------------------------------------------------
     @Override
-    public Builder set(String propertyName, Object newValue) {
+    public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName) {
         case "first":
           _first = newValue;

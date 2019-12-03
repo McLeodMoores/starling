@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -27,11 +27,11 @@ public final class FunctionCostsPerConfiguration {
   /**
    * The map of per function statistics.
    */
-  private final ConcurrentMap<String, FunctionInvocationStatistics> _data = new ConcurrentHashMap<String, FunctionInvocationStatistics>();
+  private final ConcurrentMap<String, FunctionInvocationStatistics> _data = new ConcurrentHashMap<>();
 
   /**
    * Creates an instance for a configuration name.
-   * 
+   *
    * @param functionCosts  the function costs
    * @param configurationName  the configuration name, not null
    */
@@ -52,7 +52,7 @@ public final class FunctionCostsPerConfiguration {
 
   /**
    * Gets the costs.
-   * 
+   *
    * @return the costs, not null
    */
   /* package */ ConcurrentMap<String, FunctionInvocationStatistics> getCosts() {
@@ -61,7 +61,7 @@ public final class FunctionCostsPerConfiguration {
 
   /**
    * Gets the statistics for a function.
-   * 
+   *
    * @param functionId  the function id, not null
    * @return the statistics, not null
    */
@@ -75,7 +75,7 @@ public final class FunctionCostsPerConfiguration {
 
   /**
    * Gets the set of known functions.
-   * 
+   *
    * @return the functions, not null
    */
   public Set<String> getFunctions() {

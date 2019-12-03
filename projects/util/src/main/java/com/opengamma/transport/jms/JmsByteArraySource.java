@@ -13,6 +13,7 @@ import java.util.List;
 import javax.jms.Message;
 
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.destination.JmsDestinationAccessor;
 
 import com.opengamma.transport.ByteArraySource;
 import com.opengamma.util.ArgumentChecker;
@@ -38,7 +39,7 @@ public class JmsByteArraySource implements ByteArraySource {
 
   /**
    * Creates an instance wrapping a JMS template.
-   * 
+   *
    * @param jmsTemplate  the JMS template, not null
    */
   public JmsByteArraySource(final JmsTemplate jmsTemplate) {
@@ -49,7 +50,7 @@ public class JmsByteArraySource implements ByteArraySource {
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying JMS template.
-   * 
+   *
    * @return the underlying JMS template, not null
    */
   public JmsTemplate getJmsTemplate() {
@@ -58,12 +59,12 @@ public class JmsByteArraySource implements ByteArraySource {
 
   /**
    * Gets a copy of the last message batch.
-   * 
+   *
    * @return the last batch, not null
    */
   public List<Message> getLastMessageBatch() {
     synchronized (_lastMessageBatch) {  // need to sync as following line uses iterator
-      return new ArrayList<Message>(_lastMessageBatch);
+      return new ArrayList<>(_lastMessageBatch);
     }
   }
 
@@ -76,12 +77,12 @@ public class JmsByteArraySource implements ByteArraySource {
       return Collections.emptyList();
     }
     _lastMessageBatch.clear();
-    final List<byte[]> byteBatch = new LinkedList<byte[]>();
-    getJmsTemplate().setReceiveTimeout(JmsTemplate.RECEIVE_TIMEOUT_NO_WAIT);
-    
+    final List<byte[]> byteBatch = new LinkedList<>();
+    getJmsTemplate().setReceiveTimeout(JmsDestinationAccessor.RECEIVE_TIMEOUT_NO_WAIT);
+
     while (message != null) {
       _lastMessageBatch.add(message);
-      byte[] bytes = JmsByteArrayHelper.extractBytes(message);
+      final byte[] bytes = JmsByteArrayHelper.extractBytes(message);
       byteBatch.add(bytes);
 
       message = getJmsTemplate().receive();
@@ -91,14 +92,14 @@ public class JmsByteArraySource implements ByteArraySource {
 
   @Override
   public synchronized List<byte[]> batchReceiveNoWait() {
-    return batchReceive(JmsTemplate.RECEIVE_TIMEOUT_NO_WAIT);
+    return batchReceive(JmsDestinationAccessor.RECEIVE_TIMEOUT_NO_WAIT);
   }
 
   @Override
   public synchronized byte[] receive(final long maxWaitInMilliseconds) {
     getJmsTemplate().setReceiveTimeout(maxWaitInMilliseconds);
     final Message message = getJmsTemplate().receive();
-    byte[] bytes = JmsByteArrayHelper.extractBytes(message);
+    final byte[] bytes = JmsByteArrayHelper.extractBytes(message);
     _lastMessageBatch.clear();
     _lastMessageBatch.add(message);
     return bytes;
@@ -106,7 +107,7 @@ public class JmsByteArraySource implements ByteArraySource {
 
   @Override
   public synchronized byte[] receiveNoWait() {
-    return receive(JmsTemplate.RECEIVE_TIMEOUT_NO_WAIT);
+    return receive(JmsDestinationAccessor.RECEIVE_TIMEOUT_NO_WAIT);
   }
 
 }

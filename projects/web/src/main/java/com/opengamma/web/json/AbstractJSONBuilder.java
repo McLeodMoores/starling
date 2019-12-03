@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.json;
@@ -15,28 +15,29 @@ import org.fudgemsg.mapping.FudgeDeserializer;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Partial implementation of {@link JSONBuilder}
- * 
- * @param <T> the config document parameter type
+ * Partial implementation of {@link JSONBuilder}.
+ *
+ * @param <T>
+ *          the config document parameter type
  */
 public abstract class AbstractJSONBuilder<T> implements JSONBuilder<T> {
 
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
-  protected <E> E fromJSON(Class<E> clazz, String json) {
-    FudgeMsg fudgeMsg = toFudgeMsg(json);
-    return new FudgeDeserializer(s_fudgeContext).fudgeMsgToObject(clazz, fudgeMsg);
+  protected <E> E fromJSON(final Class<E> clazz, final String json) {
+    final FudgeMsg fudgeMsg = toFudgeMsg(json);
+    return new FudgeDeserializer(FUDGE_CONTEXT).fudgeMsgToObject(clazz, fudgeMsg);
   }
 
-  private FudgeMsg toFudgeMsg(final String json) {
-    FudgeMsgJSONReader fudgeJSONReader = new FudgeMsgJSONReader(s_fudgeContext, new StringReader(json));
+  private static FudgeMsg toFudgeMsg(final String json) {
+    final FudgeMsgJSONReader fudgeJSONReader = new FudgeMsgJSONReader(FUDGE_CONTEXT, new StringReader(json));
     return fudgeJSONReader.readMessage();
   }
 
   public static String fudgeToJson(final Object configObj) {
-    FudgeMsg fudgeMsg = s_fudgeContext.toFudgeMsg(configObj).getMessage();
-    StringWriter sw = new StringWriter();
-    try (FudgeMsgJSONWriter fudgeJSONWriter = new FudgeMsgJSONWriter(s_fudgeContext, sw)) {
+    final FudgeMsg fudgeMsg = FUDGE_CONTEXT.toFudgeMsg(configObj).getMessage();
+    final StringWriter sw = new StringWriter();
+    try (FudgeMsgJSONWriter fudgeJSONWriter = new FudgeMsgJSONWriter(FUDGE_CONTEXT, sw)) {
       fudgeJSONWriter.writeMessage(fudgeMsg);
       return sw.toString();
     }

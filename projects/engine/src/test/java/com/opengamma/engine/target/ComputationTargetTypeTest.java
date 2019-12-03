@@ -195,10 +195,13 @@ public class ComputationTargetTypeTest {
     testParseToString(ComputationTargetType.of(Currency.class), "CURRENCY", null, null, null);
     testParseToString(ComputationTargetType.of(Foo.class), "Foo", null, "com.opengamma.engine.target.ComputationTargetTypeTest$Foo", null);
     testParseToString(ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION), "PORTFOLIO_NODE/POSITION", null, null, null);
-    testParseToString(ComputationTargetType.PORTFOLIO_NODE.containing(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE)).containing(ComputationTargetType.SECURITY),
+    testParseToString(ComputationTargetType.PORTFOLIO_NODE
+        .containing(ComputationTargetType.POSITION.or(ComputationTargetType.TRADE)).containing(ComputationTargetType.SECURITY),
         "PORTFOLIO_NODE/(POSITION|TRADE)/SECURITY", "PORTFOLIO_NODE/(TRADE|POSITION)/SECURITY", null, null);
-    testParseToString(ComputationTargetType.POSITION.containing(ComputationTargetType.SECURITY).or(ComputationTargetType.of(Foo.class)), "(POSITION/SECURITY)|Foo",
-        "Foo|(POSITION/SECURITY)", "(POSITION/SECURITY)|com.opengamma.engine.target.ComputationTargetTypeTest$Foo", "com.opengamma.engine.target.ComputationTargetTypeTest$Foo|(POSITION/SECURITY)");
+    testParseToString(ComputationTargetType.POSITION.containing(ComputationTargetType.SECURITY)
+        .or(ComputationTargetType.of(Foo.class)), "(POSITION/SECURITY)|Foo",
+        "Foo|(POSITION/SECURITY)", "(POSITION/SECURITY)|com.opengamma.engine.target.ComputationTargetTypeTest$Foo",
+        "com.opengamma.engine.target.ComputationTargetTypeTest$Foo|(POSITION/SECURITY)");
   }
 
   public void testEquals_null() {
@@ -250,7 +253,8 @@ public class ComputationTargetTypeTest {
     final ComputationTargetType t1 = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(HistoricalTimeSeries.class);
     final ComputationTargetType t2 = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION.or(HistoricalTimeSeries.class));
     assertEquals(t1, t2);
-    final ComputationTargetType t3 = ComputationTargetType.multiple(ComputationTargetType.PORTFOLIO_NODE, ComputationTargetType.POSITION, ComputationTargetType.of(HistoricalTimeSeries.class));
+    final ComputationTargetType t3 = ComputationTargetType.multiple(ComputationTargetType.PORTFOLIO_NODE, ComputationTargetType.POSITION,
+        ComputationTargetType.of(HistoricalTimeSeries.class));
     assertEquals(t1, t3);
   }
 

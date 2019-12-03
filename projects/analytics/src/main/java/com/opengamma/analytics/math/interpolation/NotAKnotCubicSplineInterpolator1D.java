@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.interpolation;
@@ -8,7 +8,7 @@ package com.opengamma.analytics.math.interpolation;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * 
+ *
  */
 public class NotAKnotCubicSplineInterpolator1D extends PiecewisePolynomialInterpolator1D {
 
@@ -16,7 +16,7 @@ public class NotAKnotCubicSplineInterpolator1D extends PiecewisePolynomialInterp
   private static final long serialVersionUID = 1L;
 
   /**
-   * Default constructor where the interpolation method is fixed
+   * Default constructor where the interpolation method is fixed.
    */
   public NotAKnotCubicSplineInterpolator1D() {
     super(new CubicSplineInterpolator());

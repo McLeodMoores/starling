@@ -5,11 +5,13 @@
  */
 package com.opengamma.id;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertNull;
-import static org.testng.AssertJUnit.assertSame;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNotSame;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertSame;
+import static org.testng.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,445 +31,693 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class ExternalIdBundleTest {
-
   private static final ExternalScheme SCHEME = ExternalScheme.of("Scheme");
-  private final ExternalId _id11 = ExternalId.of("D1", "V1");
-  private final ExternalId _id21 = ExternalId.of("D2", "V1");
-  private final ExternalId _id12 = ExternalId.of("D1", "V2");
-  private final ExternalId _id22 = ExternalId.of("D2", "V2");
+  private static final ExternalId ID_11 = ExternalId.of("D1", "V1");
+  private static final ExternalId ID_21 = ExternalId.of("D2", "V1");
+  private static final ExternalId ID_12 = ExternalId.of("D1", "V2");
+  private static final ExternalId ID_22 = ExternalId.of("D2", "V2");
 
-  public void singleton_empty() {
-    assertEquals(0, ExternalIdBundle.EMPTY.size());
+  /**
+   * Tests that the number of ids in the empty bundle is zero.
+   */
+  @Test
+  public void singletonEmpty() {
+    assertEquals(ExternalIdBundle.EMPTY.size(), 0);
   }
 
   //-------------------------------------------------------------------------
-  public void test_factory_ExternalScheme_String() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11.getScheme(), _id11.getValue());
-    assertEquals(1, test.size());
-    assertEquals(Sets.newHashSet(_id11), test.getExternalIds());
+  /**
+   * Tests the factory constructor that takes an ExternalScheme.
+   */
+  @Test
+  public void testFactoryExternalSchemeString() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_11.getScheme(), ID_11.getValue());
+    assertEquals(test.size(), 1);
+    assertEquals(test.getExternalIds(), Sets.newHashSet(ID_11));
   }
 
+  /**
+   * Tests that a scheme cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_ExternalScheme_String_nullScheme() {
+  public void testFactoryExternalSchemeStringNullScheme() {
     ExternalIdBundle.of((ExternalScheme) null, "value");
   }
 
+  /**
+   * Tests that a value cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_ExternalScheme_String_nullValue() {
+  public void testFactoryExternalSchemeStringNullValue() {
     ExternalIdBundle.of(SCHEME, (String) null);
   }
 
+  /**
+   * Tests that a value cannot be empty.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_ExternalScheme_String_emptyValue() {
+  public void testFactoryExternalSchemeStringEmptyValue() {
     ExternalIdBundle.of(SCHEME, "");
   }
 
   //-------------------------------------------------------------------------
-  public void test_factory_String_String() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11.getScheme().getName(), _id11.getValue());
-    assertEquals(1, test.size());
-    assertEquals(Sets.newHashSet(_id11), test.getExternalIds());
+  /**
+   * Tests the factory constructor that takes the scheme as a string.
+   */
+  @Test
+  public void testFactoryStringString() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_11.getScheme().getName(), ID_11.getValue());
+    assertEquals(test.size(), 1);
+    assertEquals(test.getExternalIds(), Sets.newHashSet(ID_11));
   }
 
+  /**
+   * Tests that a scheme cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_String_String_nullScheme() {
+  public void testfactoryStringStringNullScheme() {
     ExternalIdBundle.of((String) null, "value");
   }
 
+  /**
+   * Tests that a value cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_String_String_nullValue() {
+  public void testFactoryStringStringNullValue() {
     ExternalIdBundle.of("Scheme", (String) null);
   }
 
+  /**
+   * Tests that a value cannot be empty.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_factory_String_String_emptyValue() {
+  public void testFactoryStringStringEmptyValue() {
     ExternalIdBundle.of("Scheme", "");
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that the external id cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void factory_of_ExternalId_null() {
+  public void factoryOfExternalIdNull() {
     ExternalIdBundle.of((ExternalId) null);
   }
 
-  public void factory_of_ExternalId() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11);
-    assertEquals(1, test.size());
-    assertEquals(Sets.newHashSet(_id11), test.getExternalIds());
+  /**
+   * Tests the static constructor that takes an external id.
+   */
+  @Test
+  public void testFactoryOfExternalId() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_11);
+    assertEquals(test.size(), 1);
+    assertEquals(test.getExternalIds(), Sets.newHashSet(ID_11));
   }
 
   //-------------------------------------------------------------------------
-  public void factory_of_varargs_noExternalIds() {
-    ExternalIdBundle test = ExternalIdBundle.of();
-    assertEquals(0, test.size());
+  /**
+   * Tests that an empty bundle is created.
+   */
+  @Test
+  public void testFactoryOfVarargsNoExternalIds() {
+    final ExternalIdBundle test = ExternalIdBundle.of();
+    assertEquals(test.size(), 0);
   }
 
-  public void factory_of_varargs_oneExternalId() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11);
-    assertEquals(1, test.size());
-    assertEquals(Sets.newHashSet(_id11), test.getExternalIds());
+  /**
+   * Tests the static constructor that takes external ids.
+   */
+  @Test
+  public void testFactoryOfVarargsTwoExternalIds() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_11, ID_12);
+    assertEquals(test.size(), 2);
+    assertEquals(Arrays.asList(ID_11, ID_12), test.getExternalIds());
   }
 
-  public void factory_of_varargs_twoExternalIds() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11, _id12);
-    assertEquals(2, test.size());
-    assertEquals(Sets.newHashSet(_id11, _id12), test.getExternalIds());
-  }
-
+  /**
+   * Tests that the array of external ids cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void factory_of_varargs_null() {
+  public void testFactoryOfVarargsNull() {
     ExternalIdBundle.of((ExternalId[]) null);
   }
 
+  /**
+   * Tests that nulls are not allowed.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void factory_of_varargs_noNulls() {
-    ExternalIdBundle.of(_id11, null, _id12);
+  public void testFactoryOfVarargsNoNulls() {
+    ExternalIdBundle.of(ID_11, null, ID_12);
   }
 
   //-------------------------------------------------------------------------
-  public void factory_of_Iterable_empty() {
-    ExternalIdBundle test = ExternalIdBundle.of(new ArrayList<ExternalId>());
-    assertEquals(0, test.size());
+  /**
+   * Tests the static constructor that takes an iterable.
+   */
+  @Test
+  public void testFactoryOfIterableEmpty() {
+    final ExternalIdBundle test = ExternalIdBundle.of(new ArrayList<ExternalId>());
+    assertEquals(test.size(), 0);
   }
 
-  public void factory_of_Iterable_two() {
-    ExternalIdBundle test = ExternalIdBundle.of(Arrays.asList(_id11, _id12));
-    assertEquals(2, test.size());
-    assertEquals(Sets.newHashSet(_id11, _id12), test.getExternalIds());
+  /**
+   * Tests the static constructor that takes an iterable.
+   */
+  @Test
+  public void testFactoryOfIterableTwo() {
+    final ExternalIdBundle test = ExternalIdBundle.of(Arrays.asList(ID_11, ID_12));
+    assertEquals(test.size(), 2);
+    assertEquals(Arrays.asList(ID_11, ID_12), test.getExternalIds());
   }
 
+  /**
+   * Tests that the iterable cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void factory_of_Iterable_null() {
+  public void testFactoryOfIterableNull() {
     ExternalIdBundle.of((Iterable<ExternalId>) null);
   }
 
+  /**
+   * Tests that null entries are not allowed.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void factory_of_Iterable_noNulls() {
-    ExternalIdBundle.of(Arrays.asList(_id11, null, _id12));
+  public void testFactoryOfIterableNoNulls() {
+    ExternalIdBundle.of(Arrays.asList(ID_11, null, ID_12));
   }
 
   //-------------------------------------------------------------------------
-  public void factory_parse_Iterable_empty() {
-    ExternalIdBundle test = ExternalIdBundle.parse(new ArrayList<String>());
-    assertEquals(0, test.size());
+  /**
+   * Tests parsing an empty collection.
+   */
+  @Test
+  public void testFactoryParseIterableEmpty() {
+    final ExternalIdBundle test = ExternalIdBundle.parse(new ArrayList<String>());
+    assertEquals(test.size(), 0);
   }
 
-  public void factory_parse_Iterable_two() {
-    ExternalIdBundle test = ExternalIdBundle.parse(Arrays.asList(_id11.toString(), _id12.toString()));
+  /**
+   * Tests that a collection of strings is parsed correctly.
+   */
+  @Test
+  public void testFactoryParseIterableTwo() {
+    final ExternalIdBundle test = ExternalIdBundle.parse(Arrays.asList(ID_12.toString(), ID_11.toString()));
     assertEquals(2, test.size());
-    assertEquals(Sets.newHashSet(_id11, _id12), test.getExternalIds());
+    assertEquals(Arrays.asList(ID_11, ID_12), test.getExternalIds());
   }
 
+  /**
+   * Tests that a null iterable cannot be parsed.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void factory_parse_Iterable_null() {
+  public void testFactoryParseIterableNull() {
     ExternalIdBundle.parse((Iterable<String>) null);
   }
 
+  /**
+   * Tests that an iterable containing nulls cannot be parsed.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void factory_parse_Iterable_noNulls() {
-    ExternalIdBundle.parse(Arrays.asList(_id11.toString(), null, _id12.toString()));
+  public void testFactoryParseIterableNoNulls() {
+    ExternalIdBundle.parse(Arrays.asList(ID_11.toString(), null, ID_12.toString()));
   }
 
   //-------------------------------------------------------------------------
-  public void singleIdDifferentConstructors() {
-    assertTrue(ExternalIdBundle.of(_id11).equals(ExternalIdBundle.of(Collections.singleton(_id11))));
+  /**
+   * Tests that bundles constructed differently are equal.
+   */
+  @Test
+  public void testSingleIdDifferentConstructors() {
+    assertEquals(ExternalIdBundle.of(ID_11), ExternalIdBundle.of(Collections.singleton(ID_11)));
   }
 
-  public void singleVersusMultipleId() {
-    assertFalse(ExternalIdBundle.of(_id11).equals(ExternalIdBundle.of(_id11, _id12)));
-    assertFalse(ExternalIdBundle.of(_id11, _id12).equals(ExternalIdBundle.of(_id11)));
+  /**
+   * Tests that bundles constructed differently are equal.
+   */
+  @Test
+  public void testMultipleIdDifferentConstructors() {
+    assertEquals(ExternalIdBundle.of(ID_11, ID_22, ID_21, ID_12),
+        ExternalIdBundle.of(Arrays.asList(ID_11, ID_21, ID_12, ID_22)));
+  }
+
+  /**
+   * Tests that bundles constructed differently with different elements are not equal.
+   */
+  @Test
+  public void testSingleVersusMultipleId() {
+    assertNotEquals(ExternalIdBundle.of(ID_11), ExternalIdBundle.of(ID_11, ID_12));
+    assertNotEquals(ExternalIdBundle.of(ID_11, ID_12), ExternalIdBundle.of(ID_11));
   }
 
   //-------------------------------------------------------------------------
-  public void getExternalIdBundle() {
-    ExternalIdBundle input = ExternalIdBundle.of(_id11, _id22);
-    assertEquals(input, input.getExternalIdBundle());
+  /**
+   * Tests the getExternalIdBundle() method.
+   */
+  @Test
+  public void testGetExternalIdBundle() {
+    final ExternalIdBundle input = ExternalIdBundle.of(ID_11, ID_22);
+    assertSame(input.getExternalIdBundle(), input);
+    assertEquals(input.getExternalIdBundle(), input);
+  }
+
+  /**
+   * Tests the toBundle() method.
+   */
+  @Test
+  public void testToBundle() {
+    final ExternalIdBundle input = ExternalIdBundle.of(ID_11, ID_22);
+    assertSame(input.toBundle(), input);
+    assertEquals(input.toBundle(), input);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the getExternalId() method.
+   */
+  @Test
   public void getExternalId() {
-    ExternalIdBundle input = ExternalIdBundle.of(_id11, _id22);
-    
-    assertEquals(ExternalId.of("D1", "V1"), input.getExternalId(ExternalScheme.of("D1")));
-    assertEquals(ExternalId.of("D2", "V2"), input.getExternalId(ExternalScheme.of("D2")));
+    final ExternalIdBundle input = ExternalIdBundle.of(ID_11, ID_22);
+    assertEquals(input.getExternalId(ExternalScheme.of("D1")), ExternalId.of("D1", "V1"));
+    assertEquals(input.getExternalId(ExternalScheme.of("D2")), ExternalId.of("D2", "V2"));
     assertNull(input.getExternalId(ExternalScheme.of("Kirk Wylie")));
     assertNull(input.getExternalId(null));
   }
 
-  public void getValue() {
-    ExternalIdBundle input = ExternalIdBundle.of(_id11, _id22);
-
-    assertEquals("V1", input.getValue(ExternalScheme.of("D1")));
-    assertEquals("V2", input.getValue(ExternalScheme.of("D2")));
+  /**
+   * Tests the getValue() method.
+   */
+  @Test
+  public void testGetValue() {
+    final ExternalIdBundle input = ExternalIdBundle.of(ID_11, ID_22);
+    assertEquals(input.getValue(ExternalScheme.of("D1")), "V1");
+    assertEquals(input.getValue(ExternalScheme.of("D2")), "V2");
     assertNull(input.getValue(ExternalScheme.of("Kirk Wylie")));
     assertNull(input.getValue(null));
   }
 
   //-------------------------------------------------------------------------
-  public void withExternalId() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
-    ExternalIdBundle test = base.withExternalId(ExternalId.of("A", "C"));
-    assertEquals(1, base.size());
-    assertEquals(2, test.size());
-    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "B")));
-    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "C")));
+  /**
+   * Tests that adding an external id returns a new bundle.
+   */
+  @Test
+  public void testWithExternalId() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11);
+    final ExternalIdBundle test = base.withExternalId(ID_21);
+    assertEquals(base.size(), 1);
+    assertEquals(test.size(), 2);
+    assertTrue(test.getExternalIds().contains(ID_11));
+    assertTrue(test.getExternalIds().contains(ID_21));
   }
 
-  public void withExternalId_same() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
-    ExternalIdBundle test = base.withExternalId(ExternalId.of("A", "B"));
+  /**
+   * Tests that adding an id that is already present has no effect and returns the original object.
+   */
+  @Test
+  public void testWithExternalIdSame() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11);
+    final ExternalIdBundle test = base.withExternalId(ID_11);
     assertSame(base, test);
+    assertEquals(base, test);
   }
 
+  /**
+   * Tests that a null id cannot be added.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void withExternalId_null() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
+  public void testWithExternalIdNull() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11);
     base.withExternalId((ExternalId) null);
   }
 
   //-------------------------------------------------------------------------
-  public void withExternalIds() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
-    ExternalIdBundle test = base.withExternalIds(ImmutableList.of(ExternalId.of("A", "C"), ExternalId.of("A", "D")));
-    assertEquals(1, base.size());
-    assertEquals(3, test.size());
-    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "B")));
-    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "C")));
-    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "D")));
+  /**
+   * Tests adding multiple ids.
+   */
+  @Test
+  public void testWithExternalIds() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11);
+    final ExternalIdBundle test = base.withExternalIds(ImmutableList.of(ID_12, ID_21));
+    assertEquals(base.size(), 1);
+    assertEquals(test.size(), 3);
+    assertTrue(test.getExternalIds().contains(ID_11));
+    assertTrue(test.getExternalIds().contains(ID_12));
+    assertTrue(test.getExternalIds().contains(ID_21));
   }
 
-  public void withExternalIds_same() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
-    ExternalIdBundle test = base.withExternalIds(ImmutableList.of(ExternalId.of("A", "B"), ExternalId.of("A", "B")));
+  /**
+   * Tests that adding ids that are already present has no effect and returns the original object.
+   */
+  @Test
+  public void testWithExternalIdsSame() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11, ID_22);
+    final ExternalIdBundle test = base.withExternalIds(ImmutableList.of(ID_11, ID_11, ID_22));
     assertSame(base, test);
+    assertEquals(base, test);
   }
 
+  /**
+   * Tests that a null id cannot be added.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void withExternalIds_null() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
+  public void testWithExternalIdsNull() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11);
     base.withExternalIds((Iterable<ExternalId>) null);
   }
 
   //-------------------------------------------------------------------------
-  public void withoutExternalId_match() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
-    ExternalIdBundle test = base.withoutExternalId(ExternalId.of("A", "B"));
-    assertEquals(1, base.size());
-    assertEquals(0, test.size());
+  /**
+   * Tests the removal of an id.
+   */
+  @Test
+  public void testWithoutExternalIdMatch() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11);
+    final ExternalIdBundle test = base.withoutExternalId(ID_11);
+    assertEquals(base.size(), 1);
+    assertEquals(test.size(), 0);
   }
 
-  public void withoutExternalId_noMatch() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
-    ExternalIdBundle test = base.withoutExternalId(ExternalId.of("A", "C"));
-    assertEquals(1, base.size());
-    assertEquals(1, test.size());
-    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "B")));
+  /**
+   * Tests that trying to remove an id that is not present returns the same object.
+   */
+  @Test
+  public void testWithoutExternalIdNoMatch() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11);
+    final ExternalIdBundle test = base.withoutExternalId(ID_12);
+    assertEquals(base.size(), 1);
+    assertEquals(test.size(), 1);
+    assertSame(base, test);
+    assertTrue(test.getExternalIds().contains(ID_11));
   }
 
+  /**
+   * Tests that it is not possible to try to remove a null id.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void withoutExternalId_null() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
+  public void testWithoutExternalIdNull() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11);
     base.withoutExternalId(null);
   }
 
   //-------------------------------------------------------------------------
-  public void withoutScheme_ExternalScheme_match() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
-    ExternalIdBundle test = base.withoutScheme(ExternalScheme.of("A"));
-    assertEquals(1, base.size());
-    assertEquals(0, test.size());
+  /**
+   * Tests that all ids with matching schemes are removed.
+   */
+  @Test
+  public void testWithoutSchemeExternalSchemeMatch() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11, ID_12, ID_22);
+    final ExternalIdBundle test = base.withoutScheme(ID_11.getScheme());
+    assertEquals(base.size(), 3);
+    assertEquals(test.size(), 1);
+    assertEquals(test, ExternalIdBundle.of(ID_22));
   }
 
-  public void withoutScheme_ExternalScheme_noMatch() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
-    ExternalIdBundle test = base.withoutScheme(ExternalScheme.of("BLOOMBERG_BUID"));
-    assertEquals(1, base.size());
-    assertEquals(1, test.size());
-    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "B")));
+  /**
+   * Tests that removing a non-matching scheme has no effect and returns the same object.
+   */
+  @Test
+  public void testWithoutSchemeExternalSchemeNoMatch() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11);
+    final ExternalIdBundle test = base.withoutScheme(ID_21.getScheme());
+    assertEquals(base.size(), 1);
+    assertEquals(test.size(), 1);
+    assertNotSame(base, test);
+    assertEquals(base, test);
   }
 
-  public void withoutScheme_ExternalScheme_null() {
-    ExternalIdBundle base = ExternalIdBundle.of(ExternalId.of("A", "B"));
-    ExternalIdBundle test = base.withoutScheme(null);
-    assertEquals(1, base.size());
-    assertEquals(1, test.size());
-    assertTrue(test.getExternalIds().contains(ExternalId.of("A", "B")));
-  }
-
-  //-------------------------------------------------------------------------
-  public void test_size() {
-    assertEquals(0, ExternalIdBundle.EMPTY.size());
-    assertEquals(1, ExternalIdBundle.of(_id11).size());
-    assertEquals(2, ExternalIdBundle.of(_id11, _id12).size());
-  }
-  
-  public void test_isEmpty() {
-    assertEquals(true, ExternalIdBundle.EMPTY.isEmpty());
-    assertEquals(false, ExternalIdBundle.of(_id11).isEmpty());
-  }
-
-  //-------------------------------------------------------------------------
-  public void test_iterator() {
-    Set<ExternalId> expected = new HashSet<ExternalId>();
-    expected.add(_id11);
-    expected.add(_id12);
-    Iterable<ExternalId> base = ExternalIdBundle.of(_id11, _id12);
-    Iterator<ExternalId> test = base.iterator();
-    assertEquals(true, test.hasNext());
-    assertEquals(true, expected.remove(test.next()));
-    assertEquals(true, test.hasNext());
-    assertEquals(true, expected.remove(test.next()));
-    assertEquals(false, test.hasNext());
-    assertEquals(0, expected.size());
+  /**
+   * Tests that trying to remove all ids with null scheme has no effect and returns the same object.
+   */
+  @Test
+  public void testWithoutSchemeExternalSchemeNull() {
+    final ExternalIdBundle base = ExternalIdBundle.of(ID_11);
+    final ExternalIdBundle test = base.withoutScheme(null);
+    assertEquals(base.size(), 1);
+    assertEquals(test.size(), 1);
+    assertNotSame(base, test);
+    assertEquals(base, test);
   }
 
   //-------------------------------------------------------------------------
-  public void test_containsAll1() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11);
-    assertEquals(false, test.containsAll(ExternalIdBundle.of(_id11, _id12)));
-    assertEquals(true, test.containsAll(ExternalIdBundle.of(_id11)));
-    assertEquals(false, test.containsAll(ExternalIdBundle.of(_id12)));
-    assertEquals(false, test.containsAll(ExternalIdBundle.of(_id21)));
-    assertEquals(true, test.containsAll(ExternalIdBundle.EMPTY));
+  /**
+   * Tests the size() method.
+   */
+  @Test
+  public void testSize() {
+    assertEquals(ExternalIdBundle.EMPTY.size(), 0);
+    assertEquals(ExternalIdBundle.of(ID_11).size(), 1);
+    assertEquals(ExternalIdBundle.of(ID_11, ID_12).size(), 2);
   }
 
-  public void test_containsAll2() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11, _id12);
-    assertEquals(true, test.containsAll(ExternalIdBundle.of(_id11, _id12)));
-    assertEquals(true, test.containsAll(ExternalIdBundle.of(_id11)));
-    assertEquals(true, test.containsAll(ExternalIdBundle.of(_id12)));
-    assertEquals(false, test.containsAll(ExternalIdBundle.of(_id21)));
-    assertEquals(true, test.containsAll(ExternalIdBundle.EMPTY));
+  /**
+   * Tests the isEmpty() method.
+   */
+  @Test
+  public void testIsEmpty() {
+    assertTrue(ExternalIdBundle.EMPTY.isEmpty());
+    assertFalse(ExternalIdBundle.of(ID_11).isEmpty());
   }
 
+  //-------------------------------------------------------------------------
+  /**
+   * Tests the iterator.
+   */
+  @Test
+  public void testIterator() {
+    final Set<ExternalId> expected = new HashSet<>();
+    expected.add(ID_11);
+    expected.add(ID_12);
+    final Iterable<ExternalId> base = ExternalIdBundle.of(ID_11, ID_12);
+    final Iterator<ExternalId> test = base.iterator();
+    assertTrue(test.hasNext());
+    assertTrue(expected.remove(test.next()));
+    assertTrue(test.hasNext());
+    assertTrue(expected.remove(test.next()));
+    assertFalse(test.hasNext());
+    assertEquals(expected.size(), 0);
+  }
+
+  //-------------------------------------------------------------------------
+  /**
+   * Tests the containsAll() method.
+   */
+  @Test
+  public void testContainsAll1() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_11);
+    assertFalse(test.containsAll(ExternalIdBundle.of(ID_11, ID_12)));
+    assertTrue(test.containsAll(ExternalIdBundle.of(ID_11)));
+    assertFalse(test.containsAll(ExternalIdBundle.of(ID_12)));
+    assertFalse(test.containsAll(ExternalIdBundle.of(ID_21)));
+    assertTrue(test.containsAll(ExternalIdBundle.EMPTY));
+  }
+
+  /**
+   * Tests the containsAll() method.
+   */
+  @Test
+  public void testContainsAll2() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_11, ID_12);
+    assertTrue(test.containsAll(ExternalIdBundle.of(ID_11, ID_12)));
+    assertTrue(test.containsAll(ExternalIdBundle.of(ID_11)));
+    assertTrue(test.containsAll(ExternalIdBundle.of(ID_12)));
+    assertFalse(test.containsAll(ExternalIdBundle.of(ID_21)));
+    assertTrue(test.containsAll(ExternalIdBundle.EMPTY));
+  }
+
+  /**
+   * Tests that the containsAll() method does not accept null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_containsAll_null() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11, _id12);
+  public void testContainsAllNull() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_11, ID_12);
     test.containsAll(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_containsAny() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11, _id12);
-    assertEquals(true, test.containsAny(ExternalIdBundle.of(_id11, _id12)));
-    assertEquals(true, test.containsAny(ExternalIdBundle.of(_id11)));
-    assertEquals(true, test.containsAny(ExternalIdBundle.of(_id12)));
-    assertEquals(false, test.containsAny(ExternalIdBundle.of(_id21)));
-    assertEquals(false, test.containsAny(ExternalIdBundle.EMPTY));
+  /**
+   * Tests the containsAny() method.
+   */
+  @Test
+  public void testContainsAny() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_11, ID_12);
+    assertTrue(test.containsAny(ExternalIdBundle.of(ID_11, ID_12)));
+    assertTrue(test.containsAny(ExternalIdBundle.of(ID_11)));
+    assertTrue(test.containsAny(ExternalIdBundle.of(ID_12)));
+    assertFalse(test.containsAny(ExternalIdBundle.of(ID_21)));
+    assertFalse(test.containsAny(ExternalIdBundle.EMPTY));
   }
 
+  /**
+   * Tests that the containsAny() method does not accept null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_containsAny_null() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11, _id12);
+  public void testContainsAnyNull() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_11, ID_12);
     test.containsAny(null);
   }
 
   //-------------------------------------------------------------------------
-  public void test_contains() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11, _id12);
-    assertEquals(true, test.contains(_id11));
-    assertEquals(true, test.contains(_id11));
-    assertEquals(false, test.contains(_id21));
+  /**
+   * Tests the contains() method.
+   */
+  @Test
+  public void testContains() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_11, ID_12);
+    assertTrue(test.contains(ID_11));
+    assertTrue(test.contains(ID_11));
+    assertFalse(test.contains(ID_21));
   }
 
-  public void test_contains_null() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11, _id12);
-    assertEquals(false, test.contains(null));
-  }
-
-  //-------------------------------------------------------------------------
-  public void test_toStringList() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11, _id12);
-    assertEquals(Arrays.asList(_id11.toString(), _id12.toString()), test.toStringList());
-  }
-
-  public void test_toStringList_empty() {
-    ExternalIdBundle test = ExternalIdBundle.EMPTY;
-    assertEquals(new ArrayList<String>(), test.toStringList());
+  /**
+   * Tests that the contains() method can accept null.
+   */
+  @Test
+  public void testContainsNull() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_11, ID_12);
+    assertFalse(test.contains(null));
   }
 
   //-------------------------------------------------------------------------
-  public void test_compareTo_differentSizes() {
-    ExternalIdBundle a1 = ExternalIdBundle.EMPTY;
-    ExternalIdBundle a2 = ExternalIdBundle.of(ExternalId.of("A", "B"));
-    
-    assertEquals(true, a1.compareTo(a1) == 0);
-    assertEquals(true, a1.compareTo(a2) < 0);
-    assertEquals(true, a2.compareTo(a1) > 0);
-    assertEquals(true, a2.compareTo(a2) == 0);
+  /**
+   * Tests the toStringList() method.
+   */
+  @Test
+  public void testToStringList() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_12, ID_11);
+    assertEquals(test.toStringList(), Arrays.asList(ID_11.toString(), ID_12.toString()));
   }
 
-  public void test_compareTo_sameSizes() {
-    ExternalIdBundle a1 = ExternalIdBundle.of(ExternalId.of("A", "B"));
-    ExternalIdBundle a2 = ExternalIdBundle.of(ExternalId.of("A", "C"));
-    
-    assertEquals(true, a1.compareTo(a1) == 0);
-    assertEquals(true, a1.compareTo(a2) < 0);
-    assertEquals(true, a2.compareTo(a1) > 0);
-    assertEquals(true, a2.compareTo(a2) == 0);
+  /**
+   * Tests the toStringList() method.
+   */
+  @Test
+  public void testToStringListEmpty() {
+    final ExternalIdBundle test = ExternalIdBundle.EMPTY;
+    assertEquals(test.toStringList(), new ArrayList<String>());
   }
 
   //-------------------------------------------------------------------------
-  public void test_equals_same_empty() {
-    ExternalIdBundle a1 = ExternalIdBundle.EMPTY;
-    ExternalIdBundle a2 = ExternalIdBundle.of(_id11).withoutScheme(_id11.getScheme());
-    
-    assertEquals(true, a1.equals(a1));
-    assertEquals(true, a1.equals(a2));
-    assertEquals(true, a2.equals(a1));
-    assertEquals(true, a2.equals(a2));
+  /**
+   * Tests the compareTo() method on different sized bundles.
+   */
+  @Test
+  public void testCompareToDifferentSizes() {
+    final ExternalIdBundle a1 = ExternalIdBundle.EMPTY;
+    final ExternalIdBundle a2 = ExternalIdBundle.of(ID_11);
+
+    assertEquals(a1.compareTo(a1), 0);
+    assertTrue(a1.compareTo(a2) < 0);
+    assertTrue(a2.compareTo(a1) > 0);
+    assertEquals(a2.compareTo(a2), 0);
   }
 
-  public void test_equals_same_nonEmpty() {
-    ExternalIdBundle a1 = ExternalIdBundle.of(_id11, _id12);
-    ExternalIdBundle a2 = ExternalIdBundle.of(_id11, _id12);
-    
-    assertEquals(true, a1.equals(a1));
-    assertEquals(true, a1.equals(a2));
-    assertEquals(true, a2.equals(a1));
-    assertEquals(true, a2.equals(a2));
+  /**
+   * Tests the compareTo() method on the same sized bundles.
+   */
+  @Test
+  public void testCompareToSameSizes() {
+    final ExternalIdBundle a1 = ExternalIdBundle.of(ID_11);
+    final ExternalIdBundle a2 = ExternalIdBundle.of(ID_12);
+
+    assertEquals(a1.compareTo(a1), 0);
+    assertTrue(a1.compareTo(a2) < 0);
+    assertTrue(a2.compareTo(a1) > 0);
+    assertEquals(a2.compareTo(a2), 0);
   }
 
-  public void test_equals_different() {
-    ExternalIdBundle a = ExternalIdBundle.EMPTY;
-    ExternalIdBundle b = ExternalIdBundle.of(_id11, _id12);
-    
-    assertEquals(true, a.equals(a));
-    assertEquals(false, a.equals(b));
-    assertEquals(false, b.equals(a));
-    assertEquals(true, b.equals(b));
+  //-------------------------------------------------------------------------
+  /**
+   * Tests equality for empty bundles.
+   */
+  @Test
+  public void testEqualsSameEmpty() {
+    final ExternalIdBundle a1 = ExternalIdBundle.EMPTY;
+    final ExternalIdBundle a2 = ExternalIdBundle.of(ID_11).withoutScheme(ID_11.getScheme());
 
-    assertEquals(false, b.equals("Rubbish"));
-    assertEquals(false, b.equals(null));
+    assertEquals(a1, a1);
+    assertEquals(a2, a2);
+    assertEquals(a2, a1);
+    assertEquals(a2, a2);
   }
 
-  public void test_hashCode() {
-    ExternalIdBundle a = ExternalIdBundle.of(_id11, _id12);
-    ExternalIdBundle b = ExternalIdBundle.of(_id11, _id12);
-    
+  /**
+   * Tests equality for bundles.
+   */
+  @Test
+  public void testEqualsSameNonEmpty() {
+    final ExternalIdBundle a1 = ExternalIdBundle.of(ID_11, ID_12);
+    final ExternalIdBundle a2 = ExternalIdBundle.of(ID_11, ID_12);
+
+    assertEquals(a1, a1);
+    assertEquals(a1, a2);
+    assertEquals(a2, a1);
+    assertEquals(a2, a2);
+  }
+
+  /**
+   * Tests equality for different bundles.
+   */
+  @Test
+  public void testEqualsDifferent() {
+    final ExternalIdBundle a = ExternalIdBundle.EMPTY;
+    final ExternalIdBundle b = ExternalIdBundle.of(ID_11, ID_12);
+
+    assertEquals(a, a);
+    assertNotEquals(a, b);
+    assertNotEquals(b, a);
+    assertEquals(b, b);
+
+    assertNotEquals("Rubbish", a);
+    assertNotEquals(null, a);
+  }
+
+  /**
+   * Tests the hashCode() method.
+   */
+  @Test
+  public void testHashCode() {
+    final ExternalIdBundle a = ExternalIdBundle.of(ID_11, ID_12);
+    final ExternalIdBundle b = ExternalIdBundle.of(ID_11, ID_12);
+
     assertEquals(a.hashCode(), b.hashCode());
     assertEquals(a.hashCode(), a.hashCode());
   }
 
-  public void test_toString_empty() {
-    ExternalIdBundle test = ExternalIdBundle.EMPTY;
+  /**
+   * Tests the toString() method.
+   */
+  @Test
+  public void testToStringEmpty() {
+    final ExternalIdBundle test = ExternalIdBundle.EMPTY;
     assertEquals("Bundle[]", test.toString());
   }
 
-  public void test_toString_nonEmpty() {
-    ExternalIdBundle test = ExternalIdBundle.of(_id11, _id12);
-    assertEquals("Bundle[" + _id11.toString() + ", " + _id12.toString() + "]", test.toString());
+  /**
+   * Tests the toString() method.
+   */
+  @Test
+  public void testToStringNonEmpty() {
+    final ExternalIdBundle test = ExternalIdBundle.of(ID_12, ID_11);
+    assertEquals("Bundle[" + ID_11.toString() + ", " + ID_12.toString() + "]", test.toString());
   }
 
-  public void test_getExeternalIds() {
-    ExternalIdBundle bundle = ExternalIdBundle.of(_id11, _id12, _id21, _id22);
-    Set<ExternalId> expected = Sets.newHashSet(_id11, _id12);
+  /**
+   * Tests the getExternalIds() method.
+   */
+  @Test
+  public void testGetExternalIds() {
+    final ExternalIdBundle bundle = ExternalIdBundle.of(ID_11, ID_12, ID_21, ID_22);
+    final Set<ExternalId> expected = Sets.newHashSet(ID_11, ID_12);
     assertEquals(expected, bundle.getExternalIds(ExternalScheme.of("D1")));
   }
 
-  public void test_getValues() {
-    ExternalIdBundle bundle = ExternalIdBundle.of(_id11, _id12, _id21, _id22);
-    Set<String> expected = Sets.newHashSet(_id11.getValue(), _id12.getValue());
-    assertEquals(expected, bundle.getValues(ExternalScheme.of("D1")));
+  /**
+   * Tests the getValues() method.
+   */
+  @Test
+  public void testGetValues() {
+    final ExternalIdBundle bundle = ExternalIdBundle.of(ID_11, ID_12, ID_21, ID_22);
+    final Set<String> expected = Sets.newHashSet(ID_11.getValue(), ID_12.getValue());
+    assertEquals(bundle.getValues(ExternalScheme.of("D1")), expected);
   }
+
 }

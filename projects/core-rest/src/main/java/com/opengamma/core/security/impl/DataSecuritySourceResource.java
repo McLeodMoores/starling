@@ -47,7 +47,7 @@ public class DataSecuritySourceResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying source over REST.
-   * 
+   *
    * @param securitySource  the underlying security source, not null
    */
   public DataSecuritySourceResource(final SecuritySource securitySource) {
@@ -58,7 +58,7 @@ public class DataSecuritySourceResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the security source.
-   * 
+   *
    * @return the security source, not null
    */
   public SecuritySource getSecuritySource() {
@@ -67,82 +67,80 @@ public class DataSecuritySourceResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
   @GET
   @Path("securities")
   public Response search(
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo,
-      @QueryParam("id") List<String> externalIdStrs) {
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo,
+      @QueryParam("id") final List<String> externalIdStrs) {
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
-    Collection<? extends Security> result = getSecuritySource().get(bundle, vc);
+    final Collection<? extends Security> result = getSecuritySource().get(bundle, vc);
     return responseOkObject(FudgeListWrapper.of(result));
   }
 
   @GET
   @Path("securities/{securityId}")
   public Response get(
-      @PathParam("securityId") String idStr,
-      @QueryParam("version") String version,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo) {
+      @PathParam("securityId") final String idStr,
+      @QueryParam("version") final String version,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
     final ObjectId objectId = ObjectId.parse(idStr);
     if (version != null) {
       final Security result = getSecuritySource().get(objectId.atVersion(version));
       return responseOkObject(result);
-    } else {
-      final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
-      Security result = getSecuritySource().get(objectId, vc);
-      return responseOkObject(result);
     }
+    final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
+    final Security result = getSecuritySource().get(objectId, vc);
+    return responseOkObject(result);
   }
 
   @GET
   @Path("securitySearches/bulk")
   public Response getBulk(
-      @QueryParam("id") List<String> uniqueIdStrs) {
+      @QueryParam("id") final List<String> uniqueIdStrs) {
     final List<UniqueId> uids = IdUtils.parseUniqueIds(uniqueIdStrs);
-    Map<UniqueId, Security> result = getSecuritySource().get(uids);
+    final Map<UniqueId, Security> result = getSecuritySource().get(uids);
     return responseOkObject(FudgeListWrapper.of(result.values()));
   }
 
- 
+
   // deprecated
   //-------------------------------------------------------------------------
   @GET
   @Path("securitySearches/list")
-  public Response searchList(@QueryParam("id") List<String> externalIdStrs) {
+  public Response searchList(@QueryParam("id") final List<String> externalIdStrs) {
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
-    Collection<? extends Security> result = getSecuritySource().get(bundle);
+    final Collection<? extends Security> result = getSecuritySource().get(bundle);
     return responseOkObject(FudgeListWrapper.of(result));
   }
 
   @GET
   @Path("securitySearches/single")
   public Response searchSingle(
-      @QueryParam("id") List<String> externalIdStrs,
-      @QueryParam("versionAsOf") String versionAsOf,
-      @QueryParam("correctedTo") String correctedTo) {
-    
+      @QueryParam("id") final List<String> externalIdStrs,
+      @QueryParam("versionAsOf") final String versionAsOf,
+      @QueryParam("correctedTo") final String correctedTo) {
+
     final ExternalIdBundle bundle = ExternalIdBundle.parse(externalIdStrs);
     final VersionCorrection vc = VersionCorrection.parse(versionAsOf, correctedTo);
     if (versionAsOf != null || correctedTo != null) {
-      Security result = getSecuritySource().getSingle(bundle, vc);
-      return responseOkObject(result);
-    } else {
-      Security result = getSecuritySource().getSingle(bundle);
+      final Security result = getSecuritySource().getSingle(bundle, vc);
       return responseOkObject(result);
     }
+    final Security result = getSecuritySource().getSingle(bundle);
+    return responseOkObject(result);
   }
 
   //-------------------------------------------------------------------------
   /**
    * For debugging purposes only.
-   * 
+   *
    * @return some debug information about the state of this resource object
    */
   @GET

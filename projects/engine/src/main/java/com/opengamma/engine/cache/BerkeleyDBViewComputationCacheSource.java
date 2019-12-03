@@ -21,7 +21,7 @@ import com.sleepycat.je.EnvironmentConfig;
  */
 public class BerkeleyDBViewComputationCacheSource extends DefaultViewComputationCacheSource {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BerkeleyDBViewComputationCacheSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BerkeleyDBViewComputationCacheSource.class);
 
   private static Environment constructDatabaseEnvironmentImpl(final File dbDir, final boolean transactional) {
     if (!dbDir.exists()) {
@@ -46,7 +46,7 @@ public class BerkeleyDBViewComputationCacheSource extends DefaultViewComputation
     try {
       return constructDatabaseEnvironmentImpl(dbDir, transactional);
     } catch (final RuntimeException e) {
-      s_logger.warn("Error creating DB environment, deleting {} and trying again", dbDir);
+      LOGGER.warn("Error creating DB environment, deleting {} and trying again", dbDir);
       deleteFile(dbDir);
       return constructDatabaseEnvironmentImpl(dbDir, transactional);
     }

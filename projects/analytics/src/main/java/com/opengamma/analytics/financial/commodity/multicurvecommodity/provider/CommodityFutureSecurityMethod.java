@@ -21,7 +21,7 @@ public abstract class CommodityFutureSecurityMethod {
    * @param multicurve The multi-curve and parameters provider.
    * @return The price.
    */
-  abstract double price(final CommodityFutureSecurity future, final CommodityProviderInterface multicurve);
+  abstract double price(CommodityFutureSecurity future, CommodityProviderInterface multicurve);
 
   /**
    * Compute the price of a commodity Future in a given model.
@@ -29,15 +29,15 @@ public abstract class CommodityFutureSecurityMethod {
    * @param multicurve The multi-curve and parameters provider.
    * @return The net amount.
    */
-  abstract double netAmount(final CommodityFutureSecurity future, final CommodityProviderInterface multicurve);
+  abstract double netAmount(CommodityFutureSecurity future, CommodityProviderInterface multicurve);
 
   /**
    * Compute the price sensitivity to interest rates and commodity rates  of a interest rate future by discounting.
    * @param future The future.
-   * @param multicurve The multi-curves provider. 
+   * @param multicurve The multi-curves provider.
    * @return The price rate sensitivity.
    */
-  public abstract CommoditySensitivity priceCurveSensitivity(final CommodityFutureSecurity future, final CommodityProviderInterface multicurve);
+  public abstract CommoditySensitivity priceCurveSensitivity(CommodityFutureSecurity future, CommodityProviderInterface multicurve);
 
   /**
    * Returns the convexity adjustment, i.e. the difference between the price and the forward commodity value from the curve .

@@ -28,13 +28,13 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Utility methods for handling FX
+ * Utility methods for handling FX.
  */
 public class FXUtils {
   private static final DecimalFormat STRIKE_FORMATTER = new DecimalFormat("###.#####");
-  private static final Map<Currency, Integer> BASE_ORDER = new HashMap<Currency, Integer>();
+  private static final Map<Currency, Integer> BASE_ORDER = new HashMap<>();
   static {
-    //TODO get rid of all of this and use CurrencyPairs
+    // TODO get rid of all of this and use CurrencyPairs
     BASE_ORDER.put(Currency.EUR, 1);
     BASE_ORDER.put(Currency.GBP, 2);
     BASE_ORDER.put(Currency.AUD, 3);
@@ -59,13 +59,16 @@ public class FXUtils {
 
   /**
    * Indicator that the currencies are in the standard base/quote order.
-   * @param currency1 The first currency.
-   * @param currency2 The second currency.
+   *
+   * @param currency1
+   *          The first currency.
+   * @param currency2
+   *          The second currency.
    * @return The indicator.
    */
   public static boolean isInBaseQuoteOrder(final Currency currency1, final Currency currency2) {
     if (BASE_ORDER.containsKey(currency1) && BASE_ORDER.containsKey(currency2)) {
-      return (BASE_ORDER.get(currency1) < BASE_ORDER.get(currency2));
+      return BASE_ORDER.get(currency1) < BASE_ORDER.get(currency2);
     }
     if (BASE_ORDER.containsKey(currency1)) {
       return true;
@@ -78,9 +81,13 @@ public class FXUtils {
 
   /**
    * Indicator that the currencies are in the standard base/quote order.
-   * @param currency1 The first currency.
-   * @param currency2 The second currency.
-   * @param currencyPairs The currency pairs.
+   *
+   * @param currency1
+   *          The first currency.
+   * @param currency2
+   *          The second currency.
+   * @param currencyPairs
+   *          The currency pairs.
    * @return The indicator.
    */
   public static boolean isInBaseQuoteOrder(final Currency currency1, final Currency currency2, final CurrencyPairs currencyPairs) {
@@ -93,8 +100,11 @@ public class FXUtils {
 
   /**
    * Return in the standard base/quote currency from two currencies.
-   * @param currency1 The first currency.
-   * @param currency2 The second currency.
+   *
+   * @param currency1
+   *          The first currency.
+   * @param currency2
+   *          The second currency.
    * @return The base currency.
    */
   public static Currency baseCurrency(final Currency currency1, final Currency currency2) {
@@ -106,8 +116,11 @@ public class FXUtils {
 
   /**
    * Return in the currency which is not the base currency from two currencies.
-   * @param currency1 The first currency.
-   * @param currency2 The second currency.
+   *
+   * @param currency1
+   *          The first currency.
+   * @param currency2
+   *          The second currency.
    * @return The non-base currency.
    */
   public static Currency nonBaseCurrency(final Currency currency1, final Currency currency2) {
@@ -131,8 +144,10 @@ public class FXUtils {
   }
 
   public static boolean isFXSecurity(final Security security) {
-    return security instanceof FXForwardSecurity || security instanceof FXOptionSecurity || security instanceof FXBarrierOptionSecurity || security instanceof FXDigitalOptionSecurity
-        || security instanceof NonDeliverableFXForwardSecurity || security instanceof NonDeliverableFXOptionSecurity || security instanceof NonDeliverableFXDigitalOptionSecurity;
+    return security instanceof FXForwardSecurity || security instanceof FXOptionSecurity || security instanceof FXBarrierOptionSecurity
+        || security instanceof FXDigitalOptionSecurity
+        || security instanceof NonDeliverableFXForwardSecurity || security instanceof NonDeliverableFXOptionSecurity
+        || security instanceof NonDeliverableFXDigitalOptionSecurity;
   }
 
 }

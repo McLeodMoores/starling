@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise;
@@ -23,7 +23,7 @@ import com.opengamma.timeseries.TimeSeries;
  * Any far past or minimum instant must be converted to {@code Long.MIN_VALUE}.
  * Other values are encoded as the number of nanoseconds from 1970-01-01, with
  * a range of +-292 years.
- * 
+ *
  * @param <T>  the instant type
  * @param <V>  the value being viewed over time
  */
@@ -34,7 +34,7 @@ public interface PreciseTimeSeries<T, V>
    * Checks if the series contains a value at the {@code long} instant specified.
    * <p>
    * This method provides {@code Map} style {@code containsKey()} behavior.
-   * 
+   *
    * @param instant  the nanosecond instant to retrieve, not null
    * @return true if the series contains the specified instant, false if not
    */
@@ -42,7 +42,7 @@ public interface PreciseTimeSeries<T, V>
 
   /**
    * Gets the value associated with the instant, specifying the primitive {@code long} instant.
-   * 
+   *
    * @param instant  the nanosecond instant
    * @return the matching value, null if there is no value for the instant
    */
@@ -51,7 +51,7 @@ public interface PreciseTimeSeries<T, V>
   //-------------------------------------------------------------------------
   /**
    * Gets the value at the specified index.
-   * 
+   *
    * @param index  the index to retrieve
    * @return the instant at the index
    * @throws IndexOutOfBoundsException if the index is invalid
@@ -61,7 +61,7 @@ public interface PreciseTimeSeries<T, V>
   //-------------------------------------------------------------------------
   /**
    * Gets the earliest instant for which there is a data point.
-   * 
+   *
    * @return the earliest nanosecond instant
    * @throws NoSuchElementException if empty
    */
@@ -69,7 +69,7 @@ public interface PreciseTimeSeries<T, V>
 
   /**
    * Gets the latest instant for which there is a data point.
-   * 
+   *
    * @return the latest nanosecond instant
    * @throws NoSuchElementException if empty
    */
@@ -81,9 +81,10 @@ public interface PreciseTimeSeries<T, V>
    * <p>
    * Although the pairs are expressed as instances of {@code Map.Entry},
    * it is recommended to use the primitive methods on {@code PreciseObjectEntryIterator}.
-   * 
+   *
    * @return the iterator, not null
    */
+  @Override
   PreciseEntryIterator<T, V> iterator();
 
   //-------------------------------------------------------------------------
@@ -92,7 +93,7 @@ public interface PreciseTimeSeries<T, V>
    * <p>
    * The index of each entry will match that used by the index lookup methods.
    * As such, the values will be in instant order.
-   * 
+   *
    * @return an array of all the nanosecond instants in order from earliest to latest, not null
    */
   long[] timesArrayFast();
@@ -116,7 +117,7 @@ public interface PreciseTimeSeries<T, V>
   //-------------------------------------------------------------------------
   /**
    * Checks if this time-series equals the specified time-series.
-   * 
+   *
    * @param obj  the other time-series, null returns false
    * @return true if equal
    */
@@ -125,7 +126,7 @@ public interface PreciseTimeSeries<T, V>
 
   /**
    * A suitable hash code.
-   * 
+   *
    * @return the hash code
    */
   @Override

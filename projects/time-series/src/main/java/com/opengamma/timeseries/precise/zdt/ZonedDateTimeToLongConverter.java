@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise.zdt;
@@ -32,12 +32,12 @@ public final class ZonedDateTimeToLongConverter {
    * Converts a {@code ZonedDateTime} to a {@code long}.
    * <p>
    * See the class Javadoc for the format of the {@code long}.
-   * 
+   *
    * @param instant  the instant to convert, not null
    * @return the {@code long} equivalent
    * @throws IllegalArgumentException if the instant is too large
    */
-  public static long convertToLong(ZonedDateTime instant) {
+  public static long convertToLong(final ZonedDateTime instant) {
     if (instant.getYear() >= 1_000_000) {
       return Long.MAX_VALUE;
     }
@@ -45,9 +45,9 @@ public final class ZonedDateTimeToLongConverter {
       return Long.MIN_VALUE;
     }
     try {
-      long secs = Jdk8Methods.safeMultiply(instant.toEpochSecond(), 1_000_000_000);
+      final long secs = Jdk8Methods.safeMultiply(instant.toEpochSecond(), 1_000_000_000);
       return Jdk8Methods.safeAdd(secs, instant.getNano());
-    } catch (RuntimeException ex) {
+    } catch (final RuntimeException ex) {
       throw new IllegalArgumentException("ZonedDateTime is too large/small: " + instant);
     }
   }
@@ -56,12 +56,12 @@ public final class ZonedDateTimeToLongConverter {
    * Converts a {@code long} to an {@code ZonedDateTime}.
    * <p>
    * See the class Javadoc for the format of the {@code long}.
-   * 
+   *
    * @param instant  the {@code long} nanos to convert, not null
    * @param zone  the zone to use, not null
    * @return the {@code ZonedDateTime} equivalent, not null
    */
-  public static ZonedDateTime convertToZonedDateTime(long instant, ZoneId zone) {
+  public static ZonedDateTime convertToZonedDateTime(final long instant, final ZoneId zone) {
     if (instant == Long.MAX_VALUE) {
       return LocalDateTime.MAX.atZone(zone);
     }

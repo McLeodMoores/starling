@@ -44,13 +44,13 @@ import com.opengamma.util.money.CurrencyAmount;
  * <li>Notional</li>
  * <li>Rate</li>
  * <li>Discounted payment amount</li>
- * <ul>
+ * </ul>
  * There is an entry for each coupon in a fixed leg.
  */
 @BeanDefinition
 public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
-  //TODO replace these static strings with an annotation and reference linked to the corresponding variable - PLAT-6507
+  // TODO replace these static strings with an annotation and reference linked to the corresponding variable - PLAT-6507
   /**
    * The payment year fraction label.
    */
@@ -68,7 +68,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
    */
   public static final String FIXED_RATE = "Fixed Rate";
   /**
-   * The discounted payment amount
+   * The discounted payment amount.
    */
   public static final String DISCOUNTED_PAYMENT_AMOUNT = "Discounted Payment Amount";
   /**
@@ -130,24 +130,33 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * All arrays must be the same length.
-   * @param startAccrualDates The start accrual dates, not null
-   * @param endAccrualDates The end accrual dates, not null
-   * @param discountFactors The discount factors, not null
-   * @param paymentTimes The payment times, not null
-   * @param paymentFractions The payment year fractions, not null
-   * @param paymentAmounts The payment amounts, not null
-   * @param notionals The notionals, not null
-   * @param fixedRates The fixed rates, not null
+   * 
+   * @param startAccrualDates
+   *          The start accrual dates, not null
+   * @param endAccrualDates
+   *          The end accrual dates, not null
+   * @param discountFactors
+   *          The discount factors, not null
+   * @param paymentTimes
+   *          The payment times, not null
+   * @param paymentFractions
+   *          The payment year fractions, not null
+   * @param paymentAmounts
+   *          The payment amounts, not null
+   * @param notionals
+   *          The notionals, not null
+   * @param fixedRates
+   *          The fixed rates, not null
    */
   @ImmutableConstructor
-  public FixedLegCashFlows(List<LocalDate> startAccrualDates,
-                           List<LocalDate> endAccrualDates,
-                           List<Double> discountFactors,
-                           List<Double> paymentTimes,
-                           List<Double> paymentFractions,
-                           List<CurrencyAmount> paymentAmounts,
-                           List<CurrencyAmount> notionals,
-                           List<Double> fixedRates) {
+  public FixedLegCashFlows(final List<LocalDate> startAccrualDates,
+      final List<LocalDate> endAccrualDates,
+      final List<Double> discountFactors,
+      final List<Double> paymentTimes,
+      final List<Double> paymentFractions,
+      final List<CurrencyAmount> paymentAmounts,
+      final List<CurrencyAmount> notionals,
+      final List<Double> fixedRates) {
 
     ArgumentChecker.notNull(startAccrualDates, "startAccrualDates");
     ArgumentChecker.notNull(endAccrualDates, "endAccrualDates");
@@ -167,7 +176,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     _paymentAmounts = Collections.unmodifiableList(Lists.newArrayList(paymentAmounts));
     _fixedRates = Collections.unmodifiableList(Lists.newArrayList(fixedRates));
 
-    int n = startAccrualDates.size();
+    final int n = startAccrualDates.size();
     ArgumentChecker.isTrue(n == endAccrualDates.size(), "Must have same number of start and end accrual dates");
     ArgumentChecker.isTrue(n == discountFactors.size(), "Must have same number of start accrual dates and discount factors");
     ArgumentChecker.isTrue(n == paymentTimes.size(), "Must have same number of start accrual dates and payment times");
@@ -179,18 +188,19 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * Gets the discounted payment amounts.
+   * 
    * @return the discounted cashflows
    */
   @DerivedProperty
   public List<CurrencyAmount> getDiscountedPaymentAmounts() {
-    List<CurrencyAmount> cashflows = new ArrayList<>();
+    final List<CurrencyAmount> cashflows = new ArrayList<>();
     for (int i = 0; i < getNumberOfCashFlows(); i++) {
-      CurrencyAmount payment = getPaymentAmounts().get(i);
+      final CurrencyAmount payment = getPaymentAmounts().get(i);
       if (payment == null) {
         cashflows.add(null);
         continue;
       }
-      double df = getDiscountFactors().get(i);
+      final double df = getDiscountFactors().get(i);
       cashflows.add(CurrencyAmount.of(payment.getCurrency(), payment.getAmount() * df));
     }
     return cashflows;
@@ -198,6 +208,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
   /**
    * Gets the total number of cash-flows.
+   * 
    * @return The total number of cash-flows
    */
   @DerivedProperty
@@ -330,14 +341,14 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       FixedLegCashFlows other = (FixedLegCashFlows) obj;
-      return JodaBeanUtils.equal(getAccrualStart(), other.getAccrualStart()) &&
-          JodaBeanUtils.equal(getAccrualEnd(), other.getAccrualEnd()) &&
-          JodaBeanUtils.equal(getDiscountFactors(), other.getDiscountFactors()) &&
-          JodaBeanUtils.equal(getPaymentTimes(), other.getPaymentTimes()) &&
-          JodaBeanUtils.equal(getPaymentFractions(), other.getPaymentFractions()) &&
-          JodaBeanUtils.equal(getPaymentAmounts(), other.getPaymentAmounts()) &&
-          JodaBeanUtils.equal(getNotionals(), other.getNotionals()) &&
-          JodaBeanUtils.equal(getFixedRates(), other.getFixedRates());
+      return JodaBeanUtils.equal(_accrualStart, other._accrualStart) &&
+          JodaBeanUtils.equal(_accrualEnd, other._accrualEnd) &&
+          JodaBeanUtils.equal(_discountFactors, other._discountFactors) &&
+          JodaBeanUtils.equal(_paymentTimes, other._paymentTimes) &&
+          JodaBeanUtils.equal(_paymentFractions, other._paymentFractions) &&
+          JodaBeanUtils.equal(_paymentAmounts, other._paymentAmounts) &&
+          JodaBeanUtils.equal(_notionals, other._notionals) &&
+          JodaBeanUtils.equal(_fixedRates, other._fixedRates);
     }
     return false;
   }
@@ -345,20 +356,20 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAccrualStart());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getAccrualEnd());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getDiscountFactors());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentTimes());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentFractions());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentAmounts());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getNotionals());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getFixedRates());
+    hash = hash * 31 + JodaBeanUtils.hashCode(_accrualStart);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_accrualEnd);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_discountFactors);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_paymentTimes);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_paymentFractions);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_paymentAmounts);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_notionals);
+    hash = hash * 31 + JodaBeanUtils.hashCode(_fixedRates);
     return hash;
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(352);
+    StringBuilder buf = new StringBuilder(288);
     buf.append("FixedLegCashFlows{");
     int len = buf.length();
     toString(buf);
@@ -370,16 +381,14 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
   }
 
   protected void toString(StringBuilder buf) {
-    buf.append("accrualStart").append('=').append(JodaBeanUtils.toString(getAccrualStart())).append(',').append(' ');
-    buf.append("accrualEnd").append('=').append(JodaBeanUtils.toString(getAccrualEnd())).append(',').append(' ');
-    buf.append("discountFactors").append('=').append(JodaBeanUtils.toString(getDiscountFactors())).append(',').append(' ');
-    buf.append("paymentTimes").append('=').append(JodaBeanUtils.toString(getPaymentTimes())).append(',').append(' ');
-    buf.append("paymentFractions").append('=').append(JodaBeanUtils.toString(getPaymentFractions())).append(',').append(' ');
-    buf.append("paymentAmounts").append('=').append(JodaBeanUtils.toString(getPaymentAmounts())).append(',').append(' ');
-    buf.append("notionals").append('=').append(JodaBeanUtils.toString(getNotionals())).append(',').append(' ');
-    buf.append("fixedRates").append('=').append(JodaBeanUtils.toString(getFixedRates())).append(',').append(' ');
-    buf.append("discountedPaymentAmounts").append('=').append(JodaBeanUtils.toString(getDiscountedPaymentAmounts())).append(',').append(' ');
-    buf.append("numberOfCashFlows").append('=').append(JodaBeanUtils.toString(getNumberOfCashFlows())).append(',').append(' ');
+    buf.append("accrualStart").append('=').append(JodaBeanUtils.toString(_accrualStart)).append(',').append(' ');
+    buf.append("accrualEnd").append('=').append(JodaBeanUtils.toString(_accrualEnd)).append(',').append(' ');
+    buf.append("discountFactors").append('=').append(JodaBeanUtils.toString(_discountFactors)).append(',').append(' ');
+    buf.append("paymentTimes").append('=').append(JodaBeanUtils.toString(_paymentTimes)).append(',').append(' ');
+    buf.append("paymentFractions").append('=').append(JodaBeanUtils.toString(_paymentFractions)).append(',').append(' ');
+    buf.append("paymentAmounts").append('=').append(JodaBeanUtils.toString(_paymentAmounts)).append(',').append(' ');
+    buf.append("notionals").append('=').append(JodaBeanUtils.toString(_notionals)).append(',').append(' ');
+    buf.append("fixedRates").append('=').append(JodaBeanUtils.toString(_fixedRates)).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -736,19 +745,31 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
+    /**
+     * @deprecated Use Joda-Convert in application code
+     */
     @Override
+    @Deprecated
     public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
+    /**
+     * @deprecated Loop in application code
+     */
     @Override
+    @Deprecated
     public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;

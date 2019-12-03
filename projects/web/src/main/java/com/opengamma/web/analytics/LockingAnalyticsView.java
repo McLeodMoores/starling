@@ -19,8 +19,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
 
 /**
- * Wraps another {@link AnalyticsView} and protects it from concurrent access. The methods that can mutate the state of
- * the underlying view are locked with a write lock, the getters are locked with a read lock.
+ * Wraps another {@link AnalyticsView} and protects it from concurrent access. The methods that can mutate the state of the underlying view are locked with a
+ * write lock, the getters are locked with a read lock.
+ * 
  * @see com.opengamma.web.analytics Package concurrency notes
  */
 /* package */ class LockingAnalyticsView implements AnalyticsView {
@@ -29,15 +30,16 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   private final ReadWriteLock _lock = new ReentrantReadWriteLock();
 
   /**
-   * @param delegate The delegate view (presumably not a thread safe implementation)
+   * @param delegate
+   *          The delegate view (presumably not a thread safe implementation)
    */
-  /* package */ LockingAnalyticsView(AnalyticsView delegate) {
+  /* package */ LockingAnalyticsView(final AnalyticsView delegate) {
     ArgumentChecker.notNull(delegate, "delegate");
     _delegate = delegate;
   }
 
   @Override
-  public List<String> updateStructure(CompiledViewDefinition compiledViewDefinition, Portfolio portfolio) {
+  public List<String> updateStructure(final CompiledViewDefinition compiledViewDefinition, final Portfolio portfolio) {
     try {
       _lock.writeLock().lock();
       return _delegate.updateStructure(compiledViewDefinition, portfolio);
@@ -47,7 +49,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public String viewCompilationFailed(Throwable t) {
+  public String viewCompilationFailed(final Throwable t) {
     try {
       _lock.writeLock().lock();
       return _delegate.viewCompilationFailed(t);
@@ -57,7 +59,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public List<String> updateResults(ViewResultModel results, ViewCycle viewCycle) {
+  public List<String> updateResults(final ViewResultModel results, final ViewCycle viewCycle) {
     try {
       _lock.writeLock().lock();
       return _delegate.updateResults(results, viewCycle);
@@ -67,7 +69,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public GridStructure getGridStructure(GridType gridType, int viewportId) {
+  public GridStructure getGridStructure(final GridType gridType, final int viewportId) {
     try {
       _lock.readLock().lock();
       return _delegate.getGridStructure(gridType, viewportId);
@@ -77,7 +79,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public GridStructure getInitialGridStructure(GridType gridType) {
+  public GridStructure getInitialGridStructure(final GridType gridType) {
     try {
       _lock.readLock().lock();
       return _delegate.getInitialGridStructure(gridType);
@@ -87,7 +89,8 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public boolean createViewport(int requestId, GridType gridType, int viewportId, String callbackId, String structureCallbackId, ViewportDefinition viewportDefinition) {
+  public boolean createViewport(final int requestId, final GridType gridType, final int viewportId, final String callbackId, final String structureCallbackId,
+      final ViewportDefinition viewportDefinition) {
     try {
       _lock.writeLock().lock();
       return _delegate.createViewport(requestId, gridType, viewportId, callbackId, structureCallbackId, viewportDefinition);
@@ -97,7 +100,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public String updateViewport(GridType gridType, int viewportId, ViewportDefinition viewportDefinition) {
+  public String updateViewport(final GridType gridType, final int viewportId, final ViewportDefinition viewportDefinition) {
     try {
       _lock.writeLock().lock();
       return _delegate.updateViewport(gridType, viewportId, viewportDefinition);
@@ -107,7 +110,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public void deleteViewport(GridType gridType, int viewportId) {
+  public void deleteViewport(final GridType gridType, final int viewportId) {
     try {
       _lock.writeLock().lock();
       _delegate.deleteViewport(gridType, viewportId);
@@ -117,7 +120,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public ViewportResults getData(GridType gridType, int viewportId) {
+  public ViewportResults getData(final GridType gridType, final int viewportId) {
     try {
       _lock.readLock().lock();
       return _delegate.getData(gridType, viewportId);
@@ -127,7 +130,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public void openDependencyGraph(int requestId, GridType gridType, int graphId, String callbackId, int row, int col) {
+  public void openDependencyGraph(final int requestId, final GridType gridType, final int graphId, final String callbackId, final int row, final int col) {
     try {
       _lock.writeLock().lock();
       _delegate.openDependencyGraph(requestId, gridType, graphId, callbackId, row, col);
@@ -137,12 +140,12 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public void openDependencyGraph(int requestId,
-                                  GridType gridType,
-                                  int graphId,
-                                  String callbackId,
-                                  String calcConfigName,
-                                  ValueRequirement valueRequirement) {
+  public void openDependencyGraph(final int requestId,
+      final GridType gridType,
+      final int graphId,
+      final String callbackId,
+      final String calcConfigName,
+      final ValueRequirement valueRequirement) {
     try {
       _lock.writeLock().lock();
       _delegate.openDependencyGraph(requestId, gridType, graphId, callbackId, calcConfigName, valueRequirement);
@@ -152,7 +155,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public void closeDependencyGraph(GridType gridType, int graphId) {
+  public void closeDependencyGraph(final GridType gridType, final int graphId) {
     try {
       _lock.writeLock().lock();
       _delegate.closeDependencyGraph(gridType, graphId);
@@ -162,7 +165,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public GridStructure getGridStructure(GridType gridType, int graphId, int viewportId) {
+  public GridStructure getGridStructure(final GridType gridType, final int graphId, final int viewportId) {
     try {
       _lock.readLock().lock();
       return _delegate.getGridStructure(gridType, graphId, viewportId);
@@ -172,7 +175,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public GridStructure getInitialGridStructure(GridType gridType, int graphId) {
+  public GridStructure getInitialGridStructure(final GridType gridType, final int graphId) {
     try {
       _lock.readLock().lock();
       return _delegate.getInitialGridStructure(gridType, graphId);
@@ -182,7 +185,8 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public boolean createViewport(int requestId, GridType gridType, int graphId, int viewportId, String callbackId, String structureCallbackId, ViewportDefinition viewportDefinition) {
+  public boolean createViewport(final int requestId, final GridType gridType, final int graphId, final int viewportId, final String callbackId,
+      final String structureCallbackId, final ViewportDefinition viewportDefinition) {
     try {
       _lock.writeLock().lock();
       return _delegate.createViewport(requestId, gridType, graphId, viewportId, callbackId, structureCallbackId, viewportDefinition);
@@ -192,7 +196,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public String updateViewport(GridType gridType, int graphId, int viewportId, ViewportDefinition viewportDefinition) {
+  public String updateViewport(final GridType gridType, final int graphId, final int viewportId, final ViewportDefinition viewportDefinition) {
     try {
       _lock.writeLock().lock();
       return _delegate.updateViewport(gridType, graphId, viewportId, viewportDefinition);
@@ -202,7 +206,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public void deleteViewport(GridType gridType, int graphId, int viewportId) {
+  public void deleteViewport(final GridType gridType, final int graphId, final int viewportId) {
     try {
       _lock.writeLock().lock();
       _delegate.deleteViewport(gridType, graphId, viewportId);
@@ -212,7 +216,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public ViewportResults getData(GridType gridType, int graphId, int viewportId) {
+  public ViewportResults getData(final GridType gridType, final int graphId, final int viewportId) {
     try {
       _lock.readLock().lock();
       return _delegate.getData(gridType, graphId, viewportId);
@@ -222,7 +226,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public List<String> entityChanged(MasterChangeNotification<?> notification) {
+  public List<String> entityChanged(final MasterChangeNotification<?> notification) {
     try {
       _lock.writeLock().lock();
       return _delegate.entityChanged(notification);
@@ -242,7 +246,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public ViewportResults getAllGridData(GridType gridType, Format format) {
+  public ViewportResults getAllGridData(final GridType gridType, final Format format) {
     try {
       _lock.readLock().lock();
       return _delegate.getAllGridData(gridType, format);
@@ -272,7 +276,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter.Format;
   }
 
   @Override
-  public void deleteError(long id) {
+  public void deleteError(final long id) {
     try {
       _lock.writeLock().lock();
       _delegate.deleteError(id);

@@ -72,7 +72,8 @@ public final class MultipleCurrencyInterestRateCurveSensitivity {
   /**
    * Create a new multiple currency sensitivity by adding the sensitivity associated to a given currency.
    * If the currency is not yet present in the existing sensitivity a new map is created with the extra entry.
-   * If the currency is already present, the associated sensitivities are added (in the sense of {@link InterestRateCurveSensitivity}) and a new map is created with all the other
+   * If the currency is already present, the associated sensitivities are added (in the sense of {@link InterestRateCurveSensitivity})
+   * and a new map is created with all the other
    * existing entries and the entry with the currency and the sum sensitivity.
    * @param ccy The currency. Not null.
    * @param sensitivity The sensitivity associated to the currency. Not null.

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -36,8 +36,8 @@ public class ValueSpecificationFudgeBuilder implements FudgeBuilder<ValueSpecifi
   private static final String PROPERTIES_KEY = "properties";
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ValueSpecification object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ValueSpecification object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     msg.add(VALUE_NAME_KEY, null, FudgeWireType.STRING, object.getValueName());
     ComputationTargetReferenceFudgeBuilder.buildMessageImpl(serializer, msg, object.getTargetSpecification());
     serializer.addToMessage(msg, PROPERTIES_KEY, null, object.getProperties());
@@ -45,7 +45,7 @@ public class ValueSpecificationFudgeBuilder implements FudgeBuilder<ValueSpecifi
   }
 
   @Override
-  public ValueSpecification buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public ValueSpecification buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     FudgeField fudgeField = message.getByName(VALUE_NAME_KEY);
     Validate.notNull(fudgeField, "Fudge message is not a ValueSpecification - field '" + VALUE_NAME_KEY + "' is not present");
     final String valueName = message.getFieldValue(String.class, fudgeField);

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.region.impl;
@@ -61,7 +61,7 @@ public class DataRegionMasterResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -74,23 +74,23 @@ public class DataRegionMasterResource extends AbstractDataResource {
 
   @POST
   @Path("regionSearches")
-  public Response search(RegionSearchRequest request) {
-    RegionSearchResult result = getRegionMaster().search(request);
+  public Response search(final RegionSearchRequest request) {
+    final RegionSearchResult result = getRegionMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("regions")
-  public Response add(@Context UriInfo uriInfo, RegionDocument request) {
-    RegionDocument result = getRegionMaster().add(request);
-    URI createdUri = (new DataRegionResource()).uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response add(@Context final UriInfo uriInfo, final RegionDocument request) {
+    final RegionDocument result = getRegionMaster().add(request);
+    final URI createdUri = new DataRegionResource().uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @Path("regions/{regionId}")
-  public DataRegionResource findRegion(@PathParam("regionId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public DataRegionResource findRegion(@PathParam("regionId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataRegionResource(this, id);
   }
 }

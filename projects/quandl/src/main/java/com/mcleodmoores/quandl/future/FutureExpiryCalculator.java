@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.future;
 
@@ -33,12 +33,12 @@ import com.opengamma.util.time.ExpiryAccuracy;
 /**
  * Calculates the expiry of a future given a month code, the day of the week and the nth day.
  */
-//TODO #11
+// TODO #11
 public class FutureExpiryCalculator extends QuandlFinancialConventionVisitorAdapter<Function2<Character, Integer, Expiry>> {
   /** Weekends */
   private static final Calendar WEEKENDS = new MondayToFridayCalendar("Weekend");
   /** A map from month codes to months. */
-  /* package */ static final Map<Character, Month> MONTH_CODES = ImmutableMap.<Character, Month>builder()
+  /* package */ static final Map<Character, Month> MONTH_CODES = ImmutableMap.<Character, Month> builder()
       .put('F', Month.JANUARY)
       .put('G', Month.FEBRUARY)
       .put('H', Month.MARCH)
@@ -58,17 +58,20 @@ public class FutureExpiryCalculator extends QuandlFinancialConventionVisitorAdap
   private final RegionSource _regionSource;
 
   /**
-   * Creates an instance that does not use a holiday source. In this case, the only holidays that will be taken into
-   * account are weekends.
+   * Creates an instance that does not use a holiday source. In this case, the only holidays that will be taken into account are weekends.
    */
   public FutureExpiryCalculator() {
     _holidaySource = null;
     _regionSource = null;
   }
+
   /**
    * Creates an instance.
-   * @param holidaySource  the holiday source, not null
-   * @param regionSource  the region source, not null
+   * 
+   * @param holidaySource
+   *          the holiday source, not null
+   * @param regionSource
+   *          the region source, not null
    */
   public FutureExpiryCalculator(final HolidaySource holidaySource, final RegionSource regionSource) {
     _holidaySource = ArgumentChecker.notNull(holidaySource, "holidaySource");

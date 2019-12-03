@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.config;
 
@@ -22,7 +22,8 @@ import com.google.common.collect.Sets;
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.future.QuandlFedFundsFutureCurveInstrumentProvider;
 import com.mcleodmoores.quandl.future.QuandlFutureCurveInstrumentProvider;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.analytics.curve.AbstractCurveDefinition;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
@@ -48,8 +49,8 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Generates {@link CurveConstructionConfiguration}, {@link AbstractCurveDefinition} and {@link CurveNodeIdMapper} configurations.
- * The configurations use Quandl tickers.
+ * Generates {@link CurveConstructionConfiguration}, {@link AbstractCurveDefinition} and {@link CurveNodeIdMapper} configurations. The configurations use Quandl
+ * tickers.
  */
 public final class QuandlCurveConfigurationsGenerator {
   /** The logger */
@@ -89,8 +90,9 @@ public final class QuandlCurveConfigurationsGenerator {
   }
 
   /**
-   * Generates the three types of configurations needed to construct curves: the interpolated curve definition, the
-   * curve node id mapper and the curve construction configuration.
+   * Generates the three types of configurations needed to construct curves: the interpolated curve definition, the curve node id mapper and the curve
+   * construction configuration.
+   * 
    * @return The configurations.
    */
   public static Configurations createConfigurations() {
@@ -107,9 +109,10 @@ public final class QuandlCurveConfigurationsGenerator {
   }
 
   /**
-   * Creates a two-curve configuration for USD - a discounting / overnight curve that uses Fed fund futures
-   * and a 3m Libor curve that uses STIR futures and vanilla fixed / Libor swaps.
-   * @return  the configurations
+   * Creates a two-curve configuration for USD - a discounting / overnight curve that uses Fed fund futures and a 3m Libor curve that uses STIR futures and
+   * vanilla fixed / Libor swaps.
+   * 
+   * @return the configurations
    */
   private static Configurations createUsdConfigurations() {
     final String curveConstructionConfigurationName = "USD Rates";
@@ -131,19 +134,20 @@ public final class QuandlCurveConfigurationsGenerator {
     // create two curve groups, as the curves are not coupled
     final List<CurveGroupConfiguration> cgc = new ArrayList<>();
     cgc.add(new CurveGroupConfiguration(0,
-        Collections.<String, List<? extends CurveTypeConfiguration>>singletonMap(overnightCurveName, discountingAndOvernight)));
-    cgc.add(new CurveGroupConfiguration(1, Collections.<String, List<? extends CurveTypeConfiguration>>singletonMap(liborCurveName, ibor)));
+        Collections.<String, List<? extends CurveTypeConfiguration>> singletonMap(overnightCurveName, discountingAndOvernight)));
+    cgc.add(new CurveGroupConfiguration(1, Collections.<String, List<? extends CurveTypeConfiguration>> singletonMap(liborCurveName, ibor)));
     // create the curve construction configuration
-    final CurveConstructionConfiguration config = new CurveConstructionConfiguration(curveConstructionConfigurationName, cgc, Collections.<String>emptyList());
+    final CurveConstructionConfiguration config = new CurveConstructionConfiguration(curveConstructionConfigurationName, cgc, Collections.<String> emptyList());
     // populate the discounting / overnight curve with cash and rate futures
     final Set<CurveNode> overnightCurveNodes = new HashSet<>();
     final Map<Tenor, CurveInstrumentProvider> overnightId = new LinkedHashMap<>();
     final Map<Tenor, CurveInstrumentProvider> fedFundFutureIds = new LinkedHashMap<>();
     populateOvernight(overnightCurveNodes, overnightId, overnightCurveNodeIdMapperName, overnightConventionName, overnightReferenceId);
-    populateFedFundsFuture(overnightCurveNodes, fedFundFutureIds, overnightCurveNodeIdMapperName, Tenor.ONE_MONTH, Tenor.ONE_MONTH, "CME 30D Fed Funds", "CME/FF",
+    populateFedFundsFuture(overnightCurveNodes, fedFundFutureIds, overnightCurveNodeIdMapperName, Tenor.ONE_MONTH, Tenor.ONE_MONTH, "CME 30D Fed Funds",
+        "CME/FF",
         overnightReferenceId, 16);
     final AbstractCurveDefinition overnightDefinition = new InterpolatedCurveDefinition(overnightCurveName, overnightCurveNodes,
-        Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+        DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     final CurveNodeIdMapper overnightMapper = CurveNodeIdMapper.builder()
         .name(overnightCurveNodeIdMapperName)
         .cashNodeIds(overnightId)
@@ -159,7 +163,7 @@ public final class QuandlCurveConfigurationsGenerator {
         "CME 3M/3M Eurodollar LIBOR", "CME/ED", 16);
     populateSwaps(liborCurveNodes, swapIds, liborCurveNodeIdMapperName, "USD Vanilla LIBOR Fixed", "USD Vanilla LIBOR", "FRED/DSWP");
     final AbstractCurveDefinition liborDefinition = new InterpolatedCurveDefinition(liborCurveName, liborCurveNodes,
-        Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+        DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     final CurveNodeIdMapper liborMapper = CurveNodeIdMapper.builder()
         .name(liborCurveNodeIdMapperName)
         .cashNodeIds(liborId)
@@ -171,12 +175,15 @@ public final class QuandlCurveConfigurationsGenerator {
   }
 
   /**
-   * Creates a single-curve configuration for a currency - a discounting / 3m Ibor curve that uses only STIR
-   * futures.
-   * @param currency  the currency
-   * @param iborTenor  the ibor tenor
-   * @param rateName  the ibor rate name (e.g. LIBOR, TIBOR)
-   * @return  the configurations
+   * Creates a single-curve configuration for a currency - a discounting / 3m Ibor curve that uses only STIR futures.
+   * 
+   * @param currency
+   *          the currency
+   * @param iborTenor
+   *          the ibor tenor
+   * @param rateName
+   *          the ibor rate name (e.g. LIBOR, TIBOR)
+   * @return the configurations
    */
   private static Configurations createStirFutureOnlyConfigurations(final Currency currency, final Tenor iborTenor, final String rateName) {
     final String tenorString = iborTenor.toFormattedString().substring(1).toLowerCase();
@@ -207,9 +214,9 @@ public final class QuandlCurveConfigurationsGenerator {
     ctc.add(new IborCurveTypeConfiguration(iborReferenceId, iborTenor));
     // create a single curve group
     final List<CurveGroupConfiguration> cgc = new ArrayList<>();
-    cgc.add(new CurveGroupConfiguration(0, Collections.<String, List<? extends CurveTypeConfiguration>>singletonMap(curveName, ctc)));
+    cgc.add(new CurveGroupConfiguration(0, Collections.<String, List<? extends CurveTypeConfiguration>> singletonMap(curveName, ctc)));
     // create the curve construction configuration
-    final CurveConstructionConfiguration config = new CurveConstructionConfiguration(curveConstructionConfigurationName, cgc, Collections.<String>emptyList());
+    final CurveConstructionConfiguration config = new CurveConstructionConfiguration(curveConstructionConfigurationName, cgc, Collections.<String> emptyList());
     // populate the curve definition with rate future nodes
     final Set<CurveNode> curveNodes = new HashSet<>();
     final Map<Tenor, CurveInstrumentProvider> rateFutureIds = new LinkedHashMap<>();
@@ -219,8 +226,8 @@ public final class QuandlCurveConfigurationsGenerator {
       return null;
     }
     populateRateFuture(curveNodes, rateFutureIds, curveNodeIdMapperName, Tenor.THREE_MONTHS, iborTenor, futureConvention, futurePrefix, nFutures);
-    final AbstractCurveDefinition definition = new InterpolatedCurveDefinition(curveName, curveNodes, Interpolator1DFactory.DOUBLE_QUADRATIC,
-        Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    final AbstractCurveDefinition definition = new InterpolatedCurveDefinition(curveName, curveNodes, DoubleQuadraticInterpolator1dAdapter.NAME,
+        LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     final CurveNodeIdMapper mapper = CurveNodeIdMapper.builder()
         .name(curveNodeIdMapperName)
         .rateFutureNodeIds(rateFutureIds)
@@ -230,11 +237,17 @@ public final class QuandlCurveConfigurationsGenerator {
 
   /**
    * Adds an overnight cash node to the configurations.
-   * @param curveNodes  the curve nodes
-   * @param overnightId  the overnight id
-   * @param curveNodeIdMapperName  the curve node id mapper name
-   * @param convention  the overnight convention name
-   * @param overnightCode  the Quandl overnight code
+   * 
+   * @param curveNodes
+   *          the curve nodes
+   * @param overnightId
+   *          the overnight id
+   * @param curveNodeIdMapperName
+   *          the curve node id mapper name
+   * @param convention
+   *          the overnight convention name
+   * @param overnightCode
+   *          the Quandl overnight code
    */
   private static void populateOvernight(final Set<CurveNode> curveNodes, final Map<Tenor, CurveInstrumentProvider> overnightId,
       final String curveNodeIdMapperName, final String convention, final ExternalId overnightCode) {
@@ -245,12 +258,19 @@ public final class QuandlCurveConfigurationsGenerator {
 
   /**
    * Adds an ibor cash node to the configurations.
-   * @param curveNodes  the curve nodes
-   * @param iborId  the ibor id
-   * @param curveNodeIdMapperName  the curve node id mapper name
-   * @param tenor  the ibor tenor
-   * @param convention  the ibor convention name
-   * @param iborCode  the Quandl ibor code
+   * 
+   * @param curveNodes
+   *          the curve nodes
+   * @param iborId
+   *          the ibor id
+   * @param curveNodeIdMapperName
+   *          the curve node id mapper name
+   * @param tenor
+   *          the ibor tenor
+   * @param convention
+   *          the ibor convention name
+   * @param iborCode
+   *          the Quandl ibor code
    */
   private static void populateIbor(final Set<CurveNode> curveNodes, final Map<Tenor, CurveInstrumentProvider> iborId, final String curveNodeIdMapperName,
       final Tenor tenor, final String convention, final ExternalId iborCode) {
@@ -261,15 +281,25 @@ public final class QuandlCurveConfigurationsGenerator {
 
   /**
    * Adds the 2nd to nth Fed fund future nodes to the configurations.
-   * @param curveNodes  the curve nodes
-   * @param rateFutureIds  the rate future ids
-   * @param curveNodeIdMapperName  the curve node id mapper name
-   * @param futureTenor  the future tenor
-   * @param underlyingTenor  the underlying index tenor
-   * @param convention  the future convention name
-   * @param prefix  the Quandl future prefix
-   * @param underlyingId  the Quandl code for the overnight rate
-   * @param nFutures  the number of futures to add
+   * 
+   * @param curveNodes
+   *          the curve nodes
+   * @param rateFutureIds
+   *          the rate future ids
+   * @param curveNodeIdMapperName
+   *          the curve node id mapper name
+   * @param futureTenor
+   *          the future tenor
+   * @param underlyingTenor
+   *          the underlying index tenor
+   * @param convention
+   *          the future convention name
+   * @param prefix
+   *          the Quandl future prefix
+   * @param underlyingId
+   *          the Quandl code for the overnight rate
+   * @param nFutures
+   *          the number of futures to add
    */
   private static void populateFedFundsFuture(final Set<CurveNode> curveNodes, final Map<Tenor, CurveInstrumentProvider> rateFutureIds,
       final String curveNodeIdMapperName, final Tenor futureTenor, final Tenor underlyingTenor, final String convention,
@@ -285,14 +315,23 @@ public final class QuandlCurveConfigurationsGenerator {
 
   /**
    * Adds the 2nd to nth future nodes to the configurations.
-   * @param curveNodes  the curve nodes
-   * @param rateFutureIds  the rate future ids
-   * @param curveNodeIdMapperName  the curve node id mapper name
-   * @param futureTenor  the future tenor
-   * @param underlyingTenor  the underlying index tenor
-   * @param convention  the future convention name
-   * @param prefix  the Quandl future prefix
-   * @param nFutures  the number of futures to add
+   * 
+   * @param curveNodes
+   *          the curve nodes
+   * @param rateFutureIds
+   *          the rate future ids
+   * @param curveNodeIdMapperName
+   *          the curve node id mapper name
+   * @param futureTenor
+   *          the future tenor
+   * @param underlyingTenor
+   *          the underlying index tenor
+   * @param convention
+   *          the future convention name
+   * @param prefix
+   *          the Quandl future prefix
+   * @param nFutures
+   *          the number of futures to add
    */
   private static void populateRateFuture(final Set<CurveNode> curveNodes, final Map<Tenor, CurveInstrumentProvider> rateFutureIds,
       final String curveNodeIdMapperName, final Tenor futureTenor, final Tenor underlyingTenor, final String convention,
@@ -307,18 +346,25 @@ public final class QuandlCurveConfigurationsGenerator {
 
   /**
    * Adds 2y, 3y, 5y, 7y, 10y and 30y vanilla fixed / ibor swap nodes to the configurations.
-   * @param curveNodes  the curve nodes
-   * @param swapIds  the swap ids
-   * @param curveNodeIdMapperName  the curve node id mapper name
-   * @param payLegConvention  the pay leg convention name
-   * @param receiveLegConvention  the receive leg convention name
-   * @param prefix  the Quandl swap code prefix
+   * 
+   * @param curveNodes
+   *          the curve nodes
+   * @param swapIds
+   *          the swap ids
+   * @param curveNodeIdMapperName
+   *          the curve node id mapper name
+   * @param payLegConvention
+   *          the pay leg convention name
+   * @param receiveLegConvention
+   *          the receive leg convention name
+   * @param prefix
+   *          the Quandl swap code prefix
    */
   private static void populateSwaps(final Set<CurveNode> curveNodes, final Map<Tenor, CurveInstrumentProvider> swapIds, final String curveNodeIdMapperName,
       final String payLegConvention, final String receiveLegConvention, final String prefix) {
     final ExternalId payLegConventionId = ExternalId.of("CONVENTION", payLegConvention);
     final ExternalId receiveLegConventionId = ExternalId.of("CONVENTION", receiveLegConvention);
-    for (final Tenor tenor : new Tenor[] {Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS, Tenor.SEVEN_YEARS, Tenor.TEN_YEARS, Tenor.ofYears(30)}) {
+    for (final Tenor tenor : new Tenor[] { Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS, Tenor.SEVEN_YEARS, Tenor.TEN_YEARS, Tenor.ofYears(30) }) {
       final CurveNode node = new SwapNode(Tenor.of(Period.ZERO), tenor, payLegConventionId, receiveLegConventionId, curveNodeIdMapperName);
       curveNodes.add(node);
       final String code = prefix + tenor.getPeriod().getYears();
@@ -339,9 +385,13 @@ public final class QuandlCurveConfigurationsGenerator {
 
     /**
      * Creates an instance.
-     * @param cccs  a collection of {@link CurveConstructionConfiguration}, not null
-     * @param acds  a collection of {@link AbstractCurveDefinition}, not null
-     * @param cnims  a collection of {@link CurveNodeIdMapper}, not null
+     * 
+     * @param cccs
+     *          a collection of {@link CurveConstructionConfiguration}, not null
+     * @param acds
+     *          a collection of {@link AbstractCurveDefinition}, not null
+     * @param cnims
+     *          a collection of {@link CurveNodeIdMapper}, not null
      */
     Configurations(final Collection<CurveConstructionConfiguration> cccs, final Collection<AbstractCurveDefinition> acds,
         final Collection<CurveNodeIdMapper> cnims) {
@@ -355,7 +405,8 @@ public final class QuandlCurveConfigurationsGenerator {
 
     /**
      * Gets the {@link CurveConstructionConfiguration}s.
-     * @return  the collection of configurations
+     * 
+     * @return the collection of configurations
      */
     public Collection<CurveConstructionConfiguration> getCurveConstructionConfigurations() {
       return _cccs;
@@ -363,7 +414,8 @@ public final class QuandlCurveConfigurationsGenerator {
 
     /**
      * Gets the {@link AbstractCurveDefinition}s.
-     * @return  the collection of configurations
+     * 
+     * @return the collection of configurations
      */
     public Collection<AbstractCurveDefinition> getAbstractCurveDefinitions() {
       return _acds;
@@ -371,7 +423,8 @@ public final class QuandlCurveConfigurationsGenerator {
 
     /**
      * Gets the {@link CurveNodeIdMapper}s.
-     * @return  the collection of configurations
+     * 
+     * @return the collection of configurations
      */
     public Collection<CurveNodeIdMapper> getCurveNodeIdMappers() {
       return _cnims;
@@ -379,7 +432,9 @@ public final class QuandlCurveConfigurationsGenerator {
 
     /**
      * Adds all configurations. If the configurations are null, does nothing.
-     * @param configurations  the configurations
+     * 
+     * @param configurations
+     *          the configurations
      */
     public void addAll(final Configurations configurations) {
       if (configurations == null) {
@@ -423,7 +478,6 @@ public final class QuandlCurveConfigurationsGenerator {
       }
       return true;
     }
-
 
   }
 }

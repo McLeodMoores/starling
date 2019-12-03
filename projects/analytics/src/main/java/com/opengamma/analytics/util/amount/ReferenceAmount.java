@@ -61,8 +61,10 @@ public class ReferenceAmount<REFERENCE> {
   }
 
   /**
-   * Create a new object containing the points of the initial object plus the points of another object. If two points <REFERENCE> are identical, the values are added.
-   * @param other The other ReferenceAmount.
+   * Create a new object containing the points of the initial object plus the points of another object. If two points are identical, the values are added.
+   * 
+   * @param other
+   *          The other ReferenceAmount.
    * @return The total.
    */
   public ReferenceAmount<REFERENCE> plus(final ReferenceAmount<REFERENCE> other) {

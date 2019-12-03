@@ -58,14 +58,14 @@ public class SecurityLoaderResult extends DirectBean {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param result  the map of results, not null
    * @param fullResults  whether to store the full results
    */
-  public SecurityLoaderResult(Map<ExternalIdBundle, Security> result, boolean fullResults) {
-    for (Entry<ExternalIdBundle, Security> entry : result.entrySet()) {
-      ExternalIdBundle bundle = entry.getKey();
-      Security security = entry.getValue();
+  public SecurityLoaderResult(final Map<ExternalIdBundle, Security> result, final boolean fullResults) {
+    for (final Entry<ExternalIdBundle, Security> entry : result.entrySet()) {
+      final ExternalIdBundle bundle = entry.getKey();
+      final Security security = entry.getValue();
       if (security == null) {
         getResultMap().put(bundle, null);
       } else {
@@ -80,13 +80,18 @@ public class SecurityLoaderResult extends DirectBean {
   //-------------------------------------------------------------------------
   /**
    * Gets the result map in terms of {@code ObjectId}.
-   * 
+   *
    * @return the map of object identifiers, not null
    */
   public Map<ExternalIdBundle, ObjectId> getResultMapAsObjectId() {
-    Map<ExternalIdBundle, ObjectId> resultMap = Maps.newHashMapWithExpectedSize(getResultMap().size());
-    for (Entry<ExternalIdBundle, UniqueId> entry : getResultMap().entrySet()) {
-      resultMap.put(entry.getKey(), entry.getValue().getObjectId());
+    final Map<ExternalIdBundle, ObjectId> resultMap = Maps.newHashMapWithExpectedSize(getResultMap().size());
+    for (final Entry<ExternalIdBundle, UniqueId> entry : getResultMap().entrySet()) {
+      final UniqueId uid = entry.getValue();
+      if (uid == null) {
+        resultMap.put(entry.getKey(), null);
+      } else {
+        resultMap.put(entry.getKey(), uid.getObjectId());
+      }
     }
     return resultMap;
   }

@@ -20,9 +20,15 @@ public class UnsupportedSecurityLoader extends AbstractSecurityLoader {
     super();
   }
 
+  // override to avoid short-circuit in superclass that returns an empty result
+  @Override
+  public SecurityLoaderResult loadSecurities(final SecurityLoaderRequest request) {
+    throw new UnsupportedOperationException("Security loading is not supported");
+  }
+
   //-------------------------------------------------------------------------
   @Override
-  protected SecurityLoaderResult doBulkLoad(SecurityLoaderRequest request) {
+  protected SecurityLoaderResult doBulkLoad(final SecurityLoaderRequest request) {
     throw new UnsupportedOperationException("Security loading is not supported");
   }
 

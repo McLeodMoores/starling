@@ -52,7 +52,7 @@ public class MapComputationTargetResolver extends DefaultComputationTargetResolv
         }
 
         @Override
-        public UniqueIdentifiable resolveObject(UniqueId uniqueId, VersionCorrection versionCorrection) {
+        public UniqueIdentifiable resolveObject(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
           return resolved.getUniqueId();
         }
 
@@ -62,14 +62,13 @@ public class MapComputationTargetResolver extends DefaultComputationTargetResolv
         }
 
       };
-    } else {
-      return super.getResolver(specification);
     }
+    return super.getResolver(specification);
   }
 
   /**
    * Adds a target to the resolver.
-   * 
+   *
    * @param target the target to add, not null
    */
   public void addTarget(final ComputationTarget target) {
@@ -79,7 +78,7 @@ public class MapComputationTargetResolver extends DefaultComputationTargetResolv
 
   /**
    * Returns a string suitable for debugging.
-   * 
+   *
    * @return the string, not null
    */
   @Override

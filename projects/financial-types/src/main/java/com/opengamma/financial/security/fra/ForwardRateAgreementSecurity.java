@@ -99,55 +99,70 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
   private Frequency _indexFrequency;
 
   /**
-   * The day count convention
+   * The day count convention.
    */
   @PropertyDefinition(validate = "notNull")
   private DayCount _dayCount;
 
   /**
-   * The fixing business day convention
+   * The fixing business day convention.
    */
   @PropertyDefinition(validate = "notNull")
   private BusinessDayConvention _fixingBusinessDayConvention;
 
   /**
-   * The fixing lag (generally 0 or 2)
+   * The fixing lag (generally 0 or 2).
    */
   @PropertyDefinition(validate = "notNull")
   private Integer _fixingLag;
 
-  ForwardRateAgreementSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  ForwardRateAgreementSecurity() {
     super(SECURITY_TYPE);
   }
 
   /**
-   * Creates an instance
+   * Creates an instance.
    *
-   * @param currency  the currency, not null.
-   * @param underlyingId  the id of the underlying index (assumed Ibor), not null
-   * @param indexFrequency  the index frequency, not null
-   * @param startDate  the start date, not null
-   * @param endDate  the end date, not null
-   * @param rate  the rate
-   * @param amount  the amount (-ve if payer)
-   * @param fixingDate  the fixing date, not null
-   * @param dayCount  the day count convention, not null
-   * @param fixingBusinessDayConvention  the business dya convention, not null
-   * @param calendars  the calendars to be used, not null
-   * @param fixingLag  the fixing lag
+   * @param currency
+   *          the currency, not null.
+   * @param underlyingId
+   *          the id of the underlying index (assumed Ibor), not null
+   * @param indexFrequency
+   *          the index frequency, not null
+   * @param startDate
+   *          the start date, not null
+   * @param endDate
+   *          the end date, not null
+   * @param rate
+   *          the rate
+   * @param amount
+   *          the amount (-ve if payer)
+   * @param fixingDate
+   *          the fixing date, not null
+   * @param dayCount
+   *          the day count convention, not null
+   * @param fixingBusinessDayConvention
+   *          the business day convention, not null
+   * @param calendars
+   *          the calendars to be used, not null
+   * @param fixingLag
+   *          the fixing lag
    */
-  public ForwardRateAgreementSecurity(Currency currency,
-                                      ExternalId underlyingId,
-                                      Frequency indexFrequency,
-                                      LocalDate startDate,
-                                      LocalDate endDate,
-                                      double rate,
-                                      double amount,
-                                      LocalDate fixingDate,
-                                      DayCount dayCount,
-                                      BusinessDayConvention fixingBusinessDayConvention,
-                                      Set<ExternalId> calendars,
-                                      int fixingLag) {
+  public ForwardRateAgreementSecurity(final Currency currency,
+      final ExternalId underlyingId,
+      final Frequency indexFrequency,
+      final LocalDate startDate,
+      final LocalDate endDate,
+      final double rate,
+      final double amount,
+      final LocalDate fixingDate,
+      final DayCount dayCount,
+      final BusinessDayConvention fixingBusinessDayConvention,
+      final Set<ExternalId> calendars,
+      final int fixingLag) {
     super(SECURITY_TYPE);
     setExternalIdBundle(ExternalIdBundle.EMPTY);
     setCurrency(currency);
@@ -161,38 +176,52 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
     setDayCount(dayCount);
     setFixingBusinessDayConvention(fixingBusinessDayConvention);
     setCalendars(calendars);
+    setPaymentCalendars(calendars);
     setFixingLag(fixingLag);
   }
 
   /**
-   * Creates an instance
+   * Creates an instance.
    *
-   * @param currency  the currency, not null.
-   * @param underlyingId  the id of the underlying index (assumed Ibor), not null
-   * @param indexFrequency  the index frequency, not null
-   * @param startDate  the start date, not null
-   * @param endDate  the end date, not null
-   * @param rate  the rate
-   * @param amount  the amount (-ve if payer)
-   * @param fixingDate  the fixing date, not null
-   * @param dayCount  the day count convention, not null
-   * @param fixingBusinessDayConvention  the business dya convention, not null
-   * @param fixingCalendars  the calendars to be used, not null
-   * @param paymentCalendars the payment calendars, if null the fixing calendars will be used
-   * @param fixingLag  the fixing lag
+   * @param currency
+   *          the currency, not null.
+   * @param underlyingId
+   *          the id of the underlying index (assumed Ibor), not null
+   * @param indexFrequency
+   *          the index frequency, not null
+   * @param startDate
+   *          the start date, not null
+   * @param endDate
+   *          the end date, not null
+   * @param rate
+   *          the rate
+   * @param amount
+   *          the amount (-ve if payer)
+   * @param fixingDate
+   *          the fixing date, not null
+   * @param dayCount
+   *          the day count convention, not null
+   * @param fixingBusinessDayConvention
+   *          the business day convention, not null
+   * @param fixingCalendars
+   *          the calendars to be used, not null
+   * @param paymentCalendars
+   *          the payment calendars, if null the fixing calendars will be used
+   * @param fixingLag
+   *          the fixing lag
    */
-  public ForwardRateAgreementSecurity(Currency currency,
-                                      ExternalId underlyingId,
-                                      Frequency indexFrequency,
-                                      LocalDate startDate,
-                                      LocalDate endDate,
-                                      double rate,
-                                      double amount,
-                                      LocalDate fixingDate,
-                                      DayCount dayCount,
-                                      BusinessDayConvention fixingBusinessDayConvention,
-                                      Set<ExternalId> fixingCalendars, Set<ExternalId> paymentCalendars,
-                                      int fixingLag) {
+  public ForwardRateAgreementSecurity(final Currency currency,
+      final ExternalId underlyingId,
+      final Frequency indexFrequency,
+      final LocalDate startDate,
+      final LocalDate endDate,
+      final double rate,
+      final double amount,
+      final LocalDate fixingDate,
+      final DayCount dayCount,
+      final BusinessDayConvention fixingBusinessDayConvention,
+      final Set<ExternalId> fixingCalendars, final Set<ExternalId> paymentCalendars,
+      final int fixingLag) {
     super(SECURITY_TYPE);
     setExternalIdBundle(ExternalIdBundle.EMPTY);
     setCurrency(currency);
@@ -206,13 +235,13 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
     setDayCount(dayCount);
     setFixingBusinessDayConvention(fixingBusinessDayConvention);
     setCalendars(fixingCalendars);
-    setPaymentCalendars(paymentCalendars);
+    setPaymentCalendars(paymentCalendars == null ? fixingCalendars : paymentCalendars);
     setFixingLag(fixingLag);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitForwardRateAgreementSecurity(this);
   }
 
@@ -494,7 +523,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the day count convention
+   * Gets the day count convention.
    * @return the value of the property, not null
    */
   public DayCount getDayCount() {
@@ -502,7 +531,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the day count convention
+   * Sets the day count convention.
    * @param dayCount  the new value of the property, not null
    */
   public void setDayCount(DayCount dayCount) {
@@ -520,7 +549,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the fixing business day convention
+   * Gets the fixing business day convention.
    * @return the value of the property, not null
    */
   public BusinessDayConvention getFixingBusinessDayConvention() {
@@ -528,7 +557,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the fixing business day convention
+   * Sets the fixing business day convention.
    * @param fixingBusinessDayConvention  the new value of the property, not null
    */
   public void setFixingBusinessDayConvention(BusinessDayConvention fixingBusinessDayConvention) {
@@ -546,7 +575,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the fixing lag (generally 0 or 2)
+   * Gets the fixing lag (generally 0 or 2).
    * @return the value of the property, not null
    */
   public Integer getFixingLag() {
@@ -554,7 +583,7 @@ public class ForwardRateAgreementSecurity extends FinancialSecurity {
   }
 
   /**
-   * Sets the fixing lag (generally 0 or 2)
+   * Sets the fixing lag (generally 0 or 2).
    * @param fixingLag  the new value of the property, not null
    */
   public void setFixingLag(Integer fixingLag) {

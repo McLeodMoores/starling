@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -9,22 +9,29 @@ import com.google.common.primitives.Doubles;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Payoff of capped power option is min( max( S^i - K , 0 ) , C ) for call and min( max( K - S^i , 0 ) , C ) for put with i > 0, K > C > 0
+ * Payoff of capped power option is min( max( S^i - K , 0 ) , C ) for call and min( max( K - S^i , 0 ) , C ) for put with i &gt; 0, K &gt; C &gt; 0.
  */
 public class CappedPowerOptionFunctionProvider extends OptionFunctionProvider1D {
 
-  private double _power;
-  private double _cap;
+  private final double _power;
+  private final double _cap;
 
   /**
-   * @param strike Strike price, K
-   * @param timeToExpiry Time to expiry
-   * @param steps Number of steps
-   * @param isCall True if call, false if put
-   * @param power Power, i
-   * @param cap Cap, C
+   * @param strike
+   *          Strike price, K
+   * @param timeToExpiry
+   *          Time to expiry
+   * @param steps
+   *          Number of steps
+   * @param isCall
+   *          True if call, false if put
+   * @param power
+   *          Power, i
+   * @param cap
+   *          Cap, C
    */
-  public CappedPowerOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double power, final double cap) {
+  public CappedPowerOptionFunctionProvider(final double strike, final double timeToExpiry, final int steps, final boolean isCall, final double power,
+      final double cap) {
     super(strike, timeToExpiry, steps, isCall);
     ArgumentChecker.isTrue(power > 0., "power should be positive");
     ArgumentChecker.isTrue(Doubles.isFinite(power), "power should be finite");
@@ -70,7 +77,8 @@ public class CappedPowerOptionFunctionProvider extends OptionFunctionProvider1D 
   }
 
   /**
-   * Access power
+   * Access power.
+   *
    * @return _power
    */
   public double getPower() {
@@ -78,7 +86,8 @@ public class CappedPowerOptionFunctionProvider extends OptionFunctionProvider1D 
   }
 
   /**
-   * Access cap
+   * Access cap.
+   *
    * @return _cap
    */
   public double getCap() {
@@ -91,14 +100,14 @@ public class CappedPowerOptionFunctionProvider extends OptionFunctionProvider1D 
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_cap);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_power);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -108,7 +117,7 @@ public class CappedPowerOptionFunctionProvider extends OptionFunctionProvider1D 
     if (!(obj instanceof CappedPowerOptionFunctionProvider)) {
       return false;
     }
-    CappedPowerOptionFunctionProvider other = (CappedPowerOptionFunctionProvider) obj;
+    final CappedPowerOptionFunctionProvider other = (CappedPowerOptionFunctionProvider) obj;
     if (Double.doubleToLongBits(_cap) != Double.doubleToLongBits(other._cap)) {
       return false;
     }

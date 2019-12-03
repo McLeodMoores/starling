@@ -42,112 +42,112 @@ public class OtcSecurityVisitor extends FinancialSecurityVisitorSameValueAdapter
   }
 
   @Override
-  public Boolean visitSwapSecurity(SwapSecurity security) {
+  public Boolean visitSwapSecurity(final SwapSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitSwaptionSecurity(SwaptionSecurity security) {
+  public Boolean visitSwaptionSecurity(final SwaptionSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitCapFloorCMSSpreadSecurity(CapFloorCMSSpreadSecurity security) {
+  public Boolean visitCapFloorCMSSpreadSecurity(final CapFloorCMSSpreadSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitNonDeliverableFXOptionSecurity(NonDeliverableFXOptionSecurity security) {
+  public Boolean visitNonDeliverableFXOptionSecurity(final NonDeliverableFXOptionSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitFRASecurity(FRASecurity security) {
+  public Boolean visitFRASecurity(final FRASecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitCapFloorSecurity(CapFloorSecurity security) {
+  public Boolean visitCapFloorSecurity(final CapFloorSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitEquityVarianceSwapSecurity(EquityVarianceSwapSecurity security) {
+  public Boolean visitEquityVarianceSwapSecurity(final EquityVarianceSwapSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitFXBarrierOptionSecurity(FXBarrierOptionSecurity security) {
+  public Boolean visitFXBarrierOptionSecurity(final FXBarrierOptionSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitFXOptionSecurity(FXOptionSecurity security) {
+  public Boolean visitFXOptionSecurity(final FXOptionSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitFXDigitalOptionSecurity(FXDigitalOptionSecurity security) {
+  public Boolean visitFXDigitalOptionSecurity(final FXDigitalOptionSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitFXForwardSecurity(FXForwardSecurity security) {
+  public Boolean visitFXForwardSecurity(final FXForwardSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitLegacyVanillaCDSSecurity(LegacyVanillaCDSSecurity security) {
+  public Boolean visitLegacyVanillaCDSSecurity(final LegacyVanillaCDSSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitLegacyRecoveryLockCDSSecurity(LegacyRecoveryLockCDSSecurity security) {
+  public Boolean visitLegacyRecoveryLockCDSSecurity(final LegacyRecoveryLockCDSSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitLegacyFixedRecoveryCDSSecurity(LegacyFixedRecoveryCDSSecurity security) {
+  public Boolean visitLegacyFixedRecoveryCDSSecurity(final LegacyFixedRecoveryCDSSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitStandardVanillaCDSSecurity(StandardVanillaCDSSecurity security) {
+  public Boolean visitStandardVanillaCDSSecurity(final StandardVanillaCDSSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitStandardRecoveryLockCDSSecurity(StandardRecoveryLockCDSSecurity security) {
+  public Boolean visitStandardRecoveryLockCDSSecurity(final StandardRecoveryLockCDSSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitStandardFixedRecoveryCDSSecurity(StandardFixedRecoveryCDSSecurity security) {
+  public Boolean visitStandardFixedRecoveryCDSSecurity(final StandardFixedRecoveryCDSSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitCreditDefaultSwapIndexSecurity(CreditDefaultSwapIndexSecurity security) {
+  public Boolean visitCreditDefaultSwapIndexSecurity(final CreditDefaultSwapIndexSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitCreditDefaultSwapOptionSecurity(CreditDefaultSwapOptionSecurity security) {
+  public Boolean visitCreditDefaultSwapOptionSecurity(final CreditDefaultSwapOptionSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitZeroCouponInflationSwapSecurity(ZeroCouponInflationSwapSecurity security) {
+  public Boolean visitZeroCouponInflationSwapSecurity(final ZeroCouponInflationSwapSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitYearOnYearInflationSwapSecurity(YearOnYearInflationSwapSecurity security) {
+  public Boolean visitYearOnYearInflationSwapSecurity(final YearOnYearInflationSwapSecurity security) {
     return true;
   }
 
   @Override
-  public Boolean visitCashSecurity(CashSecurity security) {
+  public Boolean visitCashSecurity(final CashSecurity security) {
     return true;
   }
 }

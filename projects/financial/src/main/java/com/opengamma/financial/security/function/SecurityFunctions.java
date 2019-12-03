@@ -25,9 +25,9 @@ public class SecurityFunctions extends AbstractFunctionConfigurationBean {
   public static FunctionConfigurationSource instance() {
     return new SecurityFunctions().getObjectCreating();
   }
-  
+
   @Override
-  protected void addAllConfigurations(List<FunctionConfiguration> functions) {
+  protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
     functions.add(functionConfiguration(ISINFunction.class));
     functions.add(functionConfiguration(BloombergBuidFunction.class));
     functions.add(functionConfiguration(BloombergTickerFunction.class));

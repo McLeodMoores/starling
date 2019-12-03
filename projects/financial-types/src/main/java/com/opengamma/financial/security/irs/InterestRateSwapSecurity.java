@@ -24,7 +24,6 @@ import org.threeten.bp.LocalDate;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityVisitor;
 import com.opengamma.id.ExternalIdBundle;
@@ -69,7 +68,15 @@ public final class InterestRateSwapSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private List<InterestRateSwapLeg> _legs;
 
-  @Deprecated  // CSIGNORE
+  /**
+   * @param effectiveDate
+   *          the effective date, not null
+   * @param unAdjustedMaturityDate
+   *          the unadjusted maturity date, not null
+   * @param legs
+   *          the swap legs, not null
+   */
+  @Deprecated // CSIGNORE
   public InterestRateSwapSecurity(final LocalDate effectiveDate, final LocalDate unAdjustedMaturityDate, final Collection<InterestRateSwapLeg> legs) {
     super(SECURITY_TYPE);
     setEffectiveDate(effectiveDate);
@@ -77,8 +84,19 @@ public final class InterestRateSwapSecurity extends FinancialSecurity {
     setLegs(Lists.newArrayList(legs));
   }
 
-  @Deprecated  // CSIGNORE
-  public InterestRateSwapSecurity(final ExternalIdBundle id, final LocalDate effectiveDate, final LocalDate unAdjustedMaturityDate, final Collection<InterestRateSwapLeg> legs) {
+  /**
+   * @param id
+   *          the swap identifiers, not null
+   * @param effectiveDate
+   *          the effective date, not null
+   * @param unAdjustedMaturityDate
+   *          the unadjusted maturity date, not null
+   * @param legs
+   *          the swap legs, not null
+   */
+  @Deprecated // CSIGNORE
+  public InterestRateSwapSecurity(final ExternalIdBundle id, final LocalDate effectiveDate, final LocalDate unAdjustedMaturityDate,
+      final Collection<InterestRateSwapLeg> legs) {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);
     setEffectiveDate(effectiveDate);
@@ -86,7 +104,20 @@ public final class InterestRateSwapSecurity extends FinancialSecurity {
     setLegs(Lists.newArrayList(legs));
   }
 
-  public InterestRateSwapSecurity(final ExternalIdBundle id, final String name, final LocalDate effectiveDate, final LocalDate unAdjustedMaturityDate, final Collection<InterestRateSwapLeg> legs) {
+  /**
+   * @param id
+   *          the swap identifiers, not null
+   * @param name
+   *          the name of the security, not null
+   * @param effectiveDate
+   *          the effective date, not null
+   * @param unAdjustedMaturityDate
+   *          the unadjusted maturity date, not null
+   * @param legs
+   *          the swap legs, not null
+   */
+  public InterestRateSwapSecurity(final ExternalIdBundle id, final String name, final LocalDate effectiveDate, final LocalDate unAdjustedMaturityDate,
+      final Collection<InterestRateSwapLeg> legs) {
     super(SECURITY_TYPE);
     setExternalIdBundle(id);
     setName(name);
@@ -95,6 +126,11 @@ public final class InterestRateSwapSecurity extends FinancialSecurity {
     setLegs(Lists.newArrayList(legs));
   }
 
+  /**
+   * Gets the pay leg or return null if there is no pay leg or more than one pay leg.
+   *
+   * @return the pay legs or null
+   */
   public InterestRateSwapLeg getPayLeg() {
     final Collection<InterestRateSwapLeg> legs = getLegs(PayReceiveType.PAY);
     if (legs.size() == 1) {
@@ -103,6 +139,11 @@ public final class InterestRateSwapSecurity extends FinancialSecurity {
     return null;
   }
 
+  /**
+   * Gets the receive leg or return null if there is no receive leg or more than one receive leg.
+   *
+   * @return the receive legs or null
+   */
   public InterestRateSwapLeg getReceiveLeg() {
     final Collection<InterestRateSwapLeg> legs = getLegs(PayReceiveType.RECEIVE);
     if (legs.size() == 1) {
@@ -111,6 +152,13 @@ public final class InterestRateSwapSecurity extends FinancialSecurity {
     return null;
   }
 
+  /**
+   * Gets the leg or return an empty list if none are found.
+   *
+   * @param payReceiveType
+   *          the leg type, not null
+   * @return the legs
+   */
   public Collection<InterestRateSwapLeg> getLegs(final PayReceiveType payReceiveType) {
     final List<InterestRateSwapLeg> legs = new ArrayList<>();
     for (final InterestRateSwapLeg leg : getLegs()) {
@@ -121,10 +169,17 @@ public final class InterestRateSwapSecurity extends FinancialSecurity {
     return legs;
   }
 
+  /**
+   * Gets the legs of the desired class.
+   *
+   * @param desiredLegClass
+   *          the desired class, not null
+   * @param <T>
+   *          the type of the leg, not null
+   * @return the legs
+   */
   @SuppressWarnings("unchecked")
   public <T extends InterestRateSwapLeg> Collection<T> getLegs(final Class<T> desiredLegClass) {
-    //ArgumentChecker.isTrue(desiredLegClass.isAssignableFrom(InterestRateSwapLeg.class),
-    //                       "desiredLegClass must be a subtype of InterestRateSwpaLeg: got" + desiredLegClass);
     final List<T> legs = new ArrayList<>();
     for (final InterestRateSwapLeg leg : getLegs()) {
       if (leg.getClass().isAssignableFrom(desiredLegClass)) {
@@ -139,7 +194,10 @@ public final class InterestRateSwapSecurity extends FinancialSecurity {
     return visitor.visitInterestRateSwapSecurity(this);
   }
 
-  protected InterestRateSwapSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  protected InterestRateSwapSecurity() {
     super(SECURITY_TYPE);
   }
 
@@ -160,10 +218,9 @@ public final class InterestRateSwapSecurity extends FinancialSecurity {
     return result.toString();
   }
 
-  //TODO: These fields should be immutable and checked when set in constructor or builder. For now add a manual method.
+  // TODO: These fields should be immutable and checked when set in constructor or builder. For now add a manual method.
   /**
-   * Validate the swap is fully constructed and all necessary parameters are set.
-   * Requires at least one PAY and one RECEIVE leg.
+   * Validate the swap is fully constructed and all necessary parameters are set. Requires at least one PAY and one RECEIVE leg.
    */
   public void validate() {
     String name = "IRS";
@@ -182,10 +239,10 @@ public final class InterestRateSwapSecurity extends FinancialSecurity {
     }
     try {
       metaBean().validate(this);
-      for (InterestRateSwapLeg leg : getLegs()) {
+      for (final InterestRateSwapLeg leg : getLegs()) {
         leg.metaBean().validate(leg);
       }
-    } catch (IllegalArgumentException ex) {
+    } catch (final IllegalArgumentException ex) {
       throw new IllegalArgumentException(name + " details invalid: " + ex.getMessage());
     }
   }

@@ -1,6 +1,6 @@
 <section class="OG-masthead">
   <ul  class="og-nav">
-    <li><a href="analytics.ftl" class="og-home"><span class="OG-logo-light-small"></span><span>OpenGamma</span></a></li>
+    <li><a href="analytics.ftl" class="og-home"><span class="OG-logo-light-small"></span><span>Starling</span></a></li>
     <!--<li><a href="analytics_legacy.ftl" class="og-analytics">Analytics Legacy</a></li>-->
     <li><a href="analytics.ftl" class="og-analytics-beta">Analytics</a></li>
     <li><a href="blotter.ftl" class="og-blotter">Booking</a></li>
@@ -10,7 +10,12 @@
       </div>
     </li>
     <li>
-        <a href="admin.ftl#/configs/" class="og-menu-button og-datas">Data</a>
+      <a href="admin.ftl#/conventions/" class="og-menu-button og-conventions">Conventions</a>
+      <div class="og-convention og-menu og-active OG-shadow">
+      </div> 
+    </li>
+    <li>
+        <a href="admin.ftl#" class="og-menu-button og-datas">Data</a>
         <div class="og-data og-menu og-active OG-shadow">
             <table>
                 <tr>
@@ -41,12 +46,6 @@
                 </tr>
             </table>
         </div>
-    </li>
-    <li>
-      <a href="https://www.surveymonkey.com/s/opengamma-community-survey"
-          target="_blank" class="og-analytics-feedback">
-        <span class="OG-icon og-icon-speech"></span>Feedback
-      </a>
     </li>
   </ul>
   <#if userSecurity.enabled && userSecurity.userName?has_content>

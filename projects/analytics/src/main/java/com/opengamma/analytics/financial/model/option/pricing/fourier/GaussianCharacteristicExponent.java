@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -15,29 +15,14 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * This class represents the characteristic exponent for a Brownian motion driven by normally-distributed increments
- * $$
- * \begin{align*}
- * \phi_X &= E\left[e^{iuX}\right]\\
- * &= \frac{1}{\sqrt{2\pi}\sigma}\int_{-\infty}^{\infty} e^{iux} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)\\
- * %&= \exp\left({iu\mu - \tfrac{1}{2}\sigma^2 u^2}\right)
- * \end{align*}
- * $$
- * and
- * $$
- * \begin{align*}
- * \phi_{X_t}(u) &= [\phi_X(u)]^t \\
- * &= \exp\left(t\left(iu\mu - \frac{\sigma^2 u^2}{2}\right)\right)
- * \end{align*}
- * $$
- * 
+ * This class represents the characteristic exponent for a Brownian motion driven by normally-distributed increments.
  */
 public class GaussianCharacteristicExponent implements CharacteristicExponent {
   private final double _mu;
   private final double _sigma;
 
   /**
-   * 
+   *
    * @param mu The mean of the Gaussian distribution
    * @param sigma The standard deviation of the Gaussian distribution, not negative or zero
    */
@@ -51,14 +36,14 @@ public class GaussianCharacteristicExponent implements CharacteristicExponent {
   public Function1D<ComplexNumber, ComplexNumber> getFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber evaluate(ComplexNumber x) {
+      public ComplexNumber evaluate(final ComplexNumber x) {
         return getValue(x, t);
       }
     };
   }
 
   @Override
-  public ComplexNumber getValue(ComplexNumber u, double t) {
+  public ComplexNumber getValue(final ComplexNumber u, final double t) {
     Validate.isTrue(t > 0.0, "t > 0");
     Validate.notNull(u, "u");
     final ComplexNumber temp = multiply(_sigma, u);
@@ -70,7 +55,7 @@ public class GaussianCharacteristicExponent implements CharacteristicExponent {
   public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber[]>() {
       @Override
-      public ComplexNumber[] evaluate(ComplexNumber x) {
+      public ComplexNumber[] evaluate(final ComplexNumber x) {
         return getCharacteristicExponentAdjoint(x, t);
       }
     };
@@ -86,7 +71,7 @@ public class GaussianCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * 
+   *
    * @return $\infty$
    */
   @Override
@@ -95,7 +80,7 @@ public class GaussianCharacteristicExponent implements CharacteristicExponent {
   }
 
   /**
-   * 
+   *
    * @return $-\infty$
    */
   @Override
@@ -125,9 +110,9 @@ public class GaussianCharacteristicExponent implements CharacteristicExponent {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_mu);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_sigma);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

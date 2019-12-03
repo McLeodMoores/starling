@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.future.provider;
@@ -17,11 +17,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Method for the pricing of interest rate future options with daily margining. The pricing is done with a Normal approach on the future price.
- * The normal parameters are represented by (expiration-strike-delay) surfaces. The "delay" is the time between option expiration and future last trading date,
- * i.e. 0 for quarterly options and x for x-year mid-curve options. The future prices are computed without convexity adjustments.
+ * Method for the pricing of interest rate future options with daily margining. The pricing is done with a Normal approach on the future price. The normal
+ * parameters are represented by (expiration-strike-delay) surfaces. The "delay" is the time between option expiration and future last trading date, i.e. 0 for
+ * quarterly options and x for x-year mid-curve options. The future prices are computed without convexity adjustments.
  */
-public final class InterestRateFutureOptionMarginSecurityNormalSmileMethod extends InterestRateFutureOptionMarginSecurityGenericMethod<NormalSTIRFuturesSmileProviderInterface> {
+public final class InterestRateFutureOptionMarginSecurityNormalSmileMethod
+    extends InterestRateFutureOptionMarginSecurityGenericMethod<NormalSTIRFuturesSmileProviderInterface> {
 
   /**
    * Creates the method unique instance.
@@ -36,6 +37,7 @@ public final class InterestRateFutureOptionMarginSecurityNormalSmileMethod exten
 
   /**
    * Return the method unique instance.
+   * 
    * @return The instance.
    */
   public static InterestRateFutureOptionMarginSecurityNormalSmileMethod getInstance() {
@@ -54,12 +56,17 @@ public final class InterestRateFutureOptionMarginSecurityNormalSmileMethod exten
 
   /**
    * Computes the option security price from future price.
-   * @param security The future option security.
-   * @param normalData The normal volatility and multi-curves provider.
-   * @param priceFuture The price of the underlying future.
+   * 
+   * @param security
+   *          The future option security.
+   * @param normalData
+   *          The normal volatility and multi-curves provider.
+   * @param priceFuture
+   *          The price of the underlying future.
    * @return The security price.
    */
-  public double priceFromFuturePrice(final InterestRateFutureOptionMarginSecurity security, final NormalSTIRFuturesSmileProviderInterface normalData, final double priceFuture) {
+  public double priceFromFuturePrice(final InterestRateFutureOptionMarginSecurity security, final NormalSTIRFuturesSmileProviderInterface normalData,
+      final double priceFuture) {
     ArgumentChecker.notNull(security, "Option security");
     ArgumentChecker.notNull(normalData, "Normal data");
     final EuropeanVanillaOption option = new EuropeanVanillaOption(security.getStrike(), security.getExpirationTime(), security.isCall());
@@ -72,8 +79,11 @@ public final class InterestRateFutureOptionMarginSecurityNormalSmileMethod exten
 
   /**
    * Computes the option security price. The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param normalData The normal volatility and multi-curves provider.
+   * 
+   * @param security
+   *          The future option security.
+   * @param normalData
+   *          The normal volatility and multi-curves provider.
    * @return The security price.
    */
   @Override
@@ -85,14 +95,18 @@ public final class InterestRateFutureOptionMarginSecurityNormalSmileMethod exten
   }
 
   /**
-   * Computes the option security price curve sensitivity. The future price is computed without convexity adjustment.
-   * It is supposed that for a given strike the volatility does not change with the curves (sticky strike).
-   * @param security The future option security.
-   * @param normalData The normal volatility and multi-curves provider.
+   * Computes the option security price curve sensitivity. The future price is computed without convexity adjustment. It is supposed that for a given strike the
+   * volatility does not change with the curves (sticky strike).
+   * 
+   * @param security
+   *          The future option security.
+   * @param normalData
+   *          The normal volatility and multi-curves provider.
    * @return The security price curve sensitivity.
    */
   @Override
-  public MulticurveSensitivity priceCurveSensitivity(final InterestRateFutureOptionMarginSecurity security, final NormalSTIRFuturesSmileProviderInterface normalData) {
+  public MulticurveSensitivity priceCurveSensitivity(final InterestRateFutureOptionMarginSecurity security,
+      final NormalSTIRFuturesSmileProviderInterface normalData) {
     ArgumentChecker.notNull(security, "Option security");
     ArgumentChecker.notNull(normalData, "Normal data");
     // Forward sweep
@@ -112,8 +126,11 @@ public final class InterestRateFutureOptionMarginSecurityNormalSmileMethod exten
 
   /**
    * Computes the option security price volatility sensitivity. The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param normalData The normal volatility and multi-curves provider.
+   * 
+   * @param security
+   *          The future option security.
+   * @param normalData
+   *          The normal volatility and multi-curves provider.
    * @return The security price Black volatility sensitivity.
    */
   public SurfaceValue priceNormalSensitivity(final InterestRateFutureOptionMarginSecurity security, final NormalSTIRFuturesSmileProviderInterface normalData) {
@@ -137,10 +154,12 @@ public final class InterestRateFutureOptionMarginSecurityNormalSmileMethod exten
   }
 
   /**
-   * Interpolates and returns the option's implied volatility 
-   * The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param normalData The normal volatility and multi-curves provider.
+   * Interpolates and returns the option's implied volatility The future price is computed without convexity adjustment.
+   * 
+   * @param security
+   *          The future option security.
+   * @param normalData
+   *          The normal volatility and multi-curves provider.
    * @return Lognormal Implied Volatility.
    */
   public double impliedVolatility(final InterestRateFutureOptionMarginSecurity security, final NormalSTIRFuturesSmileProviderInterface normalData) {
@@ -152,8 +171,11 @@ public final class InterestRateFutureOptionMarginSecurityNormalSmileMethod exten
 
   /**
    * Computes the underlying future security price. The future price is computed without convexity adjustment.
-   * @param security The future option security.
-   * @param multicurves The multi-curves provider.
+   * 
+   * @param security
+   *          The future option security.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The security price.
    */
   public double underlyingFuturesPrice(final InterestRateFutureOptionMarginSecurity security, final MulticurveProviderInterface multicurves) {

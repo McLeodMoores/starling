@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.security.impl;
@@ -46,10 +46,13 @@ public class SimpleSecurityResolverTest {
   private final Instant _now = Instant.now();
   private final SecuritySource _securitySource;
 
+  /**
+   * Sets up mocks.
+   */
   @SuppressWarnings({"unchecked", "rawtypes" })
   public SimpleSecurityResolverTest() {
     _securityExternalId = ExternalId.of("Scheme1", "Value1");
-    ExternalIdBundle externalIdBundle = ExternalIdBundle.of(_securityExternalId, ExternalId.of("Scheme2", "Value2"));
+    final ExternalIdBundle externalIdBundle = ExternalIdBundle.of(_securityExternalId, ExternalId.of("Scheme2", "Value2"));
     _intersectingExternalIdBundle = ExternalIdBundle.of(_securityExternalId, ExternalId.of("Scheme3", "Value3"));
 
     _objectId = ObjectId.of("Sec", "a");
@@ -72,45 +75,63 @@ public class SimpleSecurityResolverTest {
     when(_securitySource.get(UNKNOWN_OID, VersionCorrection.of(Instant.ofEpochMilli(123), Instant.ofEpochMilli(123)))).thenThrow(new DataNotFoundException(""));
 
     // By external ID bundle and version-correction
-    ((OngoingStubbing) when(_securitySource.get(ExternalIdBundle.of(_securityExternalId), VersionCorrection.of(_securityV2ValidFrom, _now)))).thenReturn(Collections.singleton(_securityV2));
-    ((OngoingStubbing) when(_securitySource.get(_intersectingExternalIdBundle, VersionCorrection.of(_securityV2ValidFrom, _now)))).thenReturn(Collections.singleton(_securityV2));
-    ((OngoingStubbing) when(_securitySource.get(_intersectingExternalIdBundle, VersionCorrection.of(_securityV2ValidFrom.minusMillis(1), _now)))).thenReturn(Collections.singleton(_securityV1));
+    ((OngoingStubbing) when(_securitySource.get(ExternalIdBundle.of(_securityExternalId), VersionCorrection.of(_securityV2ValidFrom, _now))))
+         .thenReturn(Collections.singleton(_securityV2));
+    ((OngoingStubbing) when(_securitySource.get(_intersectingExternalIdBundle, VersionCorrection.of(_securityV2ValidFrom, _now))))
+         .thenReturn(Collections.singleton(_securityV2));
+    ((OngoingStubbing) when(_securitySource.get(_intersectingExternalIdBundle, VersionCorrection.of(_securityV2ValidFrom.minusMillis(1), _now))))
+        .thenReturn(Collections.singleton(_securityV1));
     when(_securitySource.get(UNKNOWN_BUNDLE)).thenThrow(new DataNotFoundException(""));
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests that the security source cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullSecuritySource() {
+  public void testConstructorNullSecuritySource() {
     new SimpleSecurityResolver((SecuritySource) null, VersionCorrection.LATEST);
   }
 
+  /**
+   * Tests that the version correction cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_nullVersionCorrection() {
+  public void testConstructorNullVersionCorrection() {
     new SimpleSecurityResolver(_securitySource, (VersionCorrection) null);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the resolution using an object id.
+   */
   @Test
   @SuppressWarnings("deprecation")
   public void testResolveLinkWithObjectId() {
-    SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom, _now));
-    SecurityLink link = new SimpleSecurityLink(_objectId);
-    Security resolvedSecurity = resolver.resolve(link);
+    final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom, _now));
+    final SecurityLink link = new SimpleSecurityLink(_objectId);
+    final Security resolvedSecurity = resolver.resolve(link);
     assertEquals(_securityV2, resolvedSecurity);
   }
 
+  /**
+   * Tests resolution of a security that is not available from the source.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   @SuppressWarnings("deprecation")
   public void testResolveLinkWithUnknownObjectId() {
-    VersionCorrection vc = VersionCorrection.of(Instant.ofEpochMilli(123), Instant.ofEpochMilli(123));
-    SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, vc);
-    SecurityLink link = new SimpleSecurityLink(UNKNOWN_OID);
+    final VersionCorrection vc = VersionCorrection.of(Instant.ofEpochMilli(123), Instant.ofEpochMilli(123));
+    final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, vc);
+    final SecurityLink link = new SimpleSecurityLink(UNKNOWN_OID);
     resolver.resolve(link);
   }
 
+  /**
+   * Tests resolution using an external id bundle.
+   */
   @Test
   public void testResolveLinkWithExternalIdBundle() {
-    SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom, _now));
+    final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom, _now));
 
     SecurityLink link = new SimpleSecurityLink(_securityExternalId);
     Security resolvedSecurity = resolver.resolve(link);
@@ -121,21 +142,32 @@ public class SimpleSecurityResolverTest {
     assertEquals(_securityV2, resolvedSecurity);
   }
 
+  /**
+   * Tests resolution of a security that is not available from the source.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testResolveLinkWithUnknownExternalIdBundle() {
-    SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(Instant.ofEpochMilli(123), Instant.ofEpochMilli(123)));
-    SecurityLink link = new SimpleSecurityLink(ExternalId.of("Unknown", "Unknown"));
+    final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource,
+        VersionCorrection.of(Instant.ofEpochMilli(123), Instant.ofEpochMilli(123)));
+    final SecurityLink link = new SimpleSecurityLink(ExternalId.of("Unknown", "Unknown"));
     resolver.resolve(link);
   }
 
+  /**
+   * Tests resolution of a security with an empty link.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testResolveEmptyLink() {
-    SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(Instant.ofEpochMilli(123), Instant.ofEpochMilli(123)));
-    SecurityLink link = new SimpleSecurityLink();
+    final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource,
+        VersionCorrection.of(Instant.ofEpochMilli(123), Instant.ofEpochMilli(123)));
+    final SecurityLink link = new SimpleSecurityLink();
     resolver.resolve(link);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests resolution by unique id.
+   */
   @Test
   public void testGetSecurityByUniqueId() {
     SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom.minusMillis(1), _now));
@@ -148,13 +180,19 @@ public class SimpleSecurityResolverTest {
     assertEquals(_securityV1, security);
   }
 
+  /**
+   * Tests resolution of a security that is not available from the source.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testGetSecurityByUnknownUniqueId() {
-    SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom, _now));
+    final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom, _now));
     resolver.getSecurity(UNKNOWN_UID);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests resolution by object id.
+   */
   @Test
   public void testGetSecurityByObjectId() {
     SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom.minusMillis(1), _now));
@@ -166,14 +204,20 @@ public class SimpleSecurityResolverTest {
     assertEquals(_securityV2, security);
   }
 
+  /**
+   * Tests resolution of a security that is not available from the source.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testGetSecurityByUnknownObjectId() {
-    VersionCorrection vc = VersionCorrection.of(Instant.ofEpochMilli(123), Instant.ofEpochMilli(123));
-    SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, vc);
+    final VersionCorrection vc = VersionCorrection.of(Instant.ofEpochMilli(123), Instant.ofEpochMilli(123));
+    final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, vc);
     resolver.getSecurity(UNKNOWN_OID);
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests resolution by external id bundle.
+   */
   @Test
   public void testGetSecurityByExternalIdBundle() {
     SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom.minusMillis(1), _now));
@@ -185,9 +229,12 @@ public class SimpleSecurityResolverTest {
     assertEquals(_securityV2, security);
   }
 
+  /**
+   * Tests resolution of a security that is not available from the source.
+   */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testGetSecurityByUnknownExternalIdBundle() {
-    SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom, _now));
+    final SimpleSecurityResolver resolver = new SimpleSecurityResolver(_securitySource, VersionCorrection.of(_securityV2ValidFrom, _now));
     resolver.getSecurity(UNKNOWN_BUNDLE);
   }
 

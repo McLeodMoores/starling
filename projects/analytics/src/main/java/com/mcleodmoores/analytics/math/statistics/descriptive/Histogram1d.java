@@ -90,7 +90,7 @@ public final class Histogram1d {
         _lowerBinValues[i] = i * binWidth + (startFromZero ? 0 : min);
       }
       for (final double d : sortedData) {
-        final int bin = (int) ((d - (startFromZero ? 0 : min))/ binWidth);
+        final int bin = (int) ((d - (startFromZero ? 0 : min)) / binWidth);
         _heights[bin]++;
       }
     }
@@ -129,7 +129,8 @@ public final class Histogram1d {
    */
   public int getHeightForValue(final double value) {
     if (value < _lowerBinValues[0] || value >= _lowerBinValues[size() - 1] + _binWidth) {
-      throw new IllegalArgumentException("Value " + value + " outside of the domain of the histogram " + _lowerBinValues[0] + " to " + _lowerBinValues[size() - 1]);
+      throw new IllegalArgumentException("Value " + value + " outside of the domain of the histogram " + _lowerBinValues[0]
+          + " to " + _lowerBinValues[size() - 1]);
     }
     if (value > _lowerBinValues[size() - 1]) {
       return _heights[size() - 1];

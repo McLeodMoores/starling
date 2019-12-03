@@ -35,7 +35,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class FXForwardPnLDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardPnLDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardPnLDefaults.class);
   private final String _start;
   private final String _end;
   private final String _scheduleCalculator;
@@ -77,7 +77,8 @@ public class FXForwardPnLDefaults extends DefaultPropertyFunction {
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String requirementName : new String[] {ValueRequirementNames.PNL_SERIES, ValueRequirementNames.YIELD_CURVE_PNL_SERIES, ValueRequirementNames.YIELD_CURVE_HISTORICAL_TIME_SERIES}) {
+    for (final String requirementName : new String[] { ValueRequirementNames.PNL_SERIES, ValueRequirementNames.YIELD_CURVE_PNL_SERIES,
+                  ValueRequirementNames.YIELD_CURVE_HISTORICAL_TIME_SERIES }) {
       defaults.addValuePropertyName(requirementName, ValuePropertyNames.PAY_CURVE);
       defaults.addValuePropertyName(requirementName, ValuePropertyNames.RECEIVE_CURVE);
       defaults.addValuePropertyName(requirementName, ValuePropertyNames.PAY_CURVE_CALCULATION_CONFIG);
@@ -90,7 +91,8 @@ public class FXForwardPnLDefaults extends DefaultPropertyFunction {
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY.equals(propertyName)) {
       return Collections.singleton(_start);
     }
@@ -107,11 +109,11 @@ public class FXForwardPnLDefaults extends DefaultPropertyFunction {
     final String payCurrency = security.accept(ForexVisitors.getPayCurrencyVisitor()).getCode();
     final String receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor()).getCode();
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(payCurrency)) {
-      s_logger.error("Could not get config for pay currency " + payCurrency + "; should never happen");
+      LOGGER.error("Could not get config for pay currency " + payCurrency + "; should never happen");
       return null;
     }
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(receiveCurrency)) {
-      s_logger.error("Could not get config for receive currency " + receiveCurrency + "; should never happen");
+      LOGGER.error("Could not get config for receive currency " + receiveCurrency + "; should never happen");
       return null;
     }
     final Pair<String, String> payPair = _currencyCurveConfigAndDiscountingCurveNames.get(payCurrency);

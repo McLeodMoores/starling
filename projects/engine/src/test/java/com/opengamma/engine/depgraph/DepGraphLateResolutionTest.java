@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -34,7 +34,7 @@ import com.opengamma.util.test.TestLifecycle;
 @Test(groups = TestGroup.UNIT)
 public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DepGraphLateResolutionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DepGraphLateResolutionTest.class);
 
   public void backtrackCleanup() {
     TestLifecycle.begin();
@@ -45,15 +45,16 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
       final MockFunction fnConv = new MockFunction("conv", helper.getTarget()) {
 
         @Override
-        public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           final ValueRequirement req = helper.getRequirement1Any();
-          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(), req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId())
-              .get()));
+          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(),
+              req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
         }
 
         @Override
-        public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
-          s_logger.debug("fnConv late resolving with inputs {}", inputs);
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+            final Map<ValueSpecification, ValueRequirement> inputs) {
+          LOGGER.debug("fnConv late resolving with inputs {}", inputs);
           assertEquals(1, inputs.size());
           final ValueSpecification input = inputs.keySet().iterator().next();
           if (!input.getProperties().getValues("TEST").contains("Bar")) {
@@ -65,9 +66,9 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
       };
       fnConv.addRequirement(helper.getRequirement2Any());
       helper.getFunctionRepository().addFunction(fnConv);
-      DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
+      final DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
         @Override
-        public int getPriority(CompiledFunctionDefinition function) {
+        public int getPriority(final CompiledFunctionDefinition function) {
           if (function == fnConv) {
             return 1;
           }
@@ -78,7 +79,7 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
         }
       });
       builder.addTarget(helper.getRequirement1Bar());
-      DependencyGraph graph = builder.getDependencyGraph();
+      final DependencyGraph graph = builder.getDependencyGraph();
       assertNotNull(graph);
       assertGraphContains(graph, fn2Bar, fnConv);
     } finally {
@@ -95,19 +96,20 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
       final MockFunction fnConv = new MockFunction("conv", helper.getTarget()) {
 
         @Override
-        public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           final ValueRequirement req = helper.getRequirement1Any();
-          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(), req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId())
-              .get()));
+          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(),
+              req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
         }
 
         @Override
-        public Set<ValueRequirement> getAdditionalRequirements(FunctionCompilationContext context, ComputationTarget target, Set<ValueSpecification> inputs, Set<ValueSpecification> outputs) {
+        public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+            final Set<ValueSpecification> inputs, final Set<ValueSpecification> outputs) {
           assertEquals(1, inputs.size());
           assertTrue(inputs.contains(helper.getSpec2Bar()));
           assertEquals(1, outputs.size());
           //final ValueSpecification expected = _result.compose(helper.getRequirement1Bar());
-          //s_logger.debug("Outputs={}, expected={}", outputs, expected);
+          //LOGGER.debug("Outputs={}, expected={}", outputs, expected);
           //assertTrue(outputs.contains(expected));
           return Collections.singleton(helper.getRequirement1Foo());
         }
@@ -115,9 +117,9 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
       };
       fnConv.addRequirement(helper.getRequirement2Any());
       helper.getFunctionRepository().addFunction(fnConv);
-      DependencyGraphBuilder builder = helper.createBuilder(null);
+      final DependencyGraphBuilder builder = helper.createBuilder(null);
       builder.addTarget(helper.getRequirement1Bar());
-      DependencyGraph graph = builder.getDependencyGraph();
+      final DependencyGraph graph = builder.getDependencyGraph();
       assertNotNull(graph);
       assertGraphContains(graph, fn2Bar, fnConv, fn1Foo);
     } finally {
@@ -135,27 +137,27 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
       final MockFunction fnConv = new MockFunction("conv", helper.getTarget()) {
 
         @Override
-        public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+        public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
           final ValueRequirement req = helper.getRequirement1Any();
-          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(), req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId())
-              .get()));
+          return Collections.singleton(new ValueSpecification(req.getValueName(), target.toSpecification(),
+              req.getConstraints().copy().with(ValuePropertyNames.FUNCTION, getUniqueId()).get()));
         }
 
         @Override
-        public Set<ValueRequirement> getAdditionalRequirements(FunctionCompilationContext context, ComputationTarget target, Set<ValueSpecification> inputs, Set<ValueSpecification> outputs) {
+        public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+            final Set<ValueSpecification> inputs, final Set<ValueSpecification> outputs) {
           if (inputs.contains(helper.getSpec2Foo())) {
             return Collections.singleton(helper.getRequirement2Beta());
-          } else {
-            return Collections.singleton(helper.getRequirement1Foo());
           }
+          return Collections.singleton(helper.getRequirement1Foo());
         }
 
       };
       fnConv.addRequirement(helper.getRequirement2Any());
       helper.getFunctionRepository().addFunction(fnConv);
-      DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
+      final DependencyGraphBuilder builder = helper.createBuilder(new FunctionPriority() {
         @Override
-        public int getPriority(CompiledFunctionDefinition function) {
+        public int getPriority(final CompiledFunctionDefinition function) {
           if (function == fn2Foo) {
             return 1;
           }
@@ -163,7 +165,7 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
         }
       });
       builder.addTarget(helper.getRequirement1Bar());
-      DependencyGraph graph = builder.getDependencyGraph();
+      final DependencyGraph graph = builder.getDependencyGraph();
       assertNotNull(graph);
       assertGraphContains(graph, fn2Bar, fnConv, fn1Foo);
     } finally {

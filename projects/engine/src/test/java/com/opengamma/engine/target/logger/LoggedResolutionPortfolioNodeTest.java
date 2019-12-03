@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.logger;
@@ -50,7 +50,7 @@ public class LoggedResolutionPortfolioNodeTest {
     final PortfolioNode node = Mockito.mock(PortfolioNode.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
     final PortfolioNode logged = new LoggedResolutionPortfolioNode(node, logger);
-    final List<PortfolioNode> childNodes = new ArrayList<PortfolioNode>();
+    final List<PortfolioNode> childNodes = new ArrayList<>();
     for (int i = 0; i < 3; i++) {
       final PortfolioNode childNode = Mockito.mock(PortfolioNode.class);
       Mockito.when(childNode.getUniqueId()).thenReturn(UniqueId.of("Node", Integer.toString(i), "0"));
@@ -59,11 +59,10 @@ public class LoggedResolutionPortfolioNodeTest {
     Mockito.when(node.getChildNodes()).thenReturn(childNodes);
     final Collection<PortfolioNode> loggedChildNodes = logged.getChildNodes();
     assertEquals(loggedChildNodes.size(), 3);
-    int i = 0;
-    for (PortfolioNode childNode : loggedChildNodes) {
+    for (final PortfolioNode childNode : loggedChildNodes) {
       assertTrue(childNode instanceof LoggedResolutionPortfolioNode);
-      //Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE, UniqueId.of("Node", Integer.toString(i))), UniqueId.of("Node", Integer.toString(i), "0"));
-      i++;
+      // Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO_NODE,
+      // UniqueId.of("Node", Integer.toString(i))), UniqueId.of("Node", Integer.toString(i), "0"));
     }
     Mockito.verifyNoMoreInteractions(logger);
   }
@@ -72,7 +71,7 @@ public class LoggedResolutionPortfolioNodeTest {
     final PortfolioNode node = Mockito.mock(PortfolioNode.class);
     final ResolutionLogger logger = Mockito.mock(ResolutionLogger.class);
     final PortfolioNode logged = new LoggedResolutionPortfolioNode(node, logger);
-    final List<Position> positions = new ArrayList<Position>();
+    final List<Position> positions = new ArrayList<>();
     for (int i = 0; i < 3; i++) {
       final Position position = Mockito.mock(Position.class);
       Mockito.when(position.getUniqueId()).thenReturn(UniqueId.of("Position", Integer.toString(i), "0"));
@@ -82,9 +81,10 @@ public class LoggedResolutionPortfolioNodeTest {
     final Collection<Position> loggedPositions = logged.getPositions();
     assertEquals(loggedPositions.size(), 3);
     int i = 0;
-    for (Position position : loggedPositions) {
+    for (final Position position : loggedPositions) {
       assertTrue(position instanceof LoggedResolutionPosition);
-      Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Position", Integer.toString(i))), UniqueId.of("Position", Integer.toString(i), "0"));
+      Mockito.verify(logger).log(new ComputationTargetSpecification(ComputationTargetType.POSITION, UniqueId.of("Position", Integer.toString(i))),
+          UniqueId.of("Position", Integer.toString(i), "0"));
       i++;
     }
     Mockito.verifyNoMoreInteractions(logger);

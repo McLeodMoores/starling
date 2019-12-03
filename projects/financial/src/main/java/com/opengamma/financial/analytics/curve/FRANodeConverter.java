@@ -35,12 +35,14 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Convert a FRA node into a {@link ForwardRateAgreementDefinition}.
- * The dates of the FRA are computed in the following way:
+ * Convert a FRA node into a {@link ForwardRateAgreementDefinition}. The dates of the FRA are computed in the following way:
  * <ul>
- *  <li> The spot date is computed from the valuation date by adding the number of settlement days (i.e. the number of business days) defined in the underlying ibor index convention.
- *  <li> The accrual start date is computed from the spot date by adding the fixing start tenor of the node and using the business-day-convention, calendar and EOM of the ibor index convention.
- *  <li> The accrual end date is computed from the spot date adding the fixing end tenor of the node and using the business-day-convention, calendar and EOM of the ibor index convention.
+ * <li>The spot date is computed from the valuation date by adding the number of settlement days (i.e. the number of business days) defined in the underlying
+ * ibor index convention.
+ * <li>The accrual start date is computed from the spot date by adding the fixing start tenor of the node and using the business-day-convention, calendar and
+ * EOM of the ibor index convention.
+ * <li>The accrual end date is computed from the spot date adding the fixing end tenor of the node and using the business-day-convention, calendar and EOM of
+ * the ibor index convention.
  * </ul>
  * The FRA notional is 1.
  */
@@ -63,15 +65,23 @@ public class FRANodeConverter extends CurveNodeVisitorAdapter<InstrumentDefiniti
   private final ZonedDateTime _valuationTime;
 
   /**
-   * @param securitySource  the security source, not null
-   * @param conventionSource  the convention source, not null
-   * @param holidaySource  the holiday source, not null
-   * @param regionSource  the region source, not null
-   * @param marketData  the market data, not null
-   * @param dataId  the id of the market data, not null
-   * @param valuationTime  the valuation time, not null
+   * @param securitySource
+   *          the security source, not null
+   * @param conventionSource
+   *          the convention source, not null
+   * @param holidaySource
+   *          the holiday source, not null
+   * @param regionSource
+   *          the region source, not null
+   * @param marketData
+   *          the market data, not null
+   * @param dataId
+   *          the id of the market data, not null
+   * @param valuationTime
+   *          the valuation time, not null
    */
-  public FRANodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
+  public FRANodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource,
+      final RegionSource regionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
     _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     _conventionSource = ArgumentChecker.notNull(conventionSource, "conventionSource");
@@ -82,7 +92,7 @@ public class FRANodeConverter extends CurveNodeVisitorAdapter<InstrumentDefiniti
     _valuationTime = ArgumentChecker.notNull(valuationTime, "valuationTime");
   }
 
-  //TODO check calendars
+  // TODO check calendars
   @Override
   public InstrumentDefinition<?> visitFRANode(final FRANode fraNode) {
     final Double rate = _marketData.getDataPoint(_dataId);

@@ -46,7 +46,7 @@ public class DelegatingPositionMaster extends UniqueIdSchemeDelegator<PositionMa
    *
    * @param defaultMaster the master to use when no scheme matches, not null
    */
-  public DelegatingPositionMaster(PositionMaster defaultMaster) {
+  public DelegatingPositionMaster(final PositionMaster defaultMaster) {
     super(defaultMaster);
     _changeManager = defaultMaster.changeManager();
   }
@@ -57,14 +57,14 @@ public class DelegatingPositionMaster extends UniqueIdSchemeDelegator<PositionMa
    * @param defaultMaster the master to use when no scheme matches, not null
    * @param schemePrefixToMasterMap  the map of masters by scheme to switch on, not null
    */
-  public DelegatingPositionMaster(PositionMaster defaultMaster, Map<String, PositionMaster> schemePrefixToMasterMap) {
+  public DelegatingPositionMaster(final PositionMaster defaultMaster, final Map<String, PositionMaster> schemePrefixToMasterMap) {
     super(defaultMaster, schemePrefixToMasterMap);
-    AggregatingChangeManager changeManager = new AggregatingChangeManager();
+    final AggregatingChangeManager changeManager = new AggregatingChangeManager();
 
     // REVIEW jonathan 2012-08-03 -- this assumes that the delegating master lasts for the lifetime of the engine as we
     // never detach from the underlying change managers.
     changeManager.addChangeManager(defaultMaster.changeManager());
-    for (PositionMaster master : schemePrefixToMasterMap.values()) {
+    for (final PositionMaster master : schemePrefixToMasterMap.values()) {
       changeManager.addChangeManager(master.changeManager());
     }
     _changeManager = changeManager;
@@ -72,15 +72,15 @@ public class DelegatingPositionMaster extends UniqueIdSchemeDelegator<PositionMa
 
   //-------------------------------------------------------------------------
   @Override
-  public PositionHistoryResult history(PositionHistoryRequest request) {
+  public PositionHistoryResult history(final PositionHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
     return chooseDelegate(request.getObjectId().getScheme()).history(request);
   }
 
   @Override
-  public PositionSearchResult search(PositionSearchRequest request) {
+  public PositionSearchResult search(final PositionSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
-    String uniqueIdScheme = request.getUniqueIdScheme();
+    final String uniqueIdScheme = request.getUniqueIdScheme();
 
     if (uniqueIdScheme == null) {
       return getDefaultDelegate().search(request);
@@ -89,23 +89,23 @@ public class DelegatingPositionMaster extends UniqueIdSchemeDelegator<PositionMa
   }
 
   @Override
-  public PositionDocument get(UniqueId uniqueId) {
+  public PositionDocument get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).get(uniqueId);
   }
 
   @Override
-  public PositionDocument get(ObjectIdentifiable objectId, VersionCorrection versionCorrection) {
+  public PositionDocument get(final ObjectIdentifiable objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return chooseDelegate(objectId.getObjectId().getScheme()).get(objectId, versionCorrection);
   }
 
   @Override
-  public PositionDocument add(PositionDocument document) {
+  public PositionDocument add(final PositionDocument document) {
     ArgumentChecker.notNull(document, "document");
-    
-    UniqueId uniqueId = document.getUniqueId();
+
+    final UniqueId uniqueId = document.getUniqueId();
     if (uniqueId == null) {
       return getDefaultDelegate().add(document);
     }
@@ -113,25 +113,25 @@ public class DelegatingPositionMaster extends UniqueIdSchemeDelegator<PositionMa
   }
 
   @Override
-  public PositionDocument update(PositionDocument document) {
+  public PositionDocument update(final PositionDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getObjectId().getScheme()).update(document);
   }
 
   @Override
-  public void remove(ObjectIdentifiable objectIdentifiable) {
+  public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
     chooseDelegate(objectIdentifiable.getObjectId().getScheme()).remove(objectIdentifiable);
   }
 
   @Override
-  public PositionDocument correct(PositionDocument document) {
+  public PositionDocument correct(final PositionDocument document) {
     ArgumentChecker.notNull(document, "document");
     return chooseDelegate(document.getObjectId().getScheme()).correct(document);
   }
 
   @Override
-  public ManageableTrade getTrade(UniqueId uniqueId) {
+  public ManageableTrade getTrade(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     return chooseDelegate(uniqueId.getScheme()).getTrade(uniqueId);
   }
@@ -142,51 +142,51 @@ public class DelegatingPositionMaster extends UniqueIdSchemeDelegator<PositionMa
   }
 
   @Override
-  public UniqueId addVersion(ObjectIdentifiable objectId, PositionDocument documentToAdd) {
+  public UniqueId addVersion(final ObjectIdentifiable objectId, final PositionDocument documentToAdd) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(documentToAdd, "documentToAdd");
     return chooseDelegate(objectId.getObjectId().getScheme()).addVersion(objectId, documentToAdd);
   }
 
   @Override
-  public List<UniqueId> replaceVersion(UniqueId uniqueId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersion(final UniqueId uniqueId, final List<PositionDocument> replacementDocuments) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(uniqueId.getScheme()).replaceVersion(uniqueId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceAllVersions(ObjectIdentifiable objectId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceAllVersions(final ObjectIdentifiable objectId, final List<PositionDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceAllVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public List<UniqueId> replaceVersions(ObjectIdentifiable objectId, List<PositionDocument> replacementDocuments) {
+  public List<UniqueId> replaceVersions(final ObjectIdentifiable objectId, final List<PositionDocument> replacementDocuments) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(replacementDocuments, "replacementDocuments");
     return chooseDelegate(objectId.getObjectId().getScheme()).replaceVersions(objectId, replacementDocuments);
   }
 
   @Override
-  public UniqueId replaceVersion(PositionDocument replacementDocument) {
+  public UniqueId replaceVersion(final PositionDocument replacementDocument) {
     ArgumentChecker.notNull(replacementDocument, "replacementDocument");
     ArgumentChecker.notNull(replacementDocument.getObjectId(), "replacementDocument.getObjectId");
     return chooseDelegate(replacementDocument.getObjectId().getScheme()).replaceVersion(replacementDocument);
   }
 
   @Override
-  public void removeVersion(UniqueId uniqueId) {
+  public void removeVersion(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     chooseDelegate(uniqueId.getScheme()).removeVersion(uniqueId);
   }
 
   @Override
-  public Map<UniqueId, PositionDocument> get(Collection<UniqueId> uniqueIds) {
-    Map<UniqueId, PositionDocument> resultMap = newHashMap();
-    for (UniqueId uniqueId : uniqueIds) {
-      PositionDocument doc = get(uniqueId);
+  public Map<UniqueId, PositionDocument> get(final Collection<UniqueId> uniqueIds) {
+    final Map<UniqueId, PositionDocument> resultMap = newHashMap();
+    for (final UniqueId uniqueId : uniqueIds) {
+      final PositionDocument doc = get(uniqueId);
       resultMap.put(uniqueId, doc);
     }
     return resultMap;

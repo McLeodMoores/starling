@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.logger;
@@ -37,8 +37,8 @@ public class LoggedResolutionPortfolioNode extends AbstractLoggedResolution<Port
   @Override
   public List<PortfolioNode> getChildNodes() {
     final List<PortfolioNode> childNodes = getUnderlying().getChildNodes();
-    final List<PortfolioNode> result = new ArrayList<PortfolioNode>(childNodes.size());
-    for (PortfolioNode childNode : childNodes) {
+    final List<PortfolioNode> result = new ArrayList<>(childNodes.size());
+    for (final PortfolioNode childNode : childNodes) {
       //log(ComputationTargetType.PORTFOLIO_NODE, childNode); // [PLAT-4491] Nodes are linked by UID not OID
       result.add(new LoggedResolutionPortfolioNode(childNode, getLogger()));
     }
@@ -48,8 +48,8 @@ public class LoggedResolutionPortfolioNode extends AbstractLoggedResolution<Port
   @Override
   public List<Position> getPositions() {
     final List<Position> positions = getUnderlying().getPositions();
-    final List<Position> result = new ArrayList<Position>(positions.size());
-    for (Position position : positions) {
+    final List<Position> result = new ArrayList<>(positions.size());
+    for (final Position position : positions) {
       log(ComputationTargetType.POSITION, position);
       result.add(new LoggedResolutionPosition(position, getLogger()));
     }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.local;
@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * 
+ *
  */
 public abstract class LocalVolatilityBackwardPDESpotGreeksGridCalculator implements PDELocalVolatilityCalculator<Interpolator1DDataBundle> {
   private final LocalVolatilityBackwardPDECalculator _pdeCalculator;
@@ -25,7 +25,8 @@ public abstract class LocalVolatilityBackwardPDESpotGreeksGridCalculator impleme
   }
 
   @Override
-  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option,
+  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceMoneyness localVolatility, final ForwardCurve forwardCurve,
+      final EuropeanVanillaOption option,
       final YieldAndDiscountCurve discountingCurve) {
     final PDETerminalResults1D pdeGrid = _pdeCalculator.runPDESolver(localVolatility, option);
     final int n = pdeGrid.getNumberSpaceNodes();
@@ -39,7 +40,8 @@ public abstract class LocalVolatilityBackwardPDESpotGreeksGridCalculator impleme
   }
 
   @Override
-  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve, final EuropeanVanillaOption option,
+  public Interpolator1DDataBundle getResult(final LocalVolatilitySurfaceStrike localVolatility, final ForwardCurve forwardCurve,
+      final EuropeanVanillaOption option,
       final YieldAndDiscountCurve discountingCurve) {
     final PDETerminalResults1D pdeGrid = _pdeCalculator.runPDESolver(localVolatility, forwardCurve, option);
     final int n = pdeGrid.getNumberSpaceNodes();
@@ -52,10 +54,10 @@ public abstract class LocalVolatilityBackwardPDESpotGreeksGridCalculator impleme
     return _interpolator.getDataBundleFromSortedArrays(forwards, greeks);
   }
 
-  protected abstract double getResultForForward(final PDETerminalResults1D pdeGrid, final int index);
+  protected abstract double getResultForForward(PDETerminalResults1D pdeGrid, int index);
 
   /**
-   * Calculates the delta
+   * Calculates the delta.
    */
   public static class DeltaCalculator extends LocalVolatilityBackwardPDESpotGreeksGridCalculator {
 
@@ -70,7 +72,7 @@ public abstract class LocalVolatilityBackwardPDESpotGreeksGridCalculator impleme
   }
 
   /**
-   * Calculates the gamma
+   * Calculates the gamma.
    */
   public static class GammaCalculator extends LocalVolatilityBackwardPDESpotGreeksGridCalculator {
 

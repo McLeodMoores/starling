@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.swap;
@@ -10,9 +10,9 @@ package com.opengamma.financial.security.swap;
  */
 public enum InterpolationMethod {
 
-  //TODO is there any reason why these shouldn't be used in the swap conventions as well?
-  /** Linear interpolation */
+  // TODO is there any reason why these shouldn't be used in the swap conventions as well?
+  /** Linear interpolation. */
   MONTH_START_LINEAR,
-  /** No interpolation */
+  /** No interpolation. */
   NONE
 }

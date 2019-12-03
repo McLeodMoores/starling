@@ -37,14 +37,14 @@ import com.opengamma.util.tuple.Pair;
 
 class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResultListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioTreeTableModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioTreeTableModel.class);
   private static final String UNAVAILABLE_VALUE = "N/A";
-  
-  private ViewerColumnModel _columnModel;
+
+  private final ViewerColumnModel _columnModel;
   private PortfolioNode _treeRoot;
   private ViewComputationResultModel _resultModel;
 
-  public PortfolioTreeTableModel() {
+  PortfolioTreeTableModel() {
     _columnModel = new ViewerColumnModel();
   }
 
@@ -54,12 +54,11 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
   }
 
   @Override
-  public synchronized String getColumnName(int column) {
+  public synchronized String getColumnName(final int column) {
     if (column == 0) {
       return "Trade";
-    } else {
-      return _columnModel.getCalculationConfigurationName(column) + "-" + _columnModel.getRequirementName(column);
     }
+    return _columnModel.getCalculationConfigurationName(column) + "-" + _columnModel.getRequirementName(column);
   }
 
   @Override
@@ -68,58 +67,47 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
   }
 
   /*
-  private void dumpPortfolio(PortfolioNode node, int depth) {
-    StringBuilder indent = new StringBuilder();
-    for (int i=0; i<depth; i++) indent.append(" ");
-    s_logger.info("{}{}", indent.toString(), node);
-    if (node.getPositions() != null) {
-      for (Position position : node.getPositions()) {
-        s_logger.info("{}  {}", indent.toString(), position);
-      }
-    }
-    if (node.getSubNodes() != null) {
-      for (PortfolioNode subNode : node.getSubNodes()) {
-        dumpPortfolio(subNode, depth+2);
-      }
-    }
-  }
-  */
+   * private void dumpPortfolio(PortfolioNode node, int depth) { StringBuilder indent = new StringBuilder(); for (int i=0; i<depth; i++) indent.append(" ");
+   * LOGGER.info("{}{}", indent.toString(), node); if (node.getPositions() != null) { for (Position position : node.getPositions()) { LOGGER.info("{}  {}",
+   * indent.toString(), position); } } if (node.getSubNodes() != null) { for (PortfolioNode subNode : node.getSubNodes()) { dumpPortfolio(subNode, depth+2); } }
+   * }
+   */
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public UserPrincipal getUser() {
     return UserPrincipal.getLocalUser();
   }
-  
+
   @Override
-  public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
+  public void viewDefinitionCompiled(final CompiledViewDefinition compiledViewDefinition, final boolean hasMarketDataPermissions) {
     _columnModel.init(compiledViewDefinition.getViewDefinition());
     _treeRoot = compiledViewDefinition.getPortfolio().getRootNode();
     fireTreeStructureChanged();
   }
 
   @Override
-  public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
+  public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
   }
 
   @Override
-  public void cycleStarted(ViewCycleMetadata cycleMetadata) {
-    //ignore
-  }
-  
-  @Override
-  public void cycleFragmentCompleted(ViewComputationResultModel fullFragment, ViewDeltaResultModel deltaFragment) {
-    //ignore
+  public void cycleStarted(final ViewCycleMetadata cycleMetadata) {
+    // ignore
   }
 
   @Override
-  public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
+  public void cycleFragmentCompleted(final ViewComputationResultModel fullFragment, final ViewDeltaResultModel deltaFragment) {
+    // ignore
+  }
+
+  @Override
+  public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
     _resultModel = fullResult;
     fireTreeNodesChanged();
   }
 
   @Override
-  public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
+  public void cycleExecutionFailed(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
   }
 
   @Override
@@ -127,45 +115,45 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
   }
 
   @Override
-  public void processTerminated(boolean executionInterrupted) {
+  public void processTerminated(final boolean executionInterrupted) {
   }
 
   @Override
-  public void clientShutdown(Exception e) {
+  public void clientShutdown(final Exception e) {
   }
-  
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   private void fireTreeNodesChanged() {
-    TreeModelEvent treeModelEvent = new TreeModelEvent(this, new TreePath(getRoot()), null, null);
-    for (TreeModelListener listener : getTreeModelListeners()) {
+    final TreeModelEvent treeModelEvent = new TreeModelEvent(this, new TreePath(getRoot()), null, null);
+    for (final TreeModelListener listener : getTreeModelListeners()) {
       listener.treeNodesChanged(treeModelEvent);
     }
   }
 
   private void fireTreeStructureChanged() {
-    TreeModelEvent treeModelEvent = new TreeModelEvent(this, new TreePath(getRoot()), null, null);
-    for (TreeModelListener listener : getTreeModelListeners()) {
+    final TreeModelEvent treeModelEvent = new TreeModelEvent(this, new TreePath(getRoot()), null, null);
+    for (final TreeModelListener listener : getTreeModelListeners()) {
       listener.treeStructureChanged(treeModelEvent);
     }
   }
 
-  private Object renderForColumn(ComputationTargetSpecification targetSpec, int column) {
-    String calcConfigName = _columnModel.getCalculationConfigurationName(column);
-    String requirementName = _columnModel.getRequirementName(column);
+  private Object renderForColumn(final ComputationTargetSpecification targetSpec, final int column) {
+    final String calcConfigName = _columnModel.getCalculationConfigurationName(column);
+    final String requirementName = _columnModel.getRequirementName(column);
 
     if (_resultModel == null || calcConfigName == null || requirementName == null) {
-      s_logger.warn("Unhandled column {}", column);
+      LOGGER.warn("Unhandled column {}", column);
       return UNAVAILABLE_VALUE;
     }
 
-    ViewCalculationResultModel calcResultModel = _resultModel.getCalculationResult(calcConfigName);
-    Map<Pair<String, ValueProperties>, ComputedValueResult> values = calcResultModel.getValues(targetSpec);
+    final ViewCalculationResultModel calcResultModel = _resultModel.getCalculationResult(calcConfigName);
+    final Map<Pair<String, ValueProperties>, ComputedValueResult> values = calcResultModel.getValues(targetSpec);
     if (values == null) {
-      s_logger.debug("No values available for {}", targetSpec);
+      LOGGER.debug("No values available for {}", targetSpec);
       return UNAVAILABLE_VALUE;
     }
     // TODO 2011-06-15 -- support value name AND value properties so that the required value can be looked up directly
-    for (Map.Entry<Pair<String, ValueProperties>, ComputedValueResult> valueEntry : values.entrySet()) {
+    for (final Map.Entry<Pair<String, ValueProperties>, ComputedValueResult> valueEntry : values.entrySet()) {
       if (valueEntry.getKey().getFirst().equals(requirementName)) {
         return valueEntry.getValue().toString();
       }
@@ -173,10 +161,10 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
     return UNAVAILABLE_VALUE;
   }
 
-  protected String getNodeTitle(Object node) {
+  protected String getNodeTitle(final Object node) {
     if (node instanceof Position) {
-      Position position = (Position) node;
-      String key = LinkUtils.bestName(position.getSecurityLink());
+      final Position position = (Position) node;
+      final String key = LinkUtils.bestName(position.getSecurityLink());
       return key + " @ " + position.getQuantity();
     } else if (node instanceof PortfolioNode) {
       return ((PortfolioNode) node).getName();
@@ -186,8 +174,8 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
   }
 
   @Override
-  public synchronized Object getValueAt(Object node, int column) {
-    //s_logger.info("getValueAt({}, {})", node, column);
+  public synchronized Object getValueAt(final Object node, final int column) {
+    // LOGGER.info("getValueAt({}, {})", node, column);
     if (node == null) {
       return null;
     }
@@ -195,42 +183,41 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
       return getNodeTitle(node);
     }
     if (node instanceof UniqueIdentifiable) {
-      ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(((UniqueIdentifiable) node).getUniqueId());
+      final ComputationTargetSpecification targetSpec = ComputationTargetSpecification.of(((UniqueIdentifiable) node).getUniqueId());
       return renderForColumn(targetSpec, column);
     }
     return "Unknown object: " + node;
   }
 
   @Override
-  public synchronized Object getChild(Object parent, int index) {
-    //s_logger.info("getChild({}, {})", parent, index);
+  public synchronized Object getChild(final Object parent, final int index) {
+    // LOGGER.info("getChild({}, {})", parent, index);
     if (parent == null) {
       return null;
     }
     if (parent instanceof Position) {
       throw new OpenGammaRuntimeException("Unexpected call to getChild on a position");
     } else if (parent instanceof PortfolioNode) {
-      PortfolioNode node = (PortfolioNode) parent;
+      final PortfolioNode node = (PortfolioNode) parent;
       if (index < node.getPositions().size()) {
-        return (node.getPositions().toArray())[index];
-      } else {
-        return (node.getChildNodes().toArray())[index - node.getPositions().size()];
+        return node.getPositions().toArray()[index];
       }
+      return node.getChildNodes().toArray()[index - node.getPositions().size()];
     } else {
       throw new OpenGammaRuntimeException("Unexpected call to getChild on a unexpected type " + parent);
     }
   }
 
   @Override
-  public synchronized int getChildCount(Object parent) {
-    //s_logger.info("getChildCount({})", parent);
+  public synchronized int getChildCount(final Object parent) {
+    // LOGGER.info("getChildCount({})", parent);
     if (parent == null) {
       return 0;
     }
     if (parent instanceof Position) {
       return 0;
     } else if (parent instanceof PortfolioNode) {
-      PortfolioNode node = (PortfolioNode) parent;
+      final PortfolioNode node = (PortfolioNode) parent;
       return node.size();
     } else {
       throw new OpenGammaRuntimeException("Unexpected call to getChild on a unexpected type " + parent);
@@ -238,26 +225,26 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
   }
 
   @Override
-  public synchronized int getIndexOfChild(Object parent, Object child) {
-    //s_logger.info("getIndexOfChild({}, {})", parent, child);
+  public synchronized int getIndexOfChild(final Object parent, final Object child) {
+    // LOGGER.info("getIndexOfChild({}, {})", parent, child);
     if (parent == null) {
       return 0;
     }
     if (parent instanceof Position) {
       return 0;
     } else if (parent instanceof PortfolioNode) {
-      PortfolioNode node = (PortfolioNode) parent;
+      final PortfolioNode node = (PortfolioNode) parent;
       if (child instanceof Position) {
-        return new ArrayList<Position>(node.getPositions()).indexOf(child);
-      } else {
-        return new ArrayList<PortfolioNode>(node.getChildNodes()).indexOf(child) + node.getPositions().size();
+        return new ArrayList<>(node.getPositions()).indexOf(child);
       }
+      return new ArrayList<>(node.getChildNodes()).indexOf(child) + node.getPositions().size();
     } else {
       throw new OpenGammaRuntimeException("Unexpected call to getChild on a unexpected type " + parent);
     }
   }
 
-  public synchronized boolean isLeaf(Object node) {
+  @Override
+  public synchronized boolean isLeaf(final Object node) {
     if (node == null) {
       return true;
     }

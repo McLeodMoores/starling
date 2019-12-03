@@ -36,15 +36,12 @@ import com.opengamma.util.auth.Permissionable;
 /**
  * A security that it may be possible to hold a position in.
  * <p>
- * A security generically defined as anything that a position can be held in.
- * This includes the security defined in "OTC" trades, permitting back-to-back
- * trades to be linked correctly.
+ * A security generically defined as anything that a position can be held in. This includes the security defined in "OTC" trades, permitting back-to-back trades
+ * to be linked correctly.
  */
 @PublicSPI
 @BeanDefinition
-public class ManageableSecurity
-    extends DirectBean
-    implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
+public class ManageableSecurity extends DirectBean implements Serializable, Security, MutableUniqueIdentifiable, Permissionable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -55,38 +52,35 @@ public class ManageableSecurity
   private static final String SECURITY_TYPE = "MANAGEABLE";
 
   /**
-   * The unique identifier of the security.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * The unique identifier of the security. This must be null when adding to a master and not null when retrieved from a master.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
-   * The bundle of external identifiers that define the security.
-   * Each external system will typically refer to a security using a different identifier.
-   * Thus the bundle consists of a set of identifiers, one for each external system.
+   * The bundle of external identifiers that define the security. Each external system will typically refer to a
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalIdBundle = ExternalIdBundle.EMPTY;
   /**
    * The name of the security intended for display purposes.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _name = "";
   /**
    * The security type.
    */
-  @PropertyDefinition(validate = "notNull", set = "private")
+  @PropertyDefinition(validate = "notNull", set = "private", overrideGet = true)
   private String _securityType;
   /**
    * The general purpose trade attributes, which can be used for aggregating in portfolios.
    */
-  @PropertyDefinition
-  private final Map<String, String> _attributes = new HashMap<String, String>();
+  @PropertyDefinition(overrideGet = true, overrideSet = true)
+  private final Map<String, String> _attributes = new HashMap<>();
   /**
-   * The set of required permissions.
-   * This is a set of permissions that a user needs to be able to view a security.
+   * The set of required permissions. This is a set of permissions that a user needs to be able to view a security.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private final Set<String> _requiredPermissions = new TreeSet<>();
 
   /**
@@ -100,48 +94,55 @@ public class ManageableSecurity
 
   /**
    * Creates an instance with a security type.
-   * 
-   * @param securityType  the security type, not null
+   *
+   * @param securityType
+   *          the security type, not null
    */
-  public ManageableSecurity(String securityType) {
+  public ManageableSecurity(final String securityType) {
     ArgumentChecker.notEmpty(securityType, "securityType");
     _securityType = securityType;
   }
 
   /**
    * Creates a fully populated instance.
-   * 
-   * @param uniqueId  the security unique identifier, may be null
-   * @param name  the display name, not null
-   * @param securityType  the security type, not null
-   * @param bundle  the security external identifier bundle, not null
+   *
+   * @param uniqueId
+   *          the security unique identifier, may be null
+   * @param name
+   *          the display name, not null
+   * @param securityType
+   *          the security type, not null
+   * @param bundle
+   *          the security external identifier bundle, not null
    */
-  public ManageableSecurity(UniqueId uniqueId, String name, String securityType, ExternalIdBundle bundle) {
+  public ManageableSecurity(final UniqueId uniqueId, final String name, final String securityType, final ExternalIdBundle bundle) {
     this(securityType);
     setUniqueId(uniqueId);
     setName(name);
     setExternalIdBundle(bundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds an external identifier to the bundle representing this security.
-   * 
-   * @param externalId  the identifier to add, not null
+   *
+   * @param externalId
+   *          the identifier to add, not null
    */
   public void addExternalId(final ExternalId externalId) {
     setExternalIdBundle(getExternalIdBundle().withExternalId(externalId));
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
   }
 
   /**
-   * @deprecated  use {@link #getRequiredPermissions()}
+   * @deprecated use {@link #getRequiredPermissions()}
+   * @return the permissions
    */
   @Deprecated
   public Set<String> getPermissions() {
@@ -149,10 +150,12 @@ public class ManageableSecurity
   }
 
   /**
-   * @deprecated  use {@link #setRequiredPermissions}
+   * @deprecated use {@link #setRequiredPermissions}
+   * @param permissions
+   *          the permissions
    */
   @Deprecated
-  public void setPermissions(Set<String> permissions) {
+  public void setPermissions(final Set<String> permissions) {
     setRequiredPermissions(permissions);
   }
 
@@ -177,26 +180,25 @@ public class ManageableSecurity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the unique identifier of the security.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Gets the unique identifier of the security. This must be null when adding to a master and not null when retrieved from a master.
    * @return the value of the property
    */
+  @Override
   public UniqueId getUniqueId() {
     return _uniqueId;
   }
 
   /**
-   * Sets the unique identifier of the security.
-   * This must be null when adding to a master and not null when retrieved from a master.
+   * Sets the unique identifier of the security. This must be null when adding to a master and not null when retrieved from a master.
    * @param uniqueId  the new value of the property
    */
+  @Override
   public void setUniqueId(UniqueId uniqueId) {
     this._uniqueId = uniqueId;
   }
 
   /**
    * Gets the the {@code uniqueId} property.
-   * This must be null when adding to a master and not null when retrieved from a master.
    * @return the property, not null
    */
   public final Property<UniqueId> uniqueId() {
@@ -205,19 +207,18 @@ public class ManageableSecurity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the bundle of external identifiers that define the security.
-   * Each external system will typically refer to a security using a different identifier.
-   * Thus the bundle consists of a set of identifiers, one for each external system.
+   * Gets the bundle of external identifiers that define the security. Each external system will typically refer to a
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getExternalIdBundle() {
     return _externalIdBundle;
   }
 
   /**
-   * Sets the bundle of external identifiers that define the security.
-   * Each external system will typically refer to a security using a different identifier.
-   * Thus the bundle consists of a set of identifiers, one for each external system.
+   * Sets the bundle of external identifiers that define the security. Each external system will typically refer to a
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    * @param externalIdBundle  the new value of the property, not null
    */
   public void setExternalIdBundle(ExternalIdBundle externalIdBundle) {
@@ -227,8 +228,7 @@ public class ManageableSecurity
 
   /**
    * Gets the the {@code externalIdBundle} property.
-   * Each external system will typically refer to a security using a different identifier.
-   * Thus the bundle consists of a set of identifiers, one for each external system.
+   * security using a different identifier. Thus the bundle consists of a set of identifiers, one for each external system.
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalIdBundle() {
@@ -240,6 +240,7 @@ public class ManageableSecurity
    * Gets the name of the security intended for display purposes.
    * @return the value of the property, not null
    */
+  @Override
   public String getName() {
     return _name;
   }
@@ -266,6 +267,7 @@ public class ManageableSecurity
    * Gets the security type.
    * @return the value of the property, not null
    */
+  @Override
   public String getSecurityType() {
     return _securityType;
   }
@@ -292,6 +294,7 @@ public class ManageableSecurity
    * Gets the general purpose trade attributes, which can be used for aggregating in portfolios.
    * @return the value of the property, not null
    */
+  @Override
   public Map<String, String> getAttributes() {
     return _attributes;
   }
@@ -300,6 +303,7 @@ public class ManageableSecurity
    * Sets the general purpose trade attributes, which can be used for aggregating in portfolios.
    * @param attributes  the new value of the property, not null
    */
+  @Override
   public void setAttributes(Map<String, String> attributes) {
     JodaBeanUtils.notNull(attributes, "attributes");
     this._attributes.clear();
@@ -316,17 +320,16 @@ public class ManageableSecurity
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of required permissions.
-   * This is a set of permissions that a user needs to be able to view a security.
+   * Gets the set of required permissions. This is a set of permissions that a user needs to be able to view a security.
    * @return the value of the property, not null
    */
+  @Override
   public Set<String> getRequiredPermissions() {
     return _requiredPermissions;
   }
 
   /**
-   * Sets the set of required permissions.
-   * This is a set of permissions that a user needs to be able to view a security.
+   * Sets the set of required permissions. This is a set of permissions that a user needs to be able to view a security.
    * @param requiredPermissions  the new value of the property, not null
    */
   public void setRequiredPermissions(Set<String> requiredPermissions) {
@@ -337,7 +340,6 @@ public class ManageableSecurity
 
   /**
    * Gets the the {@code requiredPermissions} property.
-   * This is a set of permissions that a user needs to be able to view a security.
    * @return the property, not null
    */
   public final Property<Set<String>> requiredPermissions() {

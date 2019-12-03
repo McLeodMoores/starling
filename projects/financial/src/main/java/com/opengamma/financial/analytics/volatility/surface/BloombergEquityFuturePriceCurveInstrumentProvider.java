@@ -20,12 +20,13 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *  Provider of equity Future Instrument ID's.
+ * Provider of equity Future Instrument ID's.
  */
 public class BloombergEquityFuturePriceCurveInstrumentProvider implements FuturePriceCurveInstrumentProvider<Number> {
 
   /**
    * Gets the expiryRules.
+   *
    * @return the expiryRules
    */
   public static Map<?, ?> getExpiryRules() {
@@ -34,19 +35,19 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
 
   private static final HashMap<String, FutureOptionExpiries> EXPIRY_RULES;
   static {
-    //TODO: Need to check whether indexes can be supported
+    // TODO: Need to check whether indexes can be supported
     EXPIRY_RULES = new HashMap<>();
-    //    EXPIRY_RULES.put("NKY", FutureOptionExpiries.of(new NextExpiryAdjuster(2, DayOfWeek.THURSDAY)));
-    //    EXPIRY_RULES.put("NDX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY))); //TODO
-    //    EXPIRY_RULES.put("RUT", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY))); //TODO
-    //    EXPIRY_RULES.put("DJX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY)));
-    //    EXPIRY_RULES.put("SPX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY)));
-    //    EXPIRY_RULES.put("VIX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY, -30))); // check this
-    //    EXPIRY_RULES.put("UKX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY)));
+    // EXPIRY_RULES.put("NKY", FutureOptionExpiries.of(new NextExpiryAdjuster(2, DayOfWeek.THURSDAY)));
+    // EXPIRY_RULES.put("NDX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY))); //TODO
+    // EXPIRY_RULES.put("RUT", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY))); //TODO
+    // EXPIRY_RULES.put("DJX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY)));
+    // EXPIRY_RULES.put("SPX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY)));
+    // EXPIRY_RULES.put("VIX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY, -30))); // check this
+    // EXPIRY_RULES.put("UKX", FutureOptionExpiries.of(new NextExpiryAdjuster(3, DayOfWeek.THURSDAY)));
     EXPIRY_RULES.put("DEFAULT", FutureOptionExpiries.EQUITY_FUTURE);
-    //TODO DAX, EUROSTOXX 50 (SX5E)
+    // TODO DAX, EUROSTOXX 50 (SX5E)
   }
-  
+
   private static final Calendar WEEKDAYS = new MondayToFridayCalendar("MTWThF");
 
   private final String _futurePrefix;
@@ -56,13 +57,19 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
   private final String _exchange;
 
   /**
-   * @param futurePrefix e.g. "AAPL="
-   * @param postfix generally, "Equity"
-   * @param dataFieldName expecting MarketDataRequirementNames.MARKET_VALUE
-   * @param tickerScheme expecting BLOOMBERG_TICKER_WEAK or BLOOMBERG_TICKER
-   * @param exchange the exchange code e.g. OC
+   * @param futurePrefix
+   *          e.g. "AAPL="
+   * @param postfix
+   *          generally, "Equity"
+   * @param dataFieldName
+   *          expecting MarketDataRequirementNames.MARKET_VALUE
+   * @param tickerScheme
+   *          expecting BLOOMBERG_TICKER_WEAK or BLOOMBERG_TICKER
+   * @param exchange
+   *          the exchange code e.g. OC
    */
-  public BloombergEquityFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName, final String tickerScheme, final String exchange) {
+  public BloombergEquityFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName,
+      final String tickerScheme, final String exchange) {
     Validate.notNull(futurePrefix, "future option prefix");
     Validate.notNull(postfix, "postfix");
     Validate.notNull(dataFieldName, "data field name");
@@ -74,11 +81,17 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
     _exchange = exchange;
   }
 
-  /** If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme
-   * @param futurePrefix e.g. "AAPL="
-   * @param postfix generally, "Equity"
-   * @param dataFieldName expecting MarketDataRequirementNames.MARKET_VALUE
-   * @param exchange e.g. "OC"
+  /**
+   * If a 4th argument is not provided, constructor uses BLOOMBERG_TICKER_WEAK as its ExternalScheme.
+   *
+   * @param futurePrefix
+   *          e.g. "AAPL="
+   * @param postfix
+   *          generally, "Equity"
+   * @param dataFieldName
+   *          expecting MarketDataRequirementNames.MARKET_VALUE
+   * @param exchange
+   *          e.g. "OC"
    */
   public BloombergEquityFuturePriceCurveInstrumentProvider(final String futurePrefix, final String postfix, final String dataFieldName, final String exchange) {
     Validate.notNull(futurePrefix, "future option prefix");
@@ -98,13 +111,17 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
 
   @Override
   /**
-   * Provides an ExternalID for Bloomberg ticker,
-   * given a reference date and an integer offset, the n'th subsequent option <p>
-   * The format is prefix + postfix <p>
+   * Provides an ExternalID for Bloomberg ticker, given a reference date and an integer offset, the n'th subsequent option
+   * <p>
+   * The format is prefix + postfix
+   * <p>
    * e.g. AAPL=G3 OC Equity
    * <p>
-   * @param futureOptionNumber n'th future following curve date, not null
-   * @param curveDate date of future validity; valuation date, not null
+   *
+   * @param futureOptionNumber
+   *          n'th future following curve date, not null
+   * @param curveDate
+   *          date of future validity; valuation date, not null
    * @return the id of the Bloomberg ticker
    */
   public ExternalId getInstrument(final Number futureNumber, final LocalDate curveDate) {
@@ -124,7 +141,7 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
     ticker.append(getPostfix());
     return ExternalId.of(getTickerScheme(), ticker.toString());
   }
-  
+
   @Override
   public ExchangeTradedInstrumentExpiryCalculator getExpiryRuleCalculator() {
     ExchangeTradedInstrumentExpiryCalculator expiryRule = EXPIRY_RULES.get(getFuturePrefix());
@@ -133,7 +150,6 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
     }
     return expiryRule;
   }
-  
 
   public String getFuturePrefix() {
     return _futurePrefix;
@@ -155,6 +171,7 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
 
   /**
    * Gets the exchange.
+   *
    * @return the exchange
    */
   public String getExchange() {
@@ -175,10 +192,10 @@ public class BloombergEquityFuturePriceCurveInstrumentProvider implements Future
       return false;
     }
     final BloombergEquityFuturePriceCurveInstrumentProvider other = (BloombergEquityFuturePriceCurveInstrumentProvider) obj;
-    return getFuturePrefix().equals(other.getFuturePrefix()) &&
-           getPostfix().equals(other.getPostfix()) &&
-        getDataFieldName().equals(other.getDataFieldName()) &&
-        getExchange().equals(other.getExchange());
+    return getFuturePrefix().equals(other.getFuturePrefix())
+        && getPostfix().equals(other.getPostfix())
+        && getDataFieldName().equals(other.getDataFieldName())
+        && getExchange().equals(other.getExchange());
   }
 
 }

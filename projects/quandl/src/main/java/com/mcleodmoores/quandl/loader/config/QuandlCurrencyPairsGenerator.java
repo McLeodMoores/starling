@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.quandl.loader.config;
 
@@ -30,11 +30,11 @@ public final class QuandlCurrencyPairsGenerator {
 
   /**
    * Creates a currency pairs configuration from a file.
+   *
    * @return The configuration
    */
   public static CurrencyPairs createConfiguration() {
-    try (final BufferedReader reader =
-        new BufferedReader(new InputStreamReader(QuandlCurrencyPairsGenerator.class.getResourceAsStream("currency-pairs.csv")))) {
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(QuandlCurrencyPairsGenerator.class.getResourceAsStream("currency-pairs.csv")))) {
       String pairStr;
       final Set<CurrencyPair> pairs = new HashSet<>();
       while ((pairStr = reader.readLine()) != null) {

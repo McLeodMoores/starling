@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target;
@@ -21,13 +21,14 @@ import com.opengamma.id.UniqueIdentifiable;
  */
 public class ComputationTargetResolverUtils {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ComputationTargetResolverUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComputationTargetResolverUtils.class);
 
   /**
-   * Visitor to remove any union selections from the leaf. Returns null if the type did not match the resolved object, {@link ComputationTargetType#NULL} if the object did match, or the correct type
-   * selection if it was modified.
+   * Visitor to remove any union selections from the leaf. Returns null if the type did not match the resolved object, {@link ComputationTargetType#NULL}
+   * if the object did match, or the correct type selection if it was modified.
    */
-  private static final ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType> s_resolveType = new ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType>() {
+  private static final ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType> RESOLVE_TYPE =
+      new ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType>() {
 
     @Override
     public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final UniqueIdentifiable resolved) {
@@ -87,9 +88,10 @@ public class ComputationTargetResolverUtils {
   };
 
   /**
-   * Creates a {@link ComputationTarget} instance that describes the resolved object. The type in the target will accurately describe the target type to the scoping level of the requested
-   * specification. For example a target of type {@code FooSecurity} resolved from a specification of type {@code POSITION/SECURITY} will end up as type {@code POSITION/FooSecurity}.
-   * 
+   * Creates a {@link ComputationTarget} instance that describes the resolved object. The type in the target will accurately describe the target type to
+   * the scoping level of the requested specification. For example a target of type {@code FooSecurity} resolved from a specification of type
+   * {@code POSITION/SECURITY} will end up as type {@code POSITION/FooSecurity}.
+   *
    * @param requestedSpecification the original specification as passed to the {@link ComputationTargetResolver#resolve} method, not null
    * @param target the resolved object, never null
    * @return the target object instance with the correct logical type, not null
@@ -97,11 +99,11 @@ public class ComputationTargetResolverUtils {
   public static ComputationTarget createResolvedTarget(final ComputationTargetSpecification requestedSpecification, final UniqueIdentifiable target) {
     ComputationTargetSpecification resolvedSpecification;
     final ComputationTargetType requestedType = requestedSpecification.getType();
-    final ComputationTargetType resolvedType = requestedType.accept(s_resolveType, target);
+    final ComputationTargetType resolvedType = requestedType.accept(RESOLVE_TYPE, target);
     if (resolvedType == null) {
       // Error
-      if (s_logger.isWarnEnabled()) {
-        s_logger.warn("Resolved {} to {}, not instanceof {}", new Object[] {requestedSpecification.getUniqueId(), target, requestedType });
+      if (LOGGER.isWarnEnabled()) {
+        LOGGER.warn("Resolved {} to {}, not instanceof {}", new Object[] {requestedSpecification.getUniqueId(), target, requestedType });
       }
       resolvedSpecification = requestedSpecification;
     } else if (resolvedType == ComputationTargetType.NULL) {
@@ -118,18 +120,20 @@ public class ComputationTargetResolverUtils {
   }
 
   @SuppressWarnings("unchecked")
-  private static <T extends ComputationTargetReference> T simplifyType(final T reference, final ComputationTargetType oldType, final ComputationTargetType newType) {
-    if ((newType == null) || (newType == oldType)) {
+  private static <T extends ComputationTargetReference> T simplifyType(final T reference, final ComputationTargetType oldType,
+      final ComputationTargetType newType) {
+    if (newType == null || newType == oldType) {
       return reference;
-    } else {
-      return (T) reference.replaceType(newType);
     }
+    return (T) reference.replaceType(newType);
   }
 
   /**
-   * Simplifies the type within a reference to the simplest form that the resolver will recognize. For example {@code CTSpec[FooSecurity, Sec~1]} might be simplified to {@code CTSpec[SECURITY, Sec~1]}
-   * if the same resolution will take place regardless of whether the type is a security or a sub-class of it. If no simplification is possible, the original reference may be returned.
-   * 
+   * Simplifies the type within a reference to the simplest form that the resolver will recognize. For example
+   * {@code CTSpec[FooSecurity, Sec~1]} might be simplified to {@code CTSpec[SECURITY, Sec~1]} if the same resolution
+   * will take place regardless of whether the type is a security or a sub-class of it. If no simplification is possible,
+   * the original reference may be returned.
+   *
    * @param <T> the object type, either {@link ComputationTargetSpecification} or {@link ComputationTargetReference}
    * @param reference the reference to simplify, not null
    * @param resolver the resolver to simplify against, not null

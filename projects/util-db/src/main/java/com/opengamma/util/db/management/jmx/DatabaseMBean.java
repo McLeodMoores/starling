@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.db.management.jmx;
@@ -26,9 +26,9 @@ public class DatabaseMBean {
     /**
      * Creates a new MBean instance of a type corresponding to the JDBC driver being used.
      * <p>
-     * If the class is recognized then a sub-class of DatabaseMBean will be created with management operations specific to that type. Otherwise a trivial stub exposing basic/common data will be
-     * returned.
-     * 
+     * If the class is recognized then a sub-class of DatabaseMBean will be created with management operations
+     * specific to that type. Otherwise a trivial stub exposing basic/common data will be returned.
+     *
      * @param driverClassName the driver class name, not null
      * @param dataSource the data source being managed that any operations should be applied to, not null
      */
@@ -39,7 +39,7 @@ public class DatabaseMBean {
 
     /**
      * Sets the value returned by {@link DatabaseMBean#getDriver}.
-     * 
+     *
      * @param localJdbc the local JDBC connection string
      */
     public void setLocalJdbc(final String localJdbc) {
@@ -48,7 +48,7 @@ public class DatabaseMBean {
 
     /**
      * Sets the value returned by {@link DatabaseMBean#getUsername}.
-     * 
+     *
      * @param username the username used to connect to the source
      */
     public void setUsername(final String username) {
@@ -57,7 +57,7 @@ public class DatabaseMBean {
 
     /**
      * Returns the underlying MBean instance for registration with the local MBean server.
-     * 
+     *
      * @return the MBean instance, not null
      */
     public DatabaseMBean mbean() {
@@ -67,8 +67,8 @@ public class DatabaseMBean {
   }
 
   /**
-   * The name of the local driver. This might be a presentable name, if the JDBC driver class is recognized, otherwise it will be the full JDBC class name. This is the value returned by
-   * {@link #getDriver}.
+   * The name of the local driver. This might be a presentable name, if the JDBC driver class is recognized, otherwise
+   * it will be the full JDBC class name. This is the value returned by {@link #getDriver}.
    */
   private final String _driver;
   /**
@@ -86,9 +86,9 @@ public class DatabaseMBean {
 
   /**
    * Creates a new instance.
-   * 
-   * @param driver the database driver name, not null. If possible this should be a presentable name that the database technology is commonly known as (eg HSQLDB). Otherwise the class name of the JDBC
-   *          driver will suffice.
+   *
+   * @param driver the database driver name, not null. If possible this should be a presentable name that the database
+   * technology is commonly known as (eg HSQLDB). Otherwise the class name of the JDBC driver will suffice.
    */
   public DatabaseMBean(final String driver) {
     _driver = ArgumentChecker.notNull(driver, "driver");
@@ -98,7 +98,7 @@ public class DatabaseMBean {
    * Creates a new instance, matching the driver class name against a known list to produce a sub-class with specific management operations if possible.
    * <p>
    * This is wrapped by calls through {@link Local} so that the returned bean can be configured further before registration with the MBean server.
-   * 
+   *
    * @param driverClassName the JDBC driver class name, as used in configuration files, not null
    * @return the MBean instance
    */
@@ -129,7 +129,7 @@ public class DatabaseMBean {
 
   /**
    * Returns the managed data source. Sub-classes may use this to perform the maintenance/management operations that they publish to JMX clients.
-   * 
+   *
    * @return the datasource
    */
   protected DataSource getDataSource() {

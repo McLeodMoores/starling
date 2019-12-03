@@ -22,30 +22,30 @@ public class RequiredFieldFilter implements NormalizationRule {
   /**
    * The field names that must be present.
    */
-  private final Set<String> _requiredFieldNames = new HashSet<String>();
+  private final Set<String> _requiredFieldNames = new HashSet<>();
 
   /**
    * Creates a filter with a set of required field names.
-   * 
+   *
    * @param requiredFieldNames  the field names, not null
    */
-  public RequiredFieldFilter(String... requiredFieldNames) {
+  public RequiredFieldFilter(final String... requiredFieldNames) {
     this(Sets.newHashSet(requiredFieldNames));
   }
 
   /**
    * Creates a filter with a set of required field names.
-   * 
+   *
    * @param requiredFieldNames  the field names, not null
    */
-  public RequiredFieldFilter(Collection<String> requiredFieldNames) {
+  public RequiredFieldFilter(final Collection<String> requiredFieldNames) {
     _requiredFieldNames.addAll(requiredFieldNames);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the required field names.
-   * 
+   *
    * @return the required field names, not null
    */
   public Set<String> getRequiredFieldNames() {
@@ -55,15 +55,15 @@ public class RequiredFieldFilter implements NormalizationRule {
   //-------------------------------------------------------------------------
   /**
    * Rejects any update that doesn't contain a set of fields.
-   * 
+   *
    * @param msg  the message to normalize, not null
    * @param securityUniqueId  the data provider's unique ID of the security, not null
-   * @param fieldHistory  the distributor-specific field history which the rule may choose to update, not null 
+   * @param fieldHistory  the distributor-specific field history which the rule may choose to update, not null
    * @return the unaltered message, null if it does not contain all the required fields
    */
   @Override
-  public MutableFudgeMsg apply(MutableFudgeMsg msg, String securityUniqueId, FieldHistoryStore fieldHistory) {
-    Set<String> namesFromMsg = msg.getAllFieldNames();
+  public MutableFudgeMsg apply(final MutableFudgeMsg msg, final String securityUniqueId, final FieldHistoryStore fieldHistory) {
+    final Set<String> namesFromMsg = msg.getAllFieldNames();
     if (namesFromMsg.containsAll(getRequiredFieldNames())) {
       return msg;
     }

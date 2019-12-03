@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.bbg.config;
@@ -39,7 +39,7 @@ import com.opengamma.util.ArgumentChecker;
 @Config(description = "Bloomberg security type definition", group = ConfigGroups.MISC)
 @BeanDefinition
 public class BloombergSecurityTypeDefinition implements Bean, Serializable, UniqueIdentifiable, MutableUniqueIdentifiable {
-  
+
   /**
    * Serialization version.
    */
@@ -69,7 +69,7 @@ public class BloombergSecurityTypeDefinition implements Bean, Serializable, Uniq
   //-------------------------------------------------------------------------
   /**
    * Gets the map of security types.
-   * 
+   *
    * @return the map, not null
    */
   private SetMultimap<SecurityType, String> getSecurityTypes() {
@@ -78,10 +78,10 @@ public class BloombergSecurityTypeDefinition implements Bean, Serializable, Uniq
 
   /**
    * Gets the map of security types.
-   * 
+   *
    * @param map  the map to set, not null
    */
-  private void setSecurityTypes(SetMultimap<SecurityType, String> map) {
+  private void setSecurityTypes(final SetMultimap<SecurityType, String> map) {
     ArgumentChecker.notNull(map, "map");
     _securityTypes.clear();
     _securityTypes.putAll(map);
@@ -90,13 +90,13 @@ public class BloombergSecurityTypeDefinition implements Bean, Serializable, Uniq
   //-------------------------------------------------------------------------
   /**
    * Looks up a security type.
-   * 
+   *
    * @param bbgSecurityType  the security type, not null
    * @return the security type enum, null if no match
    */
-  public SecurityType getSecurityType(String bbgSecurityType) {
+  public SecurityType getSecurityType(final String bbgSecurityType) {
     ArgumentChecker.notNull(bbgSecurityType, "bloomberg security type");
-    for (Entry<SecurityType, String> entry : _securityTypes.entries()) {
+    for (final Entry<SecurityType, String> entry : _securityTypes.entries()) {
       if (entry.getValue().equals(bbgSecurityType)) {
         return entry.getKey();
       }
@@ -106,18 +106,18 @@ public class BloombergSecurityTypeDefinition implements Bean, Serializable, Uniq
 
   /**
    * Gets the valid types.
-   * 
+   *
    * @param securityType  the security type, not null
    * @return the set of valid types, not null
    */
-  public ImmutableSet<String> getValidTypes(SecurityType securityType) {
+  public ImmutableSet<String> getValidTypes(final SecurityType securityType) {
     ArgumentChecker.notNull(securityType, "security type");
     return ImmutableSet.copyOf(_securityTypes.get(securityType));
   }
 
   /**
    * Gets all the enum types.
-   * 
+   *
    * @return the enum types, not null
    */
   public ImmutableSet<SecurityType> getAllSecurityTypes() {
@@ -126,11 +126,11 @@ public class BloombergSecurityTypeDefinition implements Bean, Serializable, Uniq
 
   /**
    * Adds a security type mapping.
-   * 
+   *
    * @param bbgSecurityType  the bloomberg type, not null
    * @param type  the enum type, not null
    */
-  public void addSecurityType(String bbgSecurityType, SecurityType type) {
+  public void addSecurityType(final String bbgSecurityType, final SecurityType type) {
     ArgumentChecker.notNull(bbgSecurityType, "bloomberg security type");
     ArgumentChecker.notNull(type, "security type");
     _securityTypes.put(type, bbgSecurityType);

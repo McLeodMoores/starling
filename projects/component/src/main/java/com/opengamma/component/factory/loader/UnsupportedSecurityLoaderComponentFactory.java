@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.loader;
@@ -30,11 +30,12 @@ public class UnsupportedSecurityLoaderComponentFactory extends AbstractSecurityL
    * Creates the loader, without registering it.
    * <p>
    * This implementation uses {@link UnsupportedSecurityLoader}.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the loader, not null
    */
-  protected SecurityLoader createSecurityLoader(ComponentRepository repo) {
+  @Override
+  protected SecurityLoader createSecurityLoader(final ComponentRepository repo) {
     return new UnsupportedSecurityLoader();
   }
 

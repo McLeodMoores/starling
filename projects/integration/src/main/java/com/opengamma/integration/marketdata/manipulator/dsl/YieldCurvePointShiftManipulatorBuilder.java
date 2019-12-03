@@ -18,12 +18,12 @@ public class YieldCurvePointShiftManipulatorBuilder {
   private final Scenario _scenario;
   private final YieldCurveSelector _selector;
   private final ScenarioShiftType _shiftType;
-  
+
   private final List<YieldCurvePointShift> _shiftList = Lists.newArrayList();
-  
-  /* package */ YieldCurvePointShiftManipulatorBuilder(YieldCurveSelector selector,
-                                                       Scenario scenario,
-                                                       ScenarioShiftType shiftType) {
+
+  /* package */ YieldCurvePointShiftManipulatorBuilder(final YieldCurveSelector selector,
+                                                       final Scenario scenario,
+                                                       final ScenarioShiftType shiftType) {
     _selector = ArgumentChecker.notNull(selector, "selector");
     _scenario = ArgumentChecker.notNull(scenario, "scenario");
     _shiftType = ArgumentChecker.notNull(shiftType, "shiftType");
@@ -36,20 +36,20 @@ public class YieldCurvePointShiftManipulatorBuilder {
    * @param shift the shift to apply
    * @return this builder
    */
-  public YieldCurvePointShiftManipulatorBuilder shift(int pointIndex, Number shift) {
-    YieldCurvePointShift pointShift = new YieldCurvePointShift(pointIndex, shift.doubleValue());
+  public YieldCurvePointShiftManipulatorBuilder shift(final int pointIndex, final Number shift) {
+    final YieldCurvePointShift pointShift = new YieldCurvePointShift(pointIndex, shift.doubleValue());
     _shiftList.add(pointShift);
     return this;
   }
-  
-  
+
+
   /**
    * Adds the configured shifts to the scenario.
    * Should only be called once per {@link YieldCurvePointShiftManipulatorBuilder}.
    */
   public void build() {
-    YieldCurvePointShiftManipulator pointShifts = new YieldCurvePointShiftManipulator(_shiftType, _shiftList);
+    final YieldCurvePointShiftManipulator pointShifts = new YieldCurvePointShiftManipulator(_shiftType, _shiftList);
     _scenario.add(_selector, pointShifts);
   }
-  
+
 }

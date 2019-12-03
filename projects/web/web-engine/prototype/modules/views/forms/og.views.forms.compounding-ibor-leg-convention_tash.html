@@ -1,0 +1,81 @@
+<!-- TODO add information tooltips + links to docs -->
+<section>
+  <div class="OG-details-content OG-convention OG-grid OG-form">
+	<section class="OG-mod-0 OG-c7 og-id-cur">
+	  <div class="og-mod-content">
+	    <table class="OG-table">
+	      <col style="width: 30%"/>
+	      <col style="width: 30%"/>
+	      <col style="width: 40%"/>	      
+	      <tbody>
+	        <tr>
+  	          <td>Name</td>
+	          <td><input type="text" name="name" value="{{name}}"/></td>
+	          <td></td>
+	        </tr>
+            <tr>
+	          <td>*IBOR index convention</td>
+	          <td>{{{item_0}}}</td>
+	          <td><p id="warning" style="color:red">No *IBOR index conventions in the database</p></td>
+	        </tr>
+	        <tr>
+	          <td>Payment tenor</td>
+	          <td>{{{item_1}}}</td>
+	          <td></td>
+	        </tr>
+	        <tr>
+	          <td>Tenor of the sub-periods to be compounded</td>
+	          <td>{{{item_2}}}</td>
+	          <td></td>
+	        </tr> 
+	        <tr>
+	          <td>Compounding type</td>
+	          <td>{{{item_3}}}</td>
+	          <td></td>
+	        </tr>
+	        <tr>
+	          <td>Stub type for the compounding period</td>
+	          <td>{{{item_4}}}</td>
+	          <td></td>
+            </tr>
+	        <tr>
+	          <td>Stub type for the leg</td>
+	          <td>{{{item_5}}}</td>
+	          <td></td>
+            </tr>
+	        <tr>
+    		  <td>Is the notional exchanged?</td>
+    		  <td class="og-checkbox"><input type="checkbox" name="isExchangeNotional"/></td>
+    		  <td></td>
+    		</tr>	 
+    		<tr>
+    		  <td>Use end of month convention?</td>
+    		  <td class="og-checkbox"><input type="checkbox" name="isEOM"/></td>
+    		  <td></td>
+    		</tr>
+			<tr>
+			  <td>Settlement days</td>
+			  <td><input class="og-num" type="text" name="settlementDays" value="{{settlementDays}}"/></td>
+			  <td></td>
+			</tr>    		    		     
+			<tr>
+			  <td>Payment lag</td>
+			  <td><input class="og-num" type="text" name="paymentLag" value="{{paymentLag}}"/></td>
+			  <td></td>
+			</tr>    		    		     
+	      </tbody>
+	    </table>
+	  </div>
+	</section>
+    <section class="OG-mod-0 OG-c7 og-id-cur">
+      <div class="og-mod-content">
+    	  {{{item_6}}} 
+    	</div>
+	  </section>
+	  <section class="OG-mod-0 OG-c7 og-attributes">
+		<div class="og-mod-content">
+		 {{{item_7}}}
+		</div>
+	  </section>
+	</div>
+</section>

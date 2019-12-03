@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -34,6 +32,8 @@ import com.opengamma.financial.security.FinancialSecuritySource;
 import com.opengamma.financial.security.MasterFinancialSecuritySource;
 import com.opengamma.financial.security.RemoteFinancialSecuritySource;
 import com.opengamma.master.security.SecurityMaster;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the security source.
@@ -81,13 +81,13 @@ public class UserFinancialSecuritySourceComponentFactory extends AbstractCompone
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     FinancialSecuritySource source = initUnderlying(repo, configuration);
     // add user level if requested
-    FinancialSecuritySource userSource = initUser(repo, configuration);
-    Map<String, FinancialSecuritySource> map = new HashMap<String, FinancialSecuritySource>();
+    final FinancialSecuritySource userSource = initUser(repo, configuration);
+    final Map<String, FinancialSecuritySource> map = new HashMap<>();
     if (userSource != null) {
-      String scheme = repo.getInfo(getUserSecurityMaster()).getAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME);
+      final String scheme = repo.getInfo(getUserSecurityMaster()).getAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME);
       map.put(scheme, userSource);
       source = new DelegatingFinancialSecuritySource(source, map);
     }
@@ -96,7 +96,7 @@ public class UserFinancialSecuritySourceComponentFactory extends AbstractCompone
       source = new EHCachingFinancialSecuritySource(source, getCacheManager());
     }
     // register
-    ComponentInfo info = new ComponentInfo(SecuritySource.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(SecuritySource.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteFinancialSecuritySource.class);
@@ -107,8 +107,8 @@ public class UserFinancialSecuritySourceComponentFactory extends AbstractCompone
     }
   }
 
-  protected FinancialSecuritySource initUnderlying(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    FinancialSecuritySource source = new MasterFinancialSecuritySource(getUnderlyingSecurityMaster());
+  protected FinancialSecuritySource initUnderlying(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final FinancialSecuritySource source = new MasterFinancialSecuritySource(getUnderlyingSecurityMaster());
 
     // REVIEW kirk 2013-04-19 -- The block below should only be enabled when developing
     // the RedisCachingFinancialSecuritySource.
@@ -117,7 +117,7 @@ public class UserFinancialSecuritySourceComponentFactory extends AbstractCompone
 
     if (getUnderlyingClassifier() != null) {
       // [PLAT-4986] Note: the composite source is wrapped in a cache, but the underlying source isn't and will not be very efficient to use
-      ComponentInfo info = new ComponentInfo(SecuritySource.class, getUnderlyingClassifier());
+      final ComponentInfo info = new ComponentInfo(SecuritySource.class, getUnderlyingClassifier());
       info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
       if (isPublishRest()) {
         info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteFinancialSecuritySource.class);
@@ -130,14 +130,14 @@ public class UserFinancialSecuritySourceComponentFactory extends AbstractCompone
     return source;
   }
 
-  protected FinancialSecuritySource initUser(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  protected FinancialSecuritySource initUser(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     if (getUserSecurityMaster() == null) {
       return null;
     }
-    FinancialSecuritySource source = new MasterFinancialSecuritySource(getUserSecurityMaster());
+    final FinancialSecuritySource source = new MasterFinancialSecuritySource(getUserSecurityMaster());
     if (getUserClassifier() != null) {
       // [PLAT-4986] Note: the composite source is wrapped in a cache, but the user source isn't and will not be very efficient to use
-      ComponentInfo info = new ComponentInfo(SecuritySource.class, getUserClassifier());
+      final ComponentInfo info = new ComponentInfo(SecuritySource.class, getUserClassifier());
       info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
       if (isPublishRest()) {
         info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteFinancialSecuritySource.class);

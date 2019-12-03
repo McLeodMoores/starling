@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.user;
@@ -55,7 +55,7 @@ public enum UserFormError {
    */
   EMAIL_MISSING,
   /**
-   * The email address was too long
+   * The email address was too long.
    */
   EMAIL_TOO_LONG,
   /**
@@ -98,7 +98,7 @@ public enum UserFormError {
   //-------------------------------------------------------------------------
   /**
    * Gets the error code in lowerCamel format.
-   * 
+   *
    * @return the error code, not null
    */
   public String toLowerCamel() {

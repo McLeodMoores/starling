@@ -31,26 +31,27 @@ public class MongoDBValueCachingReferenceDataProvider extends AbstractValueCachi
   /**
    * The cache.
    */
-  private MongoDBReferenceDataCache _cache;
+  private final MongoDBReferenceDataCache _cache;
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying provider, not null
    * @param mongoConnector  the Mongo connector, not null
    */
-  public MongoDBValueCachingReferenceDataProvider(ReferenceDataProvider underlying, MongoConnector mongoConnector) {
+  public MongoDBValueCachingReferenceDataProvider(final ReferenceDataProvider underlying, final MongoConnector mongoConnector) {
     this(underlying, mongoConnector, OpenGammaFudgeContext.getInstance());
   }
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param underlying  the underlying provider, not null
    * @param mongoConnector  the Mongo connector, not null
    * @param fudgeContext  the Fudge context, not null
    */
-  public MongoDBValueCachingReferenceDataProvider(ReferenceDataProvider underlying, MongoConnector mongoConnector, FudgeContext fudgeContext) {
+  public MongoDBValueCachingReferenceDataProvider(final ReferenceDataProvider underlying, final MongoConnector mongoConnector,
+      final FudgeContext fudgeContext) {
     super(underlying, fudgeContext);
     ArgumentChecker.notNull(mongoConnector, "mongoConnector");
     _cache = new MongoDBReferenceDataCache(mongoConnector, REFERENCE_DATA);
@@ -59,7 +60,7 @@ public class MongoDBValueCachingReferenceDataProvider extends AbstractValueCachi
   //-------------------------------------------------------------------------
   /**
    * Gets the cache field.
-   * 
+   *
    * @return the cache
    */
   public MongoDBReferenceDataCache getCache() {
@@ -68,12 +69,12 @@ public class MongoDBValueCachingReferenceDataProvider extends AbstractValueCachi
 
   //-------------------------------------------------------------------------
   @Override
-  protected Map<String, ReferenceData> loadFieldValues(Set<String> identifiers) {
+  protected Map<String, ReferenceData> loadFieldValues(final Set<String> identifiers) {
     return _cache.load(identifiers);
   }
 
   @Override
-  protected void saveFieldValues(ReferenceData result) {
+  protected void saveFieldValues(final ReferenceData result) {
     _cache.save(result);
   }
 

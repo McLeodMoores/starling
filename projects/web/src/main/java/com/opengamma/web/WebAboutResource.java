@@ -32,21 +32,21 @@ public class WebAboutResource extends AbstractSingletonWebResource {
   //-------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
-  public String get(@Context ServletContext servletContext, @Context UriInfo uriInfo) {
-    FlexiBean out = createRootData(servletContext, uriInfo);
+  public String get(@Context final ServletContext servletContext, @Context final UriInfo uriInfo) {
+    final FlexiBean out = createRootData(servletContext, uriInfo);
     return getFreemarker(servletContext).build("about.ftl", out);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @param uriInfo  the URI information, not null
    * @param servletContext  the servlet context, not null
    * @return the output root data, not null
    */
-  protected FlexiBean createRootData(ServletContext servletContext, UriInfo uriInfo) {
-    FlexiBean out = super.createRootData(uriInfo);
+  protected FlexiBean createRootData(final ServletContext servletContext, final UriInfo uriInfo) {
+    final FlexiBean out = super.createRootData(uriInfo);
     out.put("uris", new WebHomeUris(uriInfo));
     out.put("about", new WebAbout(servletContext));
     return out;
@@ -58,7 +58,7 @@ public class WebAboutResource extends AbstractSingletonWebResource {
    * @param uriInfo  the uriInfo, not null
    * @return the URI, not null
    */
-  public static URI uri(UriInfo uriInfo) {
+  public static URI uri(final UriInfo uriInfo) {
     return uriInfo.getBaseUriBuilder().path(WebAboutResource.class).build();
   }
 

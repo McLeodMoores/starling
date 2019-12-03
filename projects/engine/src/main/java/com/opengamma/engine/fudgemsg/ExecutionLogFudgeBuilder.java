@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -35,18 +35,18 @@ public class ExecutionLogFudgeBuilder implements FudgeBuilder<ExecutionLog> {
   private static final String EXCEPTION_CLASS_FIELD_NAME = "exceptionClass";
   private static final String EXCEPTION_MESSAGE_FIELD_NAME = "exceptionMessage";
   private static final String EXCEPTION_STACK_TRACE_FIELD_NAME = "exceptionStackTrace";
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ExecutionLog object) {
-    MutableFudgeMsg msg = serializer.newMessage();
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ExecutionLog object) {
+    final MutableFudgeMsg msg = serializer.newMessage();
     if (object.getEvents() != null) {
       msg.add(LOG_EVENTS_COLLECTED_FIELD_NAME, null, FudgeWireType.INDICATOR, IndicatorType.INSTANCE);
-      for (LogEvent event : object.getEvents()) {
+      for (final LogEvent event : object.getEvents()) {
         serializer.addToMessage(msg, LOG_EVENT_FIELD_NAME, null, event);
       }
     }
     if (!object.getLogLevels().isEmpty()) {
-      for (LogLevel logLevel : object.getLogLevels()) {
+      for (final LogLevel logLevel : object.getLogLevels()) {
         serializer.addToMessage(msg, LOG_LEVEL_FIELD_NAME, null, logLevel.name());
       }
     }
@@ -63,25 +63,25 @@ public class ExecutionLogFudgeBuilder implements FudgeBuilder<ExecutionLog> {
   }
 
   @Override
-  public ExecutionLog buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public ExecutionLog buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     final boolean logEventsCollected = message.hasField(LOG_EVENTS_COLLECTED_FIELD_NAME);
     final List<LogEvent> events;
     if (logEventsCollected) {
-      events = new ArrayList<LogEvent>();
-      for (FudgeField eventField : message.getAllByName(LOG_EVENT_FIELD_NAME)) {
+      events = new ArrayList<>();
+      for (final FudgeField eventField : message.getAllByName(LOG_EVENT_FIELD_NAME)) {
         events.add(deserializer.fieldValueToObject(LogEvent.class, eventField));
       }
     } else {
       events = null;
     }
     final EnumSet<LogLevel> logLevels = EnumSet.noneOf(LogLevel.class);
-    for (FudgeField levelField : message.getAllByName(LOG_LEVEL_FIELD_NAME)) {
+    for (final FudgeField levelField : message.getAllByName(LOG_LEVEL_FIELD_NAME)) {
       logLevels.add(LogLevel.valueOf((String) levelField.getValue()));
     }
     final String exceptionClass = message.getString(EXCEPTION_CLASS_FIELD_NAME);
     final String exceptionMessage = message.getString(EXCEPTION_MESSAGE_FIELD_NAME);
     final String exceptionStackTrace = message.getString(EXCEPTION_STACK_TRACE_FIELD_NAME);
-    
+
     return new ExecutionLog() {
 
       @Override
@@ -118,7 +118,7 @@ public class ExecutionLogFudgeBuilder implements FudgeBuilder<ExecutionLog> {
       public boolean isEmpty() {
         return getLogLevels().isEmpty() && !hasException();
       }
-      
+
     };
   }
 

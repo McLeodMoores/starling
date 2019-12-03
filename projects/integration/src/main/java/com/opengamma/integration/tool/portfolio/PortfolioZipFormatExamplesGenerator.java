@@ -48,13 +48,13 @@ import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.util.tuple.ObjectsPair;
 
 /**
- * Tool to generate a template for doing field mapping tasks
+ * Tool to generate a template for doing field mapping tasks.
  */
 @Scriptable
 public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioZipFormatExamplesGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioZipFormatExamplesGenerator.class);
   /** File name option flag */
   private static final String FILE_NAME_OPT = "f";
   /** Write option flag */
@@ -67,21 +67,21 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
   @Override
   protected void doRun() throws Exception {
 
-    List<ManageablePosition> positions = loadSomePositions(getCommandLine().hasOption(INCLUDE_TRADES_OPT));
+    final List<ManageablePosition> positions = loadSomePositions(getCommandLine().hasOption(INCLUDE_TRADES_OPT));
     // Construct portfolio reader
-    PositionReader positionReader = new MyPositionReader(positions);
+    final PositionReader positionReader = new MyPositionReader(positions);
 
     // Create portfolio writer
-    PositionWriter positionWriter = constructPortfolioWriter(
+    final PositionWriter positionWriter = constructPortfolioWriter(
         getCommandLine().getOptionValue(FILE_NAME_OPT),
         getCommandLine().hasOption(WRITE_OPT),
         getCommandLine().hasOption(INCLUDE_TRADES_OPT));
 
     // Construct portfolio copier
-    PortfolioCopier portfolioCopier = new SimplePortfolioCopier();
+    final PortfolioCopier portfolioCopier = new SimplePortfolioCopier();
 
     // Create visitor for verbose/quiet mode
-    PortfolioCopierVisitor portfolioCopierVisitor; 
+    PortfolioCopierVisitor portfolioCopierVisitor;
     if (getCommandLine().hasOption(VERBOSE_OPT)) {
       portfolioCopierVisitor = new VerbosePortfolioCopierVisitor();
     } else {
@@ -95,38 +95,38 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
     positionReader.close();
     positionWriter.close();
   }
-  
-  private static final Set<String> UNSUPPORTED_SECURITY_TYPES = Sets.newHashSet("CDS_INDEX", "CDS_INDEX_DEFINITION", "CDS", "RAW", "XXX", "MANAGEABLE", 
-                                                                                "EXTERNAL_SENSITIVITIES_SECURITY", "EXTERNAL_SENSITIVITY_RISK_FACTORS"); 
-                                                                                // not enough string conversion stuff there for these yet
 
-  private List<ManageablePosition> loadSomePositions(boolean includeTrades) {
-    List<ManageablePosition> positions = new ArrayList<ManageablePosition>();
-    SecurityMaster securityMaster = getToolContext().getSecurityMaster();
-    SecurityMetaDataRequest metaRequest = new SecurityMetaDataRequest();
-    SecurityMetaDataResult metaData = securityMaster.metaData(metaRequest);
-    for (String securityType : metaData.getSecurityTypes()) {
+  private static final Set<String> UNSUPPORTED_SECURITY_TYPES = Sets.newHashSet("CDS_INDEX", "CDS_INDEX_DEFINITION", "CDS", "RAW", "XXX", "MANAGEABLE",
+      "EXTERNAL_SENSITIVITIES_SECURITY", "EXTERNAL_SENSITIVITY_RISK_FACTORS");
+  // not enough string conversion stuff there for these yet
+
+  private List<ManageablePosition> loadSomePositions(final boolean includeTrades) {
+    final List<ManageablePosition> positions = new ArrayList<>();
+    final SecurityMaster securityMaster = getToolContext().getSecurityMaster();
+    final SecurityMetaDataRequest metaRequest = new SecurityMetaDataRequest();
+    final SecurityMetaDataResult metaData = securityMaster.metaData(metaRequest);
+    for (final String securityType : metaData.getSecurityTypes()) {
       if (UNSUPPORTED_SECURITY_TYPES.contains(securityType)) {
         continue;
       }
-      s_logger.info("Processing security type " + securityType);
-      SecuritySearchRequest searchRequest = new SecuritySearchRequest();
+      LOGGER.info("Processing security type " + securityType);
+      final SecuritySearchRequest searchRequest = new SecuritySearchRequest();
       searchRequest.setName("*");
       searchRequest.setSecurityType(securityType);
       searchRequest.setPagingRequest(PagingRequest.FIRST_PAGE);
-      SecuritySearchResult search = securityMaster.search(searchRequest);
-      s_logger.info("Search returned " + search.getPaging().getTotalItems() + " securities");
-      List<ManageableSecurity> securities = search.getSecurities();
+      final SecuritySearchResult search = securityMaster.search(searchRequest);
+      LOGGER.info("Search returned " + search.getPaging().getTotalItems() + " securities");
+      final List<ManageableSecurity> securities = search.getSecurities();
       int count = 0;
-      for (ManageableSecurity security : securities) {
+      for (final ManageableSecurity security : securities) {
         if (security == null) {
-          s_logger.error("null security of type " + securityType);
+          LOGGER.error("null security of type " + securityType);
           continue;
         }
         count++;
         positions.add(createPosition(security, includeTrades));
         if (count == 3) {
-          s_logger.info("Reached count of 3");
+          LOGGER.info("Reached count of 3");
           break;
         }
       }
@@ -136,10 +136,10 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
 
   private class MyPositionReader implements PositionReader {
 
-    private List<ManageablePosition> _positions;
-    private Iterator<ManageablePosition> _iterator;
+    private final List<ManageablePosition> _positions;
+    private final Iterator<ManageablePosition> _iterator;
 
-    public MyPositionReader(List<ManageablePosition> positions) {
+    MyPositionReader(final List<ManageablePosition> positions) {
       _positions = positions;
       _iterator = _positions.iterator();
     }
@@ -149,40 +149,38 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
       if (!_iterator.hasNext()) {
         return null;
       }
-      ManageablePosition position = _iterator.next();
-      
+      final ManageablePosition position = _iterator.next();
+
       // Write the related security(ies)
-      ManageableSecurityLink sLink = position.getSecurityLink();
-      Security security = sLink.resolveQuiet(getToolContext().getSecuritySource());
-      if ((security != null) && (security instanceof ManageableSecurity)) {
+      final ManageableSecurityLink sLink = position.getSecurityLink();
+      final Security security = sLink.resolveQuiet(getToolContext().getSecuritySource());
+      if (security != null && security instanceof ManageableSecurity) {
 
         // Find underlying security
         // TODO support multiple underlyings; unfortunately the system does not provide a standard way
         // to retrieve underlyings
         if (((ManageableSecurity) security).propertyNames().contains("underlyingId")) {
-          ExternalId id = (ExternalId) ((ManageableSecurity) security).property("underlyingId").get();
+          final ExternalId id = (ExternalId) ((ManageableSecurity) security).property("underlyingId").get();
 
           Security underlying;
           try {
             underlying = getToolContext().getSecuritySource().getSingle(id.toBundle());
             if (underlying != null) {
               return ObjectsPair.of(position,
-                  new ManageableSecurity[] {(ManageableSecurity) security, (ManageableSecurity) underlying });
-            } else {
-              s_logger.warn("Could not resolve underlying " + id + " for security " + security.getName());
+                  new ManageableSecurity[] { (ManageableSecurity) security, (ManageableSecurity) underlying });
             }
-          } catch (Throwable e) {
+            LOGGER.warn("Could not resolve underlying " + id + " for security " + security.getName());
+          } catch (final Throwable e) {
             // Underlying not found
-            s_logger.warn("Error trying to resolve underlying " + id + " for security " + security.getName());
+            LOGGER.warn("Error trying to resolve underlying " + id + " for security " + security.getName());
           }
         }
         return ObjectsPair.of(position,
-            new ManageableSecurity[] {(ManageableSecurity) security });
+            new ManageableSecurity[] { (ManageableSecurity) security });
 
-      } else {
-        s_logger.warn("Could not resolve security relating to position " + position.getName());
-        return ObjectsPair.of(null, null);
       }
+      LOGGER.warn("Could not resolve security relating to position " + position.getName());
+      return ObjectsPair.of(null, null);
     }
 
     @Override
@@ -200,17 +198,18 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
     }
   }
 
-  private ManageablePosition createPosition(ManageableSecurity security, boolean includeTrade) {
-    ManageablePosition position = new ManageablePosition(BigDecimal.ONE, security.getExternalIdBundle());
+  private ManageablePosition createPosition(final ManageableSecurity security, final boolean includeTrade) {
+    final ManageablePosition position = new ManageablePosition(BigDecimal.ONE, security.getExternalIdBundle());
     if (includeTrade) {
-      ManageableTrade trade = new ManageableTrade(BigDecimal.ONE, security.getExternalIdBundle(), LocalDate.now().minusDays(3), OffsetTime.now(), ExternalId.of("Cpty", "GOLDMAN"));
+      final ManageableTrade trade = new ManageableTrade(BigDecimal.ONE, security.getExternalIdBundle(), LocalDate.now().minusDays(3), OffsetTime.now(),
+          ExternalId.of("Cpty", "GOLDMAN"));
       position.addTrade(trade);
     }
     return position;
   }
 
-  private static PositionWriter constructPortfolioWriter(String filename, boolean write,
-      boolean includeTrades) {
+  private static PositionWriter constructPortfolioWriter(final String filename, final boolean write,
+      final boolean includeTrades) {
     if (write) {
       // Check that the file name was specified on the command line
       if (filename == null) {
@@ -219,37 +218,35 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
 
       if (SheetFormat.of(filename) == SheetFormat.ZIP) {
         return new ZippedPositionWriter(filename, includeTrades);
-      } else {
-        throw new OpenGammaRuntimeException("Input filename should end in .ZIP");
       }
+      throw new OpenGammaRuntimeException("Input filename should end in .ZIP");
 
-    } else {
-      // Create a dummy portfolio writer to pretty-print instead of persisting
-      return new PrettyPrintingPositionWriter(true);
     }
+    // Create a dummy portfolio writer to pretty-print instead of persisting
+    return new PrettyPrintingPositionWriter(true);
   }
 
   @Override
-  protected Options createOptions(boolean contextProvided) {
+  protected Options createOptions(final boolean contextProvided) {
 
-    Options options = super.createOptions(contextProvided);
+    final Options options = super.createOptions(contextProvided);
 
-    Option filenameOption = new Option(
+    final Option filenameOption = new Option(
         FILE_NAME_OPT, "filename", true, "The path to the file to create and export to (CSV, XLS or ZIP)");
     filenameOption.setRequired(true);
     options.addOption(filenameOption);
 
-    Option writeOption = new Option(
+    final Option writeOption = new Option(
         WRITE_OPT, "write", false,
         "Actually persists the portfolio to the file if specified, otherwise pretty-prints without persisting");
     options.addOption(writeOption);
 
-    Option verboseOption = new Option(
+    final Option verboseOption = new Option(
         VERBOSE_OPT, "verbose", false,
         "Displays progress messages on the terminal");
     options.addOption(verboseOption);
 
-    Option includeTradesOption = new Option(
+    final Option includeTradesOption = new Option(
         INCLUDE_TRADES_OPT, "trades", false,
         "Generate a separate row for each trade instead of one row per position");
     options.addOption(includeTradesOption);
@@ -257,13 +254,14 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
     return options;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
-   * @param args  the standard tool arguments, not null
+   *
+   * @param args
+   *          the standard tool arguments, not null
    */
-  public static void main(String[] args) {  // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new PortfolioZipFormatExamplesGenerator().invokeAndTerminate(args);
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -47,12 +47,14 @@ public class DepGraphOptionalInputsTest extends AbstractDependencyGraphBuilderTe
     }
 
     @Override
-    public Set<ComputedValue> execute(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues) {
+    public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+        final Set<ValueRequirement> desiredValues) {
       return null;
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final Set<ValueRequirement> req = Sets.newHashSetWithExpectedSize(4);
       req.add(_req1);
       req.add(_req2);
@@ -60,7 +62,8 @@ public class DepGraphOptionalInputsTest extends AbstractDependencyGraphBuilderTe
     }
 
     @Override
-    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+        final Map<ValueSpecification, ValueRequirement> inputs) {
       if (_expect1) {
         assertTrue(inputs.values().contains(_req1));
       } else {
@@ -75,7 +78,7 @@ public class DepGraphOptionalInputsTest extends AbstractDependencyGraphBuilderTe
     }
 
     @Override
-    public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
+    public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
       return Collections.singleton(new ValueSpecification("OUT", target.toSpecification(), ValueProperties.all()));
     }
 

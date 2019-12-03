@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments;
@@ -18,10 +18,14 @@ public class ForexForward extends Forex {
   private final double _spotFX;
 
   /**
-   * This is the exchange of an amount of domestic currency for an amount of foreign currency at some time in the future
-   * @param paymentCurrency1 domestic payment
-   * @param paymentCurrency2 foreign payment
-   * @param spotFX fxRate is defined such that ccy1 = fx*ccy2
+   * This is the exchange of an amount of domestic currency for an amount of foreign currency at some time in the future.
+   * 
+   * @param paymentCurrency1
+   *          domestic payment
+   * @param paymentCurrency2
+   *          foreign payment
+   * @param spotFX
+   *          fxRate is defined such that ccy1 = fx*ccy2
    */
   public ForexForward(final PaymentFixed paymentCurrency1, final PaymentFixed paymentCurrency2, final double spotFX) {
     super(paymentCurrency1, paymentCurrency2);
@@ -49,7 +53,7 @@ public class ForexForward extends Forex {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_spotFX);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

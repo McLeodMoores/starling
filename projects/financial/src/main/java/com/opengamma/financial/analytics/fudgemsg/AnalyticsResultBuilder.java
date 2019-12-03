@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.fudgemsg;
@@ -28,7 +28,7 @@ import com.opengamma.util.tuple.DoublesPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 /* package */final class AnalyticsResultBuilder {
 
@@ -45,7 +45,7 @@ import com.opengamma.util.tuple.Pair;
     public InterestRateCurveSensitivity buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final List<FudgeField> curveNameFields = message.getAllByName(CURVE_FIELD_NAME);
       final List<FudgeField> sensitivitiesFields = message.getAllByName(SENSITIVITIES_FIELD_NAME);
-      final Map<String, List<DoublesPair>> data = new HashMap<String, List<DoublesPair>>();
+      final Map<String, List<DoublesPair>> data = new HashMap<>();
       final int n = curveNameFields.size();
       if (sensitivitiesFields.size() != n) {
         throw new OpenGammaRuntimeException("Sensitivities list not same size as names list");
@@ -54,7 +54,7 @@ import com.opengamma.util.tuple.Pair;
         final FudgeField nameField = curveNameFields.get(i);
         final String name = deserializer.fieldValueToObject(String.class, nameField);
         final FudgeField listField = sensitivitiesFields.get(i);
-        final List<DoublesPair> pairs = new ArrayList<DoublesPair>();
+        final List<DoublesPair> pairs = new ArrayList<>();
         final List<FudgeField> pairsField = ((FudgeMsg) listField.getValue()).getAllByName(PAIR_FIELD_NAME);
         for (final FudgeField pair : pairsField) {
           pairs.add((DoublesPair) deserializer.fieldValueToObject(Pair.class, pair));

@@ -188,13 +188,13 @@ public class ViewClientTest {
 
       resultListener.assertViewDefinitionCompiled(TIMEOUT);
       resultListener.assertCycleStarted(TIMEOUT);
-      ViewResultModel result1Fragment = resultListener.getCycleFragmentCompleted(TIMEOUT).getFullFragment(); // Initial market data
+      final ViewResultModel result1Fragment = resultListener.getCycleFragmentCompleted(TIMEOUT).getFullFragment(); // Initial market data
       assertNotNull(result1Fragment);
       assertNotNull(resultListener.getCycleFragmentCompleted(TIMEOUT).getFullFragment()); // Calculated data
       final ViewComputationResultModel result1 = resultListener.getCycleCompleted(TIMEOUT).getFullResult();
       assertNotNull(result1);
 
-      Map<ValueRequirement, Object> expected = new HashMap<ValueRequirement, Object>();
+      Map<ValueRequirement, Object> expected = new HashMap<>();
       expected.put(ViewProcessorTestEnvironment.getPrimitive1(), (byte) 1);
       expected.put(ViewProcessorTestEnvironment.getPrimitive2(), (byte) 2);
       assertComputationResult(expected, env.getCalculationResult(result1));
@@ -216,7 +216,7 @@ public class ViewClientTest {
       final ViewComputationResultModel result2 = resultListener.getCycleCompleted(TIMEOUT).getFullResult();
       assertEquals(result2.getViewCycleId(), cycleStartedId);
 
-      expected = new HashMap<ValueRequirement, Object>();
+      expected = new HashMap<>();
       expected.put(ViewProcessorTestEnvironment.getPrimitive1(), (byte) 3);
       expected.put(ViewProcessorTestEnvironment.getPrimitive2(), (byte) 4);
       assertComputationResult(expected, env.getCalculationResult(result2));
@@ -262,7 +262,7 @@ public class ViewClientTest {
       final ViewDeltaResultModel result1 = resultListener.getCycleCompleted(TIMEOUT).getDeltaResult();
       assertNotNull(result1);
 
-      Map<ValueRequirement, Object> expected = new HashMap<ValueRequirement, Object>();
+      Map<ValueRequirement, Object> expected = new HashMap<>();
       expected.put(ViewProcessorTestEnvironment.getPrimitive1(), 1);
       expected.put(ViewProcessorTestEnvironment.getPrimitive2(), 2);
       assertComputationResult(expected, env.getCalculationResult(result1));
@@ -283,7 +283,7 @@ public class ViewClientTest {
       resultListener.assertCycleFragmentCompleted(TIMEOUT);
       final ViewDeltaResultModel result2 = resultListener.getCycleCompleted(TIMEOUT).getDeltaResult();
 
-      expected = new HashMap<ValueRequirement, Object>();
+      expected = new HashMap<>();
       expected.put(ViewProcessorTestEnvironment.getPrimitive1(), 3);
       assertComputationResult(expected, env.getCalculationResult(result2));
     } finally {
@@ -364,7 +364,7 @@ public class ViewClientTest {
       client1ResultListener.getCycleStarted(TIMEOUT).getCycleMetadata();
       final ViewComputationResultModel result2Fragment = client1ResultListener.getCycleFragmentCompleted(TIMEOUT).getFullFragment();
       final ViewComputationResultModel result2 = client1ResultListener.getCycleCompleted(TIMEOUT).getFullResult();
-      Map<ValueRequirement, Object> expected = new HashMap<ValueRequirement, Object>();
+      Map<ValueRequirement, Object> expected = new HashMap<>();
       expected.put(ViewProcessorTestEnvironment.getPrimitive1(), (byte) 2);
       expected.put(ViewProcessorTestEnvironment.getPrimitive2(), (byte) 0);
       assertComputationResult(expected, env.getCalculationResult(result2Fragment));
@@ -381,7 +381,7 @@ public class ViewClientTest {
       final ViewComputationResultModel result3Fragment = client1ResultListener.getCycleFragmentCompleted(TIMEOUT).getFullFragment(); // Market data
       client1ResultListener.getCycleFragmentCompleted(TIMEOUT); // Calculated data (single job)
       final ViewComputationResultModel result3 = client1ResultListener.getCycleCompleted(TIMEOUT).getFullResult();
-      expected = new HashMap<ValueRequirement, Object>();
+      expected = new HashMap<>();
       expected.put(ViewProcessorTestEnvironment.getPrimitive1(), (byte) 3);
       expected.put(ViewProcessorTestEnvironment.getPrimitive2(), (byte) 0);
       assertComputationResult(expected, env.getCalculationResult(result3Fragment));
@@ -417,7 +417,7 @@ public class ViewClientTest {
       final ViewComputationResultModel result4 = client1ResultListener.getCycleCompleted(TIMEOUT).getFullResult();
       assertEquals(0, client1ResultListener.getQueueSize());
       client2ResultListener.assertNoCalls(TIMEOUT);
-      expected = new HashMap<ValueRequirement, Object>();
+      expected = new HashMap<>();
       expected.put(ViewProcessorTestEnvironment.getPrimitive1(), (byte) 3);
       expected.put(ViewProcessorTestEnvironment.getPrimitive2(), (byte) 2);
       assertComputationResult(expected, env.getCalculationResult(result4Fragment));
@@ -592,7 +592,8 @@ public class ViewClientTest {
       };
       final ValueRequirement requirement1 = new ValueRequirement("value1", target.toSpecification());
       fn1.addRequirement(ViewProcessorTestEnvironment.getPrimitive1());
-      fn1.addResult(new ValueSpecification(requirement1.getValueName(), target.toSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "fn1").get()), "result1");
+      fn1.addResult(new ValueSpecification(requirement1.getValueName(), target.toSpecification(),
+          ValueProperties.with(ValuePropertyNames.FUNCTION, "fn1").get()), "result1");
       functionRepository.addFunction(fn1);
 
       final MockFunction fn2 = new MockFunction(MockFunction.UNIQUE_ID + "2", target) {
@@ -607,7 +608,8 @@ public class ViewClientTest {
       };
       fn2.addRequirement(requirement1);
       final ValueRequirement requirement2 = new ValueRequirement("value2", target.toSpecification());
-      fn2.addResult(new ValueSpecification(requirement2.getValueName(), target.toSpecification(), ValueProperties.with(ValuePropertyNames.FUNCTION, "fn2").get()), "result2");
+      fn2.addResult(new ValueSpecification(requirement2.getValueName(), target.toSpecification(),
+          ValueProperties.with(ValuePropertyNames.FUNCTION, "fn2").get()), "result2");
       functionRepository.addFunction(fn2);
 
       env.setFunctionRepository(functionRepository);
@@ -735,7 +737,7 @@ public class ViewClientTest {
   //-------------------------------------------------------------------------
   private void assertComputationResult(final Map<ValueRequirement, Object> expected, final ViewCalculationResultModel result) {
     assertNotNull(result);
-    final Set<ValueRequirement> remaining = new HashSet<ValueRequirement>(expected.keySet());
+    final Set<ValueRequirement> remaining = new HashSet<>(expected.keySet());
     final Collection<ComputationTargetSpecification> targets = result.getAllTargets();
     for (final ComputationTargetSpecification target : targets) {
       final Map<Pair<String, ValueProperties>, ComputedValueResult> values = result.getValues(target);
@@ -752,7 +754,8 @@ public class ViewClientTest {
   }
 
   /**
-   * Avoids the ConcurrentHashMap-based implementation of InMemoryLKVSnapshotProvider, where the LKV map can appear to lag behind if accessed from a different thread immediately after a change.
+   * Avoids the ConcurrentHashMap-based implementation of InMemoryLKVSnapshotProvider, where the LKV map can appear to lag behind if
+   * accessed from a different thread immediately after a change.
    */
   private static class SynchronousInMemoryLKVSnapshotProvider extends InMemoryLKVMarketDataProvider {
 

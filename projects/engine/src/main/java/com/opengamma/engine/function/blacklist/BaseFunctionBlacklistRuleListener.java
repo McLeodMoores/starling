@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.function.blacklist;
@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Utility class for managing a subscription to blacklist rules
+ * Utility class for managing a subscription to blacklist rules.
  */
 /* package */abstract class BaseFunctionBlacklistRuleListener implements FunctionBlacklistRuleListener {
 
@@ -23,8 +23,9 @@ import com.opengamma.util.tuple.Pair;
   }
 
   /**
-   * Queries the underlying for it's current modification count and rule set. If the current modification at the underlying is the same as the known modification count then it may return null.
-   * 
+   * Queries the underlying for it's current modification count and rule set. If the current modification at the underlying
+   * is the same as the known modification count then it may return null.
+   *
    * @param modificationCount the known/expected modification count
    * @return the correct modification count and rule set or null if it is as expected
    */
@@ -35,7 +36,7 @@ import com.opengamma.util.tuple.Pair;
   protected abstract void addRule(FunctionBlacklistRule rule);
 
   protected void addRules(final Collection<FunctionBlacklistRule> rules) {
-    for (FunctionBlacklistRule rule : rules) {
+    for (final FunctionBlacklistRule rule : rules) {
       addRule(rule);
     }
   }
@@ -43,7 +44,7 @@ import com.opengamma.util.tuple.Pair;
   protected abstract void removeRule(FunctionBlacklistRule rule);
 
   protected void removeRules(final Collection<FunctionBlacklistRule> rules) {
-    for (FunctionBlacklistRule rule : rules) {
+    for (final FunctionBlacklistRule rule : rules) {
       removeRule(rule);
     }
   }
@@ -61,15 +62,14 @@ import com.opengamma.util.tuple.Pair;
     if (_previousModification + 1 == modificationCount) {
       _previousModification = modificationCount;
       return true;
-    } else {
-      defer.submit(new Runnable() {
-        @Override
-        public void run() {
-          refresh();
-        }
-      });
-      return false;
     }
+    defer.submit(new Runnable() {
+      @Override
+      public void run() {
+        refresh();
+      }
+    });
+    return false;
   }
 
   @Override

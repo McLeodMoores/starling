@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.depgraph;
@@ -13,20 +13,20 @@ import java.util.List;
  */
 public class ResolutionFailureAccumulator implements ResolutionFailureListener {
 
-  private final List<ResolutionFailure> _resolutionFailures = new ArrayList<ResolutionFailure>();
+  private final List<ResolutionFailure> _resolutionFailures = new ArrayList<>();
 
   @Override
-  public synchronized void notifyFailure(ResolutionFailure resolutionFailure) {
+  public synchronized void notifyFailure(final ResolutionFailure resolutionFailure) {
     _resolutionFailures.add(resolutionFailure);
   }
 
   /**
    * Gets the accumulated resolution failures.
-   * 
+   *
    * @return the resolution failures
    */
   public synchronized List<ResolutionFailure> getResolutionFailures() {
-    return new ArrayList<ResolutionFailure>(_resolutionFailures);
+    return new ArrayList<>(_resolutionFailures);
   }
 
 }

@@ -30,7 +30,7 @@ import com.opengamma.service.VersionCorrectionProvider;
   /**
    * Logger for the class.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(ServiceContextConfigLinkResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServiceContextConfigLinkResolver.class);
 
   /**
    * Creates the resolver using the default service context.
@@ -44,7 +44,7 @@ import com.opengamma.service.VersionCorrectionProvider;
    *
    * @param serviceContext the service context to use when resolving the link
    */
-  /* package */ ServiceContextConfigLinkResolver(ServiceContext serviceContext) {
+  /* package */ ServiceContextConfigLinkResolver(final ServiceContext serviceContext) {
     super(serviceContext);
   }
 
@@ -54,45 +54,44 @@ import com.opengamma.service.VersionCorrectionProvider;
   }
 
   @Override
-  protected VersionCorrection getVersionCorrection(VersionCorrectionProvider vcProvider) {
+  protected VersionCorrection getVersionCorrection(final VersionCorrectionProvider vcProvider) {
     return vcProvider.getConfigVersionCorrection();
   }
 
   @Override
-  protected T executeQuery(ConfigSource configSource, Class<T> type,  String name, VersionCorrection versionCorrection) {
+  protected T executeQuery(final ConfigSource configSource, final Class<T> type,  final String name, final VersionCorrection versionCorrection) {
 
     // The database stores config items with exact type, but we may want to search
     // with a more general type. We therefore may need to try the search twice.
     final T result = findWithMatchingType(configSource, type, name, versionCorrection);
-    return result != null ?
-        result :
-        findWithGeneralType(configSource, type, name, versionCorrection);
+    return result != null
+        ? result
+        : findWithGeneralType(configSource, type, name, versionCorrection);
   }
 
-  private T findWithMatchingType(ConfigSource configSource, Class<T> type,
-                                 String identifier, VersionCorrection versionCorrection) {
+  private T findWithMatchingType(final ConfigSource configSource, final Class<T> type,
+                                 final String identifier, final VersionCorrection versionCorrection) {
     return selectResult(type, identifier, configSource.get(type, identifier, versionCorrection));
   }
 
   @SuppressWarnings("unchecked")
-  private T findWithGeneralType(ConfigSource configSource, final Class<T> type,
-                                String identifier, VersionCorrection versionCorrection) {
+  private T findWithGeneralType(final ConfigSource configSource, final Class<T> type,
+                                final String identifier, final VersionCorrection versionCorrection) {
 
     // Filter the items so we only have ones with compatible types
-    Collection<ConfigItem<Object>> allMatches = configSource.get(Object.class, identifier, versionCorrection);
-    Iterable<ConfigItem<Object>> results = filterForCorrectType(allMatches, type);
+    final Collection<ConfigItem<Object>> allMatches = configSource.get(Object.class, identifier, versionCorrection);
+    final Iterable<ConfigItem<Object>> results = filterForCorrectType(allMatches, type);
 
     final T result = (T) selectResult(type, identifier, results);
     if (result != null) {
       return result;
-    } else {
-      throw new DataNotFoundException("No config found with type: [" + type.getName() + "], id: [" +
-                                      identifier + "] and versionCorrection: [" + versionCorrection + "]");
     }
+    throw new DataNotFoundException("No config found with type: [" + type.getName() + "], id: ["
+                                    + identifier + "] and versionCorrection: [" + versionCorrection + "]");
   }
 
-  private Iterable<ConfigItem<Object>> filterForCorrectType(Collection<ConfigItem<Object>> allMatches,
-                                                            Class<T> type) {
+  private Iterable<ConfigItem<Object>> filterForCorrectType(final Collection<ConfigItem<Object>> allMatches,
+                                                            final Class<T> type) {
     return Iterables.filter(allMatches, typeMatcher(type));
   }
 
@@ -106,21 +105,21 @@ import com.opengamma.service.VersionCorrectionProvider;
   private Predicate<ConfigItem<Object>> typeMatcher(final Class<T> type) {
     return new Predicate<ConfigItem<Object>>() {
       @Override
-      public boolean apply(ConfigItem<Object> item) {
+      public boolean apply(final ConfigItem<Object> item) {
         return type.isAssignableFrom(item.getValue().getClass());
       }
     };
   }
 
-  private <R> R selectResult(Class<T> type, String identifier, Iterable<ConfigItem<R>> results) {
+  private <R> R selectResult(final Class<T> type, final String identifier, final Iterable<ConfigItem<R>> results) {
     final Iterator<ConfigItem<R>> iterator = results.iterator();
     return iterator.hasNext() ? selectFirst(type, identifier, iterator) : null;
   }
 
-  private <R> R selectFirst(Class<T> type, String identifier, Iterator<ConfigItem<R>> iterator) {
-    R result = iterator.next().getValue();
+  private <R> R selectFirst(final Class<T> type, final String identifier, final Iterator<ConfigItem<R>> iterator) {
+    final R result = iterator.next().getValue();
     if (iterator.hasNext()) {
-      s_logger.warn("Found multiple matching config results for type: {} and name: {} - returning first found",
+      LOGGER.warn("Found multiple matching config results for type: {} and name: {} - returning first found",
                     type.getName(), identifier);
     }
     return result;

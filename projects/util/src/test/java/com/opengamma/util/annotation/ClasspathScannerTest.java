@@ -23,9 +23,12 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT_SLOW)
 public class ClasspathScannerTest {
-  
-  private ClasspathScanner _scanner = new ClasspathScanner();
-  
+
+  private final ClasspathScanner _scanner = new ClasspathScanner();
+
+  /**
+   *
+   */
   public void testTimestamp() {
     final ClasspathScanner scanner = new ClasspathScanner();
     final Instant instant = scanner.getTimestamp();
@@ -34,26 +37,41 @@ public class ClasspathScannerTest {
     assertFalse(Instant.now().isBefore(instant));
   }
 
-  public void test_scanType() throws ClassNotFoundException {
+  /**
+   *
+   */
+  public void testScanType() {
     assertAnnotation(MockType.class);
   }
 
-  public void test_scanField() throws ClassNotFoundException {
+  /**
+   *
+   */
+  public void testScanField() {
     assertAnnotation(MockField.class);
   }
-  
-  public void test_scanConstructor() throws ClassNotFoundException {
+
+  /**
+   *
+   */
+  public void testScanConstructor() {
     assertAnnotation(MockConstructor.class);
   }
-  
-  public void test_scanMethod() throws ClassNotFoundException {
+
+  /**
+   *
+   */
+  public void testScanMethod() {
     assertAnnotation(MockMethod.class);
   }
-  
-  public void test_scanParameter() throws ClassNotFoundException {
+
+  /**
+   *
+   */
+  public void testScanParameter() {
     assertAnnotation(MockParameter.class);
   }
-    
+
   private void assertAnnotation(final Class<? extends Annotation> annotationClass) {
     final AnnotationCache cache = _scanner.scan(annotationClass);
     assertNotNull(cache);

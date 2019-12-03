@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.master.legalentity.impl;
@@ -15,7 +15,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.opengamma.id.ObjectId;
@@ -31,7 +30,7 @@ import com.opengamma.util.rest.RestUtils;
 
 /**
  * RESTful resource for legalEntities.
- * <p/>
+ * <p>
  * The legalEntities resource receives and processes RESTful calls to the legalentity master.
  */
 @Path("legalEntityMaster")
@@ -65,7 +64,7 @@ public class DataLegalEntityMasterResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -78,31 +77,31 @@ public class DataLegalEntityMasterResource extends AbstractDataResource {
 
   @GET
   @Path("metaData")
-  public Response metaData(@Context UriInfo uriInfo) {
-    LegalEntityMetaDataRequest request = RestUtils.decodeQueryParams(uriInfo, LegalEntityMetaDataRequest.class);
-    LegalEntityMetaDataResult result = getLegalEntityMaster().metaData(request);
+  public Response metaData(@Context final UriInfo uriInfo) {
+    final LegalEntityMetaDataRequest request = RestUtils.decodeQueryParams(uriInfo, LegalEntityMetaDataRequest.class);
+    final LegalEntityMetaDataResult result = getLegalEntityMaster().metaData(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("legalentitiesearches")
-  public Response search(LegalEntitySearchRequest request) {
-    LegalEntitySearchResult result = getLegalEntityMaster().search(request);
+  public Response search(final LegalEntitySearchRequest request) {
+    final LegalEntitySearchResult result = getLegalEntityMaster().search(request);
     return responseOkObject(result);
   }
 
   @POST
   @Path("legalentities")
-  public Response add(@Context UriInfo uriInfo, LegalEntityDocument request) {
-    LegalEntityDocument result = getLegalEntityMaster().add(request);
-    URI createdUri = (new com.opengamma.master.legalentity.impl.DataLegalEntityResource()).uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
+  public Response add(@Context final UriInfo uriInfo, final LegalEntityDocument request) {
+    final LegalEntityDocument result = getLegalEntityMaster().add(request);
+    final URI createdUri = new com.opengamma.master.legalentity.impl.DataLegalEntityResource().uriVersion(uriInfo.getBaseUri(), result.getUniqueId());
     return responseCreatedObject(createdUri, result);
   }
 
   //-------------------------------------------------------------------------
   @Path("legalentities/{legalEntityId}")
-  public com.opengamma.master.legalentity.impl.DataLegalEntityResource findLegalEntity(@PathParam("legalEntityId") String idStr) {
-    ObjectId id = ObjectId.parse(idStr);
+  public com.opengamma.master.legalentity.impl.DataLegalEntityResource findLegalEntity(@PathParam("legalEntityId") final String idStr) {
+    final ObjectId id = ObjectId.parse(idStr);
     return new DataLegalEntityResource(this, id);
   }
 

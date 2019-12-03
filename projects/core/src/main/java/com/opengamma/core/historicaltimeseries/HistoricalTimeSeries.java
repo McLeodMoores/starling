@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.historicaltimeseries;
@@ -25,14 +25,15 @@ public interface HistoricalTimeSeries extends UniqueIdentifiable {
    * Gets the unique identifier of the historical time-series.
    * <p>
    * This specifies a single version-correction of the time-series.
-   * 
+   *
    * @return the unique identifier for this series, not null within the engine
    */
+  @Override
   UniqueId getUniqueId();
 
   /**
    * Gets the time-series data.
-   * 
+   *
    * @return the series, not null
    */
   LocalDateDoubleTimeSeries getTimeSeries();

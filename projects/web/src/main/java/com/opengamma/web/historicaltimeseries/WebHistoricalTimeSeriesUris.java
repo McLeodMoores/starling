@@ -23,7 +23,7 @@ public class WebHistoricalTimeSeriesUris {
    * Creates an instance.
    * @param data  the web data, not null
    */
-  public WebHistoricalTimeSeriesUris(WebHistoricalTimeSeriesData data) {
+  public WebHistoricalTimeSeriesUris(final WebHistoricalTimeSeriesData data) {
     _data = data;
   }
 
@@ -35,7 +35,7 @@ public class WebHistoricalTimeSeriesUris {
   public URI base() {
     return allTimeSeries();
   }
-  
+
   /**
    * Gets the URI.
    * @return the URI

@@ -18,16 +18,16 @@ import com.opengamma.util.rest.FudgeRestClient;
  */
 public class RemoteViewCycleManager extends RemoteEngineResourceManager<ViewCycle> {
 
-  public RemoteViewCycleManager(URI baseUri, ScheduledExecutorService scheduler) {
+  public RemoteViewCycleManager(final URI baseUri, final ScheduledExecutorService scheduler) {
     super(baseUri, scheduler);
   }
 
-  public RemoteViewCycleManager(URI baseUri, ScheduledExecutorService scheduler, FudgeRestClient client) {
+  public RemoteViewCycleManager(final URI baseUri, final ScheduledExecutorService scheduler, final FudgeRestClient client) {
     super(baseUri, scheduler, client);
   }
 
   @Override
-  protected EngineResourceReference<ViewCycle> getRemoteReference(URI baseUri, ScheduledExecutorService scheduler) {
+  protected EngineResourceReference<ViewCycle> getRemoteReference(final URI baseUri, final ScheduledExecutorService scheduler) {
     return new RemoteViewCycleReference(baseUri, scheduler, getClient());
   }
 

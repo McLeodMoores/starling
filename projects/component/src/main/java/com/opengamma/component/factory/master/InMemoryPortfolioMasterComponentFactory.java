@@ -55,8 +55,8 @@ public class InMemoryPortfolioMasterComponentFactory extends AbstractComponentFa
    */
   @PropertyDefinition
   private boolean _cloneResults = true;
-  
-  
+
+
 
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {

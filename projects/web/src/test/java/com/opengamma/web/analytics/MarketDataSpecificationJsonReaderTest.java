@@ -59,9 +59,9 @@ public class MarketDataSpecificationJsonReaderTest {
   }
 
   @Test
-  public void multiple() throws JSONException {
-    String json = "[" + LIVE_JSON + ", " + LATEST_JSON + ", " + FIXED_JSON + ", " + SNAPSHOT_JSON + "]";
-    List<MarketDataSpecification> specs = MarketDataSpecificationJsonReader.buildSpecifications(json);
+  public void multiple() {
+    final String json = "[" + LIVE_JSON + ", " + LATEST_JSON + ", " + FIXED_JSON + ", " + SNAPSHOT_JSON + "]";
+    final List<MarketDataSpecification> specs = MarketDataSpecificationJsonReader.buildSpecifications(json);
     assertEquals(specs, ImmutableList.of(LIVE, LATEST, FIXED, SNAPSHOT));
   }
 }

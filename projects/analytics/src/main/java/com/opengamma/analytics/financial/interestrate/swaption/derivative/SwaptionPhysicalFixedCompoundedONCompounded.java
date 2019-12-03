@@ -43,14 +43,22 @@ public final class SwaptionPhysicalFixedCompoundedONCompounded extends EuropeanV
 
   /**
    * Constructor from the expiry date, the underlying swap and the long/short flag.
-   * @param expiryTime The expiry time.
-   * @param strike The strike
-   * @param underlyingSwap The underlying swap.
-   * @param settlementTime Time to swap settlement.
-   * @param isCall Call.
-   * @param isLong The long (true) / short (false) flag.
+   * 
+   * @param expiryTime
+   *          The expiry time.
+   * @param strike
+   *          The strike
+   * @param underlyingSwap
+   *          The underlying swap.
+   * @param settlementTime
+   *          Time to swap settlement.
+   * @param isCall
+   *          Call.
+   * @param isLong
+   *          The long (true) / short (false) flag.
    */
-  private SwaptionPhysicalFixedCompoundedONCompounded(final double expiryTime, final double strike, final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap,
+  private SwaptionPhysicalFixedCompoundedONCompounded(final double expiryTime, final double strike,
+      final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap,
       final double settlementTime, final boolean isCall, final boolean isLong) {
     super(strike, expiryTime, isCall);
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
@@ -62,44 +70,60 @@ public final class SwaptionPhysicalFixedCompoundedONCompounded extends EuropeanV
   }
 
   /**
-   * Builder from the expiry date, the underlying swap and the long/short flag. The strike stored in the EuropeanVanillaOption should not be used for pricing as the
-   * strike can be different for each coupon and need to be computed at the pricing method level.
-   * @param expiryTime The expiry time.
-   * @param underlyingSwap The underlying swap.
-   * @param settlementTime Time to swap settlement.
-   * @param isLong The long (true) / short (false) flag.
+   * Builder from the expiry date, the underlying swap and the long/short flag. The strike stored in the EuropeanVanillaOption should not be used for pricing as
+   * the strike can be different for each coupon and need to be computed at the pricing method level.
+   * 
+   * @param expiryTime
+   *          The expiry time.
+   * @param underlyingSwap
+   *          The underlying swap.
+   * @param settlementTime
+   *          Time to swap settlement.
+   * @param isLong
+   *          The long (true) / short (false) flag.
    * @return The swaption.
    * @deprecated This relies on the {@link AnnuityCouponFixed#isPayer()} method to determine if the swaption is a call or a put, which is deprecated
    */
   @Deprecated
-  public static SwaptionPhysicalFixedCompoundedONCompounded from(final double expiryTime, final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap,
+  public static SwaptionPhysicalFixedCompoundedONCompounded from(final double expiryTime,
+      final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap,
       final double settlementTime, final boolean isLong) {
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
     final double strike = underlyingSwap.getFirstLeg().getNthPayment(0).getFixedRate();
-    // Implementation comment: The strike is working only for swap with same rate on all coupons and standard conventions. The strike equivalent is computed in the pricing methods.
+    // Implementation comment: The strike is working only for swap with same rate on all coupons and standard conventions. The strike equivalent is computed in
+    // the pricing methods.
     return new SwaptionPhysicalFixedCompoundedONCompounded(expiryTime, strike, underlyingSwap, settlementTime, underlyingSwap.getFirstLeg().isPayer(), isLong);
   }
 
   /**
-   * Builder from the expiry date, the underlying swap and the long/short flag. The strike stored in the EuropeanVanillaOption should not be used for pricing as the
-   * strike can be different for each coupon and need to be computed at the pricing method level.
-   * @param expiryTime The expiry time.
-   * @param underlyingSwap The underlying swap.
-   * @param settlementTime Time to swap settlement.
-   * @param isLong The long (true) / short (false) flag.
-   * @param isCall True if the swaption is a call
+   * Builder from the expiry date, the underlying swap and the long/short flag. The strike stored in the EuropeanVanillaOption should not be used for pricing as
+   * the strike can be different for each coupon and need to be computed at the pricing method level.
+   * 
+   * @param expiryTime
+   *          The expiry time.
+   * @param underlyingSwap
+   *          The underlying swap.
+   * @param settlementTime
+   *          Time to swap settlement.
+   * @param isLong
+   *          The long (true) / short (false) flag.
+   * @param isCall
+   *          True if the swaption is a call
    * @return The swaption.
    */
-  public static SwaptionPhysicalFixedCompoundedONCompounded from(final double expiryTime, final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap,
+  public static SwaptionPhysicalFixedCompoundedONCompounded from(final double expiryTime,
+      final Swap<CouponFixedAccruedCompounding, CouponONCompounded> underlyingSwap,
       final double settlementTime, final boolean isCall, final boolean isLong) {
     ArgumentChecker.notNull(underlyingSwap, "underlying swap");
     final double strike = underlyingSwap.getFirstLeg().getNthPayment(0).getFixedRate();
-    // Implementation comment: The strike is working only for swap with same rate on all coupons and standard conventions. The strike equivalent is computed in the pricing methods.
+    // Implementation comment: The strike is working only for swap with same rate on all coupons and standard conventions. The strike equivalent is computed in
+    // the pricing methods.
     return new SwaptionPhysicalFixedCompoundedONCompounded(expiryTime, strike, underlyingSwap, settlementTime, isCall, isLong);
   }
 
   /**
    * Gets the underlying swap.
+   * 
    * @return The underlying swap.
    */
   public Swap<CouponFixedAccruedCompounding, CouponONCompounded> getUnderlyingSwap() {
@@ -108,6 +132,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompounded extends EuropeanV
 
   /**
    * Gets the long / short flag.
+   * 
    * @return True if the swaption is long
    */
   public boolean isLong() {
@@ -116,6 +141,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompounded extends EuropeanV
 
   /**
    * Gets the settlement time.
+   * 
    * @return The settlement time
    */
   public double getSettlementTime() {
@@ -124,6 +150,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompounded extends EuropeanV
 
   /**
    * Gets the time difference between the last fixed leg payment and the settlement.
+   * 
    * @return The maturity time.
    */
   public double getMaturityTime() {
@@ -132,6 +159,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompounded extends EuropeanV
 
   /**
    * Gets the swaption currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -162,7 +190,7 @@ public final class SwaptionPhysicalFixedCompoundedONCompounded extends EuropeanV
     result = prime * result + (_isLong ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_settlementTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _underlyingSwap.hashCode();
     return result;
   }

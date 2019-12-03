@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target.logger;
@@ -42,7 +42,7 @@ public class LoggedResolutionPosition extends AbstractLoggedResolution<Position>
   public Security getSecurity() {
     final Security security = getUnderlying().getSecurity();
     final SecurityLink link = getSecurityLink();
-    if ((link.getExternalId() != null) && !link.getExternalId().isEmpty()) {
+    if (link.getExternalId() != null && !link.getExternalId().isEmpty()) {
       log(new ComputationTargetRequirement(ComputationTargetType.SECURITY, link.getExternalId()), security.getUniqueId());
     }
     if (link.getObjectId() != null) {
@@ -54,8 +54,8 @@ public class LoggedResolutionPosition extends AbstractLoggedResolution<Position>
   @Override
   public Collection<Trade> getTrades() {
     final Collection<Trade> trades = getUnderlying().getTrades();
-    final Collection<Trade> result = new ArrayList<Trade>(trades.size());
-    for (Trade trade : trades) {
+    final Collection<Trade> result = new ArrayList<>(trades.size());
+    for (final Trade trade : trades) {
       // log(ComputationTargetType.TRADE, trade); // [PLAT-4491] Trades are linked to positions by UID, not OID
       result.add(new LoggedResolutionTrade(trade, getLogger()));
     }

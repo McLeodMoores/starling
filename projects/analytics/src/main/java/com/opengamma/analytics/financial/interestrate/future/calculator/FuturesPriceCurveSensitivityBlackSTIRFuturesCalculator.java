@@ -18,7 +18,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Computes the price for different types of futures. Calculator using a multi-curve and issuer provider.
  */
-public final class FuturesPriceCurveSensitivityBlackSTIRFuturesCalculator extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, MulticurveSensitivity> {
+public final class FuturesPriceCurveSensitivityBlackSTIRFuturesCalculator
+    extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -27,6 +28,7 @@ public final class FuturesPriceCurveSensitivityBlackSTIRFuturesCalculator extend
 
   /**
    * Gets the calculator instance.
+   * 
    * @return The calculator.
    */
   public static FuturesPriceCurveSensitivityBlackSTIRFuturesCalculator getInstance() {
@@ -44,10 +46,11 @@ public final class FuturesPriceCurveSensitivityBlackSTIRFuturesCalculator extend
   /** The method used to compute the future price. It is a method without convexity adjustment. */
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_FUTURE = InterestRateFutureSecurityDiscountingMethod.getInstance();
 
-  //     -----     Futures options    -----
+  // ----- Futures options -----
 
   @Override
-  public MulticurveSensitivity visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity security, final BlackSTIRFuturesProviderInterface black) {
+  public MulticurveSensitivity visitInterestRateFutureOptionMarginSecurity(final InterestRateFutureOptionMarginSecurity security,
+      final BlackSTIRFuturesProviderInterface black) {
     ArgumentChecker.notNull(security, "Option security");
     ArgumentChecker.notNull(black, "Black data");
     // Forward sweep

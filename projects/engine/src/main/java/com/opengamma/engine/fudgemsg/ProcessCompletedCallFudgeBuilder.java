@@ -15,18 +15,18 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.engine.view.listener.ProcessCompletedCall;
 
 /**
- * Fudge message builder for {@link ProcessCompletedCall}. 
+ * Fudge message builder for {@link ProcessCompletedCall}.
  */
 @FudgeBuilderFor(ProcessCompletedCall.class)
 public class ProcessCompletedCallFudgeBuilder implements FudgeBuilder<ProcessCompletedCall> {
-  
+
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ProcessCompletedCall object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ProcessCompletedCall object) {
     return serializer.newMessage();
   }
 
   @Override
-  public ProcessCompletedCall buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public ProcessCompletedCall buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     return new ProcessCompletedCall();
   }
 

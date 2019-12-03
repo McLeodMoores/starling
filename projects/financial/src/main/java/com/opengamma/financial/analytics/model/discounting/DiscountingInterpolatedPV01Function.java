@@ -32,7 +32,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.fixedincome.InterestRateInstrumentType;
 import com.opengamma.financial.analytics.model.InterpolatedDataProperties;
@@ -53,7 +52,7 @@ import com.opengamma.util.tuple.Pair;
 public class DiscountingInterpolatedPV01Function extends DiscountingInterpolatedFunction {
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PV01}
+   * Sets the value requirements to {@link com.opengamma.engine.value.ValueRequirementNames#PV01}.
    */
   public DiscountingInterpolatedPV01Function() {
     super(PV01);
@@ -70,6 +69,7 @@ public class DiscountingInterpolatedPV01Function extends DiscountingInterpolated
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
         final String desiredCurveName = desiredValue.getConstraint(CURVE);
         final ValueProperties properties = desiredValue.getConstraints();
+        @SuppressWarnings("unchecked")
         final Map<Pair<String, Currency>, Double> pv01s = (Map<Pair<String, Currency>, Double>) inputs.getValue(ALL_PV01S);
         final Set<ComputedValue> results = new HashSet<>();
         for (final Map.Entry<Pair<String, Currency>, Double> entry : pv01s.entrySet()) {
@@ -94,7 +94,8 @@ public class DiscountingInterpolatedPV01Function extends DiscountingInterpolated
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(CURVE);
         if (curveNames == null || curveNames.size() != 1) {
@@ -104,18 +105,20 @@ public class DiscountingInterpolatedPV01Function extends DiscountingInterpolated
         if (curveExposureConfigs == null) {
           return null;
         }
-        final ValueProperties properties = ValueProperties.with(PROPERTY_CURVE_TYPE, InterpolatedDataProperties.CALCULATION_METHOD_NAME).with(CURVE_EXPOSURES, curveExposureConfigs).get();
+        final ValueProperties properties = ValueProperties.with(PROPERTY_CURVE_TYPE, InterpolatedDataProperties.CALCULATION_METHOD_NAME)
+            .with(CURVE_EXPOSURES, curveExposureConfigs).get();
         return Collections.singleton(new ValueRequirement(ALL_PV01S, target.toSpecification(), properties));
       }
 
       @SuppressWarnings("synthetic-access")
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
-        final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, InterpolatedDataProperties.CALCULATION_METHOD_NAME).withAny(CURVE_EXPOSURES)
+        final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, InterpolatedDataProperties.CALCULATION_METHOD_NAME)
+            .withAny(CURVE_EXPOSURES)
             .withAny(CURVE);
         final Security security = target.getTrade().getSecurity();
         if (security instanceof SwapSecurity && InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security)) {
-          if ((InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) != InterestRateInstrumentType.SWAP_CROSS_CURRENCY)) {
+          if (InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) != InterestRateInstrumentType.SWAP_CROSS_CURRENCY) {
             final SwapSecurity swapSecurity = (SwapSecurity) security;
             if (swapSecurity.getPayLeg().getNotional() instanceof InterestRateNotional) {
               final String currency = ((InterestRateNotional) swapSecurity.getPayLeg().getNotional()).getCurrency().getCode();

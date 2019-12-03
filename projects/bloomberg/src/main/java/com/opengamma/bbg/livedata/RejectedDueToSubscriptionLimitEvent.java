@@ -15,9 +15,9 @@ public class RejectedDueToSubscriptionLimitEvent {
   private final long _subscriptionLimitInEffect;
   private final int _requestedSubscriptions;
   private final int _afterSubscriptionCount;
-  private Instant _instant;
+  private final Instant _instant;
 
-  public RejectedDueToSubscriptionLimitEvent(long subscriptionLimitInEffect, int requestedSubscriptions, int afterSubscriptionCount) {
+  public RejectedDueToSubscriptionLimitEvent(final long subscriptionLimitInEffect, final int requestedSubscriptions, final int afterSubscriptionCount) {
     _instant = Instant.now();
     _subscriptionLimitInEffect = subscriptionLimitInEffect;
     _requestedSubscriptions = requestedSubscriptions;
@@ -25,7 +25,8 @@ public class RejectedDueToSubscriptionLimitEvent {
   }
 
   /**
-   * Gets the subscriptionLimitInEffect at the time of the event
+   * Gets the subscriptionLimitInEffect at the time of the event.
+   * 
    * @return the subscriptionLimitInEffect
    */
   public long getSubscriptionLimitInEffect() {
@@ -34,6 +35,7 @@ public class RejectedDueToSubscriptionLimitEvent {
 
   /**
    * Gets the number of requestedSubscriptions.
+   * 
    * @return the requestedSubscriptions
    */
   public int getRequestedSubscriptions() {
@@ -42,6 +44,7 @@ public class RejectedDueToSubscriptionLimitEvent {
 
   /**
    * Gets the number of subscriptions which would have occurred after this request (if it hadn't been rejected).
+   * 
    * @return the afterSubscriptionCount
    */
   public int getAfterSubscriptionCount() {
@@ -50,6 +53,7 @@ public class RejectedDueToSubscriptionLimitEvent {
 
   /**
    * Gets the instant at which the event occured.
+   * 
    * @return the instant
    */
   public Instant getInstant() {

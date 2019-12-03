@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.exec.plan;
@@ -30,7 +30,8 @@ public class PlannedJob implements Serializable {
   private final PlannedJob[] _tails;
   private final PlannedJob[] _dependents;
 
-  public PlannedJob(final int inputJobs, final List<CalculationJobItem> items, final CacheSelectHint cacheSelectHint, final PlannedJob[] tails, final PlannedJob[] dependents) {
+  public PlannedJob(final int inputJobs, final List<CalculationJobItem> items, final CacheSelectHint cacheSelectHint, final PlannedJob[] tails,
+      final PlannedJob[] dependents) {
     _inputJobs = inputJobs;
     _items = items;
     _cacheSelectHint = cacheSelectHint;
@@ -42,7 +43,7 @@ public class PlannedJob implements Serializable {
    * Returns the number of input jobs that this job is dependent on.
    * <p>
    * Leaf jobs will have a value of 0 as they are available for immediate execution.
-   * 
+   *
    * @return the total number of immediate input jobs
    */
   protected int getInputJobCount() {
@@ -51,7 +52,7 @@ public class PlannedJob implements Serializable {
 
   /**
    * Returns the items that make up the planned job.
-   * 
+   *
    * @return the job items, not null
    */
   protected List<CalculationJobItem> getItems() {
@@ -60,7 +61,7 @@ public class PlannedJob implements Serializable {
 
   /**
    * Returns the cache select hint for locating values produced or consumed by the job items.
-   * 
+   *
    * @return the cache select hint, not null
    */
   protected CacheSelectHint getCacheSelectHint() {
@@ -69,7 +70,7 @@ public class PlannedJob implements Serializable {
 
   /**
    * Returns the jobs that can run as tails to this job.
-   * 
+   *
    * @return the tail jobs, or null for none
    */
   protected PlannedJob[] getTails() {
@@ -78,7 +79,7 @@ public class PlannedJob implements Serializable {
 
   /**
    * Returns the jobs that may become runnable after this job completes.
-   * 
+   *
    * @return the dependent jobs, or null for none
    */
   protected PlannedJob[] getDependents() {
@@ -89,7 +90,7 @@ public class PlannedJob implements Serializable {
    * Creates a concrete calculation job that can be executed.
    * <p>
    * The job created does not include any of the tails.
-   * 
+   *
    * @param jobSpec the specification for the new job, not null
    * @param functionInitializationId the function initialization id
    * @param resolverVersionCorrection the resolver version/correction time stamp, not null
@@ -98,7 +99,7 @@ public class PlannedJob implements Serializable {
    */
   public CalculationJob createCalculationJob(final CalculationJobSpecification jobSpec, final long functionInitializationId,
       final VersionCorrection resolverVersionCorrection, final long[] requiredJobIds) {
-    assert (requiredJobIds == null) || (getInputJobCount() == requiredJobIds.length);
+    assert requiredJobIds == null || getInputJobCount() == requiredJobIds.length;
     return new CalculationJob(jobSpec, functionInitializationId, resolverVersionCorrection, requiredJobIds, getItems(), getCacheSelectHint());
   }
 
@@ -112,19 +113,19 @@ public class PlannedJob implements Serializable {
     }
     out.println(indent + id + ": " + getItems().size() + " item(s)");
     if (alloc) {
-      for (CalculationJobItem item : getItems()) {
-        out.println(indent + "  " + item.getFunctionUniqueIdentifier() + "(" + item.getComputationTargetSpecification() + "," + Arrays.asList(item.getInputs()) + ") = " +
-            Arrays.asList(item.getOutputs()));
+      for (final CalculationJobItem item : getItems()) {
+        out.println(indent + "  " + item.getFunctionUniqueIdentifier() + "(" + item.getComputationTargetSpecification()
+        + "," + Arrays.asList(item.getInputs()) + ") = " + Arrays.asList(item.getOutputs()));
       }
       if (getTails() != null) {
         final String tailIndent = indent + " T ";
-        for (PlannedJob tail : getTails()) {
+        for (final PlannedJob tail : getTails()) {
           tail.print(out, tailIndent, jobs);
         }
       }
       if (getDependents() != null) {
         final String dependentIndent = indent + "   ";
-        for (PlannedJob dependent : getDependents()) {
+        for (final PlannedJob dependent : getDependents()) {
           dependent.print(out, dependentIndent, jobs);
         }
       }

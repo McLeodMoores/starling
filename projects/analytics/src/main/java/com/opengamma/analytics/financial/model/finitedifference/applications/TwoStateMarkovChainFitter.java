@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -25,10 +25,11 @@ import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.B
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.EuropeanVanillaOption;
 import com.opengamma.analytics.financial.model.volatility.BlackImpliedVolatilityFormula;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.interpolation.DoubleQuadraticInterpolator1D;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1d;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.minimization.DoubleRangeLimitTransform;
 import com.opengamma.analytics.math.minimization.ParameterLimitsTransform;
@@ -44,15 +45,15 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 public class TwoStateMarkovChainFitter {
   /** A logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(TwoStateMarkovChainFitter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TwoStateMarkovChainFitter.class);
   /** The Black implied volatility calculator */
   private static final BlackImpliedVolatilityFormula BLACK_IMPLIED_VOL = new BlackImpliedVolatilityFormula();
   /** The interpolator */
-  private static final DoubleQuadraticInterpolator1D INTERPOLATOR_1D = Interpolator1DFactory.DOUBLE_QUADRATIC_INSTANCE;
+  private static final NamedInterpolator1d INTERPOLATOR_1D = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME);
   /** The grid interpolator */
   private static final GridInterpolator2D GRID_INTERPOLATOR2D = new GridInterpolator2D(INTERPOLATOR_1D, INTERPOLATOR_1D);
   /** The parameter transforms */
@@ -62,7 +63,7 @@ public class TwoStateMarkovChainFitter {
     final ParameterLimitsTransform[] trans = new ParameterLimitsTransform[6];
     trans[0] = new SingleRangeLimitTransform(0, LimitType.GREATER_THAN);
     trans[1] = new SingleRangeLimitTransform(0, LimitType.GREATER_THAN);
-    trans[2] = new DoubleRangeLimitTransform(0.1, 5.0); //try to keep transition rates physical
+    trans[2] = new DoubleRangeLimitTransform(0.1, 5.0); // try to keep transition rates physical
     trans[3] = new DoubleRangeLimitTransform(0.1, 5.0);
     trans[4] = new DoubleRangeLimitTransform(0.0, 1.0);
     trans[5] = new DoubleRangeLimitTransform(0.0, 2.0);
@@ -73,23 +74,27 @@ public class TwoStateMarkovChainFitter {
   private final double _theta;
 
   /**
-   * Default constructor that sets theta to 0.5
+   * Default constructor that sets theta to 0.5.
    */
   public TwoStateMarkovChainFitter() {
     _theta = 0.5;
   }
 
   /**
-   * @param theta Theta
+   * @param theta
+   *          Theta
    */
   public TwoStateMarkovChainFitter(final double theta) {
     _theta = theta;
   }
 
   /**
-   * @param forward The forward
-   * @param marketVols The market volatilities
-   * @param initialGuess The initial guess. Must have the same number of elements as the parameter transforms
+   * @param forward
+   *          The forward
+   * @param marketVols
+   *          The market volatilities
+   * @param initialGuess
+   *          The initial guess. Must have the same number of elements as the parameter transforms
    * @return The results of the least squared fit
    */
   public LeastSquareResultsWithTransform fit(final ForwardCurve forward, final List<Pair<double[], Double>> marketVols, final DoubleMatrix1D initialGuess) {
@@ -130,7 +135,7 @@ public class TwoStateMarkovChainFitter {
     final int tNodes = 20;
     final int xNodes = 100;
 
-    //TODO remove hard coded grid
+    // TODO remove hard coded grid
     final MeshingFunction timeMesh = new ExponentialMeshing(0, tmaxT, tNodes, 5.0);
     final MeshingFunction spaceMesh = new HyperbolicMeshing(0, 10.0 * forward.getForward(maxT), forward.getSpot(), xNodes, 0.01);
     final PDEGrid1D grid = new PDEGrid1D(timeMesh, spaceMesh);
@@ -191,7 +196,7 @@ public class TwoStateMarkovChainFitter {
           try {
             modVols[i] = GRID_INTERPOLATOR2D.interpolate(dataBundle, tk);
           } catch (final Exception e) {
-            s_logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
           }
         }
         return new DoubleMatrix1D(modVols);
@@ -203,11 +208,11 @@ public class TwoStateMarkovChainFitter {
     final double[] sigma = new double[nMarketValues];
     for (int i = 0; i < nMarketValues; i++) {
       mrkVols[i] = marketVols.get(i).getSecond();
-      sigma[i] = 0.01; //1% error
+      sigma[i] = 0.01; // 1% error
     }
 
     final NonLinearLeastSquare ls = new NonLinearLeastSquare();
-    //solve approx first
+    // solve approx first
     LeastSquareResults solverRes = ls.solve(new DoubleMatrix1D(mrkVols), new DoubleMatrix1D(sigma), funcAppox, TRANSFORMS.transform(initialGuess));
     // now solve pde model
     solverRes = ls.solve(new DoubleMatrix1D(mrkVols), new DoubleMatrix1D(sigma), func, solverRes.getFitParameters());
@@ -216,6 +221,7 @@ public class TwoStateMarkovChainFitter {
 
   /**
    * Transforms the price data (in PDEFullResults1D form) to implied volatility in a form used by 2D interpolator
+   * 
    * @param forward
    * @param yield
    * @param prices
@@ -227,7 +233,7 @@ public class TwoStateMarkovChainFitter {
     final int xNodes = prices.getNumberSpaceNodes();
     final int tNodes = prices.getNumberTimeNodes();
     final int n = xNodes * tNodes;
-    final List<Pair<double[], Double>> out = new ArrayList<Pair<double[], Double>>(n);
+    final List<Pair<double[], Double>> out = new ArrayList<>(n);
 
     for (int i = 0; i < tNodes; i++) {
       final double t = prices.getTimeValue(i);
@@ -240,10 +246,10 @@ public class TwoStateMarkovChainFitter {
             final EuropeanVanillaOption option = new EuropeanVanillaOption(k, t, true);
             try {
               final double impVol = BLACK_IMPLIED_VOL.getImpliedVolatility(data, option, price);
-              final Pair<double[], Double> pair = Pairs.of(new double[] {prices.getTimeValue(i), prices.getSpaceValue(j)}, impVol);
+              final Pair<double[], Double> pair = Pairs.of(new double[] { prices.getTimeValue(i), prices.getSpaceValue(j) }, impVol);
               out.add(pair);
             } catch (final Exception e) {
-              s_logger.error("can't find vol for strike: " + prices.getSpaceValue(j) + " and expiry " + prices.getTimeValue(i) + " . Not added to data set");
+              LOGGER.error("can't find vol for strike: " + prices.getSpaceValue(j) + " and expiry " + prices.getTimeValue(i) + " . Not added to data set");
             }
           }
         }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.resolver;
@@ -16,21 +16,21 @@ import com.opengamma.util.SingletonFactoryBean;
  */
 public class TypeBasedMarketDataProviderResolverFactoryBean extends SingletonFactoryBean<TypeBasedMarketDataProviderResolver> {
 
-  private final Map<Class<?>, MarketDataProviderFactory> _providers = new HashMap<Class<?>, MarketDataProviderFactory>();
-  
+  private final Map<Class<?>, MarketDataProviderFactory> _providers = new HashMap<>();
+
   public Map<Class<?>, MarketDataProviderFactory> getTypesAndProviders() {
     return _providers;
   }
-  
-  public void setTypesAndProviders(Map<Class<?>, MarketDataProviderFactory> typesAndProviders) {
+
+  public void setTypesAndProviders(final Map<Class<?>, MarketDataProviderFactory> typesAndProviders) {
     _providers.clear();
     _providers.putAll(typesAndProviders);
   }
-  
+
   @Override
   protected TypeBasedMarketDataProviderResolver createObject() {
-    TypeBasedMarketDataProviderResolver resolver = new TypeBasedMarketDataProviderResolver();
-    for (Map.Entry<Class<?>, MarketDataProviderFactory> typeAndProvider : getTypesAndProviders().entrySet()) {
+    final TypeBasedMarketDataProviderResolver resolver = new TypeBasedMarketDataProviderResolver();
+    for (final Map.Entry<Class<?>, MarketDataProviderFactory> typeAndProvider : getTypesAndProviders().entrySet()) {
       resolver.addProvider(typeAndProvider.getKey(), typeAndProvider.getValue());
     }
     return resolver;

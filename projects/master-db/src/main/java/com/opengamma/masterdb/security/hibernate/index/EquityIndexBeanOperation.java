@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 
@@ -44,17 +44,17 @@ public final class EquityIndexBeanOperation extends AbstractSecurityBeanOperatio
   }
 
   @Override
-  public EquityIndexBean createBean(final OperationContext context, HibernateSecurityMasterDao secMasterSession, EquityIndex index) {
+  public EquityIndexBean createBean(final OperationContext context, final HibernateSecurityMasterDao secMasterSession, final EquityIndex index) {
     final EquityIndexBean bean = new EquityIndexBean();
     bean.setDescription(index.getDescription());
-    List<EquityIndexComponent> equityComponents = index.getEquityComponents();
-    List<EquityIndexComponentBean> equityComponentBeans = new ArrayList<>();
+    final List<EquityIndexComponent> equityComponents = index.getEquityComponents();
+    final List<EquityIndexComponentBean> equityComponentBeans = new ArrayList<>();
     long i = 0;
-    for (EquityIndexComponent equityComponent : equityComponents) {
-      EquityIndexComponentBean equityComponentBean = new EquityIndexComponentBean();
+    for (final EquityIndexComponent equityComponent : equityComponents) {
+      final EquityIndexComponentBean equityComponentBean = new EquityIndexComponentBean();
       equityComponentBean.setWeight(equityComponent.getWeight());
-      Set<ExternalIdBean> idBundle = new HashSet<>();
-      for (ExternalId id : equityComponent.getEquityIdentifier().getExternalIds()) {
+      final Set<ExternalIdBean> idBundle = new HashSet<>();
+      for (final ExternalId id : equityComponent.getEquityIdentifier().getExternalIds()) {
         idBundle.add(externalIdToExternalIdBean(id));
       }
       equityComponentBean.setIdentifiers(idBundle);
@@ -63,23 +63,23 @@ public final class EquityIndexBeanOperation extends AbstractSecurityBeanOperatio
       equityComponentBeans.add(equityComponentBean);
     }
     bean.setEquityComponents(equityComponentBeans);
-    IndexWeightingTypeBean indexWeightingTypeBean = secMasterSession.getOrCreateIndexWeightingTypeBean(index.getWeightingType().name());
+    final IndexWeightingTypeBean indexWeightingTypeBean = secMasterSession.getOrCreateIndexWeightingTypeBean(index.getWeightingType().name());
     bean.setWeightingType(indexWeightingTypeBean);
     if (index.getIndexFamilyId() != null) {
       bean.setIndexFamilyId(externalIdToExternalIdBean(index.getIndexFamilyId()));
     }
     return bean;
   }
-  
+
   @Override
   public EquityIndexBean resolve(final OperationContext context,
                                  final HibernateSecurityMasterDao secMasterSession, final Date now,
                                  final EquityIndexBean bean) {
     final List<EquityIndexComponentBean> indexComponents = secMasterSession.getEquityIndexComponentBeans(bean);
-    bean.setEquityComponents(new ArrayList<EquityIndexComponentBean>(indexComponents));
+    bean.setEquityComponents(new ArrayList<>(indexComponents));
     return bean;
   }
-  
+
   @Override
   public void postPersistBean(final OperationContext context,
       final HibernateSecurityMasterDao secMasterSession, final Date now,
@@ -88,27 +88,27 @@ public final class EquityIndexBeanOperation extends AbstractSecurityBeanOperatio
   }
 
   @Override
-  public EquityIndex createSecurity(final OperationContext context, EquityIndexBean bean) {
-    String description = bean.getDescription();
-    IndexWeightingType weightingType = indexWeightingTypeBeanToIndexWeightingType(bean.getWeightingType());
-    List<EquityIndexComponentBean> equityComponents = bean.getEquityComponents();
+  public EquityIndex createSecurity(final OperationContext context, final EquityIndexBean bean) {
+    final String description = bean.getDescription();
+    final IndexWeightingType weightingType = indexWeightingTypeBeanToIndexWeightingType(bean.getWeightingType());
+    final List<EquityIndexComponentBean> equityComponents = bean.getEquityComponents();
     if (equityComponents == null) {
       throw new OpenGammaRuntimeException("null returned by getEquityComponents, which breaks contract.");
     }
-    List<EquityIndexComponent> components = new ArrayList<>();
-    for (EquityIndexComponentBean component : equityComponents) {
-      Set<ExternalIdBean> identifiers = component.getIdentifiers();
-      List<ExternalId> ids = new ArrayList<>();
-      for (ExternalIdBean idBean : identifiers) {
-        ExternalId externalId = externalIdBeanToExternalId(idBean);
+    final List<EquityIndexComponent> components = new ArrayList<>();
+    for (final EquityIndexComponentBean component : equityComponents) {
+      final Set<ExternalIdBean> identifiers = component.getIdentifiers();
+      final List<ExternalId> ids = new ArrayList<>();
+      for (final ExternalIdBean idBean : identifiers) {
+        final ExternalId externalId = externalIdBeanToExternalId(idBean);
         ids.add(externalId);
       }
-      ExternalIdBundle externalIdBundle = ExternalIdBundle.of(ids);
-      BigDecimal weight = component.getWeight().stripTrailingZeros();
-      EquityIndexComponent equityIndexComponent = new EquityIndexComponent(externalIdBundle, weight);
+      final ExternalIdBundle externalIdBundle = ExternalIdBundle.of(ids);
+      final BigDecimal weight = component.getWeight().stripTrailingZeros();
+      final EquityIndexComponent equityIndexComponent = new EquityIndexComponent(externalIdBundle, weight);
       components.add(equityIndexComponent);
     }
-    EquityIndex equityIndex = new EquityIndex("", description, components, weightingType);
+    final EquityIndex equityIndex = new EquityIndex("", description, components, weightingType);
     if (bean.getIndexFamilyId() != null) {
       equityIndex.setIndexFamilyId(externalIdBeanToExternalId(bean.getIndexFamilyId()));
     }

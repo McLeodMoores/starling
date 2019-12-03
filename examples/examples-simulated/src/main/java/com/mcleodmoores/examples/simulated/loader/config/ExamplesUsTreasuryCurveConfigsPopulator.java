@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2019 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.examples.simulated.loader.config;
 
@@ -41,10 +41,14 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- *
+ * Populates a config master with configurations for government bond curves.
  */
 public class ExamplesUsTreasuryCurveConfigsPopulator {
 
+  /**
+   * @param configMaster
+   *          a config master, not null
+   */
   public static void populateConfigMaster(final ConfigMaster configMaster) {
     ArgumentChecker.notNull(configMaster, "configMaster");
     final String cccName = "US Treasury";
@@ -54,12 +58,12 @@ public class ExamplesUsTreasuryCurveConfigsPopulator {
     keys.add(Country.US);
     keys.add(Currency.USD);
     final LegalEntityRegion filter = new LegalEntityRegion(false, true, Collections.singleton(Country.US), true, Collections.singleton(Currency.USD));
-    final IssuerCurveTypeConfiguration bondCurveType = new IssuerCurveTypeConfiguration(keys, Collections.<LegalEntityFilter<LegalEntity>>singleton(filter));
+    final IssuerCurveTypeConfiguration bondCurveType = new IssuerCurveTypeConfiguration(keys, Collections.<LegalEntityFilter<LegalEntity>> singleton(filter));
     final DiscountingCurveTypeConfiguration discountingCurveType = new DiscountingCurveTypeConfiguration("USD");
     final Map<String, List<? extends CurveTypeConfiguration>> curveTypes = new HashMap<>();
     curveTypes.put(curveName, Arrays.asList(bondCurveType, discountingCurveType));
     final CurveGroupConfiguration group = new CurveGroupConfiguration(0, curveTypes);
-    final CurveConstructionConfiguration ccc = new CurveConstructionConfiguration(cccName, Arrays.asList(group), Collections.<String>emptyList());
+    final CurveConstructionConfiguration ccc = new CurveConstructionConfiguration(cccName, Arrays.asList(group), Collections.<String> emptyList());
     final ConfigItem<CurveConstructionConfiguration> cccItem = ConfigItem.of(ccc);
     cccItem.setName(ccc.getName());
     ConfigMasterUtils.storeByName(configMaster, cccItem);
@@ -101,11 +105,7 @@ public class ExamplesUsTreasuryCurveConfigsPopulator {
         MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID, DataFieldType.OUTRIGHT));
     bondNodeIds.put(Tenor.ofYears(30), new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId("USB000000011"),
         MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID, DataFieldType.OUTRIGHT));
-    final CurveNodeIdMapper idMapper = CurveNodeIdMapper.builder()
-        .name(idMapperName)
-        .billNodeIds(billNodeIds)
-        .bondNodeIds(bondNodeIds)
-        .build();
+    final CurveNodeIdMapper idMapper = CurveNodeIdMapper.builder().name(idMapperName).billNodeIds(billNodeIds).bondNodeIds(bondNodeIds).build();
     final ConfigItem<CurveNodeIdMapper> idMapperItem = ConfigItem.of(idMapper);
     idMapperItem.setName(idMapperItem.getName());
     ConfigMasterUtils.storeByName(configMaster, idMapperItem);

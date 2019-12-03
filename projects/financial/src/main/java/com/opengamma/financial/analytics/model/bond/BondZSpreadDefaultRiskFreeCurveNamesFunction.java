@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.bond;
@@ -16,7 +16,7 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class BondZSpreadDefaultRiskFreeCurveNamesFunction extends DefaultPropertyFunction {
   private final String[] _valueNames;
@@ -38,7 +38,8 @@ public class BondZSpreadDefaultRiskFreeCurveNamesFunction extends DefaultPropert
   }
 
   @Override
-  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
+  protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue,
+      final String propertyName) {
     if (BondFunction.PROPERTY_RISK_FREE_CURVE.equals(propertyName)) {
       return Collections.singleton(_riskFreeCurve);
     }

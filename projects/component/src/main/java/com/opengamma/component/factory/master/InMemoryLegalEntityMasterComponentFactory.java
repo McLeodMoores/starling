@@ -65,7 +65,7 @@ public class InMemoryLegalEntityMasterComponentFactory extends AbstractComponent
     // create
     final LegalEntityMaster master;
     if (getJmsChangeManagerTopic() != null) {
-      JmsChangeManager cm = new JmsChangeManager(getJmsConnector(), getJmsChangeManagerTopic());
+      final JmsChangeManager cm = new JmsChangeManager(getJmsConnector(), getJmsChangeManagerTopic());
       master = new InMemoryLegalEntityMaster(cm);
       repo.registerLifecycle(cm);
       if (getJmsConnector().getClientBrokerUri() != null) {

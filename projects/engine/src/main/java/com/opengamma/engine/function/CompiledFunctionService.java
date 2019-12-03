@@ -34,15 +34,15 @@ import com.opengamma.util.monitor.OperationTimer;
  */
 public class CompiledFunctionService implements Lifecycle {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CompiledFunctionService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CompiledFunctionService.class);
 
   private final FunctionRepositoryFactory _functionRepositoryFactory;
   private FunctionRepository _rawFunctionRepository;
   private FunctionRepository _initializedFunctionRepository;
   private final FunctionRepositoryCompiler _functionRepositoryCompiler;
   private final FunctionCompilationContext _functionCompilationContext;
-  private final Set<FunctionDefinition> _reinitializingFunctionDefinitions = new HashSet<FunctionDefinition>();
-  private final Set<ObjectId> _reinitializingFunctionRequirements = new HashSet<ObjectId>();
+  private final Set<FunctionDefinition> _reinitializingFunctionDefinitions = new HashSet<>();
+  private final Set<ObjectId> _reinitializingFunctionRequirements = new HashSet<>();
 
   /**
    * A pool executor for general use by the engine. This should be used for tasks that should saturate the available processors.
@@ -55,7 +55,7 @@ public class CompiledFunctionService implements Lifecycle {
 
     @Override
     public synchronized void reinitializeFunction(final FunctionDefinition function, final ObjectId identifier) {
-      s_logger.debug("Re-initialize function {} on change to {}", function, identifier);
+      LOGGER.debug("Re-initialize function {} on change to {}", function, identifier);
       ArgumentChecker.notNull(function, "function");
       _reinitializingFunctionDefinitions.add(function);
       _reinitializingFunctionRequirements.add(identifier);
@@ -63,7 +63,7 @@ public class CompiledFunctionService implements Lifecycle {
 
     @Override
     public synchronized void reinitializeFunction(final FunctionDefinition function, final Collection<ObjectId> identifiers) {
-      s_logger.debug("Re-initialize function {} on changes to {}", function, identifiers);
+      LOGGER.debug("Re-initialize function {} on changes to {}", function, identifiers);
       ArgumentChecker.notNull(function, "function");
       _reinitializingFunctionDefinitions.add(function);
       _reinitializingFunctionRequirements.addAll(identifiers);
@@ -78,9 +78,9 @@ public class CompiledFunctionService implements Lifecycle {
   /**
    * Creates a new instance.
    * <p>
-   * This method will use a static function repository - it will reinitialize functions, but cannot respond to addition or removal of functions. Use a constructor that takes
-   * {@link FunctionConfigurationSource} instead.
-   * 
+   * This method will use a static function repository - it will reinitialize functions, but cannot respond to addition or
+   * removal of functions. Use a constructor that takes {@link FunctionConfigurationSource} instead.
+   *
    * @param functionRepository the static function repository, not null
    * @param functionRepositoryCompiler the repository compiler service, not null
    * @param functionCompilationContext the function context, not null
@@ -95,9 +95,9 @@ public class CompiledFunctionService implements Lifecycle {
   /**
    * Creates a new instance.
    * <p>
-   * This method will use a static function repository - it will reinitialize functions, but cannot respond to addition or removal of functions. Use a constructor that takes
-   * {@link FunctionConfigurationSource} instead.
-   * 
+   * This method will use a static function repository - it will reinitialize functions, but cannot respond to addition or
+   * removal of functions. Use a constructor that takes {@link FunctionConfigurationSource} instead.
+   *
    * @param functionRepository the static function repository, not null
    * @param functionRepositoryCompiler the repository compiler service, not null
    * @param functionCompilationContext the function context, not null
@@ -106,13 +106,13 @@ public class CompiledFunctionService implements Lifecycle {
    */
   @Deprecated
   public CompiledFunctionService(final FunctionRepository functionRepository, final FunctionRepositoryCompiler functionRepositoryCompiler,
-      final FunctionCompilationContext functionCompilationContext, PoolExecutor executorService) {
+      final FunctionCompilationContext functionCompilationContext, final PoolExecutor executorService) {
     this(FunctionRepositoryFactory.constructRepositoryFactory(functionRepository), functionRepositoryCompiler, functionCompilationContext, executorService);
   }
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param functions the source of function configuration, not null
    * @param functionRepositoryCompiler the repository compiler service, not null
    * @param functionCompilationContext the function context, not null
@@ -124,20 +124,20 @@ public class CompiledFunctionService implements Lifecycle {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param functions the source of function configuration, not null
    * @param functionRepositoryCompiler the repository compiler service, not null
    * @param functionCompilationContext the function context, not null
    * @param executorService the executor service for general processor heavy operations, not null
    */
   public CompiledFunctionService(final FunctionConfigurationSource functions, final FunctionRepositoryCompiler functionRepositoryCompiler,
-      final FunctionCompilationContext functionCompilationContext, PoolExecutor executorService) {
+      final FunctionCompilationContext functionCompilationContext, final PoolExecutor executorService) {
     this(FunctionRepositoryFactory.constructRepositoryFactory(functions), functionRepositoryCompiler, functionCompilationContext, executorService);
   }
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param functions the source of function repository to use, not null
    * @param functionRepositoryCompiler the repository compiler service, not null
    * @param functionCompilationContext the function context, not null
@@ -149,14 +149,14 @@ public class CompiledFunctionService implements Lifecycle {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param functions the source of function repository to use, not null
    * @param functionRepositoryCompiler the repository compiler service, not null
    * @param functionCompilationContext the function context, not null
    * @param executorService the executor service for general processor heavy operations, not null
    */
   public CompiledFunctionService(final FunctionRepositoryFactory functions, final FunctionRepositoryCompiler functionRepositoryCompiler,
-      final FunctionCompilationContext functionCompilationContext, PoolExecutor executorService) {
+      final FunctionCompilationContext functionCompilationContext, final PoolExecutor executorService) {
     ArgumentChecker.notNull(functions, "functions");
     ArgumentChecker.notNull(functionRepositoryCompiler, "functionRepositoryCompiler");
     ArgumentChecker.notNull(functionCompilationContext, "functionCompilationContext");
@@ -175,11 +175,11 @@ public class CompiledFunctionService implements Lifecycle {
       if (functionRepo != null) {
         final Collection<FunctionDefinition> functions = functionRepo.getAllFunctions();
         _functions = Maps.newHashMapWithExpectedSize(functions.size());
-        for (FunctionDefinition function : functions) {
+        for (final FunctionDefinition function : functions) {
           _functions.put(function.getUniqueId(), function);
         }
       } else {
-        _functions = new HashMap<String, FunctionDefinition>();
+        _functions = new HashMap<>();
       }
     }
 
@@ -204,7 +204,7 @@ public class CompiledFunctionService implements Lifecycle {
   }
 
   protected void initializeImpl(final long initId, final Collection<FunctionDefinition> functions) {
-    final OperationTimer timer = new OperationTimer(s_logger, "Initializing {} function definitions", functions.size());
+    final OperationTimer timer = new OperationTimer(LOGGER, "Initializing {} function definitions", functions.size());
     _reinitializingFunctionDefinitions.clear();
     _reinitializingFunctionRequirements.clear();
     final StaticFunctionRepository initialized = new StaticFunctionRepository(_initializedFunctionRepository);
@@ -221,7 +221,7 @@ public class CompiledFunctionService implements Lifecycle {
 
       @Override
       public void failure(final Throwable error) {
-        s_logger.warn("Couldn't initialize function", error);
+        LOGGER.warn("Couldn't initialize function", error);
         // Don't take any further action - the error has been logged and the function is not in the "initialized" set
       }
 
@@ -241,11 +241,11 @@ public class CompiledFunctionService implements Lifecycle {
             definition.init(getFunctionCompilationContext());
             return definition;
           } catch (final UnsupportedOperationException e) {
-            s_logger.warn("Function {}, is not supported in this configuration - {}", definition.getUniqueId(), e.getMessage());
-            s_logger.info("Caught exception", e);
+            LOGGER.warn("Function {}, is not supported in this configuration - {}", definition.getUniqueId(), e.getMessage());
+            LOGGER.info("Caught exception", e);
             return null;
           } catch (final Exception e) {
-            s_logger.error("Couldn't initialize function {}", definition.getUniqueId());
+            LOGGER.error("Couldn't initialize function {}", definition.getUniqueId());
             throw new OpenGammaRuntimeException("Couldn't initialize " + definition.getShortName(), e);
           }
         }
@@ -255,7 +255,7 @@ public class CompiledFunctionService implements Lifecycle {
       jobs.join();
     } catch (final InterruptedException e) {
       Thread.interrupted();
-      s_logger.warn("Interrupted while initializing function definitions.");
+      LOGGER.warn("Interrupted while initializing function definitions.");
       throw new OpenGammaRuntimeException("Interrupted while initializing function definitions. ViewProcessor not safe to use.");
     }
     _initializedFunctionRepository = initialized;
@@ -265,7 +265,7 @@ public class CompiledFunctionService implements Lifecycle {
 
   /**
    * Initializes all functions.
-   * 
+   *
    * @return the set of object identifiers that should trigger re-initialization
    */
   public Set<ObjectId> initialize() {
@@ -274,12 +274,12 @@ public class CompiledFunctionService implements Lifecycle {
 
   /**
    * Initializes all functions.
-   * 
+   *
    * @param initId the initialization identifier
    * @return the set of object identifiers that should trigger re-initialization
    */
   public synchronized Set<ObjectId> initialize(final long initId) {
-    s_logger.info("Initializing all function definitions to {}", initId);
+    LOGGER.info("Initializing all function definitions to {}", initId);
     _rawFunctionRepository = getFunctionRepositoryFactory().constructRepository(Instant.ofEpochMilli(initId));
     _initializedFunctionRepository = null;
     initializeImpl(initId, _rawFunctionRepository.getAllFunctions());
@@ -292,10 +292,10 @@ public class CompiledFunctionService implements Lifecycle {
       // Same repository; just reinitialization of some functions
       final Set<FunctionDefinition> reinitialize = _reinitializingFunctionDefinitions;
       if (reinitialize.isEmpty()) {
-        s_logger.warn("No functions registered for re-initialization");
+        LOGGER.warn("No functions registered for re-initialization");
         getFunctionCompilationContext().setFunctionInitId(initId);
       } else {
-        initializeImpl(initId, new ArrayList<FunctionDefinition>(reinitialize));
+        initializeImpl(initId, new ArrayList<>(reinitialize));
       }
     } else {
       // Different repository; full initialization
@@ -307,14 +307,14 @@ public class CompiledFunctionService implements Lifecycle {
 
   public synchronized void reinitializeIfNeeded(final long initId) {
     if (getFunctionCompilationContext().getFunctionInitId() != initId) {
-      s_logger.info("Re-initializing function definitions - was {} required {}", getFunctionCompilationContext().getFunctionInitId(), initId);
+      LOGGER.info("Re-initializing function definitions - was {} required {}", getFunctionCompilationContext().getFunctionInitId(), initId);
       reinitializeImpl(initId);
     }
   }
 
   /**
    * Re-initializes functions that requested re-initialization during their previous initialization.
-   * 
+   *
    * @return the set of unique identifiers requested by any initialized functions that should trigger re-initialization
    */
   public synchronized Set<ObjectId> reinitialize() {
@@ -322,20 +322,20 @@ public class CompiledFunctionService implements Lifecycle {
     while (getFunctionCompilationContext().getFunctionInitId() == initId) {
       try {
         Thread.sleep(1);
-      } catch (InterruptedException e) {
+      } catch (final InterruptedException e) {
         throw new OpenGammaRuntimeException("Interrupted", e);
       }
       initId = System.currentTimeMillis();
     }
-    s_logger.info("Re-initializing all function definitions to {}", initId);
+    LOGGER.info("Re-initializing all function definitions to {}", initId);
     reinitializeImpl(initId);
     return _reinitializingFunctionRequirements;
   }
 
   /**
-   * Returns the source of the underlying (raw) function repository. The repository sourced from here will be used during initialization operations to populate the {@link #getFunctionRepository} and
-   * {@link #getInitializedFunctionRepository} values.
-   * 
+   * Returns the source of the underlying (raw) function repository. The repository sourced from here will be used during
+   * initialization operations to populate the {@link #getFunctionRepository} and {@link #getInitializedFunctionRepository} values.
+   *
    * @return the source of the underlying function repository, not null
    */
   public FunctionRepositoryFactory getFunctionRepositoryFactory() {
@@ -343,9 +343,9 @@ public class CompiledFunctionService implements Lifecycle {
   }
 
   /**
-   * Returns the underlying (raw) function repository. Definitions in the repository may or may not be properly initialized. If functions are needed that can be reliably used, use
-   * {@link #getInitializedFunctionRepository} instead.
-   * 
+   * Returns the underlying (raw) function repository. Definitions in the repository may or may not be properly initialized.
+   * If functions are needed that can be reliably used, use {@link #getInitializedFunctionRepository} instead.
+   *
    * @return the function repository, not null
    */
   public synchronized FunctionRepository getFunctionRepository() {
@@ -353,8 +353,9 @@ public class CompiledFunctionService implements Lifecycle {
   }
 
   /**
-   * Returns a repository of initialized functions. This may be a subset of the underlying (raw) repository if one or more threw exceptions during their {@link FunctionDefinition#init} calls.
-   * 
+   * Returns a repository of initialized functions. This may be a subset of the underlying (raw) repository if one or more
+   * threw exceptions during their {@link FunctionDefinition#init} calls.
+   *
    * @return the function repository, not null
    */
   public synchronized FunctionRepository getInitializedFunctionRepository() {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.timeseries.precise.zdt;
@@ -25,7 +25,7 @@ import com.opengamma.timeseries.precise.PreciseDoubleTimeSeries;
  */
 public final class ImmutableZonedDateTimeDoubleTimeSeries
     extends AbstractZonedDateTimeDoubleTimeSeries
-    implements ZonedDateTimeDoubleTimeSeries, Serializable {
+    implements Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = -43654613865187568L;
@@ -48,29 +48,29 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
    * Creates an empty builder, used to create time-series.
    * <p>
    * The builder has methods to create and modify a time-series.
-   * 
+   *
    * @param zone  the time-zone, not null
    * @return the time-series builder, not null
    */
-  public static ZonedDateTimeDoubleTimeSeriesBuilder builder(ZoneId zone) {
+  public static ZonedDateTimeDoubleTimeSeriesBuilder builder(final ZoneId zone) {
     return new ImmutableZonedDateTimeDoubleTimeSeriesBuilder(zone);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Obtains an empty time-series.
-   * 
+   *
    * @param zone  the time-zone, not null
    * @return the time-series, not null
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries ofEmpty(ZoneId zone) {
+  public static ImmutableZonedDateTimeDoubleTimeSeries ofEmpty(final ZoneId zone) {
     Objects.requireNonNull(zone, "zone");
     return new ImmutableZonedDateTimeDoubleTimeSeries(new long[0], new double[0], zone);
   }
 
   /**
    * Obtains an empty time-series using a UTC zone.
-   * 
+   *
    * @return the time-series, not null
    */
   public static ImmutableZonedDateTimeDoubleTimeSeries ofEmptyUTC() {
@@ -79,179 +79,179 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
 
   /**
    * Obtains a time-series from a single instant and value.
-   * 
+   *
    * @param instant  the singleton instant, not null
    * @param value  the singleton value
    * @return the time-series, not null
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries of(ZonedDateTime instant, double value) {
+  public static ImmutableZonedDateTimeDoubleTimeSeries of(final ZonedDateTime instant, final double value) {
     Objects.requireNonNull(instant, "instant");
-    long[] timesArray = new long[] {ZonedDateTimeToLongConverter.convertToLong(instant)};
-    double[] valuesArray = new double[] {value};
+    final long[] timesArray = new long[] {ZonedDateTimeToLongConverter.convertToLong(instant)};
+    final double[] valuesArray = new double[] {value};
     return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, instant.getZone());
   }
 
   /**
    * Obtains a time-series from matching arrays of instants and values.
-   * 
+   *
    * @param instants  the date array, not null
    * @param values  the value array, not null
    * @param zone  the time-zone, may be null if the arrays are non-empty
    * @return the time-series, not null
    * @throws IllegalArgumentException if the arrays are of different lengths
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries of(ZonedDateTime[] instants, Double[] values, ZoneId zone) {
-    long[] timesArray = convertToLongArray(instants);
-    double[] valuesArray = convertToDoubleArray(values);
+  public static ImmutableZonedDateTimeDoubleTimeSeries of(final ZonedDateTime[] instants, final Double[] values, final ZoneId zone) {
+    final long[] timesArray = convertToLongArray(instants);
+    final double[] valuesArray = convertToDoubleArray(values);
     validate(timesArray, valuesArray);
-    zone = (zone != null ? zone : instants[0].getZone());
-    return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, zone);
+    final ZoneId zoneId = zone != null ? zone : instants[0].getZone();
+    return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, zoneId);
   }
 
   /**
    * Obtains a time-series from matching arrays of instants and values, using a UTC zone.
-   * 
+   *
    * @param instants  the instant array, not null
    * @param values  the value array, not null
    * @return the time-series, not null
    * @throws IllegalArgumentException if the arrays are of different lengths
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries ofUTC(ZonedDateTime[] instants, Double[] values) {
+  public static ImmutableZonedDateTimeDoubleTimeSeries ofUTC(final ZonedDateTime[] instants, final Double[] values) {
     return of(instants, values, ZoneOffset.UTC);
   }
 
   /**
    * Obtains a time-series from matching arrays of instants and values.
-   * 
+   *
    * @param instants  the instant array, not null
    * @param values  the value array, not null
    * @param zone  the time-zone, may be null if the arrays are non-empty
    * @return the time-series, not null
    * @throws IllegalArgumentException if the arrays are of different lengths
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries of(ZonedDateTime[] instants, double[] values, ZoneId zone) {
-    long[] timesArray = convertToLongArray(instants);
+  public static ImmutableZonedDateTimeDoubleTimeSeries of(final ZonedDateTime[] instants, final double[] values, final ZoneId zone) {
+    final long[] timesArray = convertToLongArray(instants);
     validate(timesArray, values);
-    double[] valuesArray = values.clone();
-    zone = (zone != null ? zone : instants[0].getZone());
-    return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, zone);
+    final double[] valuesArray = values.clone();
+    final ZoneId zoneId = zone != null ? zone : instants[0].getZone();
+    return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, zoneId);
   }
 
   /**
    * Obtains a time-series from matching arrays of instants and values, using a UTC zone.
-   * 
+   *
    * @param instants  the instant array, not null
    * @param values  the value array, not null
    * @return the time-series, not null
    * @throws IllegalArgumentException if the arrays are of different lengths
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries ofUTC(ZonedDateTime[] instants, double[] values) {
+  public static ImmutableZonedDateTimeDoubleTimeSeries ofUTC(final ZonedDateTime[] instants, final double[] values) {
     return of(instants, values, ZoneOffset.UTC);
   }
 
   /**
    * Obtains a time-series from matching arrays of instants and values.
-   * 
+   *
    * @param instants  the instant array, not null
    * @param values  the value array, not null
    * @param zone  the time-zone, not null
    * @return the time-series, not null
    * @throws IllegalArgumentException if the arrays are of different lengths
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries of(long[] instants, double[] values, ZoneId zone) {
+  public static ImmutableZonedDateTimeDoubleTimeSeries of(final long[] instants, final double[] values, final ZoneId zone) {
     validate(instants, values);
     Objects.requireNonNull(zone);
-    long[] timesArray = instants.clone();
-    double[] valuesArray = values.clone();
+    final long[] timesArray = instants.clone();
+    final double[] valuesArray = values.clone();
     return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, zone);
   }
 
   /**
    * Obtains a time-series from matching arrays of instants and values, using a UTC zone.
-   * 
+   *
    * @param instants  the instant array, not null
    * @param values  the value array, not null
    * @return the time-series, not null
    * @throws IllegalArgumentException if the arrays are of different lengths
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries ofUTC(long[] instants, double[] values) {
+  public static ImmutableZonedDateTimeDoubleTimeSeries ofUTC(final long[] instants, final double[] values) {
     return of(instants, values, ZoneOffset.UTC);
   }
 
   /**
    * Obtains a time-series from matching arrays of instants and values.
-   * 
+   *
    * @param instants  the instant list, not null
    * @param values  the value list, not null
    * @param zone  the time-zone, may be null if the collections are non-empty
    * @return the time-series, not null
    * @throws IllegalArgumentException if the collections are of different lengths
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries of(Collection<ZonedDateTime> instants, Collection<Double> values, ZoneId zone) {
-    long[] timesArray = convertToLongArray(instants);
-    double[] valuesArray = convertToDoubleArray(values);
-    zone = (zone != null ? zone : instants.iterator().next().getZone());
+  public static ImmutableZonedDateTimeDoubleTimeSeries of(final Collection<ZonedDateTime> instants, final Collection<Double> values, final ZoneId zone) {
+    final long[] timesArray = convertToLongArray(instants);
+    final double[] valuesArray = convertToDoubleArray(values);
+    final ZoneId zoneId = zone != null ? zone : instants.iterator().next().getZone();
     validate(timesArray, valuesArray);
-    return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, zone);
+    return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, zoneId);
   }
 
   /**
    * Obtains a time-series from matching arrays of instants and values, using a UTC zone.
-   * 
+   *
    * @param instants  the instant list, not null
    * @param values  the value list, not null
    * @return the time-series, not null
    * @throws IllegalArgumentException if the arrays are of different lengths
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries ofUTC(Collection<ZonedDateTime> instants, Collection<Double> values) {
+  public static ImmutableZonedDateTimeDoubleTimeSeries ofUTC(final Collection<ZonedDateTime> instants, final Collection<Double> values) {
     return of(instants, values, ZoneOffset.UTC);
   }
 
   /**
    * Obtains a time-series from another time-series.
-   * 
+   *
    * @param timeSeries  the time-series, not null
    * @param zone  the time-zone, not null
    * @return the time-series, not null
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries of(PreciseDoubleTimeSeries<?> timeSeries, ZoneId zone) {
+  public static ImmutableZonedDateTimeDoubleTimeSeries of(final PreciseDoubleTimeSeries<?> timeSeries, final ZoneId zone) {
     Objects.requireNonNull(zone, "zone");
-    if (timeSeries instanceof ImmutableZonedDateTimeDoubleTimeSeries &&
-        ((ImmutableZonedDateTimeDoubleTimeSeries) timeSeries).getZone().equals(zone)) {
+    if (timeSeries instanceof ImmutableZonedDateTimeDoubleTimeSeries
+       && ((ImmutableZonedDateTimeDoubleTimeSeries) timeSeries).getZone().equals(zone)) {
       return (ImmutableZonedDateTimeDoubleTimeSeries) timeSeries;
     }
-    PreciseDoubleTimeSeries<?> other = (PreciseDoubleTimeSeries<?>) timeSeries;
-    long[] timesArray = other.timesArrayFast();
-    double[] valuesArray = other.valuesArrayFast();
+    final PreciseDoubleTimeSeries<?> other = timeSeries;
+    final long[] timesArray = other.timesArrayFast();
+    final double[] valuesArray = other.valuesArrayFast();
     return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, zone);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Obtains a time-series from another time-series.
-   * 
+   *
    * @param timeSeries  the time-series, not null
    * @param zone  the time-zone, not null
    * @return the time-series, not null
    */
-  public static ImmutableZonedDateTimeDoubleTimeSeries from(DoubleTimeSeries<ZonedDateTime> timeSeries, ZoneId zone) {
+  public static ImmutableZonedDateTimeDoubleTimeSeries from(final DoubleTimeSeries<ZonedDateTime> timeSeries, final ZoneId zone) {
     Objects.requireNonNull(zone, "zone");
     if (timeSeries instanceof PreciseDoubleTimeSeries) {
       return of((PreciseDoubleTimeSeries<?>) timeSeries, zone);
     }
-    long[] timesArray = convertToLongArray(timeSeries.timesArray());
-    double[] valuesArray = timeSeries.valuesArrayFast();
+    final long[] timesArray = convertToLongArray(timeSeries.timesArray());
+    final double[] valuesArray = timeSeries.valuesArrayFast();
     return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, zone);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Validates the data before creation.
-   * 
+   *
    * @param instants  the times, not null
    * @param values  the values, not null
    */
-  private static void validate(long[] instants, double[] values) {
+  private static void validate(final long[] instants, final double[] values) {
     if (instants == null || values == null) {
       throw new NullPointerException("Array must not be null");
     }
@@ -261,7 +261,7 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
     }
     // check dates are ordered
     long maxTime = Long.MIN_VALUE;
-    for (long time : instants) {
+    for (final long time : instants) {
       if (time < maxTime) {
         throw new IllegalArgumentException("ZonedDateTimes must be ordered");
       }
@@ -271,12 +271,12 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param instants  the times, not null
    * @param values  the values, not null
    * @param zone  the time-zone, not null
    */
-  ImmutableZonedDateTimeDoubleTimeSeries(long[] instants, double[] values, ZoneId zone) {
+  ImmutableZonedDateTimeDoubleTimeSeries(final long[] instants, final double[] values, final ZoneId zone) {
     _times = instants;
     _values = values;
     _zone = zone;
@@ -294,7 +294,7 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
   }
 
   @Override
-  ZonedDateTimeDoubleTimeSeries newInstanceFast(long[] instant, double[] values) {
+  ZonedDateTimeDoubleTimeSeries newInstanceFast(final long[] instant, final double[] values) {
     return new ImmutableZonedDateTimeDoubleTimeSeries(instant, values, _zone);
   }
 
@@ -305,7 +305,7 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries withZone(ZoneId zone) {
+  public ZonedDateTimeDoubleTimeSeries withZone(final ZoneId zone) {
     Objects.requireNonNull(zone, "zone");
     if (zone.equals(_zone)) {
       return this;
@@ -322,28 +322,27 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
 
   //-------------------------------------------------------------------------
   @Override
-  public boolean containsTime(long instant) {
-    int binarySearch = Arrays.binarySearch(_times, instant);
-    return (binarySearch >= 0);
+  public boolean containsTime(final long instant) {
+    final int binarySearch = Arrays.binarySearch(_times, instant);
+    return binarySearch >= 0;
   }
 
   @Override
-  public Double getValue(long instant) {
-    int binarySearch = Arrays.binarySearch(_times, instant);
+  public Double getValue(final long instant) {
+    final int binarySearch = Arrays.binarySearch(_times, instant);
     if (binarySearch >= 0) {
       return _values[binarySearch];
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
-  public long getTimeAtIndexFast(int index) {
+  public long getTimeAtIndexFast(final int index) {
     return _times[index];
   }
 
   @Override
-  public double getValueAtIndexFast(int index) {
+  public double getValueAtIndexFast(final int index) {
     return _values[index];
   }
 
@@ -352,7 +351,7 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
   public long getEarliestTimeFast() {
     try {
       return _times[0];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -361,7 +360,7 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
   public double getEarliestValueFast() {
     try {
       return _values[0];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -370,7 +369,7 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
   public long getLatestTimeFast() {
     try {
       return _times[_times.length - 1];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -379,7 +378,7 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
   public double getLatestValueFast() {
     try {
       return _values[_values.length - 1];
-    } catch (IndexOutOfBoundsException ex) {
+    } catch (final IndexOutOfBoundsException ex) {
       throw new NoSuchElementException("Series is empty");
     }
   }
@@ -397,78 +396,81 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries subSeriesFast(long startTime, boolean includeStart, long endTime, boolean includeEnd) {
+  public ZonedDateTimeDoubleTimeSeries subSeriesFast(final long startTime, final boolean includeStart,
+      final long endTime, final boolean includeEnd) {
     if (endTime < startTime) {
       throw new IllegalArgumentException("Invalid subSeries: endTime < startTime");
+    }
+    // special case when this is empty
+    if (isEmpty()) {
+      return ofEmpty(_zone);
     }
     // special case for start equals end
     if (startTime == endTime) {
       if (includeStart && includeEnd) {
-        int pos = Arrays.binarySearch(_times, startTime);
+        final int pos = Arrays.binarySearch(_times, startTime);
         if (pos >= 0) {
           return new ImmutableZonedDateTimeDoubleTimeSeries(new long[] {startTime}, new double[] {_values[pos]}, _zone);
         }
       }
       return ofEmpty(_zone);
     }
-    // special case when this is empty
-    if (isEmpty()) {
-      return ofEmpty(_zone);
-    }
     // normalize to include start and exclude end
-    if (includeStart == false) {
-      startTime++;
+    long start = startTime;
+    if (!includeStart) {
+      start++;
     }
+    long end = endTime;
     if (includeEnd) {
-      if (endTime != Long.MAX_VALUE) {
-        endTime++;
+      if (end != Long.MAX_VALUE) {
+        end++;
       }
     }
     // calculate
-    int startPos = Arrays.binarySearch(_times, startTime);
+    int startPos = Arrays.binarySearch(_times, start);
     startPos = startPos >= 0 ? startPos : -(startPos + 1);
-    int endPos = Arrays.binarySearch(_times, endTime);
+    int endPos = Arrays.binarySearch(_times, end);
     endPos = endPos >= 0 ? endPos : -(endPos + 1);
-    if (includeEnd && endTime == Long.MAX_VALUE) {
+    if (includeEnd && end == Long.MAX_VALUE) {
       endPos = _times.length;
     }
-    long[] timesArray = Arrays.copyOfRange(_times, startPos, endPos);
-    double[] valuesArray = Arrays.copyOfRange(_values, startPos, endPos);
+    final long[] timesArray = Arrays.copyOfRange(_times, startPos, endPos);
+    final double[] valuesArray = Arrays.copyOfRange(_values, startPos, endPos);
     return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, _zone);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries head(int numItems) {
+  public ZonedDateTimeDoubleTimeSeries head(final int numItems) {
     if (numItems == size()) {
       return this;
     }
-    long[] timesArray = Arrays.copyOfRange(_times, 0, numItems);
-    double[] valuesArray = Arrays.copyOfRange(_values, 0, numItems);
+    final long[] timesArray = Arrays.copyOfRange(_times, 0, numItems);
+    final double[] valuesArray = Arrays.copyOfRange(_values, 0, numItems);
     return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, _zone);
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries tail(int numItems) {
-    int size = size();
+  public ZonedDateTimeDoubleTimeSeries tail(final int numItems) {
+    final int size = size();
     if (numItems == size) {
       return this;
     }
-    long[] timesArray = Arrays.copyOfRange(_times, size - numItems, size);
-    double[] valuesArray = Arrays.copyOfRange(_values, size - numItems, size);
+    final long[] timesArray = Arrays.copyOfRange(_times, size - numItems, size);
+    final double[] valuesArray = Arrays.copyOfRange(_values, size - numItems, size);
     return new ImmutableZonedDateTimeDoubleTimeSeries(timesArray, valuesArray, _zone);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ImmutableZonedDateTimeDoubleTimeSeries newInstance(ZonedDateTime[] instants, Double[] values) {
+  public ImmutableZonedDateTimeDoubleTimeSeries newInstance(final ZonedDateTime[] instants, final Double[] values) {
     return of(instants, values, _zone);
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public ZonedDateTimeDoubleTimeSeries operate(UnaryOperator operator) {
-    double[] valuesArray = valuesArrayFast();
+  public ZonedDateTimeDoubleTimeSeries operate(final UnaryOperator operator) {
+    final double[] valuesArray = valuesArrayFast();
     for (int i = 0; i < valuesArray.length; i++) {
       valuesArray[i] = operator.operate(valuesArray[i]);
     }
@@ -476,8 +478,8 @@ public final class ImmutableZonedDateTimeDoubleTimeSeries
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries operate(double other, BinaryOperator operator) {
-    double[] valuesArray = valuesArrayFast();
+  public ZonedDateTimeDoubleTimeSeries operate(final double other, final BinaryOperator operator) {
+    final double[] valuesArray = valuesArrayFast();
     for (int i = 0; i < valuesArray.length; i++) {
       valuesArray[i] = operator.operate(valuesArray[i], other);
     }

@@ -14,18 +14,18 @@ import java.util.concurrent.TimeUnit;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  *
  * @author kirk
  */
 public class BlockingQueueByteArraySource implements ByteArraySource {
   private final BlockingQueue<byte[]> _queue;
-  
+
   public BlockingQueueByteArraySource() {
     this(new LinkedBlockingQueue<byte[]>());
   }
-  
-  public BlockingQueueByteArraySource(BlockingQueue<byte[]> queue) {
+
+  public BlockingQueueByteArraySource(final BlockingQueue<byte[]> queue) {
     ArgumentChecker.notNull(queue, "queue");
     _queue = queue;
   }
@@ -38,12 +38,12 @@ public class BlockingQueueByteArraySource implements ByteArraySource {
   }
 
   @Override
-  public List<byte[]> batchReceive(long maxWaitInMilliseconds) {
-    List<byte[]> result = new LinkedList<byte[]>();
+  public List<byte[]> batchReceive(final long maxWaitInMilliseconds) {
+    final List<byte[]> result = new LinkedList<>();
     byte[] head = null;
     try {
       head = getQueue().poll(maxWaitInMilliseconds, TimeUnit.MILLISECONDS);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.interrupted();
     }
     if (head != null) {
@@ -55,16 +55,16 @@ public class BlockingQueueByteArraySource implements ByteArraySource {
 
   @Override
   public List<byte[]> batchReceiveNoWait() {
-    List<byte[]> result = new LinkedList<byte[]>();
+    final List<byte[]> result = new LinkedList<>();
     getQueue().drainTo(result);
     return result;
   }
 
   @Override
-  public byte[] receive(long maxWaitInMilliseconds) {
+  public byte[] receive(final long maxWaitInMilliseconds) {
     try {
       return getQueue().poll(maxWaitInMilliseconds, TimeUnit.MILLISECONDS);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.interrupted();
     }
     return null;

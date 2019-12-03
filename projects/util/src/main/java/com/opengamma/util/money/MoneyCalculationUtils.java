@@ -33,7 +33,7 @@ public final class MoneyCalculationUtils {
   //-------------------------------------------------------------------------
   /**
    * Adds two amounts rounding to two decimal places.
-   * 
+   *
    * @param baseAmount  the base amount, not null
    * @param amountToAdd  the amount to add, not null
    * @return the total, not null
@@ -44,7 +44,7 @@ public final class MoneyCalculationUtils {
 
   /**
    * Subtract one amount from another rounding to two decimal places.
-   * 
+   *
    * @param baseAmount  the amount to subtract from, not null
    * @param amountToSubtract  the amount to subtract, not null
    * @return the subtraction result, not null
@@ -55,11 +55,11 @@ public final class MoneyCalculationUtils {
 
   /**
    * Rounds an amount to two decimal places.
-   * 
+   *
    * @param amount  the amount to round, not null
    * @return the rounded amount, not null
    */
-  public static BigDecimal rounded(BigDecimal amount) {
+  public static BigDecimal rounded(final BigDecimal amount) {
     return amount.setScale(DECIMALS, ROUNDING_MODE);
   }
 

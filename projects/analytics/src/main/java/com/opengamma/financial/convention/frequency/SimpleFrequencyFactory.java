@@ -29,25 +29,27 @@ public final class SimpleFrequencyFactory
    */
   public static final SimpleFrequencyFactory INSTANCE = new SimpleFrequencyFactory();
   /**
-   * Map of periods per year to convention, only contains frequencies with an integer number of periods per year
-   * (plus {@link SimpleFrequency#TWENTY_EIGHT_DAYS} with a key of 13 periods).
+   * Map of periods per year to convention, only contains frequencies with an integer number of periods per year (plus {@link SimpleFrequency#TWENTY_EIGHT_DAYS}
+   * with a key of 13 periods).
    */
   private final Map<Integer, SimpleFrequency> _periodsMap = new HashMap<>();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Finds a convention by name, ignoring case.
-   * 
-   * @param name  the name of the instance to find, not null
+   *
+   * @param name
+   *          the name of the instance to find, not null
    * @return the convention, not null
-   * @throws IllegalArgumentException if the name is not found
+   * @throws IllegalArgumentException
+   *           if the name is not found
    */
   @FromString
   public static SimpleFrequency of(final String name) {
     return INSTANCE.instance(name);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Restricted constructor, hard coding the conventions.
    */
@@ -73,21 +75,22 @@ public final class SimpleFrequencyFactory
     addInstance(SimpleFrequency.TEN_MONTHS, "10m");
     addInstance(SimpleFrequency.ELEVEN_MONTHS, "11m");
     storeByPeriodCount(SimpleFrequency.DAILY,
-                       SimpleFrequency.WEEKLY,
-                       SimpleFrequency.BIWEEKLY,
-                       SimpleFrequency.TWENTY_EIGHT_DAYS,
-                       SimpleFrequency.MONTHLY,
-                       SimpleFrequency.BIMONTHLY,
-                       SimpleFrequency.QUARTERLY,
-                       SimpleFrequency.SEMI_ANNUAL,
-                       SimpleFrequency.ANNUAL);
+        SimpleFrequency.WEEKLY,
+        SimpleFrequency.BIWEEKLY,
+        SimpleFrequency.TWENTY_EIGHT_DAYS,
+        SimpleFrequency.MONTHLY,
+        SimpleFrequency.BIMONTHLY,
+        SimpleFrequency.QUARTERLY,
+        SimpleFrequency.SEMI_ANNUAL,
+        SimpleFrequency.ANNUAL);
   }
 
   /**
-   * Stores the frequencies keyed by the number of periods per year. This only really makes sense for periods
-   * with an integer number of periods per year. It will fail if it is called with multiple frequencies whose
-   * period counts round to the same integer.
-   * @param frequencies The frequencies to keyed on their (integer) period count.
+   * Stores the frequencies keyed by the number of periods per year. This only really makes sense for periods with an integer number of periods per year. It
+   * will fail if it is called with multiple frequencies whose period counts round to the same integer.
+   *
+   * @param frequencies
+   *          The frequencies to keyed on their (integer) period count.
    */
   private void storeByPeriodCount(final SimpleFrequency... frequencies) {
     for (final SimpleFrequency frequency : frequencies) {
@@ -96,19 +99,19 @@ public final class SimpleFrequencyFactory
       // non-integer period count rounded to the same integer
       if (_periodsMap.containsKey(periodsPerYear)) {
         final SimpleFrequency existingFrequency = _periodsMap.get(periodsPerYear);
-        throw new OpenGammaRuntimeException("Cannot overwrite " + existingFrequency.getName() +
-                                                " with " + frequency.getName());
+        throw new OpenGammaRuntimeException("Cannot overwrite " + existingFrequency.getName()
+            + " with " + frequency.getName());
       }
       _periodsMap.put(periodsPerYear, frequency);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Gets a convention by name.
-   * Matching is case insensitive.
-   * 
-   * @param name  the name, not null
+   * Gets a convention by name. Matching is case insensitive.
+   *
+   * @param name
+   *          the name, not null
    * @return the convention, null if not found
    * @deprecated Use {@link #of(String)} or {@link #instance(String)}.
    */
@@ -116,7 +119,7 @@ public final class SimpleFrequencyFactory
   public SimpleFrequency getFrequency(final String name) {
     try {
       return instance(name);
-    } catch (IllegalArgumentException ex) {
+    } catch (final IllegalArgumentException ex) {
       return null;
     }
   }
@@ -125,8 +128,9 @@ public final class SimpleFrequencyFactory
    * Gets a convention by the number of periods per year.
    * <p>
    * Some underlying data systems use this representation for frequency.
-   * 
-   * @param periods  the number of periods per year, zero means once at end
+   *
+   * @param periods
+   *          the number of periods per year, zero means once at end
    * @return the convention, null if not found
    */
   public SimpleFrequency getFrequency(final int periods) {
@@ -134,15 +138,15 @@ public final class SimpleFrequencyFactory
   }
 
   /**
-   * Iterates over the available frequencies. No particular ordering is specified and conventions may
-   * exist in the system not provided by this factory that aren't included as part of this enumeration.
-   * 
+   * Iterates over the available frequencies. No particular ordering is specified and conventions may exist in the system not provided by this factory that
+   * aren't included as part of this enumeration.
+   *
    * @return the available conventions, not null
    * @deprecated Use {@link #instanceMap()}
    */
   @Deprecated
   public Iterator<SimpleFrequency> enumerateAvailableFrequencies() {
-    List<SimpleFrequency> frequencies = new ArrayList<>(instanceMap().values());
+    final List<SimpleFrequency> frequencies = new ArrayList<>(instanceMap().values());
     Collections.sort(frequencies, new Comparator<SimpleFrequency>() {
       @Override
       public int compare(final SimpleFrequency o1, final SimpleFrequency o2) {

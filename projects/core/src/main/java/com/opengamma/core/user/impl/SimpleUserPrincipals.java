@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.user.impl;
@@ -44,7 +44,7 @@ public class SimpleUserPrincipals implements Bean, UserPrincipals, Serializable 
    * The user name that uniquely identifies the user.
    * This is the primary identifier of a user.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private String _userName;
   /**
    * The bundle of alternate user identifiers.
@@ -52,7 +52,7 @@ public class SimpleUserPrincipals implements Bean, UserPrincipals, Serializable 
    * This allows the user identifiers of external systems to be associated with the account
    * Some of these may be unique within the external system, others may be more descriptive.
    */
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _alternateIds = ExternalIdBundle.EMPTY;
   /**
    * The network address of the user, which is intended to be an IP address.
@@ -60,24 +60,24 @@ public class SimpleUserPrincipals implements Bean, UserPrincipals, Serializable 
    * Unfortunately it is not possible to guarantee the presence of accuracy of the IP address,
    * notably as a result of web browser and network proxy restrictions.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _networkAddress;
   /**
    * The primary email address associated with the account.
    */
-  @PropertyDefinition
+  @PropertyDefinition(overrideGet = true)
   private String _emailAddress;
 
   //-------------------------------------------------------------------------
   /**
    * Creates a {@code SimpleUserPrincipals} from another instance.
-   * 
+   *
    * @param principalsToCopy  the principals to copy, not null
    * @return the new principals, not null
    */
-  public static SimpleUserPrincipals from(UserPrincipals principalsToCopy) {
+  public static SimpleUserPrincipals from(final UserPrincipals principalsToCopy) {
     ArgumentChecker.notNull(principalsToCopy, "profileToCopy");
-    SimpleUserPrincipals copy = new SimpleUserPrincipals();
+    final SimpleUserPrincipals copy = new SimpleUserPrincipals();
     copy.setUserName(principalsToCopy.getUserName());
     copy.setAlternateIds(principalsToCopy.getAlternateIds());
     copy.setNetworkAddress(principalsToCopy.getNetworkAddress());
@@ -89,13 +89,13 @@ public class SimpleUserPrincipals implements Bean, UserPrincipals, Serializable 
    * Creates a {@code SimpleUserPrincipals} from an account.
    * <p>
    * The network address will be null.
-   * 
+   *
    * @param account  the account to copy, not null
    * @return the new principals, not null
    */
-  public static SimpleUserPrincipals from(UserAccount account) {
+  public static SimpleUserPrincipals from(final UserAccount account) {
     ArgumentChecker.notNull(account, "account");
-    SimpleUserPrincipals principals = new SimpleUserPrincipals();
+    final SimpleUserPrincipals principals = new SimpleUserPrincipals();
     principals.setUserName(account.getUserName());
     principals.setAlternateIds(account.getAlternateIds());
     principals.setEmailAddress(account.getEmailAddress());
@@ -144,6 +144,7 @@ public class SimpleUserPrincipals implements Bean, UserPrincipals, Serializable 
    * This is the primary identifier of a user.
    * @return the value of the property, not null
    */
+  @Override
   public String getUserName() {
     return _userName;
   }
@@ -175,6 +176,7 @@ public class SimpleUserPrincipals implements Bean, UserPrincipals, Serializable 
    * Some of these may be unique within the external system, others may be more descriptive.
    * @return the value of the property, not null
    */
+  @Override
   public ExternalIdBundle getAlternateIds() {
     return _alternateIds;
   }
@@ -210,6 +212,7 @@ public class SimpleUserPrincipals implements Bean, UserPrincipals, Serializable 
    * notably as a result of web browser and network proxy restrictions.
    * @return the value of the property
    */
+  @Override
   public String getNetworkAddress() {
     return _networkAddress;
   }
@@ -241,6 +244,7 @@ public class SimpleUserPrincipals implements Bean, UserPrincipals, Serializable 
    * Gets the primary email address associated with the account.
    * @return the value of the property
    */
+  @Override
   public String getEmailAddress() {
     return _emailAddress;
   }

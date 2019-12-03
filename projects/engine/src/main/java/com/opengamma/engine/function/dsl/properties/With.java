@@ -11,9 +11,9 @@ import com.opengamma.lambdava.streams.StreamI;
 
 public class With extends ValuePropertiesModifier {
 
-  private StreamI<String> _propertyValues;
+  private final StreamI<String> _propertyValues;
 
-  public With(String propertyName, String... propertyValues) {
+  public With(final String propertyName, final String... propertyValues) {
     super(propertyName);
     _propertyValues = Stream.of(propertyValues);
   }
@@ -23,7 +23,7 @@ public class With extends ValuePropertiesModifier {
   }
 
   @Override
-  public ValueProperties.Builder modify(ValueProperties.Builder builder) {
+  public ValueProperties.Builder modify(final ValueProperties.Builder builder) {
     return builder.with(getPropertyName(), getPropertyValues().asList());
   }
 }

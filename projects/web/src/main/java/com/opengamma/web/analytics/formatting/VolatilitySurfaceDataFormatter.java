@@ -56,7 +56,7 @@ import com.opengamma.web.server.conversion.LabelFormatter;
   }
 
   @SuppressWarnings("unchecked")
-  private <X, Y> Map<String, Object> formatExpanded(final VolatilitySurfaceData<X, Y> surface) {
+  private static <X, Y> Map<String, Object> formatExpanded(final VolatilitySurfaceData<X, Y> surface) {
     // the x and y values won't necessarily be unique and won't necessarily map to a rectangular grid
     // this projects them onto a grid and inserts nulls where there's no data available
     final Set<X> xVals = surface.getUniqueXValues();
@@ -81,9 +81,8 @@ import com.opengamma.web.server.conversion.LabelFormatter;
     results.put(SurfaceFormatterUtils.Y_LABELS, getAxisLabels(yVals));
     if (isPlottable(surface)) {
       return formatForPlotting(surface, xVals, yVals, results);
-    } else {
-      return formatForGrid(surface, xVals, yVals, results);
     }
+    return formatForGrid(surface, xVals, yVals, results);
   }
 
   /**
@@ -91,10 +90,10 @@ import com.opengamma.web.server.conversion.LabelFormatter;
    * @param surface The surface data
    * @return The data formatted for display as text
    */
-  private <X, Y> Map<String, Object> formatForGrid(final VolatilitySurfaceData<X, Y> surface,
-                                                   final Set<X> xVals,
-                                                   final Set<Y> yVals,
-                                                   final Map<String, Object> baseResults) {
+  private static <X, Y> Map<String, Object> formatForGrid(final VolatilitySurfaceData<X, Y> surface,
+      final Set<X> xVals,
+      final Set<Y> yVals,
+      final Map<String, Object> baseResults) {
     final List<List<Double>> vol = Lists.newArrayListWithCapacity(yVals.size());
     for (final Y yVal : yVals) {
       final List<Double> volVals = Lists.newArrayListWithCapacity(xVals.size());
@@ -135,10 +134,10 @@ import com.opengamma.web.server.conversion.LabelFormatter;
    *          yTitle: "Y Axis Title",
    *          vol: [x0y0, x1y0,... , x0y1, x1y1,...]}
    */
-  private <X, Y> Map<String, Object> formatForPlotting(final VolatilitySurfaceData<X, Y> surface,
-                                                       final Set<X> xVals,
-                                                       final Set<Y> yVals,
-                                                       final Map<String, Object> baseResults) {
+  private static <X, Y> Map<String, Object> formatForPlotting(final VolatilitySurfaceData<X, Y> surface,
+      final Set<X> xVals,
+      final Set<Y> yVals,
+      final Map<String, Object> baseResults) {
     final Map<String, Object> results = Maps.newHashMap(baseResults);
     // the x and y values won't necessarily be unique and won't necessarily map to a rectangular grid
     // this projects them onto a grid and inserts nulls where there's no data available
@@ -163,7 +162,7 @@ import com.opengamma.web.server.conversion.LabelFormatter;
     return results;
   }
 
-  private List<String> getAxisLabels(final Collection values) {
+  private static List<String> getAxisLabels(final Collection values) {
     final List<String> labels = Lists.newArrayListWithCapacity(values.size());
     for (final Object value : values) {
       labels.add(LabelFormatter.format(value));
@@ -176,7 +175,7 @@ import com.opengamma.web.server.conversion.LabelFormatter;
    * @param axisValue A point on the axis
    * @return A numeric value corresponding to the value or null if there's no meaningful numeric value
    */
-  private Number getAxisValue(final Object axisValue) {
+  private static Number getAxisValue(final Object axisValue) {
     if (axisValue instanceof Number) {
       return (Number) axisValue;
     } else if (axisValue instanceof LocalDate) {
@@ -210,9 +209,8 @@ import com.opengamma.web.server.conversion.LabelFormatter;
   public DataType getDataTypeForValue(final VolatilitySurfaceData surfaceData) {
     if (isPlottable(surfaceData)) {
       return DataType.SURFACE_DATA;
-    } else {
-      return DataType.LABELLED_MATRIX_2D;
     }
+    return DataType.LABELLED_MATRIX_2D;
   }
 
   /**
@@ -221,7 +219,7 @@ import com.opengamma.web.server.conversion.LabelFormatter;
    * @param surfaceData  the surface data
    * @return true if the data can be sensibly plotted
    */
-  private boolean isPlottable(final VolatilitySurfaceData surfaceData) {
+  private static boolean isPlottable(final VolatilitySurfaceData surfaceData) {
     final Object[] xVals = surfaceData.getXs();
     final Object[] yVals = surfaceData.getYs();
 

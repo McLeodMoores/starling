@@ -32,24 +32,26 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Converts {@link YearOnYearInflationSwapSecurity} and {@link ZeroCouponInflationSwapSecurity} into the
- * classes that the analytics library requires to calculate prices and risk.
+ * Converts {@link YearOnYearInflationSwapSecurity} and {@link ZeroCouponInflationSwapSecurity} into the classes that the analytics library requires to
+ * calculate prices and risk.
  */
 public class InflationSwapSecurityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
   /** A security source */
   private final SecuritySource _securitySource;
-  /** The convention source */
-  private final ConventionSource _conventionSource;
   /** The region source */
   private final RegionSource _regionSource;
   /** The holiday source */
   private final HolidaySource _holidaySource;
 
   /**
-   * @param securitySource The security source, not null
-   * @param conventionSource The convention source, not null
-   * @param regionSource The region source, not null
-   * @param holidaySource The holiday source, not null
+   * @param securitySource
+   *          The security source, not null
+   * @param conventionSource
+   *          The convention source, not null
+   * @param regionSource
+   *          The region source, not null
+   * @param holidaySource
+   *          The holiday source, not null
    */
   public InflationSwapSecurityConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final RegionSource regionSource,
       final HolidaySource holidaySource) {
@@ -57,7 +59,6 @@ public class InflationSwapSecurityConverter extends FinancialSecurityVisitorAdap
     ArgumentChecker.notNull(regionSource, "region source");
     ArgumentChecker.notNull(holidaySource, "holiday source");
     _securitySource = securitySource;
-    _conventionSource = conventionSource;
     _regionSource = regionSource;
     _holidaySource = holidaySource;
   }
@@ -111,7 +112,8 @@ public class InflationSwapSecurityConverter extends FinancialSecurityVisitorAdap
     final boolean exchangeNotional = security.isExchangeInitialNotional() && security.isExchangeFinalNotional();
     final double notional = ((InterestRateNotional) fixedLeg.getNotional()).getAmount();
     if (isMonthly) {
-      return SwapFixedInflationYearOnYearDefinition.fromMonthly(priceIndex, security.getEffectiveDate(), paymentPeriod, (int) (maturityTenor.toTotalMonths() / 12), fixedRate,
+      return SwapFixedInflationYearOnYearDefinition.fromMonthly(priceIndex, security.getEffectiveDate(), paymentPeriod,
+          (int) (maturityTenor.toTotalMonths() / 12), fixedRate,
           notional, isPayer, businessDayConvention, calendar, isEOM, fixedLegDayCount, conventionalMonthLag, quotationMonthLag, exchangeNotional);
     }
     return SwapFixedInflationYearOnYearDefinition.fromInterpolation(priceIndex, security.getEffectiveDate(), paymentPeriod, maturityTenor, fixedRate,

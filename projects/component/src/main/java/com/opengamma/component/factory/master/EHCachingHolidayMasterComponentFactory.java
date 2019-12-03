@@ -8,8 +8,6 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -29,6 +27,8 @@ import com.opengamma.master.holiday.HolidayMaster;
 import com.opengamma.master.holiday.impl.DataHolidayMasterResource;
 import com.opengamma.master.holiday.impl.EHCachingHolidayMaster;
 import com.opengamma.master.holiday.impl.RemoteHolidayMaster;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the combined holiday master.
@@ -62,14 +62,14 @@ public class EHCachingHolidayMasterComponentFactory extends AbstractComponentFac
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> holidayuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> holidayuration) {
 
-    HolidayMaster master = new EHCachingHolidayMaster(getClassifier(),
+    final HolidayMaster master = new EHCachingHolidayMaster(getClassifier(),
                                                       getUnderlying(),
                                                       getCacheManager());
 
     // register
-    ComponentInfo info = new ComponentInfo(HolidayMaster.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(HolidayMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteHolidayMaster.class);

@@ -44,12 +44,12 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBeanMasterTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyDbLegalEntityBeanMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyDbLegalEntityBeanMasterTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public ModifyDbLegalEntityBeanMasterTest(String databaseType, String databaseVersion) {
+  public ModifyDbLegalEntityBeanMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -60,20 +60,20 @@ public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBean
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_noLegalEntity() {
-    LegalEntityDocument doc = new LegalEntityDocument();
+    final LegalEntityDocument doc = new LegalEntityDocument();
     _lenMaster.add(doc);
   }
 
   @Test
   public void test_add_add() {
-    Instant now = Instant.now(_lenMaster.getClock());
+    final Instant now = Instant.now(_lenMaster.getClock());
 
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
-    LegalEntityDocument doc = new LegalEntityDocument();
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final LegalEntityDocument doc = new LegalEntityDocument();
     doc.setLegalEntity(legalEntity);
-    LegalEntityDocument test = _lenMaster.add(doc);
+    final LegalEntityDocument test = _lenMaster.add(doc);
 
-    UniqueId uniqueId = test.getUniqueId();
+    final UniqueId uniqueId = test.getUniqueId();
     assertNotNull(uniqueId);
     assertEquals("DbLen", uniqueId.getScheme());
     assertTrue(uniqueId.isVersioned());
@@ -83,11 +83,11 @@ public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBean
     assertEquals(null, test.getVersionToInstant());
     assertEquals(now, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableLegalEntity testLegalEntity = test.getLegalEntity();
+    final ManageableLegalEntity testLegalEntity = test.getLegalEntity();
     assertNotNull(testLegalEntity);
     assertEquals(uniqueId, testLegalEntity.getUniqueId());
     assertEquals("TestLegalEntity", legalEntity.getName());
-    ExternalIdBundle idKey = legalEntity.getExternalIdBundle();
+    final ExternalIdBundle idKey = legalEntity.getExternalIdBundle();
     assertNotNull(idKey);
     assertEquals(1, idKey.size());
     assertEquals(ExternalId.of("A", "B"), idKey.getExternalIds().iterator().next());
@@ -95,45 +95,45 @@ public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBean
 
   @Test
   public void test_add_addThenGet() {
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
-    LegalEntityDocument doc = new LegalEntityDocument();
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final LegalEntityDocument doc = new LegalEntityDocument();
     doc.setLegalEntity(legalEntity);
-    LegalEntityDocument added = _lenMaster.add(doc);
+    final LegalEntityDocument added = _lenMaster.add(doc);
 
-    LegalEntityDocument test = _lenMaster.get(added.getUniqueId());
+    final LegalEntityDocument test = _lenMaster.get(added.getUniqueId());
     assertEquals(added, test);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addWithMissingNameProperty() throws Exception {
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
-    Field field = ManageableLegalEntity.class.getDeclaredField("_name");
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final Field field = ManageableLegalEntity.class.getDeclaredField("_name");
     field.setAccessible(true);
     field.set(legalEntity, null);
-    LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
+    final LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
     _lenMaster.add(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_add_addWithMissingExternalIdBundleProperty() throws Exception {
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
-    Field field = ManageableLegalEntity.class.getDeclaredField("_externalIdBundle");
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final Field field = ManageableLegalEntity.class.getDeclaredField("_externalIdBundle");
     field.setAccessible(true);
     field.set(legalEntity, null);
-    LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
+    final LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
     _lenMaster.add(doc);
   }
 
   @Test
   public void test_add_searchByAttribute() {
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
     legalEntity.addAttribute("city", "London");
     legalEntity.addAttribute("office", "Southern");
-    LegalEntityDocument added = _lenMaster.add(new LegalEntityDocument(legalEntity));
+    final LegalEntityDocument added = _lenMaster.add(new LegalEntityDocument(legalEntity));
 
-    ManageableLegalEntity legalEntity2 = new MockLegalEntity("TestLegalEntity2", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final ManageableLegalEntity legalEntity2 = new MockLegalEntity("TestLegalEntity2", ExternalIdBundle.of("A", "B"), Currency.GBP);
     legalEntity2.addAttribute("office", "Southern");
-    LegalEntityDocument added2 = _lenMaster.add(new LegalEntityDocument(legalEntity2));
+    final LegalEntityDocument added2 = _lenMaster.add(new LegalEntityDocument(legalEntity2));
 
     LegalEntitySearchRequest searchRequest = new LegalEntitySearchRequest();
     searchRequest.addAttribute("city", "London");
@@ -167,50 +167,50 @@ public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBean
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_noLegalEntityId() {
-    UniqueId uniqueId = UniqueId.of("DbLen", "101");
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbLen", "101");
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
     legalEntity.setUniqueId(uniqueId);
-    LegalEntityDocument doc = new LegalEntityDocument();
+    final LegalEntityDocument doc = new LegalEntityDocument();
     doc.setLegalEntity(legalEntity);
     _lenMaster.update(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_noLegalEntity() {
-    LegalEntityDocument doc = new LegalEntityDocument();
+    final LegalEntityDocument doc = new LegalEntityDocument();
     doc.setUniqueId(UniqueId.of("DbLen", "101", "0"));
     _lenMaster.update(doc);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_update_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbLen", "0", "0");
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbLen", "0", "0");
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
     legalEntity.setUniqueId(uniqueId);
-    LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
+    final LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
     _lenMaster.update(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_update_notLatestVersion() {
-    UniqueId uniqueId = UniqueId.of("DbLen", "201", "0");
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbLen", "201", "0");
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
     legalEntity.setUniqueId(uniqueId);
-    LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
+    final LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
     _lenMaster.update(doc);
   }
 
   @Test
   public void test_update_getUpdateGet() {
-    Instant now = Instant.now(_lenMaster.getClock());
+    final Instant now = Instant.now(_lenMaster.getClock());
 
-    UniqueId uniqueId = UniqueId.of("DbLen", "101", "0");
-    LegalEntityDocument base = _lenMaster.get(uniqueId);
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbLen", "101", "0");
+    final LegalEntityDocument base = _lenMaster.get(uniqueId);
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
     legalEntity.setUniqueId(uniqueId);
-    LegalEntityDocument input = new LegalEntityDocument(legalEntity);
+    final LegalEntityDocument input = new LegalEntityDocument(legalEntity);
 
-    LegalEntityDocument updated = _lenMaster.update(input);
+    final LegalEntityDocument updated = _lenMaster.update(input);
     assertEquals(false, base.getUniqueId().equals(updated.getUniqueId()));
     assertEquals(now, updated.getVersionFromInstant());
     assertEquals(null, updated.getVersionToInstant());
@@ -218,7 +218,7 @@ public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBean
     assertEquals(null, updated.getCorrectionToInstant());
     assertEquals(input.getLegalEntity(), updated.getLegalEntity());
 
-    LegalEntityDocument old = _lenMaster.get(uniqueId);
+    final LegalEntityDocument old = _lenMaster.get(uniqueId);
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(now, old.getVersionToInstant());  // old version ended
@@ -226,24 +226,24 @@ public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBean
     assertEquals(base.getCorrectionToInstant(), old.getCorrectionToInstant());
     assertEquals(base.getLegalEntity(), old.getLegalEntity());
 
-    LegalEntityHistoryRequest search = new LegalEntityHistoryRequest(base.getUniqueId(), null, now);
-    LegalEntityHistoryResult searchResult = _lenMaster.history(search);
+    final LegalEntityHistoryRequest search = new LegalEntityHistoryRequest(base.getUniqueId(), null, now);
+    final LegalEntityHistoryResult searchResult = _lenMaster.history(search);
     assertEquals(2, searchResult.getDocuments().size());
   }
 
   @Test
   public void test_update_rollback() {
-    DbLegalEntityBeanMaster w = new DbLegalEntityBeanMaster(_lenMaster.getDbConnector());
+    final DbLegalEntityBeanMaster w = new DbLegalEntityBeanMaster(_lenMaster.getDbConnector());
     w.setElSqlBundle(ElSqlBundle.of(new ElSqlConfig("TestRollback"), DbBeanMaster.class));
     final LegalEntityDocument base = _lenMaster.get(UniqueId.of("DbLen", "101", "0"));
-    UniqueId uniqueId = UniqueId.of("DbLen", "101", "0");
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbLen", "101", "0");
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
     legalEntity.setUniqueId(uniqueId);
-    LegalEntityDocument input = new LegalEntityDocument(legalEntity);
+    final LegalEntityDocument input = new LegalEntityDocument(legalEntity);
     try {
       w.update(input);
       Assert.fail();
-    } catch (BadSqlGrammarException ex) {
+    } catch (final BadSqlGrammarException ex) {
       // expected
     }
     final LegalEntityDocument test = _lenMaster.get(UniqueId.of("DbLen", "101", "0"));
@@ -261,41 +261,41 @@ public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBean
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noLegalEntityId() {
-    UniqueId uniqueId = UniqueId.of("DbLen", "101");
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbLen", "101");
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
     legalEntity.setUniqueId(uniqueId);
-    LegalEntityDocument doc = new LegalEntityDocument();
+    final LegalEntityDocument doc = new LegalEntityDocument();
     doc.setLegalEntity(legalEntity);
     _lenMaster.correct(doc);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_correct_noLegalEntity() {
-    LegalEntityDocument doc = new LegalEntityDocument();
+    final LegalEntityDocument doc = new LegalEntityDocument();
     doc.setUniqueId(UniqueId.of("DbLen", "101", "0"));
     _lenMaster.correct(doc);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_correct_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbLen", "0", "0");
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbLen", "0", "0");
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
     legalEntity.setUniqueId(uniqueId);
-    LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
+    final LegalEntityDocument doc = new LegalEntityDocument(legalEntity);
     _lenMaster.correct(doc);
   }
 
   @Test
   public void test_correct_getUpdateGet() {
-    Instant now = Instant.now(_lenMaster.getClock());
+    final Instant now = Instant.now(_lenMaster.getClock());
 
-    UniqueId uniqueId = UniqueId.of("DbLen", "101", "0");
-    LegalEntityDocument base = _lenMaster.get(uniqueId);
-    ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
+    final UniqueId uniqueId = UniqueId.of("DbLen", "101", "0");
+    final LegalEntityDocument base = _lenMaster.get(uniqueId);
+    final ManageableLegalEntity legalEntity = new MockLegalEntity("TestLegalEntity", ExternalIdBundle.of("A", "B"), Currency.GBP);
     legalEntity.setUniqueId(uniqueId);
-    LegalEntityDocument input = new LegalEntityDocument(legalEntity);
+    final LegalEntityDocument input = new LegalEntityDocument(legalEntity);
 
-    LegalEntityDocument corrected = _lenMaster.correct(input);
+    final LegalEntityDocument corrected = _lenMaster.correct(input);
     assertEquals(false, base.getUniqueId().equals(corrected.getUniqueId()));
     assertEquals(base.getVersionFromInstant(), corrected.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), corrected.getVersionToInstant());
@@ -303,7 +303,7 @@ public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBean
     assertEquals(null, corrected.getCorrectionToInstant());
     assertEquals(input.getLegalEntity(), corrected.getLegalEntity());
 
-    LegalEntityDocument old = _lenMaster.get(UniqueId.of("DbLen", "101", "0"));
+    final LegalEntityDocument old = _lenMaster.get(UniqueId.of("DbLen", "101", "0"));
     assertEquals(base.getUniqueId(), old.getUniqueId());
     assertEquals(base.getVersionFromInstant(), old.getVersionFromInstant());
     assertEquals(base.getVersionToInstant(), old.getVersionToInstant());
@@ -311,8 +311,8 @@ public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBean
     assertEquals(now, old.getCorrectionToInstant());  // old version ended
     assertEquals(base.getLegalEntity(), old.getLegalEntity());
 
-    LegalEntityHistoryRequest search = new LegalEntityHistoryRequest(base.getUniqueId(), now, null);
-    LegalEntityHistoryResult searchResult = _lenMaster.history(search);
+    final LegalEntityHistoryRequest search = new LegalEntityHistoryRequest(base.getUniqueId(), now, null);
+    final LegalEntityHistoryResult searchResult = _lenMaster.history(search);
     assertEquals(2, searchResult.getDocuments().size());
   }
 
@@ -321,24 +321,24 @@ public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBean
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_removeLegalEntity_versioned_notFound() {
-    UniqueId uniqueId = UniqueId.of("DbLen", "0", "0");
+    final UniqueId uniqueId = UniqueId.of("DbLen", "0", "0");
     _lenMaster.remove(uniqueId);
   }
 
   @Test
   public void test_remove_removed() {
-    Instant now = Instant.now(_lenMaster.getClock());
+    final Instant now = Instant.now(_lenMaster.getClock());
 
-    UniqueId uniqueId = UniqueId.of("DbLen", "101", "0");
+    final UniqueId uniqueId = UniqueId.of("DbLen", "101", "0");
     _lenMaster.remove(uniqueId);
-    LegalEntityDocument test = _lenMaster.get(uniqueId);
+    final LegalEntityDocument test = _lenMaster.get(uniqueId);
 
     assertEquals(uniqueId, test.getUniqueId());
     assertEquals(_version1Instant, test.getVersionFromInstant());
     assertEquals(now, test.getVersionToInstant());
     assertEquals(_version1Instant, test.getCorrectionFromInstant());
     assertEquals(null, test.getCorrectionToInstant());
-    ManageableLegalEntity legalEntity = test.getLegalEntity();
+    final ManageableLegalEntity legalEntity = test.getLegalEntity();
     assertNotNull(legalEntity);
     assertEquals(uniqueId, legalEntity.getUniqueId());
     assertEquals("TestLegalEntity101", legalEntity.getName());

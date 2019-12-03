@@ -25,12 +25,14 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Computes the sensitivity to the curves (in the Market description of curve bundle) of the market quote sensitivity.
  */
-public final class PresentValueCommodityMarketQuoteSensitivityDiscountingCalculator extends InstrumentDerivativeVisitorAdapter<CommodityProviderInterface, Double> {
+public final class PresentValueCommodityMarketQuoteSensitivityDiscountingCalculator
+extends InstrumentDerivativeVisitorAdapter<CommodityProviderInterface, Double> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueCommodityMarketQuoteSensitivityDiscountingCalculator INSTANCE = new PresentValueCommodityMarketQuoteSensitivityDiscountingCalculator();
+  private static final PresentValueCommodityMarketQuoteSensitivityDiscountingCalculator INSTANCE =
+      new PresentValueCommodityMarketQuoteSensitivityDiscountingCalculator();
 
   /**
    * Gets the calculator instance.

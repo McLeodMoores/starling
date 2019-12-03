@@ -26,7 +26,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 
 /**
- * A security for commodity future options.
+ * A security for FX future options.
  */
 @BeanDefinition
 @SecurityDescription(type = FxFutureOptionSecurity.SECURITY_TYPE, description = "Fx future option")
@@ -86,19 +86,42 @@ public class FxFutureOptionSecurity extends FinancialSecurity {
   @PropertyDefinition(validate = "notNull")
   private OptionType _optionType;
 
-  FxFutureOptionSecurity() { //For builder
+  /**
+   * For the builder.
+   */
+  FxFutureOptionSecurity() {
     super(SECURITY_TYPE);
   }
 
-  public FxFutureOptionSecurity(String tradingExchange,
-                                String settlementExchange,
-                                Expiry expiry,
-                                ExerciseType exerciseType,
-                                ExternalId underlyingIdentifier,
-                                double pointValue,
-                                Currency currency,
-                                double strike,
-                                OptionType optionType) {
+  /**
+   * @param tradingExchange
+   *          the exchange name, not null
+   * @param settlementExchange
+   *          the exchange name, not null
+   * @param expiry
+   *          the expiry, not null
+   * @param exerciseType
+   *          the exercise type, not null
+   * @param underlyingIdentifier
+   *          the identifier of the underlying index, not null
+   * @param pointValue
+   *          the value of a point, not null
+   * @param currency
+   *          the currency, not null
+   * @param strike
+   *          the strike
+   * @param optionType
+   *          the option type, not null
+   */
+  public FxFutureOptionSecurity(final String tradingExchange,
+      final String settlementExchange,
+      final Expiry expiry,
+      final ExerciseType exerciseType,
+      final ExternalId underlyingIdentifier,
+      final double pointValue,
+      final Currency currency,
+      final double strike,
+      final OptionType optionType) {
     super(SECURITY_TYPE);
     setTradingExchange(tradingExchange);
     setSettlementExchange(settlementExchange);
@@ -113,7 +136,7 @@ public class FxFutureOptionSecurity extends FinancialSecurity {
 
   //-------------------------------------------------------------------------
   @Override
-  public final <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public final <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitFxFutureOptionSecurity(this);
   }
 

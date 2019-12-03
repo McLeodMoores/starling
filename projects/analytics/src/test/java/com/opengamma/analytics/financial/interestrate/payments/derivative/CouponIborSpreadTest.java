@@ -42,98 +42,145 @@ public class CouponIborSpreadTest {
   private static final IborIndex INDEX = new IborIndex(CUR, TENOR, SETTLEMENT_DAYS, DAY_COUNT_INDEX, BUSINESS_DAY, IS_EOM, "Ibor");
 
   private static final double SPREAD = 0.02;
-  private static final CouponIborSpread PAYMENT1 = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX,
+  private static final CouponIborSpread PAYMENT1 = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL,
+      FIXING_PERIOD_START_TIME, INDEX,
       FIXING_PERIOD_END_TIME, MATURITY, FORWARD_YEAR_FRACTION);
-  private static final CouponIborSpread PAYMENT2 = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, RESET_TIME, INDEX, FIXING_PERIOD_START_TIME,
+  private static final CouponIborSpread PAYMENT2 = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, RESET_TIME,
+      INDEX, FIXING_PERIOD_START_TIME,
       FIXING_PERIOD_END_TIME, FORWARD_YEAR_FRACTION, SPREAD);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativePaymentTime() {
     new CouponIborSpread(CUR, -1, PAYMENT_YEAR_FRACTION, NOTIONAL, RESET_TIME, INDEX, RESET_TIME, MATURITY, FORWARD_YEAR_FRACTION);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativeResetTime() {
     new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, -0.1, INDEX, RESET_TIME, MATURITY, FORWARD_YEAR_FRACTION);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testMaturityBeforereset() {
-    new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, RESET_TIME, INDEX, RESET_TIME, RESET_TIME - 0.1, FORWARD_YEAR_FRACTION);
+    new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, RESET_TIME, INDEX, RESET_TIME, RESET_TIME - 0.1,
+        FORWARD_YEAR_FRACTION);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativeYearFraction1() {
     new CouponIborSpread(CUR, PAYMENT_TIME, -0.25, NOTIONAL, RESET_TIME, INDEX, RESET_TIME, MATURITY, FORWARD_YEAR_FRACTION);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativeYearFraction2() {
     new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, RESET_TIME, INDEX, RESET_TIME, MATURITY, -0.2);
   }
 
-
+  /**
+   *
+   */
   @Test
   public void testWithNotional() {
     final double notional = NOTIONAL + 100;
-    final CouponIborSpread expected = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, notional, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY,
+    final CouponIborSpread expected = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, notional, FIXING_PERIOD_START_TIME,
+        INDEX, FIXING_PERIOD_END_TIME, MATURITY,
         FORWARD_YEAR_FRACTION);
     assertEquals(expected, PAYMENT1.withNotional(notional));
   }
 
+  /**
+   *
+   */
   @Test
   public void testWithSpread() {
     final double spread = SPREAD * 1.1;
-    final CouponIborSpread coupon = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY,
+    final CouponIborSpread coupon = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME,
+        INDEX, FIXING_PERIOD_END_TIME, MATURITY,
         FORWARD_YEAR_FRACTION, SPREAD);
-    final CouponIborSpread expected = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY,
+    final CouponIborSpread expected = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME,
+        INDEX, FIXING_PERIOD_END_TIME, MATURITY,
         FORWARD_YEAR_FRACTION, spread);
     assertEquals(expected, coupon.withSpread(spread));
   }
 
+  /**
+   *
+   */
   @Test
   public void testWithZeroSpread() {
-    final CouponIborSpread coupon = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY,
+    final CouponIborSpread coupon = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME,
+        INDEX, FIXING_PERIOD_END_TIME, MATURITY,
         FORWARD_YEAR_FRACTION, SPREAD);
-    final CouponIborSpread expected = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY,
+    final CouponIborSpread expected = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME,
+        INDEX, FIXING_PERIOD_END_TIME, MATURITY,
         FORWARD_YEAR_FRACTION, 0);
     assertEquals(expected, coupon.withZeroSpread());
   }
 
+  /**
+   *
+   */
   @Test
   public void testHashCodeAndEquals() {
-    CouponIborSpread other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY,
+    CouponIborSpread other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX,
+        FIXING_PERIOD_END_TIME, MATURITY,
         FORWARD_YEAR_FRACTION);
     assertEquals(other, PAYMENT1);
     assertEquals(other.hashCode(), PAYMENT1.hashCode());
-    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY, FORWARD_YEAR_FRACTION, 0.0);
+    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX,
+        FIXING_PERIOD_END_TIME, MATURITY, FORWARD_YEAR_FRACTION, 0.0);
     assertEquals(other, PAYMENT1);
     assertEquals(other.hashCode(), PAYMENT1.hashCode());
-    other = new CouponIborSpread(CUR, PAYMENT_TIME - 0.1, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY,
+    other = new CouponIborSpread(CUR, PAYMENT_TIME - 0.1, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX,
+        FIXING_PERIOD_END_TIME, MATURITY,
         FORWARD_YEAR_FRACTION);
     assertFalse(other.equals(PAYMENT1));
-    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION + 0.01, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY,
+    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION + 0.01, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX,
+        FIXING_PERIOD_END_TIME, MATURITY,
         FORWARD_YEAR_FRACTION);
     assertFalse(other.equals(PAYMENT1));
-    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL + 10, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY, FORWARD_YEAR_FRACTION);
+    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL + 10, FIXING_PERIOD_START_TIME, INDEX,
+        FIXING_PERIOD_END_TIME, MATURITY, FORWARD_YEAR_FRACTION);
     assertFalse(other.equals(PAYMENT1));
-    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME + 0.01, INDEX, FIXING_PERIOD_END_TIME, MATURITY,
+    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME + 0.01, INDEX,
+        FIXING_PERIOD_END_TIME, MATURITY,
         FORWARD_YEAR_FRACTION);
     assertFalse(other.equals(PAYMENT1));
-    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME - 0.01, MATURITY,
+    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX,
+        FIXING_PERIOD_END_TIME - 0.01, MATURITY,
         FORWARD_YEAR_FRACTION);
     assertFalse(other.equals(PAYMENT1));
-    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY + 0.01,
+    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX,
+        FIXING_PERIOD_END_TIME, MATURITY + 0.01,
         FORWARD_YEAR_FRACTION);
     assertFalse(other.equals(PAYMENT1));
-    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY,
+    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX,
+        FIXING_PERIOD_END_TIME, MATURITY,
         FORWARD_YEAR_FRACTION + 0.01);
     assertFalse(other.equals(PAYMENT1));
-    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX, FIXING_PERIOD_END_TIME, MATURITY, FORWARD_YEAR_FRACTION,
+    other = new CouponIborSpread(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_PERIOD_START_TIME, INDEX,
+        FIXING_PERIOD_END_TIME, MATURITY, FORWARD_YEAR_FRACTION,
         SPREAD);
     assertFalse(other.equals(PAYMENT1));
   }
 
+  /**
+   *
+   */
   @Test
   public void testGetters() {
     assertEquals(CUR, PAYMENT2.getCurrency());

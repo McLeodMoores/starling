@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.definition;
@@ -11,15 +11,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Expiry;
 
 /**
- * 
- * Definition for an American-style vanilla option. An American-style option can
- * be exercised at any time up to expiry.
+ *
+ * Definition for an American-style vanilla option. An American-style option can be exercised at any time up to expiry.
  * <p>
- * When the spot price is <i>S</i>, an option with strike <i>K</i> has payoff
- * <i>max(0, S - K)</i> for a call and <i>max(0, K - S)</i> for a put. If the
- * price of the option is <i>O</i>, then the option should be exercised early if
- * <i>O > K - S</i> for a call and <i>O > S - K</i> for a put.
- * 
+ * When the spot price is <i>S</i>, an option with strike <i>K</i> has payoff <i>max(0, S - K)</i> for a call and <i>max(0, K - S)</i> for a put. If the price
+ * of the option is <i>O</i>, then the option should be exercised early if <i>O &gt; K - S</i> for a call and <i>O &gt; S - K</i> for a put.
+ *
  */
 public class AmericanVanillaOptionDefinition extends OptionDefinition {
   private final OptionPayoffFunction<StandardOptionDataBundle> _payoffFunction = new OptionPayoffFunction<StandardOptionDataBundle>() {
@@ -46,7 +43,7 @@ public class AmericanVanillaOptionDefinition extends OptionDefinition {
   };
 
   /**
-   * 
+   *
    * @param strike The option strike
    * @param expiry The option expiry
    * @param isCall Whether the option is a put or call

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.position.impl;
@@ -33,18 +33,18 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
   private static final long serialVersionUID = 1L;
 
   /**
-   * Debugging flag for artificially limiting the size of all portfolios. Use this to truncate large portfolios to isolate error cases more easily. The default value is off but can be controlled by
-   * the {@code SimplePortfolioNode.debugFlag} property.
+   * Debugging flag for artificially limiting the size of all portfolios. Use this to truncate large portfolios to
+   * isolate error cases more easily. The default value is off but can be controlled by the {@code SimplePortfolioNode.debugFlag} property.
    */
   private static final boolean DEBUG_FLAG = System.getProperty("SimplePortfolioNode.debugFlag", "FALSE").equalsIgnoreCase("TRUE");
   /**
-   * Maximum number of nodes to present immediately underneath this node. This is only used if {@link #DEBUG_FLAG} is on. The default value is 1 but can be controlled by the
-   * {@code SimplePortfolioNode.debugMaxNodes} property.
+   * Maximum number of nodes to present immediately underneath this node. This is only used if {@link #DEBUG_FLAG}
+   * is on. The default value is 1 but can be controlled by the {@code SimplePortfolioNode.debugMaxNodes} property.
    */
   private static final int DEBUG_MAX_NODES = Integer.parseInt(System.getProperty("SimplePortfolioNode.debugMaxNodes", "1"));
   /**
-   * Maximum number of positions to present immediately underneath this node. This is only used if {@link #DEBUG_FLAG} is on. The default value is 1 but can be controlled by the
-   * {@code SimplePortfolioNode.debugMaxPositions} property.
+   * Maximum number of positions to present immediately underneath this node. This is only used if {@link #DEBUG_FLAG}
+   * is on. The default value is 1 but can be controlled by the {@code SimplePortfolioNode.debugMaxPositions} property.
    */
   private static final int DEBUG_MAX_POSITIONS = Integer.parseInt(System.getProperty("SimplePortfolioNode.debugMaxPositions", "1"));
 
@@ -78,20 +78,20 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
 
   /**
    * Creates a portfolio node with a given name.
-   * 
+   *
    * @param name  the name of the portfolio node, null treated as empty
    */
-  public SimplePortfolioNode(String name) {
+  public SimplePortfolioNode(final String name) {
     _name = StringUtils.defaultString(name);
   }
 
   /**
    * Creates a portfolio with the specified identifier.
-   * 
+   *
    * @param uniqueId  the unique identifier, not null
    * @param name  the name to use, null treated as empty
    */
-  public SimplePortfolioNode(UniqueId uniqueId, String name) {
+  public SimplePortfolioNode(final UniqueId uniqueId, final String name) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     _uniqueId = uniqueId;
     _name = StringUtils.defaultString(name);
@@ -99,20 +99,20 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
 
   /**
    * Creates a deep copy of the specified portfolio node.
-   * 
+   *
    * @param copyFrom  the instance to copy fields from, not null
    */
   public SimplePortfolioNode(final PortfolioNode copyFrom) {
     ArgumentChecker.notNull(copyFrom, "copyFrom");
     _uniqueId = copyFrom.getUniqueId();
     _name = copyFrom.getName();
-    for (PortfolioNode child : copyFrom.getChildNodes()) {
-      SimplePortfolioNode clonedNode = new SimplePortfolioNode(child);
+    for (final PortfolioNode child : copyFrom.getChildNodes()) {
+      final SimplePortfolioNode clonedNode = new SimplePortfolioNode(child);
       clonedNode.setParentNodeId(_uniqueId);
       _childNodes.add(clonedNode);
     }
-    for (Position position : copyFrom.getPositions()) {
-      SimplePosition clonedPosition = new SimplePosition(position);
+    for (final Position position : copyFrom.getPositions()) {
+      final SimplePosition clonedPosition = new SimplePosition(position);
       _positions.add(clonedPosition);
     }
   }
@@ -120,7 +120,7 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
   //-------------------------------------------------------------------------
   /**
    * Gets the unique identifier of the node.
-   * 
+   *
    * @return the identifier, not null
    */
   @Override
@@ -130,11 +130,11 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
 
   /**
    * Sets the unique identifier of the node.
-   * 
+   *
    * @param uniqueId  the new unique identifier, not null
    */
   @Override
-  public void setUniqueId(UniqueId uniqueId) {
+  public void setUniqueId(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     _uniqueId = uniqueId;
   }
@@ -142,7 +142,7 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
   //-------------------------------------------------------------------------
   /**
    * Gets the unique identifier of the parent node, null if this is a root node.
-   * 
+   *
    * @return the unique identifier, null if root node
    */
   @Override
@@ -152,7 +152,7 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
 
   /**
    * Sets the unique identifier of the parent node, null if this is a root node.
-   * 
+   *
    * @param parentNodeId  the new parent node, null if root node
    */
   public void setParentNodeId(final UniqueId parentNodeId) {
@@ -162,7 +162,7 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
   //-------------------------------------------------------------------------
   /**
    * Gets the name of the node intended for display purposes.
-   * 
+   *
    * @return the name, not null
    */
   @Override
@@ -172,10 +172,10 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
 
   /**
    * Sets the name of the node intended for display purposes.
-   * 
+   *
    * @param name  the name, not null
    */
-  public void setName(String name) {
+  public void setName(final String name) {
     ArgumentChecker.notNull(name, "name");
     _name = name;
   }
@@ -183,7 +183,7 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
   //-------------------------------------------------------------------------
   /**
    * Gets the total size of the children, including nodes and positions.
-   * 
+   *
    * @return the combined size of the node and position lists
    */
   @Override
@@ -194,7 +194,7 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
   //-------------------------------------------------------------------------
   /**
    * Gets the nodes which are immediate children of this node.
-   * 
+   *
    * @return the child nodes, unmodifiable, not null
    */
   @Override
@@ -209,44 +209,45 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
 
   /**
    * Adds a node to the list of immediate children.
-   * 
+   *
    * @param childNode  the child node to add, not null
    */
-  public void addChildNode(PortfolioNode childNode) {
+  public void addChildNode(final PortfolioNode childNode) {
     ArgumentChecker.notNull(childNode, "child node");
+    PortfolioNode cn = childNode;
     if (!ObjectUtils.equals(getUniqueId(), childNode.getParentNodeId())) {
       final SimplePortfolioNode newChildNode = new SimplePortfolioNode(childNode);
       newChildNode.setParentNodeId(getUniqueId());
-      childNode = newChildNode;
+      cn = newChildNode;
     }
-    _childNodes.add(childNode);
+    _childNodes.add(cn);
   }
 
   /**
    * Adds a collection of nodes to the list of immediate children.
-   * 
+   *
    * @param childNodes the child nodes to add, not null
    */
-  public void addChildNodes(Collection<? extends PortfolioNode> childNodes) {
+  public void addChildNodes(final Collection<? extends PortfolioNode> childNodes) {
     ArgumentChecker.noNulls(childNodes, "child node");
-    for (PortfolioNode child : childNodes) {
+    for (final PortfolioNode child : childNodes) {
       addChildNode(child);
     }
   }
 
   /**
    * Removes a node from the list of immediate children.
-   * 
+   *
    * @param childNode  the child node to remove, not null
    */
-  public void removeChildNode(PortfolioNode childNode) {
+  public void removeChildNode(final PortfolioNode childNode) {
     _childNodes.remove(childNode);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the positions which are immediate children of this node.
-   * 
+   *
    * @return the positions, unmodifiable, not null
    */
   @Override
@@ -261,32 +262,32 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
 
   /**
    * Adds a node to the list of immediate children.
-   * 
+   *
    * @param position  the position to add, not null
    */
-  public void addPosition(Position position) {
+  public void addPosition(final Position position) {
     ArgumentChecker.notNull(position, "child node");
     _positions.add(position);
   }
 
   /**
    * Adds a collection of nodes to the list of immediate children.
-   * 
+   *
    * @param positions the positions to add, not null
    */
-  public void addPositions(Collection<? extends Position> positions) {
+  public void addPositions(final Collection<? extends Position> positions) {
     ArgumentChecker.noNulls(positions, "positions");
-    for (Position position : positions) {
+    for (final Position position : positions) {
       addPosition(position);
     }
   }
 
   /**
    * Removes a position from the list.
-   * 
+   *
    * @param position  the position to remove, not null
    */
-  public void removePosition(Position position) {
+  public void removePosition(final Position position) {
     _positions.remove(position);
   }
 
@@ -294,28 +295,28 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
   /**
    * Recursively finds a specific node from this node by identifier.
    * If this node matches it is returned.
-   * 
+   *
    * @param uniqueId  the identifier, null returns null
    * @return the node, null if not found
    */
-  public PortfolioNode getNode(UniqueId uniqueId) {
+  public PortfolioNode getNode(final UniqueId uniqueId) {
     return getNode(this, uniqueId);
   }
 
   /**
    * Recursively finds a specific node from a node by identifier.
-   * 
+   *
    * @param node  the node to process, not null
    * @param uniqueId  the identifier, null returns null
    * @return the node, null if not found
    */
-  private static PortfolioNode getNode(PortfolioNode node, UniqueId uniqueId) {
+  private static PortfolioNode getNode(final PortfolioNode node, final UniqueId uniqueId) {
     if (uniqueId != null) {
       if (uniqueId.equals(node.getUniqueId())) {
         return node;
       }
-      for (PortfolioNode child : node.getChildNodes()) {
-        PortfolioNode result = getNode(child, uniqueId);
+      for (final PortfolioNode child : node.getChildNodes()) {
+        final PortfolioNode result = getNode(child, uniqueId);
         if (result != null) {
           return result;
         }
@@ -326,30 +327,30 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
 
   /**
    * Recursively finds a specific position from this node by identifier.
-   * 
+   *
    * @param uniqueId  the identifier, null returns null
    * @return the position, null if not found
    */
-  public Position getPosition(UniqueId uniqueId) {
+  public Position getPosition(final UniqueId uniqueId) {
     return getPosition(this, uniqueId);
   }
 
   /**
    * Recursively finds a specific position from a node by identifier.
-   * 
+   *
    * @param node  the node to process, not null
    * @param uniqueId  the identifier, null returns null
    * @return the position, null if not found
    */
-  private static Position getPosition(PortfolioNode node, UniqueId uniqueId) {
+  private static Position getPosition(final PortfolioNode node, final UniqueId uniqueId) {
     if (uniqueId != null) {
-      for (Position child : node.getPositions()) {
+      for (final Position child : node.getPositions()) {
         if (uniqueId.equals(child.getUniqueId())) {
           return child;
         }
       }
-      for (PortfolioNode child : node.getChildNodes()) {
-        Position result = getPosition(child, uniqueId);
+      for (final PortfolioNode child : node.getChildNodes()) {
+        final Position result = getPosition(child, uniqueId);
         if (result != null) {
           return result;
         }
@@ -360,14 +361,14 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
 
   /**
    * Gets a full-detail string containing all child nodes and positions.
-   * 
+   *
    * @return the full-detail string, not null
    */
   public String toLongString() {
-    StrBuilder childBuf = new StrBuilder(1024);
+    final StrBuilder childBuf = new StrBuilder(1024);
     childBuf.append("[");
     for (int i = 0; i < getChildNodes().size(); i++) {
-      PortfolioNode child = getChildNodes().get(i);
+      final PortfolioNode child = getChildNodes().get(i);
       if (child instanceof SimplePortfolioNode) {
         childBuf.append(((SimplePortfolioNode) child).toLongString());
       } else {
@@ -398,13 +399,13 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
       final SimplePortfolioNode other = (SimplePortfolioNode) obj;
       final List<PortfolioNode> otherChildNodes = other.getChildNodes();
       final List<Position> otherPositions = other.getPositions();
-      return ObjectUtils.equals(getUniqueId(), other.getUniqueId()) &&
-          ObjectUtils.equals(getParentNodeId(), other.getParentNodeId()) &&
-          ObjectUtils.equals(getName(), other.getName()) &&
-          getChildNodes().size() == otherChildNodes.size() &&
-          getPositions().size() == otherPositions.size() &&
-          getChildNodes().equals(otherChildNodes) &&
-          getPositions().equals(otherPositions);
+      return ObjectUtils.equals(getUniqueId(), other.getUniqueId())
+          && ObjectUtils.equals(getParentNodeId(), other.getParentNodeId())
+          && ObjectUtils.equals(getName(), other.getName())
+          && getChildNodes().size() == otherChildNodes.size()
+          && getPositions().size() == otherPositions.size()
+          && getChildNodes().equals(otherChildNodes)
+          && getPositions().equals(otherPositions);
     }
     return false;
   }
@@ -412,7 +413,7 @@ public class SimplePortfolioNode implements PortfolioNode, MutableUniqueIdentifi
   @Override
   public int hashCode() {
     int result = 0;
-    int prime = 31;
+    final int prime = 31;
     if (getUniqueId() != null) {
       result += getUniqueId().hashCode();
     }

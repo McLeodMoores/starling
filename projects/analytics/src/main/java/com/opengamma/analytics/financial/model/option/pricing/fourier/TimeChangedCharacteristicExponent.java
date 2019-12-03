@@ -20,31 +20,13 @@ import com.opengamma.analytics.math.number.ComplexNumber;
  * business time (where time moves at a stochastic rate relative to calendar
  * time). This has the effect of introducing stochastic changes to the model
  * parameters of the original Levy process.
- * <p>
- * If the time-changed Levy process is $X_{Y_t}$, with $Y_t$ the business time,
- * the characteristic function is given by:
- * $$
- * \begin{align*}
- * \phi(u, t) &= E\left[e^{iuX_{Y_t}}\right]\\
- * &= E\left[e^{Y_t\psi_X(u)}\right]\\
- * &= E\left[e^{i(-i\psi_X(u))Y_t}\right]\\
- * &= \phi_{Y_t}(-i\psi_X(u), t)
- * \end{align*}
- * $$
- * where $\psi_X(u)$ is the cumulant characteristic function of the Levy
- * process. The drift correction then becomes:
- * $$
- * \begin{align*}
- * \omega(t) = -\frac{\ln(\phi(-i, t))}{t}
- * \end{align*}
- * $$
  */
 public class TimeChangedCharacteristicExponent implements CharacteristicExponent {
   private final CharacteristicExponent _base;
   private final CharacteristicExponent _timeChange;
 
   /**
-   * 
+   *
    * @param base The base characteristic exponent, not null
    * @param timeChange The characteristic exponent to time change, not null
    */
@@ -70,13 +52,13 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
   }
 
   @Override
-  public ComplexNumber getValue(ComplexNumber u, double t) {
-    Function1D<ComplexNumber, ComplexNumber> func = getFunction(t);
+  public ComplexNumber getValue(final ComplexNumber u, final double t) {
+    final Function1D<ComplexNumber, ComplexNumber> func = getFunction(t);
     return func.evaluate(u);
   }
 
   /**
-   * 
+   *
    * @return the smaller $alpha_{max}$ of the base characteristic exponent and the time-changed characteristic exponent
    */
   @Override
@@ -85,7 +67,7 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
   }
 
   /**
-   * 
+   *
    * @return the larger $alpha_{min}$ of the base characteristic exponent and the time-changed characteristic exponent
    */
   @Override
@@ -137,12 +119,12 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
   }
 
   @Override
-  public ComplexNumber[] getCharacteristicExponentAdjoint(ComplexNumber u, double t) {
+  public ComplexNumber[] getCharacteristicExponentAdjoint(final ComplexNumber u, final double t) {
     throw new NotImplementedException();
   }
 
   @Override
-  public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(double t) {
+  public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(final double t) {
     throw new NotImplementedException();
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.value.properties;
@@ -35,15 +35,16 @@ public final class ArrayValueProperty extends AbstractValueProperty {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param key the value key, never null
    * @param optional the optional flag
-   * @param values the values to store, never null, containing at least one entry and not more than {@link #MAX_ARRAY_LENGTH}. The object will use this object but won't modify it.
+   * @param values the values to store, never null, containing at least one entry and not more than {@link #MAX_ARRAY_LENGTH}.
+   * The object will use this object but won't modify it.
    * @param next the next property in the bucket, or null if this is the end of the chain
    */
   public ArrayValueProperty(final String key, final boolean optional, final String[] values, final AbstractValueProperty next) {
     super(key, optional, next);
-    assert (values.length > 1) && (values.length <= MAX_ARRAY_LENGTH);
+    assert values.length > 1 && values.length <= MAX_ARRAY_LENGTH;
     _values = values;
   }
 
@@ -56,9 +57,8 @@ public final class ArrayValueProperty extends AbstractValueProperty {
   protected AbstractValueProperty withOptional(final boolean optional) {
     if (isOptional() == optional) {
       return this;
-    } else {
-      return new ArrayValueProperty(getKey(), optional, _values, getNext());
     }
+    return new ArrayValueProperty(getKey(), optional, _values, getNext());
   }
 
   // query/update self
@@ -74,7 +74,7 @@ public final class ArrayValueProperty extends AbstractValueProperty {
 
   @Override
   protected AbstractValueProperty addValueImpl(final String value) {
-    for (String existing : _values) {
+    for (final String existing : _values) {
       if (value.equals(existing)) {
         return this;
       }
@@ -84,18 +84,17 @@ public final class ArrayValueProperty extends AbstractValueProperty {
       newValues[_values.length] = value;
       _values = newValues;
       return this;
-    } else {
-      final Set<String> newValues = Sets.newHashSet(_values);
-      newValues.add(value);
-      return new SetValueProperty(getKey(), isOptional(), newValues, getNext());
     }
+    final Set<String> newValues = Sets.newHashSet(_values);
+    newValues.add(value);
+    return new SetValueProperty(getKey(), isOptional(), newValues, getNext());
   }
 
   @Override
   protected AbstractValueProperty addValuesImpl(final String[] values) {
     int newValues = 0;
-    newValueLoop: for (String value : values) { //CSIGNORE
-      for (String existing : _values) {
+    newValueLoop: for (final String value : values) { //CSIGNORE
+      for (final String existing : _values) {
         if (value.equals(existing)) {
           continue newValueLoop;
         }
@@ -108,8 +107,8 @@ public final class ArrayValueProperty extends AbstractValueProperty {
     newValues += _values.length;
     if (newValues <= MAX_ARRAY_LENGTH) {
       final String[] copy = Arrays.copyOf(_values, newValues);
-      newValueLoop: for (String value : values) { //CSIGNORE
-        for (String existing : _values) {
+      newValueLoop: for (final String value : values) { //CSIGNORE
+        for (final String existing : _values) {
           if (value.equals(existing)) {
             continue newValueLoop;
           }
@@ -118,23 +117,22 @@ public final class ArrayValueProperty extends AbstractValueProperty {
       }
       _values = copy;
       return this;
-    } else {
-      final Set<String> copy = Sets.newHashSetWithExpectedSize(newValues);
-      for (String value : _values) {
-        copy.add(value);
-      }
-      for (String value : values) {
-        copy.add(value);
-      }
-      return new SetValueProperty(getKey(), isOptional(), copy, getNext());
     }
+    final Set<String> copy = Sets.newHashSetWithExpectedSize(newValues);
+    for (final String value : _values) {
+      copy.add(value);
+    }
+    for (final String value : values) {
+      copy.add(value);
+    }
+    return new SetValueProperty(getKey(), isOptional(), copy, getNext());
   }
 
   @Override
   protected AbstractValueProperty addValuesImpl(final Collection<String> values) {
     int newValues = 0;
-    newValueLoop: for (String value : values) { //CSIGNORE
-      for (String existing : _values) {
+    newValueLoop: for (final String value : values) { //CSIGNORE
+      for (final String existing : _values) {
         if (value.equals(existing)) {
           continue newValueLoop;
         }
@@ -147,8 +145,8 @@ public final class ArrayValueProperty extends AbstractValueProperty {
     if (newValues <= MAX_ARRAY_LENGTH) {
       newValues += _values.length;
       final String[] copy = Arrays.copyOf(_values, newValues);
-      newValueLoop: for (String value : values) { //CSIGNORE
-        for (String existing : _values) {
+      newValueLoop: for (final String value : values) { //CSIGNORE
+        for (final String existing : _values) {
           if (value.equals(existing)) {
             continue newValueLoop;
           }
@@ -157,14 +155,13 @@ public final class ArrayValueProperty extends AbstractValueProperty {
       }
       _values = copy;
       return this;
-    } else {
-      final Set<String> copy = Sets.newHashSetWithExpectedSize(newValues);
-      for (String value : _values) {
-        copy.add(value);
-      }
-      copy.addAll(values);
-      return new SetValueProperty(getKey(), isOptional(), copy, getNext());
     }
+    final Set<String> copy = Sets.newHashSetWithExpectedSize(newValues);
+    for (final String value : _values) {
+      copy.add(value);
+    }
+    copy.addAll(values);
+    return new SetValueProperty(getKey(), isOptional(), copy, getNext());
   }
 
   @Override
@@ -174,7 +171,7 @@ public final class ArrayValueProperty extends AbstractValueProperty {
 
   @Override
   protected boolean containsValue(final String value) {
-    for (String myValue : _values) {
+    for (final String myValue : _values) {
       if (value.equals(myValue)) {
         return true;
       }
@@ -186,7 +183,7 @@ public final class ArrayValueProperty extends AbstractValueProperty {
   protected boolean containsAllValues(final String[] values) {
     int lo = 0;
     int hi = _values.length - 1;
-    for (String value : values) {
+    for (final String value : values) {
       boolean match = false;
       for (int i = lo; i <= hi; i++) {
         if (value.equals(_values[i])) {
@@ -210,7 +207,7 @@ public final class ArrayValueProperty extends AbstractValueProperty {
   protected boolean containsAllValues(final Collection<String> values) {
     int lo = 0;
     int hi = _values.length - 1;
-    for (String value : values) {
+    for (final String value : values) {
       boolean match = false;
       for (int i = lo; i <= hi; i++) {
         if (value.equals(_values[i])) {
@@ -257,7 +254,7 @@ public final class ArrayValueProperty extends AbstractValueProperty {
 
   @Override
   protected boolean isSatisfiedBy(final String value) {
-    for (String myValue : _values) {
+    for (final String myValue : _values) {
       if (value.equals(myValue)) {
         return true;
       }
@@ -267,7 +264,7 @@ public final class ArrayValueProperty extends AbstractValueProperty {
 
   @Override
   public boolean isSatisfyValue(final AbstractValueProperty property) {
-    for (String myValue : _values) {
+    for (final String myValue : _values) {
       if (property.isSatisfiedBy(myValue)) {
         return true;
       }
@@ -278,7 +275,7 @@ public final class ArrayValueProperty extends AbstractValueProperty {
   @Override
   protected AbstractValueProperty intersectSingletonValue(final SingletonValueProperty other) {
     final String value = other.getValueImpl();
-    for (String myValue : _values) {
+    for (final String myValue : _values) {
       if (value.equals(myValue)) {
         return other.withOptional(isOptional());
       }
@@ -307,8 +304,7 @@ public final class ArrayValueProperty extends AbstractValueProperty {
       i++;
       while (i < _values.length) {
         si = _values[i];
-        for (int j = 0; j < other._values.length; j++) {
-          final String sj = other._values[j];
+        for (final String sj : other._values) {
           if (si.equals(sj)) {
             result[x++] = si;
             break;
@@ -319,9 +315,8 @@ public final class ArrayValueProperty extends AbstractValueProperty {
       if (x > 1) {
         if (result.length != x) {
           return new ArrayValueProperty(getKey(), isOptional() && other.isOptional(), Arrays.copyOf(result, x), getNext());
-        } else {
-          return new ArrayValueProperty(getKey(), isOptional() && other.isOptional(), result, getNext());
         }
+        return new ArrayValueProperty(getKey(), isOptional() && other.isOptional(), result, getNext());
       } else if (x == 1) {
         // Single value in intersection
         return new SingletonValueProperty(getKey(), isOptional() && other.isOptional(), result[0], getNext());
@@ -356,9 +351,8 @@ public final class ArrayValueProperty extends AbstractValueProperty {
       if (x > 1) {
         if (result.length != x) {
           return new ArrayValueProperty(getKey(), isOptional() && other.isOptional(), Arrays.copyOf(result, x), getNext());
-        } else {
-          return new ArrayValueProperty(getKey(), isOptional() && other.isOptional(), result, getNext());
         }
+        return new ArrayValueProperty(getKey(), isOptional() && other.isOptional(), result, getNext());
       } else if (x == 1) {
         // Single value in intersection
         return new SingletonValueProperty(getKey(), isOptional() && other.isOptional(), result[0], getNext());
@@ -393,7 +387,7 @@ public final class ArrayValueProperty extends AbstractValueProperty {
   protected int valueHashCode() {
     // Hash code of a set of these strings
     int hc = 0;
-    for (String value : _values) {
+    for (final String value : _values) {
       hc += value.hashCode();
     }
     return hc;

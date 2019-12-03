@@ -16,12 +16,12 @@ public class VersionedPortfolioHandler {
   /**
    * The portfolio positions, not null.
    */
-  private Iterable<PortfolioPosition> _positions;
+  private final Iterable<PortfolioPosition> _positions;
 
   /**
    * The portfolio name, may be null.
    */
-  private String _portfolioName;
+  private final String _portfolioName;
 
   /**
    * Create a handler for the portfolio.
@@ -29,7 +29,7 @@ public class VersionedPortfolioHandler {
    * @param name the name of the portfolio
    * @param positions the positions to be handled
    */
-  public VersionedPortfolioHandler(String name, Iterable<PortfolioPosition> positions) {
+  public VersionedPortfolioHandler(final String name, final Iterable<PortfolioPosition> positions) {
     _portfolioName = name;
     _positions = positions;
   }

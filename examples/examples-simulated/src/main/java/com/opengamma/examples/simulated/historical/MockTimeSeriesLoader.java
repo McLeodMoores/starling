@@ -13,24 +13,23 @@ import com.opengamma.master.historicaltimeseries.impl.AbstractHistoricalTimeSeri
 
 /**
  * Mock time-series loader to get the example engine server running.
- * 
- * For fully supported implementations supporting major data vendors like Bloomberg and
- * Thomson-Reuters, please contact sales@opengamma.com
+ *
+ * For fully supported implementations supporting major data vendors like Bloomberg and Thomson-Reuters, please contact sales@opengamma.com
  */
 public class MockTimeSeriesLoader extends AbstractHistoricalTimeSeriesLoader {
 
-  private static final String MESSAGE = "This is a placeholder time-series loader." +
-      "\nFor fully supported implementations supporting major data vendors like Bloomberg and Thomson-Reuters," +
-      "\nPlease contact sales@opengamma.com.";
+  private static final String MESSAGE = "This is a placeholder time-series loader."
+      + "\nFor fully supported implementations supporting major data vendors like Bloomberg and Thomson-Reuters,"
+      + "\nPlease contact sales@opengamma.com.";
 
   @Override
-  protected HistoricalTimeSeriesLoaderResult doBulkLoad(HistoricalTimeSeriesLoaderRequest request) {
+  protected HistoricalTimeSeriesLoaderResult doBulkLoad(final HistoricalTimeSeriesLoaderRequest request) {
     System.out.println(MESSAGE);
     throw new OpenGammaRuntimeException(MESSAGE);
   }
 
   @Override
-  public boolean updateTimeSeries(UniqueId uniqueIdentifier) {
+  public boolean updateTimeSeries(final UniqueId uniqueIdentifier) {
     System.out.println(MESSAGE);
     throw new OpenGammaRuntimeException(MESSAGE);
   }

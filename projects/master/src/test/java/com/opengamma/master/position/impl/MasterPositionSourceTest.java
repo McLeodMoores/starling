@@ -53,34 +53,43 @@ public class MasterPositionSourceTest {
   private static final Instant NOW = Instant.now();
   private static final VersionCorrection VC = VersionCorrection.of(NOW.minusSeconds(2), NOW.minusSeconds(1));
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_2arg_nullMaster() throws Exception {
+  public void testConstructor2argNullMaster() {
     new MasterPositionSource(null, null);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void test_constructor_3arg_nullMaster() throws Exception {
+  public void testConstructor3argNullMaster() {
     new MasterPositionSource(null, null);
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getPortfolio_UniqueId() throws Exception {
-    PortfolioMaster mockPortfolio = mock(PortfolioMaster.class);
-    PositionMaster mockPosition = mock(PositionMaster.class);
-    
-    ManageablePortfolioNode manNode = example(false);
-    ManageablePortfolio manPrt = new ManageablePortfolio("Hello", manNode);
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetPortfolioUniqueId() {
+    final PortfolioMaster mockPortfolio = mock(PortfolioMaster.class);
+    final PositionMaster mockPosition = mock(PositionMaster.class);
+
+    final ManageablePortfolioNode manNode = example(false);
+    final ManageablePortfolio manPrt = new ManageablePortfolio("Hello", manNode);
     manPrt.addAttribute("A1", "V1");
     manPrt.addAttribute("A2", "V2");
     manPrt.setUniqueId(UID);
-    
-    PortfolioDocument prtDoc = new PortfolioDocument(manPrt);
-    
+
+    final PortfolioDocument prtDoc = new PortfolioDocument(manPrt);
+
     when(mockPortfolio.get(UID)).thenReturn(prtDoc);
-    MasterPositionSource test = new MasterPositionSource(mockPortfolio, mockPosition);
-    Portfolio testResult = test.getPortfolio(UID, VersionCorrection.LATEST);
+    final MasterPositionSource test = new MasterPositionSource(mockPortfolio, mockPosition);
+    final Portfolio testResult = test.getPortfolio(UID, VersionCorrection.LATEST);
     verify(mockPortfolio, times(1)).get(UID);
-    
+
     assertEquals(UID, testResult.getUniqueId());
     assertEquals("Hello", testResult.getName());
     assertEquals("Node", testResult.getRootNode().getName());
@@ -93,45 +102,48 @@ public class MasterPositionSourceTest {
     assertEquals(UID2, testResult.getRootNode().getChildNodes().get(0).getParentNodeId());
     assertEquals(0, testResult.getRootNode().getChildNodes().get(0).getPositions().size());
     assertEquals(0, testResult.getRootNode().getChildNodes().get(0).getChildNodes().size());
-    
+
     assertNotNull(testResult.getAttributes());
     assertEquals(2, testResult.getAttributes().size());
     assertEquals("V1", testResult.getAttributes().get("A1"));
     assertEquals("V2", testResult.getAttributes().get("A2"));
   }
 
-  public void test_getPortfolio_UniqueId_instants_children() throws Exception {
-    PortfolioMaster mockPortfolio = mock(PortfolioMaster.class);
-    PositionMaster mockPosition = mock(PositionMaster.class);
-    
-    ManageablePortfolioNode manNode = example(true);
-    ManageablePortfolio manPrt = new ManageablePortfolio("Hello", manNode);
+  /**
+   *
+   */
+  public void testGetPortfolioUniqueIdInstantsChildren() {
+    final PortfolioMaster mockPortfolio = mock(PortfolioMaster.class);
+    final PositionMaster mockPosition = mock(PositionMaster.class);
+
+    final ManageablePortfolioNode manNode = example(true);
+    final ManageablePortfolio manPrt = new ManageablePortfolio("Hello", manNode);
     manPrt.setUniqueId(UID);
-    PortfolioDocument prtDoc = new PortfolioDocument(manPrt);
-    
-    ManageableTrade manTrade = new ManageableTrade();
+    final PortfolioDocument prtDoc = new PortfolioDocument(manPrt);
+
+    final ManageableTrade manTrade = new ManageableTrade();
     manTrade.setQuantity(BigDecimal.valueOf(1234));
     manTrade.setSecurityLink(new ManageableSecurityLink(ExternalId.of("CC", "DD")));
     manTrade.setUniqueId(UID5);
-    ManageablePosition manPos = new ManageablePosition();
+    final ManageablePosition manPos = new ManageablePosition();
     manPos.setQuantity(BigDecimal.valueOf(1235));
     manPos.setSecurityLink(new ManageableSecurityLink(ExternalId.of("AA", "BB")));
     manPos.setUniqueId(UID4);
     manPos.addTrade(manTrade);
-    PositionDocument posDoc = new PositionDocument(manPos);
-    PositionSearchRequest posRequest = new PositionSearchRequest();
+    final PositionDocument posDoc = new PositionDocument(manPos);
+    final PositionSearchRequest posRequest = new PositionSearchRequest();
     posRequest.addPositionObjectId(UID4);
     posRequest.setVersionCorrection(VC);
-    PositionSearchResult posResult = new PositionSearchResult();
+    final PositionSearchResult posResult = new PositionSearchResult();
     posResult.getDocuments().add(posDoc);
-    
+
     when(mockPortfolio.get(UID)).thenReturn(prtDoc);
     when(mockPosition.search(posRequest)).thenReturn(posResult);
-    MasterPositionSource test = new MasterPositionSource(mockPortfolio, mockPosition);
-    Portfolio testResult = test.getPortfolio(UID, VC);
+    final MasterPositionSource test = new MasterPositionSource(mockPortfolio, mockPosition);
+    final Portfolio testResult = test.getPortfolio(UID, VC);
     verify(mockPortfolio, times(1)).get(UID);
     verify(mockPosition, times(1)).search(posRequest);
-    
+
     assertEquals(UID, testResult.getUniqueId());
     assertEquals("Hello", testResult.getName());
     assertEquals("Node", testResult.getRootNode().getName());
@@ -144,36 +156,39 @@ public class MasterPositionSourceTest {
     assertEquals(UID2, testResult.getRootNode().getChildNodes().get(0).getParentNodeId());
     assertEquals(1, testResult.getRootNode().getChildNodes().get(0).getPositions().size());
     assertEquals(0, testResult.getRootNode().getChildNodes().get(0).getChildNodes().size());
-    Position pos = testResult.getRootNode().getChildNodes().get(0).getPositions().get(0);
+    final Position pos = testResult.getRootNode().getChildNodes().get(0).getPositions().get(0);
     assertEquals(UID4, pos.getUniqueId());
     assertEquals(BigDecimal.valueOf(1235), pos.getQuantity());
     assertEquals(ExternalIdBundle.of("AA", "BB"), pos.getSecurityLink().getExternalId());
     assertEquals(1, pos.getTrades().size());
-    Trade trade = pos.getTrades().iterator().next();
+    final Trade trade = pos.getTrades().iterator().next();
     assertEquals(UID5, trade.getUniqueId());
     assertEquals(BigDecimal.valueOf(1234), trade.getQuantity());
     assertEquals(ExternalIdBundle.of("CC", "DD"), trade.getSecurityLink().getExternalId());
   }
 
-  //-------------------------------------------------------------------------
-  public void test_getPortfolioNode_UniqueId() throws Exception {
-    PortfolioMaster mockPortfolio = mock(PortfolioMaster.class);
-    PositionMaster mockPosition = mock(PositionMaster.class);
-    
-    ManageablePortfolioNode manNode = new ManageablePortfolioNode("Node");
+  // -------------------------------------------------------------------------
+  /**
+   *
+   */
+  public void testGetPortfolioNodeUniqueId() {
+    final PortfolioMaster mockPortfolio = mock(PortfolioMaster.class);
+    final PositionMaster mockPosition = mock(PositionMaster.class);
+
+    final ManageablePortfolioNode manNode = new ManageablePortfolioNode("Node");
     manNode.setUniqueId(UID2);
     manNode.setPortfolioId(UID);
-    ManageablePortfolioNode manChild = new ManageablePortfolioNode("Child");
+    final ManageablePortfolioNode manChild = new ManageablePortfolioNode("Child");
     manChild.setUniqueId(UID3);
     manChild.setParentNodeId(UID2);
     manChild.setPortfolioId(UID);
     manNode.addChildNode(manChild);
-    
+
     when(mockPortfolio.getNode(UID2)).thenReturn(manNode);
-    MasterPositionSource test = new MasterPositionSource(mockPortfolio, mockPosition);
-    PortfolioNode testResult = test.getPortfolioNode(UID2, VersionCorrection.LATEST);
+    final MasterPositionSource test = new MasterPositionSource(mockPortfolio, mockPosition);
+    final PortfolioNode testResult = test.getPortfolioNode(UID2, VersionCorrection.LATEST);
     verify(mockPortfolio, times(1)).getNode(UID2);
-    
+
     assertEquals("Node", testResult.getName());
     assertEquals(UID2, testResult.getUniqueId());
     assertEquals(null, testResult.getParentNodeId());
@@ -186,41 +201,53 @@ public class MasterPositionSourceTest {
     assertEquals(0, testResult.getChildNodes().get(0).getChildNodes().size());
   }
 
-  public void test_getPosition() throws Exception {
+  /**
+   *
+   */
+  public void testGetPosition() {
     final PortfolioMaster mockPortfolio = mock(PortfolioMaster.class);
     final PositionMaster mockPosition = mock(PositionMaster.class);
     final PositionDocument doc = new PositionDocument(new ManageablePosition(BigDecimal.TEN, ExternalId.of("B", "C")));
     doc.getPosition().setUniqueId(UID);
     when(mockPosition.get(UID)).thenReturn(doc);
-    MasterPositionSource test = new MasterPositionSource(mockPortfolio, mockPosition);
-    Position testResult = test.getPosition(UID);
+    final MasterPositionSource test = new MasterPositionSource(mockPortfolio, mockPosition);
+    final Position testResult = test.getPosition(UID);
     verify(mockPosition, times(1)).get(UID);
     assertEquals(UID, testResult.getUniqueId());
     assertEquals(BigDecimal.TEN, testResult.getQuantity());
     assertEquals(ExternalId.of("B", "C").toBundle(), testResult.getSecurityLink().getExternalId());
   }
 
-  public void test_getTrade() throws Exception {
+  /**
+   *
+   */
+  public void testGetTrade() {
     final PortfolioMaster mockPortfolio = mock(PortfolioMaster.class);
     final PositionMaster mockPosition = mock(PositionMaster.class);
     final OffsetDateTime now = OffsetDateTime.now();
-    final ManageableTrade doc = new ManageableTrade(BigDecimal.TEN, ExternalId.of("B", "C"), now.toLocalDate(), now.toOffsetTime().minusSeconds(100), ExternalId.of("CPARTY", "C100"));
+    final ManageableTrade doc = new ManageableTrade(BigDecimal.TEN, ExternalId.of("B", "C"), now.toLocalDate(), now.toOffsetTime().minusSeconds(100),
+        ExternalId.of("CPARTY", "C100"));
     doc.setUniqueId(UID);
     when(mockPosition.getTrade(UID)).thenReturn(doc);
-    MasterPositionSource test = new MasterPositionSource(mockPortfolio, mockPosition);
-    Trade testResult = test.getTrade(UID);
+    final MasterPositionSource test = new MasterPositionSource(mockPortfolio, mockPosition);
+    final Trade testResult = test.getTrade(UID);
     verify(mockPosition, times(1)).getTrade(UID);
     assertEquals(UID, testResult.getUniqueId());
     assertEquals(BigDecimal.TEN, testResult.getQuantity());
     assertEquals(ExternalId.of("B", "C").toBundle(), testResult.getSecurityLink().getExternalId());
   }
 
-  //-------------------------------------------------------------------------
-  protected ManageablePortfolioNode example(boolean withPosition) {
-    ManageablePortfolioNode manNode = new ManageablePortfolioNode("Node");
+  // -------------------------------------------------------------------------
+  /**
+   * @param withPosition
+   *          true if the child node should contain the position
+   * @return the portfolio node
+   */
+  protected ManageablePortfolioNode example(final boolean withPosition) {
+    final ManageablePortfolioNode manNode = new ManageablePortfolioNode("Node");
     manNode.setUniqueId(UID2);
     manNode.setPortfolioId(UID);
-    ManageablePortfolioNode manChild = new ManageablePortfolioNode("Child");
+    final ManageablePortfolioNode manChild = new ManageablePortfolioNode("Child");
     manChild.setUniqueId(UID3);
     manChild.setParentNodeId(UID2);
     manChild.setPortfolioId(UID);

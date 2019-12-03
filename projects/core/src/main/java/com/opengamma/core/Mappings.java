@@ -20,8 +20,13 @@ public class Mappings {
   /** The mappings. */
   private final Map<String, String> _mappings;
 
-  public Mappings(Map<String, String> mappings) {
-    ArgumentChecker.notNull(mappings, "mappingValues");
+  /**
+   * Constructs a mappings object.
+   *
+   * @param mappings  the string mappings, not null
+   */
+  public Mappings(final Map<String, String> mappings) {
+    ArgumentChecker.notNull(mappings, "mappings");
     _mappings = ImmutableMap.copyOf(mappings);
   }
 
@@ -33,7 +38,7 @@ public class Mappings {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }

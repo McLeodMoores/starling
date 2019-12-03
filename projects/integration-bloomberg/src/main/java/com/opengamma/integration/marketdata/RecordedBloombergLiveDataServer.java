@@ -36,34 +36,45 @@ public class RecordedBloombergLiveDataServer extends AbstractBloombergLiveDataSe
   private final ReferenceDataProvider _referenceDataProvider;
 
   /**
-   * Used to keep track of subscriptions ourself in a way that can be queried efficiently, every time a tick is
-   * replayed, to see whether it is required.
+   * Used to keep track of subscriptions ourself in a way that can be queried efficiently, every time a tick is replayed, to see whether it is required.
    */
-  private final ConcurrentMap<String, Object> _subscriptions = new ConcurrentHashMap<String, Object>();
+  private final ConcurrentMap<String, Object> _subscriptions = new ConcurrentHashMap<>();
 
   /**
    * Creates an instance, parsing the given times from ISO-8601 strings.
    *
-   * @param rootTickPath  the recorded ticks directory
-   * @param dataStart  the tick start time
-   * @param dataEnd  the tick end time
-   * @param referenceDataProvider  a source of reference data
-   * @param cacheManager  the cache manager, not null
+   * @param rootTickPath
+   *          the recorded ticks directory
+   * @param dataStart
+   *          the tick start time
+   * @param dataEnd
+   *          the tick end time
+   * @param referenceDataProvider
+   *          a source of reference data
+   * @param cacheManager
+   *          the cache manager, not null
    */
-  public RecordedBloombergLiveDataServer(final String rootTickPath, final String dataStart, final String dataEnd, final ReferenceDataProvider referenceDataProvider, final CacheManager cacheManager) {
+  public RecordedBloombergLiveDataServer(final String rootTickPath, final String dataStart, final String dataEnd,
+      final ReferenceDataProvider referenceDataProvider, final CacheManager cacheManager) {
     this(rootTickPath, ZonedDateTime.parse(dataStart), ZonedDateTime.parse(dataEnd), referenceDataProvider, cacheManager);
   }
 
   /**
    * Creates an instance.
    *
-   * @param rootTickPath  the recorded ticks directory
-   * @param dataStart  the tick start time
-   * @param dataEnd  the tick end time
-   * @param referenceDataProvider  a source of reference data
-   * @param cacheManager  the cache manager, not null
+   * @param rootTickPath
+   *          the recorded ticks directory
+   * @param dataStart
+   *          the tick start time
+   * @param dataEnd
+   *          the tick end time
+   * @param referenceDataProvider
+   *          a source of reference data
+   * @param cacheManager
+   *          the cache manager, not null
    */
-  public RecordedBloombergLiveDataServer(final String rootTickPath, final ZonedDateTime dataStart, final ZonedDateTime dataEnd, final ReferenceDataProvider referenceDataProvider,
+  public RecordedBloombergLiveDataServer(final String rootTickPath, final ZonedDateTime dataStart, final ZonedDateTime dataEnd,
+      final ReferenceDataProvider referenceDataProvider,
       final CacheManager cacheManager) {
     super(cacheManager);
     final BloombergTickReceiver tickReceiver = new BloombergTickReceiver() {
@@ -76,7 +87,7 @@ public class RecordedBloombergLiveDataServer extends AbstractBloombergLiveDataSe
     setEntitlementChecker(new LiveDataEntitlementChecker() {
       @Override
       public Map<LiveDataSpecification, Boolean> isEntitled(final UserPrincipal user, final Collection<LiveDataSpecification> requestedSpecifications) {
-        final Map<LiveDataSpecification, Boolean> results = new HashMap<LiveDataSpecification, Boolean>();
+        final Map<LiveDataSpecification, Boolean> results = new HashMap<>();
         for (final LiveDataSpecification requestedSpec : requestedSpecifications) {
           results.put(requestedSpec, true);
         }
@@ -89,7 +100,7 @@ public class RecordedBloombergLiveDataServer extends AbstractBloombergLiveDataSe
       }
     });
 
-    _tickReplayer = new BloombergTicksReplayer(Mode.ORIGINAL_LATENCY, rootTickPath, tickReceiver, dataStart, dataEnd, true, Collections.<String>emptySet());
+    _tickReplayer = new BloombergTicksReplayer(Mode.ORIGINAL_LATENCY, rootTickPath, tickReceiver, dataStart, dataEnd, true, Collections.<String> emptySet());
     _referenceDataProvider = referenceDataProvider;
   }
 
@@ -105,7 +116,7 @@ public class RecordedBloombergLiveDataServer extends AbstractBloombergLiveDataSe
 
   @Override
   protected Map<String, Object> doSubscribe(final Collection<String> uniqueIds) {
-    final Map<String, Object> subscriptions = new HashMap<String, Object>();
+    final Map<String, Object> subscriptions = new HashMap<>();
     for (final String uniqueId : uniqueIds) {
       subscriptions.put(uniqueId, uniqueId);
     }

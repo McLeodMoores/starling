@@ -21,24 +21,24 @@ import com.opengamma.core.value.MarketDataRequirementNames;
  * normalization rules.
  */
 public class StandardRulesUtils {
-  
-  public static void validateOpenGammaMsg(FudgeMsg msg) {
+
+  public static void validateOpenGammaMsg(final FudgeMsg msg) {
     assertNotNull(msg);
-    
-    Set<String> acceptableFields = Sets.newHashSet(
+
+    final Set<String> acceptableFields = Sets.newHashSet(
         MarketDataRequirementNames.MARKET_VALUE,
         MarketDataRequirementNames.VOLUME,
         MarketDataRequirementNames.IMPLIED_VOLATILITY,
         MarketDataRequirementNames.YIELD_CONVENTION_MID,
         MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID,
         MarketDataRequirementNames.DIRTY_PRICE_MID);
-    for (FudgeField field : msg.getAllFields()) {
+    for (final FudgeField field : msg.getAllFields()) {
       assertTrue(acceptableFields + " does not contain " + field.getName(), acceptableFields.contains(field.getName()));
     }
-    
+
     assertNotNull(msg.getDouble(MarketDataRequirementNames.MARKET_VALUE));
     assertTrue(msg.getDouble(MarketDataRequirementNames.MARKET_VALUE) >= 0.0);
-    
+
     if (msg.getDouble(MarketDataRequirementNames.IMPLIED_VOLATILITY) != null) {
       assertTrue(msg.getDouble(MarketDataRequirementNames.IMPLIED_VOLATILITY) >= 0.0);
     }

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
@@ -20,7 +20,8 @@ import com.opengamma.util.money.CurrencyAmount;
 /**
  * Gets the forward rates for an annuity given a bundle of yield curves.
  */
-public final class AnnuityProjectedPaymentsVisitor extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, CurrencyAmount[]> {
+public final class AnnuityProjectedPaymentsVisitor
+    extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, CurrencyAmount[]> {
   /** Gets the fixed rates for coupons */
   private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, CurrencyAmount> COUPON_VISITOR = new CouponProjectedPaymentVisitor();
   /** The singleton instance */
@@ -28,6 +29,7 @@ public final class AnnuityProjectedPaymentsVisitor extends InstrumentDerivativeV
 
   /**
    * Gets the singleton instance.
+   * 
    * @return The instance
    */
   public static InstrumentDerivativeVisitor<MulticurveProviderInterface, CurrencyAmount[]> getInstance() {

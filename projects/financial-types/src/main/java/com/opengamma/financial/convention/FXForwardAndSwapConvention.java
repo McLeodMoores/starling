@@ -22,6 +22,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.id.ExternalId;
@@ -31,6 +33,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Convention for FX forwards and FX swaps.
  */
+@ConventionMetaData(description = "FX forward / swap", group = ConventionGroups.FX)
 @BeanDefinition
 public class FXForwardAndSwapConvention extends FinancialConvention {
 
@@ -74,7 +77,7 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the id bundle for this convention, not null
    * @param spotConvention  the underlying spot rate convention, not null
@@ -93,7 +96,7 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the id bundle for this convention, not null
    * @param spotConvention  the underlying spot rate convention, not null
@@ -117,7 +120,7 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

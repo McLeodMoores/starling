@@ -25,32 +25,32 @@ import com.opengamma.util.tuple.Pair;
  */
 /* package */ class LoggingViewportListener implements ViewportListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(LoggingViewportListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LoggingViewportListener.class);
 
   private final ViewClient _viewClient;
   private final Map<Pair<String, ValueSpecification>, Integer> _refCounts = Maps.newHashMap();
 
-  /* package */ LoggingViewportListener(ViewClient viewClient) {
+  /* package */ LoggingViewportListener(final ViewClient viewClient) {
     ArgumentChecker.notNull(viewClient, "viewClient");
     _viewClient = viewClient;
   }
 
   @Override
-  public void viewportCreated(ViewportDefinition viewportDef, GridStructure gridStructure) {
+  public void viewportCreated(final ViewportDefinition viewportDef, final GridStructure gridStructure) {
     if (viewportDef.enableLogging()) {
       enableLogging(viewportDef, gridStructure);
     }
   }
 
-  private void enableLogging(ViewportDefinition viewportDef, GridStructure gridStructure) {
-    Set<Pair<String, ValueSpecification>> newVals = Sets.newHashSet();
-    for (GridCell cell : viewportDef) {
-      Pair<String, ValueSpecification> valueSpec = gridStructure.getValueSpecificationForCell(cell.getRow(),
-                                                                                              cell.getColumn());
+  private void enableLogging(final ViewportDefinition viewportDef, final GridStructure gridStructure) {
+    final Set<Pair<String, ValueSpecification>> newVals = Sets.newHashSet();
+    for (final GridCell cell : viewportDef) {
+      final Pair<String, ValueSpecification> valueSpec = gridStructure.getValueSpecificationForCell(cell.getRow(),
+          cell.getColumn());
       if (valueSpec == null) {
         continue;
       }
-      Integer refCount = _refCounts.get(valueSpec);
+      final Integer refCount = _refCounts.get(valueSpec);
       Integer newRefCount;
       if (refCount == null) {
         newRefCount = 1;
@@ -60,18 +60,18 @@ import com.opengamma.util.tuple.Pair;
       }
       _refCounts.put(valueSpec, newRefCount);
     }
-    s_logger.debug("Setting log mode to FULL for {}", newVals);
+    LOGGER.debug("Setting log mode to FULL for {}", newVals);
     _viewClient.setMinimumLogMode(ExecutionLogMode.FULL, newVals);
   }
 
   @Override
-  public void viewportUpdated(ViewportDefinition currentDef, ViewportDefinition newDef, GridStructure gridStructure) {
+  public void viewportUpdated(final ViewportDefinition currentDef, final ViewportDefinition newDef, final GridStructure gridStructure) {
     if (currentDef.enableLogging() && newDef.enableLogging()) {
       // logging enabled for both versions of the viewport
-      Set<GridCell> currentCells = Sets.newHashSet(currentDef.iterator());
-      Set<GridCell> newCells = Sets.newHashSet(newDef.iterator());
-      Set<GridCell> cellsRemoved = Sets.difference(currentCells, newCells);
-      Set<GridCell> cellsAdded = Sets.difference(newCells, currentCells);
+      final Set<GridCell> currentCells = Sets.newHashSet(currentDef.iterator());
+      final Set<GridCell> newCells = Sets.newHashSet(newDef.iterator());
+      final Set<GridCell> cellsRemoved = Sets.difference(currentCells, newCells);
+      final Set<GridCell> cellsAdded = Sets.difference(newCells, currentCells);
       enableLogging(targetsFor(cellsAdded.iterator(), gridStructure));
       disableLogging(targetsFor(cellsRemoved.iterator(), gridStructure));
     } else if (!currentDef.enableLogging() && newDef.enableLogging()) {
@@ -83,17 +83,17 @@ import com.opengamma.util.tuple.Pair;
     }
   }
 
-  private Set<Pair<String, ValueSpecification>> targetsFor(Iterator<GridCell> cellIterator, GridStructure gridStructure) {
-    Set<Pair<String, ValueSpecification>> targets = Sets.newHashSet();
+  private static Set<Pair<String, ValueSpecification>> targetsFor(final Iterator<GridCell> cellIterator, final GridStructure gridStructure) {
+    final Set<Pair<String, ValueSpecification>> targets = Sets.newHashSet();
     while (cellIterator.hasNext()) {
-      GridCell cell = cellIterator.next();
+      final GridCell cell = cellIterator.next();
       targets.add(gridStructure.getValueSpecificationForCell(cell.getRow(), cell.getColumn()));
     }
     return targets;
   }
 
   @Override
-  public void viewportDeleted(ViewportDefinition viewportDef, GridStructure gridStructure) {
+  public void viewportDeleted(final ViewportDefinition viewportDef, final GridStructure gridStructure) {
     if (viewportDef.enableLogging()) {
       disableLogging(targetsFor(viewportDef.iterator(), gridStructure));
     }
@@ -103,10 +103,10 @@ import com.opengamma.util.tuple.Pair;
    * Increments the ref count for the value specs and returns the set of specs whose ref count was previously zero.
    * @param targets The referenced specs
    */
-  private void enableLogging(Set<Pair<String, ValueSpecification>> targets) {
-    Set<Pair<String, ValueSpecification>> newlyReferenced = Sets.newHashSet();
-    for (Pair<String, ValueSpecification> target : targets) {
-      Integer refCount = _refCounts.get(target);
+  private void enableLogging(final Set<Pair<String, ValueSpecification>> targets) {
+    final Set<Pair<String, ValueSpecification>> newlyReferenced = Sets.newHashSet();
+    for (final Pair<String, ValueSpecification> target : targets) {
+      final Integer refCount = _refCounts.get(target);
       Integer newRefCount;
       if (refCount == null) {
         newRefCount = 1;
@@ -123,10 +123,10 @@ import com.opengamma.util.tuple.Pair;
    * Decrements the ref count for the value specs and returns the set of specs whose ref count is now zero.
    * @param targets The referenced specs
    */
-  private void disableLogging(Set<Pair<String, ValueSpecification>> targets) {
-    Set<Pair<String, ValueSpecification>> dereferenced = Sets.newHashSet();
-    for (Pair<String, ValueSpecification> target : targets) {
-      Integer refCount = _refCounts.get(target);
+  private void disableLogging(final Set<Pair<String, ValueSpecification>> targets) {
+    final Set<Pair<String, ValueSpecification>> dereferenced = Sets.newHashSet();
+    for (final Pair<String, ValueSpecification> target : targets) {
+      final Integer refCount = _refCounts.get(target);
       Integer newRefCount;
       if (refCount != null) {
         if (refCount.equals(1)) {
@@ -138,7 +138,7 @@ import com.opengamma.util.tuple.Pair;
         }
       }
     }
-    s_logger.debug("Setting log mode to INDICATORS for {}", dereferenced);
+    LOGGER.debug("Setting log mode to INDICATORS for {}", dereferenced);
     _viewClient.setMinimumLogMode(ExecutionLogMode.INDICATORS, dereferenced);
   }
 }

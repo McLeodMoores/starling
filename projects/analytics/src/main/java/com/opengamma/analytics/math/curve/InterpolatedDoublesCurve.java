@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -18,6 +18,7 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
 import org.joda.beans.PropertyDefinition;
+import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
@@ -26,11 +27,9 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
-import org.joda.beans.impl.direct.DirectBeanBuilder;
-
 /**
- * A curve that is defined by a set of nodal points (i.e. <i>x-y</i> data) and an interpolator
- * to return values of <i>y</i> for values of <i>x</i> that do not lie on nodal <i>x</i> values. 
+ * A curve that is defined by a set of nodal points (i.e. <i>x-y</i> data) and an interpolator to return values of <i>y</i> for values of <i>x</i> that do not
+ * lie on nodal <i>x</i> values.
  */
 @BeanDefinition
 public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
@@ -46,12 +45,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   @PropertyDefinition(validate = "notNull", get = "manual", set = "private")
   private Interpolator1D _interpolator;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * 
-   * @param xData An array of <i>x</i> data points, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
+   *
+   * @param xData
+   *          An array of <i>x</i> data points, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final double[] xData, final double[] yData, final Interpolator1D interpolator) {
@@ -59,10 +61,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data points, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
+   *
+   * @param xData
+   *          An array of <i>x</i> data points, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final Double[] xData, final Double[] yData, final Interpolator1D interpolator) {
@@ -70,9 +75,11 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A map of <i>x-y</i> data points, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
+   *
+   * @param data
+   *          A map of <i>x-y</i> data points, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final Map<Double, Double> data, final Interpolator1D interpolator) {
@@ -80,9 +87,11 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data An array of <i>x-y</i> pairs, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
+   *
+   * @param data
+   *          An array of <i>x-y</i> pairs, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final DoublesPair[] data, final Interpolator1D interpolator) {
@@ -90,9 +99,11 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A set of <i>x-y</i> pairs, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
+   *
+   * @param data
+   *          A set of <i>x-y</i> pairs, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final Set<DoublesPair> data, final Interpolator1D interpolator) {
@@ -100,10 +111,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData A list of <i>x</i> data points, not null, contains at least 2 data points
-   * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
+   *
+   * @param xData
+   *          A list of <i>x</i> data points, not null, contains at least 2 data points
+   * @param yData
+   *          A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final List<Double> xData, final List<Double> yData, final Interpolator1D interpolator) {
@@ -111,9 +125,11 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A list of <i>x-y</i> pairs, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
+   *
+   * @param data
+   *          A list of <i>x-y</i> pairs, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final List<DoublesPair> data, final Interpolator1D interpolator) {
@@ -121,11 +137,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data points, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param xData
+   *          An array of <i>x</i> data points, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final double[] xData, final double[] yData, final Interpolator1D interpolator, final String name) {
@@ -133,11 +153,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data points, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param xData
+   *          An array of <i>x</i> data points, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final Double[] xData, final Double[] yData, final Interpolator1D interpolator, final String name) {
@@ -145,10 +169,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A map of <i>x-y</i> data points, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param data
+   *          A map of <i>x-y</i> data points, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final Map<Double, Double> data, final Interpolator1D interpolator, final String name) {
@@ -156,10 +183,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data An array of <i>x-y</i> pairs, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param data
+   *          An array of <i>x-y</i> pairs, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final DoublesPair[] data, final Interpolator1D interpolator, final String name) {
@@ -167,10 +197,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A set of <i>x-y</i> pairs, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param data
+   *          A set of <i>x-y</i> pairs, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final Set<DoublesPair> data, final Interpolator1D interpolator, final String name) {
@@ -178,11 +211,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData A list of <i>x</i> data points, not null, contains at least 2 data points
-   * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param xData
+   *          A list of <i>x</i> data points, not null, contains at least 2 data points
+   * @param yData
+   *          A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final List<Double> xData, final List<Double> yData, final Interpolator1D interpolator, final String name) {
@@ -190,10 +227,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A list of <i>x-y</i> pairs, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null, contains same number of entries as <i>x</i>
-   * @param name The name of the curve
+   *
+   * @param data
+   *          A list of <i>x-y</i> pairs, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null, contains same number of entries as <i>x</i>
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve from(final List<DoublesPair> data, final Interpolator1D interpolator, final String name) {
@@ -201,10 +241,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
+   *
+   * @param xData
+   *          An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final double[] xData, final double[] yData, final Interpolator1D interpolator) {
@@ -212,10 +255,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
+   *
+   * @param xData
+   *          An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final Double[] xData, final Double[] yData, final Interpolator1D interpolator) {
@@ -223,9 +269,11 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A map of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
+   *
+   * @param data
+   *          A map of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final Map<Double, Double> data, final Interpolator1D interpolator) {
@@ -233,9 +281,11 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data An array of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
+   *
+   * @param data
+   *          An array of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final DoublesPair[] data, final Interpolator1D interpolator) {
@@ -243,9 +293,11 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A set of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
+   *
+   * @param data
+   *          A set of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final Set<DoublesPair> data, final Interpolator1D interpolator) {
@@ -253,10 +305,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData A list of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
-   * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
+   *
+   * @param xData
+   *          A list of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
+   * @param yData
+   *          A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final List<Double> xData, final List<Double> yData, final Interpolator1D interpolator) {
@@ -264,9 +319,11 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A list of <i>x-y</i> pairs, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
+   *
+   * @param data
+   *          A list of <i>x-y</i> pairs, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final List<DoublesPair> data, final Interpolator1D interpolator) {
@@ -274,11 +331,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param xData
+   *          An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final double[] xData, final double[] yData, final Interpolator1D interpolator, final String name) {
@@ -286,11 +347,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param xData
+   *          An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final Double[] xData, final Double[] yData, final Interpolator1D interpolator, final String name) {
@@ -298,10 +363,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A map of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param data
+   *          A map of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final Map<Double, Double> data, final Interpolator1D interpolator, final String name) {
@@ -309,10 +377,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data An array of <i>x-y</i> pairs, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param data
+   *          An array of <i>x-y</i> pairs, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final DoublesPair[] data, final Interpolator1D interpolator, final String name) {
@@ -320,10 +391,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A set of <i>x-y</i> pairs, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param data
+   *          A set of <i>x-y</i> pairs, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final Set<DoublesPair> data, final Interpolator1D interpolator, final String name) {
@@ -331,11 +405,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param xData
+   *          An array of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final List<Double> xData, final List<Double> yData, final Interpolator1D interpolator, final String name) {
@@ -343,17 +421,20 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A list of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param name The name of the curve
+   *
+   * @param data
+   *          A list of <i>x-y</i> data points, assumed to be sorted ascending in <i>x</i>, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param name
+   *          The name of the curve
    * @return An interpolated curve with automatically-generated name
    */
   public static InterpolatedDoublesCurve fromSorted(final List<DoublesPair> data, final Interpolator1D interpolator, final String name) {
     return new InterpolatedDoublesCurve(data, interpolator, true, name);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Constructor for Joda-Beans.
    */
@@ -361,11 +442,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
+   *
+   * @param xData
+   *          An array of <i>x</i> data, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
    */
   public InterpolatedDoublesCurve(final double[] xData, final double[] yData, final Interpolator1D interpolator, final boolean isSorted) {
     super(xData, yData, isSorted);
@@ -373,11 +458,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
+   *
+   * @param xData
+   *          An array of <i>x</i> data, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
    */
   public InterpolatedDoublesCurve(final Double[] xData, final Double[] yData, final Interpolator1D interpolator, final boolean isSorted) {
     super(xData, yData, isSorted);
@@ -385,10 +474,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A map of <i>x-y</i> data, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
+   *
+   * @param data
+   *          A map of <i>x-y</i> data, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
    */
   public InterpolatedDoublesCurve(final Map<Double, Double> data, final Interpolator1D interpolator, final boolean isSorted) {
     super(data, isSorted);
@@ -396,10 +488,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data An array of <i>x-y</i> pairs, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
+   *
+   * @param data
+   *          An array of <i>x-y</i> pairs, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
    */
   public InterpolatedDoublesCurve(final DoublesPair[] data, final Interpolator1D interpolator, final boolean isSorted) {
     super(data, isSorted);
@@ -407,10 +502,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A set of <i>x-y</i> pairs, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
+   *
+   * @param data
+   *          A set of <i>x-y</i> pairs, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
    */
   public InterpolatedDoublesCurve(final Set<DoublesPair> data, final Interpolator1D interpolator, final boolean isSorted) {
     super(data, isSorted);
@@ -418,11 +516,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData A list of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
-   * @param yData A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
+   *
+   * @param xData
+   *          A list of <i>x</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
+   * @param yData
+   *          A list of <i>y</i> data points, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
    */
   public InterpolatedDoublesCurve(final List<Double> xData, final List<Double> yData, final Interpolator1D interpolator, final boolean isSorted) {
     super(xData, yData, isSorted);
@@ -430,10 +532,13 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A list of <i>x-y</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
+   *
+   * @param data
+   *          A list of <i>x-y</i> data points, assumed to be sorted ascending, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
    */
   public InterpolatedDoublesCurve(final List<DoublesPair> data, final Interpolator1D interpolator, final boolean isSorted) {
     super(data, isSorted);
@@ -441,12 +546,17 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
-   * @param name The name of the curve
+   *
+   * @param xData
+   *          An array of <i>x</i> data, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
+   * @param name
+   *          The name of the curve
    */
   public InterpolatedDoublesCurve(final double[] xData, final double[] yData, final Interpolator1D interpolator, final boolean isSorted, final String name) {
     super(xData, yData, isSorted, name);
@@ -454,12 +564,17 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData An array of <i>x</i> data, not null, contains at least 2 data points
-   * @param yData An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
-   * @param name The name of the curve
+   *
+   * @param xData
+   *          An array of <i>x</i> data, not null, contains at least 2 data points
+   * @param yData
+   *          An array of <i>y</i> data, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
+   * @param name
+   *          The name of the curve
    */
   public InterpolatedDoublesCurve(final Double[] xData, final Double[] yData, final Interpolator1D interpolator, final boolean isSorted, final String name) {
     super(xData, yData, isSorted, name);
@@ -467,11 +582,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A map of <i>x-y</i> data, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
-   * @param name The name of the curve
+   *
+   * @param data
+   *          A map of <i>x-y</i> data, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
+   * @param name
+   *          The name of the curve
    */
   public InterpolatedDoublesCurve(final Map<Double, Double> data, final Interpolator1D interpolator, final boolean isSorted, final String name) {
     super(data, isSorted, name);
@@ -479,11 +598,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data An array of <i>x-y</i> pairs, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
-   * @param name The name of the curve
+   *
+   * @param data
+   *          An array of <i>x-y</i> pairs, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
+   * @param name
+   *          The name of the curve
    */
   public InterpolatedDoublesCurve(final DoublesPair[] data, final Interpolator1D interpolator, final boolean isSorted, final String name) {
     super(data, isSorted, name);
@@ -491,11 +614,15 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param data A set of <i>x-y</i> pairs, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
-   * @param name The name of the curve
+   *
+   * @param data
+   *          A set of <i>x-y</i> pairs, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
+   * @param name
+   *          The name of the curve
    */
   public InterpolatedDoublesCurve(final Set<DoublesPair> data, final Interpolator1D interpolator, final boolean isSorted, final String name) {
     super(data, isSorted, name);
@@ -503,24 +630,34 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
   }
 
   /**
-   * 
-   * @param xData A list of <i>x</i> data, not null, contains at least 2 data points
-   * @param yData A list of <i>y</i> data, not null, contains same number of entries as <i>x</i>
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
-   * @param name The name of the curve
+   *
+   * @param xData
+   *          A list of <i>x</i> data, not null, contains at least 2 data points
+   * @param yData
+   *          A list of <i>y</i> data, not null, contains same number of entries as <i>x</i>
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
+   * @param name
+   *          The name of the curve
    */
-  public InterpolatedDoublesCurve(final List<Double> xData, final List<Double> yData, final Interpolator1D interpolator, final boolean isSorted, final String name) {
+  public InterpolatedDoublesCurve(final List<Double> xData, final List<Double> yData, final Interpolator1D interpolator, final boolean isSorted,
+      final String name) {
     super(xData, yData, isSorted, name);
     init(interpolator);
   }
 
   /**
-   * 
-   * @param data A list of <i>x-y</i> pairs, not null, contains at least 2 data points
-   * @param interpolator The interpolator, not null
-   * @param isSorted Is the <i>x</i>-data sorted
-   * @param name The name of the curve
+   *
+   * @param data
+   *          A list of <i>x-y</i> pairs, not null, contains at least 2 data points
+   * @param interpolator
+   *          The interpolator, not null
+   * @param isSorted
+   *          Is the <i>x</i>-data sorted
+   * @param name
+   *          The name of the curve
    */
   public InterpolatedDoublesCurve(final List<DoublesPair> data, final Interpolator1D interpolator, final boolean isSorted, final String name) {
     super(data, isSorted, name);
@@ -529,12 +666,12 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
 
   private void init(final Interpolator1D interpolator) {
     ArgumentChecker.notNull(interpolator, "interpolator");
-    //  Validate.isTrue(size() >= 2);
+    // Validate.isTrue(size() >= 2);
     _dataBundle = interpolator.getDataBundleFromSortedArrays(getXDataAsPrimitive(), getYDataAsPrimitive());
     _interpolator = interpolator;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public Double getYValue(final Double x) {
     ArgumentChecker.notNull(x, "x");
@@ -560,7 +697,7 @@ public class InterpolatedDoublesCurve extends ArraysDoublesCurve {
     return _interpolator.firstDerivative(_dataBundle, x);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {

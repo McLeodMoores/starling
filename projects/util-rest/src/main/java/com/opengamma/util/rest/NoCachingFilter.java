@@ -21,14 +21,14 @@ import com.sun.jersey.spi.container.ContainerResponseFilter;
 public class NoCachingFilter implements ContainerResponseFilter {
 
   @Override
-  public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
-    if (request.getMethod().equalsIgnoreCase("GET") == false) {
+  public ContainerResponse filter(final ContainerRequest request, final ContainerResponse response) {
+    if (!request.getMethod().equalsIgnoreCase("GET")) {
       return response;
     }
-    MultivaluedMap<String, Object> headers = response.getHttpHeaders();
-    if (headers.containsKey(HttpHeaders.ETAG) == false &&
-        headers.containsKey(HttpHeaders.CACHE_CONTROL) == false &&
-        headers.containsKey(HttpHeaders.EXPIRES) == false) {
+    final MultivaluedMap<String, Object> headers = response.getHttpHeaders();
+    if (!headers.containsKey(HttpHeaders.ETAG)
+        && !headers.containsKey(HttpHeaders.CACHE_CONTROL)
+        && !headers.containsKey(HttpHeaders.EXPIRES)) {
       headers.add(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, max-age=0, must-revalidate");
       headers.add(HttpHeaders.EXPIRES, "Mon, 26 Jul 1997 05:00:00 GMT");
     }

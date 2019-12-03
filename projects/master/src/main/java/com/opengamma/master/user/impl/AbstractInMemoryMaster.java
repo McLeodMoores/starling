@@ -33,6 +33,7 @@ import com.opengamma.util.ArgumentChecker;
  * Abstract base providing a simple, in-memory master.
  * <p>
  * This master does not support versioning.
+ * @param <T> the type of the object to be stored, updated, queried, etc.
  */
 abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniqueIdentifiable> {
   // see UserMaster and RoleMaster for method descriptions
@@ -70,7 +71,7 @@ abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniq
    * @param objectIdSupplier  the supplier of object identifiers, not null
    * @param changeManager  the change manager, not null
    */
-  AbstractInMemoryMaster(String objectDescription, T removed, Supplier<ObjectId> objectIdSupplier, final ChangeManager changeManager) {
+  AbstractInMemoryMaster(final String objectDescription, final T removed, final Supplier<ObjectId> objectIdSupplier, final ChangeManager changeManager) {
     ArgumentChecker.notNull(objectDescription, "objectDescription");
     ArgumentChecker.notNull(removed, "removed");
     ArgumentChecker.notNull(objectIdSupplier, "objectIdSupplier");
@@ -84,7 +85,7 @@ abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniq
   //-------------------------------------------------------------------------
   /**
    * Gets the stored values, not to be altered.
-   * 
+   *
    * @return the values, not null
    */
   Collection<T> getStoredValues() {
@@ -93,7 +94,7 @@ abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniq
 
   /**
    * Gets the change manager.
-   * 
+   *
    * @return the change manager, not null
    */
   ChangeManager getChangeManager() {
@@ -102,14 +103,14 @@ abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniq
 
   /**
    * Extracts the name from the object.
-   * 
+   *
    * @param object  the object, not null
    * @return the name, not null
    */
   abstract String extractName(T object);
 
   //-------------------------------------------------------------------------
-  String caseInsensitive(String name) {
+  String caseInsensitive(final String name) {
     return name.toLowerCase(Locale.ROOT);
   }
 
@@ -118,32 +119,32 @@ abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniq
     return (T) JodaBeanUtils.clone((Bean) original);
   }
 
-  boolean nameExists(String name) {
+  boolean nameExists(final String name) {
     ArgumentChecker.notNull(name, "name");
     return _names.containsKey(caseInsensitive(name));
   }
 
-  T getByName(String name) {
+  T getByName(final String name) {
     ArgumentChecker.notNull(name, "name");
-    T stored = getByName0(name);
+    final T stored = getByName0(name);
     return clone(stored);
   }
 
-  T getByName0(String name) {
-    ObjectId objectId = _names.get(caseInsensitive(name));
+  T getByName0(final String name) {
+    final ObjectId objectId = _names.get(caseInsensitive(name));
     if (objectId == null) {
       throw new DataNotFoundException(_objectDescription + " name not found: " + name);
     }
     return getById0(objectId);
   }
 
-  T getById(ObjectId objectId) {
+  T getById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
     final T stored = getById0(objectId);
     return clone(stored);
   }
 
-  T getById0(ObjectId objectId) {
+  T getById0(final ObjectId objectId) {
     final T stored = _objects.get(objectId);
     if (stored == null || stored == _removed) {
       throw new DataNotFoundException(_objectDescription + " identifier not found: " + objectId);
@@ -152,77 +153,76 @@ abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniq
   }
 
   //-------------------------------------------------------------------------
-  UniqueId add(T object) {
+  UniqueId add(final T object) {
     ArgumentChecker.notNull(object, "object");
-    ObjectId objectId = _objectIdSupplier.get();
-    UniqueId uniqueId = objectId.atVersion("1");
-    object = clone(object);
-    object.setUniqueId(uniqueId);
-    String nameKey = caseInsensitive(extractName(object));
+    final ObjectId objectId = _objectIdSupplier.get();
+    final UniqueId uniqueId = objectId.atVersion("1");
+    final T o = clone(object);
+    o.setUniqueId(uniqueId);
+    final String nameKey = caseInsensitive(extractName(o));
     synchronized (this) {
       if (_names.containsKey(nameKey)) {
-        throw new DataDuplicationException(_objectDescription + " already exists: " + extractName(object));
+        throw new DataDuplicationException(_objectDescription + " already exists: " + extractName(o));
       }
-      _objects.put(objectId, object);
+      _objects.put(objectId, o);
       _names.put(nameKey, objectId);
     }
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     _changeManager.entityChanged(ChangeType.ADDED, objectId, now, null, now);
     return uniqueId;
   }
 
-  UniqueId update(T object) {
+  UniqueId update(final T object) {
     ArgumentChecker.notNull(object, "object");
     ArgumentChecker.notNull(object.getUniqueId(), "object.uniqueId");
     ArgumentChecker.notNull(object.getUniqueId().getVersion(), "object.uniqueId.version");
-    ObjectId objectId = object.getUniqueId().getObjectId();
-    String oldVersion = object.getUniqueId().getVersion();
-    UniqueId newUniqueId = objectId.atVersion(Integer.toString(Integer.parseInt(oldVersion) + 1));
-    object = clone(object);
-    object.setUniqueId(newUniqueId);
-    String nameKey = caseInsensitive(extractName(object));
+    final ObjectId objectId = object.getUniqueId().getObjectId();
+    final String oldVersion = object.getUniqueId().getVersion();
+    final UniqueId newUniqueId = objectId.atVersion(Integer.toString(Integer.parseInt(oldVersion) + 1));
+    final T o = clone(object);
+    o.setUniqueId(newUniqueId);
+    final String nameKey = caseInsensitive(extractName(o));
     synchronized (this) {
       final T stored = getById0(objectId);
-      if (stored.getUniqueId().getVersion().equals(oldVersion) == false) {
+      if (!stored.getUniqueId().getVersion().equals(oldVersion)) {
         throw new DataVersionException("Invalid version, " + _objectDescription + " has already been updated: " + objectId);
       }
       if (nameKey.equals(caseInsensitive(extractName(stored)))) {
-        _objects.put(objectId, object);  // replace
+        _objects.put(objectId, o);  // replace
       } else {
         if (_names.containsKey(nameKey)) {
-          throw new DataDuplicationException(_objectDescription + " cannot be renamed, new name already exists: " + extractName(object));
+          throw new DataDuplicationException(_objectDescription + " cannot be renamed, new name already exists: " + extractName(o));
         }
-        _objects.put(objectId, object);  // replace
+        _objects.put(objectId, o);  // replace
         _names.put(nameKey, objectId);
         // leave old name to forward to same object
       }
     }
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     _changeManager.entityChanged(ChangeType.CHANGED, objectId, now, null, now);
     return newUniqueId;
   }
 
-  UniqueId save(T object) {
+  UniqueId save(final T object) {
     ArgumentChecker.notNull(object, "object");
     if (object.getUniqueId() != null) {
       return update(object);
-    } else {
-      return add(object);
     }
+    return add(object);
   }
 
   //-------------------------------------------------------------------------
-  void removeByName(String name) {
+  void removeByName(final String name) {
     ArgumentChecker.notNull(name, "name");
     // no need to synchronize as names is append-only
-    ObjectId objectId = _names.get(caseInsensitive(name));
+    final ObjectId objectId = _names.get(caseInsensitive(name));
     if (objectId == null) {
       throw new DataNotFoundException(_objectDescription + " name not found: " + name);
     }
     removeById(objectId);
   }
 
-  void removeById(ObjectId objectId) {
+  void removeById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
     synchronized (this) {
       final T stored = _objects.get(objectId);
@@ -233,15 +233,15 @@ abstract class AbstractInMemoryMaster<T extends UniqueIdentifiable & MutableUniq
       }
       _objects.put(objectId, _removed);  // replace
     }
-    Instant now = Instant.now();
+    final Instant now = Instant.now();
     _changeManager.entityChanged(ChangeType.REMOVED, objectId, now, null, now);
   }
 
   //-------------------------------------------------------------------------
-  List<HistoryEvent> eventHistory(ObjectId objectId, String name) {
-    if (objectId != null && _objects.containsKey(objectId) == false) {
+  List<HistoryEvent> eventHistory(final ObjectId objectId, final String name) {
+    if (objectId != null && !_objects.containsKey(objectId)) {
       throw new DataNotFoundException(_objectDescription + " identifier not found: " + objectId);
-    } else if (name != null && _names.containsKey(caseInsensitive(name)) == false) {
+    } else if (name != null && !_names.containsKey(caseInsensitive(name))) {
       throw new DataNotFoundException(_objectDescription + " name not found: " + name);
     }
     return ImmutableList.of();

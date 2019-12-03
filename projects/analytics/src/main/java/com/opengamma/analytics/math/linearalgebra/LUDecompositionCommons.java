@@ -14,8 +14,8 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
 
 /**
- * This class is a wrapper for the <a href="http://commons.apache.org/math/api-2.1/org/apache/commons/math/linear/LUDecompositionImpl.html">Commons Math library implementation</a> 
- * of LU decomposition.
+ * This class is a wrapper for the <a href="http://commons.apache.org/math/api-2.1/org/apache/commons/math/linear/LUDecompositionImpl.html">Commons Math library
+ * implementation</a> of LU decomposition.
  */
 public class LUDecompositionCommons extends Decomposition<LUDecompositionResult> {
 

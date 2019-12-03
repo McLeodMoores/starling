@@ -12,13 +12,13 @@ import groovy.lang.Closure;
  */
 /* package */ final class DslVolatilitySurfaceSelectorBuilder extends VolatilitySurfaceSelector.Builder {
 
-  /* package */ DslVolatilitySurfaceSelectorBuilder(Scenario scenario) {
+  /* package */ DslVolatilitySurfaceSelectorBuilder(final Scenario scenario) {
     super(scenario);
   }
 
   @SuppressWarnings("unused")
-  public void apply(Closure<?> body) {
-    DslVolatilitySurfaceManipulatorBuilder builder =
+  public void apply(final Closure<?> body) {
+    final DslVolatilitySurfaceManipulatorBuilder builder =
         new DslVolatilitySurfaceManipulatorBuilder(getScenario(), getSelector());
     body.setDelegate(builder);
     body.setResolveStrategy(Closure.DELEGATE_FIRST);

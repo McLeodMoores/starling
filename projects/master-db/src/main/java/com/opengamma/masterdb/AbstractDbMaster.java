@@ -13,7 +13,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.threeten.bp.Clock;
 import org.threeten.bp.Instant;
@@ -30,15 +30,14 @@ import com.opengamma.util.db.DbMapSqlParameterSource;
 /**
  * An abstract master for rapid implementation of a database backed master.
  * <p>
- * This combines the various configuration elements and convenience methods
- * needed for most database masters.
+ * This combines the various configuration elements and convenience methods needed for most database masters.
  * <p>
  * This class is mutable but must be treated as immutable after configuration.
  */
 public abstract class AbstractDbMaster implements ConfigurableDbMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbMaster.class);
 
   /**
    * The database connector.
@@ -62,21 +61,23 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
    * External SQL bundle.
    */
   private ElSqlBundle _externalSqlBundle;
-  
+
   /**
    * The Hibernate template.
    */
-  private HibernateTemplate _hibernateTemplate;
+  private final HibernateTemplate _hibernateTemplate;
 
   /**
    * Creates an instance.
-   * 
-   * @param dbConnector  the database connector, not null
-   * @param defaultScheme  the default scheme for unique identifier, not null
+   *
+   * @param dbConnector
+   *          the database connector, not null
+   * @param defaultScheme
+   *          the default scheme for unique identifier, not null
    */
   public AbstractDbMaster(final DbConnector dbConnector, final String defaultScheme) {
     ArgumentChecker.notNull(dbConnector, "dbConnector");
-    s_logger.debug("installed DbConnector: {}", dbConnector);
+    LOGGER.debug("installed DbConnector: {}", dbConnector);
     _dbConnector = dbConnector;
     _clock = dbConnector.timeSource();
     _uniqueIdScheme = defaultScheme;
@@ -84,8 +85,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   }
 
   /**
-   * Gets the maximum number of retries.
-   * The default is ten.
+   * Gets the maximum number of retries. The default is ten.
    *
    * @return the maximum number of retries, not null
    */
@@ -95,10 +95,10 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   }
 
   /**
-   * Sets the maximum number of retries.
-   * The default is ten.
+   * Sets the maximum number of retries. The default is ten.
    *
-   * @param maxRetries  the maximum number of retries, not negative
+   * @param maxRetries
+   *          the maximum number of retries, not negative
    */
   @Override
   public void setMaxRetries(final int maxRetries) {
@@ -106,17 +106,17 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
     _maxRetries = maxRetries;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the database connector.
-   * 
+   *
    * @return the database connector, not null
    */
   @Override
   public DbConnector getDbConnector() {
     return _dbConnector;
   }
-  
+
   /**
    * Gets the Hibernate Session factory.
    *
@@ -125,7 +125,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   public SessionFactory getSessionFactory() {
     return getDbConnector().getHibernateSessionFactory();
   }
-  
+
   /**
    * Gets the local Hibernate template.
    *
@@ -134,11 +134,11 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   public HibernateTemplate getHibernateTemplate() {
     return _hibernateTemplate;
   }
-  
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   /**
    * Gets the external SQL bundle.
-   * 
+   *
    * @return the external SQL bundle, not null
    */
   @Override
@@ -148,18 +148,19 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
 
   /**
    * Sets the external SQL bundle.
-   * 
-   * @param bundle  the external SQL bundle, not null
+   *
+   * @param bundle
+   *          the external SQL bundle, not null
    */
   @Override
-  public void setElSqlBundle(ElSqlBundle bundle) {
+  public void setElSqlBundle(final ElSqlBundle bundle) {
     _externalSqlBundle = bundle;
   }
-  
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   /**
    * Gets the clock that determines the current time.
-   * 
+   *
    * @return the clock, not null
    */
   @Override
@@ -169,16 +170,17 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
 
   /**
    * Sets the clock that determines the current time.
-   * 
-   * @param clock  the clock, not null
+   *
+   * @param clock
+   *          the clock, not null
    */
   @Override
   public void setClock(final Clock clock) {
     ArgumentChecker.notNull(clock, "clock");
-    s_logger.debug("installed Clock: {}", clock);
+    LOGGER.debug("installed Clock: {}", clock);
     _clock = clock;
   }
-  
+
   /**
    * Resets the clock that determines the current time to the default.
    */
@@ -188,16 +190,17 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
 
   /**
    * Gets the current instant using the clock.
-   * 
+   *
    * @return the current instant, not null
    */
   protected Instant now() {
     return Instant.now(getClock());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates the parameter source.
+   * 
    * @return the source, not null
    */
   protected DbMapSqlParameterSource createParameterSource() {
@@ -206,18 +209,19 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
 
   /**
    * Gets the next database id.
-   * 
-   * @param sequenceName  the name of the sequence to query, not null
+   *
+   * @param sequenceName
+   *          the name of the sequence to query, not null
    * @return the next database id
    */
-  protected long nextId(String sequenceName) {
+  protected long nextId(final String sequenceName) {
     return getJdbcTemplate().getJdbcOperations().queryForObject(getDialect().sqlNextSequenceValueSelect(sequenceName), Long.class);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the database template.
-   * 
+   *
    * @return the database template, not null if correctly initialized
    */
   protected NamedParameterJdbcTemplate getJdbcTemplate() {
@@ -226,7 +230,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
 
   /**
    * Gets the transaction template.
-   * 
+   *
    * @return the transaction template, not null if correctly initialized
    */
   protected TransactionTemplate getTransactionTemplate() {
@@ -236,13 +240,14 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Gets the retrying transaction template.
    *
-   * @param retries number of retries of execution before considering the execution failed
+   * @param retries
+   *          number of retries of execution before considering the execution failed
    * @return the transaction template, not null if correctly initialized
    */
-  protected DbConnector.TransactionTemplateRetrying getTransactionTemplateRetrying(int retries) {
+  protected DbConnector.TransactionTemplateRetrying getTransactionTemplateRetrying(final int retries) {
     return getDbConnector().getTransactionTemplateRetrying(retries);
   }
-  
+
   /**
    * Gets the hibernate template wrapped in new transaction.
    *
@@ -255,26 +260,27 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   /**
    * Gets the retrying hibernate transaction template.
    *
-   * @param retries number of retries of execution before considering the execution failed
+   * @param retries
+   *          number of retries of execution before considering the execution failed
    * @return the hibernate transaction template, not null if correctly initialized
    */
-  protected DbConnector.HibernateTransactionTemplateRetrying getHibernateTransactionTemplateRetrying(int retries) {
+  protected DbConnector.HibernateTransactionTemplateRetrying getHibernateTransactionTemplateRetrying(final int retries) {
     return getDbConnector().getHibernateTransactionTemplateRetrying(retries);
   }
-  
+
   /**
    * Gets the database dialect.
-   * 
+   *
    * @return the dialect, not null if correctly initialized
    */
   protected DbDialect getDialect() {
     return getDbConnector().getDialect();
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the scheme in use for unique identifier.
-   * 
+   *
    * @return the scheme, not null
    */
   @Override
@@ -284,61 +290,66 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
 
   /**
    * Sets the scheme in use for unique identifier.
-   * 
-   * @param scheme  the scheme for unique identifier, not null
+   *
+   * @param scheme
+   *          the scheme for unique identifier, not null
    */
   @Override
   public void setUniqueIdScheme(final String scheme) {
     ArgumentChecker.notNull(scheme, "scheme");
-    s_logger.debug("installed scheme: {}", scheme);
+    LOGGER.debug("installed scheme: {}", scheme);
     _uniqueIdScheme = scheme;
   }
 
   /**
    * Checks the unique identifier scheme is valid.
-   * 
-   * @param objectId  the object identifier, not null
+   *
+   * @param objectId
+   *          the object identifier, not null
    */
   protected void checkScheme(final ObjectIdentifiable objectId) {
-    if (getUniqueIdScheme().equals(objectId.getObjectId().getScheme()) == false) {
+    if (!getUniqueIdScheme().equals(objectId.getObjectId().getScheme())) {
       throw new IllegalArgumentException("UniqueId is not from this master (" + toString() + "): " + objectId);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Extracts the row identifier.
-   * 
-   * @param id  the identifier to extract from, not null
+   *
+   * @param id
+   *          the identifier to extract from, not null
    * @return the extracted row id
    */
   protected long extractRowId(final UniqueId id) {
     try {
       return Long.parseLong(id.getValue()) + Long.parseLong(id.getVersion());
-    } catch (NumberFormatException ex) {
+    } catch (final NumberFormatException ex) {
       throw new IllegalArgumentException("UniqueId is not from this master (non-numeric row id): " + id, ex);
     }
   }
 
   /**
    * Extracts the object identifier.
-   * 
-   * @param objectId  the identifier to extract from, not null
+   *
+   * @param objectId
+   *          the identifier to extract from, not null
    * @return the extracted oid
    */
   protected long extractOid(final ObjectIdentifiable objectId) {
     try {
       return Long.parseLong(objectId.getObjectId().getValue());
-    } catch (NumberFormatException ex) {
+    } catch (final NumberFormatException ex) {
       throw new IllegalArgumentException("UniqueId is not from this master (non-numeric object id): " + objectId, ex);
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Creates an object identifier.
-   * 
-   * @param oid  the object identifier
+   *
+   * @param oid
+   *          the object identifier
    * @return the unique identifier, not null
    */
   public UniqueId createObjectId(final long oid) {
@@ -347,37 +358,42 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
 
   /**
    * Creates a unique identifier.
-   * 
-   * @param oid  the object identifier
-   * @param rowId  the node unique row identifier, null if object identifier
+   *
+   * @param oid
+   *          the object identifier
+   * @param rowId
+   *          the node unique row identifier, null if object identifier
    * @return the unique identifier, not null
    */
   public UniqueId createUniqueId(final long oid, final long rowId) {
     return UniqueId.of(getUniqueIdScheme(), Long.toString(oid), Long.toString(rowId - oid));
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Extracts a BigDecimal handling DB annoyances.
-   * 
-   * @param rs  the result set, not null
-   * @param columnName  the column name, not null
+   *
+   * @param rs
+   *          the result set, not null
+   * @param columnName
+   *          the column name, not null
    * @return the extracted value, may be null
-   * @throws SQLException 
+   * @throws SQLException
+   *           if there is a problem getting the value
    */
   protected BigDecimal extractBigDecimal(final ResultSet rs, final String columnName) throws SQLException {
-    BigDecimal value = rs.getBigDecimal(columnName);
+    final BigDecimal value = rs.getBigDecimal(columnName);
     if (value == null) {
       return null;
     }
-    BigDecimal stripped = JdkUtils.stripTrailingZeros(value);  // Derby, and maybe others, add trailing zeroes
+    final BigDecimal stripped = JdkUtils.stripTrailingZeros(value); // Derby, and maybe others, add trailing zeroes
     return stripped.scale() < 0 ? stripped.setScale(0) : stripped;
   }
-  
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
   /**
    * Retrieves the version of the master schema from the database.
-   *  
+   *
    * @return the schema version, or null if not found
    */
   @Override
@@ -385,18 +401,18 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
     try {
       final DbMapSqlParameterSource args = createParameterSource().addValue("version_key", "schema_patch");
       final String sql = getElSqlBundle().getSql("GetSchemaVersion", args);
-      String version = getJdbcTemplate().queryForObject(sql, args, String.class);
+      final String version = getJdbcTemplate().queryForObject(sql, args, String.class);
       return Integer.parseInt(version);
-    } catch (Exception e) {
-      s_logger.debug("Error reading schema version from database", e);
+    } catch (final Exception e) {
+      LOGGER.debug("Error reading schema version from database", e);
       return null;
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Returns a string summary of this master.
-   * 
+   *
    * @return the string summary, not null
    */
   @Override

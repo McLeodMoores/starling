@@ -23,14 +23,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public class DbHistoricalTimeSeriesMasterTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbHistoricalTimeSeriesMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbHistoricalTimeSeriesMasterTest.class);
 
   private DbHistoricalTimeSeriesMaster _htsMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
-  public DbHistoricalTimeSeriesMasterTest(String databaseType, String databaseVersion) {
+  public DbHistoricalTimeSeriesMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------

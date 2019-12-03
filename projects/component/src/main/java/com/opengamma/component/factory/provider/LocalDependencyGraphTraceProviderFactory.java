@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.provider;
@@ -37,8 +37,7 @@ import com.opengamma.financial.depgraph.rest.DependencyGraphTraceProviderResourc
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Initializes the {@link LocalDependencyGraphTraceProvider} and its corresponding
- * REST interface if configured.
+ * Initializes the {@link LocalDependencyGraphTraceProvider} and its corresponding REST interface if configured.
  */
 @BeanDefinition
 public class LocalDependencyGraphTraceProviderFactory extends AbstractComponentFactory {
@@ -62,19 +61,19 @@ public class LocalDependencyGraphTraceProviderFactory extends AbstractComponentF
   private FudgeContext _fudgeContext = OpenGammaFudgeContext.getInstance();
 
   /**
-   * The {@link CompiledFunctionService}
+   * The {@link CompiledFunctionService}.
    */
   @PropertyDefinition(validate = "notNull")
   private CompiledFunctionService _compiledFunctionService;
 
   /**
-   * The {@link FunctionResolver}
+   * The {@link FunctionResolver}.
    */
   @PropertyDefinition(validate = "notNull")
   private FunctionResolver _functionResolver;
 
   /**
-   * The {@link FunctionExclusionGroups}
+   * The {@link FunctionExclusionGroups}.
    */
   @PropertyDefinition(validate = "notNull")
   private FunctionExclusionGroups _functionExclusionGroups;
@@ -85,17 +84,17 @@ public class LocalDependencyGraphTraceProviderFactory extends AbstractComponentF
   private MarketDataProviderResolver _marketDataProviderResolver;
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
 
-    DependencyGraphBuilderResourceContextBean builderContext = new DependencyGraphBuilderResourceContextBean();
+    final DependencyGraphBuilderResourceContextBean builderContext = new DependencyGraphBuilderResourceContextBean();
     builderContext.setCompiledFunctionService(getCompiledFunctionService());
     builderContext.setFunctionResolver(getFunctionResolver());
     builderContext.setFunctionExclusionGroups(getFunctionExclusionGroups());
     builderContext.setMarketDataProviderResolver(getMarketDataProviderResolver());
 
-    DependencyGraphTraceBuilder traceBuilder = new DependencyGraphTraceBuilder(builderContext);
-    LocalDependencyGraphTraceProvider provider = new LocalDependencyGraphTraceProvider(traceBuilder);
-    ComponentInfo info = new ComponentInfo(DependencyGraphTraceProvider.class, getClassifier());
+    final DependencyGraphTraceBuilder traceBuilder = new DependencyGraphTraceBuilder(builderContext);
+    final LocalDependencyGraphTraceProvider provider = new LocalDependencyGraphTraceProvider(traceBuilder);
+    final ComponentInfo info = new ComponentInfo(DependencyGraphTraceProvider.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteDependencyGraphTraceProvider.class);
@@ -104,8 +103,8 @@ public class LocalDependencyGraphTraceProviderFactory extends AbstractComponentF
     repo.registerComponent(info, provider);
 
     if (isPublishRest()) {
-      //final ComponentInfo infoDGB = new ComponentInfo(DependencyGraphTraceProviderResource.class, getClassifier());
-      //repo.registerComponent(infoDGB, restResource);
+      // final ComponentInfo infoDGB = new ComponentInfo(DependencyGraphTraceProviderResource.class, getClassifier());
+      // repo.registerComponent(infoDGB, restResource);
       repo.getRestComponents().publish(info, new DependencyGraphTraceProviderResource(provider, getFudgeContext()));
     }
   }
@@ -208,7 +207,7 @@ public class LocalDependencyGraphTraceProviderFactory extends AbstractComponentF
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the {@link CompiledFunctionService}
+   * Gets the {@link CompiledFunctionService}.
    * @return the value of the property, not null
    */
   public CompiledFunctionService getCompiledFunctionService() {
@@ -216,7 +215,7 @@ public class LocalDependencyGraphTraceProviderFactory extends AbstractComponentF
   }
 
   /**
-   * Sets the {@link CompiledFunctionService}
+   * Sets the {@link CompiledFunctionService}.
    * @param compiledFunctionService  the new value of the property, not null
    */
   public void setCompiledFunctionService(CompiledFunctionService compiledFunctionService) {
@@ -234,7 +233,7 @@ public class LocalDependencyGraphTraceProviderFactory extends AbstractComponentF
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the {@link FunctionResolver}
+   * Gets the {@link FunctionResolver}.
    * @return the value of the property, not null
    */
   public FunctionResolver getFunctionResolver() {
@@ -242,7 +241,7 @@ public class LocalDependencyGraphTraceProviderFactory extends AbstractComponentF
   }
 
   /**
-   * Sets the {@link FunctionResolver}
+   * Sets the {@link FunctionResolver}.
    * @param functionResolver  the new value of the property, not null
    */
   public void setFunctionResolver(FunctionResolver functionResolver) {
@@ -260,7 +259,7 @@ public class LocalDependencyGraphTraceProviderFactory extends AbstractComponentF
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the {@link FunctionExclusionGroups}
+   * Gets the {@link FunctionExclusionGroups}.
    * @return the value of the property, not null
    */
   public FunctionExclusionGroups getFunctionExclusionGroups() {
@@ -268,7 +267,7 @@ public class LocalDependencyGraphTraceProviderFactory extends AbstractComponentF
   }
 
   /**
-   * Sets the {@link FunctionExclusionGroups}
+   * Sets the {@link FunctionExclusionGroups}.
    * @param functionExclusionGroups  the new value of the property, not null
    */
   public void setFunctionExclusionGroups(FunctionExclusionGroups functionExclusionGroups) {

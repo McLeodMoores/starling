@@ -98,12 +98,15 @@ public abstract class StandardVolatilityCubeDataFunction extends AbstractFunctio
   protected abstract ValueProperties getInputCubeProperties(Set<String> definitionNames, Set<String> specificationNames);
 
   /**
-   * Gets the properties for the raw input surface. Implementing classes should set the
-   * {@link SurfaceAndCurvePropertyNames#PROPERTY_SURFACE_QUOTE_TYPE} and
-   * {@link SurfaceAndCurvePropertyNames#PROPERTY_SURFACE_UNITS} properties.
-   * @param definitionNames The definition name properties
-   * @param specificationNames The specification name properties
-   * @param calculationMethodNames The calculation method name properties
+   * Gets the properties for the raw input surface. Implementing classes should set the {@link SurfaceAndCubePropertyNames#PROPERTY_SURFACE_QUOTE_TYPE} and
+   * {@link SurfaceAndCubePropertyNames#PROPERTY_SURFACE_UNITS} properties.
+   * 
+   * @param definitionNames
+   *          The definition name properties
+   * @param specificationNames
+   *          The specification name properties
+   * @param calculationMethodNames
+   *          The calculation method name properties
    * @return the input surface properties
    */
   protected abstract ValueProperties getInputSurfaceProperties(Set<String> definitionNames, Set<String> specificationNames,

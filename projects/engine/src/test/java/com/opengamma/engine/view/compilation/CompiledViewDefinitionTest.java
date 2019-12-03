@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.view.compilation;
@@ -13,7 +13,7 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.mockito.Mockito;
+import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.annotations.Test;
@@ -96,7 +96,7 @@ public class CompiledViewDefinitionTest {
 
   private CompiledViewDefinitionWithGraphsImpl buildCompiledViewDefinition(final DependencyGraph... graphs) {
     final CompiledFunctionResolver compiledResolver = mock(CompiledFunctionResolver.class);
-    when(compiledResolver.getFunction(Mockito.<String>any())).thenAnswer(new Answer<CompiledFunctionDefinition>() {
+    when(compiledResolver.getFunction(Matchers.<String>any())).thenAnswer(new Answer<CompiledFunctionDefinition>() {
       @Override
       public CompiledFunctionDefinition answer(final InvocationOnMock invocation) throws Throwable {
         final CompiledFunctionDefinition cfd = mock(CompiledFunctionDefinition.class);
@@ -127,50 +127,55 @@ public class CompiledViewDefinitionTest {
   @Test
   public void testNoValidityTimes() {
     final CompiledViewDefinitionWithGraphsImpl model = buildCompiledViewDefinition(graphNoStartEndTimes());
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, Instant.ofEpochMilli(Long.MIN_VALUE)));
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, Instant.ofEpochMilli(Long.MAX_VALUE)));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, Instant.ofEpochMilli(Long.MIN_VALUE)));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, Instant.ofEpochMilli(Long.MAX_VALUE)));
   }
 
   @Test
   public void testNoStartTime1() {
-    final CompiledViewDefinitionWithGraphsImpl model = buildCompiledViewDefinition(graphNoStartEndTimes(), graphOneEndTime(_time0), graphTwoEndTimes(_time1, _time2));
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, Instant.ofEpochMilli(Long.MIN_VALUE)));
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time0));
-    assertFalse(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time1));
+    final CompiledViewDefinitionWithGraphsImpl model = buildCompiledViewDefinition(graphNoStartEndTimes(),
+        graphOneEndTime(_time0), graphTwoEndTimes(_time1, _time2));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, Instant.ofEpochMilli(Long.MIN_VALUE)));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, _time0));
+    assertFalse(CompiledViewDefinitionImpl.isValidFor(model, _time1));
   }
 
   @Test
   public void testNoStartTime2() {
-    final CompiledViewDefinitionWithGraphsImpl model = buildCompiledViewDefinition(graphNoStartEndTimes(), graphOneEndTime(_time1), graphTwoEndTimes(_time0, _time2));
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, Instant.ofEpochMilli(Long.MIN_VALUE)));
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time0));
-    assertFalse(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time1));
+    final CompiledViewDefinitionWithGraphsImpl model = buildCompiledViewDefinition(graphNoStartEndTimes(),
+        graphOneEndTime(_time1), graphTwoEndTimes(_time0, _time2));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, Instant.ofEpochMilli(Long.MIN_VALUE)));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, _time0));
+    assertFalse(CompiledViewDefinitionImpl.isValidFor(model, _time1));
   }
 
   @Test
   public void testNoEndTime1() {
-    final CompiledViewDefinitionWithGraphsImpl model = buildCompiledViewDefinition(graphNoStartEndTimes(), graphOneStartTime(_time2), graphTwoStartTimes(_time0, _time1));
-    assertFalse(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time1));
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time2));
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, Instant.ofEpochMilli(Long.MAX_VALUE)));
+    final CompiledViewDefinitionWithGraphsImpl model =
+        buildCompiledViewDefinition(graphNoStartEndTimes(), graphOneStartTime(_time2), graphTwoStartTimes(_time0, _time1));
+    assertFalse(CompiledViewDefinitionImpl.isValidFor(model, _time1));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, _time2));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, Instant.ofEpochMilli(Long.MAX_VALUE)));
   }
 
   @Test
   public void testNoEndTime2() {
-    final CompiledViewDefinitionWithGraphsImpl model = buildCompiledViewDefinition(graphNoStartEndTimes(), graphOneStartTime(_time1), graphTwoStartTimes(_time0, _time2));
-    assertFalse(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time1));
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time2));
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, Instant.ofEpochMilli(Long.MAX_VALUE)));
+    final CompiledViewDefinitionWithGraphsImpl model = buildCompiledViewDefinition(graphNoStartEndTimes(),
+        graphOneStartTime(_time1), graphTwoStartTimes(_time0, _time2));
+    assertFalse(CompiledViewDefinitionImpl.isValidFor(model, _time1));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, _time2));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, Instant.ofEpochMilli(Long.MAX_VALUE)));
   }
 
   @Test
   public void testStartEndTime() {
-    final CompiledViewDefinitionWithGraphsImpl model = buildCompiledViewDefinition(graphNoStartEndTimes(), graphOneStartTime(_time0), graphTwoStartTimes(_time1, _time2),
+    final CompiledViewDefinitionWithGraphsImpl model = buildCompiledViewDefinition(graphNoStartEndTimes(),
+        graphOneStartTime(_time0), graphTwoStartTimes(_time1, _time2),
         graphOneEndTime(_time3), graphTwoEndTimes(_time4, _time5));
-    assertFalse(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time1));
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time2));
-    assertTrue(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time3));
-    assertFalse(CompiledViewDefinitionWithGraphsImpl.isValidFor(model, _time4));
+    assertFalse(CompiledViewDefinitionImpl.isValidFor(model, _time1));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, _time2));
+    assertTrue(CompiledViewDefinitionImpl.isValidFor(model, _time3));
+    assertFalse(CompiledViewDefinitionImpl.isValidFor(model, _time4));
   }
 
 }

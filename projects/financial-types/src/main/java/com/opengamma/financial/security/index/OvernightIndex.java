@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.security.index;
@@ -75,7 +75,7 @@ public class OvernightIndex extends Index {
    * @param conventionId The convention id, not null
    * @param idBundle The external id bundle for this security, not null
    */
-  public OvernightIndex(final String name, final String description, final ExternalId conventionId, ExternalIdBundle idBundle) {
+  public OvernightIndex(final String name, final String description, final ExternalId conventionId, final ExternalIdBundle idBundle) {
     super(INDEX_TYPE, name, description);
     setConventionId(conventionId);
     setExternalIdBundle(idBundle);

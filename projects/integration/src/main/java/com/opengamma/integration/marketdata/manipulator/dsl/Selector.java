@@ -29,11 +29,11 @@ import com.opengamma.util.money.Currency;
   private final PatternWrapper _nameLikePattern;
   private final Set<String> _calcConfigNames;
 
-  /* package */ Selector(Set<String> calcConfigNames,
-                         Set<String> names,
-                         Set<Currency> currencies,
-                         Pattern nameMatchPattern,
-                         Pattern nameLikePattern) {
+  /* package */ Selector(final Set<String> calcConfigNames,
+      final Set<String> names,
+      final Set<Currency> currencies,
+      final Pattern nameMatchPattern,
+      final Pattern nameLikePattern) {
     _calcConfigNames = calcConfigNames;
     _names = names;
     _currencies = currencies;
@@ -61,7 +61,7 @@ import com.opengamma.util.money.Currency;
     return _calcConfigNames;
   }
 
-  /* package */ boolean matches(String name, Currency currency) {
+  /* package */ boolean matches(final String name, final Currency currency) {
     // TODO can / should these be relaxed?
     ArgumentChecker.notEmpty(name, "name");
     ArgumentChecker.notNull(currency, "currency");
@@ -86,18 +86,17 @@ import com.opengamma.util.money.Currency;
   }
 
   @Override
-  public DistinctMarketDataSelector findMatchingSelector(ValueSpecification valueSpecification,
-                                                         String calcConfigName,
-                                                         SelectorResolver resolver) {
+  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification,
+      final String calcConfigName,
+      final SelectorResolver resolver) {
     ArgumentChecker.notNull(valueSpecification, "valueSpecification");
     if (_calcConfigNames != null && !_calcConfigNames.contains(calcConfigName)) {
       return null;
     }
     if (matches(valueSpecification)) {
       return this;
-    } else {
-      return null;
     }
+    return null;
   }
 
   /* package */ abstract boolean matches(ValueSpecification valueSpecification);
@@ -105,14 +104,14 @@ import com.opengamma.util.money.Currency;
   @Override
   public int hashCode() {
     return Objects.hash(_names,
-                        _currencies,
-                        _nameMatchPattern,
-                        _nameLikePattern,
-                        _calcConfigNames);
+        _currencies,
+        _nameMatchPattern,
+        _nameLikePattern,
+        _calcConfigNames);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -120,22 +119,22 @@ import com.opengamma.util.money.Currency;
       return false;
     }
     final Selector other = (Selector) obj;
-    return Objects.equals(this._names, other._names) &&
-        Objects.equals(this._currencies, other._currencies) &&
-        Objects.equals(this._nameMatchPattern, other._nameMatchPattern) &&
-        Objects.equals(this._nameLikePattern, other._nameLikePattern) &&
-        Objects.equals(this._calcConfigNames, other._calcConfigNames);
+    return Objects.equals(this._names, other._names)
+        && Objects.equals(this._currencies, other._currencies)
+        && Objects.equals(this._nameMatchPattern, other._nameMatchPattern)
+        && Objects.equals(this._nameLikePattern, other._nameLikePattern)
+        && Objects.equals(this._calcConfigNames, other._calcConfigNames);
   }
 
   @Override
   public String toString() {
-    return "Selector [" +
-        "_names=" + _names +
-        ", _currencies=" + _currencies +
-        ", _nameMatchPattern=" + _nameMatchPattern +
-        ", _nameLikePattern=" + _nameLikePattern +
-        ", _calcConfigNames=" + _calcConfigNames +
-        "]";
+    return "Selector ["
+        + "_names=" + _names
+        + ", _currencies=" + _currencies
+        + ", _nameMatchPattern=" + _nameMatchPattern
+        + ", _nameLikePattern=" + _nameLikePattern
+        + ", _calcConfigNames=" + _calcConfigNames
+        + "]";
   }
 
   /* package */ abstract static class Builder {
@@ -147,12 +146,12 @@ import com.opengamma.util.money.Currency;
     private Pattern _nameMatchPattern;
     private Pattern _nameLikePattern;
 
-    /* package */ Builder(Scenario scenario) {
+    /* package */ Builder(final Scenario scenario) {
       ArgumentChecker.notNull(scenario, "scenario");
       _scenario = scenario;
     }
 
-    /* package */ Builder named(String... names) {
+    /* package */ Builder named(final String... names) {
       ArgumentChecker.notEmpty(names, "names");
       if (_names != null) {
         throw new IllegalStateException("named() can only be called once");
@@ -167,20 +166,20 @@ import com.opengamma.util.money.Currency;
       return this;
     }
 
-    /* package */ Builder currencies(String... codes) {
+    /* package */ Builder currencies(final String... codes) {
       ArgumentChecker.notEmpty(codes, "codes");
       if (_currencies != null) {
         throw new IllegalStateException("currencies() can only be called once");
       }
-      Set<Currency> currencies = Sets.newHashSet();
-      for (String code : codes) {
+      final Set<Currency> currencies = Sets.newHashSet();
+      for (final String code : codes) {
         currencies.add(Currency.of(code));
       }
       _currencies = Collections.unmodifiableSet(currencies);
       return this;
     }
 
-    /* package */ Builder nameMatches(String regex) {
+    /* package */ Builder nameMatches(final String regex) {
       if (_nameMatchPattern != null) {
         throw new IllegalStateException("nameMatches() can only be called once");
       }
@@ -194,7 +193,7 @@ import com.opengamma.util.money.Currency;
       return this;
     }
 
-    /* package */ Builder nameLike(String glob) {
+    /* package */ Builder nameLike(final String glob) {
       if (_nameLikePattern != null) {
         throw new IllegalStateException("nameLike() can only be called once");
       }

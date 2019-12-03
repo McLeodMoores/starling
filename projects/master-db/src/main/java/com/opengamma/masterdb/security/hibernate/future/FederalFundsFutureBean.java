@@ -5,15 +5,14 @@
  */
 package com.opengamma.masterdb.security.hibernate.future;
 
-import com.opengamma.financial.security.future.FederalFundsFutureSecurity;
-
 /**
- * A Hibernate bean representation of {@link FederalFundsFutureSecurity}.
+ * A Hibernate bean representation of
+ * {@link com.opengamma.financial.security.future.FederalFundsFutureSecurity}.
  */
 public class FederalFundsFutureBean extends FutureSecurityBean {
 
   @Override
-  public <T> T accept(Visitor<T> visitor) {
+  public <T> T accept(final Visitor<T> visitor) {
     return visitor.visitFederalFundsFutureType(this);
   }
 

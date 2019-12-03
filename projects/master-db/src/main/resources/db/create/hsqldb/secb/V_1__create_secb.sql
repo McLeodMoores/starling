@@ -12,13 +12,13 @@ CREATE TABLE secb_schema_version (
 );
 INSERT INTO secb_schema_version (version_key, version_value) VALUES ('schema_patch', '1');
 
-CREATE SEQUENCE secb_doc_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS secb_doc_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE secb_idkey_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS secb_idkey_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE secb_attr_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS secb_attr_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
-CREATE SEQUENCE secb_prop_seq AS bigint
+CREATE SEQUENCE IF NOT EXISTS secb_prop_seq AS bigint
     START WITH 1000 INCREMENT BY 1 NO CYCLE;
 -- "as bigint" required by Derby/HSQL, not accepted by Postgresql
 

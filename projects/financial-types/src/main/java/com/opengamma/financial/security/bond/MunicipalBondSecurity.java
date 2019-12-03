@@ -31,21 +31,22 @@ public class MunicipalBondSecurity extends BondSecurity {
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
 
-  MunicipalBondSecurity() { //For builder
+  MunicipalBondSecurity() { // For builder
     super();
   }
 
-  public MunicipalBondSecurity(String issuerName, String issuerType, String issuerDomicile, String market, Currency currency,
-      YieldConvention yieldConvention, Expiry lastTradeDate, String couponType, double couponRate, Frequency couponFrequency,
-      DayCount dayCountConvention, ZonedDateTime interestAccrualDate, ZonedDateTime settlementDate, ZonedDateTime firstCouponDate,
-      Double issuancePrice, double totalAmountIssued, double minimumAmount, double minimumIncrement, double parAmount, double redemptionValue) {
+  public MunicipalBondSecurity(final String issuerName, final String issuerType, final String issuerDomicile, final String market, final Currency currency,
+      final YieldConvention yieldConvention, final Expiry lastTradeDate, final String couponType, final double couponRate, final Frequency couponFrequency,
+      final DayCount dayCountConvention, final ZonedDateTime interestAccrualDate, final ZonedDateTime settlementDate, final ZonedDateTime firstCouponDate,
+      final Double issuancePrice, final double totalAmountIssued, final double minimumAmount, final double minimumIncrement, final double parAmount,
+      final double redemptionValue) {
     super(issuerName, issuerType, issuerDomicile, market, currency, yieldConvention, lastTradeDate, couponType, couponRate, couponFrequency,
-        dayCountConvention, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount, redemptionValue);
+        dayCountConvention, interestAccrualDate, settlementDate, firstCouponDate, issuancePrice, totalAmountIssued, minimumAmount, minimumIncrement, parAmount,
+        redemptionValue);
   }
-  
 
   @Override
-  public <T> T accept(FinancialSecurityVisitor<T> visitor) {
+  public <T> T accept(final FinancialSecurityVisitor<T> visitor) {
     return visitor.visitMunicipalBondSecurity(this);
   }
 

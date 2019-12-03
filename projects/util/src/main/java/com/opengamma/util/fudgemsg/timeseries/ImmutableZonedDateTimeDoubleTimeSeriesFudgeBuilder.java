@@ -15,18 +15,18 @@ import org.fudgemsg.mapping.FudgeSerializer;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 
 /**
- * Fudge message encoder/decoder (builder) for ImmutableZonedDateTimeDoubleTimeSeries
+ * Fudge message encoder/decoder (builder) for ImmutableZonedDateTimeDoubleTimeSeries.
  */
 @FudgeBuilderFor(ImmutableZonedDateTimeDoubleTimeSeries.class)
 public class ImmutableZonedDateTimeDoubleTimeSeriesFudgeBuilder implements FudgeBuilder<ImmutableZonedDateTimeDoubleTimeSeries> {
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ImmutableZonedDateTimeDoubleTimeSeries object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ImmutableZonedDateTimeDoubleTimeSeries object) {
     return DoubleTimeSeriesFudgeBuilder.INSTANCE.buildMessage(serializer, object);
   }
 
   @Override
-  public ImmutableZonedDateTimeDoubleTimeSeries buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public ImmutableZonedDateTimeDoubleTimeSeries buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     return (ImmutableZonedDateTimeDoubleTimeSeries) DoubleTimeSeriesFudgeBuilder.INSTANCE.buildObject(deserializer, message);
   }
 

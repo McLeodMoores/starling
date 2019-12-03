@@ -38,18 +38,15 @@ import com.opengamma.util.RegexUtils;
 /**
  * Request for searching for securities.
  * <p>
- * Documents will be returned that match the search criteria.
- * This class provides the ability to page the results and to search
- * as at a specific version and correction instant.
- * See {@link SecurityHistoryRequest} for more details on how history works.
+ * Documents will be returned that match the search criteria. This class provides the ability to page the results and to search as at a specific version and
+ * correction instant. See {@link SecurityHistoryRequest} for more details on how history works.
  */
 @PublicSPI
 @BeanDefinition
 public class SecuritySearchRequest extends AbstractSearchRequest {
 
   /**
-   * The set of security object identifiers, null to not limit by security object identifiers.
-   * Note that an empty set will return no securities.
+   * The set of security object identifiers, null to not limit by security object identifiers. Note that an empty set will return no securities.
    */
   @PropertyDefinition(set = "manual")
   private List<ObjectId> _objectIds;
@@ -59,25 +56,22 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
   @PropertyDefinition
   private ExternalIdSearch _externalIdSearch;
   /**
-   * The external identifier value, matching against the <b>value</b> of the identifiers,
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * The external identifier value, matching against the <b>value</b> of the identifiers, null to not match by
+   * identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and does
+   * not match against the key. Wildcards are allowed. This method is suitable for human searching, whereas the
+   * {@code externalIdSearch} search is useful for exact machine searching.
    */
   @PropertyDefinition
   private String _externalIdValue;
   /**
-   * The external identifier scheme, matching against the <b>scheme</b> of the identifiers,
-   * null not to match by identifier scheme. Wildcards are allowed.
+   * The external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by
+   * identifier scheme. Wildcards are allowed.
    */
   @PropertyDefinition
   private String _externalIdScheme;
   /**
-   * Map of attributes to search for.
-   * The returned documents must match all of the specified attributes.
-   * Wildcards are allowed for the values. Nulls are not allowed.
+   * Map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards
+   * are allowed for the values. Nulls are not allowed.
    */
   @PropertyDefinition
   private final Map<String, String> _attributes = Maps.newHashMap();
@@ -97,10 +91,8 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
   @PropertyDefinition(validate = "notNull")
   private SecuritySearchSortOrder _sortOrder = SecuritySearchSortOrder.OBJECT_ID_ASC;
   /**
-   * The depth of security data to return.
-   * False will only return the basic information held in the {@code ManageableSecurity} class.
-   * True will load the full security subclass for each returned security.
-   * By default this is true returning all the data.
+   * The depth of security data to return. False will only return the basic information held in the {@code ManageableSecurity}
+   * class. True will load the full security subclass for each returned security. By default this is true returning all the data.
    */
   @PropertyDefinition
   private boolean _fullDetail = true;
@@ -113,74 +105,77 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   /**
    * Creates an instance using a single search identifier.
-   * 
-   * @param securityId  the security external identifier to search for, not null
+   *
+   * @param securityId
+   *          the security external identifier to search for, not null
    */
-  public SecuritySearchRequest(ExternalId securityId) {
+  public SecuritySearchRequest(final ExternalId securityId) {
     addExternalId(securityId);
   }
 
   /**
    * Creates an instance using a bundle of identifiers.
-   * 
-   * @param securityBundle  the security bundle to search for, not null
+   *
+   * @param securityBundle
+   *          the security bundle to search for, not null
    */
-  public SecuritySearchRequest(ExternalIdBundle securityBundle) {
+  public SecuritySearchRequest(final ExternalIdBundle securityBundle) {
     addExternalIds(securityBundle);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Adds a single security object identifier to the set.
-   * 
-   * @param securityId  the security object identifier to add, not null
+   *
+   * @param securityId
+   *          the security object identifier to add, not null
    */
-  public void addObjectId(ObjectIdentifiable securityId) {
+  public void addObjectId(final ObjectIdentifiable securityId) {
     ArgumentChecker.notNull(securityId, "securityId");
     if (_objectIds == null) {
-      _objectIds = new ArrayList<ObjectId>();
+      _objectIds = new ArrayList<>();
     }
     _objectIds.add(securityId.getObjectId());
   }
 
   /**
-   * Sets the set of security object identifiers, null to not limit by security object identifiers.
-   * Note that an empty set will return no securities.
-   * 
-   * @param securityIds  the new security identifiers, null clears the security id search
+   * Sets the set of security object identifiers, null to not limit by security object identifiers. Note that an empty set will return no securities.
+   *
+   * @param securityIds
+   *          the new security identifiers, null clears the security id search
    */
-  public void setObjectIds(Iterable<? extends ObjectIdentifiable> securityIds) {
+  public void setObjectIds(final Iterable<? extends ObjectIdentifiable> securityIds) {
     if (securityIds == null) {
       _objectIds = null;
     } else {
-      _objectIds = new ArrayList<ObjectId>();
-      for (ObjectIdentifiable securityId : securityIds) {
+      _objectIds = new ArrayList<>();
+      for (final ObjectIdentifiable securityId : securityIds) {
         _objectIds.add(securityId.getObjectId());
       }
     }
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
-   * Adds a single security external identifier to the collection to search for.
-   * Unless customized, the search will match.
-   * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
-   * @param securityId  the security key identifier to add, not null
+   * Adds a single security external identifier to the collection to search for. Unless customized, the search will match. {@link ExternalIdSearchType#ANY any}
+   * of the identifiers.
+   *
+   * @param securityId
+   *          the security key identifier to add, not null
    */
-  public void addExternalId(ExternalId securityId) {
+  public void addExternalId(final ExternalId securityId) {
     ArgumentChecker.notNull(securityId, "securityId");
     addExternalIds(Arrays.asList(securityId));
   }
 
   /**
-   * Adds a collection of security external identifiers to the collection to search for.
-   * Unless customized, the search will match.
+   * Adds a collection of security external identifiers to the collection to search for. Unless customized, the search will match.
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
-   * @param securityIds  the security key identifiers to add, not null
+   *
+   * @param securityIds
+   *          the security key identifiers to add, not null
    */
-  public void addExternalIds(ExternalId... securityIds) {
+  public void addExternalIds(final ExternalId... securityIds) {
     ArgumentChecker.notNull(securityIds, "securityIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(securityIds));
@@ -190,13 +185,13 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Adds a collection of security external identifiers to the collection to search for.
-   * Unless customized, the search will match.
+   * Adds a collection of security external identifiers to the collection to search for. Unless customized, the search will match.
    * {@link ExternalIdSearchType#ANY any} of the identifiers.
-   * 
-   * @param securityIds  the security key identifiers to add, not null
+   *
+   * @param securityIds
+   *          the security key identifiers to add, not null
    */
-  public void addExternalIds(Iterable<ExternalId> securityIds) {
+  public void addExternalIds(final Iterable<ExternalId> securityIds) {
     ArgumentChecker.notNull(securityIds, "securityIds");
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(securityIds));
@@ -207,10 +202,11 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   /**
    * Sets the search type to use in {@code ExternalIdSearch}.
-   * 
-   * @param type  the type to set, not null
+   *
+   * @param type
+   *          the type to set, not null
    */
-  public void setExternalIdSearchType(ExternalIdSearchType type) {
+  public void setExternalIdSearchType(final ExternalIdSearchType type) {
     if (getExternalIdSearch() == null) {
       setExternalIdSearch(ExternalIdSearch.of(type));
     } else {
@@ -222,57 +218,59 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
    * Adds a key-value pair to the set of attributes to search for.
    * <p>
    * Attributes are used to tag the object with additional information.
-   * 
-   * @param key  the key to add, not null
-   * @param value  the value to add, not null
+   *
+   * @param key
+   *          the key to add, not null
+   * @param value
+   *          the value to add, not null
    */
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     ArgumentChecker.notNull(key, "key");
     ArgumentChecker.notNull(value, "value");
     _attributes.put(key, value);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
-  public boolean matches(AbstractDocument obj) {
-    if (obj instanceof SecurityDocument == false) {
+  public boolean matches(final AbstractDocument obj) {
+    if (!(obj instanceof SecurityDocument)) {
       return false;
     }
-    SecurityDocument document = (SecurityDocument) obj;
-    ManageableSecurity security = document.getSecurity();
-    if (getObjectIds() != null && getObjectIds().contains(document.getObjectId()) == false) {
+    final SecurityDocument document = (SecurityDocument) obj;
+    final ManageableSecurity security = document.getSecurity();
+    if (getObjectIds() != null && !getObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getExternalIdSearch() != null && getExternalIdSearch().matches(security.getExternalIdBundle()) == false) {
+    if (getExternalIdSearch() != null && !getExternalIdSearch().matches(security.getExternalIdBundle())) {
       return false;
     }
-    if (getName() != null && RegexUtils.wildcardMatch(getName(), document.getName()) == false) {
+    if (getName() != null && !RegexUtils.wildcardMatch(getName(), document.getName())) {
       return false;
     }
-    if (getSecurityType() != null && getSecurityType().equals(security.getSecurityType()) == false) {
+    if (getSecurityType() != null && !getSecurityType().equals(security.getSecurityType())) {
       return false;
     }
     if (getExternalIdValue() != null) {
-      for (ExternalId identifier : security.getExternalIdBundle()) {
-        if (RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue()) == false) {
+      for (final ExternalId identifier : security.getExternalIdBundle()) {
+        if (!RegexUtils.wildcardMatch(getExternalIdValue(), identifier.getValue())) {
           return false;
         }
       }
     }
     if (getExternalIdScheme() != null) {
-      for (ExternalId identifier : security.getExternalIdBundle()) {
-        if (RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName()) == false) {
+      for (final ExternalId identifier : security.getExternalIdBundle()) {
+        if (!RegexUtils.wildcardMatch(getExternalIdScheme(), identifier.getScheme().getName())) {
           return false;
         }
       }
     }
     if (getAttributes().size() > 0) {
-      for (Entry<String, String> entry : getAttributes().entrySet()) {
-        if (security.getAttributes().containsKey(entry.getKey()) == false) {
+      for (final Entry<String, String> entry : getAttributes().entrySet()) {
+        if (!security.getAttributes().containsKey(entry.getKey())) {
           return false;
         }
-        String otherValue = security.getAttributes().get(entry.getKey());
-        if (RegexUtils.wildcardMatch(entry.getValue(), otherValue) == false) {
+        final String otherValue = security.getAttributes().get(entry.getKey());
+        if (!RegexUtils.wildcardMatch(entry.getValue(), otherValue)) {
           return false;
         }
       }
@@ -301,8 +299,7 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the set of security object identifiers, null to not limit by security object identifiers.
-   * Note that an empty set will return no securities.
+   * Gets the set of security object identifiers, null to not limit by security object identifiers. Note that an empty set will return no securities.
    * @return the value of the property
    */
   public List<ObjectId> getObjectIds() {
@@ -311,7 +308,6 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code objectIds} property.
-   * Note that an empty set will return no securities.
    * @return the property, not null
    */
   public final Property<List<ObjectId>> objectIds() {
@@ -345,12 +341,10 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external identifier value, matching against the <b>value</b> of the identifiers,
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * Gets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match by
+   * identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and does
+   * not match against the key. Wildcards are allowed. This method is suitable for human searching, whereas the
+   * {@code externalIdSearch} search is useful for exact machine searching.
    * @return the value of the property
    */
   public String getExternalIdValue() {
@@ -358,12 +352,10 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the external identifier value, matching against the <b>value</b> of the identifiers,
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * Sets the external identifier value, matching against the <b>value</b> of the identifiers, null to not match by
+   * identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and does
+   * not match against the key. Wildcards are allowed. This method is suitable for human searching, whereas the
+   * {@code externalIdSearch} search is useful for exact machine searching.
    * @param externalIdValue  the new value of the property
    */
   public void setExternalIdValue(String externalIdValue) {
@@ -372,11 +364,9 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code externalIdValue} property.
-   * null to not match by identifier value.
-   * This matches against the {@link ExternalId#getValue() value} of the identifier
-   * and does not match against the key. Wildcards are allowed.
-   * This method is suitable for human searching, whereas the {@code externalIdSearch}
-   * search is useful for exact machine searching.
+   * identifier value. This matches against the {@link ExternalId#getValue() value} of the identifier and does
+   * not match against the key. Wildcards are allowed. This method is suitable for human searching, whereas the
+   * {@code externalIdSearch} search is useful for exact machine searching.
    * @return the property, not null
    */
   public final Property<String> externalIdValue() {
@@ -385,8 +375,8 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the external identifier scheme, matching against the <b>scheme</b> of the identifiers,
-   * null not to match by identifier scheme. Wildcards are allowed.
+   * Gets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by
+   * identifier scheme. Wildcards are allowed.
    * @return the value of the property
    */
   public String getExternalIdScheme() {
@@ -394,8 +384,8 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the external identifier scheme, matching against the <b>scheme</b> of the identifiers,
-   * null not to match by identifier scheme. Wildcards are allowed.
+   * Sets the external identifier scheme, matching against the <b>scheme</b> of the identifiers, null not to match by
+   * identifier scheme. Wildcards are allowed.
    * @param externalIdScheme  the new value of the property
    */
   public void setExternalIdScheme(String externalIdScheme) {
@@ -404,7 +394,7 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code externalIdScheme} property.
-   * null not to match by identifier scheme. Wildcards are allowed.
+   * identifier scheme. Wildcards are allowed.
    * @return the property, not null
    */
   public final Property<String> externalIdScheme() {
@@ -413,9 +403,8 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets map of attributes to search for.
-   * The returned documents must match all of the specified attributes.
-   * Wildcards are allowed for the values. Nulls are not allowed.
+   * Gets map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards
+   * are allowed for the values. Nulls are not allowed.
    * @return the value of the property, not null
    */
   public Map<String, String> getAttributes() {
@@ -423,9 +412,8 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets map of attributes to search for.
-   * The returned documents must match all of the specified attributes.
-   * Wildcards are allowed for the values. Nulls are not allowed.
+   * Sets map of attributes to search for. The returned documents must match all of the specified attributes. Wildcards
+   * are allowed for the values. Nulls are not allowed.
    * @param attributes  the new value of the property, not null
    */
   public void setAttributes(Map<String, String> attributes) {
@@ -436,8 +424,7 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code attributes} property.
-   * The returned documents must match all of the specified attributes.
-   * Wildcards are allowed for the values. Nulls are not allowed.
+   * are allowed for the values. Nulls are not allowed.
    * @return the property, not null
    */
   public final Property<Map<String, String>> attributes() {
@@ -522,10 +509,8 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the depth of security data to return.
-   * False will only return the basic information held in the {@code ManageableSecurity} class.
-   * True will load the full security subclass for each returned security.
-   * By default this is true returning all the data.
+   * Gets the depth of security data to return. False will only return the basic information held in the {@code ManageableSecurity}
+   * class. True will load the full security subclass for each returned security. By default this is true returning all the data.
    * @return the value of the property
    */
   public boolean isFullDetail() {
@@ -533,10 +518,8 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the depth of security data to return.
-   * False will only return the basic information held in the {@code ManageableSecurity} class.
-   * True will load the full security subclass for each returned security.
-   * By default this is true returning all the data.
+   * Sets the depth of security data to return. False will only return the basic information held in the {@code ManageableSecurity}
+   * class. True will load the full security subclass for each returned security. By default this is true returning all the data.
    * @param fullDetail  the new value of the property
    */
   public void setFullDetail(boolean fullDetail) {
@@ -545,9 +528,7 @@ public class SecuritySearchRequest extends AbstractSearchRequest {
 
   /**
    * Gets the the {@code fullDetail} property.
-   * False will only return the basic information held in the {@code ManageableSecurity} class.
-   * True will load the full security subclass for each returned security.
-   * By default this is true returning all the data.
+   * class. True will load the full security subclass for each returned security. By default this is true returning all the data.
    * @return the property, not null
    */
   public final Property<Boolean> fullDetail() {

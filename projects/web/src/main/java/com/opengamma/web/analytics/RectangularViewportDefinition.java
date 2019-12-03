@@ -26,7 +26,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
  */
 public class RectangularViewportDefinition extends ViewportDefinition {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RectangularViewportDefinition.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RectangularViewportDefinition.class);
 
   /** Indices of rows in the viewport, not empty, sorted in ascending order. */
   private final List<Integer> _rows;
@@ -37,16 +37,21 @@ public class RectangularViewportDefinition extends ViewportDefinition {
 
   /**
    * @param version
-   * @param rows Indices of rows in the viewport, not empty
-   * @param columns Indices of columns in the viewport, not empty
+   *          the version
+   * @param rows
+   *          Indices of rows in the viewport, not empty
+   * @param columns
+   *          Indices of columns in the viewport, not empty
    * @param format
+   *          the type format
    * @param enableLogging
+   *          true to enable logging
    */
-  /* package */ RectangularViewportDefinition(int version,
-                                              List<Integer> rows,
-                                              List<Integer> columns,
-                                              TypeFormatter.Format format,
-                                              Boolean enableLogging) {
+  /* package */ RectangularViewportDefinition(final int version,
+      final List<Integer> rows,
+      final List<Integer> columns,
+      final TypeFormatter.Format format,
+      final Boolean enableLogging) {
     super(version, enableLogging);
     ArgumentChecker.notNull(format, "format");
     _format = format;
@@ -61,15 +66,15 @@ public class RectangularViewportDefinition extends ViewportDefinition {
   }
 
   @Override
-  public boolean isValidFor(GridStructure grid) {
+  public boolean isValidFor(final GridStructure grid) {
     if (!_rows.isEmpty()) {
-      int maxRow = _rows.get(_rows.size() - 1);
+      final int maxRow = _rows.get(_rows.size() - 1);
       if (maxRow >= grid.getRowCount()) {
         return false;
       }
     }
     if (!_columns.isEmpty()) {
-      int maxCol = _columns.get(_columns.size() - 1);
+      final int maxCol = _columns.get(_columns.size() - 1);
       if (maxCol >= grid.getColumnCount()) {
         return false;
       }
@@ -81,18 +86,18 @@ public class RectangularViewportDefinition extends ViewportDefinition {
   // scrolling up triggers a node collapse
   // scrolling down or expanding the viewport down triggers a node expansion
   @Override
-  Pair<Integer, Boolean> getChangedNode(ViewportDefinition viewportDefinition) {
+  Pair<Integer, Boolean> getChangedNode(final ViewportDefinition viewportDefinition) {
     // Viewport definitions other than RectangularViewportDefinitions do not have changed nodes so just return null
     if (!(viewportDefinition instanceof RectangularViewportDefinition)) {
       return null;
     }
-    List<Integer> newRows = ((RectangularViewportDefinition) viewportDefinition).getRows();
+    final List<Integer> newRows = ((RectangularViewportDefinition) viewportDefinition).getRows();
 
     //if the first rows aren't equal the user has scrolled, or if there are no rows, return null
     // TODO this logic doesn't cover these cases:
     //   * the user expands the viewport downwards by resizing the window
     //   * the user scrolls the viewport down but the previous top row is still included in the off-screen buffer zone
-    if (_rows.isEmpty() || newRows.isEmpty() || (!_rows.get(0).equals(newRows.get(0)))) {
+    if (_rows.isEmpty() || newRows.isEmpty() || !_rows.get(0).equals(newRows.get(0))) {
       return null;
     }
     // if the first rows are equal and the viewport has changed then the user has either expanded or collapsed a node
@@ -103,28 +108,28 @@ public class RectangularViewportDefinition extends ViewportDefinition {
         // TODO this gives false positives when expanding the viewport down by resizing the window
         // top row in both viewports is the same because there's no scrolling but new rows are being added without
         // any nodes being expanded
-        s_logger.debug("return #1");
+        LOGGER.debug("return #1");
         return Pairs.of(_rows.get(i - 1), true);
       }
       if (i >= newRows.size()) {
         // TODO this gives false positives scrolling slowly up to the top into the buffer zone
         // top row in both viewports is the same because of the extra hidden rows
-        s_logger.debug("return #2");
+        LOGGER.debug("return #2");
         return Pairs.of(newRows.get(i - 1), false);
       }
       // if this object's row index is greater then the node has collapsed
       // the the other object's row index is greater then the node has expanded
       // the expanded / collapsed node is the row before the unequal row
-      int oldRow = _rows.get(i);
-      int newRow = newRows.get(i);
+      final int oldRow = _rows.get(i);
+      final int newRow = newRows.get(i);
       if (oldRow == newRow) {
         continue;
       }
       if (newRow < oldRow) {
-        s_logger.debug("return #3");
+        LOGGER.debug("return #3");
         return Pairs.of(newRows.get(i - 1), true);
       } else if (oldRow < newRow) {
-        s_logger.debug("return #4");
+        LOGGER.debug("return #4");
         return Pairs.of(_rows.get(i - 1), false);
       }
     }

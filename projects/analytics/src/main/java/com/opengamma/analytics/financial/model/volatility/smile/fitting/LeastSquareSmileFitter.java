@@ -14,17 +14,19 @@ import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.E
 import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWithTransform;
 
 /**
- * An interface for least-square fitting of option data to smile models
- * 
+ * An interface for least-square fitting of option data to smile models.
+ *
  */
 public abstract class LeastSquareSmileFitter {
 
-  public abstract LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, BlackFunctionData[] data,
-      double[] errors, final double[] initialFitParameters, final BitSet fixed);
+  public abstract LeastSquareResultsWithTransform getFitResult(EuropeanVanillaOption[] options, BlackFunctionData[] data,
+      double[] errors, double[] initialFitParameters, BitSet fixed);
 
-  public abstract LeastSquareResultsWithTransform getFitResult(final EuropeanVanillaOption[] options, BlackFunctionData[] data, final double[] initialFitParameters, final BitSet fixed);
+  public abstract LeastSquareResultsWithTransform getFitResult(EuropeanVanillaOption[] options, BlackFunctionData[] data, double[] initialFitParameters,
+      BitSet fixed);
 
-  protected void testData(final EuropeanVanillaOption[] options, final BlackFunctionData[] data, final double[] errors, final double[] initialFitParameters, final BitSet fixed,
+  protected void testData(final EuropeanVanillaOption[] options, final BlackFunctionData[] data, final double[] errors, final double[] initialFitParameters,
+      final BitSet fixed,
       final int nParameters) {
     Validate.notEmpty(options, "options");
     final int n = options.length;

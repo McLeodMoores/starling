@@ -29,6 +29,7 @@ public class MultiCurvePricingFunctions {
 
     /**
      * Gets the absolute tolerance.
+     *
      * @return The absolute tolerance
      */
     public double getAbsoluteTolerance() {
@@ -37,7 +38,9 @@ public class MultiCurvePricingFunctions {
 
     /**
      * Sets the absolute tolerance.
-     * @param absoluteTolerance The absolute tolerance
+     *
+     * @param absoluteTolerance
+     *          The absolute tolerance
      */
     public void setAbsoluteTolerance(final double absoluteTolerance) {
       _absoluteTolerance = absoluteTolerance;
@@ -45,6 +48,7 @@ public class MultiCurvePricingFunctions {
 
     /**
      * Gets the relative tolerance.
+     *
      * @return The relative tolerance
      */
     public double getRelativeTolerance() {
@@ -53,7 +57,9 @@ public class MultiCurvePricingFunctions {
 
     /**
      * Sets the relative tolerance.
-     * @param relativeTolerance The relative tolerance.
+     *
+     * @param relativeTolerance
+     *          The relative tolerance.
      */
     public void setRelativeTolerance(final double relativeTolerance) {
       _relativeTolerance = relativeTolerance;
@@ -61,6 +67,7 @@ public class MultiCurvePricingFunctions {
 
     /**
      * Gets the maximum number of iterations.
+     *
      * @return The maximum number of iterations
      */
     public int getMaximumIterations() {
@@ -68,8 +75,10 @@ public class MultiCurvePricingFunctions {
     }
 
     /**
-     * Sets the maximum number of iterations
-     * @param maxIterations The maximum number of iterations
+     * Sets the maximum number of iterations.
+     *
+     * @param maxIterations
+     *          The maximum number of iterations
      */
     public void setMaximumIterations(final int maxIterations) {
       _maxIterations = maxIterations;
@@ -89,9 +98,10 @@ public class MultiCurvePricingFunctions {
     }
 
     /**
-     * Adds default values for absolute tolerance, relative tolerance and the maximum number of
-     * iterations for all curve building functions
-     * @param functions The list of function configurations.
+     * Adds default values for absolute tolerance, relative tolerance and the maximum number of iterations for all curve building functions.
+     *
+     * @param functions
+     *          The list of function configurations.
      */
     protected void addCurveDefaults(final List<FunctionConfiguration> functions) {
       final String[] args = new String[3];

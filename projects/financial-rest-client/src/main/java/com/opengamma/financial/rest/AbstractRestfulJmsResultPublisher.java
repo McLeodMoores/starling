@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.rest;
@@ -28,47 +28,47 @@ import com.opengamma.util.rest.AbstractDataResource;
  */
 public abstract class AbstractRestfulJmsResultPublisher extends AbstractDataResource {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractRestfulJmsResultPublisher.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRestfulJmsResultPublisher.class);
+
   //CSOFF: just constants
   public static final String PATH_HEARTBEAT = "heartbeat";
   public static final String PATH_START_JMS_RESULT_STREAM = "startJmsResultStream";
   public static final String PATH_STOP_JMS_RESULT_STREAM = "stopJmsResultStream";
   public static final String DESTINATION_FIELD = "destination";
   //CSON: just constants
-  
+
   private final AbstractJmsResultPublisher _resultPublisher;
   private final ExecutorService _executor;
   private volatile Instant _lastAccessed = Instant.now();
-  
-  protected AbstractRestfulJmsResultPublisher(AbstractJmsResultPublisher resultPublisher, ExecutorService executor) {
+
+  protected AbstractRestfulJmsResultPublisher(final AbstractJmsResultPublisher resultPublisher, final ExecutorService executor) {
     _resultPublisher = resultPublisher;
     _executor = executor;
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Tests whether the underlying resource has been terminated.
-   * 
+   *
    * @return true if the underlying resource has been terminated, false otherwise
    */
   protected abstract boolean isTerminated();
-  
+
   /**
    * Called to indicate that the publisher's consumer has failed to provide heartbeats, and the resource is no longer
-   * required. Releases the underlying resource, stopping publication of results. 
+   * required. Releases the underlying resource, stopping publication of results.
    */
   protected abstract void expire();
-  
+
   //-------------------------------------------------------------------------
-  protected void startPublishingResults(String destination) throws Exception {
+  protected void startPublishingResults(final String destination) throws Exception {
     getResultPublisher().startPublishingResults(destination);
   }
-  
+
   protected void stopPublishingResults() throws JMSException {
     getResultPublisher().stopPublishingResults();
   }
-  
+
   //-------------------------------------------------------------------------
   @POST
   @Path(PATH_HEARTBEAT)
@@ -76,16 +76,16 @@ public abstract class AbstractRestfulJmsResultPublisher extends AbstractDataReso
     updateLastAccessed();
     return responseOk();
   }
-  
+
   public Instant getLastAccessed() {
     return _lastAccessed;
   }
-  
+
   protected void updateLastAccessed() {
     _lastAccessed = Instant.now();
   }
-  
-  //-------------------------------------------------------------------------  
+
+  //-------------------------------------------------------------------------
   @POST
   @Path(PATH_START_JMS_RESULT_STREAM)
   @Consumes(FudgeRest.MEDIA)
@@ -101,15 +101,15 @@ public abstract class AbstractRestfulJmsResultPublisher extends AbstractDataReso
       public void run() {
         try {
           startPublishingResults(destination);
-        } catch (Exception e) {
-          s_logger.error("Error starting result publisher", e);
+        } catch (final Exception e) {
+          LOGGER.error("Error starting result publisher", e);
         }
       }
-      
+
     });
     return responseOk(destination);
   }
-  
+
   @POST
   @Path(PATH_STOP_JMS_RESULT_STREAM)
   public Response stopResultStream() {
@@ -123,18 +123,18 @@ public abstract class AbstractRestfulJmsResultPublisher extends AbstractDataReso
       public void run() {
         try {
           stopPublishingResults();
-        } catch (Exception e) {
-          s_logger.error("Error stopping result publisher", e);
+        } catch (final Exception e) {
+          LOGGER.error("Error stopping result publisher", e);
         }
       }
-      
+
     });
     return responseOk();
   }
-  
+
   //-------------------------------------------------------------------------
   private AbstractJmsResultPublisher getResultPublisher() {
     return _resultPublisher;
   }
-  
+
 }

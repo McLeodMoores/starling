@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.sabrcap;
@@ -16,7 +16,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.SABRC
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the present value of an inflation instruments by discounting for a given MarketBundle.
  */
 public final class PresentValueSABRSensitivitySABRCapRightExtrapolationCalculator extends
     InstrumentDerivativeVisitorSameMethodAdapter<SABRCapProviderInterface, PresentValueSABRSensitivityDataBundle> {
@@ -37,8 +37,11 @@ public final class PresentValueSABRSensitivitySABRCapRightExtrapolationCalculato
 
   /**
    * Constructor.
-   * @param cutOffStrike The cut-off strike.
-   * @param mu The tail thickness parameter.
+   * 
+   * @param cutOffStrike
+   *          The cut-off strike.
+   * @param mu
+   *          The tail thickness parameter.
    */
   public PresentValueSABRSensitivitySABRCapRightExtrapolationCalculator(final double cutOffStrike, final double mu) {
     _mu = mu;
@@ -51,21 +54,21 @@ public final class PresentValueSABRSensitivitySABRCapRightExtrapolationCalculato
     return derivative.accept(this, sabr);
   }
 
-  // -----     Payment/Coupon     ------
+  // ----- Payment/Coupon ------
 
   @Override
   public PresentValueSABRSensitivityDataBundle visitCapFloorIbor(final CapFloorIbor cap, final SABRCapProviderInterface sabr) {
     return _methodExtraCap.presentValueSABRSensitivity(cap, sabr);
   }
 
-  // -----     Annuity     ------
+  // ----- Annuity ------
 
   @Override
   public PresentValueSABRSensitivityDataBundle visitGenericAnnuity(final Annuity<? extends Payment> annuity, final SABRCapProviderInterface sabr) {
     ArgumentChecker.notNull(annuity, "Annuity");
     PresentValueSABRSensitivityDataBundle pvss = visit(annuity.getNthPayment(0), sabr);
-    for (int loopp = 1; loopp < annuity.getNumberOfPayments(); loopp++) {
-      pvss = pvss.plus(visit(annuity.getNthPayment(loopp), sabr));
+    for (int i = 1; i < annuity.getNumberOfPayments(); i++) {
+      pvss = pvss.plus(visit(annuity.getNthPayment(i), sabr));
     }
     return pvss;
   }

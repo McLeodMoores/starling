@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.derivative;
@@ -32,7 +32,8 @@ public final class CouponONArithmeticAverageSpread extends Coupon {
    */
   private final double[] _fixingPeriodAccrualFactors;
   /**
-   * The interest accrued over the periods already fixed multiplied by the accrual factors, i.e. the sum (\delta_i r_i). The spread is not included in the value.
+   * The interest accrued over the periods already fixed multiplied by the accrual factors, i.e. the sum (\delta_i r_i). The spread is not included in the
+   * value.
    */
   private final double _rateAccrued;
   /**
@@ -52,19 +53,31 @@ public final class CouponONArithmeticAverageSpread extends Coupon {
 
   /**
    * Constructor.
-   * @param currency The coupon currency.
-   * @param paymentTime The coupon payment time.
-   * @param paymentAccrualFactor The year fraction of the full coupon.
-   * @param notional The coupon notional.
-   * @param index The index associated to the coupon.
-   * @param fixingPeriodTimes The times of the remaining fixing. The length is one greater than the number of periods, as it includes accrual start and end.
-   * @param fixingPeriodAccrualFactors The accrual factors (or year fractions) associated to the fixing periods in the Index day count convention.
-   * @param rateAccrued The interest accrued over the periods already fixed.
-   * @param fixingPeriodRemainingAccrualFactor ??
-   * @param spread The spread rate paid above the arithmetic average.
+   * 
+   * @param currency
+   *          The coupon currency.
+   * @param paymentTime
+   *          The coupon payment time.
+   * @param paymentAccrualFactor
+   *          The year fraction of the full coupon.
+   * @param notional
+   *          The coupon notional.
+   * @param index
+   *          The index associated to the coupon.
+   * @param fixingPeriodTimes
+   *          The times of the remaining fixing. The length is one greater than the number of periods, as it includes accrual start and end.
+   * @param fixingPeriodAccrualFactors
+   *          The accrual factors (or year fractions) associated to the fixing periods in the Index day count convention.
+   * @param rateAccrued
+   *          The interest accrued over the periods already fixed.
+   * @param fixingPeriodRemainingAccrualFactor
+   *          ??
+   * @param spread
+   *          The spread rate paid above the arithmetic average.
    */
-  private CouponONArithmeticAverageSpread(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final IndexON index,
-      final double[] fixingPeriodTimes, final double[] fixingPeriodAccrualFactors, final double rateAccrued, final double fixingPeriodRemainingAccrualFactor, final double spread) {
+  private CouponONArithmeticAverageSpread(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional,
+      final IndexON index, final double[] fixingPeriodTimes, final double[] fixingPeriodAccrualFactors, final double rateAccrued,
+      final double fixingPeriodRemainingAccrualFactor, final double spread) {
     super(currency, paymentTime, paymentYearFraction, notional);
     _index = index;
     _fixingPeriodTimes = fixingPeriodTimes;
@@ -77,19 +90,27 @@ public final class CouponONArithmeticAverageSpread extends Coupon {
 
   /**
    * Builder from financial details.
-   * @param paymentTime The coupon payment time.
-   * @param paymentAccrualFactor The year fraction of the full coupon.
-   * @param notional The coupon notional.
-   * @param index The index associated to the coupon.
-   * @param fixingPeriodTimes The times of the remaining fixing. The length is one greater than the number of periods, as it includes accrual start and end.
-   * @param fixingPeriodAccrualFactors The accrual factors (or year fractions) associated to the fixing periods in the Index day count convention.
-   * @param rateAccrued The interest accrued over the periods already fixed.
-   * @param spread The spread rate paid above the arithmetic average.
+   * 
+   * @param paymentTime
+   *          The coupon payment time.
+   * @param paymentAccrualFactor
+   *          The year fraction of the full coupon.
+   * @param notional
+   *          The coupon notional.
+   * @param index
+   *          The index associated to the coupon.
+   * @param fixingPeriodTimes
+   *          The times of the remaining fixing. The length is one greater than the number of periods, as it includes accrual start and end.
+   * @param fixingPeriodAccrualFactors
+   *          The accrual factors (or year fractions) associated to the fixing periods in the Index day count convention.
+   * @param rateAccrued
+   *          The interest accrued over the periods already fixed.
+   * @param spread
+   *          The spread rate paid above the arithmetic average.
    * @return The coupon.
    */
-  public static CouponONArithmeticAverageSpread from(final double paymentTime, final double paymentAccrualFactor, final double notional, final IndexON index, final double[] fixingPeriodTimes,
-      final double[] fixingPeriodAccrualFactors,
-      final double rateAccrued, final double spread) {
+  public static CouponONArithmeticAverageSpread from(final double paymentTime, final double paymentAccrualFactor, final double notional, final IndexON index,
+      final double[] fixingPeriodTimes, final double[] fixingPeriodAccrualFactors, final double rateAccrued, final double spread) {
     ArgumentChecker.notNull(index, "Index");
     ArgumentChecker.notNull(fixingPeriodTimes, "Fixing Times");
     ArgumentChecker.notNull(fixingPeriodAccrualFactors, "Accrual Factors");
@@ -97,12 +118,13 @@ public final class CouponONArithmeticAverageSpread extends Coupon {
     for (final double fixingPeriodAccrualFactor : fixingPeriodAccrualFactors) {
       fixingPeriodRemainingAccrualFactor += fixingPeriodAccrualFactor;
     }
-    return new CouponONArithmeticAverageSpread(index.getCurrency(), paymentTime, paymentAccrualFactor, notional, index, fixingPeriodTimes, fixingPeriodAccrualFactors, rateAccrued,
-        fixingPeriodRemainingAccrualFactor, spread);
+    return new CouponONArithmeticAverageSpread(index.getCurrency(), paymentTime, paymentAccrualFactor, notional, index, fixingPeriodTimes,
+        fixingPeriodAccrualFactors, rateAccrued, fixingPeriodRemainingAccrualFactor, spread);
   }
 
   /**
    * Gets the index.
+   * 
    * @return The index.
    */
   public IndexON getIndex() {
@@ -111,6 +133,7 @@ public final class CouponONArithmeticAverageSpread extends Coupon {
 
   /**
    * Gets the times of the fixing periods.
+   * 
    * @return The times.
    */
   public double[] getFixingPeriodTimes() {
@@ -119,6 +142,7 @@ public final class CouponONArithmeticAverageSpread extends Coupon {
 
   /**
    * Gets the fixingPeriodAccrualFactors field.
+   * 
    * @return the fixingPeriodAccrualFactors
    */
   public double[] getFixingPeriodAccrualFactors() {
@@ -127,6 +151,7 @@ public final class CouponONArithmeticAverageSpread extends Coupon {
 
   /**
    * Gets the notionalAccrued field.
+   * 
    * @return the notionalAccrued
    */
   public double getRateAccrued() {
@@ -135,6 +160,7 @@ public final class CouponONArithmeticAverageSpread extends Coupon {
 
   /**
    * Gets the fixingPeriodTotalAccrualFactor field.
+   * 
    * @return the fixingPeriodTotalAccrualFactor
    */
   public double getFixingPeriodRemainingAccrualFactor() {
@@ -143,6 +169,7 @@ public final class CouponONArithmeticAverageSpread extends Coupon {
 
   /**
    * Returns the spread rate paid above the arithmetic average.
+   * 
    * @return The spread.
    */
   public double getSpread() {
@@ -151,6 +178,7 @@ public final class CouponONArithmeticAverageSpread extends Coupon {
 
   /**
    * Returns the fixed amount related to the spread.
+   * 
    * @return The amount.
    */
   public double getSpreadAmount() {
@@ -181,15 +209,15 @@ public final class CouponONArithmeticAverageSpread extends Coupon {
     result = prime * result + Arrays.hashCode(_fixingPeriodAccrualFactors);
     long temp;
     temp = Double.doubleToLongBits(_fixingPeriodRemainingAccrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_fixingPeriodTimes);
     result = prime * result + _index.hashCode();
     temp = Double.doubleToLongBits(_rateAccrued);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spread);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_spreadAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

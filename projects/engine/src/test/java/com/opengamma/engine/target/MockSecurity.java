@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.target;
@@ -34,12 +34,12 @@ import com.opengamma.id.UniqueId;
   }
 
   @Override
-  public void setAttributes(Map<String, String> attributes) {
+  public void setAttributes(final Map<String, String> attributes) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void addAttribute(String key, String value) {
+  public void addAttribute(final String key, final String value) {
     throw new UnsupportedOperationException();
   }
 

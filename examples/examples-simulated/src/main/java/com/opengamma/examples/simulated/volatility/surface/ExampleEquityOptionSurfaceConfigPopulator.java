@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.volatility.surface;
@@ -72,7 +72,8 @@ public class ExampleEquityOptionSurfaceConfigPopulator {
    * @param definition The definition
    * @return The config item
    */
-  private static ConfigItem<VolatilitySurfaceDefinition<LocalDate, Double>> makeConfigDocument(final VolatilitySurfaceDefinition<LocalDate, Double> definition) {
+  private static ConfigItem<VolatilitySurfaceDefinition<LocalDate, Double>> makeConfigDocument(
+      final VolatilitySurfaceDefinition<LocalDate, Double> definition) {
     return ConfigItem.of(definition, definition.getName(), VolatilitySurfaceDefinition.class);
   }
 

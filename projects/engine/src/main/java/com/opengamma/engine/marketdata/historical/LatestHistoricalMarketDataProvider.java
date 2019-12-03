@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.marketdata.historical;
@@ -21,7 +21,7 @@ public class LatestHistoricalMarketDataProvider extends AbstractHistoricalMarket
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param historicalTimeSeriesSource the underlying source of historical data, not null
    * @param historicalTimeSeriesResolver the time series resolver, not null
    * @param timeSeriesResolverKey the source resolver key, or null to use the source default
@@ -33,11 +33,12 @@ public class LatestHistoricalMarketDataProvider extends AbstractHistoricalMarket
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param historicalTimeSeriesSource the underlying source of historical data, not null
    * @param historicalTimeSeriesResolver the time series resolver, not null
    */
-  public LatestHistoricalMarketDataProvider(final HistoricalTimeSeriesSource historicalTimeSeriesSource, final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
+  public LatestHistoricalMarketDataProvider(final HistoricalTimeSeriesSource historicalTimeSeriesSource,
+      final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
     super(historicalTimeSeriesSource, historicalTimeSeriesResolver);
   }
 

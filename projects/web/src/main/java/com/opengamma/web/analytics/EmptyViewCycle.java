@@ -43,10 +43,10 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * {@link ViewCycle} implementation that acts as a placeholder when a calculation cycle hasn't completed and there isn't a cycle available. This is cleaner than using a null cycle reference and being
- * forced to do a null check everywhere it's used. Only a single instance of this class should ever exist.
+ * {@link ViewCycle} implementation that acts as a placeholder when a calculation cycle hasn't completed and there isn't a cycle available. This is cleaner than
+ * using a null cycle reference and being forced to do a null check everywhere it's used. Only a single instance of this class should ever exist.
  */
-/*package*/final class EmptyViewCycle implements ViewCycle {
+/* package */final class EmptyViewCycle implements ViewCycle {
 
   /** Reference to the empty cycle. */
   /* package */static final EngineResourceReference<ViewCycle> REFERENCE = new EmptyViewCycleReference();
@@ -62,9 +62,9 @@ import com.opengamma.util.tuple.Pair;
 
   static {
     EMPTY_CACHE_RESPONSE = new ComputationCacheResponse();
-    EMPTY_CACHE_RESPONSE.setResults(ImmutableList.<Pair<ValueSpecification, Object>>of());
+    EMPTY_CACHE_RESPONSE.setResults(ImmutableList.<Pair<ValueSpecification, Object>> of());
     EMPTY_RESULTS_RESPONSE = new ComputationResultsResponse();
-    EMPTY_RESULTS_RESPONSE.setResults(ImmutableMap.<ValueSpecification, ComputedValueResult>of());
+    EMPTY_RESULTS_RESPONSE.setResults(ImmutableMap.<ValueSpecification, ComputedValueResult> of());
   }
 
   private final CompiledViewDefinitionWithGraphs _compiledViewDef = new EmptyViewDefinition();
@@ -96,7 +96,7 @@ import com.opengamma.util.tuple.Pair;
   public Duration getDuration() {
     return Duration.ZERO;
   }
-  
+
   @Override
   public ViewCycleExecutionOptions getExecutionOptions() {
     throw new UnsupportedOperationException("getExecutionOptions not supported");
@@ -113,12 +113,12 @@ import com.opengamma.util.tuple.Pair;
   }
 
   @Override
-  public ComputationCacheResponse queryComputationCaches(ComputationCycleQuery computationCacheQuery) {
+  public ComputationCacheResponse queryComputationCaches(final ComputationCycleQuery computationCacheQuery) {
     return EMPTY_CACHE_RESPONSE;
   }
 
   @Override
-  public ComputationResultsResponse queryResults(ComputationCycleQuery query) {
+  public ComputationResultsResponse queryResults(final ComputationCycleQuery query) {
     return EMPTY_RESULTS_RESPONSE;
   }
 
@@ -153,7 +153,7 @@ import com.opengamma.util.tuple.Pair;
     }
 
     @Override
-    public CompiledViewDefinitionWithGraphs withResolverVersionCorrection(VersionCorrection resolverVersionCorrection) {
+    public CompiledViewDefinitionWithGraphs withResolverVersionCorrection(final VersionCorrection resolverVersionCorrection) {
       throw new UnsupportedOperationException("withResolverVersionCorrection not implemented");
     }
 
@@ -168,7 +168,7 @@ import com.opengamma.util.tuple.Pair;
     }
 
     @Override
-    public CompiledViewCalculationConfiguration getCompiledCalculationConfiguration(String viewCalculationConfiguration) {
+    public CompiledViewCalculationConfiguration getCompiledCalculationConfiguration(final String viewCalculationConfiguration) {
       throw new UnsupportedOperationException("getCompiledCalculationConfiguration not implemented");
     }
 
@@ -179,9 +179,9 @@ import com.opengamma.util.tuple.Pair;
 
     @Override
     public CompiledViewDefinitionWithGraphs withMarketDataManipulationSelections(
-        Map<String, DependencyGraph> graphsByConfiguration,
-        Map<String, Map<DistinctMarketDataSelector, Set<ValueSpecification>>> selectionsByConfiguration,
-        Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> paramsByConfiguration) {
+        final Map<String, DependencyGraph> graphsByConfiguration,
+        final Map<String, Map<DistinctMarketDataSelector, Set<ValueSpecification>>> selectionsByConfiguration,
+        final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> paramsByConfiguration) {
       throw new UnsupportedOperationException("withMarketDataManipulationSelections not implemented");
     }
 
@@ -221,7 +221,7 @@ import com.opengamma.util.tuple.Pair;
     }
 
     @Override
-    public DependencyGraphExplorer getDependencyGraphExplorer(String calcConfig) {
+    public DependencyGraphExplorer getDependencyGraphExplorer(final String calcConfig) {
       return _dependencyGraphExplorer;
     }
 
@@ -244,12 +244,12 @@ import com.opengamma.util.tuple.Pair;
     }
 
     @Override
-    public DependencyGraphExplorer getSubgraphProducing(ValueSpecification output) {
+    public DependencyGraphExplorer getSubgraphProducing(final ValueSpecification output) {
       return null;
     }
 
     @Override
-    public DependencyNode getNodeProducing(ValueSpecification output) {
+    public DependencyNode getNodeProducing(final ValueSpecification output) {
       return null;
     }
 

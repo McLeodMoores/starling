@@ -22,7 +22,6 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.opengamma.financial.analytics.fxforwardcurve.FXForwardCurveConfigPopulator;
-import com.opengamma.financial.analytics.ircurve.YieldCurveConfigPopulator;
 import com.opengamma.financial.analytics.ircurve.calcconfig.MultiCurveCalculationConfigPopulator;
 import com.opengamma.financial.analytics.volatility.surface.EquityOptionSurfaceConfigPopulator;
 import com.opengamma.financial.analytics.volatility.surface.FXOptionVolatilitySurfaceConfigPopulator;
@@ -86,18 +85,17 @@ public class ConfigMasterPopulatorsFactoryBean extends DirectBean implements Ini
   /**
    * The flag to create curve calculation configurations in the config master.
    */
+  @Deprecated
   @PropertyDefinition
   private boolean _curveCalculationConfiguration;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  @SuppressWarnings("deprecation")
   @Override
   public void afterPropertiesSet() {
     final ConfigMaster cm = getConfigMaster();
     ArgumentChecker.notNull(cm, "ConfigMaster");
 
-    if (isYieldCurve()) {
-      new YieldCurveConfigPopulator(cm);
-    }
     if (isCurrencyMatrix()) {
       // TODO: [PLAT-2379] This won't work if the currency pair conventions aren't already loaded
       CurrencyMatrixConfigPopulator.populateCurrencyMatrixConfigMaster(cm);
@@ -371,6 +369,7 @@ public class ConfigMasterPopulatorsFactoryBean extends DirectBean implements Ini
    * Gets the flag to create curve calculation configurations in the config master.
    * @return the value of the property
    */
+  @Deprecated
   public boolean isCurveCalculationConfiguration() {
     return _curveCalculationConfiguration;
   }
@@ -379,6 +378,7 @@ public class ConfigMasterPopulatorsFactoryBean extends DirectBean implements Ini
    * Sets the flag to create curve calculation configurations in the config master.
    * @param curveCalculationConfiguration  the new value of the property
    */
+  @Deprecated
   public void setCurveCalculationConfiguration(boolean curveCalculationConfiguration) {
     this._curveCalculationConfiguration = curveCalculationConfiguration;
   }
@@ -387,6 +387,7 @@ public class ConfigMasterPopulatorsFactoryBean extends DirectBean implements Ini
    * Gets the the {@code curveCalculationConfiguration} property.
    * @return the property, not null
    */
+  @Deprecated
   public final Property<Boolean> curveCalculationConfiguration() {
     return metaBean().curveCalculationConfiguration().createProperty(this);
   }
@@ -661,6 +662,7 @@ public class ConfigMasterPopulatorsFactoryBean extends DirectBean implements Ini
      * The meta-property for the {@code curveCalculationConfiguration} property.
      * @return the meta-property, not null
      */
+    @Deprecated
     public final MetaProperty<Boolean> curveCalculationConfiguration() {
       return _curveCalculationConfiguration;
     }

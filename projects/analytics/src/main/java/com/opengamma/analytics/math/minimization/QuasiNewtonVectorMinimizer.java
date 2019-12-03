@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.minimization;
@@ -17,9 +17,10 @@ import com.opengamma.analytics.math.matrix.MatrixAlgebraFactory;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
-public class QuasiNewtonVectorMinimizer implements MinimizerWithGradient<Function1D<DoubleMatrix1D, Double>, Function1D<DoubleMatrix1D, DoubleMatrix1D>, DoubleMatrix1D> {
+public class QuasiNewtonVectorMinimizer
+    implements MinimizerWithGradient<Function1D<DoubleMatrix1D, Double>, Function1D<DoubleMatrix1D, DoubleMatrix1D>, DoubleMatrix1D> {
 
   private static final int RESET_FREQ = 200;
   private static final double ALPHA = 1e-4;
@@ -41,7 +42,8 @@ public class QuasiNewtonVectorMinimizer implements MinimizerWithGradient<Functio
     this(absTolerance, relTolerance, maxInterations, DEF_UPDATER);
   }
 
-  public QuasiNewtonVectorMinimizer(final double absoluteTol, final double relativeTol, final int maxInterations, final QuasiNewtonInverseHessianUpdate hessianUpdater) {
+  public QuasiNewtonVectorMinimizer(final double absoluteTol, final double relativeTol, final int maxInterations,
+      final QuasiNewtonInverseHessianUpdate hessianUpdater) {
     ArgumentChecker.notNull(hessianUpdater, "null updater");
     ArgumentChecker.notNegative(absoluteTol, "absolute tolerance");
     ArgumentChecker.notNegative(relativeTol, "relative tolerance");
@@ -53,9 +55,12 @@ public class QuasiNewtonVectorMinimizer implements MinimizerWithGradient<Functio
   }
 
   /**
-   * Disabled because not working properly (see JIRA issue)
-   * @param function The function
-   * @param startPosition The start position
+   * Disabled because not working properly (see JIRA issue).
+   *
+   * @param function
+   *          The function
+   * @param startPosition
+   *          The start position
    * @return The minimum
    */
   @Override
@@ -64,7 +69,8 @@ public class QuasiNewtonVectorMinimizer implements MinimizerWithGradient<Functio
   }
 
   @Override
-  public DoubleMatrix1D minimize(final Function1D<DoubleMatrix1D, Double> function, final Function1D<DoubleMatrix1D, DoubleMatrix1D> grad, final DoubleMatrix1D startPosition) {
+  public DoubleMatrix1D minimize(final Function1D<DoubleMatrix1D, Double> function, final Function1D<DoubleMatrix1D, DoubleMatrix1D> grad,
+      final DoubleMatrix1D startPosition) {
     final DataBundle data = new DataBundle();
     final double y = function.evaluate(startPosition);
     data.setX(startPosition);
@@ -80,7 +86,7 @@ public class QuasiNewtonVectorMinimizer implements MinimizerWithGradient<Functio
     int resetCount = 1;
 
     while (!isConverged(data)) {
-      if ((resetCount) % RESET_FREQ == 0) {
+      if (resetCount % RESET_FREQ == 0) {
         data.setInverseHessianEsimate(getInitializedMatrix(startPosition));
         resetCount = 1;
       } else {
@@ -110,7 +116,8 @@ public class QuasiNewtonVectorMinimizer implements MinimizerWithGradient<Functio
     return (DoubleMatrix1D) MA.multiply(data.getInverseHessianEsimate(), MA.scale(data.getGrad(), -1.0));
   }
 
-  private boolean getNextPosition(final Function1D<DoubleMatrix1D, Double> function, final Function1D<DoubleMatrix1D, DoubleMatrix1D> grad, final DataBundle data) {
+  private boolean getNextPosition(final Function1D<DoubleMatrix1D, Double> function, final Function1D<DoubleMatrix1D, DoubleMatrix1D> grad,
+      final DataBundle data) {
     final DoubleMatrix1D p = getDirection(data);
     if (data.getLambda0() < 1.0) {
       data.setLambda0(1.0);
@@ -198,11 +205,11 @@ public class QuasiNewtonVectorMinimizer implements MinimizerWithGradient<Functio
         return false;
       }
     }
-    return (MA.getNorm2(data.getGrad()) < _absoluteTol);
+    return MA.getNorm2(data.getGrad()) < _absoluteTol;
   }
 
   /**
-   * Data bundle for intermediate data
+   * Data bundle for intermediate data.
    */
   public static class DataBundle {
     private double _g0;
@@ -285,7 +292,8 @@ public class QuasiNewtonVectorMinimizer implements MinimizerWithGradient<Functio
     }
 
     /**
-     * Inverse Hessian matrix 
+     * Inverse Hessian matrix.
+     *
      * @return The inverse Hessian Matrix
      */
     public DoubleMatrix2D getInverseHessianEsimate() {

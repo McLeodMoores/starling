@@ -6,12 +6,13 @@
 package com.opengamma.financial.temptarget;
 
 import com.opengamma.id.UniqueId;
-import com.opengamma.master.config.ConfigMaster;
 
 /**
- * Interface to manage a repository for temporary targets. Items can be posted into the repository and then referenced by nodes within a dependency graph.
+ * Interface to manage a repository for temporary targets. Items can be posted
+ * into the repository and then referenced by nodes within a dependency graph.
  * <p>
- * An implementation may be in-memory, or more likely backed by storage provided by a service such as a {@link ConfigMaster}.
+ * An implementation may be in-memory, or more likely backed by storage provided
+ * by a service such as a {@link com.opengamma.master.config.ConfigMaster}.
  */
 public interface TempTargetRepository extends TempTargetSource {
 

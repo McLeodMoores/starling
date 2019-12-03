@@ -21,14 +21,14 @@ public final class PresentValueFromCurvesCalculator extends InstrumentDerivative
   /**
    * The calculator instance.
    */
-  private static final PresentValueFromCurvesCalculator s_instance = new PresentValueFromCurvesCalculator();
+  private static final PresentValueFromCurvesCalculator INSTANCE = new PresentValueFromCurvesCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static PresentValueFromCurvesCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

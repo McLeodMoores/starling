@@ -36,8 +36,8 @@ import com.opengamma.web.analytics.rest.MasterType;
  */
 public class ClientConnection implements ChangeListener, MasterChangeListener, UpdateListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ClientConnection.class);
-  
+  private static final Logger LOGGER = LoggerFactory.getLogger(ClientConnection.class);
+
   /** Login ID of the user that owns this connection TODO this isn't used yet */
   private final String _userId;
   /** Unique ID of this connection */
@@ -47,7 +47,7 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
   /** Listener that forwards changes over HTTP whenever any updates occur to which this connection subscribes */
   private final UpdateListener _listener;
   /** Listeners that are called when this connection closes. */
-  private final List<DisconnectionListener> _disconnectionListeners = new CopyOnWriteArrayList<DisconnectionListener>();
+  private final List<DisconnectionListener> _disconnectionListeners = new CopyOnWriteArrayList<>();
 
   /** Lock which must be held when mutating any of the objects below */
   private final Object _lock = new Object();
@@ -56,24 +56,24 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
   /** URLs which should be published when an entity changes, keyed on the entity's ID */
   private final Multimap<ObjectId, String> _entityUrls = HashMultimap.create();
   /** Map of URLs for which changes should be published to their underlying objects. */
-  private final Map<String, UrlMapping> _urlMappings = new HashMap<String, UrlMapping>();
+  private final Map<String, UrlMapping> _urlMappings = new HashMap<>();
   /** Connection flag. */
   private boolean _connected = true;
 
   /**
    * @param userId Login ID of the user that owns this connection, null if not known
-   * @param clientId Unique ID of this connection 
-   * @param listener Listener that forwards changes over HTTP whenever any updates occur to which this connection subscribes 
+   * @param clientId Unique ID of this connection
+   * @param listener Listener that forwards changes over HTTP whenever any updates occur to which this connection subscribes
    * @param timeoutTask Task that closes this connection if it is idle for too long
    */
-  /* package */ ClientConnection(String userId,
-                                 String clientId,
-                                 UpdateListener listener,
-                                 ConnectionTimeoutTask timeoutTask) {
+  /* package */ ClientConnection(final String userId,
+      final String clientId,
+      final UpdateListener listener,
+      final ConnectionTimeoutTask timeoutTask) {
     ArgumentChecker.notNull(listener, "listener");
     ArgumentChecker.notNull(clientId, "clientId");
     ArgumentChecker.notNull(timeoutTask, "timeoutTask");
-    s_logger.debug("Creating new client connection. userId: {}, clientId: {}", userId, clientId);
+    LOGGER.debug("Creating new client connection. userId: {}, clientId: {}", userId, clientId);
     _userId = userId;
     _listener = listener;
     _clientId = clientId;
@@ -91,15 +91,15 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
    * Disconnects this client.
    */
   /* package */ void disconnect() {
-    s_logger.debug("Disconnecting client connection, userId: {}, clientId: {}", _userId, _clientId);
+    LOGGER.debug("Disconnecting client connection, userId: {}, clientId: {}", _userId, _clientId);
     synchronized (_lock) {
       _connected = false;
       _timeoutTask.cancel();
-      for (DisconnectionListener listener : _disconnectionListeners) {
+      for (final DisconnectionListener listener : _disconnectionListeners) {
         try {
           listener.clientDisconnected();
-        } catch (Exception e) {
-          s_logger.warn("Problem calling disconnection listener", e);
+        } catch (final Exception e) {
+          LOGGER.warn("Problem calling disconnection listener", e);
         }
       }
     }
@@ -111,24 +111,24 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
    * @param uid The unique ID of an entity
    * @param url The REST URL of the entity.  This is published to the client when the entity is updated
    */
-  /* package */ void subscribe(UniqueId uid, String url) {
+  /* package */ void subscribe(final UniqueId uid, final String url) {
     ArgumentChecker.notNull(uid, "uid");
     ArgumentChecker.notNull(url, "url");
-    s_logger.debug("Client ID {} subscribing for changes to {}, URL: {}", new Object[]{_clientId, uid, url});
+    LOGGER.debug("Client ID {} subscribing for changes to {}, URL: {}", new Object[]{_clientId, uid, url});
     synchronized (_lock) {
       _timeoutTask.reset();
-      ObjectId objectId = uid.getObjectId();
+      final ObjectId objectId = uid.getObjectId();
       _entityUrls.put(objectId, url);
       _urlMappings.put(url, UrlMapping.create(_urlMappings.get(url), objectId));
     }
   }
 
   @Override
-  public void entityChanged(ChangeEvent event) {
-    s_logger.debug("Received ChangeEvent {}", event);
+  public void entityChanged(final ChangeEvent event) {
+    LOGGER.debug("Received ChangeEvent {}", event);
     synchronized (_lock) {
-      ObjectId objectId = event.getObjectId();      
-      Collection<String> urls = _entityUrls.removeAll(objectId);
+      final ObjectId objectId = event.getObjectId();
+      final Collection<String> urls = _entityUrls.removeAll(objectId);
       removeSubscriptions(urls);
       if (!urls.isEmpty()) {
         _listener.itemsUpdated(urls);
@@ -143,10 +143,10 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
    * @param masterType The type of master
    * @param url The REST URL whose results might be invalidated by changes in the master
    */
-  /* package */ void subscribe(MasterType masterType, String url) {
+  /* package */ void subscribe(final MasterType masterType, final String url) {
     ArgumentChecker.notNull(masterType, "masterType");
     ArgumentChecker.notNull(url, "url");
-    s_logger.debug("Subscribing to notifications for changes to {} master, notification URL: {}", masterType, url);
+    LOGGER.debug("Subscribing to notifications for changes to {} master, notification URL: {}", masterType, url);
     synchronized (_lock) {
       _timeoutTask.reset();
       _masterUrls.put(masterType, url);
@@ -155,10 +155,10 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
   }
 
   @Override
-  public void masterChanged(MasterType masterType) {
-    s_logger.debug("Received notification {} master changed", masterType);
+  public void masterChanged(final MasterType masterType) {
+    LOGGER.debug("Received notification {} master changed", masterType);
     synchronized (_lock) {
-      Collection<String> urls = _masterUrls.removeAll(masterType);
+      final Collection<String> urls = _masterUrls.removeAll(masterType);
       removeSubscriptions(urls);
       if (!urls.isEmpty()) {
         _listener.itemsUpdated(urls);
@@ -171,27 +171,27 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
    * URL for all {@link MasterType}s or entity {@link ObjectId}s are cancelled.
    * @param urls The URLs for which updates have been published
    */
-  private void removeSubscriptions(Collection<String> urls) {
-    for (String url : urls) {
-      UrlMapping urlMapping = _urlMappings.get(url);
+  private void removeSubscriptions(final Collection<String> urls) {
+    for (final String url : urls) {
+      final UrlMapping urlMapping = _urlMappings.get(url);
       // remove mappings for this url for master type
-      for (MasterType type : urlMapping.getMasterTypes()) {
+      for (final MasterType type : urlMapping.getMasterTypes()) {
         _masterUrls.remove(type, url);
       }
       // remove mappings for this url for all entities
-      for (ObjectId entityId : urlMapping.getEntityIds()) {
+      for (final ObjectId entityId : urlMapping.getEntityIds()) {
         _entityUrls.remove(entityId, url);
       }
     }
   }
 
   @Override
-  public void itemUpdated(Object callbackId) {
+  public void itemUpdated(final Object callbackId) {
     _listener.itemUpdated(callbackId);
   }
 
   @Override
-  public void itemsUpdated(Collection<?> callbackIds) {
+  public void itemsUpdated(final Collection<?> callbackIds) {
     _listener.itemsUpdated(callbackIds);
   }
 
@@ -200,7 +200,7 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
    * disconnected the listener will be called immediately.
    * @param listener The listener
    */
-  public void addDisconnectionListener(DisconnectionListener listener) {
+  public void addDisconnectionListener(final DisconnectionListener listener) {
     synchronized (_lock) {
       if (_connected) {
         _disconnectionListeners.add(listener);
@@ -222,7 +222,7 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
     private final Set<MasterType> _masterTypes;
     private final Set<ObjectId> _entityIds;
 
-    private UrlMapping(Set<MasterType> masterTypes, Set<ObjectId> entityIds) {
+    private UrlMapping(final Set<MasterType> masterTypes, final Set<ObjectId> entityIds) {
       _masterTypes = masterTypes;
       _entityIds = entityIds;
     }
@@ -235,24 +235,22 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
       return _entityIds;
     }
 
-    private static UrlMapping create(UrlMapping urlMapping, MasterType masterType) {
+    private static UrlMapping create(final UrlMapping urlMapping, final MasterType masterType) {
       if (urlMapping == null) {
         return new UrlMapping(ImmutableSet.of(masterType), Collections.<ObjectId>emptySet());
-      } else {
-        ImmutableSet<MasterType> masterTypes =
-            ImmutableSet.<MasterType>builder().addAll(urlMapping.getMasterTypes()).add(masterType).build();
-        return new UrlMapping(masterTypes, urlMapping.getEntityIds());
       }
+      final ImmutableSet<MasterType> masterTypes =
+          ImmutableSet.<MasterType>builder().addAll(urlMapping.getMasterTypes()).add(masterType).build();
+      return new UrlMapping(masterTypes, urlMapping.getEntityIds());
     }
 
-    private static UrlMapping create(UrlMapping urlMapping, ObjectId entityId) {
+    private static UrlMapping create(final UrlMapping urlMapping, final ObjectId entityId) {
       if (urlMapping == null) {
         return new UrlMapping(Collections.<MasterType>emptySet(), ImmutableSet.of(entityId));
-      } else {
-        ImmutableSet<ObjectId> entityIds =
-            ImmutableSet.<ObjectId>builder().addAll(urlMapping.getEntityIds()).add(entityId).build();
-        return new UrlMapping(urlMapping.getMasterTypes(), entityIds);
       }
+      final ImmutableSet<ObjectId> entityIds =
+          ImmutableSet.<ObjectId>builder().addAll(urlMapping.getEntityIds()).add(entityId).build();
+      return new UrlMapping(urlMapping.getMasterTypes(), entityIds);
     }
   }
 

@@ -17,7 +17,7 @@ import com.opengamma.analytics.financial.simpleinstruments.pricing.SimpleFutureD
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class for pricing commodity futures
+ * Class for pricing commodity futures.
  *
  * Computes PV as the difference between Live and last day's closing prices
  *
@@ -34,61 +34,61 @@ public class CommodityFuturePresentValueCalculator implements SimpleInstrumentVi
   }
 
   /**
-   * Main visitor entry point, takes a derivative and market data and returns the current value
+   * Main visitor entry point, takes a derivative and market data and returns the current value.
    *
    * @param derivative the derivative to price
    * @param data market data
    * @return the current value
    */
-  public Double visit(AgricultureFuture derivative, SimpleFutureDataBundle data) {
+  public Double visit(final AgricultureFuture derivative, final SimpleFutureDataBundle data) {
     ArgumentChecker.notNull(derivative, "derivative");
     ArgumentChecker.notNull(data, "data");
     return SIMPLE_FUTURE_CONVERTER.visitAgricultureFuture(derivative).accept(this, data);
   }
 
   /**
-   * Main visitor entry point, takes a derivative and market data and returns the current value
+   * Main visitor entry point, takes a derivative and market data and returns the current value.
    *
    * @param derivative the derivative to price
    * @param data market data
    * @return the current value
    */
-  public Double visit(EnergyFuture derivative, SimpleFutureDataBundle data) {
+  public Double visit(final EnergyFuture derivative, final SimpleFutureDataBundle data) {
     ArgumentChecker.notNull(derivative, "derivative");
     ArgumentChecker.notNull(data, "data");
     return SIMPLE_FUTURE_CONVERTER.visitEnergyFuture(derivative).accept(this, data);
   }
 
   /**
-   * Main visitor entry point, takes a derivative and market data and returns the current value
+   * Main visitor entry point, takes a derivative and market data and returns the current value.
    *
    * @param derivative the derivative to price
    * @param data market data
    * @return the current value
    */
-  public Double visit(MetalFuture derivative, SimpleFutureDataBundle data) {
+  public Double visit(final MetalFuture derivative, final SimpleFutureDataBundle data) {
     ArgumentChecker.notNull(derivative, "derivative");
     ArgumentChecker.notNull(data, "data");
     return SIMPLE_FUTURE_CONVERTER.visitMetalFuture(derivative).accept(this, data);
   }
 
   @Override
-  public Double visit(SimpleInstrument derivative, SimpleFutureDataBundle data) {
+  public Double visit(final SimpleInstrument derivative, final SimpleFutureDataBundle data) {
     ArgumentChecker.notNull(derivative, "derivative");
     ArgumentChecker.notNull(data, "data");
     return derivative.accept(this, data);
   }
 
-  @Override
   /**
-   * Compute PV as the difference between Live and last day's closing prices
+   * Compute PV as the difference between Live and last day's closing prices.
    */
-  public Double visitSimpleFuture(SimpleFuture future, SimpleFutureDataBundle data) {
+  @Override
+  public Double visitSimpleFuture(final SimpleFuture future, final SimpleFutureDataBundle data) {
     return future.getUnitAmount() * (data.getMarketPrice() - future.getReferencePrice());
   }
 
   @Override
-  public Double visitSimpleFXFuture(SimpleFXFuture future, SimpleFutureDataBundle data) {
+  public Double visitSimpleFXFuture(final SimpleFXFuture future, final SimpleFutureDataBundle data) {
     throw new UnsupportedOperationException("Cannot price simple FX future with this calculator");
   }
 

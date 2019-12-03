@@ -13,7 +13,6 @@ import com.opengamma.core.marketdatasnapshot.MarketDataSnapshotSource;
 import com.opengamma.core.position.PositionSource;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.SecuritySource;
-import com.opengamma.financial.analytics.ircurve.YieldCurveConfigPopulator;
 import com.opengamma.financial.analytics.volatility.surface.FXOptionVolatilitySurfaceConfigPopulator;
 import com.opengamma.financial.analytics.volatility.surface.IRFutureOptionSurfaceConfigPopulator;
 import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
@@ -40,7 +39,6 @@ public abstract class MastersTestUtils {
 
   public MastersTestUtils() {
     final InMemoryConfigMaster cfgMaster = new InMemoryConfigMaster();
-    YieldCurveConfigPopulator.populateCurveConfigMaster(cfgMaster);
     CurrencyPairsConfigPopulator.populateCurrencyPairsConfigMaster(cfgMaster);
     CurrencyMatrixConfigPopulator.populateCurrencyMatrixConfigMaster(cfgMaster);
     FXOptionVolatilitySurfaceConfigPopulator.populateVolatilitySurfaceConfigMaster(cfgMaster);
@@ -49,7 +47,7 @@ public abstract class MastersTestUtils {
     _memConfigSource = new MasterConfigSource(cfgMaster);
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the config master.
    *
@@ -68,7 +66,7 @@ public abstract class MastersTestUtils {
     return _memConfigSource;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the config master.
    *
@@ -76,7 +74,7 @@ public abstract class MastersTestUtils {
    */
   public abstract ConfigMaster getConfigMaster();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the region source.
    *
@@ -84,7 +82,7 @@ public abstract class MastersTestUtils {
    */
   public abstract RegionSource getRegionSource();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the organization source.
    *
@@ -92,7 +90,7 @@ public abstract class MastersTestUtils {
    */
   public abstract LegalEntitySource getLegalEntitySource();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the security source.
    *
@@ -107,7 +105,7 @@ public abstract class MastersTestUtils {
    */
   public abstract SecurityMaster getSecurityMaster();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the convention source.
    *
@@ -122,7 +120,7 @@ public abstract class MastersTestUtils {
    */
   public abstract ConventionMaster getConventionMaster();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the snapshot source.
    *
@@ -137,7 +135,7 @@ public abstract class MastersTestUtils {
    */
   public abstract MarketDataSnapshotMaster getMarketDataSnapshotMaster();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the exchange source.
    *
@@ -152,7 +150,7 @@ public abstract class MastersTestUtils {
    */
   public abstract ExchangeMaster getExchangeMaster();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the holiday source.
    *
@@ -167,7 +165,7 @@ public abstract class MastersTestUtils {
    */
   public abstract HolidayMaster getHolidayMaster();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the portfolio master.
    *
@@ -175,7 +173,7 @@ public abstract class MastersTestUtils {
    */
   public abstract PortfolioMaster getPortfolioMaster();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the position source.
    *
@@ -190,7 +188,7 @@ public abstract class MastersTestUtils {
    */
   public abstract PositionMaster getPositionMaster();
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the time-series master.
    *

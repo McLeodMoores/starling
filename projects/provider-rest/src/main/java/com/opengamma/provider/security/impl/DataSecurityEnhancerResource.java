@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  * Copyright (C) 2015 - present by McLeod Moores Software Limited.
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.provider.security.impl;
@@ -35,7 +35,7 @@ public class DataSecurityEnhancerResource extends AbstractDataResource {
 
   /**
    * Creates the resource, exposing the underlying enhancer over REST.
-   * 
+   *
    * @param securityEnhancer  the underlying enhancer, not null
    */
   public DataSecurityEnhancerResource(final SecurityEnhancer securityEnhancer) {
@@ -46,7 +46,7 @@ public class DataSecurityEnhancerResource extends AbstractDataResource {
   //-------------------------------------------------------------------------
   /**
    * Gets the underlying security enhancer.
-   * 
+   *
    * @return the underlying security enhancer, not null
    */
   public SecurityEnhancer getSecurityEnhancer() {
@@ -55,7 +55,7 @@ public class DataSecurityEnhancerResource extends AbstractDataResource {
 
   //-------------------------------------------------------------------------
   @GET
-  public Response getHateaos(@Context UriInfo uriInfo) {
+  public Response getHateaos(@Context final UriInfo uriInfo) {
     return hateoasResponse(uriInfo);
   }
 
@@ -68,8 +68,8 @@ public class DataSecurityEnhancerResource extends AbstractDataResource {
 
   @POST  // should be a get, but query is too large
   @Path("securityEnhance")
-  public Response getSecurity(SecurityEnhancerRequest request) {
-    SecurityEnhancerResult result = getSecurityEnhancer().enhanceSecurities(request);
+  public Response getSecurity(final SecurityEnhancerRequest request) {
+    final SecurityEnhancerResult result = getSecurityEnhancer().enhanceSecurities(request);
     return responseOkObject(result);
   }
 }

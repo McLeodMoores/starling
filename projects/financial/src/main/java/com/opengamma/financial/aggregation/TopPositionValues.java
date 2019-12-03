@@ -32,7 +32,7 @@ public class TopPositionValues extends SlicedPositionValues {
   @Override
   protected boolean validateConstraints(final ValueProperties constraints) {
     final Integer count = getIntegerConstraint(constraints, COUNT_PROPERTY);
-    if ((count == null) || (count <= 0)) {
+    if (count == null || count <= 0) {
       return false;
     }
     return true;
@@ -44,10 +44,11 @@ public class TopPositionValues extends SlicedPositionValues {
   }
 
   @Override
-  protected List<ComputedValue> sliceResults(final List<ComputedValue> ascendingOrder, final ValueProperties constraints, final ValueProperties.Builder properties) {
+  protected List<ComputedValue> sliceResults(final List<ComputedValue> ascendingOrder, final ValueProperties constraints,
+      final ValueProperties.Builder properties) {
     final int count = getIntegerConstraint(constraints, COUNT_PROPERTY);
     properties.with(COUNT_PROPERTY, Integer.toString(count));
-    final List<ComputedValue> result = new ArrayList<ComputedValue>(ascendingOrder.subList(Math.max(ascendingOrder.size() - count, 0), ascendingOrder.size()));
+    final List<ComputedValue> result = new ArrayList<>(ascendingOrder.subList(Math.max(ascendingOrder.size() - count, 0), ascendingOrder.size()));
     Collections.reverse(result);
     return result;
   }

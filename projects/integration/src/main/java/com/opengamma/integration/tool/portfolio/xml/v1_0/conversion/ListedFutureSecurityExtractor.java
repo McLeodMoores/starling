@@ -24,23 +24,23 @@ public class ListedFutureSecurityExtractor
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param securityDefinition  the definition, not null
    */
-  public ListedFutureSecurityExtractor(FutureSecurityDefinition securityDefinition) {
+  public ListedFutureSecurityExtractor(final FutureSecurityDefinition securityDefinition) {
     super(securityDefinition);
   }
 
   @Override
   protected ManageableSecurity createSecurity() {
-    FutureSecurityDefinition defn = getSecurityDefinition();
-    ExternalId underlyingId = defn.getUnderlyingId().toExternalId();
-    Expiry expiry = new Expiry(defn.getFutureExpiry().atDay(1).atStartOfDay(ZoneOffset.UTC), ExpiryAccuracy.MONTH_YEAR);
-    String exchange = defn.getExchange();
-    Currency currency = defn.getCurrency();
-    int pointValue = defn.getPointValue();
-    String settlementExchange = defn.getSettlementExchange();
-    ZonedDateTime settlementDate = defn.getSettlementDate().atStartOfDay(ZoneOffset.UTC);
+    final FutureSecurityDefinition defn = getSecurityDefinition();
+    final ExternalId underlyingId = defn.getUnderlyingId().toExternalId();
+    final Expiry expiry = new Expiry(defn.getFutureExpiry().atDay(1).atStartOfDay(ZoneOffset.UTC), ExpiryAccuracy.MONTH_YEAR);
+    final String exchange = defn.getExchange();
+    final Currency currency = defn.getCurrency();
+    final int pointValue = defn.getPointValue();
+    final String settlementExchange = defn.getSettlementExchange();
+    final ZonedDateTime settlementDate = defn.getSettlementDate().atStartOfDay(ZoneOffset.UTC);
 
     switch (defn.getFutureType()) {
       case EQUITY_DIVIDEND_FUTURE:

@@ -8,8 +8,6 @@ package com.opengamma.component.factory.master;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -29,6 +27,8 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.master.historicaltimeseries.impl.DataHistoricalTimeSeriesMasterResource;
 import com.opengamma.master.historicaltimeseries.impl.EHCachingHistoricalTimeSeriesMaster;
 import com.opengamma.master.historicaltimeseries.impl.RemoteHistoricalTimeSeriesMaster;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Component factory for the combined historical time-series master.
@@ -62,14 +62,14 @@ public class EHCachingHistoricalTimeSeriesMasterComponentFactory extends Abstrac
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> historicalTimeSeriesuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> historicalTimeSeriesuration) {
 
-    HistoricalTimeSeriesMaster master = new EHCachingHistoricalTimeSeriesMaster(getClassifier(),
+    final HistoricalTimeSeriesMaster master = new EHCachingHistoricalTimeSeriesMaster(getClassifier(),
                                                       getUnderlying(),
                                                       getCacheManager());
 
     // register
-    ComponentInfo info = new ComponentInfo(HistoricalTimeSeriesMaster.class, getClassifier());
+    final ComponentInfo info = new ComponentInfo(HistoricalTimeSeriesMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 2);
     if (isPublishRest()) {
       info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteHistoricalTimeSeriesMaster.class);

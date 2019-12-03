@@ -15,22 +15,6 @@ import com.opengamma.util.time.Expiry;
 
 /**
  * Defines a European-style two-asset correlation option.
- * <p>
- * The payoff of a two-asset correlation call option is:
- * $$
- * \begin{eqnarray*}
- * max\left(S_2 - P, 0\right) \quad\quad\text{if}\quad S_1 > K
- * \end{eqnarray*}
- * $$
- * and 0 otherwise. The payoff of a put is:
- * $$
- * \begin{eqnarray*}
- * max\left(P - S_2, 0\right) \quad\quad\text{if}\quad S_1 < K
- * \end{eqnarray*}
- * $$
- * and 0 otherwise, where $K$ is the strike, $P$ is the payout level, $S_1$ is
- * the spot price of the first underlying and $S_2$ is the spot price of the
- * second underlying.
  */
 public class TwoAssetCorrelationOptionDefinition extends OptionDefinition {
   private final OptionExerciseFunction<StandardTwoAssetOptionDataBundle> _exerciseFunction = new EuropeanExerciseFunction<>();
@@ -52,11 +36,15 @@ public class TwoAssetCorrelationOptionDefinition extends OptionDefinition {
   private final double _payoutLevel;
 
   /**
-   * 
-   * @param strike The strike
-   * @param expiry The expiry
-   * @param isCall Is the option a call
-   * @param payoutLevel The payout level of the option
+   *
+   * @param strike
+   *          The strike
+   * @param expiry
+   *          The expiry
+   * @param isCall
+   *          Is the option a call
+   * @param payoutLevel
+   *          The payout level of the option
    */
   public TwoAssetCorrelationOptionDefinition(final double strike, final Expiry expiry, final boolean isCall, final double payoutLevel) {
     super(strike, expiry, isCall);
@@ -64,7 +52,8 @@ public class TwoAssetCorrelationOptionDefinition extends OptionDefinition {
   }
 
   /**
-   * The exercise function of this option is European (see {@link EuropeanExerciseFunction})
+   * The exercise function of this option is European (see {@link EuropeanExerciseFunction}).
+   * 
    * @return The exercise function
    */
   @SuppressWarnings("unchecked")
@@ -83,7 +72,7 @@ public class TwoAssetCorrelationOptionDefinition extends OptionDefinition {
   }
 
   /**
-   * 
+   *
    * @return The payout level
    */
   public double getPayoutLevel() {
@@ -96,7 +85,7 @@ public class TwoAssetCorrelationOptionDefinition extends OptionDefinition {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_payoutLevel);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

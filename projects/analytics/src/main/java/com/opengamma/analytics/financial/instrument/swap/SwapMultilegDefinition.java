@@ -44,7 +44,7 @@ public class SwapMultilegDefinition implements InstrumentDefinitionWithData<Swap
   }
 
   @Override
-  public SwapMultileg toDerivative(ZonedDateTime date) {
+  public SwapMultileg toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
     final int nbLegs = _legs.length;
     @SuppressWarnings("unchecked")
@@ -56,7 +56,7 @@ public class SwapMultilegDefinition implements InstrumentDefinitionWithData<Swap
   }
 
   @Override
-  public SwapMultileg toDerivative(ZonedDateTime date, ZonedDateTimeDoubleTimeSeries[] data) {
+  public SwapMultileg toDerivative(final ZonedDateTime date, final ZonedDateTimeDoubleTimeSeries[] data) {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.noNulls(data, "times series");
     final int nbLegs = _legs.length;
@@ -75,7 +75,7 @@ public class SwapMultilegDefinition implements InstrumentDefinitionWithData<Swap
    */
   @Override
   @Deprecated
-  public SwapMultileg toDerivative(ZonedDateTime date, String... yieldCurveNames) {
+  public SwapMultileg toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     throw new UnsupportedOperationException("SwapMultileg does not support toDerivative with curve name.");
   }
 
@@ -85,18 +85,18 @@ public class SwapMultilegDefinition implements InstrumentDefinitionWithData<Swap
    */
   @Override
   @Deprecated
-  public SwapMultileg toDerivative(ZonedDateTime date, ZonedDateTimeDoubleTimeSeries[] data, String... yieldCurveNames) {
+  public SwapMultileg toDerivative(final ZonedDateTime date, final ZonedDateTimeDoubleTimeSeries[] data, final String... yieldCurveNames) {
     throw new UnsupportedOperationException("SwapMultileg does not support toDerivative with curve name.");
   }
 
   @Override
-  public <U, V> V accept(InstrumentDefinitionVisitor<U, V> visitor, U data) {
+  public <U, V> V accept(final InstrumentDefinitionVisitor<U, V> visitor, final U data) {
     ArgumentChecker.notNull(visitor, "visitor");
     return visitor.visitSwapMultilegDefinition(this, data);
   }
 
   @Override
-  public <V> V accept(InstrumentDefinitionVisitor<?, V> visitor) {
+  public <V> V accept(final InstrumentDefinitionVisitor<?, V> visitor) {
     ArgumentChecker.notNull(visitor, "visitor");
     return visitor.visitSwapMultilegDefinition(this);
   }
@@ -110,7 +110,7 @@ public class SwapMultilegDefinition implements InstrumentDefinitionWithData<Swap
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -120,7 +120,7 @@ public class SwapMultilegDefinition implements InstrumentDefinitionWithData<Swap
     if (getClass() != obj.getClass()) {
       return false;
     }
-    SwapMultilegDefinition other = (SwapMultilegDefinition) obj;
+    final SwapMultilegDefinition other = (SwapMultilegDefinition) obj;
     if (!Arrays.equals(_legs, other._legs)) {
       return false;
     }

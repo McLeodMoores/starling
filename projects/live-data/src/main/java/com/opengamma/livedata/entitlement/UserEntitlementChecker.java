@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.livedata.entitlement;
@@ -25,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
  * {@link com.opengamma.security.user.UserManager}).
  * <p>
  * For access to be granted, the user must have a permission to the JMS topic
- * name, with dots in the name replaced by slashes.  
+ * name, with dots in the name replaced by slashes.
  * <p>
  * Say {@link #isEntitled(UserPrincipal, LiveDataSpecification)} is called with a
  * {@link DistributionSpecification} with JMS topic name LiveData.Reuters.AAPL.O.
@@ -36,7 +36,7 @@ import com.opengamma.util.ArgumentChecker;
 public class UserEntitlementChecker extends AbstractEntitlementChecker {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(UserEntitlementChecker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserEntitlementChecker.class);
 
   /**
    * The user manager.
@@ -49,36 +49,36 @@ public class UserEntitlementChecker extends AbstractEntitlementChecker {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param userManager  the user manager used to load users (their permissions really), not null
    * @param resolver  the resolver used to map from {@link LiveDataSpecification} to {@link DistributionSpecification}, not null
    */
-  public UserEntitlementChecker(UserManager userManager, DistributionSpecificationResolver resolver) {
+  public UserEntitlementChecker(final UserManager userManager, final DistributionSpecificationResolver resolver) {
     _userManager = ArgumentChecker.notNull(userManager, "User manager");
     _resolver = ArgumentChecker.notNull(resolver, "Distribution Specification Resolver");
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public Map<LiveDataSpecification, Boolean> isEntitled(UserPrincipal userPrincipal, Collection<LiveDataSpecification> requestedSpecifications) {
-    Map<LiveDataSpecification, Boolean> returnValue = new HashMap<>();
-    User user = _userManager.getUser(userPrincipal.getUserName());
+  public Map<LiveDataSpecification, Boolean> isEntitled(final UserPrincipal userPrincipal, final Collection<LiveDataSpecification> requestedSpecifications) {
+    final Map<LiveDataSpecification, Boolean> returnValue = new HashMap<>();
+    final User user = _userManager.getUser(userPrincipal.getUserName());
     if (user == null) {
-      s_logger.warn("User {} does not exist - no permissions are granted", userPrincipal.getUserName());
-      for (LiveDataSpecification spec : requestedSpecifications) {
-        returnValue.put(spec, false);                
+      LOGGER.warn("User {} does not exist - no permissions are granted", userPrincipal.getUserName());
+      for (final LiveDataSpecification spec : requestedSpecifications) {
+        returnValue.put(spec, false);
       }
       return returnValue;
     }
-    
-    Map<LiveDataSpecification, DistributionSpecification> distributionSpecs = _resolver.resolve(requestedSpecifications);
-    
-    for (LiveDataSpecification requestedSpec : requestedSpecifications) {
-      DistributionSpecification distributionSpec = distributionSpecs.get(requestedSpec);
+
+    final Map<LiveDataSpecification, DistributionSpecification> distributionSpecs = _resolver.resolve(requestedSpecifications);
+
+    for (final LiveDataSpecification requestedSpec : requestedSpecifications) {
+      final DistributionSpecification distributionSpec = distributionSpecs.get(requestedSpec);
       if (distributionSpec != null) {
-        String permission = distributionSpec.getJmsTopic().replace('.', '/');
-        boolean hasPermission = user.hasPermission(permission);
-        returnValue.put(requestedSpec, hasPermission);                
+        final String permission = distributionSpec.getJmsTopic().replace('.', '/');
+        final boolean hasPermission = user.hasPermission(permission);
+        returnValue.put(requestedSpec, hasPermission);
       } else {
         // If we can't resolve the spec, then most likely we've tried
         // to guess a ticker (e.g. for an option) that doesn't exist. As

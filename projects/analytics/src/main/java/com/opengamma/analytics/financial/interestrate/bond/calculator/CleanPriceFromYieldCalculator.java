@@ -26,6 +26,7 @@ public final class CleanPriceFromYieldCalculator extends InstrumentDerivativeVis
 
   /**
    * Gets the singleton instance.
+   * 
    * @return The instance
    */
   public static CleanPriceFromYieldCalculator getInstance() {
@@ -42,7 +43,6 @@ public final class CleanPriceFromYieldCalculator extends InstrumentDerivativeVis
   private static final BondSecurityDiscountingMethod METHOD_BOND_SECURITY = BondSecurityDiscountingMethod.getInstance();
   /** Calculator from inflation bonds */
   private static final BondCapitalIndexedSecurityDiscountingMethod METHOD_INFLATION_BOND_SECURITY = BondCapitalIndexedSecurityDiscountingMethod.getInstance();
-
 
   @Override
   public Double visitBillTransaction(final BillTransaction bill, final Double yield) {
@@ -76,7 +76,6 @@ public final class CleanPriceFromYieldCalculator extends InstrumentDerivativeVis
   public Double visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction<?> bond, final Double yield) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(yield, "yield");
-    ArgumentChecker.notNull(bond.getBondStandard() instanceof BondCapitalIndexedSecurity<?>, "the bond should be a BondCapitalIndexedSecurity");
     final BondCapitalIndexedSecurity<?> bondSecurity = bond.getBondStandard();
     return METHOD_INFLATION_BOND_SECURITY.cleanPriceFromYield(bondSecurity, yield) * 100.0;
   }

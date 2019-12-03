@@ -86,7 +86,7 @@ public class ShiroSecurityComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     if (isEnabled()) {
       if (getUserSource() == null && getUserMaster() == null) {
         ArgumentChecker.notNull(getUserSource(), "userSource");
@@ -94,11 +94,11 @@ public class ShiroSecurityComponentFactory extends AbstractComponentFactory {
       ArgumentChecker.notNull(getHashAlgorithm(), "hashAlgorithm");
       ArgumentChecker.notNull(getHashIterations(), "hashIterations");
       ArgumentChecker.notNull(getPrivateSalt(), "privateSalt");
-      PasswordService pwService = initPasswordService(repo);
-      SecurityManager securityManager = initSecurityManager(repo, pwService);
+      final PasswordService pwService = initPasswordService(repo);
+      final SecurityManager securityManager = initSecurityManager(repo, pwService);
       AuthUtils.initSecurityManager(securityManager);
     } else {
-      SecurityManager securityManager = initPermissiveSecurityManager(repo);
+      final SecurityManager securityManager = initPermissiveSecurityManager(repo);
       AuthUtils.initSecurityManager(securityManager);
     }
   }
@@ -106,30 +106,30 @@ public class ShiroSecurityComponentFactory extends AbstractComponentFactory {
   //-------------------------------------------------------------------------
   /**
    * Initializes the password service via {@code createPasswordService}.
-   * 
+   *
    * @param repo  the component repository, not null
    * @return the password service, not null
    */
-  protected PasswordService initPasswordService(ComponentRepository repo) {
-    PasswordService pwService = createPasswordService(repo);
-    ComponentInfo info = new ComponentInfo(PasswordService.class, getClassifier());
+  protected PasswordService initPasswordService(final ComponentRepository repo) {
+    final PasswordService pwService = createPasswordService(repo);
+    final ComponentInfo info = new ComponentInfo(PasswordService.class, getClassifier());
     repo.registerComponent(info, pwService);
     return pwService;
   }
 
   /**
    * Creates the password service without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the password service, not null
    */
-  protected PasswordService createPasswordService(ComponentRepository repo) {
-    DefaultHashService hashService = new DefaultHashService();
+  protected PasswordService createPasswordService(final ComponentRepository repo) {
+    final DefaultHashService hashService = new DefaultHashService();
     hashService.setHashAlgorithmName(getHashAlgorithm());
     hashService.setHashIterations(getHashIterations());
     hashService.setGeneratePublicSalt(true);
     hashService.setPrivateSalt(new SimpleByteSource(getPrivateSalt()));
-    DefaultPasswordService pwService = new DefaultPasswordService();
+    final DefaultPasswordService pwService = new DefaultPasswordService();
     pwService.setHashService(hashService);
     return pwService;
   }
@@ -137,14 +137,18 @@ public class ShiroSecurityComponentFactory extends AbstractComponentFactory {
   //-------------------------------------------------------------------------
   /**
    * Initializes the security manager via {@code createSecurityManager}.
-   * 
-   * @param repo  the component repository, not null
-   * @param pwService  the password service, not null
+   *
+   * @param repo
+   *          the component repository, not null
+   * @param pwService
+   *          the password service, not null
    * @return the security manager, not null
+   * @throws IOException
+   *           if there is a problem
    */
-  protected SecurityManager initSecurityManager(ComponentRepository repo, PasswordService pwService) throws IOException {
-    SecurityManager securityManager = createSecurityManager(repo, pwService);
-    ComponentInfo info = new ComponentInfo(SecurityManager.class, getClassifier());
+  protected SecurityManager initSecurityManager(final ComponentRepository repo, final PasswordService pwService) throws IOException {
+    final SecurityManager securityManager = createSecurityManager(repo, pwService);
+    final ComponentInfo info = new ComponentInfo(SecurityManager.class, getClassifier());
     repo.registerComponent(info, securityManager);
     repo.registerLifecycleStop(securityManager, "destroy");
     return securityManager;
@@ -152,27 +156,31 @@ public class ShiroSecurityComponentFactory extends AbstractComponentFactory {
 
   /**
    * Creates the security manager without registering it.
-   * 
-   * @param repo  the component repository, only used to register secondary items like lifecycle, not null
-   * @param pwService  the password service, not null
+   *
+   * @param repo
+   *          the component repository, only used to register secondary items like lifecycle, not null
+   * @param pwService
+   *          the password service, not null
    * @return the security manager, not null
+   * @throws IOException
+   *           if there is a problem
    */
-  protected SecurityManager createSecurityManager(ComponentRepository repo, PasswordService pwService) throws IOException {
+  protected SecurityManager createSecurityManager(final ComponentRepository repo, final PasswordService pwService) throws IOException {
     // password matcher
-    PasswordMatcher pwMatcher = new PasswordMatcher();
+    final PasswordMatcher pwMatcher = new PasswordMatcher();
     pwMatcher.setPasswordService(pwService);
     // user database realm
     UserSource userSource = getUserSource();
     if (userSource == null) {
       userSource = getUserMaster();
     }
-    UserSourceRealm realm = new UserSourceRealm(userSource);
+    final UserSourceRealm realm = new UserSourceRealm(userSource);
     realm.setAuthenticationCachingEnabled(true);
     realm.setAuthorizationCachingEnabled(true);
     realm.setCredentialsMatcher(pwMatcher);
     realm.setPermissionResolver(AuthUtils.getPermissionResolver());
     // security manager
-    DefaultWebSecurityManager sm = new DefaultWebSecurityManager();
+    final DefaultWebSecurityManager sm = new DefaultWebSecurityManager();
     sm.setRealm(realm);
     sm.setAuthorizer(realm);  // replace ModularRealmAuthorizer as not needed
     sm.setCacheManager(new MemoryConstrainedCacheManager());
@@ -181,12 +189,12 @@ public class ShiroSecurityComponentFactory extends AbstractComponentFactory {
 
   /**
    * Initializes the permissive security manager.
-   * 
+   *
    * @param repo  the component repository, not null
    * @return the security manager, not null
    */
-  protected SecurityManager initPermissiveSecurityManager(ComponentRepository repo) {
-    DefaultWebSecurityManager securityManager = new PermissiveSecurityManager();
+  protected SecurityManager initPermissiveSecurityManager(final ComponentRepository repo) {
+    final DefaultWebSecurityManager securityManager = new PermissiveSecurityManager();
     final ComponentInfo info = new ComponentInfo(SecurityManager.class, getClassifier());
     repo.registerComponent(info, securityManager);
     repo.registerLifecycleStop(securityManager, "destroy");

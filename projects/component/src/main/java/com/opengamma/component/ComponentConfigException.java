@@ -17,20 +17,20 @@ public class ComponentConfigException extends OpenGammaRuntimeException {
 
   /**
    * Creates an exception with a message.
-   * 
+   *
    * @param message  the message, may be null
    */
-  public ComponentConfigException(String message) {
+  public ComponentConfigException(final String message) {
     super(message);
   }
 
   /**
    * Creates an exception with a message.
-   * 
+   *
    * @param message  the message, may be null
    * @param cause  the underlying cause, may be null
    */
-  public ComponentConfigException(String message, Throwable cause) {
+  public ComponentConfigException(final String message, final Throwable cause) {
     super(message, cause);
   }
 

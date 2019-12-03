@@ -17,7 +17,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  */
 public class FuturesTransactionHullWhiteIssuerMethod extends FuturesTransactionMethod {
 
-  private static final FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator PVCSIC = FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator.getInstance();
+  private static final FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator PVCSIC = FuturesPVCurveSensitivityFromPriceCurveSensitivityCalculator
+      .getInstance();
 
   /**
    * Constructor.
@@ -28,6 +29,7 @@ public class FuturesTransactionHullWhiteIssuerMethod extends FuturesTransactionM
 
   /**
    * Gets the securityMethod.
+   * 
    * @return the securityMethod
    */
   @Override
@@ -37,23 +39,30 @@ public class FuturesTransactionHullWhiteIssuerMethod extends FuturesTransactionM
 
   /**
    * Compute the present value of a future transaction from a curve provider.
-   * @param futures The futures.
-   * @param multicurve The multicurve and parameters provider.
+   * 
+   * @param futures
+   *          The futures.
+   * @param multicurve
+   *          The multicurve and parameters provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final FuturesTransaction<?> futures, final HullWhiteIssuerProviderInterface multicurve) {
-    double price = getSecurityMethod().price(futures.getUnderlyingSecurity(), multicurve);
+    final double price = getSecurityMethod().price(futures.getUnderlyingSecurity(), multicurve);
     return presentValueFromPrice(futures, price);
   }
 
   /**
    * Compute the present value curve sensitivity to rates of a future.
-   * @param futures The futures.
-   * @param multicurve The multicurve and parameters provider.
+   * 
+   * @param futures
+   *          The futures.
+   * @param multicurve
+   *          The multicurve and parameters provider.
    * @return The present value rate sensitivity.
    */
 
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final FuturesTransaction<?> futures, final HullWhiteIssuerProviderInterface multicurve) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final FuturesTransaction<?> futures,
+      final HullWhiteIssuerProviderInterface multicurve) {
     final MulticurveSensitivity priceSensitivity = getSecurityMethod().priceCurveSensitivity(futures.getUnderlyingSecurity(), multicurve);
     return futures.accept(PVCSIC, priceSensitivity);
 

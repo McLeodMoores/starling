@@ -14,16 +14,17 @@ import com.opengamma.engine.value.ValueSpecification;
  * Extended abstract failure node that adds a map as standard.
  */
 public abstract class AbstractFailureWithRequirementsNode extends AbstractFailureNode {
-  private ValueSpecificationToRequirementMapNode _valueSpecificationToRequirementMap;
+  private final ValueSpecificationToRequirementMapNode _valueSpecificationToRequirementMap;
 
-  public AbstractFailureWithRequirementsNode(Object parent, ValueRequirement valueRequirement, String function, ValueSpecification desiredOutput,
-      Map<ValueSpecification, ValueRequirement> satisfied, String mapName) {
+  public AbstractFailureWithRequirementsNode(final Object parent, final ValueRequirement valueRequirement, final String function,
+      final ValueSpecification desiredOutput,
+      final Map<ValueSpecification, ValueRequirement> satisfied, final String mapName) {
     super(parent, valueRequirement, function, desiredOutput);
     _valueSpecificationToRequirementMap = new ValueSpecificationToRequirementMapNode(this, satisfied, mapName);
   }
 
   @Override
-  public Object getChildAt(int index) {
+  public Object getChildAt(final int index) {
     switch (index) {
       case 3:
         return _valueSpecificationToRequirementMap;
@@ -33,12 +34,11 @@ public abstract class AbstractFailureWithRequirementsNode extends AbstractFailur
   }
 
   @Override
-  public int getIndexOfChild(Object child) {
+  public int getIndexOfChild(final Object child) {
     if (child.equals(_valueSpecificationToRequirementMap)) {
       return 3;
-    } else {
-      return super.getIndexOfChild(child);
     }
+    return super.getIndexOfChild(child);
   }
 
   @Override
@@ -50,12 +50,12 @@ public abstract class AbstractFailureWithRequirementsNode extends AbstractFailur
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_valueSpecificationToRequirementMap == null) ? 0 : _valueSpecificationToRequirementMap.hashCode());
+    result = prime * result + (_valueSpecificationToRequirementMap == null ? 0 : _valueSpecificationToRequirementMap.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -65,7 +65,7 @@ public abstract class AbstractFailureWithRequirementsNode extends AbstractFailur
     if (!(obj instanceof AbstractFailureWithRequirementsNode)) {
       return false;
     }
-    AbstractFailureWithRequirementsNode other = (AbstractFailureWithRequirementsNode) obj;
+    final AbstractFailureWithRequirementsNode other = (AbstractFailureWithRequirementsNode) obj;
     if (_valueSpecificationToRequirementMap == null) {
       if (other._valueSpecificationToRequirementMap != null) {
         return false;
