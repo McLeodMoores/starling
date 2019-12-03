@@ -124,7 +124,6 @@ public class SpreadOptionPDETestCase {
 
   static void testAgainstBSPrice(final ConvectionDiffusionPDESolver2D solver, final int timeSteps, final int spotASteps,
       final int spotBSteps) {
-
     final double[][] res = solver.solve(DATA, timeSteps, spotASteps, spotBSteps, T, A_LOWER, A_UPPER, B_LOWER, B_UPPER);
 
     // for (int i = 0; i <= spotASteps; i++) {
