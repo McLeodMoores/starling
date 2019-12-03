@@ -78,15 +78,19 @@ public class DividendYieldFuturesFunctions extends AbstractFunctionConfiguration
 
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-    functions.add(functionConfiguration(EquityDividendYieldForwardFuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
-    functions
-        .add(functionConfiguration(EquityDividendYieldPresentValueFuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
-    functions.add(functionConfiguration(EquityDividendYieldPV01FuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
-    functions.add(functionConfiguration(EquityDividendYieldSpotFuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
-    functions
-        .add(functionConfiguration(EquityDividendYieldValueDeltaFuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
-    functions
-        .add(functionConfiguration(EquityDividendYieldValueRhoFuturesFunction.class, getClosingPriceField(), getCostOfCarryField(), getHtsResolutionKey()));
+    functions.add(functionConfiguration(EquityDividendYieldForwardFuturesFunction.class, getClosingPriceField(),
+        getCostOfCarryField(), getHtsResolutionKey()));
+    functions.add(functionConfiguration(EquityDividendYieldPresentValueFuturesFunction.class, getClosingPriceField(),
+        getCostOfCarryField(), getHtsResolutionKey()));
+    functions.add(functionConfiguration(EquityDividendYieldPV01FuturesFunction.class, getClosingPriceField(),
+        getCostOfCarryField(), getHtsResolutionKey()));
+    functions.add(functionConfiguration(EquityDividendYieldSpotFuturesFunction.class, getClosingPriceField(),
+        getCostOfCarryField(), getHtsResolutionKey()));
+    functions.add(functionConfiguration(EquityDividendYieldValueDeltaFuturesFunction.class, getClosingPriceField(),
+        getCostOfCarryField(), getHtsResolutionKey()));
+    functions.add(functionConfiguration(EquityDividendYieldValueRhoFuturesFunction.class, getClosingPriceField(),
+        getCostOfCarryField(), getHtsResolutionKey()));
+    // TODO: add other package functions
   }
 
 }

@@ -18,18 +18,15 @@ import com.opengamma.engine.function.config.FunctionConfigurationBundle;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.function.config.SimpleFunctionConfigurationSource;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingPricingFunctions;
-import com.opengamma.financial.analytics.model.bond.BondFunctions;
 import com.opengamma.financial.analytics.model.bondcleanprice.BondCleanPriceFunctions;
 import com.opengamma.financial.analytics.model.bondcurves.BondCurveFunctions;
 import com.opengamma.financial.analytics.model.bondcurves.inflationbondcurves.InflationBondCurveFunctions;
-import com.opengamma.financial.analytics.model.bondfutureoption.BondFutureOptionFunctions;
 import com.opengamma.financial.analytics.model.bondyield.BondYieldFunctions;
 import com.opengamma.financial.analytics.model.carrlee.CarrLeeFunctions;
 import com.opengamma.financial.analytics.model.cds.CDSFunctions;
 import com.opengamma.financial.analytics.model.credit.CreditFunctions;
 import com.opengamma.financial.analytics.model.curve.CurveFunctions;
 import com.opengamma.financial.analytics.model.curve.forward.ForwardFunctions;
-import com.opengamma.financial.analytics.model.curve.interestrate.InterestRateFunctions;
 import com.opengamma.financial.analytics.model.discounting.DiscountingPricingFunctions;
 import com.opengamma.financial.analytics.model.equity.EquityFunctions;
 import com.opengamma.financial.analytics.model.forex.ForexFunctions;
@@ -37,16 +34,13 @@ import com.opengamma.financial.analytics.model.future.FutureFunctions;
 import com.opengamma.financial.analytics.model.futureoption.FutureOptionFunctions;
 import com.opengamma.financial.analytics.model.fx.FXForwardPricingFunctions;
 import com.opengamma.financial.analytics.model.g2ppdiscounting.G2ppPricingFunctions;
-import com.opengamma.financial.analytics.model.horizon.HorizonFunctions;
 import com.opengamma.financial.analytics.model.hullwhitediscounting.HullWhitePricingFunctions;
 import com.opengamma.financial.analytics.model.irfutureoption.IRFutureOptionFunctions;
 import com.opengamma.financial.analytics.model.option.OptionFunctions;
 import com.opengamma.financial.analytics.model.pnl.PNLFunctions;
 import com.opengamma.financial.analytics.model.sabr.SABRDiscountingPricingFunctions;
-import com.opengamma.financial.analytics.model.sabrcube.SABRCubeFunctions;
 import com.opengamma.financial.analytics.model.sensitivities.SensitivitiesFunctions;
 import com.opengamma.financial.analytics.model.simpleinstrument.SimpleInstrumentFunctions;
-import com.opengamma.financial.analytics.model.swaption.SwaptionFunctions;
 import com.opengamma.financial.analytics.model.timeseries.TimeSeriesFunctions;
 import com.opengamma.financial.analytics.model.trs.TotalReturnSwapFunctions;
 import com.opengamma.financial.analytics.model.var.VaRFunctions;
@@ -72,30 +66,6 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(MarginPriceFunction.class));
     functions.add(functionConfiguration(PVCashBalanceFunction.class));
     functions.add(functionConfiguration(FXCurrencyExposureFunction.class));
-    /* functions.add(functionConfiguration(InflationBondFromCurvesFunction.class)); */
-
-  }
-
-  /**
-   * Adds deprecated bond functions.
-   *
-   * @return A configuration source containing deprecated bond functions
-   * @deprecated The new versions of these functions are added in {{@link #bondCleanPriceFunctionConfiguration()}
-   */
-  @Deprecated
-  protected FunctionConfigurationSource bondFunctionConfiguration() {
-    return BondFunctions.instance();
-  }
-
-  /**
-   * Adds deprecated bond functions.
-   *
-   * @return A configuration source containing deprecated bond future functions
-   * @deprecated The functions that are added are deprecated
-   */
-  @Deprecated
-  protected FunctionConfigurationSource bondFutureOptionFunctionConfiguration() {
-    return BondFutureOptionFunctions.instance();
   }
 
   /**
@@ -198,17 +168,6 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
   }
 
   /**
-   * Adds deprecated interest rate instrument functions.
-   *
-   * @return A configuration source containing the deprecated interest rate instrument functions
-   * @deprecated The current versions of these functions are added in {@link #discountingFunctionConfiguration}
-   */
-  @Deprecated
-  protected FunctionConfigurationSource fixedIncomeFunctionConfiguration() {
-    return com.opengamma.financial.analytics.model.fixedincome.DeprecatedFunctions.instance();
-  }
-
-  /**
    * Adds pricing functions that use curves constructed with the discounting method.
    *
    * @return A configuration source containing these functions.
@@ -248,10 +207,6 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
     return FXForwardPricingFunctions.instance();
   }
 
-  protected FunctionConfigurationSource yieldCurveFunctionConfiguration() {
-    return InterestRateFunctions.instance();
-  }
-
   protected FunctionConfigurationSource forwardFunctionConfiguration() {
     return ForwardFunctions.instance();
   }
@@ -266,15 +221,6 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   protected FunctionConfigurationSource futureOptionFunctionConfiguration() {
     return FutureOptionFunctions.instance();
-  }
-
-  /**
-   * Adds horizon functions.
-   *
-   * @return A configuration source containing horizon functions.
-   */
-  protected FunctionConfigurationSource horizonFunctionConfiguration() {
-    return HorizonFunctions.instance();
   }
 
   /**
@@ -312,17 +258,6 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
     return new SimpleFunctionConfigurationSource(new FunctionConfigurationBundle(Collections.<FunctionConfiguration> emptyList()));
   }
 
-  /**
-   * Adds SABR pricing functions for swaptions, cap/floors, CMS and cap/floor CMS spreads.
-   *
-   * @return A configuration source containing the deprecated functions
-   * @deprecated The current versions of these functions are added in {@link ModelFunctions#sabrDiscountingFunctionConfiguration()}
-   */
-  @Deprecated
-  protected FunctionConfigurationSource sabrCubeFunctionConfiguration() {
-    return SABRCubeFunctions.instance();
-  }
-
   protected FunctionConfigurationSource sabrDiscountingFunctionConfiguration() {
     return SABRDiscountingPricingFunctions.instance();
   }
@@ -333,10 +268,6 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
 
   protected FunctionConfigurationSource simpleInstrumentFunctionConfiguration() {
     return SimpleInstrumentFunctions.instance();
-  }
-
-  protected FunctionConfigurationSource swaptionFunctionConfiguration() {
-    return SwaptionFunctions.instance();
   }
 
   protected FunctionConfigurationSource varFunctionConfiguration() {
@@ -374,9 +305,9 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
     return CombiningFunctionConfigurationSource.of(super.createObject(), bondCleanPriceFunctionConfiguration(), bondCurveFunctionConfiguration(),
         inflationbondCurveFunctionConfiguration(), bondYieldFunctionConfiguration(), carrLeeFunctionConfiguration(), curveFunctionConfiguration(),
         equityFunctionConfiguration(), forexFunctionConfiguration(), futureFunctionConfiguration(), futureOptionFunctionConfiguration(),
-        horizonFunctionConfiguration(), irFutureOptionFunctionConfiguration(), pnlFunctionConfiguration(), riskFactorFunctionConfiguration(),
-        sensitivitiesFunctionConfiguration(), simpleInstrumentFunctionConfiguration(), swaptionFunctionConfiguration(), varFunctionConfiguration(),
-        volatilityFunctionConfiguration(), yieldCurveFunctionConfiguration(), forwardFunctionConfiguration(), futureCurveFunctionConfiguration(),
+        irFutureOptionFunctionConfiguration(), pnlFunctionConfiguration(), riskFactorFunctionConfiguration(),
+        sensitivitiesFunctionConfiguration(), simpleInstrumentFunctionConfiguration(), varFunctionConfiguration(),
+        volatilityFunctionConfiguration(), forwardFunctionConfiguration(), futureCurveFunctionConfiguration(),
         discountingFunctionConfiguration(), hullWhitePricingFunctionConfiguration(), fxPricingFunctionConfiguration(), blackDiscountingFunctionConfiguration(),
         sabrDiscountingFunctionConfiguration(), g2ppPricingFunctionConfiguration(), timeSeriesFunctionConfiguration(), totalReturnSwapFunctionConfiguration(),
         isdaModelFunctionConfiguration());

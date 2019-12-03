@@ -48,7 +48,6 @@ import com.opengamma.financial.analytics.riskfactors.DefaultRiskFactorsConfigura
 import com.opengamma.financial.analytics.riskfactors.DefaultRiskFactorsGatherer;
 import com.opengamma.financial.analytics.riskfactors.RiskFactorsGatherer;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.marketdata.MarketDataELCompiler;
 import com.opengamma.financial.temptarget.TempTargetRepository;
 import com.opengamma.id.VersionCorrection;
@@ -73,17 +72,19 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   /**
    * The config source.
    * <p>
-   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an implementation that is backed by
-   * a ConfigSource, allows the flexibility to source that data from an external system, or a more efficient storage mechanism, in the future.
+   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an
+   * implementation that is backed by a ConfigSource, allows the flexibility to source that data from an external system, or a more
+   * efficient storage mechanism, in the future.
    */
   @PropertyDefinition(validate = "notNull")
   private ConfigSource _configSource;
   /**
-   * The config master. This might only be a temporary addition; most services should be written to back onto this if necessary rather than data be accessed
-   * directly from the config master. This allows the flexibility to have data stored in another system or more efficient storage specific to that type.
+   * The config master. This might only be a temporary addition; most services should be written to back onto this if necessary rather than
+   * data be accessed directly from the config master. This allows the flexibility to have data stored in another system or more efficient
+   * storage specific to that type.
    * <p>
-   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user maintained views from the
-   * persistent config master and temporary/short-lived views created programatically.
+   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user
+   * maintained views from the persistent config master and temporary/short-lived views created programatically.
    */
   @PropertyDefinition
   private ConfigMaster _configMaster;
@@ -113,12 +114,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   @PropertyDefinition(validate = "notNull")
   private LegalEntitySource _legalEntitySource;
   /**
-   * The convention bundle source.
-   */
-  @PropertyDefinition(validate = "notNull")
-  private ConventionBundleSource _conventionBundleSource;
-  /**
-   * The volitility cube source.
+   * The volatility cube source.
    */
   @PropertyDefinition()
   private VolatilityCubeDefinitionSource _volatilityCubeDefinitionSource;
@@ -164,8 +160,8 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   private TempTargetRepository _tempTargetRepository;
 
   /**
-   * The slave view processor executing functions can make requests to. This might be the view processor that owns the context, but might be a different but
-   * compatible one.
+   * The slave view processor executing functions can make requests to. This might be the view processor that owns the context, but might be
+   * a different but compatible one.
    */
   @PropertyDefinition
   private ViewProcessor _viewProcessor;
@@ -174,14 +170,17 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    */
   @PropertyDefinition
   private Boolean _permissive = Boolean.FALSE;
+
   /**
-   * The PnL requirements gatherer.
+   * The P&L requirements gatherer.
    */
+  @Deprecated
   @PropertyDefinition
   private PnLRequirementsGatherer _pnlRequirementsGatherer;
   /**
    * The risk factors requirements gatherer.
    */
+  @Deprecated
   @PropertyDefinition
   private RiskFactorsGatherer _riskFactorsGatherer;
 
@@ -196,34 +195,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   }
 
   protected void initPnlRequirementsGatherer() {
-    _pnlRequirementsGatherer = new DefaultPnLRequirementsGatherer() {
-      {
-        addCurveCalculationConfig("USD", "DefaultTwoCurveUSDConfig");
-        addFXCurveCalculationConfig("USD", "DefaultTwoCurveUSDConfig");
-        addIRFuturesCurveCalculationConfig("USD", "DefaultTwoCurveUSDConfig");
-        addFXDiscountingCurveName("USD", "Forward3M");
-        addCurveCalculationConfig("EUR", "DefaultTwoCurveEURConfig");
-        addFXCurveCalculationConfig("EUR", "DefaultTwoCurveEURConfig");
-        addIRFuturesCurveCalculationConfig("EUR", "DefaultTwoCurveEURConfig");
-        addFXDiscountingCurveName("EUR", "Forward6M");
-        addCurveCalculationConfig("CAD", "DefaultTwoCurveCADConfig");
-        addFXCurveCalculationConfig("CAD", "DefaultTwoCurveCADConfig");
-        addIRFuturesCurveCalculationConfig("CAD", "DefaultTwoCurveCADConfig");
-        addFXDiscountingCurveName("CAD", "Forward3M");
-        addCurveCalculationConfig("AUD", "DefaultThreeCurveAUDConfig");
-        addFXCurveCalculationConfig("AUD", "DefaultThreeCurveAUDConfig");
-        addIRFuturesCurveCalculationConfig("AUD", "DefaultThreeCurveAUDConfig");
-        addFXDiscountingCurveName("AUD", "ForwardBasis3M");
-        addCurveCalculationConfig("CHF", "DefaultTwoCurveCHFConfig");
-        addFXCurveCalculationConfig("CHF", "DefaultTwoCurveCHFConfig");
-        addIRFuturesCurveCalculationConfig("CHF", "DefaultTwoCurveCHFConfig");
-        addFXDiscountingCurveName("CHF", "Forward6M");
-        addCurveCalculationConfig("GBP", "DefaultTwoCurveGBPConfig");
-        addFXCurveCalculationConfig("GBP", "DefaultTwoCurveGBPConfig");
-        addIRFuturesCurveCalculationConfig("GBP", "DefaultTwoCurveGBPConfig");
-        addFXDiscountingCurveName("USD", "Forward3M");
-      }
-    };
+    _pnlRequirementsGatherer = new DefaultPnLRequirementsGatherer();
   }
 
   private void initThreadLocalServiceContext() {
@@ -239,12 +211,13 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
         return VersionCorrection.LATEST;
       }
     };
-    final ImmutableMap.Builder<Class<?>, Object> services = ImmutableMap.<Class<?>, Object> builder().put(ConfigSource.class, getConfigSource())
-        .put(RegionSource.class, getRegionSource()).put(ConventionBundleSource.class, getConventionBundleSource())
-        .put(ConventionSource.class, getConventionSource()).put(HolidaySource.class, getHolidaySource()).put(ExchangeSource.class, getExchangeSource())
-        .put(HistoricalTimeSeriesSource.class, getHistoricalTimeSeriesSource()).put(HistoricalTimeSeriesResolver.class, getHistoricalTimeSeriesResolver())
-        .put(SecuritySource.class, getSecuritySource()).put(LegalEntitySource.class, getLegalEntitySource()).put(PositionSource.class, getPositionSource());
-
+    final ImmutableMap.Builder<Class<?>, Object> services = ImmutableMap.<Class<?>, Object> builder()
+        .put(ConfigSource.class, getConfigSource())
+        .put(RegionSource.class, getRegionSource()).put(ConventionSource.class, getConventionSource())
+        .put(HolidaySource.class, getHolidaySource())
+        .put(ExchangeSource.class, getExchangeSource()).put(HistoricalTimeSeriesSource.class, getHistoricalTimeSeriesSource())
+        .put(HistoricalTimeSeriesResolver.class, getHistoricalTimeSeriesResolver()).put(SecuritySource.class, getSecuritySource())
+        .put(LegalEntitySource.class, getLegalEntitySource()).put(PositionSource.class, getPositionSource());
     if (getVolatilityCubeDefinitionSource() != null) {
       services.put(VolatilityCubeDefinitionSource.class, getVolatilityCubeDefinitionSource());
     }
@@ -257,7 +230,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     final FunctionCompilationContext context = new FunctionCompilationContext();
     OpenGammaCompilationContext.setConfigSource(context, getConfigSource());
     OpenGammaCompilationContext.setRegionSource(context, getRegionSource());
-    OpenGammaCompilationContext.setConventionBundleSource(context, getConventionBundleSource());
     OpenGammaCompilationContext.setConventionSource(context, getConventionSource());
     OpenGammaCompilationContext.setVolatilityCubeDefinitionSource(context, getVolatilityCubeDefinitionSource());
     OpenGammaCompilationContext.setHolidaySource(context, getHolidaySource());
@@ -291,7 +263,8 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     repo.registerComponent(info, context);
   }
 
-  protected OverrideOperationCompiler initOverrideOperationCompiler(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+  protected OverrideOperationCompiler initOverrideOperationCompiler(final ComponentRepository repo,
+      final LinkedHashMap<String, String> configuration) {
     final OverrideOperationCompiler ooc = new MarketDataELCompiler();
     final ComponentInfo info = new ComponentInfo(OverrideOperationCompiler.class, getClassifier());
     repo.registerComponent(info, ooc);
@@ -306,7 +279,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     OpenGammaExecutionContext.setExchangeSource(context, getExchangeSource());
     OpenGammaExecutionContext.setHolidaySource(context, getHolidaySource());
     OpenGammaExecutionContext.setLegalEntitySource(context, getLegalEntitySource());
-    OpenGammaExecutionContext.setConventionBundleSource(context, getConventionBundleSource());
     OpenGammaExecutionContext.setConventionSource(context, getConventionSource());
     OpenGammaExecutionContext.setLegalEntitySource(context, getLegalEntitySource());
     OpenGammaExecutionContext.setConfigSource(context, getConfigSource());
@@ -372,8 +344,9 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   /**
    * Gets the config source.
    * <p>
-   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an implementation that is backed by
-   * a ConfigSource, allows the flexibility to source that data from an external system, or a more efficient storage mechanism, in the future.
+   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an
+   * implementation that is backed by a ConfigSource, allows the flexibility to source that data from an external system, or a more
+   * efficient storage mechanism, in the future.
    * @return the value of the property, not null
    */
   public ConfigSource getConfigSource() {
@@ -383,8 +356,9 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   /**
    * Sets the config source.
    * <p>
-   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an implementation that is backed by
-   * a ConfigSource, allows the flexibility to source that data from an external system, or a more efficient storage mechanism, in the future.
+   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an
+   * implementation that is backed by a ConfigSource, allows the flexibility to source that data from an external system, or a more
+   * efficient storage mechanism, in the future.
    * @param configSource  the new value of the property, not null
    */
   public void setConfigSource(ConfigSource configSource) {
@@ -395,8 +369,9 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   /**
    * Gets the the {@code configSource} property.
    * <p>
-   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an implementation that is backed by
-   * a ConfigSource, allows the flexibility to source that data from an external system, or a more efficient storage mechanism, in the future.
+   * Where possible, components should not be tightly coupled to the configuration database. An intermediate interface, with an
+   * implementation that is backed by a ConfigSource, allows the flexibility to source that data from an external system, or a more
+   * efficient storage mechanism, in the future.
    * @return the property, not null
    */
   public final Property<ConfigSource> configSource() {
@@ -405,11 +380,12 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the config master. This might only be a temporary addition; most services should be written to back onto this if necessary rather than data be accessed
-   * directly from the config master. This allows the flexibility to have data stored in another system or more efficient storage specific to that type.
+   * Gets the config master. This might only be a temporary addition; most services should be written to back onto this if necessary rather than
+   * data be accessed directly from the config master. This allows the flexibility to have data stored in another system or more efficient
+   * storage specific to that type.
    * <p>
-   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user maintained views from the
-   * persistent config master and temporary/short-lived views created programatically.
+   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user
+   * maintained views from the persistent config master and temporary/short-lived views created programatically.
    * @return the value of the property
    */
   public ConfigMaster getConfigMaster() {
@@ -417,11 +393,12 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the config master. This might only be a temporary addition; most services should be written to back onto this if necessary rather than data be accessed
-   * directly from the config master. This allows the flexibility to have data stored in another system or more efficient storage specific to that type.
+   * Sets the config master. This might only be a temporary addition; most services should be written to back onto this if necessary rather than
+   * data be accessed directly from the config master. This allows the flexibility to have data stored in another system or more efficient
+   * storage specific to that type.
    * <p>
-   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user maintained views from the
-   * persistent config master and temporary/short-lived views created programatically.
+   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user
+   * maintained views from the persistent config master and temporary/short-lived views created programatically.
    * @param configMaster  the new value of the property
    */
   public void setConfigMaster(ConfigMaster configMaster) {
@@ -430,10 +407,11 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   /**
    * Gets the the {@code configMaster} property.
-   * directly from the config master. This allows the flexibility to have data stored in another system or more efficient storage specific to that type.
+   * data be accessed directly from the config master. This allows the flexibility to have data stored in another system or more efficient
+   * storage specific to that type.
    * <p>
-   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user maintained views from the
-   * persistent config master and temporary/short-lived views created programatically.
+   * This is currently required to replace the functionality previously offered by ViewDefinitionRepository which exposed both user
+   * maintained views from the persistent config master and temporary/short-lived views created programatically.
    * @return the property, not null
    */
   public final Property<ConfigMaster> configMaster() {
@@ -572,33 +550,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the convention bundle source.
-   * @return the value of the property, not null
-   */
-  public ConventionBundleSource getConventionBundleSource() {
-    return _conventionBundleSource;
-  }
-
-  /**
-   * Sets the convention bundle source.
-   * @param conventionBundleSource  the new value of the property, not null
-   */
-  public void setConventionBundleSource(ConventionBundleSource conventionBundleSource) {
-    JodaBeanUtils.notNull(conventionBundleSource, "conventionBundleSource");
-    this._conventionBundleSource = conventionBundleSource;
-  }
-
-  /**
-   * Gets the the {@code conventionBundleSource} property.
-   * @return the property, not null
-   */
-  public final Property<ConventionBundleSource> conventionBundleSource() {
-    return metaBean().conventionBundleSource().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets the volitility cube source.
+   * Gets the volatility cube source.
    * @return the value of the property
    */
   public VolatilityCubeDefinitionSource getVolatilityCubeDefinitionSource() {
@@ -606,7 +558,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the volitility cube source.
+   * Sets the volatility cube source.
    * @param volatilityCubeDefinitionSource  the new value of the property
    */
   public void setVolatilityCubeDefinitionSource(VolatilityCubeDefinitionSource volatilityCubeDefinitionSource) {
@@ -828,8 +780,8 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the slave view processor executing functions can make requests to. This might be the view processor that owns the context, but might be a different but
-   * compatible one.
+   * Gets the slave view processor executing functions can make requests to. This might be the view processor that owns the context, but might be
+   * a different but compatible one.
    * @return the value of the property
    */
   public ViewProcessor getViewProcessor() {
@@ -837,8 +789,8 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
   }
 
   /**
-   * Sets the slave view processor executing functions can make requests to. This might be the view processor that owns the context, but might be a different but
-   * compatible one.
+   * Sets the slave view processor executing functions can make requests to. This might be the view processor that owns the context, but might be
+   * a different but compatible one.
    * @param viewProcessor  the new value of the property
    */
   public void setViewProcessor(ViewProcessor viewProcessor) {
@@ -847,7 +799,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   /**
    * Gets the the {@code viewProcessor} property.
-   * compatible one.
+   * a different but compatible one.
    * @return the property, not null
    */
   public final Property<ViewProcessor> viewProcessor() {
@@ -881,17 +833,19 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the PnL requirements gatherer.
+   * Gets the P&L requirements gatherer.
    * @return the value of the property
    */
+  @Deprecated
   public PnLRequirementsGatherer getPnlRequirementsGatherer() {
     return _pnlRequirementsGatherer;
   }
 
   /**
-   * Sets the PnL requirements gatherer.
+   * Sets the P&L requirements gatherer.
    * @param pnlRequirementsGatherer  the new value of the property
    */
+  @Deprecated
   public void setPnlRequirementsGatherer(PnLRequirementsGatherer pnlRequirementsGatherer) {
     this._pnlRequirementsGatherer = pnlRequirementsGatherer;
   }
@@ -900,6 +854,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Gets the the {@code pnlRequirementsGatherer} property.
    * @return the property, not null
    */
+  @Deprecated
   public final Property<PnLRequirementsGatherer> pnlRequirementsGatherer() {
     return metaBean().pnlRequirementsGatherer().createProperty(this);
   }
@@ -909,6 +864,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Gets the risk factors requirements gatherer.
    * @return the value of the property
    */
+  @Deprecated
   public RiskFactorsGatherer getRiskFactorsGatherer() {
     return _riskFactorsGatherer;
   }
@@ -917,6 +873,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Sets the risk factors requirements gatherer.
    * @param riskFactorsGatherer  the new value of the property
    */
+  @Deprecated
   public void setRiskFactorsGatherer(RiskFactorsGatherer riskFactorsGatherer) {
     this._riskFactorsGatherer = riskFactorsGatherer;
   }
@@ -925,6 +882,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
    * Gets the the {@code riskFactorsGatherer} property.
    * @return the property, not null
    */
+  @Deprecated
   public final Property<RiskFactorsGatherer> riskFactorsGatherer() {
     return metaBean().riskFactorsGatherer().createProperty(this);
   }
@@ -950,7 +908,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
           JodaBeanUtils.equal(getTargetResolver(), other.getTargetResolver()) &&
           JodaBeanUtils.equal(getRegionSource(), other.getRegionSource()) &&
           JodaBeanUtils.equal(getLegalEntitySource(), other.getLegalEntitySource()) &&
-          JodaBeanUtils.equal(getConventionBundleSource(), other.getConventionBundleSource()) &&
           JodaBeanUtils.equal(getVolatilityCubeDefinitionSource(), other.getVolatilityCubeDefinitionSource()) &&
           JodaBeanUtils.equal(getHolidaySource(), other.getHolidaySource()) &&
           JodaBeanUtils.equal(getExchangeSource(), other.getExchangeSource()) &&
@@ -980,7 +937,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     hash = hash * 31 + JodaBeanUtils.hashCode(getTargetResolver());
     hash = hash * 31 + JodaBeanUtils.hashCode(getRegionSource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getLegalEntitySource());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getConventionBundleSource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getVolatilityCubeDefinitionSource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getHolidaySource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getExchangeSource());
@@ -999,7 +955,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(736);
+    StringBuilder buf = new StringBuilder(704);
     buf.append("EngineContextsComponentFactory{");
     int len = buf.length();
     toString(buf);
@@ -1021,7 +977,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     buf.append("targetResolver").append('=').append(JodaBeanUtils.toString(getTargetResolver())).append(',').append(' ');
     buf.append("regionSource").append('=').append(JodaBeanUtils.toString(getRegionSource())).append(',').append(' ');
     buf.append("legalEntitySource").append('=').append(JodaBeanUtils.toString(getLegalEntitySource())).append(',').append(' ');
-    buf.append("conventionBundleSource").append('=').append(JodaBeanUtils.toString(getConventionBundleSource())).append(',').append(' ');
     buf.append("volatilityCubeDefinitionSource").append('=').append(JodaBeanUtils.toString(getVolatilityCubeDefinitionSource())).append(',').append(' ');
     buf.append("holidaySource").append('=').append(JodaBeanUtils.toString(getHolidaySource())).append(',').append(' ');
     buf.append("exchangeSource").append('=').append(JodaBeanUtils.toString(getExchangeSource())).append(',').append(' ');
@@ -1087,11 +1042,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
      */
     private final MetaProperty<LegalEntitySource> _legalEntitySource = DirectMetaProperty.ofReadWrite(
         this, "legalEntitySource", EngineContextsComponentFactory.class, LegalEntitySource.class);
-    /**
-     * The meta-property for the {@code conventionBundleSource} property.
-     */
-    private final MetaProperty<ConventionBundleSource> _conventionBundleSource = DirectMetaProperty.ofReadWrite(
-        this, "conventionBundleSource", EngineContextsComponentFactory.class, ConventionBundleSource.class);
     /**
      * The meta-property for the {@code volatilityCubeDefinitionSource} property.
      */
@@ -1170,7 +1120,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
         "targetResolver",
         "regionSource",
         "legalEntitySource",
-        "conventionBundleSource",
         "volatilityCubeDefinitionSource",
         "holidaySource",
         "exchangeSource",
@@ -1210,8 +1159,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
           return _regionSource;
         case -1759712457:  // legalEntitySource
           return _legalEntitySource;
-        case -1281578674:  // conventionBundleSource
-          return _conventionBundleSource;
         case 1540542824:  // volatilityCubeDefinitionSource
           return _volatilityCubeDefinitionSource;
         case 431020691:  // holidaySource
@@ -1323,14 +1270,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
     }
 
     /**
-     * The meta-property for the {@code conventionBundleSource} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<ConventionBundleSource> conventionBundleSource() {
-      return _conventionBundleSource;
-    }
-
-    /**
      * The meta-property for the {@code volatilityCubeDefinitionSource} property.
      * @return the meta-property, not null
      */
@@ -1422,6 +1361,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
      * The meta-property for the {@code pnlRequirementsGatherer} property.
      * @return the meta-property, not null
      */
+    @Deprecated
     public final MetaProperty<PnLRequirementsGatherer> pnlRequirementsGatherer() {
       return _pnlRequirementsGatherer;
     }
@@ -1430,6 +1370,7 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
      * The meta-property for the {@code riskFactorsGatherer} property.
      * @return the meta-property, not null
      */
+    @Deprecated
     public final MetaProperty<RiskFactorsGatherer> riskFactorsGatherer() {
       return _riskFactorsGatherer;
     }
@@ -1454,8 +1395,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
           return ((EngineContextsComponentFactory) bean).getRegionSource();
         case -1759712457:  // legalEntitySource
           return ((EngineContextsComponentFactory) bean).getLegalEntitySource();
-        case -1281578674:  // conventionBundleSource
-          return ((EngineContextsComponentFactory) bean).getConventionBundleSource();
         case 1540542824:  // volatilityCubeDefinitionSource
           return ((EngineContextsComponentFactory) bean).getVolatilityCubeDefinitionSource();
         case 431020691:  // holidaySource
@@ -1513,9 +1452,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
         case -1759712457:  // legalEntitySource
           ((EngineContextsComponentFactory) bean).setLegalEntitySource((LegalEntitySource) newValue);
           return;
-        case -1281578674:  // conventionBundleSource
-          ((EngineContextsComponentFactory) bean).setConventionBundleSource((ConventionBundleSource) newValue);
-          return;
         case 1540542824:  // volatilityCubeDefinitionSource
           ((EngineContextsComponentFactory) bean).setVolatilityCubeDefinitionSource((VolatilityCubeDefinitionSource) newValue);
           return;
@@ -1568,7 +1504,6 @@ public class EngineContextsComponentFactory extends AbstractComponentFactory {
       JodaBeanUtils.notNull(((EngineContextsComponentFactory) bean)._targetResolver, "targetResolver");
       JodaBeanUtils.notNull(((EngineContextsComponentFactory) bean)._regionSource, "regionSource");
       JodaBeanUtils.notNull(((EngineContextsComponentFactory) bean)._legalEntitySource, "legalEntitySource");
-      JodaBeanUtils.notNull(((EngineContextsComponentFactory) bean)._conventionBundleSource, "conventionBundleSource");
       JodaBeanUtils.notNull(((EngineContextsComponentFactory) bean)._holidaySource, "holidaySource");
       JodaBeanUtils.notNull(((EngineContextsComponentFactory) bean)._exchangeSource, "exchangeSource");
       JodaBeanUtils.notNull(((EngineContextsComponentFactory) bean)._historicalTimeSeriesSource, "historicalTimeSeriesSource");

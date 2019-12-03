@@ -56,9 +56,6 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.view.ViewProcessor;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
 import com.opengamma.financial.analytics.volatility.cube.rest.RemoteVolatilityCubeDefinitionSource;
-import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.EHCachingConventionBundleSource;
-import com.opengamma.financial.convention.rest.RemoteConventionBundleSource;
 import com.opengamma.financial.security.EHCachingFinancialSecuritySource;
 import com.opengamma.financial.security.FinancialSecuritySource;
 import com.opengamma.financial.security.RemoteFinancialSecuritySource;
@@ -152,13 +149,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
     return configSource;
   }
 
-  protected ConventionBundleSource cache(final ConventionBundleSource conventionBundleSource) {
-    if (getCacheManager() != null) {
-      return new EHCachingConventionBundleSource(conventionBundleSource, getCacheManager());
-    }
-    return conventionBundleSource;
-  }
-
   protected ConventionSource cache(final ConventionSource conventionSource) {
     if (getCacheManager() != null) {
       return new EHCachingConventionSource(conventionSource, getCacheManager());
@@ -231,13 +221,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   protected ConfigSource createConfigSource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteConfigSource(uri/* , TODO: change manager */));
-    }
-    return null;
-  }
-
-  protected ConventionBundleSource createConventionBundleSource(final URI uri) {
-    if (uri != null) {
-      return cache(new RemoteConventionBundleSource(uri));
     }
     return null;
   }
@@ -425,9 +408,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
         break;
       case "configSource":
         remoteComponent(repo, property, template, createConfigSource(fetchURI(remoteConfiguration, "configSource")));
-        break;
-      case "conventionBundleSource":
-        remoteComponent(repo, property, template, createConventionBundleSource(fetchURI(remoteConfiguration, "conventionBundleSource")));
         break;
       case "conventionSource":
         remoteComponent(repo, property, template, createConventionSource(fetchURI(remoteConfiguration, "conventionSource")));

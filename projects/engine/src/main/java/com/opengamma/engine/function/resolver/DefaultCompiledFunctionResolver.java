@@ -48,11 +48,11 @@ import com.opengamma.util.tuple.Triple;
 /**
  * Default implementation of the compiled function resolver.
  * <p>
- * The aim of the resolution is to find functions that are capable of satisfying a requirement. In addition, a priority mechanism is used to return functions in
- * priority order from highest to lowest.
+ * The aim of the resolution is to find functions that are capable of satisfying a requirement. In addition, a priority mechanism is used to
+ * return functions in priority order from highest to lowest.
  * <p>
- * This class is not thread-safe. It is possible to call {@link #resolveFunction} concurrently from multiple threads, the rule manipulation methods require
- * external locking.
+ * This class is not thread-safe. It is possible to call {@link #resolveFunction} concurrently from multiple threads, the rule manipulation
+ * methods require external locking.
  */
 public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver {
 
@@ -61,39 +61,36 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
   /**
    * Comparator to give a fixed ordering of functions at the same priority so that we at least have deterministic behavior between runs.
    */
-  private static final Comparator<ResolutionRule> RULE_COMPARATOR = new Comparator<ResolutionRule>() {
-    @Override
-    public int compare(final ResolutionRule o1, final ResolutionRule o2) {
-      int c = o1.getParameterizedFunction().getFunction().getFunctionDefinition().getUniqueId().compareTo(
-          o2.getParameterizedFunction().getFunction().getFunctionDefinition().getUniqueId());
-      if (c != 0) {
-        return c;
-      }
-      // Have the same function, can try and order the "FunctionParameters" as we know it implements a hash code
-      c = o1.getParameterizedFunction().getParameters().hashCode() - o2.getParameterizedFunction().getParameters().hashCode();
-      if (c != 0) {
-        return c;
-      }
-      throw new OpenGammaRuntimeException("Rule priority conflict - cannot order " + o1 + " against " + o2);
+  private static final Comparator<ResolutionRule> RULE_COMPARATOR = (o1, o2) -> {
+    int c = o1.getParameterizedFunction().getFunction().getFunctionDefinition().getUniqueId().compareTo(
+        o2.getParameterizedFunction().getFunction().getFunctionDefinition().getUniqueId());
+    if (c != 0) {
+      return c;
     }
+    // Have the same function, can try and order the "FunctionParameters" as we know it implements a hash code
+    c = o1.getParameterizedFunction().getParameters().hashCode() - o2.getParameterizedFunction().getParameters().hashCode();
+    if (c != 0) {
+      return c;
+    }
+    throw new OpenGammaRuntimeException("Rule priority conflict - cannot order " + o1 + " against " + o2);
   };
 
   /**
-   * Holds an arbitrary bundle of rules with mixed priorities. Instances can attach to a "parent" bundle to receive copies of those rules. For example a rule
-   * that applies to objects of type A must be present in the bundles for objects of sub-types of A.
+   * Holds an arbitrary bundle of rules with mixed priorities. Instances can attach to a "parent" bundle to receive copies of those rules.
+   * For example a rule that applies to objects of type A must be present in the bundles for objects of sub-types of A.
    */
   private interface ChainedRuleBundle extends Iterable<Collection<ResolutionRule>> {
 
     /**
      * Groups the rules into priority levels, sorts these and returns a structure that can iterate over them in descending priority order.
      *
-     * @returns the prioritized rules or null if there are none
+     * @return the prioritized rules or null if there are none
      */
     Iterable<Collection<ResolutionRule>> prioritize();
 
     /**
-     * Registers a listening {@link ChainedRuleBundle} with this one. The listener will be immediately notified of any existing rules. When new rules are added,
-     * the listener will also be notified.
+     * Registers a listening {@link ChainedRuleBundle} with this one. The listener will be immediately notified of any existing rules. When
+     * new rules are added, the listener will also be notified.
      */
     void addListener(ChainedRuleBundle listener);
 
@@ -282,10 +279,10 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
   }
 
-  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> FOLD_RULES =
-      new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
+  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> FOLD_RULES = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
     @Override
-    public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a, final Iterable<Collection<ResolutionRule>> b) {
+    public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a,
+        final Iterable<Collection<ResolutionRule>> b) {
       if (a instanceof ChainedRuleBundle) {
         if (b instanceof ChainedRuleBundle) {
           return FoldedChainedRuleBundle.of((ChainedRuleBundle) a, (ChainedRuleBundle) b);
@@ -300,8 +297,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
   };
 
   /**
-   * The rules by target type. The map values are {@link ChainedRuleBundle} instances during construction, after which return an iterator giving the rules in
-   * blocks of descending priority order.
+   * The rules by target type. The map values are {@link ChainedRuleBundle} instances during construction, after which return an iterator
+   * giving the rules in blocks of descending priority order.
    */
   private final ComputationTargetTypeMap<Iterable<Collection<ResolutionRule>>> _type2Rules = new ComputationTargetTypeMap<>(FOLD_RULES);
 
@@ -316,8 +313,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
   private final FunctionCompilationContext _functionCompilationContext;
 
   /**
-   * Cache of targets. The values are weak so that when the function iterators drop out of scope as the requirements on the target are resolved the entry can be
-   * dropped.
+   * Cache of targets. The values are weak so that when the function iterators drop out of scope as the requirements on the target are
+   * resolved the entry can be dropped.
    */
   private final ConcurrentMap<ComputationTargetSpecification, Pair<ResolutionRule[], Collection<ValueSpecification>[]>> _targetCache = new MapMaker()
       .weakValues().makeMap();
@@ -345,18 +342,18 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
    * @param resolutionRules
    *          the resolution rules, not null
    */
-  public DefaultCompiledFunctionResolver(final FunctionCompilationContext functionCompilationContext, final Collection<ResolutionRule> resolutionRules) {
+  public DefaultCompiledFunctionResolver(final FunctionCompilationContext functionCompilationContext,
+      final Collection<ResolutionRule> resolutionRules) {
     ArgumentChecker.notNull(functionCompilationContext, "functionCompilationContext");
     ArgumentChecker.notNull(resolutionRules, "resolutionRules");
     _functionCompilationContext = functionCompilationContext;
     addRules(resolutionRules);
   }
 
-  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>
-  COMBINE_CHAIN_RULE_BUNDLE =
-  new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
+  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> COMBINE_CHAIN_RULE_BUNDLE = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
     @Override
-    public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a, final Iterable<Collection<ResolutionRule>> b) {
+    public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a,
+        final Iterable<Collection<ResolutionRule>> b) {
       if (!(a instanceof ChainedRuleBundle)) {
         throw new IllegalStateException("Rules have already been compiled - can't add new ones");
       }
@@ -365,8 +362,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     }
   };
 
-  private static final ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void> CREATE_CHANGED_RULE_BUNDLE =
-      new ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void>() {
+  private static final ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void> CREATE_CHANGED_RULE_BUNDLE = new ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void>() {
 
     @Override
     public Void visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final DefaultCompiledFunctionResolver self) {
@@ -404,7 +400,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     }
 
     @Override
-    public Void visitClassComputationTargetType(final Class<? extends UniqueIdentifiable> type, final DefaultCompiledFunctionResolver self) {
+    public Void visitClassComputationTargetType(final Class<? extends UniqueIdentifiable> type,
+        final DefaultCompiledFunctionResolver self) {
       insertBundle(type, self);
       return null;
     }
@@ -412,8 +409,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
   };
 
   /**
-   * Adds a single rule to the resolver. Rules must be added before calling {@link #compileRules} to pre-process them into the data structures used for
-   * resolution.
+   * Adds a single rule to the resolver. Rules must be added before calling {@link #compileRules} to pre-process them into the data
+   * structures used for resolution.
    *
    * @param resolutionRule
    *          the rule to add, not null
@@ -434,7 +431,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
   }
 
   /**
-   * Adds rules to the resolver. Rules must be added before calling {@link #compileRules} to pre-process them into the data structures used for resolution.
+   * Adds rules to the resolver. Rules must be added before calling {@link #compileRules} to pre-process them into the data structures used
+   * for resolution.
    *
    * @param resolutionRules
    *          the rules to add, no nulls, not null
@@ -446,8 +444,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
   }
 
   /**
-   * Processes the rules into data structures used for resolution. After calling this method, no further rules must be added using {@link #addRule} or
-   * {@link #addRules}.
+   * Processes the rules into data structures used for resolution. After calling this method, no further rules must be added using
+   * {@link #addRule} or {@link #addRules}.
    */
   public void compileRules() {
     final Iterator<Map.Entry<ComputationTargetType, Iterable<Collection<ResolutionRule>>>> itr = _type2Rules.entries().iterator();
@@ -490,7 +488,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     return _functionCompilationContext;
   }
 
-  private static ValueSpecification reduceMemory(final ValueSpecification valueSpec, final ComputationTargetResolver.AtVersionCorrection resolver) {
+  private static ValueSpecification reduceMemory(final ValueSpecification valueSpec,
+      final ComputationTargetResolver.AtVersionCorrection resolver) {
     final ComputationTargetSpecification oldTargetSpec = valueSpec.getTargetSpecification();
     final ComputationTargetSpecification newTargetSpec = ComputationTargetResolverUtils.simplifyType(oldTargetSpec, resolver);
     if (newTargetSpec == oldTargetSpec) {
@@ -521,7 +520,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
   public Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> resolveFunction(
       final String valueName, final ComputationTarget target, final ValueProperties constraints) {
     final ComputationTargetResolver.AtVersionCorrection resolver = getFunctionCompilationContext().getComputationTargetResolver();
-    // TODO [PLAT-2286] Don't key the cache by target specification as the contexts may vary. E.g. the (PORTFOLIO_NODE/POSITION, node0, pos0) target
+    // TODO [PLAT-2286] Don't key the cache by target specification as the contexts may vary. E.g. the (PORTFOLIO_NODE/POSITION, node0,
+    // pos0) target
     // will have considered all the rules for (POSITION, pos0). We want to share this, not duplicate the effort (and the storage)
     final ComputationTargetSpecification targetSpecification = MemoryUtils
         .instance(ComputationTargetResolverUtils.simplifyType(target.toSpecification(), resolver));
@@ -549,6 +549,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
             }
           }
         } catch (final RuntimeException e) {
+          e.printStackTrace(System.err);
           LOGGER.error("Couldn't process rules for {}: {}", target, e.getMessage());
           LOGGER.info("Caught exception", e);
           // Now have an incomplete rule set for the target, possibly even an empty one
@@ -584,7 +585,8 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     private Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>> _next;
 
     private It(final String valueName, final ComputationTargetSpecification targetSpecification, final ValueProperties constraints,
-        final ComputationTarget target, final FunctionCompilationContext context, final Pair<ResolutionRule[], Collection<ValueSpecification>[]> values) {
+        final ComputationTarget target, final FunctionCompilationContext context,
+        final Pair<ResolutionRule[], Collection<ValueSpecification>[]> values) {
       _context = context;
       _target = targetSpecification;
       _valueName = valueName;

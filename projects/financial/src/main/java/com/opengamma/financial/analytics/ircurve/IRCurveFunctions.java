@@ -12,7 +12,6 @@ import java.util.Set;
 
 import com.mcleodmoores.financial.function.credit.configs.CreditCurveDefinition;
 import com.opengamma.core.change.ChangeEvent;
-import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.BeanDynamicFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -104,7 +103,6 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
       functions.add(functionConfiguration(CurveMarketDataFunction.class, curveName));
     }
 
-    @SuppressWarnings({ "unchecked" })
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
 
@@ -113,11 +111,6 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
       final ConfigSearchRequest<?> searchRequest = new ConfigSearchRequest<>();
       searchRequest.setType(MultiCurveCalculationConfig.class);
       searchRequest.setVersionCorrection(getVersionCorrection());
-      for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(_configMaster, searchRequest)) {
-        final String documentName = configDocument.getName();
-        final MultiCurveCalculationConfig config = ((ConfigItem<MultiCurveCalculationConfig>) configDocument.getConfig()).getValue();
-      }
-
       searchRequest.setVersionCorrection(getVersionCorrection());
       for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(getConfigMaster(), searchRequest)) {
         final String documentName = configDocument.getName();

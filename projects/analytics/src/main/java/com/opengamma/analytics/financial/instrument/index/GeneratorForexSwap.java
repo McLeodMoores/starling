@@ -8,6 +8,8 @@ package com.opengamma.analytics.financial.instrument.index;
 import org.apache.commons.lang.ObjectUtils;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.definition.ForexSwapDefinition;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -63,7 +65,8 @@ public class GeneratorForexSwap extends GeneratorInstrument<GeneratorAttributeFX
    * @param endOfMonth
    *          The flag indicating if the end-of-month rule is used.
    */
-  public GeneratorForexSwap(final String name, final Currency currency1, final Currency currency2, final Calendar calendar, final int spotLag,
+  public GeneratorForexSwap(final String name, final Currency currency1, final Currency currency2, final Calendar calendar,
+      final int spotLag,
       final BusinessDayConvention businessDayConvention, final boolean endOfMonth) {
     super(name);
     ArgumentChecker.notNull(currency1, "Currency 1");
@@ -73,6 +76,39 @@ public class GeneratorForexSwap extends GeneratorInstrument<GeneratorAttributeFX
     _currency1 = currency1;
     _currency2 = currency2;
     _calendar = calendar;
+    _spotLag = spotLag;
+    _businessDayConvention = businessDayConvention;
+    _endOfMonth = endOfMonth;
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param name
+   *          The generator name.
+   * @param currency1
+   *          The first currency. Not null.
+   * @param currency2
+   *          The second currency. Not null.
+   * @param calendar
+   *          The joint calendar of both currencies. Not null.
+   * @param spotLag
+   *          The index spot lag in days between trade and spot date (usually 2).
+   * @param businessDayConvention
+   *          The business day convention.
+   * @param endOfMonth
+   *          The flag indicating if the end-of-month rule is used.
+   */
+  public GeneratorForexSwap(final String name, final Currency currency1, final Currency currency2, final WorkingDayCalendar calendar,
+      final int spotLag, final BusinessDayConvention businessDayConvention, final boolean endOfMonth) {
+    super(name);
+    ArgumentChecker.notNull(currency1, "Currency 1");
+    ArgumentChecker.notNull(currency2, "Currency 2");
+    ArgumentChecker.notNull(calendar, "Calendar");
+    ArgumentChecker.notNull(businessDayConvention, "Business day convention");
+    _currency1 = currency1;
+    _currency2 = currency2;
+    _calendar = CalendarAdapter.of(calendar);
     _spotLag = spotLag;
     _businessDayConvention = businessDayConvention;
     _endOfMonth = endOfMonth;
@@ -141,8 +177,10 @@ public class GeneratorForexSwap extends GeneratorInstrument<GeneratorAttributeFX
     ArgumentChecker.notNull(attribute, "Attribute");
     final double fx = attribute.getFXMatrix().getFxRate(_currency1, _currency2);
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, _spotLag, _calendar);
-    final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spot, attribute.getStartPeriod(), _businessDayConvention, _calendar, _endOfMonth);
-    final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(spot, attribute.getEndPeriod(), _businessDayConvention, _calendar, _endOfMonth);
+    final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spot, attribute.getStartPeriod(), _businessDayConvention, _calendar,
+        _endOfMonth);
+    final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(spot, attribute.getEndPeriod(), _businessDayConvention, _calendar,
+        _endOfMonth);
     return new ForexSwapDefinition(_currency1, _currency2, startDate, endDate, notional, fx, forwardPoints);
   }
 

@@ -7,6 +7,8 @@ package com.opengamma.analytics.financial.instrument.index;
 
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedInflationZeroCouponDefinition;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -49,7 +51,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Constructor from all the details.
-   * 
+   *
    * @param name
    *          The generator name. Not null.
    * @param indexPrice
@@ -67,7 +69,8 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
    * @param isLinear
    *          True if the price index is interpolated linearly.
    */
-  public GeneratorSwapFixedInflationZeroCoupon(final String name, final IndexPrice indexPrice, final BusinessDayConvention businessDayConvention,
+  public GeneratorSwapFixedInflationZeroCoupon(final String name, final IndexPrice indexPrice,
+      final BusinessDayConvention businessDayConvention,
       final Calendar calendar, final boolean endOfMonth, final int monthLag, final int spotLag, final boolean isLinear) {
     super(name);
     ArgumentChecker.notNull(indexPrice, "index price");
@@ -83,8 +86,44 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
   }
 
   /**
+   * Constructor from all the details.
+   *
+   * @param name
+   *          The generator name. Not null.
+   * @param indexPrice
+   *          The Price index..
+   * @param businessDayConvention
+   *          The business day convention associated to fix leg.
+   * @param calendar
+   *          The calendar used to compute the payment date.
+   * @param endOfMonth
+   *          The end-of-month flag.
+   * @param monthLag
+   *          The price index fixing lag in months(usually 3).
+   * @param spotLag
+   *          Lag between today and the spot date.
+   * @param isLinear
+   *          True if the price index is interpolated linearly.
+   */
+  public GeneratorSwapFixedInflationZeroCoupon(final String name, final IndexPrice indexPrice,
+      final BusinessDayConvention businessDayConvention,
+      final WorkingDayCalendar calendar, final boolean endOfMonth, final int monthLag, final int spotLag, final boolean isLinear) {
+    super(name);
+    ArgumentChecker.notNull(indexPrice, "index price");
+    ArgumentChecker.notNull(calendar, "calendar");
+    ArgumentChecker.notNull(businessDayConvention, "businessDayConvention");
+    _indexPrice = indexPrice;
+    _businessDayConvention = businessDayConvention;
+    _calendar = CalendarAdapter.of(calendar);
+    _endOfMonth = endOfMonth;
+    _monthLag = monthLag;
+    _spotLag = spotLag;
+    _isLinear = isLinear;
+  }
+
+  /**
    * Gets the _indexPrice field.
-   * 
+   *
    * @return the _indexPrice
    */
   public IndexPrice getIndexPrice() {
@@ -93,7 +132,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the _businessDayConvention field.
-   * 
+   *
    * @return the _businessDayConvention
    */
   public BusinessDayConvention getBusinessDayConvention() {
@@ -102,7 +141,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the _calendar field.
-   * 
+   *
    * @return the _calendar
    */
   public Calendar getCalendar() {
@@ -111,7 +150,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the _endOfMonth field.
-   * 
+   *
    * @return the _endOfMonth
    */
   public boolean isEndOfMonth() {
@@ -120,7 +159,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the _monthLag field.
-   * 
+   *
    * @return the _monthLag
    */
   public int getMonthLag() {
@@ -129,7 +168,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the swap generator spot lag.
-   * 
+   *
    * @return The lag (in days).
    */
   public int getSpotLag() {
@@ -138,7 +177,7 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
 
   /**
    * Gets the _isLinear field.
-   * 
+   *
    * @return the _isLinear
    */
   public boolean isLinear() {
@@ -156,7 +195,8 @@ public class GeneratorSwapFixedInflationZeroCoupon extends GeneratorInstrument<G
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, _spotLag, _calendar);
     final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spot, attribute.getStartPeriod(), this.getCalendar());
     if (this._isLinear) {
-      return SwapFixedInflationZeroCouponDefinition.fromGeneratorInterpolation(startDate, rate, notional, attribute.getEndPeriod(), this, true);
+      return SwapFixedInflationZeroCouponDefinition.fromGeneratorInterpolation(startDate, rate, notional, attribute.getEndPeriod(), this,
+          true);
     }
     return SwapFixedInflationZeroCouponDefinition.fromGeneratorMonthly(startDate, rate, notional, attribute.getEndPeriod(), this, true);
   }

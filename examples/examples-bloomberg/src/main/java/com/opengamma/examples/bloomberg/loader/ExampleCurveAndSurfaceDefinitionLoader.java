@@ -46,7 +46,6 @@ public class ExampleCurveAndSurfaceDefinitionLoader extends AbstractTool<ToolCon
     fxForward.put(UnorderedCurrencyPair.of(Currency.USD, Currency.JPY), Triple.of("DEFAULT", "JPY", "JPY"));
     FXOptionVolatilitySurfaceConfigPopulator.populateVolatilitySurfaceConfigMaster(configMaster, fxSurfaces);
     FXForwardCurveConfigPopulator.populateFXForwardCurveConfigMaster(configMaster, fxForward);
-    new ExampleFXImpliedMultiCurveCalculationConfigPopulator(configMaster);
   }
 
 }

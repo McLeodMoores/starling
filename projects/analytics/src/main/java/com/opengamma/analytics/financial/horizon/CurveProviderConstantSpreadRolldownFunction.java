@@ -21,12 +21,17 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Produces a {@link MulticurveProviderDiscount} or {@link com.opengamma.analytics.financial.provider.description.interestrate.IssuerProvider} where all yield
- * curves have been shifted forward in time without slide i.e. the curves are shifted in such a way that the rate or discount factor requested for the same
- * maturity date will be the same as for the original curves.
+ * Produces a {@link MulticurveProviderDiscount} or
+ * {@link com.opengamma.analytics.financial.provider.description.interestrate.IssuerProvider} where all yield curves have been shifted
+ * forward in time without slide i.e. the curves are shifted in such a way that the rate or discount factor requested for the same maturity
+ * date will be the same as for the original curves.
  * <p>
- * This class does not handle all types of {@link ParameterProviderInterface} because the type hierarchy has not been refactored for easier use.
+ * This class does not handle all types of {@link ParameterProviderInterface} because the type hierarchy has not been refactored for easier
+ * use.
+ *
+ * @deprecated Use {@link com.opengamma.analytics.financial.horizon.rolldown.CurveProviderConstantSpreadRolldown}.
  */
+@Deprecated
 public final class CurveProviderConstantSpreadRolldownFunction implements RolldownFunction<ParameterProviderInterface> {
   /** Rolls down a yield curve without slide */
   private static final ConstantSpreadYieldCurveRolldownFunction CURVE_ROLLDOWN = ConstantSpreadYieldCurveRolldownFunction.getInstance();
@@ -35,6 +40,7 @@ public final class CurveProviderConstantSpreadRolldownFunction implements Rolldo
 
   /**
    * Gets the singleton instance.
+   *
    * @return The instance
    */
   public static CurveProviderConstantSpreadRolldownFunction getInstance() {
@@ -61,8 +67,11 @@ public final class CurveProviderConstantSpreadRolldownFunction implements Rolldo
 
   /**
    * Rolls down all of the curves in a {@link MulticurveProviderDiscount}
-   * @param data The data
-   * @param time The time in years
+   *
+   * @param data
+   *          The data
+   * @param time
+   *          The time in years
    * @return A provider with all of the curves shifted by the time
    */
   private MulticurveProviderDiscount rollDown(final MulticurveProviderDiscount data, final double time) {
@@ -83,8 +92,11 @@ public final class CurveProviderConstantSpreadRolldownFunction implements Rolldo
 
   /**
    * Rolls down all of the curves in an {@link IssuerProviderDiscount}
-   * @param data The data
-   * @param time The time in years
+   *
+   * @param data
+   *          The data
+   * @param time
+   *          The time in years
    * @return A provider with all of the curves shifted by the time
    */
   private IssuerProviderDiscount rollDown(final IssuerProviderDiscount data, final double time) {

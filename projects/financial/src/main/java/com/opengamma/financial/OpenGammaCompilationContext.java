@@ -17,7 +17,6 @@ import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.financial.analytics.model.pnl.PnLRequirementsGatherer;
 import com.opengamma.financial.analytics.riskfactors.RiskFactorsGatherer;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.currency.CurrencyPair;
 import com.opengamma.financial.currency.CurrencyPairs;
 import com.opengamma.financial.currency.CurrencyPairsResolver;
@@ -44,10 +43,6 @@ public final class OpenGammaCompilationContext {
    * The name under which an instance of {@link RegionSource} should be bound.
    */
   public static final String REGION_SOURCE_NAME = "regionSource";
-  /**
-   * The name under which an instance of {@link ConventionBundleSource} should be bound.
-   */
-  public static final String CONVENTION_BUNDLE_SOURCE_NAME = "conventionBundleSource";
   /**
    * The name under which an instance of {@link ConventionSource} should be bound.
    */
@@ -85,13 +80,10 @@ public final class OpenGammaCompilationContext {
   public static final String TEMPORARY_TARGETS_NAME = "tempTargets";
   /**
    * The name under which an instance of {@link RiskFactorsGatherer} should be bound.
+   * @deprecated This functionality is no longer used
    */
+  @Deprecated
   public static final String RISK_FACTORS_GATHERER_NAME = "riskFactorsGatherer";
-  /**
-   * The name under which a {@link Boolean#TRUE} value should be bound to put functions which support it into a permissive requirement mode. Note that this is a
-   * non-default mode of behavior that is not usually required.
-   */
-  private static final String PERMISSIVE_FLAG_NAME = "permissive";
   /**
    * The name under which an instance of {@link PnLRequirementsGatherer} should be bound.
    *
@@ -99,6 +91,11 @@ public final class OpenGammaCompilationContext {
    */
   @Deprecated
   public static final String PNL_REQUIREMENTS_GATHERER_NAME = "pnlRequirementsGatherer";
+  /**
+   * The name under which a {@link Boolean#TRUE} value should be bound to put functions which support it into a permissive requirement mode. Note that this is a
+   * non-default mode of behavior that is not usually required.
+   */
+  private static final String PERMISSIVE_FLAG_NAME = "permissive";
 
   /**
    * Restricted constructor.
@@ -188,33 +185,6 @@ public final class OpenGammaCompilationContext {
   }
 
   // -------------------------------------------------------------------------
-  /**
-   * Gets a {@code ConventionBundleSource} from the context.
-   *
-   * @param compilationContext
-   *          the context to examine, not null
-   * @return the convention bundle source, null if not found
-   * @deprecated {@link ConventionBundleSource} is deprecated. Use {@link ConventionSource} instead
-   */
-  @Deprecated
-  public static ConventionBundleSource getConventionBundleSource(final FunctionCompilationContext compilationContext) {
-    return get(compilationContext, CONVENTION_BUNDLE_SOURCE_NAME);
-  }
-
-  /**
-   * Stores a {@code ConventionBundleSource} in the context.
-   *
-   * @param compilationContext
-   *          the context to store in, not null
-   * @param conventionBundleSource
-   *          the convention bundle source to store, not null
-   * @deprecated {@link ConventionBundleSource} is deprecated. Use {@link ConventionSource} instead
-   */
-  @Deprecated
-  public static void setConventionBundleSource(final FunctionCompilationContext compilationContext, final ConventionBundleSource conventionBundleSource) {
-    set(compilationContext, CONVENTION_BUNDLE_SOURCE_NAME, conventionBundleSource);
-  }
-
   public static VolatilityCubeDefinitionSource getVolatilityCubeDefinitionSource(final FunctionCompilationContext compilationContext) {
     return get(compilationContext, VOLATILITY_CUBE_DEFINITION_SOURCE_NAME);
   }
@@ -316,22 +286,6 @@ public final class OpenGammaCompilationContext {
     }
   }
 
-  public static RiskFactorsGatherer getRiskFactorsGatherer(final FunctionCompilationContext compilationContext) {
-    return get(compilationContext, RISK_FACTORS_GATHERER_NAME);
-  }
-
-  public static void setRiskFactorsGatherer(final FunctionCompilationContext compilationContext, final RiskFactorsGatherer riskFactorsGatherer) {
-    set(compilationContext, RISK_FACTORS_GATHERER_NAME, riskFactorsGatherer);
-  }
-
-  public static PnLRequirementsGatherer getPnLRequirementsGatherer(final FunctionCompilationContext compilationContext) {
-    return get(compilationContext, PNL_REQUIREMENTS_GATHERER_NAME);
-  }
-
-  public static void setPnLRequirementsGatherer(final FunctionCompilationContext compilationContext, final PnLRequirementsGatherer pnlRequirementsGatherer) {
-    set(compilationContext, PNL_REQUIREMENTS_GATHERER_NAME, pnlRequirementsGatherer);
-  }
-
   /**
    * @param compilationContext
    *          the compilation context
@@ -362,6 +316,22 @@ public final class OpenGammaCompilationContext {
         return currencyPairs.getCurrencyPair(currency1, currency2);
       }
     };
+  }
+
+  public static RiskFactorsGatherer getRiskFactorsGatherer(final FunctionCompilationContext compilationContext) {
+    return get(compilationContext, RISK_FACTORS_GATHERER_NAME);
+  }
+
+  public static void setRiskFactorsGatherer(final FunctionCompilationContext compilationContext, final RiskFactorsGatherer riskFactorsGatherer) {
+    set(compilationContext, RISK_FACTORS_GATHERER_NAME, riskFactorsGatherer);
+  }
+
+  public static PnLRequirementsGatherer getPnLRequirementsGatherer(final FunctionCompilationContext compilationContext) {
+    return get(compilationContext, PNL_REQUIREMENTS_GATHERER_NAME);
+  }
+
+  public static void setPnLRequirementsGatherer(final FunctionCompilationContext compilationContext, final PnLRequirementsGatherer pnlRequirementsGatherer) {
+    set(compilationContext, PNL_REQUIREMENTS_GATHERER_NAME, pnlRequirementsGatherer);
   }
 
 }

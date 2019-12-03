@@ -7,17 +7,15 @@ package com.opengamma.analytics.financial.curve.interestrate.generator;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Store the details and generate the required curve. The curve is interpolated on the discount factor.
- * Only the lastTimeCalculator is stored. The node are computed from the instruments.
+ * Store the details and generate the required curve. The curve is interpolated on the discount factor. Only the lastTimeCalculator is
+ * stored. The node are computed from the instruments.
  */
-@SuppressWarnings("deprecation")
 public class GeneratorCurveDiscountFactorInterpolatedAnchor extends GeneratorYDCurve {
 
   /**
@@ -31,8 +29,11 @@ public class GeneratorCurveDiscountFactorInterpolatedAnchor extends GeneratorYDC
 
   /**
    * Constructor.
-   * @param nodeTimeCalculator Calculator of the node associated to instruments.
-   * @param interpolator The interpolator used for the curve.
+   * 
+   * @param nodeTimeCalculator
+   *          Calculator of the node associated to instruments.
+   * @param interpolator
+   *          The interpolator used for the curve.
    */
   public GeneratorCurveDiscountFactorInterpolatedAnchor(final InstrumentDerivativeVisitorAdapter<Object, Double> nodeTimeCalculator,
       final Interpolator1D interpolator) {
@@ -50,16 +51,6 @@ public class GeneratorCurveDiscountFactorInterpolatedAnchor extends GeneratorYDC
     throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveYieldInterpolated");
   }
 
-  /**
-   * {@inheritDoc}
-   * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
-   */
-  @Deprecated
-  @Override
-  public YieldAndDiscountCurve generateCurve(final String name, final YieldCurveBundle bundle, final double[] parameters) {
-    throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveYieldInterpolated");
-  }
-
   @Override
   public YieldAndDiscountCurve generateCurve(final String name, final MulticurveProviderInterface multicurve, final double[] parameters) {
     throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveYieldInterpolated");
@@ -67,7 +58,9 @@ public class GeneratorCurveDiscountFactorInterpolatedAnchor extends GeneratorYDC
 
   /**
    * The data passed should be one instrument for the anchor then one instrument for each of the nodes.
-   * @param data The array of instruments.
+   * 
+   * @param data
+   *          The array of instruments.
    * @return The final generator.
    */
   @Override

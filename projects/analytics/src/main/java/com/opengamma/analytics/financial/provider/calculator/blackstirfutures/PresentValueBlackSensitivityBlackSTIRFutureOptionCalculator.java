@@ -7,7 +7,9 @@ package com.opengamma.analytics.financial.provider.calculator.blackstirfutures;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureOptionMarginTransaction;
+import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureOptionPremiumTransaction;
 import com.opengamma.analytics.financial.interestrate.future.provider.InterestRateFutureOptionMarginTransactionBlackSmileMethod;
+import com.opengamma.analytics.financial.interestrate.future.provider.InterestRateFutureOptionPremiumTransactionBlackSmileMethod;
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackSTIRFuturesProviderInterface;
 import com.opengamma.analytics.util.amount.SurfaceValue;
 
@@ -15,7 +17,7 @@ import com.opengamma.analytics.util.amount.SurfaceValue;
  * Calculator of the present value as a multiple currency amount.
  */
 public final class PresentValueBlackSensitivityBlackSTIRFutureOptionCalculator
-extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, SurfaceValue> {
+    extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, SurfaceValue> {
 
   /**
    * The unique instance of the calculator.
@@ -37,17 +39,17 @@ extends InstrumentDerivativeVisitorAdapter<BlackSTIRFuturesProviderInterface, Su
   private PresentValueBlackSensitivityBlackSTIRFutureOptionCalculator() {
   }
 
-  /**
-   * Pricing methods.
-   */
-  private static final InterestRateFutureOptionMarginTransactionBlackSmileMethod METHOD_STIRFUT_MARGIN =
-      InterestRateFutureOptionMarginTransactionBlackSmileMethod.getInstance();
-
   // ----- Futures ------
 
   @Override
   public SurfaceValue visitInterestRateFutureOptionMarginTransaction(final InterestRateFutureOptionMarginTransaction futures,
       final BlackSTIRFuturesProviderInterface black) {
-    return METHOD_STIRFUT_MARGIN.presentValueBlackSensitivity(futures, black);
+    return InterestRateFutureOptionMarginTransactionBlackSmileMethod.getInstance().presentValueBlackSensitivity(futures, black);
+  }
+
+  @Override
+  public SurfaceValue visitInterestRateFutureOptionPremiumTransaction(final InterestRateFutureOptionPremiumTransaction futures,
+      final BlackSTIRFuturesProviderInterface black) {
+    return InterestRateFutureOptionPremiumTransactionBlackSmileMethod.getInstance().presentValueBlackSensitivity(futures, black);
   }
 }

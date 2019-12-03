@@ -67,8 +67,8 @@ public final class PresentValueSABRSensitivitySABRCapRightExtrapolationCalculato
   public PresentValueSABRSensitivityDataBundle visitGenericAnnuity(final Annuity<? extends Payment> annuity, final SABRCapProviderInterface sabr) {
     ArgumentChecker.notNull(annuity, "Annuity");
     PresentValueSABRSensitivityDataBundle pvss = visit(annuity.getNthPayment(0), sabr);
-    for (int loopp = 1; loopp < annuity.getNumberOfPayments(); loopp++) {
-      pvss = pvss.plus(visit(annuity.getNthPayment(loopp), sabr));
+    for (int i = 1; i < annuity.getNumberOfPayments(); i++) {
+      pvss = pvss.plus(visit(annuity.getNthPayment(i), sabr));
     }
     return pvss;
   }

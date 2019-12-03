@@ -17,7 +17,7 @@ import org.threeten.bp.Period;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Sets;
-import com.opengamma.financial.analytics.model.irfutureoption.FutureOptionUtils;
+import com.opengamma.financial.analytics.model.FutureOptionExpiries;
 import com.opengamma.financial.convention.expirycalc.BondFutureOptionExpiryCalculator;
 import com.opengamma.financial.convention.expirycalc.FedFundFutureAndFutureOptionMonthlyExpiryCalculator;
 import com.opengamma.financial.convention.expirycalc.SoybeanFutureExpiryCalculator;
@@ -168,7 +168,7 @@ public class BloombergFutureUtils {
       LOG.debug("We recommended that you ask QR to test behaviour of IRFutureOption Volatility Surface's Expiries for prefix {}", futurePrefix);
       // The reason being that we have hard coded the behaviour of 6 consecutive months, then quarterly thereafter..
     }
-    final LocalDate expiry = FutureOptionUtils.getApproximateIRFutureOptionWithSerialOptionsExpiry(nthFuture, curveDate);
+    final LocalDate expiry = FutureOptionExpiries.IR.getFutureOptionExpiry(nthFuture, curveDate);
     return getMonthYearCode(expiry, expiry.minusYears(10));
   }
 
@@ -240,7 +240,7 @@ public class BloombergFutureUtils {
    */
   public static final String getQuarterlyExpiryMonthYearCode(final int nthQuarter, final LocalDate valuationDate, final LocalDate twoDigitYearDate) {
     Validate.isTrue(nthQuarter > 0, "nthFuture must be greater than 0.");
-    final LocalDate expiry = FutureOptionUtils.getApproximateIRFutureQuarterlyExpiry(nthQuarter, valuationDate);
+    final LocalDate expiry = FutureOptionExpiries.IR.getQuarterlyExpiry(nthQuarter, valuationDate);
     return getMonthYearCode(expiry, twoDigitYearDate);
   }
 
@@ -257,7 +257,7 @@ public class BloombergFutureUtils {
    */
   public static final String getMonthlyExpiryMonthYearCode(final int nthMonth, final LocalDate valuationDate, final LocalDate twoDigitYearDate) {
     Validate.isTrue(nthMonth > 0, "nthFuture must be greater than 0.");
-    final LocalDate expiry = FutureOptionUtils.getIRFutureMonthlyExpiry(nthMonth, valuationDate);
+    final LocalDate expiry = FutureOptionExpiries.IR.getMonthlyExpiry(nthMonth, valuationDate);
     return getMonthYearCode(expiry, twoDigitYearDate);
   }
 

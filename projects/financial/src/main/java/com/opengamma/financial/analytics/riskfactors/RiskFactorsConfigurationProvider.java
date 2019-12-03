@@ -10,6 +10,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Provides configuration to a {@link RiskFactorsGatherer}.
  */
+@Deprecated
 public interface RiskFactorsConfigurationProvider {
 
   /**

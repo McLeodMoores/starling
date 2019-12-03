@@ -19,6 +19,8 @@ import com.opengamma.component.ComponentServer;
 import com.opengamma.component.rest.RemoteComponentServer;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.config.impl.RemoteConfigSource;
+import com.opengamma.core.convention.ConventionSource;
+import com.opengamma.core.convention.impl.RemoteConventionSource;
 import com.opengamma.core.exchange.ExchangeSource;
 import com.opengamma.core.exchange.impl.RemoteExchangeSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
@@ -390,6 +392,38 @@ public class RemoteComponentFactory {
   /**
    * @param name
    *          the classifier name of the object you want to retrieve
+   * @return the interface requested, or null if not present
+   */
+  public ConventionSource getConventionSource(final String name) {
+    final URI uri = getComponentServer().getComponentInfo(ConventionSource.class, name).getUri();
+    return new RemoteConventionSource(uri);
+  }
+
+  /**
+   * @param preferredClassifiers
+   *          a list of names of classifiers in order of preference (most preferred first), or null
+   * @return the best matching interface available
+   */
+  public ConventionSource getConventionSource(final List<String> preferredClassifiers) {
+    final URI uri = getTopLevelComponent(preferredClassifiers, ConventionSource.class).getUri();
+    return new RemoteConventionSource(uri);
+  }
+
+  /**
+   * @return a map of classifier names to requested interface type
+   */
+  public Map<String, ConventionSource> getConventionSources() {
+    final Map<String, ConventionSource> result = new LinkedHashMap<>();
+    for (final ComponentInfo info : getComponentServer().getComponentInfos(LegalEntitySource.class)) {
+      result.put(info.getClassifier(), new RemoteConventionSource(info.getUri()));
+    }
+    return result;
+  }
+  // -------------------------------------------------------------------------
+
+  /**
+   * @param name
+   *          the classifier name of the object you want to retrieve >>>>>>> master
    * @return the interface requested, or null if not present
    */
   public ConventionMaster getConventionMaster(final String name) {

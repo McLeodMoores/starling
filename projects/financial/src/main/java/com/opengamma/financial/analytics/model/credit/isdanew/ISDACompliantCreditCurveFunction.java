@@ -35,6 +35,7 @@ import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.change.DummyChangeManager;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.holiday.impl.WeekendHolidaySource;
+import com.opengamma.core.legalentity.LegalEntitySource;
 import com.opengamma.core.region.Region;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.value.MarketDataRequirementNames;
@@ -50,7 +51,8 @@ import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.financial.analytics.conversion.CreditDefaultSwapSecurityConverterDeprecated;
+import com.opengamma.financial.OpenGammaCompilationContext;
+import com.opengamma.financial.analytics.conversion.CreditDefaultSwapSecurityConverter;
 import com.opengamma.financial.analytics.model.cds.ISDAFunctionConstants;
 import com.opengamma.financial.analytics.model.credit.CreditSecurityToRecoveryRateVisitor;
 import com.opengamma.financial.analytics.model.credit.IMMDateGenerator;
@@ -80,6 +82,7 @@ public class ISDACompliantCreditCurveFunction extends AbstractFunction.NonCompil
   private static final MarketQuoteConverter POINTS_UP_FRONT_CONVERTER = new MarketQuoteConverter();
   private HolidaySource _holidaySource;
   private RegionSource _regionSource;
+  private LegalEntitySource _legalEntitySource;
 
   public static CreditCurveIdentifier getSpreadCurveIdentifier(final CreditDefaultSwapSecurity cds) {
     return getCreditCurveIdentifier(cds, "");
@@ -134,6 +137,7 @@ public class ISDACompliantCreditCurveFunction extends AbstractFunction.NonCompil
     // using hardcoded region and calendar for now
     _holidaySource = new WeekendHolidaySource(); // OpenGammaCompilationContext.getHolidaySource(context);
     _regionSource = new TestRegionSource(); // OpenGammaCompilationContext.getRegionSource(context);
+    _legalEntitySource = OpenGammaCompilationContext.getLegalEntitySource(context);
   }
 
   @Override
@@ -153,8 +157,8 @@ public class ISDACompliantCreditCurveFunction extends AbstractFunction.NonCompil
     }
     final double recoveryRate = (Double) recoveryRateObject;
 
-    final CreditDefaultSwapSecurityConverterDeprecated converter = new CreditDefaultSwapSecurityConverterDeprecated(_holidaySource, _regionSource,
-        recoveryRate);
+    final CreditDefaultSwapSecurityConverter converter = new CreditDefaultSwapSecurityConverter(_holidaySource, _regionSource, _legalEntitySource,
+        recoveryRate, now);
     final StandardCDSQuotingConvention quoteConvention = StandardCDSQuotingConvention
         .parse(requirement.getConstraint(ISDAFunctionConstants.CDS_QUOTE_CONVENTION));
     final NodalTenorDoubleCurve spreadCurve = (NodalTenorDoubleCurve) inputs.getValue(ValueRequirementNames.BUCKETED_SPREADS);

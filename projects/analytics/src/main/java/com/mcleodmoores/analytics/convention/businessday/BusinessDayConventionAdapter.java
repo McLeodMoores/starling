@@ -42,6 +42,7 @@ public final class BusinessDayConventionAdapter implements BusinessDayConvention
     return _convention.getTemporalAdjuster(workingDayCalendar);
   }
 
+  @Deprecated
   @Override
   public String getConventionName() {
     return _convention.getConventionName();

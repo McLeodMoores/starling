@@ -13,8 +13,10 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.position.Counterparty;
 import com.opengamma.core.value.MarketDataRequirementNames;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
+import com.opengamma.financial.convention.IborIndexConvention;
+import com.opengamma.financial.convention.SwapFixedLegConvention;
+import com.opengamma.financial.convention.VanillaIborLegConvention;
+import com.opengamma.financial.convention.frequency.PeriodFrequency;
 import com.opengamma.financial.security.swap.FixedInterestRateLeg;
 import com.opengamma.financial.security.swap.FloatingInterestRateLeg;
 import com.opengamma.financial.security.swap.FloatingRateType;
@@ -48,12 +50,12 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
   /**
    * Return the time series identifier.
    *
-   * @param liborConvention
-   *          the convention bundle, not null
+   * @param iborConvention
+   *          the convention, not null
    * @return the time series identifier
    */
-  protected ExternalId getTimeSeriesIdentifier(final ConventionBundle liborConvention) {
-    return liborConvention.getIdentifiers().getExternalId(getPreferredScheme());
+  protected ExternalId getTimeSeriesIdentifier(final IborIndexConvention iborConvention) {
+    return iborConvention.getExternalIdBundle().getExternalId(getPreferredScheme());
   }
 
   private ExternalId getSwapRateFor(final Currency ccy, final LocalDate tradeDate, final Tenor maturityTenor, final Tenor forwardTenor) {
@@ -67,21 +69,23 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
     final ZonedDateTime tradeDate = previousWorkingDay(now.minusDays(getRandom(getDaysTrading())), ccy);
     final Tenor forward = getRandom(FORWARDS);
     final ZonedDateTime forwardDate = nextWorkingDay(now.plus(forward.getPeriod()), ccy);
-    final ConventionBundle swapConvention = getConventionBundleSource()
-        .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
-    if (swapConvention == null) {
+    final SwapFixedLegConvention fixedLegConvention = getConventionSource().getSingle(ExternalId.of(Currency.OBJECT_SCHEME, ccy.getCode()),
+        SwapFixedLegConvention.class);
+    final VanillaIborLegConvention iborLegConvention = getConventionSource().getSingle(ExternalId.of(Currency.OBJECT_SCHEME, ccy.getCode()),
+        VanillaIborLegConvention.class);
+    if (iborLegConvention == null) {
       LOGGER.error("Couldn't get swap convention for {}", ccy.getCode());
       return null;
     }
     final Tenor maturity = getRandom(TENORS);
     // get the convention of the identifier of the initial rate
-    final ConventionBundle liborConvention = getConventionBundleSource().getConventionBundle(swapConvention.getSwapFloatingLegInitialRate());
-    if (liborConvention == null) {
-      LOGGER.error("Couldn't get libor convention for {}", swapConvention.getSwapFloatingLegInitialRate());
+    final IborIndexConvention iborConvention = getConventionSource().getSingle(iborLegConvention.getIborIndexConvention(), IborIndexConvention.class);
+    if (iborConvention == null) {
+      LOGGER.error("Couldn't get ibor convention for {}", iborLegConvention.getIborIndexConvention());
       return null;
     }
     // look up the rate timeseries identifier out of the bundle
-    final ExternalId tsIdentifier = getTimeSeriesIdentifier(liborConvention);
+    final ExternalId tsIdentifier = getTimeSeriesIdentifier(iborConvention);
     // look up the value on our chosen trade date
     final HistoricalTimeSeries initialRateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE,
         tsIdentifier.toBundle(), null, tradeDate.toLocalDate(), true, tradeDate.toLocalDate(), true);
@@ -106,15 +110,14 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
     final Double notional = (double) getRandom(100000) * 1000;
     final ZonedDateTime maturityDate = forwardDate.plus(maturity.getPeriod());
     final String counterparty = "CParty";
-    final SwapLeg fixedLeg = new FixedInterestRateLeg(swapConvention.getSwapFixedLegDayCount(), swapConvention.getSwapFixedLegFrequency(),
-        swapConvention.getSwapFixedLegRegion(), swapConvention.getSwapFixedLegBusinessDayConvention(), new InterestRateNotional(ccy, notional), false,
-        fixedRate);
-    final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(swapConvention.getSwapFloatingLegDayCount(),
-        swapConvention.getSwapFloatingLegFrequency(), swapConvention.getSwapFloatingLegRegion(), swapConvention.getSwapFloatingLegBusinessDayConvention(),
+    final SwapLeg fixedLeg = new FixedInterestRateLeg(fixedLegConvention.getDayCount(), PeriodFrequency.of(fixedLegConvention.getPaymentTenor().getPeriod()),
+        fixedLegConvention.getRegionCalendar(), fixedLegConvention.getBusinessDayConvention(), new InterestRateNotional(ccy, notional), false, fixedRate);
+    final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(iborConvention.getDayCount(),
+        PeriodFrequency.of(iborLegConvention.getResetTenor().getPeriod()), iborConvention.getRegionCalendar(), iborConvention.getBusinessDayConvention(),
         new InterestRateNotional(ccy, notional), false, tsIdentifier, FloatingRateType.IBOR);
     floatingLeg.setInitialFloatingRate(initialRate);
     final String fixedLegDescription = RATE_FORMATTER.format(fixedRate);
-    final String floatingLegDescription = swapConvention.getSwapFloatingLegInitialRate().getValue();
+    final String floatingLegDescription = tsIdentifier.getValue();
     final boolean isPayFixed = getRandom().nextBoolean();
     SwapLeg payLeg;
     String payLegDescription;

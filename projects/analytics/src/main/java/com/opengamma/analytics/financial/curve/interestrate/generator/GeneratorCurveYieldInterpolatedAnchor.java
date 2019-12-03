@@ -7,20 +7,17 @@ package com.opengamma.analytics.financial.curve.interestrate.generator;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Store the details and generate the required curve. The curve is interpolated on the rate (continuously compounded).
- * One extra node with value zero is added at the mid point between the first and second point. This extra anchor is
- * required when two translation invariant curves descriptions are added in a spread curve (two translations would
- * create a singular system).
- * Only the lastTimeCalculator is stored. The node are computed from the instruments.
+ * Store the details and generate the required curve. The curve is interpolated on the rate (continuously compounded). One extra node with
+ * value zero is added at the mid point between the first and second point. This extra anchor is required when two translation invariant
+ * curves descriptions are added in a spread curve (two translations would create a singular system). Only the lastTimeCalculator is stored.
+ * The node are computed from the instruments.
  */
-@SuppressWarnings("deprecation")
 public class GeneratorCurveYieldInterpolatedAnchor extends GeneratorYDCurve {
   // TODO Change to have the anchor point flexible.
 
@@ -35,10 +32,14 @@ public class GeneratorCurveYieldInterpolatedAnchor extends GeneratorYDCurve {
 
   /**
    * Constructor.
-   * @param nodeTimeCalculator Calculator of the node associated to instruments.
-   * @param interpolator The interpolator used for the curve.
+   * 
+   * @param nodeTimeCalculator
+   *          Calculator of the node associated to instruments.
+   * @param interpolator
+   *          The interpolator used for the curve.
    */
-  public GeneratorCurveYieldInterpolatedAnchor(final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator, final Interpolator1D interpolator) {
+  public GeneratorCurveYieldInterpolatedAnchor(final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator,
+      final Interpolator1D interpolator) {
     _nodeTimeCalculator = nodeTimeCalculator;
     _interpolator = interpolator;
   }
@@ -53,16 +54,6 @@ public class GeneratorCurveYieldInterpolatedAnchor extends GeneratorYDCurve {
     throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveYieldInterpolatedAnchor");
   }
 
-  /**
-   * {@inheritDoc}
-   * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
-   */
-  @Deprecated
-  @Override
-  public YieldAndDiscountCurve generateCurve(final String name, final YieldCurveBundle bundle, final double[] parameters) {
-    throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveYieldInterpolatedAnchor");
-  }
-
   @Override
   public YieldAndDiscountCurve generateCurve(final String name, final MulticurveProviderInterface multicurve, final double[] parameters) {
     throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveYieldInterpolatedAnchor");
@@ -70,7 +61,9 @@ public class GeneratorCurveYieldInterpolatedAnchor extends GeneratorYDCurve {
 
   /**
    * The data passed should be one instrument for the anchor then one instrument for each of the nodes.
-   * @param data The array of instruments.
+   * 
+   * @param data
+   *          The array of instruments.
    * @return The final generator.
    */
   @Override

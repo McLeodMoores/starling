@@ -5,29 +5,31 @@
  */
 package com.opengamma.analytics.financial.interestrate.capletstripping;
 
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository;
 import com.opengamma.analytics.financial.model.volatility.SimpleOptionData;
 import com.opengamma.analytics.financial.model.volatility.VolatilityModel1D;
 import com.opengamma.analytics.financial.model.volatility.VolatilityTermStructure;
+import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 
 /**
- * @deprecated {@link YieldCurveBundle} is deprecated
  */
-@Deprecated
 public class CapFloorPricer {
 
   private final SimpleOptionData[] _caplets;
   private final int _n;
 
   /**
-   * Decomposes a cap (floor) down to relevant information about its caplets (floorlets), i.e. the forward (ibor) values, the fixing times and
-   * the discount factors. Each caplet (floorlet), and hence the whole cap (floor) can then be priced by suppling a VolatilityModel1D
-   * (which gives a Black vol for a particular forward/strike/expiry) or a  VolatilityTermStructure (which gives the vol simply as a function of expiry)
-   * @param cap a cap or floor
-   * @param ycb The relevant yield curves
+   * Decomposes a cap (floor) down to relevant information about its caplets (floorlets), i.e. the forward (ibor) values, the fixing times
+   * and the discount factors. Each caplet (floorlet), and hence the whole cap (floor) can then be priced by suppling a VolatilityModel1D
+   * (which gives a Black vol for a particular forward/strike/expiry) or a VolatilityTermStructure (which gives the vol simply as a function
+   * of expiry)
+   *
+   * @param cap
+   *          a cap or floor
+   * @param ycb
+   *          The relevant yield curves
    */
-  public CapFloorPricer(final CapFloor cap, final YieldCurveBundle ycb) {
+  public CapFloorPricer(final CapFloor cap, final MulticurveProviderDiscount ycb) {
     _caplets = CapFloorDecomposer.toOptions(cap, ycb);
     _n = _caplets.length;
   }
@@ -41,9 +43,11 @@ public class CapFloorPricer {
   }
 
   /**
-   * Price a cap (floor) with a VolatilityModel1D. This allows the same cap to be prices with different models (different models include different
-   * parameters for the same model), with repeating calculations (e.g. as part of a caplet stripping routine)
-   * @param volModel VolatilityModel1D  which gives a Black vol for a particular forward/strike/expiry
+   * Price a cap (floor) with a VolatilityModel1D. This allows the same cap to be prices with different models (different models include
+   * different parameters for the same model), with repeating calculations (e.g. as part of a caplet stripping routine)
+   *
+   * @param volModel
+   *          VolatilityModel1D which gives a Black vol for a particular forward/strike/expiry
    * @return The cap (floor) price
    */
   public double price(final VolatilityModel1D volModel) {
@@ -98,6 +102,7 @@ public class CapFloorPricer {
 
   /**
    * Gets the fwds.
+   *
    * @return the fwds
    */
   protected double[] getForwards() {
@@ -122,6 +127,7 @@ public class CapFloorPricer {
 
   /**
    * Gets the t.
+   *
    * @return the t
    */
   protected double[] getExpiries() {
@@ -134,6 +140,7 @@ public class CapFloorPricer {
 
   /**
    * Gets the df.
+   *
    * @return the df
    */
   protected double[] getDiscountFactors() {
@@ -146,6 +153,7 @@ public class CapFloorPricer {
 
   /**
    * Gets the k.
+   *
    * @return the k
    */
   protected double getStrike() {
@@ -154,6 +162,7 @@ public class CapFloorPricer {
 
   /**
    * Gets the n.
+   *
    * @return the n
    */
   protected int getNumberCaplets() {

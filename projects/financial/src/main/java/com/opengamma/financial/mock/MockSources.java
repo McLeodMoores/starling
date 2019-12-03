@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
@@ -11,10 +11,6 @@ import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.financial.OpenGammaExecutionContext;
-import com.opengamma.financial.convention.ConventionBundleMaster;
-import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.DefaultConventionBundleSource;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.master.holiday.HolidayMaster;
 import com.opengamma.master.holiday.impl.InMemoryHolidayMaster;
 import com.opengamma.master.holiday.impl.InMemoryHolidayMasterPopulator;
@@ -36,7 +32,6 @@ public class MockSources {
     final MockSources mock = new MockSources();
     mock.setRegionSource(REGION_RESOURCE, scheme);
     mock.setHolidaySource(HOLIDAY_RESOURCE, scheme);
-    mock.setConventionBundleSource();
     return mock.mock();
   }
 
@@ -60,10 +55,4 @@ public class MockSources {
     // could add master also
   }
 
-  public void setConventionBundleSource() {
-    final ConventionBundleMaster conventionMaster = new InMemoryConventionBundleMaster();
-    final ConventionBundleSource conventionSource = new DefaultConventionBundleSource(conventionMaster);
-    OpenGammaExecutionContext.setConventionBundleSource(_context, conventionSource);
-    // could add master also
-  }
 }

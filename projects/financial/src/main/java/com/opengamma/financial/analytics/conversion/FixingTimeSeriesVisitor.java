@@ -10,14 +10,14 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.financial.analytics.fixedincome.InterestRateInstrumentType;
 import com.opengamma.financial.analytics.timeseries.DateConstraint;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunctionUtils;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.ConventionBundleSource;
+import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
 import com.opengamma.financial.security.swap.FixedInterestRateLeg;
 import com.opengamma.financial.security.swap.FloatingInterestRateLeg;
@@ -39,11 +39,11 @@ public class FixingTimeSeriesVisitor extends FinancialSecurityVisitorAdapter<Val
 
   // TODO a lot of this code is repeated in FixedIncomeConverterDataProvider - that class should use this one
 
-  private final ConventionBundleSource _conventionSource;
+  private final ConventionSource _conventionSource;
   private final HistoricalTimeSeriesResolver _resolver;
   private final DateConstraint _now;
 
-  public FixingTimeSeriesVisitor(final ConventionBundleSource conventionSource, final HistoricalTimeSeriesResolver resolver, final DateConstraint now) {
+  public FixingTimeSeriesVisitor(final ConventionSource conventionSource, final HistoricalTimeSeriesResolver resolver, final DateConstraint now) {
     _conventionSource = conventionSource;
     _resolver = resolver;
     _now = now;
@@ -96,10 +96,7 @@ public class FixingTimeSeriesVisitor extends FinancialSecurityVisitorAdapter<Val
   }
 
   private ExternalIdBundle getIndexIdBundle(final ExternalId indexId) {
-    final ConventionBundle indexConvention = _conventionSource.getConventionBundle(indexId);
-    if (indexConvention == null) {
-      throw new OpenGammaRuntimeException("No conventions found for floating reference rate " + indexId);
-    }
-    return indexConvention.getIdentifiers();
+    final IborIndexConvention indexConvention = _conventionSource.getSingle(indexId, IborIndexConvention.class);
+    return indexConvention.getExternalIdBundle();
   }
 }

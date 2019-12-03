@@ -28,7 +28,6 @@ import com.opengamma.timeseries.DoubleTimeSeries;
  * Uses the risk factor values to create the covariance matrix.
  */
 public class RiskFactorCovarianceMatrixFunction extends SampledCovarianceMatrixFunction {
-
   // FunctionDefinition
 
   /**

@@ -24,16 +24,25 @@ public class CouponFixedTest {
   private static final Currency CUR = Currency.EUR;
   private static final CouponFixed PAYMENT = new CouponFixed(CUR, PAYMENT_TIME, YEAR_FRACTION, COUPON);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativePaymentTime() {
     new CouponFixed(CUR, -1, YEAR_FRACTION, COUPON);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativeYearFraction() {
     new CouponFixed(CUR, PAYMENT_TIME, -0.25, COUPON);
   }
 
+  /**
+   *
+   */
   @Test
   public void testWithNotional() {
     final double notional = 1000000;
@@ -42,6 +51,9 @@ public class CouponFixedTest {
     assertEquals(expected, coupon.withNotional(notional + 100));
   }
 
+  /**
+   *
+   */
   @Test
   public void testWithRate() {
     final double notional = 10000;
@@ -51,6 +63,9 @@ public class CouponFixedTest {
     assertEquals(expected, coupon.withRate(rate));
   }
 
+  /**
+   *
+   */
   @Test
   public void testWithRateShifted() {
     final double notional = 10000;
@@ -61,6 +76,9 @@ public class CouponFixedTest {
     assertEquals(expected, coupon.withRateShifted(spread));
   }
 
+  /**
+   *
+   */
   @Test
   public void testWithUnitCoupon() {
     final double notional = 1000000;
@@ -69,6 +87,9 @@ public class CouponFixedTest {
     assertEquals(expected, coupon.withUnitCoupon());
   }
 
+  /**
+   *
+   */
   @Test
   public void testHashCodeAndEquals() {
     CouponFixed other = new CouponFixed(CUR, PAYMENT_TIME, YEAR_FRACTION, COUPON);
@@ -84,6 +105,9 @@ public class CouponFixedTest {
     assertFalse(other.equals(PAYMENT));
   }
 
+  /**
+   *
+   */
   @Test
   public void testGetters() {
     assertEquals(PAYMENT.getPaymentTime(), PAYMENT_TIME, 0);

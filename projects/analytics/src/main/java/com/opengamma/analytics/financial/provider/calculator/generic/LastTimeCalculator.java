@@ -86,6 +86,9 @@ public class LastTimeCalculator extends InstrumentDerivativeVisitorAdapter<Objec
     return CALCULATOR;
   }
 
+  /**
+   *
+   */
   protected LastTimeCalculator() {
   }
 
@@ -162,7 +165,7 @@ public class LastTimeCalculator extends InstrumentDerivativeVisitorAdapter<Objec
 
   @Override
   public Double visitCouponIborCompoundingFlatSpread(final CouponIborCompoundingFlatSpread payment) {
-    return Math.max(payment.getFixingSubperiodsEndTimes()[payment.getFixingSubperiodsEndTimes().length - 1], payment.getPaymentTime());
+    return Math.max(payment.getFixingPeriodEndTimes()[payment.getFixingPeriodEndTimes().length - 1], payment.getPaymentTime());
   }
 
   @Override
@@ -243,7 +246,7 @@ public class LastTimeCalculator extends InstrumentDerivativeVisitorAdapter<Objec
     return deposit.getEndTime();
   }
 
-  // -----     Bond     -----
+  // ----- Bond -----
 
   @Override
   public Double visitBondFixedSecurity(final BondFixedSecurity bond) {
@@ -265,14 +268,14 @@ public class LastTimeCalculator extends InstrumentDerivativeVisitorAdapter<Objec
     return bond.getBondStandard().accept(this);
   }
 
-  // -----     Bond     -----
+  // ----- Bond -----
 
   @Override
   public Double visitBillTransaction(final BillTransaction bill) {
     return bill.getBillStandard().getEndTime();
   }
 
-  // -----     Forex     -----
+  // ----- Forex -----
 
   @Override
   public Double visitForexSwap(final ForexSwap fx) {
@@ -344,7 +347,7 @@ public class LastTimeCalculator extends InstrumentDerivativeVisitorAdapter<Objec
     return option.getExpiry();
   }
 
-  // -----     Inflation     -----
+  // ----- Inflation -----
 
   @Override
   public Double visitCouponInflationZeroCouponMonthly(final CouponInflationZeroCouponMonthly coupon) {
@@ -376,7 +379,7 @@ public class LastTimeCalculator extends InstrumentDerivativeVisitorAdapter<Objec
     return coupon.getPaymentTime();
   }
 
-  //-----     Commodity     -----
+  // ----- Commodity -----
 
   @Override
   public Double visitAgricultureFutureSecurity(final AgricultureFutureSecurity future) {

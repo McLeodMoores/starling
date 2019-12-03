@@ -80,6 +80,8 @@ import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
 import com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues;
 import com.opengamma.financial.analytics.model.curve.IssuerProviderDiscountingFunction;
 import com.opengamma.financial.analytics.model.discounting.DiscountingYCNSFunction;
+import com.opengamma.financial.analytics.model.var.EmpiricalHistoricalVaRFunction;
+import com.opengamma.financial.analytics.model.var.NormalHistoricalVaRFunction;
 import com.opengamma.financial.currency.CurrencyConversionFunction;
 import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
@@ -111,7 +113,8 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   /** A list of currencies. */
   public static final Currency[] SWAP_CURRENCIES = new Currency[] { Currency.USD, Currency.GBP, Currency.EUR, Currency.JPY, Currency.CHF };
   /** A list of currency pairs. */
-  public static final UnorderedCurrencyPair[] CURRENCY_PAIRS = new UnorderedCurrencyPair[] { UnorderedCurrencyPair.of(Currency.USD, Currency.EUR),
+  public static final UnorderedCurrencyPair[] CURRENCY_PAIRS = new UnorderedCurrencyPair[] {
+      UnorderedCurrencyPair.of(Currency.USD, Currency.EUR),
       UnorderedCurrencyPair.of(Currency.USD, Currency.CHF), UnorderedCurrencyPair.of(Currency.USD, Currency.AUD),
       UnorderedCurrencyPair.of(Currency.USD, Currency.GBP), UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR) };
   /** A list of currencies. */
@@ -182,7 +185,8 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     final String[] valueRequirementNames = new String[] { CAPM_BETA, SHARPE_RATIO };
     addValueRequirements(defaultCalc, EquitySecurity.SECURITY_TYPE, valueRequirementNames);
     defaultCalc.addPortfolioRequirement(EquitySecurity.SECURITY_TYPE, PNL, ValueProperties.builder().with(CURRENCY, "USD").get());
-    defaultCalc.addPortfolioRequirement(EquitySecurity.SECURITY_TYPE, HISTORICAL_VAR, ValueProperties.builder().with(CURRENCY, "USD").get());
+    defaultCalc.addPortfolioRequirement(EquitySecurity.SECURITY_TYPE, HISTORICAL_VAR, ValueProperties.builder().with(CURRENCY, "USD")
+        .with(NormalHistoricalVaRFunction.PROPERTY_VAR_DISTRIBUTION, EmpiricalHistoricalVaRFunction.EMPIRICAL_VAR).get());
     viewDefinition.addViewCalculationConfiguration(defaultCalc);
     return viewDefinition;
   }
@@ -213,8 +217,10 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, NOTIONAL, ValueProperties.none());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, calcProperties.compose(
-        ValueProperties.with(CurrencyConversionFunction.ORIGINAL_CURRENCY, "Default").withOptional(CurrencyConversionFunction.ORIGINAL_CURRENCY).get()));
-    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, calcProperties.compose(ValueProperties.with(CURRENCY, "USD").get()));
+        ValueProperties.with(CurrencyConversionFunction.ORIGINAL_CURRENCY, "Default")
+            .withOptional(CurrencyConversionFunction.ORIGINAL_CURRENCY).get()));
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
+        calcProperties.compose(ValueProperties.with(CURRENCY, "USD").get()));
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FIXED_CASH_FLOWS, calcProperties);
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FLOATING_CASH_FLOWS, calcProperties);
     viewDefinition.addViewCalculationConfiguration(calcConfig);
@@ -243,25 +249,35 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, calcProperties.copy().with(CURRENCY, "USD").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PAR_RATE, calcProperties.copy().get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "USD Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
+        calcProperties.copy().with(CURVE, "USD Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "USD 3M LIBOR").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
+        calcProperties.copy().with(CURVE, "USD 3M LIBOR").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "EUR Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "EUR").get());
+        calcProperties.copy().with(CURVE, "EUR Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "EUR").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "EUR 6M EURIBOR").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "EUR").get());
+        calcProperties.copy().with(CURVE, "EUR 6M EURIBOR").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "EUR").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "CHF Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "CHF").get());
+        calcProperties.copy().with(CURVE, "CHF Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "CHF").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "CHF 6M LIBOR").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "CHF").get());
+        calcProperties.copy().with(CURVE, "CHF 6M LIBOR").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "CHF").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "GBP Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "GBP").get());
+        calcProperties.copy().with(CURVE, "GBP Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "GBP").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "GBP 6M LIBOR").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "GBP").get());
+        calcProperties.copy().with(CURVE, "GBP 6M LIBOR").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "GBP").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "JPY Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "JPY").get());
+        calcProperties.copy().with(CURVE, "JPY Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "JPY").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "JPY 6M TIBOR").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "JPY").get());
+        calcProperties.copy().with(CURVE, "JPY 6M TIBOR").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "JPY").get());
     viewDefinition.addViewCalculationConfiguration(calcConfig);
     return viewDefinition;
   }
@@ -287,21 +303,29 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, calcProperties.copy().with(CURRENCY, "USD").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PV01,
-        calcProperties.copy().with(CURVE, "USD Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
+        calcProperties.copy().with(CURVE, "USD Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "USD Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
+        calcProperties.copy().with(CURVE, "USD Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PV01,
-        calcProperties.copy().with(CURVE, "EUR Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "EUR").get());
+        calcProperties.copy().with(CURVE, "EUR Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "EUR").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "EUR Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "EUR").get());
+        calcProperties.copy().with(CURVE, "EUR Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "EUR").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PV01,
-        calcProperties.copy().with(CURVE, "CHF Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "CHF").get());
+        calcProperties.copy().with(CURVE, "CHF Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "CHF").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "CHF Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "CHF").get());
+        calcProperties.copy().with(CURVE, "CHF Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "CHF").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PV01,
-        calcProperties.copy().with(CURVE, "GBP Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "GBP").get());
+        calcProperties.copy().with(CURVE, "GBP Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "GBP").get());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        calcProperties.copy().with(CURVE, "GBP Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "GBP").get());
+        calcProperties.copy().with(CURVE, "GBP Discounting").with(CURRENCY, "USD")
+            .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "GBP").get());
     viewDefinition.addViewCalculationConfiguration(calcConfig);
     return viewDefinition;
   }
@@ -335,14 +359,16 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     final Set<Currency> ccysAdded = new HashSet<>();
     for (final UnorderedCurrencyPair pair : CURRENCY_PAIRS) {
       final ComputationTargetSpecification target = ComputationTargetSpecification.of(pair.getUniqueId());
-      final ValueProperties surfaceProperties = ValueProperties.builder().with(SURFACE, "DEFAULT").with(PROPERTY_SURFACE_INSTRUMENT_TYPE, FOREX).get();
+      final ValueProperties surfaceProperties = ValueProperties.builder().with(SURFACE, "DEFAULT")
+          .with(PROPERTY_SURFACE_INSTRUMENT_TYPE, FOREX).get();
       calcConfig.addSpecificRequirement(new ValueRequirement(VOLATILITY_SURFACE_DATA, target, surfaceProperties));
       final ValueProperties currencyProperty = ValueProperties.builder().with(CURRENCY, "USD").get();
       calcConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, PRESENT_VALUE, currencyProperty);
       calcConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, FX_CURRENCY_EXPOSURE, ValueProperties.builder().get());
       if (!ccysAdded.contains(pair.getFirstCurrency())) {
         if (pair.getFirstCurrency().equals(Currency.USD)) {
-          final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, ExamplesFxImpliedCurveConfigsPopulator.USD_DEPOSIT_CURVE_NAME).get();
+          final ValueProperties curveProperties = ValueProperties.builder()
+              .with(CURVE, ExamplesFxImpliedCurveConfigsPopulator.USD_DEPOSIT_CURVE_NAME).get();
           calcConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, BUCKETED_PV01,
               curveProperties.copy().with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
           calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
@@ -358,7 +384,8 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
       }
       if (!ccysAdded.contains(pair.getSecondCurrency())) {
         if (pair.getSecondCurrency().equals(Currency.USD)) {
-          final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, ExamplesFxImpliedCurveConfigsPopulator.USD_DEPOSIT_CURVE_NAME).get();
+          final ValueProperties curveProperties = ValueProperties.builder()
+              .with(CURVE, ExamplesFxImpliedCurveConfigsPopulator.USD_DEPOSIT_CURVE_NAME).get();
           calcConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, BUCKETED_PV01,
               curveProperties.copy().with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
           calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
@@ -411,11 +438,13 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     final ViewCalculationConfiguration defaultCalculationConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     final ValueProperties currencyProperty = ValueProperties.builder().with(CURRENCY, "USD").get();
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, PRESENT_VALUE, currencyProperty);
-    defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, SECURITY_IMPLIED_VOLATILITY, ValueProperties.builder().get());
+    defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, SECURITY_IMPLIED_VOLATILITY,
+        ValueProperties.builder().get());
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, FORWARD_DELTA, ValueProperties.builder().get());
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, FORWARD_VEGA, ValueProperties.builder().get());
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, FORWARD_GAMMA, ValueProperties.builder().get());
-    defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, FORWARD_DRIFTLESS_THETA, ValueProperties.builder().get());
+    defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, FORWARD_DRIFTLESS_THETA,
+        ValueProperties.builder().get());
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VALUE_DELTA, currencyProperty);
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VALUE_GAMMA, currencyProperty);
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VALUE_VEGA, currencyProperty);
@@ -426,8 +455,8 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   }
 
   /**
-   * Creates a view definition for a portfolio of AUD swaps where the curve configuration generates the three yield curves (discounting, 3m forward and 6m
-   * forward) simultaneously. This view produces:
+   * Creates a view definition for a portfolio of AUD swaps where the curve configuration generates the three yield curves (discounting, 3m
+   * forward and 6m forward) simultaneously. This view produces:
    * <ul>
    * <li>{@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#PRESENT_VALUE}
    * <li>{@link com.opengamma.engine.value.ValueRequirementNamesValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
@@ -446,38 +475,50 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
     viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
-    final ValueProperties.Builder properties1 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_EXPOSURES, "AUD Swaps (1)");
+    final ValueProperties.Builder properties1 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_EXPOSURES,
+        "AUD Swaps (1)");
     final ViewCalculationConfiguration viewConfig1 = new ViewCalculationConfiguration(viewDefinition, "Simultaneous curve construction");
     viewConfig1.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, properties1.get());
     viewConfig1.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01, properties1.copy().with(CURVE, "AUD Discounting").get());
-    viewConfig1.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01, properties1.copy().with(CURVE, "AUD 3M BANK BILL").get());
-    viewConfig1.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01, properties1.copy().with(CURVE, "AUD 6M BANK BILL").get());
+    viewConfig1.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        properties1.copy().with(CURVE, "AUD 3M BANK BILL").get());
+    viewConfig1.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        properties1.copy().with(CURVE, "AUD 6M BANK BILL").get());
     viewConfig1.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, ValueProperties
-        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (1)").with(CURVE, "AUD Discounting").get()));
+        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (1)").with(CURVE, "AUD Discounting")
+        .get()));
     viewConfig1.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, ValueProperties
-        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (1)").with(CURVE, "AUD 3M BANK BILL").get()));
+        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (1)").with(CURVE, "AUD 3M BANK BILL")
+        .get()));
     viewConfig1.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, ValueProperties
-        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (1)").with(CURVE, "AUD 6M BANK BILL").get()));
+        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (1)").with(CURVE, "AUD 6M BANK BILL")
+        .get()));
     viewDefinition.addViewCalculationConfiguration(viewConfig1);
-    final ValueProperties.Builder properties2 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_EXPOSURES, "AUD Swaps (2)");
+    final ValueProperties.Builder properties2 = ValueProperties.builder().with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_EXPOSURES,
+        "AUD Swaps (2)");
     final ViewCalculationConfiguration viewConfig2 = new ViewCalculationConfiguration(viewDefinition, "Successive curve construction");
     viewConfig2.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, properties1.get());
     viewConfig2.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01, properties2.copy().with(CURVE, "AUD Discounting").get());
-    viewConfig2.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01, properties2.copy().with(CURVE, "AUD 3M BANK BILL").get());
-    viewConfig2.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01, properties2.copy().with(CURVE, "AUD 6M BANK BILL").get());
+    viewConfig2.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        properties2.copy().with(CURVE, "AUD 3M BANK BILL").get());
+    viewConfig2.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        properties2.copy().with(CURVE, "AUD 6M BANK BILL").get());
     viewConfig2.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, ValueProperties
-        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (2)").with(CURVE, "AUD Discounting").get()));
+        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (2)").with(CURVE, "AUD Discounting")
+        .get()));
     viewConfig2.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, ValueProperties
-        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (2)").with(CURVE, "AUD 3M BANK BILL").get()));
+        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (2)").with(CURVE, "AUD 3M BANK BILL")
+        .get()));
     viewConfig2.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, ValueProperties
-        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (2)").with(CURVE, "AUD 6M BANK BILL").get()));
+        .with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (2)").with(CURVE, "AUD 6M BANK BILL")
+        .get()));
     viewDefinition.addViewCalculationConfiguration(viewConfig2);
     return viewDefinition;
   }
 
   /**
-   * Creates a view definition for a portfolio of FX forwards with two column sets showing the results of calculations by discounting with yield curves implied
-   * from FX forwards and of using the FX forward quotes directly.
+   * Creates a view definition for a portfolio of FX forwards with two column sets showing the results of calculations by discounting with
+   * yield curves implied from FX forwards and of using the FX forward quotes directly.
    * <p>
    * This view produces:
    * <ul>
@@ -511,13 +552,15 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
       final String ccy = pair.getFirstCurrency().getCode();
       if (!ccysAdded.contains(pair.getFirstCurrency())) {
         if (pair.getFirstCurrency().equals(Currency.USD)) {
-          final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, ExamplesFxImpliedCurveConfigsPopulator.USD_DEPOSIT_CURVE_NAME)
+          final ValueProperties curveProperties = ValueProperties.builder()
+              .with(CURVE, ExamplesFxImpliedCurveConfigsPopulator.USD_DEPOSIT_CURVE_NAME)
               .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").with(CURRENCY, "USD").get();
           calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, BUCKETED_PV01, curveProperties);
           calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
           ccysAdded.add(pair.getFirstCurrency());
         } else {
-          final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, ExampleConfigUtils.generateFxImpliedCurveName(ccy)).get();
+          final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, ExampleConfigUtils.generateFxImpliedCurveName(ccy))
+              .get();
           calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, BUCKETED_PV01,
               curveProperties.copy().with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, ccy).with(CURRENCY, "USD").get());
           calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
@@ -526,13 +569,15 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
       }
       if (!ccysAdded.contains(pair.getSecondCurrency())) {
         if (pair.getSecondCurrency().equals(Currency.USD)) {
-          final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, ExamplesFxImpliedCurveConfigsPopulator.USD_DEPOSIT_CURVE_NAME)
+          final ValueProperties curveProperties = ValueProperties.builder()
+              .with(CURVE, ExamplesFxImpliedCurveConfigsPopulator.USD_DEPOSIT_CURVE_NAME)
               .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").with(CURRENCY, "USD").get();
           calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, BUCKETED_PV01, curveProperties);
           calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
           ccysAdded.add(pair.getFirstCurrency());
         } else {
-          final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, ExampleConfigUtils.generateFxImpliedCurveName(ccy)).get();
+          final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, ExampleConfigUtils.generateFxImpliedCurveName(ccy))
+              .get();
           calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, BUCKETED_PV01,
               curveProperties.copy().with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, ccy).with(CURRENCY, "USD").get());
           calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
@@ -545,8 +590,8 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   }
 
   /**
-   * Creates a view definition for a portfolio of FX forwards with two column sets showing the results of calculations by discounting with yield curves implied
-   * from FX forwards and of using the FX forward quotes directly.
+   * Creates a view definition for a portfolio of FX forwards with two column sets showing the results of calculations by discounting with
+   * yield curves implied from FX forwards and of using the FX forward quotes directly.
    * <p>
    * This view produces:
    * <ul>
@@ -570,10 +615,12 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    final ValueProperties calculationMethodProperty = ValueProperties.builder().with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, DISCOUNTING)
+    final ValueProperties calculationMethodProperty = ValueProperties.builder()
+        .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, DISCOUNTING)
         .get();
     calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, FX_PRESENT_VALUE, calculationMethodProperty);
-    calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE, calculationMethodProperty.copy().with(CURRENCY, "USD").get());
+    calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE,
+        calculationMethodProperty.copy().with(CURRENCY, "USD").get());
     calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, FX_FORWARD_DETAILS, calculationMethodProperty);
     viewDefinition.addViewCalculationConfiguration(calcConfig);
     return viewDefinition;
@@ -674,32 +721,32 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
             .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA").get()));
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE,
         ValueProperties
-          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
-          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+            .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, ValueRequirementNames.CLEAN_PRICE,
         ValueProperties
-          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
-          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+            .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, CREDIT_SPREAD,
         ValueProperties
-          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
-          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+            .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
     config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, HAZARD_RATE,
         ValueProperties
-          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
-          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+            .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
     config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, PRESENT_VALUE,
         ValueProperties
-        .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
-        .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+            .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
     config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, CLEAN_PRICE,
         ValueProperties
-          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
-          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+            .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
     config.addPortfolioRequirement(StandardCDSSecurity.SECURITY_TYPE, HAZARD_RATE,
         ValueProperties
-          .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
-          .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
+            .with(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY, "ISDA")
+            .withOptional(IssuerProviderDiscountingFunction.UNDERLYING_CURVE_TYPE_PROPERTY).get());
     definition.addViewCalculationConfiguration(config);
     return definition;
   }

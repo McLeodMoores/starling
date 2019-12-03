@@ -16,8 +16,8 @@ import com.opengamma.util.ClassMap;
 import com.opengamma.web.analytics.ValueTypes;
 
 /**
- * Formats analytics data for display in a grid in the user interface or for transmitting to the client as history. Data structures bigger than a single value
- * are encoded as JSON.
+ * Formats analytics data for display in a grid in the user interface or for transmitting to the client as history. Data structures bigger
+ * than a single value are encoded as JSON.
  */
 @SuppressWarnings("rawtypes")
 public class ResultsFormatter {
@@ -26,20 +26,20 @@ public class ResultsFormatter {
    * Enum indicating whether the currency code should be included in the output when values are formatted.
    */
   public enum CurrencyDisplay {
-  /**
-   * Include the currency code in formatted outputs (if one is available).
-   */
-  DISPLAY_CURRENCY,
-  /**
-   * Do not include the currency code in formatted outputs.
-   */
-  SUPPRESS_CURRENCY
+    /**
+     * Include the currency code in formatted outputs (if one is available).
+     */
+    DISPLAY_CURRENCY,
+    /**
+     * Do not include the currency code in formatted outputs.
+     */
+    SUPPRESS_CURRENCY
   }
 
   /**
-   * Marker value returned to indicate there is no formatted value available for a combination of value, formatter and inline key. This can happen for cells
-   * displaying inline values where the underlying value has no entry for the column's key. It is also possible for complex values (e.g. vectors) where the
-   * history is stored but can only be formatted when displayed inline as single values.
+   * Marker value returned to indicate there is no formatted value available for a combination of value, formatter and inline key. This can
+   * happen for cells displaying inline values where the underlying value has no entry for the column's key. It is also possible for complex
+   * values (e.g. vectors) where the history is stored but can only be formatted when displayed inline as single values.
    */
   public static final Object VALUE_UNAVAILABLE = new Object() {
 
@@ -74,25 +74,30 @@ public class ResultsFormatter {
     final ZonedDateTimeFormatter zonedDateTimeFormatter = new ZonedDateTimeFormatter();
     final LocalDateDoubleTimeSeriesFormatter localDateDoubleTimeSeriesFormatter = new LocalDateDoubleTimeSeriesFormatter();
     final RateFormatter rateFormatter = new RateFormatter();
-    final BasisPointsFormatter basisPointFormatter = new BasisPointsFormatter();
     addFormatters(doubleFormatter, bigDecimalFormatter, currencyAmountFormatter, zonedDateTimeFormatter, localDateDoubleTimeSeriesFormatter,
-        new YieldCurveFormatter(), new PriceIndexCurveFormatter(), new ISDACompliantYieldCurveFormatter(), new ISDACompliantCurveFormatter(),
+        new YieldCurveFormatter(), new PriceIndexCurveFormatter(), new ISDACompliantYieldCurveFormatter(),
+        new ISDACompliantCurveFormatter(),
         new NodalObjectsCurveFormatter(), // TODO is not a general formatter - used only for (Tenor, Double) curves
         new VolatilityCubeDataFormatter(), new VolatilitySurfaceDataFormatter(), new VolatilitySurfaceFormatter(),
-        new LabelledMatrix1DFormatter(doubleFormatter), new LocalDateLabelledMatrix1DFormatter(doubleFormatter), new LabelledMatrix2DFormatter(doubleFormatter),
-        new LabelledMatrix3DFormatter(), new TenorLabelledLocalDateDoubleTimeSeriesMatrix1DFormatter(localDateDoubleTimeSeriesFormatter), new TenorFormatter(),
-        new MultipleCurrencyAmountFormatter(doubleFormatter), new MissingInputFormatter(), new MissingOutputFormatter(), new ForwardCurveFormatter(),
-        new BlackVolatilitySurfaceMoneynessFormatter(), new LocalVolatilitySurfaceMoneynessFormatter(), new BucketedGreekResultCollectionFormatter(),
-        new DoublesCurveFormatter(), new HistoricalTimeSeriesFormatter(), new DoubleArrayFormatter(), new DoubleObjectArrayFormatter(), new FudgeMsgFormatter(),
-        new ListDoubleArrayFormatter(), new PresentValueForexBlackVolatilitySensitivityFormatter(), new SnapshotDataBundleFormatter(doubleFormatter),
-        new HistoricalTimeSeriesBundleFormatter(), new VolatilitySurfaceSpecificationFormatter(), new CurrencyPairsFormatter(), new NodeTargetFormatter(),
+        new LabelledMatrix1DFormatter(doubleFormatter), new LocalDateLabelledMatrix1DFormatter(doubleFormatter),
+        new LabelledMatrix2DFormatter(doubleFormatter),
+        new LabelledMatrix3DFormatter(), new TenorLabelledLocalDateDoubleTimeSeriesMatrix1DFormatter(localDateDoubleTimeSeriesFormatter),
+        new TenorFormatter(),
+        new MultipleCurrencyAmountFormatter(doubleFormatter), new MissingInputFormatter(), new MissingOutputFormatter(),
+        new ForwardCurveFormatter(),
+        new BlackVolatilitySurfaceMoneynessFormatter(), new LocalVolatilitySurfaceMoneynessFormatter(),
+        new BucketedGreekResultCollectionFormatter(),
+        new DoublesCurveFormatter(), new HistoricalTimeSeriesFormatter(), new DoubleArrayFormatter(), new DoubleObjectArrayFormatter(),
+        new FudgeMsgFormatter(),
+        new ListDoubleArrayFormatter(), new PresentValueForexBlackVolatilitySensitivityFormatter(),
+        new SnapshotDataBundleFormatter(doubleFormatter),
+        new HistoricalTimeSeriesBundleFormatter(), new VolatilitySurfaceSpecificationFormatter(), new CurrencyPairsFormatter(),
+        new NodeTargetFormatter(),
         new PositionTargetFormatter(), new FungibleTradeTargetFormatter(), new OtcTradeTargetFormatter(),
         new BlackVolatilitySurfaceMoneynessFcnBackedByGridFormatter(), new FrequencyFormatter(), new FXAmountsFormatter(doubleFormatter),
-        new ExpiryFormatter(zonedDateTimeFormatter), new ValuePropertiesFormatter(), new FixedPaymentMatrixFormatter(currencyAmountFormatter),
+        new ExpiryFormatter(zonedDateTimeFormatter), new ValuePropertiesFormatter(),
+        new FixedPaymentMatrixFormatter(currencyAmountFormatter),
         new FloatingPaymentMatrixFormatter(currencyAmountFormatter),
-        new FixedSwapLegDetailsFormatter(new CurrencyAmountFormatter(CurrencyDisplay.SUPPRESS_CURRENCY, bigDecimalFormatter), rateFormatter),
-        new FloatingSwapLegDetailsFormatter(new CurrencyAmountFormatter(CurrencyDisplay.SUPPRESS_CURRENCY, bigDecimalFormatter), rateFormatter,
-            basisPointFormatter),
         new FXMatrixFormatter(), new FxForwardDetailsFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
         new FxNdfDetailsFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
         new FixedCashFlowFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
@@ -155,7 +160,7 @@ public class ResultsFormatter {
 
   /**
    * Formats a value for conversion to JSON and sending to the client.
-   * 
+   *
    * @param value
    *          The value to be formatted, possibly null
    * @param valueSpec
@@ -163,10 +168,10 @@ public class ResultsFormatter {
    * @param format
    *          The type of formatting
    * @param inlineKey
-   *          The key for extracting a single value from the value, possibly null. This is used for values that can be displayed inline across multiple cells,
-   *          e.g. vectors of doubles that are displayed across multiple columns of double values.
-   * @return The formatted value. Can be null (indicating an error) or {@link #VALUE_UNAVAILABLE} if the object can't be formatted as requested or if the value
-   *         doesn't have an entry for the specified key.
+   *          The key for extracting a single value from the value, possibly null. This is used for values that can be displayed inline
+   *          across multiple cells, e.g. vectors of doubles that are displayed across multiple columns of double values.
+   * @return The formatted value. Can be null (indicating an error) or {@link #VALUE_UNAVAILABLE} if the object can't be formatted as
+   *         requested or if the value doesn't have an entry for the specified key.
    */
   @SuppressWarnings("unchecked")
   public Object format(final Object value, final ValueSpecification valueSpec, final TypeFormatter.Format format, final Object inlineKey) {
@@ -176,7 +181,7 @@ public class ResultsFormatter {
 
   /**
    * Returns the format type for a value type.
-   * 
+   *
    * @param type
    *          The value type
    * @return The formatter used for formatting the type
@@ -187,7 +192,7 @@ public class ResultsFormatter {
 
   /**
    * Returns the format type for a value.
-   * 
+   *
    * @param value
    *          The value, possibly null
    * @param valueSpec

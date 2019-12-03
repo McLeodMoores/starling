@@ -20,7 +20,6 @@ import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.Security;
 import com.opengamma.examples.bloomberg.generator.BloombergExamplePortfolioGeneratorTool;
-import com.opengamma.examples.bloomberg.loader.CurveNodeHistoricalDataLoader;
 import com.opengamma.examples.bloomberg.loader.DemoEquityOptionCollarPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleAUDSwapPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleCurveAndSurfaceDefinitionLoader;
@@ -32,7 +31,6 @@ import com.opengamma.examples.bloomberg.loader.ExampleFxForwardPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleTimeSeriesRatingLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleVanillaFxOptionPortfolioLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleViewsPopulator;
-import com.opengamma.examples.bloomberg.loader.FXSpotRateHistoricalDataLoader;
 import com.opengamma.financial.analytics.volatility.surface.FXOptionVolatilitySurfaceConfigPopulator;
 import com.opengamma.financial.convention.initializer.DefaultConventionMasterInitializer;
 import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
@@ -100,7 +98,6 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
     loadCurrencyConfiguration();
     loadCurveAndSurfaceDefinitions();
     loadCurveCalculationConfigurations();
-    loadCurveNodeHistoricalData();
     loadFutures();
     loadEquityOptionPortfolio();
     loadEquityPortfolio();
@@ -129,8 +126,8 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
   }
 
   /**
-   * Logging helper. All stages must go through this. When run as part of the Windows install, the logger is customized to recognize messages formatted in this
-   * fashion and route them towards the progress indicators.
+   * Logging helper. All stages must go through this. When run as part of the Windows install, the logger is customized to recognize
+   * messages formatted in this fashion and route them towards the progress indicators.
    */
   private static final class Log {
 
@@ -217,24 +214,6 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
     }
   }
 
-  @SuppressWarnings("synthetic-access")
-  private void loadCurveNodeHistoricalData() {
-    final Log log = new Log("Loading historical and futures data");
-    try {
-      final CurveNodeHistoricalDataLoader curveNodeHistoricalDataLoader = new CurveNodeHistoricalDataLoader();
-      final FXSpotRateHistoricalDataLoader fxSpotRateHistoricalDataLoader = new FXSpotRateHistoricalDataLoader();
-      curveNodeHistoricalDataLoader.run(getToolContext());
-      fxSpotRateHistoricalDataLoader.run(getToolContext());
-      _historicalDataToLoad.addAll(curveNodeHistoricalDataLoader.getCurveNodesExternalIds());
-      _historicalDataToLoad.addAll(curveNodeHistoricalDataLoader.getInitialRateExternalIds());
-      _historicalDataToLoad.addAll(fxSpotRateHistoricalDataLoader.getFXSpotRateExternalIds());
-      _futuresToLoad.addAll(curveNodeHistoricalDataLoader.getFuturesExternalIds());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
   private void loadVolSurfaceData() {
     final Log log = new Log("Creating volatility surface configurations");
     try {
@@ -273,11 +252,14 @@ public class ExampleDatabasePopulator extends AbstractTool<IntegrationToolContex
   private void loadHistoricalData() {
     final Log log = new Log("Loading historical reference data");
     try {
-      final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster(),
-          getToolContext().getHistoricalTimeSeriesProvider(), new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
+      final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(
+          getToolContext().getHistoricalTimeSeriesMaster(),
+          getToolContext().getHistoricalTimeSeriesProvider(),
+          new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
       for (final SecurityDocument doc : readEquitySecurities()) {
         final Security security = doc.getSecurity();
-        loader.loadTimeSeries(ImmutableSet.of(security.getExternalIdBundle().getExternalId(ExternalSchemes.BLOOMBERG_TICKER)), "UNKNOWN", "PX_LAST",
+        loader.loadTimeSeries(ImmutableSet.of(security.getExternalIdBundle().getExternalId(ExternalSchemes.BLOOMBERG_TICKER)), "UNKNOWN",
+            "PX_LAST",
             LocalDate.now().minusYears(1), LocalDate.now());
       }
       loader.loadTimeSeries(_historicalDataToLoad, "UNKNOWN", "PX_LAST", LocalDate.now().minusYears(1), LocalDate.now());

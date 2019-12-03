@@ -12,11 +12,11 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 
 /**
- * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument for which the present
- * value of the instrument is zero. The notion of "spread" will depend of each instrument.
+ * Compute the sensitivity of the spread to the curve; the spread is the number to be added to the market standard quote of the instrument
+ * for which the present value of the instrument is zero. The notion of "spread" will depend of each instrument.
  */
 public final class PresentValueBasisPointCurveSensitivityDiscountingCalculator
-extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MulticurveSensitivity> {
+    extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, MulticurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -47,5 +47,52 @@ extends InstrumentDerivativeVisitorAdapter<MulticurveProviderInterface, Multicur
   public MulticurveSensitivity visitFixedCouponSwap(final SwapFixedCoupon<?> swap, final MulticurveProviderInterface multicurve) {
     return METHOD_SWAP.presentValueBasisPointCurveSensitivity(swap, multicurve);
   }
+
+  // @Override
+  // public MulticurveSensitivity visitFixedPayment(final PaymentFixed payment, final MulticurveProviderInterface data) {
+  // return 0.0;
+  // }
+  //
+  // public MulticurveSensitivity visitCoupon(final Coupon coupon, final MulticurveProviderInterface curves) {
+  // Validate.notNull(curves);
+  // Validate.notNull(coupon);
+  // final YieldAndDiscountCurve fundingCurve = curves.getCurve(coupon.getFundingCurveName());
+  // return fundingCurve.getDiscountFactor(coupon.getPaymentTime()) * coupon.getPaymentYearFraction() * coupon.getNotional();
+  // }
+  //
+  // @Override
+  // public MulticurveSensitivity visitCouponFixed(final CouponFixed coupon, final MulticurveProviderInterface curves) {
+  // return visitCoupon(coupon, curves);
+  // }
+  //
+  // @Override
+  // public MulticurveSensitivity visitCouponIbor(final CouponIbor coupon, final MulticurveProviderInterface curves) {
+  // return visitCoupon(coupon, curves);
+  // }
+  //
+  // @Override
+  // public MulticurveSensitivity visitCouponIborSpread(final CouponIborSpread coupon, final MulticurveProviderInterface curves) {
+  // return visitCoupon(coupon, curves);
+  // }
+  //
+  // @Override
+  // public MulticurveSensitivity visitCouponIborCompounding(final CouponIborCompounding coupon, final MulticurveProviderInterface curves) {
+  // return visitCoupon(coupon, curves);
+  // }
+  //
+  // @Override
+  // public MulticurveSensitivity visitForwardRateAgreement(final ForwardRateAgreement fra, final MulticurveProviderInterface curves) {
+  // return ForwardRateAgreementDiscountingProviderMethod.getInstance().presentValueCouponSensitivity(fra, curves) * fra.getNotional();
+  // }
+  //
+  // // ----- Futures ------
+  //
+  // @Override
+  // public MulticurveSensitivity visitInterestRateFutureTransaction(final InterestRateFutureTransaction future,
+  // final MulticurveProviderInterface curves) {
+  // ArgumentChecker.notNull(future, "Futures");
+  // ArgumentChecker.notNull(curves, "Bundle");
+  // return future.getUnderlyingSecurity().getNotional() * future.getUnderlyingSecurity().getPaymentAccrualFactor() * future.getQuantity();
+  // }
 
 }

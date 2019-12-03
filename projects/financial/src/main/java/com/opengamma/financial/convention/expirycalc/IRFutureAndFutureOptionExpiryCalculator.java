@@ -10,7 +10,7 @@ import org.threeten.bp.LocalDate;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendarAdapter;
-import com.opengamma.financial.analytics.model.irfutureoption.FutureOptionUtils;
+import com.opengamma.financial.analytics.model.FutureOptionExpiries;
 import com.opengamma.financial.convention.calendar.Calendar;
 
 /**
@@ -53,12 +53,12 @@ public final class IRFutureAndFutureOptionExpiryCalculator implements ExchangeTr
 
   @Override
   public LocalDate getExpiryDate(final int n, final LocalDate today, final WorkingDayCalendar holidayCalendar) {
-    return FutureOptionUtils.getIRFutureOptionWithSerialOptionsExpiry(n, today, holidayCalendar);
+    return FutureOptionExpiries.IR.getExpiryDate(n, today, holidayCalendar);
   }
 
   @Override
   public LocalDate getExpiryMonth(final int n, final LocalDate today) {
-    return FutureOptionUtils.getIRFutureOptionWithSerialOptionsExpiry(n, today, WEEKDAYS);
+    return FutureOptionExpiries.IR.getExpiryDate(n, today, WEEKDAYS);
   }
 
   @Override

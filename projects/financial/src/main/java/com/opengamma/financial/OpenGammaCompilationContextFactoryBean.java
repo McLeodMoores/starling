@@ -18,7 +18,6 @@ import com.opengamma.engine.ComputationTargetResolver;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.PortfolioStructure;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.util.SingletonFactoryBean;
 
@@ -32,7 +31,6 @@ public class OpenGammaCompilationContextFactoryBean extends SingletonFactoryBean
   private PositionSource _positionSource;
   private RegionSource _regionSource;
   private LegalEntitySource _legalEntitySource;
-  private ConventionBundleSource _conventionBundleSource;
   private VolatilityCubeDefinitionSource _volatilityCubeDefinitionSource;
   private HolidaySource _holidaySource;
   private ExchangeSource _exchangeSource;
@@ -79,14 +77,6 @@ public class OpenGammaCompilationContextFactoryBean extends SingletonFactoryBean
 
   public RegionSource getRegionSource() {
     return _regionSource;
-  }
-
-  public void setConventionBundleSource(final ConventionBundleSource conventionBundleSource) {
-    _conventionBundleSource = conventionBundleSource;
-  }
-
-  public ConventionBundleSource getConventionBundleSource() {
-    return _conventionBundleSource;
   }
 
   public void setConventionSource(final ConventionSource conventionSource) {
@@ -151,9 +141,6 @@ public class OpenGammaCompilationContextFactoryBean extends SingletonFactoryBean
     }
     if (getRegionSource() != null) {
       OpenGammaCompilationContext.setRegionSource(context, getRegionSource());
-    }
-    if (getConventionBundleSource() != null) {
-      OpenGammaCompilationContext.setConventionBundleSource(context, getConventionBundleSource());
     }
     if (getConventionSource() != null) {
       OpenGammaCompilationContext.setConventionSource(context, getConventionSource());

@@ -11,9 +11,11 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.cash.DepositCounterpartDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDeposit;
-import com.opengamma.analytics.financial.instrument.index.generator.EURDeposit;
+import com.opengamma.analytics.financial.instrument.index.generator.EurDepositGenerator;
 import com.opengamma.analytics.financial.interestrate.cash.derivative.DepositCounterpart;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.provider.calculator.generic.TodayPaymentCalculator;
@@ -33,8 +35,6 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multipl
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.SimpleParameterSensitivity;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.financial.util.AssertSensitivityObjects;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
@@ -46,8 +46,8 @@ import com.opengamma.util.time.DateUtils;
 @Test(groups = TestGroup.UNIT)
 public class DepositCounterpartDiscountingMethodTest {
 
-  private static final Calendar TARGET = new MondayToFridayCalendar("TARGET");
-  private static final GeneratorDeposit GENERATOR = new EURDeposit(TARGET);
+  private static final WorkingDayCalendar TARGET = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
+  private static final GeneratorDeposit GENERATOR = new EurDepositGenerator(TARGET);
   private static final Currency EUR = GENERATOR.getCurrency();
 
   private static final ZonedDateTime TRADE_DATE = DateUtils.getUTCDate(2011, 12, 12);
@@ -58,7 +58,8 @@ public class DepositCounterpartDiscountingMethodTest {
   private static final double RATE = 0.0250;
   private static final Period DEPOSIT_PERIOD = Period.ofMonths(6);
   private static final ZonedDateTime END_DATE = ScheduleCalculator.getAdjustedDate(SPOT_DATE, DEPOSIT_PERIOD, GENERATOR);
-  private static final DepositCounterpartDefinition DEPOSIT_CPTY_DEFINITION = DepositCounterpartDefinition.fromStart(SPOT_DATE, DEPOSIT_PERIOD, NOTIONAL, RATE,
+  private static final DepositCounterpartDefinition DEPOSIT_CPTY_DEFINITION = DepositCounterpartDefinition.fromStart(SPOT_DATE,
+      DEPOSIT_PERIOD, NOTIONAL, RATE,
       GENERATOR, ISSUER_NAME);
   private static final LegalEntity ISSUER = new LegalEntity(null, ISSUER_NAME, null, null, null);
 
@@ -69,11 +70,13 @@ public class DepositCounterpartDiscountingMethodTest {
 
   private static final PresentValueIssuerCalculator PVC = PresentValueIssuerCalculator.getInstance();
   private static final PresentValueCurveSensitivityIssuerCalculator PVCSIC = PresentValueCurveSensitivityIssuerCalculator.getInstance();
-  private static final ParameterSensitivityIssuerCalculator<ParameterIssuerProviderInterface> PS_PV_C = new ParameterSensitivityIssuerCalculator<>(PVCSIC);
+  private static final ParameterSensitivityIssuerCalculator<ParameterIssuerProviderInterface> PS_PV_C = new ParameterSensitivityIssuerCalculator<>(
+      PVCSIC);
   private static final ParameterSensitivityIssuerDiscountInterpolatedFDCalculator PS_PV_FDC = new ParameterSensitivityIssuerDiscountInterpolatedFDCalculator(
       PVC, SHIFT_FD);
 
-  private static final ParSpreadMarketQuoteIssuerDiscountingCalculator PSMQIDC = ParSpreadMarketQuoteIssuerDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteIssuerDiscountingCalculator PSMQIDC = ParSpreadMarketQuoteIssuerDiscountingCalculator
+      .getInstance();
   private static final ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator PSMQCSIDC = ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator
       .getInstance();
   private static final SimpleParameterSensitivityIssuerCalculator<ParameterIssuerProviderInterface> PS_PSMQ_C = new SimpleParameterSensitivityIssuerCalculator<>(
@@ -85,12 +88,13 @@ public class DepositCounterpartDiscountingMethodTest {
 
   private static final double TOLERANCE_PV = 1.0E-2;
   private static final double TOLERANCE_SPREAD = 1.0E-10;
-  private static final double TOLERANCE_PV_DELTA = 1.0E+2; // Testing note: Sensitivity is for a movement of 1. 1E+2 = 1 cent for a 1 bp move.
+  private static final double TOLERANCE_PV_DELTA = 1.0E+2; // Testing note: Sensitivity is for a movement of 1. 1E+2 = 1 cent for a 1 bp
+                                                           // move.
 
-  @Test
   /**
    * Tests present value when the valuation date is on trade date.
    */
+  @Test
   public void presentValueTrade() {
     final ZonedDateTime referenceDate = DateUtils.getUTCDate(2011, 12, 12);
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
@@ -101,10 +105,10 @@ public class DepositCounterpartDiscountingMethodTest {
     assertEquals("DepositCounterpartDiscountingMethod: present value", pvExpected, pvComputed.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests present value when the valuation date is on trade date. Compare Method to Calculator.
    */
+  @Test
   public void presentValueMethodVsCalculator() {
     final ZonedDateTime referenceDate = DateUtils.getUTCDate(2011, 12, 12);
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
@@ -113,10 +117,10 @@ public class DepositCounterpartDiscountingMethodTest {
     assertEquals("DepositCounterpartDiscountingMethod: present value", pvMethod, pvCalculator);
   }
 
-  @Test
   /**
    * Tests present value.
    */
+  @Test
   public void presentValueBetweenTradeAndSettle() {
     final ZonedDateTime referenceDate = DateUtils.getUTCDate(2011, 12, 13);
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
@@ -127,10 +131,10 @@ public class DepositCounterpartDiscountingMethodTest {
     assertEquals("DepositCounterpartDiscountingMethod: present value", pvExpected, pvComputed.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests present value.
    */
+  @Test
   public void presentValueSettle() {
     final ZonedDateTime referenceDate = SPOT_DATE;
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
@@ -141,10 +145,10 @@ public class DepositCounterpartDiscountingMethodTest {
     assertEquals("DepositCounterpartDiscountingMethod: present value", pvExpected, pvComputed.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests present value.
    */
+  @Test
   public void presentValueBetweenSettleMaturity() {
     final ZonedDateTime referenceDate = DateUtils.getUTCDate(2011, 12, 20);
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
@@ -154,10 +158,10 @@ public class DepositCounterpartDiscountingMethodTest {
     assertEquals("DepositCounterpartDiscountingMethod: present value", pvExpected, pvComputed.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests present value.
    */
+  @Test
   public void presentValueMaturity() {
     final ZonedDateTime referenceDate = END_DATE;
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
@@ -166,81 +170,89 @@ public class DepositCounterpartDiscountingMethodTest {
     assertEquals("DepositCounterpartDiscountingMethod: present value", pvExpected, pvComputed.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests present value curve sensitivity when the valuation date is on trade date.
    */
+  @Test
   public void presentValueCurveSensitivityTrade() {
     final ZonedDateTime referenceDate = DateUtils.getUTCDate(2011, 12, 12);
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
-    final MultipleCurrencyParameterSensitivity pvpsDepositExact = PS_PV_C.calculateSensitivity(deposit, PROVIDER_ISSUER, PROVIDER_ISSUER.getAllNames());
+    final MultipleCurrencyParameterSensitivity pvpsDepositExact = PS_PV_C.calculateSensitivity(deposit, PROVIDER_ISSUER,
+        PROVIDER_ISSUER.getAllNames());
     final MultipleCurrencyParameterSensitivity pvpsDepositFD = PS_PV_FDC.calculateSensitivity(deposit, PROVIDER_ISSUER);
-    AssertSensitivityObjects.assertEquals("DepositCounterpartDiscountingMethod: presentValueCurveSensitivity ", pvpsDepositExact, pvpsDepositFD,
+    AssertSensitivityObjects.assertEquals("DepositCounterpartDiscountingMethod: presentValueCurveSensitivity ", pvpsDepositExact,
+        pvpsDepositFD,
         TOLERANCE_PV_DELTA);
   }
 
-  @Test
   /**
    * Tests present value curve sensitivity when the valuation date is between settle date and maturity.
    */
+  @Test
   public void presentValueCurveSensitivityBetweenSettleMaturity() {
     final ZonedDateTime referenceDate = DateUtils.getUTCDate(2011, 12, 20);
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
-    final MultipleCurrencyParameterSensitivity pvpsDepositExact = PS_PV_C.calculateSensitivity(deposit, PROVIDER_ISSUER, PROVIDER_ISSUER.getAllNames());
+    final MultipleCurrencyParameterSensitivity pvpsDepositExact = PS_PV_C.calculateSensitivity(deposit, PROVIDER_ISSUER,
+        PROVIDER_ISSUER.getAllNames());
     final MultipleCurrencyParameterSensitivity pvpsDepositFD = PS_PV_FDC.calculateSensitivity(deposit, PROVIDER_ISSUER);
-    AssertSensitivityObjects.assertEquals("DepositCounterpartDiscountingMethod: presentValueCurveSensitivity ", pvpsDepositExact, pvpsDepositFD,
+    AssertSensitivityObjects.assertEquals("DepositCounterpartDiscountingMethod: presentValueCurveSensitivity ", pvpsDepositExact,
+        pvpsDepositFD,
         TOLERANCE_PV_DELTA);
   }
 
-  @Test
   /**
    * Tests parSpread when the present is before the deposit start date.
    */
+  @Test
   public void parSpreadBeforeStart() {
     final ZonedDateTime referenceDate = TRADE_DATE;
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
     final double parSpread = METHOD_DEPOSIT.parSpread(deposit, PROVIDER_ISSUER);
-    final DepositCounterpartDefinition deposit0Definition = DepositCounterpartDefinition.fromStart(SPOT_DATE, DEPOSIT_PERIOD, NOTIONAL, RATE + parSpread,
+    final DepositCounterpartDefinition deposit0Definition = DepositCounterpartDefinition.fromStart(SPOT_DATE, DEPOSIT_PERIOD, NOTIONAL,
+        RATE + parSpread,
         GENERATOR, ISSUER_NAME);
     final DepositCounterpart deposit0 = deposit0Definition.toDerivative(referenceDate);
     final MultipleCurrencyAmount pv0 = METHOD_DEPOSIT.presentValue(deposit0, PROVIDER_ISSUER);
     assertEquals("DepositDefinition: present value", 0, pv0.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests parSpread when the present date is on the start date.
    */
+  @Test
   public void parSpreadOnStart() {
     final ZonedDateTime referenceDate = DEPOSIT_CPTY_DEFINITION.getStartDate();
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
     final double parSpread = METHOD_DEPOSIT.parSpread(deposit, PROVIDER_ISSUER);
-    final DepositCounterpartDefinition deposit0Definition = DepositCounterpartDefinition.fromStart(SPOT_DATE, DEPOSIT_PERIOD, NOTIONAL, RATE + parSpread,
+    final DepositCounterpartDefinition deposit0Definition = DepositCounterpartDefinition.fromStart(SPOT_DATE, DEPOSIT_PERIOD, NOTIONAL,
+        RATE + parSpread,
         GENERATOR, ISSUER_NAME);
     final DepositCounterpart deposit0 = deposit0Definition.toDerivative(referenceDate);
     final MultipleCurrencyAmount pv0 = METHOD_DEPOSIT.presentValue(deposit0, PROVIDER_ISSUER);
     assertEquals("DepositDefinition: present value", 0, pv0.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests parSpread when the present date is after the start: .
    */
+  @Test
   public void parSpreadAfterStart() {
     final ZonedDateTime referenceDate = ScheduleCalculator.getAdjustedDate(DEPOSIT_CPTY_DEFINITION.getStartDate(), 1, TARGET);
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
-    final double parSpread = METHOD_DEPOSIT.parSpread(deposit, PROVIDER_ISSUER); // Spread will be -(1/delta+rate), as there is no initial amount
-    final DepositCounterpartDefinition deposit0Definition = DepositCounterpartDefinition.fromStart(SPOT_DATE, DEPOSIT_PERIOD, NOTIONAL, RATE + parSpread,
+    final double parSpread = METHOD_DEPOSIT.parSpread(deposit, PROVIDER_ISSUER); // Spread will be -(1/delta+rate), as there is no initial
+                                                                                 // amount
+    final DepositCounterpartDefinition deposit0Definition = DepositCounterpartDefinition.fromStart(SPOT_DATE, DEPOSIT_PERIOD, NOTIONAL,
+        RATE + parSpread,
         GENERATOR, ISSUER_NAME);
     final DepositCounterpart deposit0 = deposit0Definition.toDerivative(referenceDate);
     final MultipleCurrencyAmount pv0 = METHOD_DEPOSIT.presentValue(deposit0, PROVIDER_ISSUER);
     assertEquals("DepositDefinition: present value", 0, pv0.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests parSpread.
    */
+  @Test
   public void parSpreadMethodVsCalculator() {
     final ZonedDateTime referenceDate = TRADE_DATE;
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
@@ -249,35 +261,38 @@ public class DepositCounterpartDiscountingMethodTest {
     assertEquals("DepositDefinition: present value", parSpreadMethod, parSpreadCalculator, TOLERANCE_SPREAD);
   }
 
-  @Test
   /**
    * Tests parSpread curve sensitivity.
    */
+  @Test
   public void parSpreadCurveSensitivity() {
     final ZonedDateTime referenceDate = TRADE_DATE;
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
-    final SimpleParameterSensitivity pspsDepositExact = PS_PSMQ_C.calculateSensitivity(deposit, PROVIDER_ISSUER, PROVIDER_ISSUER.getAllNames());
+    final SimpleParameterSensitivity pspsDepositExact = PS_PSMQ_C.calculateSensitivity(deposit, PROVIDER_ISSUER,
+        PROVIDER_ISSUER.getAllNames());
     final SimpleParameterSensitivity pspsDepositFD = PS_PSMQ_FDC.calculateSensitivity(deposit, PROVIDER_ISSUER);
-    AssertSensitivityObjects.assertEquals("DepositCounterpartDiscountingMethod: presentValueCurveSensitivity ", pspsDepositExact, pspsDepositFD,
+    AssertSensitivityObjects.assertEquals("DepositCounterpartDiscountingMethod: presentValueCurveSensitivity ", pspsDepositExact,
+        pspsDepositFD,
         TOLERANCE_PV_DELTA);
   }
 
-  @Test
   /**
    * Tests parSpread curve sensitivity.
    */
+  @Test
   public void parSpreadCurveSensitivityMethodVsCalculator() {
     final ZonedDateTime referenceDate = TRADE_DATE;
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
     final MulticurveSensitivity pscsMethod = METHOD_DEPOSIT.parSpreadCurveSensitivity(deposit, PROVIDER_ISSUER);
     final MulticurveSensitivity pscsCalculator = deposit.accept(PSMQCSIDC, PROVIDER_ISSUER);
-    AssertSensitivityObjects.assertEquals("CashDiscountingProviderMethod: parSpreadCurveSensitivity", pscsMethod, pscsCalculator, TOLERANCE_SPREAD);
+    AssertSensitivityObjects.assertEquals("CashDiscountingProviderMethod: parSpreadCurveSensitivity", pscsMethod, pscsCalculator,
+        TOLERANCE_SPREAD);
   }
 
-  @Test
   /**
    * Tests today payment amount when the present is before the deposit start date.
    */
+  @Test
   public void todayPaymentBeforeStart() {
     final ZonedDateTime referenceDate = TRADE_DATE;
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
@@ -286,10 +301,10 @@ public class DepositCounterpartDiscountingMethodTest {
     assertEquals("DepositDefinition: today payment", 1, cash.getCurrencyAmounts().length);
   }
 
-  @Test
   /**
    * Tests today payment amount when the present is on the deposit start date.
    */
+  @Test
   public void todayPaymentOnStart() {
     final ZonedDateTime referenceDate = SPOT_DATE;
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
@@ -298,10 +313,10 @@ public class DepositCounterpartDiscountingMethodTest {
     assertEquals("DepositDefinition: today payment", 1, cash.getCurrencyAmounts().length);
   }
 
-  @Test
   /**
    * Tests today payment amount when the present is on the deposit start date.
    */
+  @Test
   public void todayPaymentBetweenStartAndEnd() {
     final ZonedDateTime referenceDate = SPOT_DATE.plusDays(2);
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
@@ -310,15 +325,16 @@ public class DepositCounterpartDiscountingMethodTest {
     assertEquals("DepositDefinition: today payment", 1, cash.getCurrencyAmounts().length);
   }
 
-  @Test
   /**
    * Tests today payment amount when the present is on the deposit end date.
    */
+  @Test
   public void todayPaymentOnEnd() {
     final ZonedDateTime referenceDate = END_DATE;
     final DepositCounterpart deposit = DEPOSIT_CPTY_DEFINITION.toDerivative(referenceDate);
     final MultipleCurrencyAmount cash = deposit.accept(TPC);
-    assertEquals("DepositDefinition: today payment", NOTIONAL + deposit.getInterestAmount(), cash.getAmount(deposit.getCurrency()), TOLERANCE_PV);
+    assertEquals("DepositDefinition: today payment", NOTIONAL + deposit.getInterestAmount(), cash.getAmount(deposit.getCurrency()),
+        TOLERANCE_PV);
     assertEquals("DepositDefinition: today payment", 1, cash.getCurrencyAmounts().length);
   }
 

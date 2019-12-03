@@ -7,17 +7,15 @@ package com.opengamma.analytics.financial.curve.interestrate.generator;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Store the details and generate the required curve. The curve is interpolated on the discount factor.
- * Only the lastTimeCalculator is stored. The node are computed from the instruments.
+ * Store the details and generate the required curve. The curve is interpolated on the discount factor. Only the lastTimeCalculator is
+ * stored. The node are computed from the instruments.
  */
-@SuppressWarnings("deprecation")
 public class GeneratorCurveDiscountFactorInterpolated extends GeneratorYDCurve {
 
   /**
@@ -31,10 +29,14 @@ public class GeneratorCurveDiscountFactorInterpolated extends GeneratorYDCurve {
 
   /**
    * Constructor.
-   * @param nodeTimeCalculator Calculator of the node associated to instruments.
-   * @param interpolator The interpolator used for the curve.
+   * 
+   * @param nodeTimeCalculator
+   *          Calculator of the node associated to instruments.
+   * @param interpolator
+   *          The interpolator used for the curve.
    */
-  public GeneratorCurveDiscountFactorInterpolated(final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator, final Interpolator1D interpolator) {
+  public GeneratorCurveDiscountFactorInterpolated(final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator,
+      final Interpolator1D interpolator) {
     _nodeTimeCalculator = nodeTimeCalculator;
     _interpolator = interpolator;
   }
@@ -46,16 +48,6 @@ public class GeneratorCurveDiscountFactorInterpolated extends GeneratorYDCurve {
 
   @Override
   public YieldAndDiscountCurve generateCurve(final String name, final double[] parameters) {
-    throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveYieldInterpolated");
-  }
-
-  /**
-   * {@inheritDoc}
-   * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
-   */
-  @Deprecated
-  @Override
-  public YieldAndDiscountCurve generateCurve(final String name, final YieldCurveBundle bundle, final double[] parameters) {
     throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveYieldInterpolated");
   }
 

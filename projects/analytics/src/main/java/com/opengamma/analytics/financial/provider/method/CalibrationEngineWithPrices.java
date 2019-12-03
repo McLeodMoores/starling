@@ -8,11 +8,10 @@ package com.opengamma.analytics.financial.provider.method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.Validate;
-
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
@@ -28,7 +27,8 @@ public abstract class CalibrationEngineWithPrices<DATA_TYPE extends ParameterPro
   private final List<InstrumentDerivative> _basket;
 
   /**
-   * The prices (usually market quotes or prices calculating with a simpler (than the one we want to calibrate) models) on which we are doing the calibration.
+   * The prices (usually market quotes or prices calculating with a simpler (than the one we want to calibrate) models) on which we are
+   * doing the calibration.
    */
   private final List<Double> _calibrationPrices;
 
@@ -59,8 +59,9 @@ public abstract class CalibrationEngineWithPrices<DATA_TYPE extends ParameterPro
   }
 
   /**
-   * Add an array of instruments to the basket and the associated calculator. The same method is used for all the instruments. instrument and calibration{rices
-   * should have the same length, and the same order ie the price of the first instrmwent is the first double of the vector calibrationPrices etc...
+   * Add an array of instruments to the basket and the associated calculator. The same method is used for all the instruments. instrument
+   * and calibration{rices should have the same length, and the same order ie the price of the first instrmwent is the first double of the
+   * vector calibrationPrices etc...
    *
    * @param instrument
    *          An interest rate derivative array.
@@ -68,10 +69,10 @@ public abstract class CalibrationEngineWithPrices<DATA_TYPE extends ParameterPro
    *          The prices of the instruments we want to calibrate on.
    */
   public void addInstrument(final InstrumentDerivative[] instrument, final double[] calibrationPrices) {
-    Validate.notNull(instrument, "Instrument");
-    Validate.isTrue(instrument.length == calibrationPrices.length);
-    for (int loopins = 0; loopins < instrument.length; loopins++) {
-      addInstrument(instrument[loopins], calibrationPrices[loopins]);
+    ArgumentChecker.notNull(instrument, "Instrument");
+    ArgumentChecker.isTrue(instrument.length == calibrationPrices.length, "Must have one price per instrument");
+    for (int i = 0; i < instrument.length; i++) {
+      addInstrument(instrument[i], calibrationPrices[i]);
     }
   }
 

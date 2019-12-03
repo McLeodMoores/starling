@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.hullwhite;
@@ -12,12 +12,19 @@ import com.opengamma.analytics.financial.provider.description.interestrate.HullW
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 
 /**
+ * Adapts a {@link HullWhiteOneFactorProviderInterface} to a {@link MulticurveProviderInterface}.
  * 
- * @param <RESULT_TYPE> The result-type for the provider.
+ * @param <RESULT_TYPE>
+ *          The result-type for the provider.
  */
-public class HullWhiteProviderAdapter<RESULT_TYPE> extends InstrumentDerivativeVisitorSameMethodAdapter<HullWhiteOneFactorProviderInterface, RESULT_TYPE> {
+public class HullWhiteProviderAdapter<RESULT_TYPE>
+    extends InstrumentDerivativeVisitorSameMethodAdapter<HullWhiteOneFactorProviderInterface, RESULT_TYPE> {
   private final InstrumentDerivativeVisitor<MulticurveProviderInterface, RESULT_TYPE> _visitor;
 
+  /**
+   * @param visitor
+   *          the underlying visitor, not null
+   */
   public HullWhiteProviderAdapter(final InstrumentDerivativeVisitor<MulticurveProviderInterface, RESULT_TYPE> visitor) {
     _visitor = visitor;
   }

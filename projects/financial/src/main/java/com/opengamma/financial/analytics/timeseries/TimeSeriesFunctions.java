@@ -5,11 +5,9 @@
  */
 package com.opengamma.financial.analytics.timeseries;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.opengamma.core.change.ChangeEvent;
-import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.BeanDynamicFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -17,10 +15,7 @@ import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.function.config.VersionedFunctionConfigurationBean;
 import com.opengamma.financial.analytics.ircurve.calcconfig.MultiCurveCalculationConfig;
 import com.opengamma.financial.config.ConfigMasterChangeProvider;
-import com.opengamma.master.config.ConfigDocument;
 import com.opengamma.master.config.ConfigMaster;
-import com.opengamma.master.config.ConfigSearchRequest;
-import com.opengamma.master.config.impl.ConfigSearchIterator;
 
 /**
  * Function repository configuration source for the functions contained in this package.
@@ -39,8 +34,7 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
 
   /**
    * Returns a factory that populates the repository with functions that produce
-   * {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_HISTORICAL_TIME_SERIES} for all curve types <b>except</b>
-   * {@link ImpliedDepositCurveFunction#IMPLIED_DEPOSIT}.
+   * {@link com.opengamma.engine.value.ValueRequirementNames#YIELD_CURVE_HISTORICAL_TIME_SERIES} for all curve types.
    *
    * @param configMaster
    *          The configuration master
@@ -93,17 +87,8 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
       return _configMaster;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-      // search for the names of implied deposit curves and exclude from historical time series function
-      final List<String> excludedCurves = new ArrayList<>();
-      final ConfigSearchRequest<?> searchRequest = new ConfigSearchRequest<>();
-      searchRequest.setType(MultiCurveCalculationConfig.class);
-      searchRequest.setVersionCorrection(getVersionCorrection());
-      for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(_configMaster, searchRequest)) {
-        final MultiCurveCalculationConfig config = ((ConfigItem<MultiCurveCalculationConfig>) configDocument.getConfig()).getValue();
-      }
     }
 
     public static boolean isMonitoredType(final String type) {
@@ -119,7 +104,6 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(CurveHistoricalTimeSeriesFunction.class));
     functions.add(functionConfiguration(DefaultHistoricalTimeSeriesShiftFunction.class));
     functions.add(functionConfiguration(FXForwardCurveHistoricalTimeSeriesFunction.class));
-    functions.add(functionConfiguration(FXForwardCurveNodeReturnSeriesFunction.class));
     functions.add(functionConfiguration(FXReturnSeriesFunction.class));
     functions.add(functionConfiguration(FXVolatilitySurfaceHistoricalTimeSeriesFunction.class));
     functions.add(functionConfiguration(HistoricalTimeSeriesFunction.class));
@@ -130,7 +114,6 @@ public class TimeSeriesFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(HistoricalValuationFunction.class));
     functions.add(functionConfiguration(YieldCurveInstrumentConversionHistoricalTimeSeriesShiftFunction.class));
     functions.add(functionConfiguration(YieldCurveInstrumentConversionHistoricalTimeSeriesShiftFunctionDeprecated.class));
-    functions.add(functionConfiguration(VolatilityWeightedFXForwardCurveNodeReturnSeriesFunction.class));
     functions.add(functionConfiguration(VolatilityWeightedFXReturnSeriesFunction.class));
   }
 

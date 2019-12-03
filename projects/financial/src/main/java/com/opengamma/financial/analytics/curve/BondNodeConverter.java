@@ -38,9 +38,6 @@ import com.opengamma.financial.analytics.conversion.ConversionUtils;
 import com.opengamma.financial.analytics.conversion.WorkingDayCalendarUtils;
 import com.opengamma.financial.analytics.ircurve.strips.BondNode;
 import com.opengamma.financial.convention.BondConvention;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCount;
@@ -60,8 +57,6 @@ public class BondNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
   private final RegionSource _regionSource;
   /** The holiday source */
   private final HolidaySource _holidaySource;
-  /** The convention bundle source */
-  private final ConventionBundleSource _conventionBundleSource;
   /** The convention source */
   private final ConventionSource _conventionSource;
   /** The security source */
@@ -103,42 +98,6 @@ public class BondNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     _regionSource = regionSource;
     _holidaySource = holidaySource;
     _conventionSource = conventionSource;
-    _conventionBundleSource = null;
-    _securitySource = securitySource;
-    _marketData = marketData;
-    _dataId = dataId;
-    _valuationTime = valuationTime;
-  }
-
-  /**
-   * @param regionSource
-   *          The region source, not null
-   * @param holidaySource
-   *          The holiday source, not null
-   * @param conventionBundleSource
-   *          The convention source, not null
-   * @param securitySource
-   *          The security source, not null
-   * @param marketData
-   *          The market data, not null
-   * @param dataId
-   *          The market data id, not null
-   * @param valuationTime
-   *          The valuation time, not null
-   */
-  public BondNodeConverter(final ConventionBundleSource conventionBundleSource, final HolidaySource holidaySource, final RegionSource regionSource,
-      final SecuritySource securitySource, final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
-    ArgumentChecker.notNull(regionSource, "region source");
-    ArgumentChecker.notNull(holidaySource, "holiday source");
-    ArgumentChecker.notNull(conventionBundleSource, "convention source");
-    ArgumentChecker.notNull(securitySource, "security source");
-    ArgumentChecker.notNull(marketData, "market data");
-    ArgumentChecker.notNull(dataId, "data id");
-    ArgumentChecker.notNull(valuationTime, "valuation time");
-    _regionSource = regionSource;
-    _holidaySource = holidaySource;
-    _conventionBundleSource = conventionBundleSource;
-    _conventionSource = null;
     _securitySource = securitySource;
     _marketData = marketData;
     _dataId = dataId;
@@ -174,28 +133,9 @@ public class BondNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     if (domicile == null) {
       throw new OpenGammaRuntimeException("bond security domicile cannot be null");
     }
-    final boolean isEOM;
-    final int settlementDays;
-    if (_conventionSource != null) {
-      final BondConvention convention = _conventionSource.getSingle(regionId, BondConvention.class);
-      isEOM = convention.isIsEOM();
-      settlementDays = convention.getSettlementDays();
-    } else {
-      final String conventionName = domicile + "_TREASURY_BOND_CONVENTION";
-      final ConventionBundle convention = _conventionBundleSource
-          .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, conventionName));
-      if (convention == null) {
-        throw new OpenGammaRuntimeException("Convention called " + conventionName + " was null");
-      }
-      if (convention.isEOMConvention() == null) {
-        throw new OpenGammaRuntimeException("Could not get EOM convention information from " + conventionName);
-      }
-      isEOM = convention.isEOMConvention();
-      if (convention.getBondSettlementDays(firstAccrualDate, maturityDate) == null) {
-        throw new OpenGammaRuntimeException("Could not get bond settlement days from " + conventionName);
-      }
-      settlementDays = convention.getBondSettlementDays(firstAccrualDate, maturityDate);
-    }
+    final BondConvention convention = _conventionSource.getSingle(regionId, BondConvention.class);
+    final boolean isEOM = convention.isIsEOM();
+    final int settlementDays = convention.getSettlementDays();
     final YieldConvention yieldConvention = bondSecurity.getYieldConvention();
     if (bondSecurity.getCouponType().equals("NONE") || bondSecurity.getCouponType().equals("ZERO COUPON")) { // TODO find where string is
       return new PaymentFixedDefinition(currency, maturityDate, 1);

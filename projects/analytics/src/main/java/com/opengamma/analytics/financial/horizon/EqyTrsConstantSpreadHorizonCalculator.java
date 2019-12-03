@@ -9,6 +9,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.financial.equity.trs.definition.EquityTotalReturnSwap;
 import com.opengamma.analytics.financial.equity.trs.definition.EquityTotalReturnSwapDefinition;
+import com.opengamma.analytics.financial.horizon.constantspread.EquityTrsConstantSpreadHorizonCalculator;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
@@ -18,26 +19,30 @@ import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeri
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
+
 /**
- * Calculates the difference in the present value of an equity total return swap between two dates without
- * rate slide i.e. assumes that the market moves in such a way that the discount factors or rates for the
- * same maturity <b>dates</b> will be equal.
+ * Calculates the difference in the present value of an equity total return swap between two dates without rate slide i.e. assumes that the
+ * market moves in such a way that the discount factors or rates for the same maturity <b>dates</b> will be equal.
  * <p>
  * Only the funding leg is considered in this calculation.
+ * 
+ * @deprecated Use {@link EquityTrsConstantSpreadHorizonCalculator}.
  */
+@Deprecated
 public final class EqyTrsConstantSpreadHorizonCalculator
-extends HorizonCalculator<EquityTotalReturnSwapDefinition, MulticurveProviderInterface, ZonedDateTimeDoubleTimeSeries> {
+    extends HorizonCalculator<EquityTotalReturnSwapDefinition, MulticurveProviderInterface, ZonedDateTimeDoubleTimeSeries> {
   /** Rolls down a yield curve provider */
-  private static final CurveProviderConstantSpreadRolldownFunction CURVE_ROLLDOWN = CurveProviderConstantSpreadRolldownFunction.getInstance();
+  private static final CurveProviderConstantSpreadRolldownFunction CURVE_ROLLDOWN = CurveProviderConstantSpreadRolldownFunction
+      .getInstance();
   /** The present value calculator */
-  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyAmount> PV_CALCULATOR =
-      PresentValueDiscountingCalculator.getInstance();
+  private static final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyAmount> PV_CALCULATOR = PresentValueDiscountingCalculator
+      .getInstance();
   /** The singleton instance */
-  private static final HorizonCalculator<EquityTotalReturnSwapDefinition, MulticurveProviderInterface, ZonedDateTimeDoubleTimeSeries> INSTANCE =
-      new EqyTrsConstantSpreadHorizonCalculator();
+  private static final HorizonCalculator<EquityTotalReturnSwapDefinition, MulticurveProviderInterface, ZonedDateTimeDoubleTimeSeries> INSTANCE = new EqyTrsConstantSpreadHorizonCalculator();
 
   /**
    * Gets the singleton instance.
+   * 
    * @return The instance
    */
   public static HorizonCalculator<EquityTotalReturnSwapDefinition, MulticurveProviderInterface, ZonedDateTimeDoubleTimeSeries> getInstance() {
@@ -51,7 +56,8 @@ extends HorizonCalculator<EquityTotalReturnSwapDefinition, MulticurveProviderInt
   }
 
   @Override
-  public MultipleCurrencyAmount getTheta(final EquityTotalReturnSwapDefinition definition, final ZonedDateTime date, final MulticurveProviderInterface data,
+  public MultipleCurrencyAmount getTheta(final EquityTotalReturnSwapDefinition definition, final ZonedDateTime date,
+      final MulticurveProviderInterface data,
       final int daysForward, final Calendar calendar, final ZonedDateTimeDoubleTimeSeries fixingSeries) {
     ArgumentChecker.notNull(definition, "definition");
     ArgumentChecker.notNull(date, "date");
@@ -68,7 +74,8 @@ extends HorizonCalculator<EquityTotalReturnSwapDefinition, MulticurveProviderInt
   }
 
   @Override
-  public MultipleCurrencyAmount getTheta(final EquityTotalReturnSwapDefinition definition, final ZonedDateTime date, final MulticurveProviderInterface data,
+  public MultipleCurrencyAmount getTheta(final EquityTotalReturnSwapDefinition definition, final ZonedDateTime date,
+      final MulticurveProviderInterface data,
       final int daysForward, final Calendar calendar) {
     return getTheta(definition, date, data, daysForward, calendar, ImmutableZonedDateTimeDoubleTimeSeries.ofEmptyUTC());
   }

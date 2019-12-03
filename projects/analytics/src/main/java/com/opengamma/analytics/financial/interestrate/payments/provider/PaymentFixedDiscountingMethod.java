@@ -31,6 +31,7 @@ public final class PaymentFixedDiscountingMethod {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static PaymentFixedDiscountingMethod getInstance() {
@@ -45,8 +46,11 @@ public final class PaymentFixedDiscountingMethod {
 
   /**
    * Compute the the present value of a fixed payment by discounting to a parallel curve movement.
-   * @param payment The payment.
-   * @param multicurves The multi-curve provider.
+   * 
+   * @param payment
+   *          The payment.
+   * @param multicurves
+   *          The multi-curve provider.
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final PaymentFixed payment, final MulticurveProviderInterface multicurves) {
@@ -58,11 +62,15 @@ public final class PaymentFixedDiscountingMethod {
 
   /**
    * Computes the present value curve sensitivity of a fixed payment by discounting.
-   * @param payment The fixed payment.
-   * @param multicurves The multi-curve provider.
+   * 
+   * @param payment
+   *          The fixed payment.
+   * @param multicurves
+   *          The multi-curve provider.
    * @return The sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final PaymentFixed payment, final MulticurveProviderInterface multicurves) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final PaymentFixed payment,
+      final MulticurveProviderInterface multicurves) {
     final double time = payment.getPaymentTime();
     final DoublesPair s = DoublesPair.of(time, -time * payment.getAmount() * multicurves.getDiscountFactor(payment.getCurrency(), time));
     final List<DoublesPair> list = new ArrayList<>();
@@ -74,11 +82,14 @@ public final class PaymentFixedDiscountingMethod {
 
   /**
    * Compute the the present value curve sensitivity of a fixed payment by discounting to a parallel curve movement.
-   * @param payment The payment.
-   * @param multicurves The multi-curves provider.
+   * 
+   * @param payment
+   *          The payment.
+   * @param multicurves
+   *          The multi-curves provider.
    * @return The sensitivity.
-   * TODO: Should this be multiple-currency?
    */
+  // TODO: Should this be multiple-currency?
   public StringAmount presentValueParallelCurveSensitivity(final PaymentFixed payment, final MulticurveProviderInterface multicurves) {
     final double time = payment.getPaymentTime();
     final double sensitivity = -time * payment.getAmount() * multicurves.getDiscountFactor(payment.getCurrency(), time);

@@ -8,6 +8,8 @@ package com.opengamma.analytics.financial.instrument.index;
 import org.apache.commons.lang.ObjectUtils;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.cash.DepositCounterpartDefinition;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -39,7 +41,7 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
 
   /**
    * Deposit generator from all the financial details.
-   * 
+   *
    * @param nameGenerator
    *          The generator name. Not null.
    * @param currency
@@ -51,7 +53,8 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
    * @param nameCounterpart
    *          The counterpart name. Not null.
    */
-  public GeneratorDepositONCounterpart(final String nameGenerator, final Currency currency, final Calendar calendar, final DayCount dayCount,
+  public GeneratorDepositONCounterpart(final String nameGenerator, final Currency currency, final Calendar calendar,
+      final DayCount dayCount,
       final String nameCounterpart) {
     super(nameGenerator);
     ArgumentChecker.notNull(currency, "Currency");
@@ -65,8 +68,36 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
   }
 
   /**
+   * Deposit generator from all the financial details.
+   *
+   * @param nameGenerator
+   *          The generator name. Not null.
+   * @param currency
+   *          The index currency. Not null.
+   * @param calendar
+   *          The calendar associated to the index. Not null.
+   * @param dayCount
+   *          The day count convention associated to the index.
+   * @param nameCounterpart
+   *          The counterpart name. Not null.
+   */
+  public GeneratorDepositONCounterpart(final String nameGenerator, final Currency currency, final WorkingDayCalendar calendar,
+      final DayCount dayCount,
+      final String nameCounterpart) {
+    super(nameGenerator);
+    ArgumentChecker.notNull(currency, "Currency");
+    ArgumentChecker.notNull(calendar, "Calendar");
+    ArgumentChecker.notNull(dayCount, "Day count");
+    ArgumentChecker.notNull(nameCounterpart, "Counterpart name");
+    _currency = currency;
+    _calendar = CalendarAdapter.of(calendar);
+    _dayCount = dayCount;
+    _nameCounterpart = nameCounterpart;
+  }
+
+  /**
    * Gets the index currency.
-   * 
+   *
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -75,7 +106,7 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
 
   /**
    * Gets the calendar associated to the index.
-   * 
+   *
    * @return The calendar.
    */
   public Calendar getCalendar() {
@@ -84,7 +115,7 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
 
   /**
    * Gets the day count convention associated to the index.
-   * 
+   *
    * @return The day count convention.
    */
   public DayCount getDayCount() {
@@ -93,7 +124,7 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
 
   /**
    * Gets the counterpart name.
-   * 
+   *
    * @return The name.
    */
   public String getNameCounterpart() {
@@ -102,7 +133,7 @@ public class GeneratorDepositONCounterpart extends GeneratorInstrument<Generator
 
   /**
    * Generate an overnight deposit for the given counterpart.
-   * 
+   *
    * @param date
    *          The reference date.
    * @param rate

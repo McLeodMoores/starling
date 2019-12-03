@@ -13,11 +13,10 @@ import com.opengamma.analytics.financial.instrument.cash.DepositZeroDefinition;
 import com.opengamma.analytics.financial.interestrate.ContinuousInterestRate;
 import com.opengamma.analytics.financial.interestrate.InterestRate;
 import com.opengamma.analytics.financial.interestrate.PeriodicInterestRate;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.ConventionBundleSource;
+import com.opengamma.financial.convention.DepositConvention;
 import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.security.FinancialSecurityVisitorAdapter;
@@ -33,7 +32,7 @@ import com.opengamma.util.money.Currency;
  */
 public class ZeroDepositConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
   /** The convention source */
-  private final ConventionBundleSource _conventionSource;
+  private final ConventionSource _conventionSource;
   /** The holiday source */
   private final HolidaySource _holidaySource;
 
@@ -43,7 +42,7 @@ public class ZeroDepositConverter extends FinancialSecurityVisitorAdapter<Instru
    * @param holidaySource
    *          The holiday source, not null
    */
-  public ZeroDepositConverter(final ConventionBundleSource conventionSource, final HolidaySource holidaySource) {
+  public ZeroDepositConverter(final ConventionSource conventionSource, final HolidaySource holidaySource) {
     ArgumentChecker.notNull(conventionSource, "convention source");
     ArgumentChecker.notNull(holidaySource, "holiday source");
     _conventionSource = conventionSource;
@@ -56,8 +55,8 @@ public class ZeroDepositConverter extends FinancialSecurityVisitorAdapter<Instru
     final Currency currency = security.getCurrency();
     final ZonedDateTime startDate = security.getStartDate();
     final ZonedDateTime endDate = security.getMaturityDate();
-    final ConventionBundle convention = _conventionSource
-        .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, currency.getCode() + "_ZERO_DEPOSIT"));
+    final DepositConvention convention = _conventionSource
+        .getSingle(ExternalId.of(Currency.OBJECT_SCHEME, currency.getCode()), DepositConvention.class);
     final DayCount daycount = convention.getDayCount();
     final InterestRate rate = new ContinuousInterestRate(security.getRate());
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, currency);
@@ -75,8 +74,8 @@ public class ZeroDepositConverter extends FinancialSecurityVisitorAdapter<Instru
     final Currency currency = security.getCurrency();
     final ZonedDateTime startDate = security.getStartDate();
     final ZonedDateTime endDate = security.getMaturityDate();
-    final ConventionBundle convention = _conventionSource
-        .getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, currency.getCode() + "_ZERO_DEPOSIT"));
+    final DepositConvention convention = _conventionSource
+        .getSingle(ExternalId.of(Currency.OBJECT_SCHEME, currency.getCode()), DepositConvention.class);
     final DayCount daycount = convention.getDayCount();
     final InterestRate rate = new PeriodicInterestRate(security.getRate(), (int) security.getCompoundingPeriodsPerYear());
     final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, currency);

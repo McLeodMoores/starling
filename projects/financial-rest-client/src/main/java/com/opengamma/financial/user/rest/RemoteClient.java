@@ -9,8 +9,6 @@ import java.net.URI;
 
 import org.fudgemsg.FudgeContext;
 
-import com.opengamma.financial.convention.ConventionBundleMaster;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.impl.RemoteConfigMaster;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
@@ -28,9 +26,9 @@ import com.opengamma.util.GUIDGenerator;
 import com.opengamma.util.rest.FudgeRestClient;
 
 /**
- * Provides access to a remote representation of a "client". A client is defined as a set of coherent and related masters. These might be the set of masters
- * corresponding to the "shared" data used by all users of an OpenGamma instance, or the masters containing data specific to a single user or perhaps a group of
- * users.
+ * Provides access to a remote representation of a "client". A client is defined as a set of coherent and related masters. These might be
+ * the set of masters corresponding to the "shared" data used by all users of an OpenGamma instance, or the masters containing data specific
+ * to a single user or perhaps a group of users.
  */
 public class RemoteClient {
 
@@ -133,7 +131,8 @@ public class RemoteClient {
 
     @Override
     public URI getInterpolatedYieldCurveDefinitionMaster() {
-      return _interpolatedYieldCurveDefinitionMaster != null ? _interpolatedYieldCurveDefinitionMaster : super.getInterpolatedYieldCurveDefinitionMaster();
+      return _interpolatedYieldCurveDefinitionMaster != null ? _interpolatedYieldCurveDefinitionMaster
+          : super.getInterpolatedYieldCurveDefinitionMaster();
     }
 
     public void setHeartbeat(final URI heartbeat) {
@@ -223,8 +222,6 @@ public class RemoteClient {
   private volatile ConfigMaster _configMaster;
   private volatile MarketDataSnapshotMaster _marketDataSnapshotMaster;
   private volatile HistoricalTimeSeriesMaster _historicalTimeSeriesMaster;
-  // TODO [PLAT-637] We're using the in memory job as a hack
-  private static ConventionBundleMaster s_conventionBundleMaster;
 
   public RemoteClient(final String clientId, final FudgeContext fudgeContext, final TargetProvider uriProvider) {
     _clientId = clientId;
@@ -277,19 +274,9 @@ public class RemoteClient {
     return _historicalTimeSeriesMaster;
   }
 
-  public ConventionBundleMaster getConventionBundleMaster() {
-    // TODO [PLAT-637] We're using the in memory job as a hack
-    synchronized (RemoteClient.class) {
-      if (s_conventionBundleMaster == null) {
-        s_conventionBundleMaster = new InMemoryConventionBundleMaster();
-      }
-      return s_conventionBundleMaster;
-    }
-  }
-
   /**
-   * Creates a heartbeat sender. If nothing has happened for a timeout duration, that would result in messages being sent to the server, the heartbeat signal
-   * should be sent as a keep-alive.
+   * Creates a heartbeat sender. If nothing has happened for a timeout duration, that would result in messages being sent to the server, the
+   * heartbeat signal should be sent as a keep-alive.
    *
    * @return a runnable sender. Each invocation of {@link Runnable#run} will send a heartbeat signal
    */
@@ -301,8 +288,8 @@ public class RemoteClient {
 
   // -------------------------------------------------------------------------
   /**
-   * A hack to allow the Excel side to get hold of a RemoteClient without it having to be aware of the URI. Eventually we will need a UserMaster to host users
-   * and their clients, and the entry point for Excel will be a RemoteUserMaster.
+   * A hack to allow the Excel side to get hold of a RemoteClient without it having to be aware of the URI. Eventually we will need a
+   * UserMaster to host users and their clients, and the entry point for Excel will be a RemoteUserMaster.
    *
    * @param fudgeContext
    *          the Fudge context, not null
@@ -317,7 +304,8 @@ public class RemoteClient {
     return forClient(fudgeContext, baseUserManagerUri, userName, clientName);
   }
 
-  public static RemoteClient forClient(final FudgeContext fudgeContext, final URI baseUserManagerUri, final String userName, final String clientName) {
+  public static RemoteClient forClient(final FudgeContext fudgeContext, final URI baseUserManagerUri, final String userName,
+      final String clientName) {
     return new RemoteClient(clientName, fudgeContext, new BaseUriTargetProvider(baseUserManagerUri, userName, clientName));
   }
 

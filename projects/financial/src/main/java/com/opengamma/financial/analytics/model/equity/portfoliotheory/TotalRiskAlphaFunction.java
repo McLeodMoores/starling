@@ -18,6 +18,7 @@ import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalc
 import com.opengamma.analytics.financial.timeseries.returns.TimeSeriesReturnCalculatorFactory;
 import com.opengamma.analytics.math.statistics.descriptive.StatisticsCalculatorFactory;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -32,13 +33,9 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
-import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.timeseries.DateConstraint;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunctionUtils;
-import com.opengamma.financial.convention.ConventionBundle;
-import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
 import com.opengamma.id.ExternalId;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolutionResult;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
@@ -48,8 +45,12 @@ import com.opengamma.timeseries.TimeSeriesIntersector;
 /**
  *
  */
+@Deprecated
 public abstract class TotalRiskAlphaFunction extends AbstractFunction.NonCompiledInvoker {
   private static final double DAYS_PER_YEAR = 365.25;
+  private static final ExternalId MARKET_QUOTE_TICKER = ExternalSchemes.syntheticSecurityId("SPX");
+  private static final ExternalId RISK_FREE_RATE_TICKER = ExternalSchemes.syntheticSecurityId("USDLIBORP3M");
+
   private final String _resolutionKey;
 
   public TotalRiskAlphaFunction(final String resolutionKey) {
@@ -66,16 +67,14 @@ public abstract class TotalRiskAlphaFunction extends AbstractFunction.NonCompile
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) {
     final ComputationTargetSpecification targetSpec = target.toSpecification();
-    final ConventionBundleSource conventionSource = OpenGammaExecutionContext.getConventionBundleSource(executionContext);
-    final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM"));
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ValueProperties constraints = desiredValue.getConstraints();
     final HistoricalTimeSeriesBundle timeSeries = HistoricalTimeSeriesFunctionUtils.getHistoricalTimeSeriesInputs(executionContext, inputs);
-    final HistoricalTimeSeries marketTSObject = timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, bundle.getCAPMMarket());
+    final HistoricalTimeSeries marketTSObject = timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, MARKET_QUOTE_TICKER);
     if (marketTSObject == null) {
       throw new OpenGammaRuntimeException("Market value series was not available");
     }
-    final HistoricalTimeSeries riskFreeTSObject = timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, bundle.getCAPMRiskFreeRate());
+    final HistoricalTimeSeries riskFreeTSObject = timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, RISK_FREE_RATE_TICKER);
     if (riskFreeTSObject == null) {
       throw new OpenGammaRuntimeException("Risk free series was not available");
     }
@@ -137,17 +136,16 @@ public abstract class TotalRiskAlphaFunction extends AbstractFunction.NonCompile
         .with(ValuePropertyNames.RETURN_CALCULATOR, returnCalculatorName).get()));
     requirements.add(new ValueRequirement(ValueRequirementNames.FAIR_VALUE, targetSpec));
     final HistoricalTimeSeriesResolver resolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
-    final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
-    final ConventionBundle bundle = conventionSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, "USD_CAPM"));
     final DateConstraint startDate = DateConstraint.VALUATION_TIME.minus(samplingPeriodName);
-    HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(bundle.getCAPMMarket(), null, null, null, MarketDataRequirementNames.MARKET_VALUE,
+    HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(MARKET_QUOTE_TICKER.toBundle(), null, null, null,
+        MarketDataRequirementNames.MARKET_VALUE,
         _resolutionKey);
     if (timeSeries == null) {
       return null;
     }
     requirements.add(HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, MarketDataRequirementNames.MARKET_VALUE, startDate, true,
         DateConstraint.VALUATION_TIME, true));
-    timeSeries = resolver.resolve(bundle.getCAPMRiskFreeRate(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, _resolutionKey);
+    timeSeries = resolver.resolve(RISK_FREE_RATE_TICKER.toBundle(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, _resolutionKey);
     if (timeSeries == null) {
       return null;
     }
