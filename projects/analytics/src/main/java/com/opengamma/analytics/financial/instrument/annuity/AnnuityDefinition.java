@@ -146,7 +146,7 @@ public class AnnuityDefinition<P extends PaymentDefinition>
 
   @Override
   public String toString() {
-    final StringBuffer result = new StringBuffer("Annuity:");
+    final StringBuilder result = new StringBuilder("Annuity:");
     for (final P payment : _payments) {
       result.append(payment.toString());
       result.append(" ");

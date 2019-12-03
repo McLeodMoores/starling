@@ -9,8 +9,6 @@
  */
 package com.opengamma.analytics.financial.interestrate.bond.definition;
 
-import org.apache.commons.lang.ObjectUtils;
-
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponFixed;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
@@ -44,7 +42,7 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
 
   /**
    * Fixed coupon bond constructor from the nominal and the coupons. The legal entity contains only the issuer name.
-   * 
+   *
    * @param nominal
    *          The notional payments. For bullet bond, it is restricted to a single payment.
    * @param coupon
@@ -66,7 +64,8 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
    * @deprecated Use the constructor that does not take curve names
    */
   @Deprecated
-  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime, final double accruedInterest,
+  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime,
+      final double accruedInterest,
       final double factorToNextCoupon,
       final YieldConvention yieldConvention, final int couponPerYear, final String repoCurveName, final String issuer) {
     this(nominal, coupon, settlementTime, accruedInterest, factorToNextCoupon, yieldConvention, couponPerYear, repoCurveName,
@@ -75,7 +74,7 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
 
   /**
    * Fixed coupon bond constructor from the nominal and the coupons.
-   * 
+   *
    * @param nominal
    *          The notional payments. For bullet bond, it is restricted to a single payment.
    * @param coupon
@@ -97,7 +96,8 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
    * @deprecated Use the constructor that does not take curve names
    */
   @Deprecated
-  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime, final double accruedInterest,
+  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime,
+      final double accruedInterest,
       final double factorToNextCoupon,
       final YieldConvention yieldConvention, final int couponPerYear, final String repoCurveName, final LegalEntity issuer) {
     super(nominal, coupon, settlementTime, repoCurveName, issuer);
@@ -110,7 +110,7 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
 
   /**
    * Fixed coupon bond constructor from the nominal and the coupons. The legal entity contains only the issuer name.
-   * 
+   *
    * @param nominal
    *          The notional payments. For bullet bond, it is restricted to a single payment.
    * @param coupon
@@ -128,15 +128,17 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
    * @param issuer
    *          The bond issuer name.
    */
-  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime, final double accruedInterest,
+  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime,
+      final double accruedInterest,
       final double factorToNextCoupon,
       final YieldConvention yieldConvention, final int couponPerYear, final String issuer) {
-    this(nominal, coupon, settlementTime, accruedInterest, factorToNextCoupon, yieldConvention, couponPerYear, new LegalEntity(null, issuer, null, null, null));
+    this(nominal, coupon, settlementTime, accruedInterest, factorToNextCoupon, yieldConvention, couponPerYear,
+        new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
    * Fixed coupon bond constructor from the nominal and the coupons.
-   * 
+   *
    * @param nominal
    *          The notional payments. For bullet bond, it is restricted to a single payment.
    * @param coupon
@@ -154,7 +156,8 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
    * @param issuer
    *          The bond issuer name.
    */
-  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime, final double accruedInterest,
+  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime,
+      final double accruedInterest,
       final double factorToNextCoupon,
       final YieldConvention yieldConvention, final int couponPerYear, final LegalEntity issuer) {
     super(nominal, coupon, settlementTime, issuer);
@@ -167,7 +170,7 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
 
   /**
    * Gets the yield computation convention.
-   * 
+   *
    * @return The yield convention.
    */
   public YieldConvention getYieldConvention() {
@@ -176,7 +179,7 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
 
   /**
    * Gets the accrued interest at the settlement date.
-   * 
+   *
    * @return The accrued interest.
    */
   public double getAccruedInterest() {
@@ -185,7 +188,7 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
 
   /**
    * Gets the number of coupon per year.
-   * 
+   *
    * @return The number of coupon per year.
    */
   public int getCouponPerYear() {
@@ -194,7 +197,7 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
 
   /**
    * Gets the factor to the next coupon.
-   * 
+   *
    * @return The factor to the next coupon.
    */
   public double getFactorToNextCoupon() {
@@ -203,7 +206,8 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
 
   /**
    * Gets the number of coupon payments remaining.
-   * @return  the number of coupon payments
+   *
+   * @return the number of coupon payments
    */
   public int getNumberOfCoupons() {
     return getCoupon().getNumberOfPayments();
@@ -224,7 +228,8 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
   @Override
   public String toString() {
     String result = super.toString();
-    result += "\nFixed coupon bond: " + _yieldConvention.toString() + ", accrued=" + _accruedInterest + ", coupon=" + _couponPerYear + ", factor="
+    result += "\nFixed coupon bond: " + _yieldConvention.toString() + ", accrued=" + _accruedInterest + ", coupon=" + _couponPerYear
+        + ", factor="
         + _factorToNextCoupon;
     return result;
   }
@@ -239,7 +244,7 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
     result = prime * result + _couponPerYear;
     temp = Double.doubleToLongBits(_factorToNextCoupon);
     result = prime * result + (int) (temp ^ temp >>> 32);
-    result = prime * result + _yieldConvention.hashCode();
+    result = prime * result + (_yieldConvention == null ? 0 : _yieldConvention.hashCode());
     return result;
   }
 
@@ -251,7 +256,7 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
     if (!super.equals(obj)) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof BondFixedSecurity)) {
       return false;
     }
     final BondFixedSecurity other = (BondFixedSecurity) obj;
@@ -264,7 +269,11 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
     if (Double.doubleToLongBits(_factorToNextCoupon) != Double.doubleToLongBits(other._factorToNextCoupon)) {
       return false;
     }
-    if (!ObjectUtils.equals(_yieldConvention, other._yieldConvention)) {
+    if (_yieldConvention == null) {
+      if (other._yieldConvention != null) {
+        return false;
+      }
+    } else if (!_yieldConvention.equals(other._yieldConvention)) {
       return false;
     }
     return true;

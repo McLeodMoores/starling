@@ -118,7 +118,7 @@ public class DoubleMatrix1D implements Matrix<Double> {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuilder sb = new StringBuilder();
     final int n = _data.length;
     sb.append(" (");
     for (int i = 0; i < n - 1; i++) {

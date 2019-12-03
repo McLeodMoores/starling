@@ -34,7 +34,7 @@ public class DoubleMatrix2D implements Matrix<Double> {
 
   /**
    * Sets up an empty matrix.
-   * 
+   *
    * @param rows
    *          Number of rows
    * @param columns
@@ -109,7 +109,7 @@ public class DoubleMatrix2D implements Matrix<Double> {
 
   /**
    * Returns the row for a particular index.
-   * 
+   *
    * @param index
    *          The index
    * @return The row
@@ -120,7 +120,7 @@ public class DoubleMatrix2D implements Matrix<Double> {
 
   /**
    * Returns the column for a particular index.
-   * 
+   *
    * @param index
    *          The index
    * @return The column
@@ -146,7 +146,7 @@ public class DoubleMatrix2D implements Matrix<Double> {
 
   /**
    * Returns the underlying matrix data. If this is changed so is the matrix.
-   * 
+   *
    * @see #toArray to get a copy of data
    * @return An array of arrays containing the matrix elements
    */
@@ -156,7 +156,7 @@ public class DoubleMatrix2D implements Matrix<Double> {
 
   /**
    * Convert the matrix to an array of double arrays. As its elements are copied, the array is independent from the matrix data.
-   * 
+   *
    * @return An array of arrays containing a copy of matrix elements
    */
   public double[][] toArray() {
@@ -238,14 +238,12 @@ public class DoubleMatrix2D implements Matrix<Double> {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuilder sb = new StringBuilder();
     for (final double[] d : _data) {
-      // sb.append("(");
       for (int i = 0; i < d.length - 1; i++) {
         sb.append(d[i] + "\t");
       }
       sb.append(d[d.length - 1] + "\n");
-      // sb.append(d[d.length - 1] + ")\n");
     }
     return sb.toString();
   }

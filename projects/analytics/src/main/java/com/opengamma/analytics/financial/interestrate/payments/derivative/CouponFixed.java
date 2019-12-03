@@ -306,24 +306,27 @@ public class CouponFixed extends Coupon {
   @SuppressWarnings("deprecation")
   @Override
   public String toString() {
-    final StringBuilder builder = new StringBuilder();
-    builder.append(", getCurrency()=");
+    final StringBuilder builder = new StringBuilder("CouponFixed[currency=");
     builder.append(getCurrency());
-    builder.append("CouponFixed [_fixedRate=");
+    builder.append(", fixedRate=");
     builder.append(_fixedRate);
-    builder.append(", _amount=");
+    builder.append(", amount=");
     builder.append(_amount);
-    builder.append(", _accrualStartDate=");
-    builder.append(_accrualStartDate);
-    builder.append(", _accrualEndDate=");
-    builder.append(_accrualEndDate);
-    builder.append(", getPaymentYearFraction()=");
+    if (_accrualStartDate != null) {
+      builder.append(", accrualStartDate=");
+      builder.append(_accrualStartDate);
+    }
+    if (_accrualEndDate != null) {
+      builder.append(", accrualEndDate=");
+      builder.append(_accrualEndDate);
+    }
+    builder.append(", paymentYearFraction=");
     builder.append(getPaymentYearFraction());
-    builder.append(", getNotional()=");
+    builder.append(", notional=");
     builder.append(getNotional());
-    builder.append(", getReferenceAmount()=");
+    builder.append(", referenceAmount=");
     builder.append(getReferenceAmount());
-    builder.append(", getPaymentTime()=");
+    builder.append(", paymentTime=");
     builder.append(getPaymentTime());
     String fundingCurveName = null;
     try {
@@ -332,7 +335,7 @@ public class CouponFixed extends Coupon {
       // deprecated form was not used
     }
     if (fundingCurveName != null) {
-      builder.append(", getFundingCurveName()=");
+      builder.append(", fundingCurveName=");
       builder.append(getFundingCurveName());
     }
     builder.append("]");

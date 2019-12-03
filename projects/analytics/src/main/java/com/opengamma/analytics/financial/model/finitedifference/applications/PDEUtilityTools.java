@@ -264,7 +264,7 @@ public class PDEUtilityTools {
     Validate.isTrue(xSteps > 0, "need xSteps > 0");
     Validate.isTrue(ySteps > 0, "need ySteps > 0");
 
-    final StringBuffer result = new StringBuffer(name);
+    final StringBuilder result = new StringBuilder(name);
     result.append("\n");
     for (int i = 0; i <= ySteps; i++) {
       final double y = yMin + (yMax - yMin) * i / ySteps;
@@ -356,7 +356,7 @@ public class PDEUtilityTools {
     Validate.isTrue(x.length > 0, "The x-array was empty");
     Validate.isTrue(y.length > 0, "The y-array was empty");
 
-    final StringBuffer result = new StringBuffer(name);
+    final StringBuilder result = new StringBuilder(name);
     result.append("\n");
     for (final double element : y) {
       result.append("\t");
