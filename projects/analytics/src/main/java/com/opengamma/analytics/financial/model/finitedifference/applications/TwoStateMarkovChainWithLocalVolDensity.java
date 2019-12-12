@@ -38,17 +38,22 @@ public class TwoStateMarkovChainWithLocalVolDensity {
     Validate.notNull(forward, "null forward");
     Validate.notNull(data, "null data");
     Validate.notNull(localVolOverlay, "null localVolOverlay");
-    // _data1 = getCoupledPDEDataBundle(forward, data.getVol1(), data.getLambda12(), data.getLambda21(), data.getP0(), data.getBeta1(), localVol);
-    // _data2 = getCoupledPDEDataBundle(forward, data.getVol2(), data.getLambda21(), data.getLambda12(), 1.0 - data.getP0(), data.getBeta2(), localVol);
-    _data1 = getExtendedCoupledPDEDataBundle(forward, data.getVol1(), data.getLambda12(), data.getLambda21(), data.getP0(), data.getBeta1(), localVolOverlay);
-    _data2 = getExtendedCoupledPDEDataBundle(forward, data.getVol2(), data.getLambda21(), data.getLambda12(), 1.0 - data.getP0(), data.getBeta2(),
+    // _data1 = getCoupledPDEDataBundle(forward, data.getVol1(), data.getLambda12(), data.getLambda21(), data.getP0(), data.getBeta1(),
+    // localVol);
+    // _data2 = getCoupledPDEDataBundle(forward, data.getVol2(), data.getLambda21(), data.getLambda12(), 1.0 - data.getP0(),
+    // data.getBeta2(), localVol);
+    _data1 = getExtendedCoupledPDEDataBundle(forward, data.getVol1(), data.getLambda12(), data.getLambda21(), data.getP0(), data.getBeta1(),
+        localVolOverlay);
+    _data2 = getExtendedCoupledPDEDataBundle(forward, data.getVol2(), data.getLambda21(), data.getLambda12(), 1.0 - data.getP0(),
+        data.getBeta2(),
         localVolOverlay);
   }
 
   PDEFullResults1D[] solve(final PDEGrid1D grid) {
 
     final BoundaryCondition lower = new NeumannBoundaryCondition(0.0, grid.getSpaceNode(0), true);
-    // BoundaryCondition lower = new DirichletBoundaryCondition(0.0, 0.0);//TODO for beta < 0.5 zero is accessible and thus there will be non-zero
+    // BoundaryCondition lower = new DirichletBoundaryCondition(0.0, 0.0);//TODO for beta < 0.5 zero is accessible and thus there will be
+    // non-zero
     // density there
     final BoundaryCondition upper = new DirichletBoundaryCondition(0.0, grid.getSpaceNode(grid.getNumSpaceNodes() - 1));
 
@@ -60,7 +65,8 @@ public class TwoStateMarkovChainWithLocalVolDensity {
     return new PDEFullResults1D[] { res1, res2 };
   }
 
-  private ExtendedCoupledPDEDataBundle getExtendedCoupledPDEDataBundle(final ForwardCurve forward, final double vol, final double lambda1, final double lambda2,
+  private ExtendedCoupledPDEDataBundle getExtendedCoupledPDEDataBundle(final ForwardCurve forward, final double vol, final double lambda1,
+      final double lambda2,
       final double initialProb,
       final double beta, final AbsoluteLocalVolatilitySurface localVol) {
 
@@ -102,7 +108,7 @@ public class TwoStateMarkovChainWithLocalVolDensity {
       private final double _volRootTOffset = 0.01;
 
       @Override
-      public Double apply(final Double s) {
+      public Double evaluate(final Double s) {
         if (s == 0) {
           return 0.0;
         }
@@ -112,7 +118,8 @@ public class TwoStateMarkovChainWithLocalVolDensity {
       }
     };
 
-    return new ExtendedCoupledPDEDataBundle(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
+    return new ExtendedCoupledPDEDataBundle(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        FunctionalDoublesSurface.from(c),
         FunctionalDoublesSurface.from(aStar),
         FunctionalDoublesSurface.from(bStar), -lambda2, initialCondition);
 

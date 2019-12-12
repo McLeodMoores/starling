@@ -27,7 +27,7 @@ public class BlackPriceFunction implements OptionPriceFunction<BlackFunctionData
     return new Function1D<BlackFunctionData, Double>() {
 
       @Override
-      public Double apply(final BlackFunctionData data) {
+      public Double evaluate(final BlackFunctionData data) {
         Validate.notNull(data, "data");
         final double forward = data.getForward();
         final double sigma = data.getBlackVolatility();
@@ -39,12 +39,15 @@ public class BlackPriceFunction implements OptionPriceFunction<BlackFunctionData
 
   /**
    * Return the Black price and its derivatives.
-   * @param option The option.
-   * @param data The Black data.
-   * @return An array with [0] the price, [1] the derivative with respect to the forward, [2] the derivative with respect to the volatility and
-   * [3] the derivative with respect to the strike.
+   *
+   * @param option
+   *          The option.
+   * @param data
+   *          The Black data.
+   * @return An array with [0] the price, [1] the derivative with respect to the forward, [2] the derivative with respect to the volatility
+   *         and [3] the derivative with respect to the strike.
    */
-  //TODO Refactor the method call to have the price as output and the derivatives as an array (like getPriceAdjoint2).
+  // TODO Refactor the method call to have the price as output and the derivatives as an array (like getPriceAdjoint2).
   // TODO: [PLAT-6343]Add the derivative to the time to expiry (theta)
   public double[] getPriceAdjoint(final EuropeanVanillaOption option, final BlackFunctionData data) {
     /**
@@ -102,16 +105,22 @@ public class BlackPriceFunction implements OptionPriceFunction<BlackFunctionData
 
   /**
    * Return the Black price and its first and second order derivatives.
-   * @param option The option.
-   * @param data The Black data.
-   * @param bsD An array containing the price derivative [0] the derivative with respect to the forward, [1] the derivative with respect to the volatility and
-   * [2] the derivative with respect to the strike.
-   * @param bsD2 An array of array containing the price second order derivatives.
-   * Second order derivatives with respect to: [0][0] forward-forward [0][1] forward-volatility [0][2] forward-strike [1][1]volatility-volatility,
-   * [1][2] volatility-strike, [2][2] strike-strike
+   *
+   * @param option
+   *          The option.
+   * @param data
+   *          The Black data.
+   * @param bsD
+   *          An array containing the price derivative [0] the derivative with respect to the forward, [1] the derivative with respect to
+   *          the volatility and [2] the derivative with respect to the strike.
+   * @param bsD2
+   *          An array of array containing the price second order derivatives. Second order derivatives with respect to: [0][0]
+   *          forward-forward [0][1] forward-volatility [0][2] forward-strike [1][1]volatility-volatility, [1][2] volatility-strike, [2][2]
+   *          strike-strike
    * @return The price.
    */
-  public double getPriceAdjoint2(final EuropeanVanillaOption option, final BlackFunctionData data, final double[] bsD, final double[][] bsD2) {
+  public double getPriceAdjoint2(final EuropeanVanillaOption option, final BlackFunctionData data, final double[] bsD,
+      final double[][] bsD2) {
     /**
      * The cut-off for small time and strike.
      */
@@ -214,7 +223,7 @@ public class BlackPriceFunction implements OptionPriceFunction<BlackFunctionData
     return new Function1D<BlackFunctionData, Double>() {
 
       @Override
-      public Double apply(final BlackFunctionData data) {
+      public Double evaluate(final BlackFunctionData data) {
         Validate.notNull(data, "data");
         final double sigma = data.getBlackVolatility();
         final double f = data.getForward();

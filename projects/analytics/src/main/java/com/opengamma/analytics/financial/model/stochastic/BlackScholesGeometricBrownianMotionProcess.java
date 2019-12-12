@@ -19,7 +19,8 @@ import com.opengamma.analytics.math.function.Function2D;
  * @param <U>
  *          The type of the market data
  */
-public class BlackScholesGeometricBrownianMotionProcess<T extends OptionDefinition, U extends StandardOptionDataBundle> extends StochasticProcess<T, U> {
+public class BlackScholesGeometricBrownianMotionProcess<T extends OptionDefinition, U extends StandardOptionDataBundle>
+    extends StochasticProcess<T, U> {
 
   @Override
   public Function1D<Double, Double> getPathGeneratingFunction(final T t, final U u, final int steps) {
@@ -39,7 +40,7 @@ public class BlackScholesGeometricBrownianMotionProcess<T extends OptionDefiniti
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double apply(final Double e) {
+      public Double evaluate(final Double e) {
         return nu + sigmaDt * e;
       }
     };

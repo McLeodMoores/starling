@@ -1,15 +1,17 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.horizon;
 
+import com.opengamma.analytics.financial.horizon.rolldown.VolatilitySurfaceForwardSlideRolldown;
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
 
 /**
- * 
+ * @deprecated Use {@link VolatilitySurfaceForwardSlideRolldown}.
  */
+@Deprecated
 public class ForwardSlideVolatilitySurfaceRolldownFunction implements RolldownFunction<VolatilitySurface> {
 
   @Override

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.forex.method;
@@ -30,27 +30,28 @@ public class PresentValueVolatilitySensitivityDataBundleTest {
   private static final Currency CUR_2 = Currency.EUR;
   private static final Currency CUR_3 = Currency.GBP;
 
-  @Test
   /**
    * Tests the currency pair and map getters.
    */
+  @Test
   public void getter() {
-    SurfaceValue vega = new SurfaceValue();
+    final SurfaceValue vega = new SurfaceValue();
     final double exp = 1.0;
     final double strike = 0.05;
     final double value = 10000;
     final DoublesPair point = DoublesPair.of(exp, strike);
     vega.add(point, value);
-    final PresentValueForexBlackVolatilitySensitivity sensi = new PresentValueForexBlackVolatilitySensitivity(CUR_1, CUR_2, SurfaceValue.from(point, value));
+    final PresentValueForexBlackVolatilitySensitivity sensi = new PresentValueForexBlackVolatilitySensitivity(CUR_1, CUR_2,
+        SurfaceValue.from(point, value));
     final Pair<Currency, Currency> pair = ObjectsPair.of(CUR_1, CUR_2);
     assertEquals("Currency pair", pair, sensi.getCurrencyPair());
     assertEquals("Vega", vega, sensi.getVega());
   }
 
-  @Test
   /**
    * Tests the equal and hash-code methods.
    */
+  @Test
   public void equalHash() {
     final double exp = 1.0;
     final double strike = 0.05;
@@ -67,7 +68,7 @@ public class PresentValueVolatilitySensitivityDataBundleTest {
     vega = new SurfaceValue();
     final SurfaceValue newVega = new SurfaceValue();
     newVega.add(point, value / 2.0);
-    PresentValueForexBlackVolatilitySensitivity other = new PresentValueForexBlackVolatilitySensitivity(CUR_1, CUR_2, newVega);
+    final PresentValueForexBlackVolatilitySensitivity other = new PresentValueForexBlackVolatilitySensitivity(CUR_1, CUR_2, newVega);
     other.add(point, value / 2.0);
     assertTrue(other.equals(sensitivities));
     assertEquals(other.hashCode(), sensitivities.hashCode());
@@ -81,10 +82,10 @@ public class PresentValueVolatilitySensitivityDataBundleTest {
     assertFalse(modified.equals(null));
   }
 
-  @Test
   /**
    * The sensitivity is added twice to the same point and it is checked that the value is twice the initial value.
    */
+  @Test
   public void addSamePoint() {
     SurfaceValue vega = new SurfaceValue();
     final double exp = 1.0;
@@ -95,7 +96,7 @@ public class PresentValueVolatilitySensitivityDataBundleTest {
     final PresentValueForexBlackVolatilitySensitivity first = new PresentValueForexBlackVolatilitySensitivity(CUR_1, CUR_2, vega);
     vega = new SurfaceValue();
     vega.add(point, value);
-    PresentValueForexBlackVolatilitySensitivity second = new PresentValueForexBlackVolatilitySensitivity(CUR_1, CUR_2, vega);
+    final PresentValueForexBlackVolatilitySensitivity second = new PresentValueForexBlackVolatilitySensitivity(CUR_1, CUR_2, vega);
     second.add(point, value);
     assertEquals(first, second);
   }

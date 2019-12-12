@@ -36,11 +36,11 @@ public class GaussianVegaCE implements MartingaleCharacteristicExponent {
     return new Function1D<ComplexNumber, ComplexNumber>() {
 
       @Override
-      public ComplexNumber apply(final ComplexNumber u) {
+      public ComplexNumber evaluate(final ComplexNumber u) {
         Validate.notNull(u, "u");
         final ComplexNumber psi = baseFunc.apply(u);
         final ComplexNumber temp = divFunc.apply(u);
-        final ComplexNumber temp2 = log(temp); //don't like taking logs - bad things happen
+        final ComplexNumber temp2 = log(temp); // don't like taking logs - bad things happen
         final ComplexNumber res = add(psi, temp2);
         return res;
 

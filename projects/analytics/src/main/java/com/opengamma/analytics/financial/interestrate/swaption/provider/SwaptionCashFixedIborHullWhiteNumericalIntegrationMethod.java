@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.financial.interestrate.swaption.provider;
 
+import java.util.function.Function;
+
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionCashFixedIbor;
 import com.opengamma.analytics.financial.model.interestrate.HullWhiteOneFactorPiecewiseConstantInterestRateModel;
@@ -12,7 +14,7 @@ import com.opengamma.analytics.financial.model.interestrate.definition.HullWhite
 import com.opengamma.analytics.financial.provider.calculator.discounting.CashFlowEquivalentCalculator;
 import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderInterface;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -30,7 +32,7 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
 
   /**
    * Return the unique instance of the class.
-   * 
+   *
    * @return The instance.
    */
   public static SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod getInstance() {
@@ -58,7 +60,7 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
 
   /**
    * Computes the present value of the Physical delivery swaption.
-   * 
+   *
    * @param swaption
    *          The swaption.
    * @param hullWhite
@@ -79,8 +81,10 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
     for (int loopcf = 0; loopcf < nbFixed; loopcf++) {
       alphaFixed[loopcf] = MODEL.alpha(parameters, 0.0, expiryTime, expiryTime,
           swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(loopcf).getPaymentTime());
-      dfFixed[loopcf] = multicurves.getDiscountFactor(ccy, swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(loopcf).getPaymentTime());
-      discountedCashFlowFixed[loopcf] = dfFixed[loopcf] * swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction()
+      dfFixed[loopcf] = multicurves.getDiscountFactor(ccy,
+          swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(loopcf).getPaymentTime());
+      discountedCashFlowFixed[loopcf] = dfFixed[loopcf]
+          * swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(loopcf).getPaymentYearFraction()
           * swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(loopcf).getNotional();
     }
 
@@ -93,10 +97,12 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
       dfIbor[loopcf] = multicurves.getDiscountFactor(ccy, cfeIbor.getNthPayment(loopcf).getPaymentTime());
       discountedCashFlowIbor[loopcf] = dfIbor[loopcf] * cfeIbor.getNthPayment(loopcf).getAmount();
     }
-    final int nbFixedPaymentYear = (int) Math.round(1.0 / swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(0).getPaymentYearFraction());
+    final int nbFixedPaymentYear = (int) Math
+        .round(1.0 / swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(0).getPaymentYearFraction());
     final double notional = Math.abs(swaption.getUnderlyingSwap().getFixedLeg().getNthPayment(0).getNotional());
     // Integration
-    final SwaptionIntegrant integrant = new SwaptionIntegrant(discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor, nbFixedPaymentYear,
+    final SwaptionIntegrant integrant = new SwaptionIntegrant(discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor,
+        nbFixedPaymentYear,
         swaption.getStrike(), swaption.isCall());
     final double limit = 10.0;
     final double absoluteTolerance = 1.0E-8;
@@ -104,7 +110,8 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
     final RungeKuttaIntegrator1D integrator = new RungeKuttaIntegrator1D(absoluteTolerance, relativeTolerance, NB_INTEGRATION);
     double pv = 0.0;
     try {
-      pv = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(integrant, -limit, limit) * (swaption.isLong() ? 1.0 : -1.0) * notional * dfIbor[0];
+      pv = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(Function1dAdapter.of(integrant), -limit, limit)
+          * (swaption.isLong() ? 1.0 : -1.0) * notional * dfIbor[0];
     } catch (final Exception e) {
       throw new RuntimeException(e);
     }
@@ -114,7 +121,7 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
   /**
    * Inner class to implement the integration used in price replication.
    */
-  private static final class SwaptionIntegrant extends Function1D<Double, Double> {
+  private static final class SwaptionIntegrant implements Function<Double, Double> {
 
     private final double[] _discountedCashFlowFixed;
     private final double[] _alphaFixed;
@@ -125,25 +132,8 @@ public final class SwaptionCashFixedIborHullWhiteNumericalIntegrationMethod {
     private final double _strike;
     private final boolean _isPayer;
 
-    /**
-     * Constructor to the integrant function.
-     * 
-     * @param discountedCashFlowFixed
-     *          The discounted cash flows.
-     * @param alphaFixed
-     *          The bond volatilities.
-     * @param discountedCashFlowIbor
-     *          The discounted cash flows.
-     * @param alphaIbor
-     *          The bond volatilities.
-     * @param nbFixedPaymentYear
-     *          Number of Fixed payment per year.
-     * @param notional
-     *          The notional.
-     * @param strike
-     *          The strike.
-     */
-    SwaptionIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor,
+    SwaptionIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor,
+        final double[] alphaIbor,
         final int nbFixedPaymentYear,
         final double strike, final boolean isPayer) {
       _discountedCashFlowFixed = discountedCashFlowFixed;

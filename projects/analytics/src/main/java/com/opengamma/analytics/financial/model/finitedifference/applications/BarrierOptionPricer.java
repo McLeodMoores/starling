@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.model.finitedifference.BoundaryCondition;
@@ -81,14 +83,16 @@ public class BarrierOptionPricer {
    *          The Black volatility.
    * @return The price.
    */
-  public double getPrice(final EuropeanVanillaOption option, final Barrier barrier, final double rebate, final double spot, final double costOfCarry,
+  public double getPrice(final EuropeanVanillaOption option, final Barrier barrier, final double rebate, final double spot,
+      final double costOfCarry,
       final double rate, final double sigma) {
     Validate.notNull(option, "option");
     Validate.notNull(barrier, "barrier");
     final boolean isKnockIn = barrier.getKnockType() == KnockType.IN;
     final boolean isDown = barrier.getBarrierType() == BarrierType.DOWN;
 
-    // in these pathological cases the barrier is hit immediately so the value is just from the rebate (knock-out) or a European option (knock-in)
+    // in these pathological cases the barrier is hit immediately so the value is just from the rebate (knock-out) or a European option
+    // (knock-in)
     if (isDown && spot <= barrier.getBarrierLevel() || !isDown && spot >= barrier.getBarrierLevel()) {
       if (isKnockIn) {
         return blackPrice(spot, option.getStrike(), option.getTimeToExpiry(), rate, costOfCarry, sigma, option.isCall());
@@ -96,19 +100,22 @@ public class BarrierOptionPricer {
       return rebate;
     }
     if (isKnockIn) {
-      return inBarrier(spot, barrier.getBarrierLevel(), option.getStrike(), option.getTimeToExpiry(), rate, costOfCarry, sigma, option.isCall(), rebate);
+      return inBarrier(spot, barrier.getBarrierLevel(), option.getStrike(), option.getTimeToExpiry(), rate, costOfCarry, sigma,
+          option.isCall(), rebate);
     }
-    return outBarrier(spot, barrier.getBarrierLevel(), option.getStrike(), option.getTimeToExpiry(), rate, costOfCarry, sigma, option.isCall(), rebate);
+    return outBarrier(spot, barrier.getBarrierLevel(), option.getStrike(), option.getTimeToExpiry(), rate, costOfCarry, sigma,
+        option.isCall(), rebate);
   }
 
   /**
-   * Computes the price of a one-touch out barrier option in the Black-Scholes world by solving the BS PDE on a finite difference grid. If a barrier is hit at
-   * any time before expiry, the option is cancelled (knocked-out) and a rebate (which is often zero) is paid <b>immediately</b>. If the barrier is not hit,
-   * then a normal European option payment is made.
+   * Computes the price of a one-touch out barrier option in the Black-Scholes world by solving the BS PDE on a finite difference grid. If a
+   * barrier is hit at any time before expiry, the option is cancelled (knocked-out) and a rebate (which is often zero) is paid
+   * <b>immediately</b>. If the barrier is not hit, then a normal European option payment is made.
    * <p>
-   * If the barrier is above the spot it is assumed to be an up-and-out barrier (otherwise it would expire immediately) otherwise it is a down-and-out barrier
-   * As there are exact formulae for this case (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction}),
-   * this is purely for testing purposes.
+   * If the barrier is above the spot it is assumed to be an up-and-out barrier (otherwise it would expire immediately) otherwise it is a
+   * down-and-out barrier As there are exact formulae for this case (see
+   * {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction}), this is purely for testing
+   * purposes.
    *
    * @param spot
    *          The current (i.e. option price time) of the underlying
@@ -130,7 +137,8 @@ public class BarrierOptionPricer {
    *          The rebate amount.
    * @return The price.
    */
-  public double outBarrier(final double spot, final double barrierLevel, final double strike, final double expiry, final double rate, final double carry,
+  public double outBarrier(final double spot, final double barrierLevel, final double strike, final double expiry, final double rate,
+      final double carry,
       final double vol, final boolean isCall, final double rebate) {
 
     final Function1D<Double, Double> intCon = ICP.getEuropeanPayoff(strike, isCall);
@@ -149,12 +157,7 @@ public class BarrierOptionPricer {
       if (isCall) {
         lower = new DirichletBoundaryCondition(0.0, sMin);
       } else {
-        final Function1D<Double, Double> lowerValue = new Function1D<Double, Double>() {
-          @Override
-          public Double apply(final Double tau) {
-            return Math.exp(-rate * tau) * strike;
-          }
-        };
+        final Function<Double, Double> lowerValue = tau -> Math.exp(-rate * tau) * strike;
         lower = new DirichletBoundaryCondition(lowerValue, sMin);
       }
       upper = new DirichletBoundaryCondition(rebate, sMax);
@@ -164,12 +167,7 @@ public class BarrierOptionPricer {
       lower = new DirichletBoundaryCondition(rebate, sMin);
 
       if (isCall) {
-        final Function1D<Double, Double> upperValue = new Function1D<Double, Double>() {
-          @Override
-          public Double apply(final Double tau) {
-            return Math.exp(-rate * tau) * (spot * Math.exp(carry * tau) - strike);
-          }
-        };
+        final Function<Double, Double> upperValue = tau -> Math.exp(-rate * tau) * (spot * Math.exp(carry * tau) - strike);
         upper = new DirichletBoundaryCondition(upperValue, sMax);
       } else {
         upper = new DirichletBoundaryCondition(0.0, sMax);
@@ -192,11 +190,13 @@ public class BarrierOptionPricer {
   }
 
   /**
-   * Computes the price of a one-touch in barrier option in the Black-Scholes world by solving the BS PDE on a finite difference grid. If a barrier is hit at
-   * any time before expiry, the option becomes a simple European (call or put). If the barrier is not hit a rebate is paid at the option expiry
+   * Computes the price of a one-touch in barrier option in the Black-Scholes world by solving the BS PDE on a finite difference grid. If a
+   * barrier is hit at any time before expiry, the option becomes a simple European (call or put). If the barrier is not hit a rebate is
+   * paid at the option expiry
    * <p>
-   * If the barrier is above the spot it is assumed to be an up-and-in barrier otherwise it is a down-and-in barrier As there are exact formulae for this case
-   * (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction}), this is purely for testing purposes.
+   * If the barrier is above the spot it is assumed to be an up-and-in barrier otherwise it is a down-and-in barrier As there are exact
+   * formulae for this case (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction}),
+   * this is purely for testing purposes.
    *
    * @param spot
    *          The current (i.e. option price time) of the underlying
@@ -218,7 +218,8 @@ public class BarrierOptionPricer {
    *          The rebate amount.
    * @return The price.
    */
-  public double inBarrier(final double spot, final double barrierLevel, final double strike, final double expiry, final double rate, final double carry,
+  public double inBarrier(final double spot, final double barrierLevel, final double strike, final double expiry, final double rate,
+      final double carry,
       final double vol, final boolean isCall, final double rebate) {
     final double outPrice = outBarrierSpecial(spot, barrierLevel, strike, expiry, rate, carry, vol, isCall, rebate);
     final double bsPrice = blackPrice(spot, strike, expiry, rate, carry, vol, isCall);
@@ -226,8 +227,9 @@ public class BarrierOptionPricer {
   }
 
   /**
-   * Computes the price of a one-touch out barrier option in the Black-Scholes world assuming the rebate is paid at the option expiry. This is NOT the case for
-   * a out barrier, but is for an in, and as we must price an in barrier and a European option plus a bond (the rebate) minus an out, we need this special case.
+   * Computes the price of a one-touch out barrier option in the Black-Scholes world assuming the rebate is paid at the option expiry. This
+   * is NOT the case for a out barrier, but is for an in, and as we must price an in barrier and a European option plus a bond (the rebate)
+   * minus an out, we need this special case.
    *
    * @param spot
    *          The current (i.e. option price time) of the underlying
@@ -249,20 +251,16 @@ public class BarrierOptionPricer {
    *          The rebate amount.
    * @return The price.
    */
-  protected double outBarrierSpecial(final double spot, final double barrierLevel, final double strike, final double expiry, final double rate,
+  protected double outBarrierSpecial(final double spot, final double barrierLevel, final double strike, final double expiry,
+      final double rate,
       final double carry,
       final double vol, final boolean isCall, final double rebate) {
 
-    final Function1D<Double, Double> intCon = ICP.getEuropeanPayoff(strike, isCall);
+    final Function<Double, Double> intCon = ICP.getEuropeanPayoff(strike, isCall);
     final ConvectionDiffusionPDE1DStandardCoefficients pde = PDE.getBlackScholes(rate, rate - carry, vol);
     final boolean isUp = barrierLevel > spot;
 
-    final Function1D<Double, Double> rebateValue = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double tau) {
-        return rebate * Math.exp(-rate * tau);
-      }
-    };
+    final Function<Double, Double> rebateValue = tau -> rebate * Math.exp(-rate * tau);
 
     double sMin;
     double sMax;
@@ -274,12 +272,7 @@ public class BarrierOptionPricer {
       if (isCall) {
         lower = new DirichletBoundaryCondition(0.0, sMin);
       } else {
-        final Function1D<Double, Double> lowerValue = new Function1D<Double, Double>() {
-          @Override
-          public Double apply(final Double tau) {
-            return Math.exp(-rate * tau) * strike;
-          }
-        };
+        final Function<Double, Double> lowerValue = tau -> Math.exp(-rate * tau) * strike;
         lower = new DirichletBoundaryCondition(lowerValue, sMin);
       }
       upper = new DirichletBoundaryCondition(rebateValue, sMax);
@@ -288,12 +281,7 @@ public class BarrierOptionPricer {
       sMax = spot * Math.exp(_z * Math.sqrt(expiry));
       lower = new DirichletBoundaryCondition(rebateValue, sMin);
       if (isCall) {
-        final Function1D<Double, Double> upperValue = new Function1D<Double, Double>() {
-          @Override
-          public Double apply(final Double tau) {
-            return Math.exp(-rate * tau) * (spot * Math.exp(carry * tau) - strike);
-          }
-        };
+        final Function<Double, Double> upperValue = tau -> Math.exp(-rate * tau) * (spot * Math.exp(carry * tau) - strike);
         upper = new DirichletBoundaryCondition(upperValue, sMax);
       } else {
         upper = new DirichletBoundaryCondition(0.0, sMax);
@@ -326,20 +314,10 @@ public class BarrierOptionPricer {
     BoundaryCondition upper;
     if (isCall) {
       lower = new DirichletBoundaryCondition(0.0, sMin);
-      final Function1D<Double, Double> upperValue = new Function1D<Double, Double>() {
-        @Override
-        public Double apply(final Double tau) {
-          return Math.exp(-rate * tau) * (spot * Math.exp(carry * tau) - strike);
-        }
-      };
+      final Function<Double, Double> upperValue = tau -> Math.exp(-rate * tau) * (spot * Math.exp(carry * tau) - strike);
       upper = new DirichletBoundaryCondition(upperValue, sMax);
     } else {
-      final Function1D<Double, Double> lowerValue = new Function1D<Double, Double>() {
-        @Override
-        public Double apply(final Double tau) {
-          return Math.exp(-rate * tau) * strike;
-        }
-      };
+      final Function<Double, Double> lowerValue = tau -> Math.exp(-rate * tau) * strike;
       lower = new DirichletBoundaryCondition(lowerValue, sMin);
       upper = new DirichletBoundaryCondition(0.0, sMax);
     }

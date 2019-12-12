@@ -36,10 +36,6 @@ public class FinancialClient {
    */
   private final FinancialUserSecurityMaster _securityMaster;
   /**
-   * The yield curve master.
-   */
-  private final FinancialUserInterpolatedYieldCurveDefinitionMaster _interpolatedYieldCurveDefinitionMaster;
-  /**
    * The snashot master.
    */
   private final FinancialUserSnapshotMaster _snapshotMaster;
@@ -71,8 +67,6 @@ public class FinancialClient {
     _positionMaster = new FinancialUserPositionMaster(this, services.getPositionMaster());
     _securityMaster = new FinancialUserSecurityMaster(this, services.getSecurityMaster());
     _configMaster = new FinancialUserConfigMaster(this, services.getConfigMaster());
-    _interpolatedYieldCurveDefinitionMaster = new FinancialUserInterpolatedYieldCurveDefinitionMaster(this,
-        services.getInterpolatedYieldCurveDefinitionMaster());
     _snapshotMaster = new FinancialUserSnapshotMaster(this, services.getSnapshotMaster());
   }
 
@@ -160,16 +154,6 @@ public class FinancialClient {
   public ConfigMaster getConfigMaster() {
     updateLastAccessed();
     return _configMaster;
-  }
-
-  /**
-   * Gets the yield curve master.
-   *
-   * @return the value of the property
-   */
-  public FinancialUserInterpolatedYieldCurveDefinitionMaster getInterpolatedYieldCurveDefinitionMaster() {
-    updateLastAccessed();
-    return _interpolatedYieldCurveDefinitionMaster;
   }
 
   /**

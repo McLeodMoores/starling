@@ -119,7 +119,7 @@ public class PositionPnLFunction extends AbstractFunction.NonCompiledInvoker {
     try {
       final Set<ValueRequirement> set =
           OpenGammaCompilationContext.getPnLRequirementsGatherer(context)
-            .getFirstOrderRequirements(security, samplingPeriod, scheduleCalculator, samplingFunction, target.toSpecification(), currency);
+          .getFirstOrderRequirements(security, samplingPeriod, scheduleCalculator, samplingFunction, target.toSpecification(), currency);
       return set;
     } catch (final OpenGammaRuntimeException e) {
       LOGGER.error("Could not get delta requirements for {} {}; reason was {}", new Object[] {getCcyString(security), security.getClass(), e.getMessage() });

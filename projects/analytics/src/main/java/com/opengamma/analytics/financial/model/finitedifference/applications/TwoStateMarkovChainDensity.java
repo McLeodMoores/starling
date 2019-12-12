@@ -23,9 +23,10 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 
 /**
- * Solves a coupled forward PDE (i.e. coupled Fokker-Plank) for the density of an asset when the process is CEV with vol levels determined by a two state Markov
- * chain. The densities, p(t,s,state1) &amp; p(t,s,state2), are such that int_{0}^{\infty} p(t,s,stateX) ds gives the probability of being in state X at time t,
- * and (p(t,s,state1)+p(t,s,state2))*ds is the probability that the asset with be between s and s + ds at time t.
+ * Solves a coupled forward PDE (i.e. coupled Fokker-Plank) for the density of an asset when the process is CEV with vol levels determined
+ * by a two state Markov chain. The densities, p(t,s,state1) &amp; p(t,s,state2), are such that int_{0}^{\infty} p(t,s,stateX) ds gives the
+ * probability of being in state X at time t, and (p(t,s,state1)+p(t,s,state2))*ds is the probability that the asset with be between s and s
+ * + ds at time t.
  */
 public class TwoStateMarkovChainDensity {
   private static final double THETA = 1.0;
@@ -35,7 +36,8 @@ public class TwoStateMarkovChainDensity {
   private final Function1D<Double, Double> _initCon11;
   private final Function1D<Double, Double> _initCon12;
 
-  public TwoStateMarkovChainDensity(final ForwardCurve forward, final double vol1, final double deltaVol, final double lambda12, final double lambda21,
+  public TwoStateMarkovChainDensity(final ForwardCurve forward, final double vol1, final double deltaVol, final double lambda12,
+      final double lambda21,
       final double probS1, final double beta1,
       final double beta2) {
     this(forward, new TwoStateMarkovChainDataBundle(vol1, vol1 + deltaVol, lambda12, lambda21, probS1, beta1, beta2));
@@ -55,7 +57,8 @@ public class TwoStateMarkovChainDensity {
 
     // BoundaryCondition lower = new FixedSecondDerivativeBoundaryCondition(0, grid.getSpaceNode(0), true);
     final BoundaryCondition lower = new NeumannBoundaryCondition(0.0, grid.getSpaceNode(0), true);
-    // BoundaryCondition lower = new DirichletBoundaryCondition(0.0, grid.getSpaceNode(0));//TODO for beta < 0.5 zero is accessible and thus there will be
+    // BoundaryCondition lower = new DirichletBoundaryCondition(0.0, grid.getSpaceNode(0));//TODO for beta < 0.5 zero is accessible and thus
+    // there will be
     // non-zero
     // density there
     final BoundaryCondition upper = new DirichletBoundaryCondition(0.0, grid.getSpaceNode(grid.getNumSpaceNodes() - 1));
@@ -77,7 +80,7 @@ public class TwoStateMarkovChainDensity {
       private final double _volRootTOffset = 0.01;
 
       @Override
-      public Double apply(final Double s) {
+      public Double evaluate(final Double s) {
         if (s <= 0 || initialProb == 0) {
           return 0.0;
         }
@@ -88,7 +91,8 @@ public class TwoStateMarkovChainDensity {
     };
   }
 
-  private ConvectionDiffusionPDE1DCoupledCoefficients getCoupledPDEDataBundle(final ForwardCurve forward, final double vol, final double lambda1,
+  private ConvectionDiffusionPDE1DCoupledCoefficients getCoupledPDEDataBundle(final ForwardCurve forward, final double vol,
+      final double lambda1,
       final double lambda2, final double beta) {
 
     final Function<Double, Double> a = ts -> {
@@ -126,7 +130,8 @@ public class TwoStateMarkovChainDensity {
       return lambda1 + forward.getDrift(t) - vol * vol * beta * (2 * beta - 1) * temp;
     };
 
-    return new ConvectionDiffusionPDE1DCoupledCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
+    return new ConvectionDiffusionPDE1DCoupledCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        FunctionalDoublesSurface.from(c),
         -lambda2);
   }
 }

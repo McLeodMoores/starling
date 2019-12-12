@@ -24,16 +24,25 @@ public class PaymentTest {
   private static final double PAYMENT_TIME = 0.5;
   private static final MyPayment PAYMENT = new MyPayment(CCY, PAYMENT_TIME);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrency() {
     new MyPayment(null, PAYMENT_TIME);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativePaymentTime() {
     new MyPayment(CCY, -PAYMENT_TIME);
   }
 
+  /**
+   *
+   */
   @Test
   public void testObject() {
     assertEquals(CCY, PAYMENT.getCurrency());

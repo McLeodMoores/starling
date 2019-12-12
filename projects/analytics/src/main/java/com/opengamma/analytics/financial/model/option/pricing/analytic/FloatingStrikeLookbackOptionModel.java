@@ -19,17 +19,19 @@ import com.opengamma.util.CompareUtils;
 /**
  *
  */
-public class FloatingStrikeLookbackOptionModel extends AnalyticOptionModel<FloatingStrikeLookbackOptionDefinition, StandardOptionWithSpotTimeSeriesDataBundle> {
+public class FloatingStrikeLookbackOptionModel
+    extends AnalyticOptionModel<FloatingStrikeLookbackOptionDefinition, StandardOptionWithSpotTimeSeriesDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
   @Override
-  public Function1D<StandardOptionWithSpotTimeSeriesDataBundle, Double> getPricingFunction(final FloatingStrikeLookbackOptionDefinition definition) {
+  public Function1D<StandardOptionWithSpotTimeSeriesDataBundle, Double> getPricingFunction(
+      final FloatingStrikeLookbackOptionDefinition definition) {
     Validate.notNull(definition, "definition");
     return new Function1D<StandardOptionWithSpotTimeSeriesDataBundle, Double>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionWithSpotTimeSeriesDataBundle data) {
+      public Double evaluate(final StandardOptionWithSpotTimeSeriesDataBundle data) {
         Validate.notNull(data, "data");
         final DoubleTimeSeries<?> ts = data.getSpotTimeSeries();
         final double s = data.getSpot();
@@ -53,9 +55,9 @@ public class FloatingStrikeLookbackOptionModel extends AnalyticOptionModel<Float
         } else {
           y = CompareUtils.closeEquals(sigma, 0, 1e-15) ? 0
               : s * df2 * sigma * sigma
-              * (sign * Math.pow(s / k, -2 * b / sigma / sigma) * NORMAL.getCDF(sign * (2 * b * Math.sqrt(t) / sigma - d1))
-                  - sign * Math.exp(b * t) * NORMAL.getCDF(-sign * d1))
-              / 2 / b;
+                  * (sign * Math.pow(s / k, -2 * b / sigma / sigma) * NORMAL.getCDF(sign * (2 * b * Math.sqrt(t) / sigma - d1))
+                      - sign * Math.exp(b * t) * NORMAL.getCDF(-sign * d1))
+                  / 2 / b;
         }
         return sign * (s * df1 * NORMAL.getCDF(sign * d1) - k * df2 * NORMAL.getCDF(sign * d2)) + y;
       }

@@ -17,7 +17,6 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.marketdata.OverrideOperationCompiler;
 import com.opengamma.engine.view.ViewProcessor;
 import com.opengamma.financial.analytics.ircurve.calcconfig.CurveCalculationConfigSource;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.currency.CurrencyPair;
 import com.opengamma.financial.currency.CurrencyPairs;
 import com.opengamma.financial.currency.CurrencyPairsResolver;
@@ -151,29 +150,6 @@ public final class OpenGammaExecutionContext {
    */
   public static void setSecuritySource(final FunctionExecutionContext context, final SecuritySource securitySource) {
     context.setSecuritySource(securitySource);
-  }
-
-  /**
-   * Gets a {@code ConventionBundleSource} from the context.
-   *
-   * @param context
-   *          the context to examine, not null
-   * @return the value, null if not found
-   */
-  public static ConventionBundleSource getConventionBundleSource(final FunctionExecutionContext context) {
-    return (ConventionBundleSource) context.get(CONVENTION_BUNDLE_SOURCE_NAME);
-  }
-
-  /**
-   * Stores a {@code ConventionBundleSource} in the context.
-   *
-   * @param context
-   *          the context to store in, not null
-   * @param conventionBundleSource
-   *          the value to store, not null
-   */
-  public static void setConventionBundleSource(final FunctionExecutionContext context, final ConventionBundleSource conventionBundleSource) {
-    context.put(CONVENTION_BUNDLE_SOURCE_NAME, conventionBundleSource);
   }
 
   /**

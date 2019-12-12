@@ -5,24 +5,28 @@
  */
 package com.opengamma.analytics.financial.horizon;
 
+import java.util.function.Function;
+
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.math.curve.Curve;
 import com.opengamma.analytics.math.curve.FunctionalDoublesCurve;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Produces a yield curve that has been shifted forward in time without slide.
- * That is, it moves in such a way that the rate or discount factor requested for the same maturity DATE
- * will be equal for the original market data bundle and the shifted one.
+ * Produces a yield curve that has been shifted forward in time without slide. That is, it moves in such a way that the rate or discount
+ * factor requested for the same maturity DATE will be equal for the original market data bundle and the shifted one.
+ *
+ * @deprecated Use {@link com.opengamma.analytics.financial.horizon.rolldown.YieldCurveConstantSpreadRolldown}.
  */
+@Deprecated
 public final class ConstantSpreadYieldCurveRolldownFunction implements RolldownFunction<YieldAndDiscountCurve> {
   /** The singleton instance */
   private static final ConstantSpreadYieldCurveRolldownFunction INSTANCE = new ConstantSpreadYieldCurveRolldownFunction();
 
   /**
    * Gets the singleton instance.
+   *
    * @return The instance
    */
   public static ConstantSpreadYieldCurveRolldownFunction getInstance() {
@@ -42,14 +46,7 @@ public final class ConstantSpreadYieldCurveRolldownFunction implements RolldownF
       throw new IllegalArgumentException("Can only handle YieldCurve");
     }
     final Curve<Double, Double> curve = ((YieldCurve) yieldCurve).getCurve();
-    final Function1D<Double, Double> shiftedFunction = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double t) {
-        return curve.getYValue(t + time);
-      }
-
-    };
+    final Function<Double, Double> shiftedFunction = t -> curve.getYValue(t + time);
     return YieldCurve.from(FunctionalDoublesCurve.from(shiftedFunction));
   }
 

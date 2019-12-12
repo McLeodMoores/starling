@@ -19,11 +19,8 @@ import com.opengamma.analytics.financial.instrument.InstrumentDefinitionWithData
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.simpleinstruments.pricing.SimpleFutureDataBundle;
-import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.position.Trade;
-import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction;
@@ -36,11 +33,10 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
-import com.opengamma.financial.analytics.conversion.FutureTradeConverterDeprecated;
+import com.opengamma.financial.analytics.conversion.FutureTradeConverter;
 import com.opengamma.financial.analytics.timeseries.DateConstraint;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunctionUtils;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.future.FutureSecurity;
 import com.opengamma.id.ExternalId;
@@ -51,7 +47,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Base class for FuturesSecurity ValueRequirements. FuturesFunctions, as the securities are exchange traded, closely resemble MarkToMarketPnLFunction.
- * 
+ *
  * @param <T>
  *          The type of the data returned from the calculator
  */
@@ -65,7 +61,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
   /** The calculator */
   private final InstrumentDerivativeVisitor<SimpleFutureDataBundle, T> _calculator;
   /** The trade converter */
-  private FutureTradeConverterDeprecated _tradeConverter;
+  private FutureTradeConverter _tradeConverter;
   /** The field name of the historical time series for price, e.g. "PX_LAST", "Close" */
   private final String _closingPriceField;
   /** The field name of the historical time series for cost of carry e.g. "COST_OF_CARRY" */
@@ -101,11 +97,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
 
   @Override
   public void init(final FunctionCompilationContext context) {
-    final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
-    final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
-    final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    _tradeConverter = new FutureTradeConverterDeprecated(securitySource, holidaySource, conventionSource, regionSource);
+    _tradeConverter = new FutureTradeConverter();
   }
 
   @Override
@@ -165,7 +157,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
 
   /**
    * Creates general value properties.
-   * 
+   *
    * @param target
    *          The target
    * @return The value properties
@@ -174,7 +166,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
 
   /**
    * Creates value properties with the property values set.
-   * 
+   *
    * @param target
    *          The target
    * @param desiredValue
@@ -187,7 +179,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
 
   /**
    * Creates the data bundle used in futures pricing.
-   * 
+   *
    * @param security
    *          The security
    * @param inputs
@@ -210,7 +202,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
 
   /**
    * Gets the spot value requirement.
-   * 
+   *
    * @param security
    *          The security
    * @return The spot asset value requirement if the future has a spot asset id, null otherwise
@@ -231,7 +223,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
 
   /**
    * Gets the spot asset id from a security.
-   * 
+   *
    * @param sec
    *          The security
    * @return The spot asset id, null if not available
@@ -247,7 +239,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
 
   /**
    * Gets the spot value.
-   * 
+   *
    * @param inputs
    *          The market data inputs
    * @return The spot value
@@ -289,7 +281,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
   /**
    * FuturesFunction acts upon ComputationTargetType.TRADE, but many of the calculators used in the execute() method really operate as if they acted upon
    * ComputationTargetType.SECUIRITY. For this reason, it is the responsibility of the Function here to scale by trade.getQuantity() if appropriate.
-   * 
+   *
    * @param trade
    *          Computation Target
    * @param value

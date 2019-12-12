@@ -39,13 +39,11 @@ import org.joda.beans.gen.BeanDefinition;
 import org.joda.beans.gen.PropertyDefinition;
 
 /**
- * A version of {@link com.opengamma.component.factory.engine.FinancialUserManagerComponentFactory} that does
- * not reference deprecated components or components that are only used by deprecated functionality (e.g.
- * {@link com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionMaster}. The only sources
- * that are required to be populated are the {@link SecurityMaster}, {@link PositionMaster} and {@link PortfolioMaster}.
+ * A version of {@link com.opengamma.component.factory.engine.FinancialUserManagerComponentFactory} that does not reference deprecated components or components
+ * that are only used by deprecated functionality. The only sources that are required to be populated are the {@link SecurityMaster}, {@link PositionMaster} and
+ * {@link PortfolioMaster}.
  * <p>
- * This factory only populates {@link com.opengamma.core.Source}s, although it could be extended to use masters
- * if required.
+ * This factory only populates {@link com.opengamma.core.Source}s, although it could be extended to use masters if required.
  */
 @BeanDefinition
 public class MinimalFinancialUserManagerComponentFactory extends AbstractComponentFactory {

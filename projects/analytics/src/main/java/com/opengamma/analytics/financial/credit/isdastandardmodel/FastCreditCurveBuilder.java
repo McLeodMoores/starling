@@ -10,16 +10,18 @@ import static com.opengamma.analytics.financial.credit.isdastandardmodel.Doubles
 import static com.opengamma.analytics.math.utilities.Epsilon.epsilon;
 import static com.opengamma.analytics.math.utilities.Epsilon.epsilonP;
 
+import java.util.function.Function;
+
 import com.opengamma.analytics.math.MathException;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.analytics.math.rootfinding.BrentSingleRootFinder;
 import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * This is a fast bootstrapper for the credit curve that is consistent with ISDA in that it will produce the same curve from the same inputs (up to numerical
- * round-off).
+ * This is a fast bootstrapper for the credit curve that is consistent with ISDA in that it will produce the same curve from the same inputs
+ * (up to numerical round-off).
  */
 
 public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
@@ -73,7 +75,8 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
    * {@inheritDoc}
    */
   @Override
-  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic[] cds, final double[] premiums, final ISDACompliantYieldCurve yieldCurve,
+  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic[] cds, final double[] premiums,
+      final ISDACompliantYieldCurve yieldCurve,
       final double[] pointsUpfront) {
     ArgumentChecker.noNulls(cds, "CDSs");
     ArgumentChecker.notEmpty(premiums, "fractionalSpreads");
@@ -99,14 +102,15 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
     ISDACompliantCreditCurve creditCurve = new ISDACompliantCreditCurve(t, guess);
     for (int i = 0; i < n; i++) {
       final Pricer pricer = new Pricer(cds[i], yieldCurve, t, premiums[i], pointsUpfront[i]);
-      final Function1D<Double, Double> func = pricer.getPointFunction(i, creditCurve);
+      final Function<Double, Double> func = pricer.getPointFunction(i, creditCurve);
 
       switch (getArbHanding()) {
         case Ignore: {
           try {
-            final double[] bracket = BRACKER.getBracketedPoints(func, 0.8 * guess[i], 1.25 * guess[i], Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-            final double zeroRate = bracket[0] > bracket[1] ? ROOTFINDER.getRoot(func, bracket[1], bracket[0])
-                : ROOTFINDER.getRoot(func, bracket[0], bracket[1]); // Negative guess handled
+            final double[] bracket = BRACKER.getBracketedPoints(func, 0.8 * guess[i], 1.25 * guess[i], Double.NEGATIVE_INFINITY,
+                Double.POSITIVE_INFINITY);
+            final double zeroRate = bracket[0] > bracket[1] ? ROOTFINDER.getRoot(Function1dAdapter.of(func), bracket[1], bracket[0])
+                : ROOTFINDER.getRoot(Function1dAdapter.of(func), bracket[0], bracket[1]); // Negative guess handled
             creditCurve = creditCurve.withRate(zeroRate, i);
           } catch (final MathException e) { // handling bracketing failure due to small survival probability
             if (Math.abs(func.apply(creditCurve.getZeroRateAtIndex(i - 1))) < 1.e-12) {
@@ -131,7 +135,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
           }
           guess[i] = Math.max(minValue, guess[i]);
           final double[] bracket = BRACKER.getBracketedPoints(func, guess[i], 1.2 * guess[i], minValue, Double.POSITIVE_INFINITY);
-          final double zeroRate = ROOTFINDER.getRoot(func, bracket[0], bracket[1]);
+          final double zeroRate = ROOTFINDER.getRoot(Function1dAdapter.of(func), bracket[0], bracket[1]);
           creditCurve = creditCurve.withRate(zeroRate, i);
           break;
         }
@@ -142,7 +146,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
           } else {
             guess[i] = Math.max(minValue, guess[i]);
             final double[] bracket = BRACKER.getBracketedPoints(func, guess[i], 1.2 * guess[i], minValue, Double.POSITIVE_INFINITY);
-            final double zeroRate = ROOTFINDER.getRoot(func, bracket[0], bracket[1]);
+            final double zeroRate = ROOTFINDER.getRoot(Function1dAdapter.of(func), bracket[0], bracket[1]);
             creditCurve = creditCurve.withRate(zeroRate, i);
           }
           break;
@@ -182,7 +186,8 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
     private final double[] _accRate;
     private final double[] _offsetAccStart;
 
-    public Pricer(final CDSAnalytic cds, final ISDACompliantYieldCurve yieldCurve, final double[] creditCurveKnots, final double fractionalSpread,
+    public Pricer(final CDSAnalytic cds, final ISDACompliantYieldCurve yieldCurve, final double[] creditCurveKnots,
+        final double fractionalSpread,
         final double pointsUpfront) {
 
       _cds = cds;
@@ -190,7 +195,8 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
       _pointsUpfront = pointsUpfront;
 
       // protection leg
-      _proLegIntPoints = getIntegrationsPoints(cds.getEffectiveProtectionStart(), cds.getProtectionEnd(), yieldCurve.getKnotTimes(), creditCurveKnots);
+      _proLegIntPoints = getIntegrationsPoints(cds.getEffectiveProtectionStart(), cds.getProtectionEnd(), yieldCurve.getKnotTimes(),
+          creditCurveKnots);
       _nProPoints = _proLegIntPoints.length;
       final double lgd = cds.getLGD();
       _valuationDF = yieldCurve.getDiscountFactor(cds.getCashSettleTime());
@@ -211,7 +217,8 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
 
       if (cds.isPayAccOnDefault()) {
         final double tmp = cds.getNumPayments() == 1 ? cds.getEffectiveProtectionStart() : cds.getAccStart();
-        final double[] integrationSchedule = getIntegrationsPoints(tmp, cds.getProtectionEnd(), yieldCurve.getKnotTimes(), creditCurveKnots);
+        final double[] integrationSchedule = getIntegrationsPoints(tmp, cds.getProtectionEnd(), yieldCurve.getKnotTimes(),
+            creditCurveKnots);
 
         _accRate = new double[_nPayments];
         _offsetAccStart = new double[_nPayments];
@@ -255,15 +262,12 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
 
     }
 
-    public Function1D<Double, Double> getPointFunction(final int index, final ISDACompliantCreditCurve creditCurve) {
-      return new Function1D<Double, Double>() {
-        @Override
-        public Double apply(final Double x) {
-          final ISDACompliantCreditCurve cc = creditCurve.withRate(x, index);
-          final double rpv01 = rpv01(cc, PriceType.CLEAN);
-          final double pro = protectionLeg(cc);
-          return pro - _fracSpread * rpv01 - _pointsUpfront;
-        }
+    public Function<Double, Double> getPointFunction(final int index, final ISDACompliantCreditCurve creditCurve) {
+      return x -> {
+        final ISDACompliantCreditCurve cc = creditCurve.withRate(x, index);
+        final double rpv01 = rpv01(cc, PriceType.CLEAN);
+        final double pro = protectionLeg(cc);
+        return pro - _fracSpread * rpv01 - _pointsUpfront;
       };
 
     }

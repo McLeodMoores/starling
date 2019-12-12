@@ -25,7 +25,7 @@ public class BjerksundStenslandPriceFunction implements OptionPriceFunction<Blac
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final BlackFunctionData data) {
+      public Double evaluate(final BlackFunctionData data) {
         ArgumentChecker.notNull(data, "data");
         final double f = data.getForward();
         final double k = option.getStrike();
@@ -75,7 +75,8 @@ public class BjerksundStenslandPriceFunction implements OptionPriceFunction<Blac
     final double alpha2 = getAlpha(x2, beta, k);
     return alpha2 * Math.pow(f, beta) - alpha2 * getPhi(f, t1, beta, x2, x2, r, b, sigma) + getPhi(f, t1, 1, x2, x2, r, b, sigma)
         - getPhi(f, t1, 1, x1, x2, r, b, sigma)
-        - k * getPhi(f, t1, 0, x2, x2, r, b, sigma) + k * getPhi(f, t1, 0, x1, x2, r, b, sigma) + alpha1 * getPhi(f, t1, beta, x1, x2, r, b, sigma) - alpha1
+        - k * getPhi(f, t1, 0, x2, x2, r, b, sigma) + k * getPhi(f, t1, 0, x1, x2, r, b, sigma)
+        + alpha1 * getPhi(f, t1, beta, x1, x2, r, b, sigma) - alpha1
             * getPsi(f, t1, t, beta, x1, x2, x1, r, b, sigma)
         + getPsi(f, t1, t, 1, x1, x2, x1, r, b, sigma) - getPsi(f, t1, t, 1, k, x2, x1, r, b, sigma) - k
             * getPsi(f, t1, t, 0, x1, x2, x1, r, b, sigma)
@@ -106,7 +107,8 @@ public class BjerksundStenslandPriceFunction implements OptionPriceFunction<Blac
     return Math.exp(lambda * t) * Math.pow(s, gamma) * (NORMAL.getCDF(d1) - Math.pow(x / s, kappa) * NORMAL.getCDF(d2));
   }
 
-  private double getPsi(final double s, final double t1, final double t2, final double gamma, final double h, final double x2, final double x1, final double r,
+  private double getPsi(final double s, final double t1, final double t2, final double gamma, final double h, final double x2,
+      final double x1, final double r,
       final double b, final double sigma) {
     final double sigmaSq = sigma * sigma;
     final double denom1 = getDenom(t1, sigma);
@@ -126,7 +128,8 @@ public class BjerksundStenslandPriceFunction implements OptionPriceFunction<Blac
     final double rho = Math.sqrt(t1 / t2);
     return Math.exp(lambda * t2)
         * Math.pow(s, gamma)
-        * (BIVARIATE_NORMAL.getCDF(new double[] { d1, e1, rho }) - Math.pow(x2 / s, kappa) * BIVARIATE_NORMAL.getCDF(new double[] { d2, e2, rho })
+        * (BIVARIATE_NORMAL.getCDF(new double[] { d1, e1, rho })
+            - Math.pow(x2 / s, kappa) * BIVARIATE_NORMAL.getCDF(new double[] { d2, e2, rho })
             - Math.pow(x1 / s, kappa)
                 * BIVARIATE_NORMAL.getCDF(new double[] { d3, e3, -rho })
             + Math.pow(x1 / x2, kappa) * BIVARIATE_NORMAL.getCDF(new double[] { d4, e4, -rho }));

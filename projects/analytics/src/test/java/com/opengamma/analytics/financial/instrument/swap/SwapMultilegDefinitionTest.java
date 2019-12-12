@@ -13,6 +13,9 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityDefinition;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityDefinitionBuilder;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedIbor;
@@ -24,8 +27,6 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIbor;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapMultileg;
 import com.opengamma.financial.convention.StubType;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
@@ -38,7 +39,7 @@ import com.opengamma.util.time.DateUtils;
 @Test(groups = TestGroup.UNIT)
 public class SwapMultilegDefinitionTest {
 
-  private static final Calendar TARGET = new MondayToFridayCalendar("TRAGET");
+  private static final WorkingDayCalendar TARGET = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final IndexIborMaster INDEX_MASTER = IndexIborMaster.getInstance();
   private static final IborIndex EURIBOR3M = INDEX_MASTER.getIndex("EURIBOR3M");
   private static final IborIndex EURIBOR6M = INDEX_MASTER.getIndex("EURIBOR6M");
@@ -60,27 +61,39 @@ public class SwapMultilegDefinitionTest {
   @SuppressWarnings("rawtypes")
   private static final AnnuityDefinition[] LEGS_DEFINITION = new AnnuityDefinition[NB_LEGS];
   static {
-    LEGS_DEFINITION[0] = AnnuityDefinitionBuilder.couponFixed(EUR, SETTLEMENT_DATE, MATURITY_DATE, EUR1YEURIBOR6M.getFixedLegPeriod(), TARGET,
-        EUR1YEURIBOR6M.getFixedLegDayCount(), EUR1YEURIBOR6M.getBusinessDayConvention(), EUR1YEURIBOR6M.isEndOfMonth(), NOTIONAL, SPREAD, IS_PAYER_SPREAD, STUB, 0);
+    LEGS_DEFINITION[0] = AnnuityDefinitionBuilder.couponFixed(EUR, SETTLEMENT_DATE, MATURITY_DATE, EUR1YEURIBOR6M.getFixedLegPeriod(),
+        CalendarAdapter.of(TARGET), EUR1YEURIBOR6M.getFixedLegDayCount(), EUR1YEURIBOR6M.getBusinessDayConvention(),
+        EUR1YEURIBOR6M.isEndOfMonth(), NOTIONAL, SPREAD, IS_PAYER_SPREAD, STUB, 0);
     LEGS_DEFINITION[1] = AnnuityDefinitionBuilder.couponIbor(SETTLEMENT_DATE, MATURITY_DATE, EURIBOR3M.getTenor(), NOTIONAL, EURIBOR3M,
-        IS_PAYER_SPREAD, EURIBOR3M.getDayCount(), EURIBOR3M.getBusinessDayConvention(), EURIBOR3M.isEndOfMonth(), TARGET, STUB, 0);
+        IS_PAYER_SPREAD, EURIBOR3M.getDayCount(), EURIBOR3M.getBusinessDayConvention(), EURIBOR3M.isEndOfMonth(),
+        CalendarAdapter.of(TARGET), STUB, 0);
     LEGS_DEFINITION[2] = AnnuityDefinitionBuilder.couponIbor(SETTLEMENT_DATE, MATURITY_DATE, EURIBOR6M.getTenor(), NOTIONAL, EURIBOR6M,
-        !IS_PAYER_SPREAD, EURIBOR6M.getDayCount(), EURIBOR6M.getBusinessDayConvention(), EURIBOR6M.isEndOfMonth(), TARGET, STUB, 0);
+        !IS_PAYER_SPREAD, EURIBOR6M.getDayCount(), EURIBOR6M.getBusinessDayConvention(), EURIBOR6M.isEndOfMonth(),
+        CalendarAdapter.of(TARGET), STUB, 0);
   }
   @SuppressWarnings("unchecked")
   private static final SwapMultilegDefinition SWAP_MULTI_LEG_DEFINITION = new SwapMultilegDefinition(LEGS_DEFINITION);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullLegs() {
     new SwapMultilegDefinition(null);
   }
 
+  /**
+   *
+   */
   @SuppressWarnings("unchecked")
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullZeroLeg() {
     new SwapMultilegDefinition(new AnnuityDefinition[0]);
   }
 
+  /**
+   *
+   */
   @SuppressWarnings("unchecked")
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullLeg2() {
@@ -90,6 +103,9 @@ public class SwapMultilegDefinitionTest {
     new SwapMultilegDefinition(legs2);
   }
 
+  /**
+   *
+   */
   @Test
   public void getter() {
     assertEquals("SwapMultilegDefinition: getter", LEGS_DEFINITION, SWAP_MULTI_LEG_DEFINITION.getLegs());
@@ -101,47 +117,62 @@ public class SwapMultilegDefinitionTest {
   @Test
   public void toDerivative() {
     final ZonedDateTimeDoubleTimeSeries fixingTsF = ImmutableZonedDateTimeDoubleTimeSeries.ofEmpty(ZoneId.of("UTC"));
-    final ZonedDateTimeDoubleTimeSeries fixingTs3 = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {((CouponIborDefinition) LEGS_DEFINITION[1].getNthPayment(0)).getFixingDate() },
-        new double[] {0.0123 });
-    final ZonedDateTimeDoubleTimeSeries fixingTs6 = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {((CouponIborDefinition) LEGS_DEFINITION[2].getNthPayment(0)).getFixingDate() },
-        new double[] {0.0135 });
-    final ZonedDateTimeDoubleTimeSeries[] fixingTs = new ZonedDateTimeDoubleTimeSeries[] {fixingTsF, fixingTs3, fixingTs6 };
+    final ZonedDateTimeDoubleTimeSeries fixingTs3 = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
+        new ZonedDateTime[] { ((CouponIborDefinition) LEGS_DEFINITION[1].getNthPayment(0)).getFixingDate() },
+        new double[] { 0.0123 });
+    final ZonedDateTimeDoubleTimeSeries fixingTs6 = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
+        new ZonedDateTime[] { ((CouponIborDefinition) LEGS_DEFINITION[2].getNthPayment(0)).getFixingDate() },
+        new double[] { 0.0135 });
+    final ZonedDateTimeDoubleTimeSeries[] fixingTs = new ZonedDateTimeDoubleTimeSeries[] { fixingTsF, fixingTs3, fixingTs6 };
     final ZonedDateTime referenceDateBeforeFirstFixing = REFERENCE_DATE;
     final SwapMultileg swapConvertedBeforeFirstFixing = SWAP_MULTI_LEG_DEFINITION.toDerivative(referenceDateBeforeFirstFixing);
     for (int loopcpn = 0; loopcpn < swapConvertedBeforeFirstFixing.getLegs()[0].getNumberOfPayments(); loopcpn++) {
-      assertTrue("SwapMultilegDefinition: toDerivative", swapConvertedBeforeFirstFixing.getLegs()[0].getNthPayment(loopcpn) instanceof CouponFixed);
+      assertTrue("SwapMultilegDefinition: toDerivative",
+          swapConvertedBeforeFirstFixing.getLegs()[0].getNthPayment(loopcpn) instanceof CouponFixed);
     }
     for (int loopcpn = 0; loopcpn < swapConvertedBeforeFirstFixing.getLegs()[1].getNumberOfPayments(); loopcpn++) {
-      assertTrue("SwapMultilegDefinition: toDerivative", swapConvertedBeforeFirstFixing.getLegs()[1].getNthPayment(loopcpn) instanceof CouponIbor);
+      assertTrue("SwapMultilegDefinition: toDerivative",
+          swapConvertedBeforeFirstFixing.getLegs()[1].getNthPayment(loopcpn) instanceof CouponIbor);
     }
     for (int loopcpn = 0; loopcpn < swapConvertedBeforeFirstFixing.getLegs()[2].getNumberOfPayments(); loopcpn++) {
-      assertTrue("SwapMultilegDefinition: toDerivative", swapConvertedBeforeFirstFixing.getLegs()[2].getNthPayment(loopcpn) instanceof CouponIbor);
+      assertTrue("SwapMultilegDefinition: toDerivative",
+          swapConvertedBeforeFirstFixing.getLegs()[2].getNthPayment(loopcpn) instanceof CouponIbor);
     }
     for (int loopleg = 0; loopleg < NB_LEGS; loopleg++) {
-      assertEquals("SwapMultilegDefinition: toDerivative", swapConvertedBeforeFirstFixing.getLegs()[loopleg], LEGS_DEFINITION[loopleg].toDerivative(referenceDateBeforeFirstFixing));
+      assertEquals("SwapMultilegDefinition: toDerivative", swapConvertedBeforeFirstFixing.getLegs()[loopleg],
+          LEGS_DEFINITION[loopleg].toDerivative(referenceDateBeforeFirstFixing));
     }
     final ZonedDateTime referenceDateOnFirstFixingDate = ((CouponIborDefinition) LEGS_DEFINITION[1].getNthPayment(0)).getFixingDate();
     final SwapMultileg swapConvertedOnFirstFixingDateNoFixing = SWAP_MULTI_LEG_DEFINITION.toDerivative(referenceDateOnFirstFixingDate);
     for (int loopcpn = 0; loopcpn < swapConvertedBeforeFirstFixing.getLegs()[0].getNumberOfPayments(); loopcpn++) {
-      assertTrue("SwapMultilegDefinition: toDerivative", swapConvertedOnFirstFixingDateNoFixing.getLegs()[0].getNthPayment(loopcpn) instanceof CouponFixed);
+      assertTrue("SwapMultilegDefinition: toDerivative",
+          swapConvertedOnFirstFixingDateNoFixing.getLegs()[0].getNthPayment(loopcpn) instanceof CouponFixed);
     }
     for (int loopcpn = 0; loopcpn < swapConvertedBeforeFirstFixing.getLegs()[1].getNumberOfPayments(); loopcpn++) {
-      assertTrue("SwapMultilegDefinition: toDerivative", swapConvertedOnFirstFixingDateNoFixing.getLegs()[1].getNthPayment(loopcpn) instanceof CouponIbor);
+      assertTrue("SwapMultilegDefinition: toDerivative",
+          swapConvertedOnFirstFixingDateNoFixing.getLegs()[1].getNthPayment(loopcpn) instanceof CouponIbor);
     }
     for (int loopcpn = 0; loopcpn < swapConvertedBeforeFirstFixing.getLegs()[2].getNumberOfPayments(); loopcpn++) {
-      assertTrue("SwapMultilegDefinition: toDerivative", swapConvertedOnFirstFixingDateNoFixing.getLegs()[2].getNthPayment(loopcpn) instanceof CouponIbor);
+      assertTrue("SwapMultilegDefinition: toDerivative",
+          swapConvertedOnFirstFixingDateNoFixing.getLegs()[2].getNthPayment(loopcpn) instanceof CouponIbor);
     }
-    final SwapMultileg swapConvertedOnFirstFixingDateFixing = SWAP_MULTI_LEG_DEFINITION.toDerivative(referenceDateOnFirstFixingDate, fixingTs);
+    final SwapMultileg swapConvertedOnFirstFixingDateFixing = SWAP_MULTI_LEG_DEFINITION.toDerivative(referenceDateOnFirstFixingDate,
+        fixingTs);
     for (int loopcpn = 0; loopcpn < swapConvertedBeforeFirstFixing.getLegs()[0].getNumberOfPayments(); loopcpn++) {
-      assertTrue("SwapMultilegDefinition: toDerivative", swapConvertedOnFirstFixingDateFixing.getLegs()[0].getNthPayment(loopcpn) instanceof CouponFixed);
+      assertTrue("SwapMultilegDefinition: toDerivative",
+          swapConvertedOnFirstFixingDateFixing.getLegs()[0].getNthPayment(loopcpn) instanceof CouponFixed);
     }
-    assertTrue("SwapMultilegDefinition: toDerivative", swapConvertedOnFirstFixingDateFixing.getLegs()[1].getNthPayment(0) instanceof CouponFixed);
+    assertTrue("SwapMultilegDefinition: toDerivative",
+        swapConvertedOnFirstFixingDateFixing.getLegs()[1].getNthPayment(0) instanceof CouponFixed);
     for (int loopcpn = 1; loopcpn < swapConvertedBeforeFirstFixing.getLegs()[1].getNumberOfPayments(); loopcpn++) {
-      assertTrue("SwapMultilegDefinition: toDerivative", swapConvertedOnFirstFixingDateFixing.getLegs()[1].getNthPayment(loopcpn) instanceof CouponIbor);
+      assertTrue("SwapMultilegDefinition: toDerivative",
+          swapConvertedOnFirstFixingDateFixing.getLegs()[1].getNthPayment(loopcpn) instanceof CouponIbor);
     }
-    assertTrue("SwapMultilegDefinition: toDerivative", swapConvertedOnFirstFixingDateFixing.getLegs()[2].getNthPayment(0) instanceof CouponFixed);
+    assertTrue("SwapMultilegDefinition: toDerivative",
+        swapConvertedOnFirstFixingDateFixing.getLegs()[2].getNthPayment(0) instanceof CouponFixed);
     for (int loopcpn = 1; loopcpn < swapConvertedBeforeFirstFixing.getLegs()[2].getNumberOfPayments(); loopcpn++) {
-      assertTrue("SwapMultilegDefinition: toDerivative", swapConvertedOnFirstFixingDateFixing.getLegs()[2].getNthPayment(loopcpn) instanceof CouponIbor);
+      assertTrue("SwapMultilegDefinition: toDerivative",
+          swapConvertedOnFirstFixingDateFixing.getLegs()[2].getNthPayment(loopcpn) instanceof CouponIbor);
     }
 
   }

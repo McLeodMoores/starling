@@ -35,7 +35,8 @@ public class InflationIssuerDiscountFinderFunction extends Function1D<DoubleMatr
    * @param data
    *          The data required for curve building.
    */
-  public InflationIssuerDiscountFinderFunction(final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, Double> inflationCalculator,
+  public InflationIssuerDiscountFinderFunction(
+      final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, Double> inflationCalculator,
       final InflationIssuerDiscountBuildingData data) {
     ArgumentChecker.notNull(inflationCalculator, "Calculator");
     ArgumentChecker.notNull(data, "Data");
@@ -44,9 +45,9 @@ public class InflationIssuerDiscountFinderFunction extends Function1D<DoubleMatr
   }
 
   @Override
-  public DoubleMatrix1D apply(final DoubleMatrix1D x) {
+  public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
     final InflationIssuerProviderDiscount inflationBundle = _data.getKnownData().copy();
-    final InflationIssuerProviderDiscount inflationnewCurves = _data.getGeneratorMarket().apply(x);
+    final InflationIssuerProviderDiscount inflationnewCurves = (InflationIssuerProviderDiscount) _data.getGeneratorMarket().apply(x);
     inflationBundle.setAll(inflationnewCurves);
     final double[] res = new double[_data.getNumberOfInstruments()];
     for (int i = 0; i < _data.getNumberOfInstruments(); i++) {

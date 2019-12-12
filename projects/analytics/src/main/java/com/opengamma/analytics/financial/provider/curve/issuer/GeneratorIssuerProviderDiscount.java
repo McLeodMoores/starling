@@ -73,7 +73,8 @@ public class GeneratorIssuerProviderDiscount extends Function1D<DoubleMatrix1D, 
    */
   public GeneratorIssuerProviderDiscount(final IssuerProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap,
       final LinkedHashMap<String, IborIndex[]> forwardIborMap,
-      final LinkedHashMap<String, IndexON[]> forwardONMap, final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerMap,
+      final LinkedHashMap<String, IndexON[]> forwardONMap,
+      final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerMap,
       final LinkedHashMap<String, GeneratorYDCurve> generatorsMap) {
     ArgumentChecker.notNull(discountingMap, "Discounting curves names map");
     ArgumentChecker.notNull(forwardIborMap, "Forward curves names map");
@@ -105,7 +106,7 @@ public class GeneratorIssuerProviderDiscount extends Function1D<DoubleMatrix1D, 
   }
 
   @Override
-  public IssuerProviderDiscount apply(final DoubleMatrix1D x) {
+  public IssuerProviderDiscount evaluate(final DoubleMatrix1D x) {
     final IssuerProviderDiscount provider = _knownData.copy();
     final Set<String> nameSet = _generatorsMap.keySet();
     int indexParam = 0;

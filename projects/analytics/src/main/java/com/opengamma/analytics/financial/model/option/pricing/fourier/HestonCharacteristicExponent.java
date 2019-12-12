@@ -79,7 +79,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   public Function1D<ComplexNumber, ComplexNumber> getFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber apply(final ComplexNumber u) {
+      public ComplexNumber evaluate(final ComplexNumber u) {
         return getValue(u, t);
       }
     };
@@ -111,7 +111,7 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
   public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber[]>() {
       @Override
-      public ComplexNumber[] apply(final ComplexNumber u) {
+      public ComplexNumber[] evaluate(final ComplexNumber u) {
         return getCharacteristicExponentAdjoint(u, t);
       }
     };
@@ -180,8 +180,9 @@ public class HestonCharacteristicExponent implements MartingaleCharacteristicExp
     res[1] = subtract(multiply(_theta / _omega / _omega, wBar[0]), wBar[2]);
     res[2] = multiply(_kappa / _omega / _omega, wBar[0]);
     res[3] = multiply(w[17], wBar[18]);
-    res[4] = multiply(1 / _omega, add(multiply(-2, w[0], wBar[0]), multiply(w[1], wBar[1]), multiply(2, w[4], wBar[4]), multiply(2, w[5], wBar[5]),
-        multiply(-2, w[17], wBar[17])));
+    res[4] = multiply(1 / _omega,
+        add(multiply(-2, w[0], wBar[0]), multiply(w[1], wBar[1]), multiply(2, w[4], wBar[4]), multiply(2, w[5], wBar[5]),
+            multiply(-2, w[17], wBar[17])));
     res[5] = multiply(1 / _rho, w[1], wBar[1]);
 
     return res;

@@ -20,7 +20,8 @@ import com.opengamma.analytics.math.random.RandomNumberGenerator;
  */
 public class EuropeanMonteCarloOptionModel extends MonteCarloOptionModel<OptionDefinition, StandardOptionDataBundle> {
 
-  public EuropeanMonteCarloOptionModel(final int n, final int steps, final StochasticProcess<OptionDefinition, StandardOptionDataBundle> process,
+  public EuropeanMonteCarloOptionModel(final int n, final int steps,
+      final StochasticProcess<OptionDefinition, StandardOptionDataBundle> process,
       final RandomNumberGenerator generator) {
     super(n, steps, process, generator);
   }
@@ -37,7 +38,7 @@ public class EuropeanMonteCarloOptionModel extends MonteCarloOptionModel<OptionD
     return new Function1D<StandardOptionDataBundle, Double>() {
 
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         Validate.notNull(data, "data");
         final Function1D<Double, Double> generator = process.getPathGeneratingFunction(definition, data, steps);
         double[] e;

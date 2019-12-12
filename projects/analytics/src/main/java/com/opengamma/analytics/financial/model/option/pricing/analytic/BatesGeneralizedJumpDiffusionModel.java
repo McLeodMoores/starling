@@ -17,12 +17,14 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 
 /**
- * The Bates generalized jump-diffusion model prices options with an underlying process: $$ \begin{align*} dS = (b - \lambda \overline{k})S dt + \sigma S dz + k
- * dq \end{align*} $$ with $S$ the spot, $b$ the cost-of-carry, $\sigma$ the volatility of the (relative) price change based on no jumps, $dz$ a Brownian
- * motion, $k$ a random percentage jump conditional on a Poisson-distributed event occurring, with ($1+k$) lognormally distributed, $\overline{k}$ the expected
- * jump size, $\lambda$ the frequency of events (the average number of events per year) and $q$ a Poisson counter with intensity $\lambda$.
+ * The Bates generalized jump-diffusion model prices options with an underlying process: $$ \begin{align*} dS = (b - \lambda \overline{k})S
+ * dt + \sigma S dz + k dq \end{align*} $$ with $S$ the spot, $b$ the cost-of-carry, $\sigma$ the volatility of the (relative) price change
+ * based on no jumps, $dz$ a Brownian motion, $k$ a random percentage jump conditional on a Poisson-distributed event occurring, with
+ * ($1+k$) lognormally distributed, $\overline{k}$ the expected jump size, $\lambda$ the frequency of events (the average number of events
+ * per year) and $q$ a Poisson counter with intensity $\lambda$.
  */
-public class BatesGeneralizedJumpDiffusionModel extends AnalyticOptionModel<OptionDefinition, BatesGeneralizedJumpDiffusionModelDataBundle> {
+public class BatesGeneralizedJumpDiffusionModel
+    extends AnalyticOptionModel<OptionDefinition, BatesGeneralizedJumpDiffusionModelDataBundle> {
   private static final AnalyticOptionModel<OptionDefinition, StandardOptionDataBundle> BSM = new BlackScholesMertonModel();
   private static final int N = 50;
 
@@ -32,12 +34,11 @@ public class BatesGeneralizedJumpDiffusionModel extends AnalyticOptionModel<Opti
   @Override
   public Function1D<BatesGeneralizedJumpDiffusionModelDataBundle, Double> getPricingFunction(final OptionDefinition definition) {
     Validate.notNull(definition);
-    final Function1D<BatesGeneralizedJumpDiffusionModelDataBundle, Double> pricingFunction =
-        new Function1D<BatesGeneralizedJumpDiffusionModelDataBundle, Double>() {
+    final Function1D<BatesGeneralizedJumpDiffusionModelDataBundle, Double> pricingFunction = new Function1D<BatesGeneralizedJumpDiffusionModelDataBundle, Double>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final BatesGeneralizedJumpDiffusionModelDataBundle data) {
+      public Double evaluate(final BatesGeneralizedJumpDiffusionModelDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final YieldAndDiscountCurve discountCurve = data.getInterestRateCurve();

@@ -24,8 +24,8 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.CurveUtils;
 import com.mcleodmoores.analytics.financial.index.Index;
-import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveAddYield;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolatedAnchorNode;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolatedNumber;
@@ -71,7 +71,6 @@ import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAd
 import com.opengamma.analytics.math.interpolation.factory.LogLinearInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.util.time.TimeCalculator;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
@@ -85,7 +84,8 @@ import com.opengamma.util.tuple.Pair;
 @Test(groups = TestGroup.UNIT)
 public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
 
-  private static final Interpolator1D INTERPOLATOR_LINEAR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
+  private static final Interpolator1D INTERPOLATOR_LINEAR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
   private static final Interpolator1D INTERPOLATOR_LL = NamedInterpolator1dFactory.of(LogLinearInterpolator1dAdapter.NAME,
       ExponentialExtrapolator1dAdapter.NAME); // Log-linear on the discount factor = step on the instantaneous rates
   private static final Interpolator1D INTERPOLATOR_DQ = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME,
@@ -96,7 +96,7 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
   private static final double TOLERANCE_ROOT = 1.0E-10;
   private static final int STEP_MAX = 100;
 
-  private static final Calendar TARGET = CalendarAdapter.of(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
+  private static final WorkingDayCalendar TARGET = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.EUR);
 
   private static final double NOTIONAL = 1.0;
@@ -104,7 +104,8 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
   private static final GeneratorSwapFixedON GENERATOR_OIS_EUR = GeneratorSwapFixedONMaster.getInstance().getGenerator("EUR1YEONIA", TARGET);
   /** An EONIA index */
   private static final IndexON EONIA_INDEX = GENERATOR_OIS_EUR.getIndex();
-  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_EUR = new GeneratorDepositON("EUR Deposit ON", Currency.EUR, TARGET, EONIA_INDEX.getDayCount());
+  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_EUR = new GeneratorDepositON("EUR Deposit ON", Currency.EUR, TARGET,
+      EONIA_INDEX.getDayCount());
   private static final GeneratorSwapFixedIborMaster GENERATOR_SWAP_MASTER = GeneratorSwapFixedIborMaster.getInstance();
   private static final GeneratorSwapFixedIbor EUR1YEURIBOR6M = GENERATOR_SWAP_MASTER.getGenerator("EUR1YEURIBOR6M", TARGET);
   /** A 6M EURIBOR index */
@@ -117,9 +118,12 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
 
   private static final ZonedDateTime NOW = DateUtils.getUTCDate(2013, 2, 4);
   // Test note: Curve building date selected such that ECB dates are in the same OIS month: 7-Mar and 4-Apr
-  private static final ZonedDateTime[] MEETING_ECB_DATE = new ZonedDateTime[] { DateUtils.getUTCDate(2013, 3, 7), DateUtils.getUTCDate(2013, 4, 4),
-      DateUtils.getUTCDate(2013, 5, 2), DateUtils.getUTCDate(2013, 6, 6), DateUtils.getUTCDate(2013, 7, 4), DateUtils.getUTCDate(2013, 8, 1),
-      DateUtils.getUTCDate(2013, 9, 5), DateUtils.getUTCDate(2013, 10, 2), DateUtils.getUTCDate(2013, 11, 7), DateUtils.getUTCDate(2013, 12, 5),
+  private static final ZonedDateTime[] MEETING_ECB_DATE = new ZonedDateTime[] { DateUtils.getUTCDate(2013, 3, 7),
+      DateUtils.getUTCDate(2013, 4, 4),
+      DateUtils.getUTCDate(2013, 5, 2), DateUtils.getUTCDate(2013, 6, 6), DateUtils.getUTCDate(2013, 7, 4),
+      DateUtils.getUTCDate(2013, 8, 1),
+      DateUtils.getUTCDate(2013, 9, 5), DateUtils.getUTCDate(2013, 10, 2), DateUtils.getUTCDate(2013, 11, 7),
+      DateUtils.getUTCDate(2013, 12, 5),
       DateUtils.getUTCDate(2014, 1, 9), DateUtils.getUTCDate(2014, 2, 6) };
   private static final double[] MEETING_ECB_TIME = new double[MEETING_ECB_DATE.length];
   static {
@@ -155,17 +159,24 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
   private static final String CURVE_NAME_FWD6_EUR = "EUR Fwd 6M";
 
   /** Market values for the dsc USD curve */
-  private static final double[] DSC_EUR_MARKET_QUOTES = new double[] { 0.0050, 0.0055, 0.0060, 0.0050, 0.0055, 0.0070, 0.0080, 0.0075, 0.0070, 0.0075, 0.0080,
+  private static final double[] DSC_EUR_MARKET_QUOTES = new double[] { 0.0050, 0.0055, 0.0060, 0.0050, 0.0055, 0.0070, 0.0080, 0.0075,
+      0.0070, 0.0075, 0.0080,
       0.0075, 0.0080, 0.0075, 0.0100, 0.0110, 0.0120, 0.0110, 0.0150 };
   /** Generators for the dsc USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_EUR_GENERATORS = new GeneratorInstrument<?>[] { GENERATOR_DEPOSIT_ON_EUR,
-      GENERATOR_DEPOSIT_ON_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
-      GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
+  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_EUR_GENERATORS = new GeneratorInstrument<?>[] {
+      GENERATOR_DEPOSIT_ON_EUR,
+      GENERATOR_DEPOSIT_ON_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
+      GENERATOR_OIS_EUR,
+      GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
+      GENERATOR_OIS_EUR,
       GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR };
   /** Tenors for the dsc USD curve */
-  private static final Period[] DSC_EUR_TENOR = new Period[] { Period.ofDays(0), Period.ofDays(1), Period.ofMonths(1), Period.ofMonths(2), Period.ofMonths(3),
-      Period.ofMonths(4), Period.ofMonths(5), Period.ofMonths(6), Period.ofMonths(7), Period.ofMonths(8), Period.ofMonths(9), Period.ofMonths(10),
-      Period.ofMonths(11), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(10) };
+  private static final Period[] DSC_EUR_TENOR = new Period[] { Period.ofDays(0), Period.ofDays(1), Period.ofMonths(1), Period.ofMonths(2),
+      Period.ofMonths(3),
+      Period.ofMonths(4), Period.ofMonths(5), Period.ofMonths(6), Period.ofMonths(7), Period.ofMonths(8), Period.ofMonths(9),
+      Period.ofMonths(10),
+      Period.ofMonths(11), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5),
+      Period.ofYears(10) };
   private static final GeneratorAttributeIR[] DSC_EUR_ATTR = new GeneratorAttributeIR[DSC_EUR_TENOR.length];
   static {
     for (int i = 0; i < 2; i++) {
@@ -179,10 +190,12 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
   /** Market values for the Fwd 3M USD curve */
   private static final double[] FWD6_EUR_MARKET_QUOTES = new double[] { 0.0100, 0.0150, 0.0175, 0.0175, 0.0200, 0.00175, 0.0200, 0.00175 };
   /** Generators for the Fwd 3M USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD6_EUR_GENERATORS = new GeneratorInstrument<?>[] { GENERATOR_EURIBOR6M,
+  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD6_EUR_GENERATORS = new GeneratorInstrument<?>[] {
+      GENERATOR_EURIBOR6M,
       GENERATOR_FRA_6M, GENERATOR_FRA_6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M };
   /** Tenors for the Fwd 3M USD curve */
-  private static final Period[] FWD6_EUR_TENOR = new Period[] { Period.ofMonths(0), Period.ofMonths(9), Period.ofMonths(12), Period.ofYears(2),
+  private static final Period[] FWD6_EUR_TENOR = new Period[] { Period.ofMonths(0), Period.ofMonths(9), Period.ofMonths(12),
+      Period.ofYears(2),
       Period.ofYears(3), Period.ofYears(5), Period.ofYears(7), Period.ofYears(10) };
   private static final GeneratorAttributeIR[] FWD6_EUR_ATTR = new GeneratorAttributeIR[FWD6_EUR_TENOR.length];
   static {
@@ -225,9 +238,11 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
     final int nbNode1 = 2;
     final GeneratorYDCurve genIntLinMat = new GeneratorCurveYieldInterpolated(MATURITY_CALCULATOR, INTERPOLATOR_LINEAR);
     final GeneratorYDCurve genIntLinFix = new GeneratorCurveYieldInterpolated(FIXING_CALCULATOR, INTERPOLATOR_LINEAR);
-    final GeneratorYDCurve genIntNumDFLL = new GeneratorCurveDiscountFactorInterpolatedNumber(MATURITY_CALCULATOR, nbNode1, INTERPOLATOR_LL);
+    final GeneratorYDCurve genIntNumDFLL = new GeneratorCurveDiscountFactorInterpolatedNumber(MATURITY_CALCULATOR, nbNode1,
+        INTERPOLATOR_LL);
     final GeneratorYDCurve genInt0DFLL = new GeneratorCurveDiscountFactorInterpolatedAnchorNode(MEETING_ECB_TIME,
-        TimeCalculator.getTimeBetween(NOW, ScheduleCalculator.getAdjustedDate(NOW, GENERATOR_OIS_EUR.getSpotLag(), TARGET)), INTERPOLATOR_LL);
+        TimeCalculator.getTimeBetween(NOW, ScheduleCalculator.getAdjustedDate(NOW, GENERATOR_OIS_EUR.getSpotLag(), TARGET)),
+        INTERPOLATOR_LL);
     final GeneratorYDCurve genInt0DQ = new GeneratorCurveYieldInterpolatedAnchor(MATURITY_CALCULATOR, INTERPOLATOR_DQ);
     final GeneratorYDCurve[] genComp = new GeneratorYDCurve[] { genIntNumDFLL, genInt0DFLL, genInt0DQ };
     GENERATORS_UNITS[0][0] = new GeneratorYDCurve[] { new GeneratorCurveAddYield(genComp, false) };
@@ -263,19 +278,27 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
   private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator PSMQCSDC = ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator
       .getInstance();
 
-  private static final MulticurveDiscountBuildingRepository CURVE_BUILDING_REPOSITORY = new MulticurveDiscountBuildingRepository(TOLERANCE_ROOT, TOLERANCE_ROOT,
+  private static final MulticurveDiscountBuildingRepository CURVE_BUILDING_REPOSITORY = new MulticurveDiscountBuildingRepository(
+      TOLERANCE_ROOT, TOLERANCE_ROOT,
       STEP_MAX);
 
   private static final double TOLERANCE_CAL = 1.0E-9;
 
+  /**
+   *
+   */
   @BeforeSuite
   static void initClass() {
     for (int i = 0; i < NB_BLOCKS; i++) {
       CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK
-          .add(makeCurvesFromDefinitions(DEFINITIONS_UNITS[i], GENERATORS_UNITS[i], NAMES_UNITS[i], MULTICURVE_KNOWN_DATA, PSMQDC, PSMQCSDC, false));
+          .add(makeCurvesFromDefinitions(DEFINITIONS_UNITS[i], GENERATORS_UNITS[i], NAMES_UNITS[i], MULTICURVE_KNOWN_DATA, PSMQDC, PSMQCSDC,
+              false));
     }
   }
 
+  /**
+   *
+   */
   @Test
   public void curveConstruction() {
     for (int i = 0; i < NB_BLOCKS; i++) {
@@ -285,6 +308,9 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
         CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(0).getFirst().getCurve(EUROLIBOR_6M_INDEX));
   }
 
+  /**
+   *
+   */
   @Test(enabled = false)
   public void comparison1Unit2Units() {
     final MulticurveProviderDiscount[] units = new MulticurveProviderDiscount[2];
@@ -314,11 +340,15 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
     assertArrayEquals("Curve construction: 1 unit / 3 units ", ArrayUtils.toPrimitive(((YieldCurve) curveFwd6[0]).getCurve().getYData()),
         ArrayUtils.toPrimitive(((YieldCurve) curveFwd6[1]).getCurve().getYData()), TOLERANCE_CAL);
 
-    assertEquals("Curve construction: 1 unit / 3 units ", bb[0].getBlock(CURVE_NAME_FWD6_EUR).getFirst(), bb[1].getBlock(CURVE_NAME_FWD6_EUR).getFirst());
+    assertEquals("Curve construction: 1 unit / 3 units ", bb[0].getBlock(CURVE_NAME_FWD6_EUR).getFirst(),
+        bb[1].getBlock(CURVE_NAME_FWD6_EUR).getFirst());
   }
 
   // TODO: test on the correctness of the Jacobian matrix in the CurveBuildingBlock's.
 
+  /**
+   *
+   */
   @Test(enabled = false)
   public void performance() {
     long startTime, endTime;
@@ -342,11 +372,13 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
 
   }
 
-  private void curveConstructionTest(final InstrumentDefinition<?>[][][] definitions, final MulticurveProviderDiscount curves, final boolean withToday,
+  private void curveConstructionTest(final InstrumentDefinition<?>[][][] definitions, final MulticurveProviderDiscount curves,
+      final boolean withToday,
       final int block) {
     final int nbBlocks = definitions.length;
     for (int i = 0; i < nbBlocks; i++) {
-      final InstrumentDerivative[][] instruments = CurveUtils.convert(definitions[i], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
+      final InstrumentDerivative[][] instruments = CurveUtils.convert(definitions[i],
+          withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
       final double[][] pv = new double[instruments.length][];
       for (int j = 0; j < instruments.length; j++) {
         pv[j] = new double[instruments[j].length];
@@ -388,10 +420,12 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
   }
 
   @SuppressWarnings("unchecked")
-  private static Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDefinitions(final InstrumentDefinition<?>[][][] definitions,
+  private static Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDefinitions(
+      final InstrumentDefinition<?>[][][] definitions,
       final GeneratorYDCurve[][] curveGenerators, final String[][] curveNames, final MulticurveProviderDiscount knownData,
       final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> calculator,
-      final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> sensitivityCalculator, final boolean withToday) {
+      final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> sensitivityCalculator,
+      final boolean withToday) {
     final int nUnits = definitions.length;
     final MultiCurveBundle<GeneratorYDCurve>[] curveBundles = new MultiCurveBundle[nUnits];
     for (int i = 0; i < nUnits; i++) {
@@ -411,7 +445,8 @@ public class EurDiscounting6mLiborWithCommitteeMeeting2Test {
       }
       curveBundles[i] = new MultiCurveBundle<>(singleCurves);
     }
-    return CURVE_BUILDING_REPOSITORY.makeCurvesFromDerivatives(curveBundles, knownData, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP, calculator, sensitivityCalculator);
+    return CURVE_BUILDING_REPOSITORY.makeCurvesFromDerivatives(curveBundles, knownData, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP, calculator,
+        sensitivityCalculator);
   }
 
 }

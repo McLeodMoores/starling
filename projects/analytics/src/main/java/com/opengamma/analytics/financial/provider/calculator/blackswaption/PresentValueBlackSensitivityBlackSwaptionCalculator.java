@@ -7,9 +7,13 @@ package com.opengamma.analytics.financial.provider.calculator.blackswaption;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.interestrate.sensitivity.PresentValueBlackSwaptionSensitivity;
+import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionCashFixedCompoundedONCompounded;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionCashFixedIbor;
+import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedCompoundedONCompounded;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedIbor;
+import com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionCashFixedCompoundedONCompoundedBlackMethod;
 import com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionCashFixedIborBlackMethod;
+import com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod;
 import com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionPhysicalFixedIborBlackMethod;
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackSwaptionFlatProviderInterface;
 
@@ -26,7 +30,7 @@ public final class PresentValueBlackSensitivityBlackSwaptionCalculator
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static PresentValueBlackSensitivityBlackSwaptionCalculator getInstance() {
@@ -51,7 +55,22 @@ public final class PresentValueBlackSensitivityBlackSwaptionCalculator
   }
 
   @Override
-  public PresentValueBlackSwaptionSensitivity visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption, final BlackSwaptionFlatProviderInterface black) {
+  public PresentValueBlackSwaptionSensitivity visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption,
+      final BlackSwaptionFlatProviderInterface black) {
     return METHOD_SWT_CASH.presentValueBlackSensitivity(swaption, black);
+  }
+
+  @Override
+  public PresentValueBlackSwaptionSensitivity visitSwaptionPhysicalFixedCompoundedONCompounded(
+      final SwaptionPhysicalFixedCompoundedONCompounded swaption,
+      final BlackSwaptionFlatProviderInterface black) {
+    return SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance().presentValueBlackSensitivity(swaption, black);
+  }
+
+  @Override
+  public PresentValueBlackSwaptionSensitivity visitSwaptionCashFixedCompoundedONCompounded(
+      final SwaptionCashFixedCompoundedONCompounded swaption,
+      final BlackSwaptionFlatProviderInterface black) {
+    return SwaptionCashFixedCompoundedONCompoundedBlackMethod.getInstance().presentValueBlackSensitivity(swaption, black);
   }
 }

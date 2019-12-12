@@ -22,20 +22,21 @@ import com.opengamma.analytics.math.matrix.MatrixAlgebraFactory;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Modification to NonLinearLeastSquare to use a penalty function add to the normal chi^2 term of the form $a^TPa$ where $a$ is the vector of model parameters
- * sort and P is some matrix. The idea is to extend the p-spline concept to non-linear models of the form $\hat{y}_j = H\left(\sum_{i=0}^{M-1} w_i b_i
- * (x_j)\right)$ where $H(\cdot)$ is some non-linear function, $b_i(\cdot)$ are a set of basis functions and $w_i$ are the weights (to be found). As with
- * (linear) p-splines, smoothness of the function is obtained by having a penalty on the nth order difference of the weights. The modified chi-squared is
- * written as $\chi^2 = \sum_{i=0}^{N-1} \left(\frac{y_i-H\left(\sum_{k=0}^{M-1} w_k b_k (x_i)\right)}{\sigma_i} \right)^2 + \sum_{i,j=0}^{M-1}P_{i,j}x_ix_j$
+ * Modification to NonLinearLeastSquare to use a penalty function add to the normal chi^2 term of the form $a^TPa$ where $a$ is the vector
+ * of model parameters sort and P is some matrix. The idea is to extend the p-spline concept to non-linear models of the form $\hat{y}_j =
+ * H\left(\sum_{i=0}^{M-1} w_i b_i (x_j)\right)$ where $H(\cdot)$ is some non-linear function, $b_i(\cdot)$ are a set of basis functions and
+ * $w_i$ are the weights (to be found). As with (linear) p-splines, smoothness of the function is obtained by having a penalty on the nth
+ * order difference of the weights. The modified chi-squared is written as $\chi^2 = \sum_{i=0}^{N-1}
+ * \left(\frac{y_i-H\left(\sum_{k=0}^{M-1} w_k b_k (x_i)\right)}{\sigma_i} \right)^2 + \sum_{i,j=0}^{M-1}P_{i,j}x_ix_j$
  * <p>
  * This is currently for research as part of PLAT-2215
  */
 public class NonLinearLeastSquareWithPenalty {
   // private static final Logger LOGGER = LoggerFactory.getLogger(NonLinearLeastSquareWithPenalty.class);
   private static final int MAX_ATTEMPTS = 100000;
-  private static final Function1D<DoubleMatrix1D, Boolean> UNCONSTAINED = new Function1D<DoubleMatrix1D, Boolean>() {
+  private static final Function1D<DoubleMatrix1D, Boolean> UNCONSTRAINED = new Function1D<DoubleMatrix1D, Boolean>() {
     @Override
-    public Boolean apply(final DoubleMatrix1D x) {
+    public Boolean evaluate(final DoubleMatrix1D x) {
       return true;
     }
   };
@@ -55,9 +56,9 @@ public class NonLinearLeastSquareWithPenalty {
   }
 
   /**
-   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
-   * the measurement points are already known to the function), and analytic parameter sensitivity is not available
-   * 
+   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set
+   * of model values, so the measurement points are already known to the function), and analytic parameter sensitivity is not available
+   *
    * @param observedValues
    *          Set of measurement values
    * @param func
@@ -68,7 +69,8 @@ public class NonLinearLeastSquareWithPenalty {
    *          Penalty matrix
    * @return value of the fitted parameters
    */
-  public LeastSquareResults solve(final DoubleMatrix1D observedValues, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func, final DoubleMatrix1D startPos,
+  public LeastSquareResults solve(final DoubleMatrix1D observedValues, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
+      final DoubleMatrix1D startPos,
       final DoubleMatrix2D penalty) {
     final int n = observedValues.getNumberOfElements();
     final VectorFieldFirstOrderDifferentiator jac = new VectorFieldFirstOrderDifferentiator();
@@ -76,9 +78,9 @@ public class NonLinearLeastSquareWithPenalty {
   }
 
   /**
-   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
-   * the measurement points are already known to the function), and analytic parameter sensitivity is not available
-   * 
+   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set
+   * of model values, so the measurement points are already known to the function), and analytic parameter sensitivity is not available
+   *
    * @param observedValues
    *          Set of measurement values
    * @param sigma
@@ -91,7 +93,8 @@ public class NonLinearLeastSquareWithPenalty {
    *          Penalty matrix
    * @return value of the fitted parameters
    */
-  public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
+  public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma,
+      final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
       final DoubleMatrix1D startPos,
       final DoubleMatrix2D penalty) {
     final VectorFieldFirstOrderDifferentiator jac = new VectorFieldFirstOrderDifferentiator();
@@ -99,9 +102,9 @@ public class NonLinearLeastSquareWithPenalty {
   }
 
   /**
-   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
-   * the measurement points are already known to the function), and analytic parameter sensitivity is not available
-   * 
+   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set
+   * of model values, so the measurement points are already known to the function), and analytic parameter sensitivity is not available
+   *
    * @param observedValues
    *          Set of measurement values
    * @param sigma
@@ -113,11 +116,13 @@ public class NonLinearLeastSquareWithPenalty {
    * @param penalty
    *          Penalty matrix
    * @param allowedValue
-   *          a function which returned true if the new trial position is allowed by the model. An example would be to enforce positive parameters without
-   *          resorting to a non-linear parameter transform. In some circumstances this approach will lead to slow convergence.
+   *          a function which returned true if the new trial position is allowed by the model. An example would be to enforce positive
+   *          parameters without resorting to a non-linear parameter transform. In some circumstances this approach will lead to slow
+   *          convergence.
    * @return value of the fitted parameters
    */
-  public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
+  public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma,
+      final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
       final DoubleMatrix1D startPos,
       final DoubleMatrix2D penalty, final Function1D<DoubleMatrix1D, Boolean> allowedValue) {
     final VectorFieldFirstOrderDifferentiator jac = new VectorFieldFirstOrderDifferentiator();
@@ -125,9 +130,9 @@ public class NonLinearLeastSquareWithPenalty {
   }
 
   /**
-   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
-   * the measurement points are already known to the function), and analytic parameter sensitivity is available
-   * 
+   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set
+   * of model values, so the measurement points are already known to the function), and analytic parameter sensitivity is available
+   *
    * @param observedValues
    *          Set of measurement values
    * @param sigma
@@ -142,15 +147,16 @@ public class NonLinearLeastSquareWithPenalty {
    *          Penalty matrix
    * @return the least-square results
    */
-  public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
+  public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma,
+      final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
       final Function1D<DoubleMatrix1D, DoubleMatrix2D> jac, final DoubleMatrix1D startPos, final DoubleMatrix2D penalty) {
-    return solve(observedValues, sigma, func, jac, startPos, penalty, UNCONSTAINED);
+    return solve(observedValues, sigma, func, jac, startPos, penalty, UNCONSTRAINED);
   }
 
   /**
-   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set of model values, so
-   * the measurement points are already known to the function), and analytic parameter sensitivity is available
-   * 
+   * Use this when the model is given as a function of its parameters only (i.e. a function that takes a set of parameters and return a set
+   * of model values, so the measurement points are already known to the function), and analytic parameter sensitivity is available
+   *
    * @param observedValues
    *          Set of measurement values
    * @param sigma
@@ -164,11 +170,13 @@ public class NonLinearLeastSquareWithPenalty {
    * @param penalty
    *          Penalty matrix
    * @param allowedValue
-   *          a function which returned true if the new trial position is allowed by the model. An example would be to enforce positive parameters without
-   *          resorting to a non-linear parameter transform. In some circumstances this approach will lead to slow convergence.
+   *          a function which returned true if the new trial position is allowed by the model. An example would be to enforce positive
+   *          parameters without resorting to a non-linear parameter transform. In some circumstances this approach will lead to slow
+   *          convergence.
    * @return the least-square results
    */
-  public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma, final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
+  public LeastSquareResults solve(final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma,
+      final Function1D<DoubleMatrix1D, DoubleMatrix1D> func,
       final Function1D<DoubleMatrix1D, DoubleMatrix2D> jac, final DoubleMatrix1D startPos, final DoubleMatrix2D penalty,
       final Function1D<DoubleMatrix1D, Boolean> allowedValue) {
 
@@ -272,7 +280,7 @@ public class NonLinearLeastSquareWithPenalty {
   /**
    *
    * the inverse-Jacobian where the i-j entry is the sensitivity of the ith (fitted) parameter (a_i) to the jth data point (y_j).
-   * 
+   *
    * @param sigma
    *          Set of measurement errors
    * @param jac
@@ -290,13 +298,15 @@ public class NonLinearLeastSquareWithPenalty {
     return decRes.solve(bT);
   }
 
-  private LeastSquareResults finish(final double newChiSqr, final DoubleMatrix2D jacobian, final DoubleMatrix1D newTheta, final DoubleMatrix1D sigma) {
+  private LeastSquareResults finish(final double newChiSqr, final DoubleMatrix2D jacobian, final DoubleMatrix1D newTheta,
+      final DoubleMatrix1D sigma) {
     final DoubleMatrix2D alpha = getModifiedCurvatureMatrix(jacobian, 0.0);
     final DecompositionResult decmp = _decomposition.apply(alpha);
     return finish(alpha, decmp, newChiSqr, jacobian, newTheta, sigma);
   }
 
-  private LeastSquareResults finish(final DoubleMatrix2D alpha, final DecompositionResult decmp, final double newChiSqr, final DoubleMatrix2D jacobian,
+  private LeastSquareResults finish(final DoubleMatrix2D alpha, final DecompositionResult decmp, final double newChiSqr,
+      final DoubleMatrix2D jacobian,
       final DoubleMatrix1D newTheta,
       final DoubleMatrix1D sigma) {
     final DoubleMatrix2D covariance = decmp.solve(DoubleMatrixUtils.getIdentityMatrix2D(alpha.getNumberOfRows()));
@@ -305,7 +315,8 @@ public class NonLinearLeastSquareWithPenalty {
     return new LeastSquareResults(newChiSqr, newTheta, covariance, inverseJacobian);
   }
 
-  private DoubleMatrix1D getError(final Function1D<DoubleMatrix1D, DoubleMatrix1D> func, final DoubleMatrix1D observedValues, final DoubleMatrix1D sigma,
+  private DoubleMatrix1D getError(final Function1D<DoubleMatrix1D, DoubleMatrix1D> func, final DoubleMatrix1D observedValues,
+      final DoubleMatrix1D sigma,
       final DoubleMatrix1D theta) {
     final int n = observedValues.getNumberOfElements();
     final DoubleMatrix1D modelValues = func.apply(theta);
@@ -333,7 +344,8 @@ public class NonLinearLeastSquareWithPenalty {
     return new DoubleMatrix2D(res);
   }
 
-  private DoubleMatrix2D getJacobian(final Function1D<DoubleMatrix1D, DoubleMatrix2D> jac, final DoubleMatrix1D sigma, final DoubleMatrix1D theta) {
+  private DoubleMatrix2D getJacobian(final Function1D<DoubleMatrix1D, DoubleMatrix2D> jac, final DoubleMatrix1D sigma,
+      final DoubleMatrix1D theta) {
     final DoubleMatrix2D res = jac.apply(theta);
     final double[][] data = res.getData();
     final int n = res.getNumberOfRows();

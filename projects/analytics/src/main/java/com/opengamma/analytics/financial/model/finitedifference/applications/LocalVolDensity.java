@@ -25,9 +25,9 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 public class LocalVolDensity {
 
   /**
-   * Get the coefficients (a, b and c) for the PDE governing the evolution of the transition density for a single underlying (i.e. 1 spatial dimension). The PDE
-   * is of the form $frac{\partial V}{\partial t} + a(x,t)\frac{\partial^2V}{\partial x^2}+b(x,t)\frac{\partial V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the
-   * density
+   * Get the coefficients (a, b and c) for the PDE governing the evolution of the transition density for a single underlying (i.e. 1 spatial
+   * dimension). The PDE is of the form $frac{\partial V}{\partial t} + a(x,t)\frac{\partial^2V}{\partial x^2}+b(x,t)\frac{\partial
+   * V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the density
    *
    * @param forward
    *          the forward curve
@@ -35,7 +35,8 @@ public class LocalVolDensity {
    *          the local volatility surface (parameterised by strike)
    * @return The coefficients a, b &amp; c - which are all functions of time and asset value (space)
    */
-  public static ConvectionDiffusionPDE1DCoefficients getStandardCoefficients(final ForwardCurve forward, final LocalVolatilitySurfaceStrike localVol) {
+  public static ConvectionDiffusionPDE1DCoefficients getStandardCoefficients(final ForwardCurve forward,
+      final LocalVolatilitySurfaceStrike localVol) {
 
     final Function<Double, Double> a = ts -> {
       Validate.isTrue(ts.length == 2);
@@ -95,9 +96,10 @@ public class LocalVolDensity {
   }
 
   /**
-   * Get the coefficients (a, b, c, $\alpha$ &amp; $\beta$) for the PDE governing the evolution of the transition density for a single underlying (i.e. 1
-   * spatial dimension). The PDE is of the form $frac{\partial V}{\partial t} + a(x,t)\frac{\alpha(x,t)\partial^2V}{\partial x^2}+b(x,t)\frac{\beta(x,t)\partial
-   * V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the density
+   * Get the coefficients (a, b, c, $\alpha$ &amp; $\beta$) for the PDE governing the evolution of the transition density for a single
+   * underlying (i.e. 1 spatial dimension). The PDE is of the form $frac{\partial V}{\partial t} +
+   * a(x,t)\frac{\alpha(x,t)\partial^2V}{\partial x^2}+b(x,t)\frac{\beta(x,t)\partial V}{\partial x} +c(x,t)V=0$ where $V(x,t)$ is the
+   * density
    *
    * @param forward
    *          the forward curve
@@ -105,7 +107,8 @@ public class LocalVolDensity {
    *          the local volatility surface (parameterised by strike)
    * @return The coefficients a, b, c, $\alpha$ &amp; $\beta$ - which are all functions of time and asset value (space)
    */
-  public static ConvectionDiffusionPDE1DFullCoefficients getFullCoefficients(final ForwardCurve forward, final LocalVolatilitySurfaceStrike localVol) {
+  public static ConvectionDiffusionPDE1DFullCoefficients getFullCoefficients(final ForwardCurve forward,
+      final LocalVolatilitySurfaceStrike localVol) {
 
     final Function<Double, Double> a = ts -> {
       Validate.isTrue(ts.length == 2);
@@ -140,12 +143,14 @@ public class LocalVolDensity {
       return forward.getDrift(t);
     };
 
-    return new ConvectionDiffusionPDE1DFullCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
+    return new ConvectionDiffusionPDE1DFullCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        FunctionalDoublesSurface.from(c),
         FunctionalDoublesSurface.from(alpha),
         FunctionalDoublesSurface.from(beta));
   }
 
-  public static ExtendedCoupledPDEDataBundle getExtendedCoupledPDEDataBundle(final ForwardCurve forward, final LocalVolatilitySurfaceStrike localVol,
+  public static ExtendedCoupledPDEDataBundle getExtendedCoupledPDEDataBundle(final ForwardCurve forward,
+      final LocalVolatilitySurfaceStrike localVol,
       final double lambda1, final double lambda2,
       final double initialProb) {
 
@@ -187,7 +192,7 @@ public class LocalVolDensity {
       private final double _volRootTOffset = 0.01;
 
       @Override
-      public Double apply(final Double s) {
+      public Double evaluate(final Double s) {
         if (s == 0) {
           return 0.0;
         }
@@ -197,7 +202,8 @@ public class LocalVolDensity {
       }
     };
 
-    return new ExtendedCoupledPDEDataBundle(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
+    return new ExtendedCoupledPDEDataBundle(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        FunctionalDoublesSurface.from(c),
         FunctionalDoublesSurface.from(alpha),
         FunctionalDoublesSurface.from(beta), lambda2, initialCondition);
 

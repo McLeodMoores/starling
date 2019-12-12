@@ -14,7 +14,8 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * Pricing model for capped power options (see {@link com.opengamma.analytics.financial.model.option.definition.CappedPowerOptionDefinition}).
+ * Pricing model for capped power options (see
+ * {@link com.opengamma.analytics.financial.model.option.definition.CappedPowerOptionDefinition}).
  */
 public class CappedPowerOptionModel extends AnalyticOptionModel<CappedPowerOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -26,7 +27,7 @@ public class CappedPowerOptionModel extends AnalyticOptionModel<CappedPowerOptio
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getStrike();

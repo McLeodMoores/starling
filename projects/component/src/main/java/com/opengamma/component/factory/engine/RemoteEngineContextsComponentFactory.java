@@ -52,16 +52,8 @@ import com.opengamma.engine.ComputationTargetResolver;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.view.ViewProcessor;
-import com.opengamma.financial.analytics.ircurve.EHCachingInterpolatedYieldCurveDefinitionSource;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
-import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveDefinitionSource;
-import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.analytics.volatility.cube.VolatilityCubeDefinitionSource;
 import com.opengamma.financial.analytics.volatility.cube.rest.RemoteVolatilityCubeDefinitionSource;
-import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.EHCachingConventionBundleSource;
-import com.opengamma.financial.convention.rest.RemoteConventionBundleSource;
 import com.opengamma.financial.security.EHCachingFinancialSecuritySource;
 import com.opengamma.financial.security.FinancialSecuritySource;
 import com.opengamma.financial.security.RemoteFinancialSecuritySource;
@@ -118,9 +110,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   private Class<? extends AbstractComponentFactory> _templateEngineContexts = EngineContextsComponentFactory.class;
 
   /**
-   * The component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely
-   * as the components that make them up are often used independently. Performance is better if the resolver goes
-   * through these, cached, instances rather than make independently cached remote requests.
+   * The component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    */
   @PropertyDefinition(validate = "notNull")
   private Class<? extends AbstractComponentFactory> _templateTargetResolver = TargetResolverComponentFactory.class;
@@ -157,13 +148,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
       return new EHCachingConfigSource(configSource, getCacheManager());
     }
     return configSource;
-  }
-
-  protected ConventionBundleSource cache(final ConventionBundleSource conventionBundleSource) {
-    if (getCacheManager() != null) {
-      return new EHCachingConventionBundleSource(conventionBundleSource, getCacheManager());
-    }
-    return conventionBundleSource;
   }
 
   protected ConventionSource cache(final ConventionSource conventionSource) {
@@ -205,13 +189,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
     return new CachedHolidaySource(holidaySource);
   }
 
-  protected InterpolatedYieldCurveDefinitionSource cache(final InterpolatedYieldCurveDefinitionSource interpolatedYieldCurveDefinitionSource) {
-    if (getCacheManager() != null) {
-      return new EHCachingInterpolatedYieldCurveDefinitionSource(interpolatedYieldCurveDefinitionSource, getCacheManager());
-    }
-    return interpolatedYieldCurveDefinitionSource;
-  }
-
   protected LegalEntitySource cache(final LegalEntitySource legalEntitySource) {
     if (getCacheManager() != null) {
       return new EHCachingLegalEntitySource(legalEntitySource, getCacheManager());
@@ -249,13 +226,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
     return null;
   }
 
-  protected ConventionBundleSource createConventionBundleSource(final URI uri) {
-    if (uri != null) {
-      return cache(new RemoteConventionBundleSource(uri));
-    }
-    return null;
-  }
-
   protected ConventionSource createConventionSource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteConventionSource(uri/* , TODO: change manager */));
@@ -287,20 +257,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   protected HolidaySource createHolidaySource(final URI uri) {
     if (uri != null) {
       return cache(new RemoteHolidaySource(uri));
-    }
-    return null;
-  }
-
-  protected InterpolatedYieldCurveDefinitionSource createInterpolatedYieldCurveDefinitionSource(final URI uri) {
-    if (uri != null) {
-      return cache(new RemoteInterpolatedYieldCurveDefinitionSource(uri/* , TODO: change manager */));
-    }
-    return null;
-  }
-
-  protected InterpolatedYieldCurveSpecificationBuilder createInterpolatedYieldCurveSpecificationBuilder(final URI uri) {
-    if (uri != null) {
-      return /* TODO: cache */new RemoteInterpolatedYieldCurveSpecificationBuilder(uri);
     }
     return null;
   }
@@ -454,9 +410,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
       case "configSource":
         remoteComponent(repo, property, template, createConfigSource(fetchURI(remoteConfiguration, "configSource")));
         break;
-      case "conventionBundleSource":
-        remoteComponent(repo, property, template, createConventionBundleSource(fetchURI(remoteConfiguration, "conventionBundleSource")));
-        break;
       case "conventionSource":
         remoteComponent(repo, property, template, createConventionSource(fetchURI(remoteConfiguration, "conventionSource")));
         break;
@@ -474,14 +427,6 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
         break;
       case "holidaySource":
         remoteComponent(repo, property, template, createHolidaySource(fetchURI(remoteConfiguration, "holidaySource")));
-        break;
-      case "interpolatedYieldCurveDefinitionSource":
-        remoteComponent(repo, property, template,
-            createInterpolatedYieldCurveDefinitionSource(fetchURI(remoteConfiguration, "interpolatedYieldCurveDefinitionSource")));
-        break;
-      case "interpolatedYieldCurveSpecificationBuilder":
-        remoteComponent(repo, property, template,
-            createInterpolatedYieldCurveSpecificationBuilder(fetchURI(remoteConfiguration, "interpolatedYieldCurveSpecificationBuilder")));
         break;
       case "legalEntitySource":
         remoteComponent(repo, property, template, createLegalEntitySource(fetchURI(remoteConfiguration, "legalEntitySource")));
@@ -710,9 +655,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely
-   * as the components that make them up are often used independently. Performance is better if the resolver goes
-   * through these, cached, instances rather than make independently cached remote requests.
+   * Gets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    * @return the value of the property, not null
    */
   public Class<? extends AbstractComponentFactory> getTemplateTargetResolver() {
@@ -720,9 +664,8 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   }
 
   /**
-   * Sets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely
-   * as the components that make them up are often used independently. Performance is better if the resolver goes
-   * through these, cached, instances rather than make independently cached remote requests.
+   * Sets the component factory to use as a template for the target resolver. Target resolvers aren't accessed remotely as the components that make them up are often
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    * @param templateTargetResolver  the new value of the property, not null
    */
   public void setTemplateTargetResolver(Class<? extends AbstractComponentFactory> templateTargetResolver) {
@@ -732,8 +675,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   /**
    * Gets the the {@code templateTargetResolver} property.
-   * as the components that make them up are often used independently. Performance is better if the resolver goes
-   * through these, cached, instances rather than make independently cached remote requests.
+   * used independently. Performance is better if the resolver goes through these, cached, instances rather than make independently cached remote requests.
    * @return the property, not null
    */
   public final Property<Class<? extends AbstractComponentFactory>> templateTargetResolver() {

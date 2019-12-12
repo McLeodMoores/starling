@@ -26,11 +26,17 @@ public class CouponTest {
   private static final double NOTIONAL = 100;
   private static final Coupon COUPON = new MyCoupon(CCY, PAYMENT_TIME, ACCRUAL_TIME, NOTIONAL);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativeAccrualTime() {
     new MyCoupon(CCY, PAYMENT_TIME, -ACCRUAL_TIME, NOTIONAL);
   }
 
+  /**
+   *
+   */
   @Test
   public void testObject() {
     assertEquals(CCY, COUPON.getCurrency());

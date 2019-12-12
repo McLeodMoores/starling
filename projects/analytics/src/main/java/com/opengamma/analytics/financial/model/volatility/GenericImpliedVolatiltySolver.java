@@ -5,15 +5,17 @@
  */
 package com.opengamma.analytics.financial.model.volatility;
 
+import java.util.function.Function;
+
 import com.opengamma.analytics.math.MathException;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.rootfinding.BisectionSingleRootFinder;
 import com.opengamma.analytics.math.rootfinding.BracketRoot;
 
 /**
- * Finds an implied volatility (a parameter that put into a model gives the market price of an option) for any option pricing model that has a 'volatility'
- * parameter. This included the Black-Scholes-Merton model (and derivatives) for European options and Barone-Adesi &amp; Whaley and Bjeksund and Stensland for
- * American options
+ * Finds an implied volatility (a parameter that put into a model gives the market price of an option) for any option pricing model that has
+ * a 'volatility' parameter. This included the Black-Scholes-Merton model (and derivatives) for European options and Barone-Adesi &amp;
+ * Whaley and Bjeksund and Stensland for American options
  */
 public class GenericImpliedVolatiltySolver {
 
@@ -101,7 +103,7 @@ public class GenericImpliedVolatiltySolver {
    *          Guess value
    * @return Implied volatility
    */
-  public static double impliedVolatility(final double optionPrice, final Function1D<Double, double[]> pavFunc, final double guess) {
+  public static double impliedVolatility(final double optionPrice, final Function<Double, double[]> pavFunc, final double guess) {
 
     double lowerSigma;
     double upperSigma;
@@ -172,41 +174,29 @@ public class GenericImpliedVolatiltySolver {
 
   }
 
-  private static double[] bracketRoot(final double optionPrice, final Function1D<Double, double[]> pavFunc, final double sigma, final double change) {
+  private static double[] bracketRoot(final double optionPrice, final Function<Double, double[]> pavFunc, final double sigma,
+      final double change) {
     final BracketRoot bracketer = new BracketRoot();
-    final Function1D<Double, Double> func = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double volatility) {
-        return pavFunc.apply(volatility)[0] / optionPrice - 1.0;
-      }
-    };
+    final Function<Double, Double> func = volatility -> pavFunc.apply(volatility)[0] / optionPrice - 1.0;
     return bracketer.getBracketedPoints(func, sigma - Math.abs(change), sigma + Math.abs(change), 0, Double.POSITIVE_INFINITY);
   }
 
-  private static double[] bracketRoot(final double optionPrice, final Function1D<Double, double[]> pavFunc, final double sigma, final double change,
+  private static double[] bracketRoot(final double optionPrice, final Function<Double, double[]> pavFunc, final double sigma,
+      final double change,
       final double shift) {
     final BracketRoot bracketer = new BracketRoot();
-    final Function1D<Double, Double> func = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double volatility) {
-        return pavFunc.apply(volatility)[0] / optionPrice - 1.0;
-      }
-    };
+    final Function<Double, Double> func = volatility -> pavFunc.apply(volatility)[0] / optionPrice - 1.0;
     final double absChange = Math.abs(change);
     final double left = sigma - absChange < shift ? shift : sigma - absChange;
     return bracketer.getBracketedPoints(func, left, sigma + absChange, shift, Double.POSITIVE_INFINITY);
   }
 
-  private static double solveByBisection(final double optionPrice, final Function1D<Double, double[]> pavFunc, final double lowerSigma,
+  private static double solveByBisection(final double optionPrice, final Function<Double, double[]> pavFunc, final double lowerSigma,
       final double upperSigma) {
     final BisectionSingleRootFinder rootFinder = new BisectionSingleRootFinder(VOL_TOL);
-    final Function1D<Double, Double> func = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double volatility) {
-        final double trialPrice = pavFunc.apply(volatility)[0];
-        return trialPrice / optionPrice - 1.0;
-      }
+    final Function<Double, Double> func = volatility -> {
+      final double trialPrice = pavFunc.apply(volatility)[0];
+      return trialPrice / optionPrice - 1.0;
     };
     return rootFinder.getRoot(func, lowerSigma, upperSigma);
   }

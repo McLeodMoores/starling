@@ -22,6 +22,7 @@ import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethod
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
@@ -44,7 +45,6 @@ import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAd
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.util.time.TimeCalculator;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
@@ -58,18 +58,21 @@ import com.opengamma.util.tuple.Pair;
 @Test(groups = TestGroup.UNIT)
 public class BrlDiscountingOvernight1Test extends CurveBuildingTests {
   /** The interpolator used for the curve */
-  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
   /** A calendar containing only Saturday and Sunday holidays */
-  private static final Calendar RIO = CalendarAdapter.of(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
+  private static final WorkingDayCalendar RIO = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   /** The base FX matrix */
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.BRL);
   /** Generates OIS swaps */
-  private static final GeneratorSwapFixedCompoundedONCompounded GENERATOR_OIS_BRL = GeneratorSwapFixedCompoundedONCompoundedMaster.getInstance()
+  private static final GeneratorSwapFixedCompoundedONCompounded GENERATOR_OIS_BRL = GeneratorSwapFixedCompoundedONCompoundedMaster
+      .getInstance()
       .getGenerator("BRLCDI", RIO);
   /** The CDI index */
   private static final IndexON CDI_INDEX = GENERATOR_OIS_BRL.getIndex();
   /** Generates the overnight deposit */
-  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_BRL = new GeneratorDepositON("BRL Deposit ON", Currency.BRL, RIO, CDI_INDEX.getDayCount());
+  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_BRL = new GeneratorDepositON("BRL Deposit ON", Currency.BRL, RIO,
+      CDI_INDEX.getDayCount());
   /** The curve construction date */
   private static final ZonedDateTime NOW = DateUtils.getUTCDate(2011, 9, 28);
   /** The previous day */
@@ -91,16 +94,20 @@ public class BrlDiscountingOvernight1Test extends CurveBuildingTests {
   /** The curve name */
   private static final String CURVE_NAME_DSC_BRL = "BRL Dsc";
   /** Market values for the discounting curve */
-  private static final double[] DSC_BRL_MARKET_QUOTES = new double[] { 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400,
+  private static final double[] DSC_BRL_MARKET_QUOTES = new double[] { 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400,
+      0.0400, 0.0400, 0.0400,
       0.0400 };
   /** Vanilla instrument generators */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_BRL_GENERATORS = new GeneratorInstrument<?>[] { GENERATOR_DEPOSIT_ON_BRL,
-      GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
+  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_BRL_GENERATORS = new GeneratorInstrument<?>[] {
+      GENERATOR_DEPOSIT_ON_BRL,
+      GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
+      GENERATOR_OIS_BRL,
       GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL };
   /** Attribute generators */
   private static final GeneratorAttributeIR[] DSC_BRL_ATTR;
   static {
-    final Period[] tenors = new Period[] { Period.ofDays(0), Period.ofMonths(1), Period.ofMonths(2), Period.ofMonths(3), Period.ofMonths(6), Period.ofMonths(9),
+    final Period[] tenors = new Period[] { Period.ofDays(0), Period.ofMonths(1), Period.ofMonths(2), Period.ofMonths(3), Period.ofMonths(6),
+        Period.ofMonths(9),
         Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(10) };
     DSC_BRL_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
@@ -142,9 +149,11 @@ public class BrlDiscountingOvernight1Test extends CurveBuildingTests {
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesBeforeFixing = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
+    final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesBeforeFixing = BUILDER_FOR_TEST.copy()
+        .withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
         .getDefinitionsForCurves(NOW);
-    final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesAfterFixing = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder()
+    final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesAfterFixing = BUILDER_FOR_TEST.copy()
+        .withFixingTs(FIXING_TS_WITH_TODAY).getBuilder()
         .getDefinitionsForCurves(NOW);
     curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_BRL), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.BRL);
@@ -214,11 +223,11 @@ public class BrlDiscountingOvernight1Test extends CurveBuildingTests {
     try (FileWriter writer = new FileWriter("fwd-dsc.csv")) {
       for (int i = 0; i < nbDate; i++) {
         startTime[i] = TimeCalculator.getTimeBetween(NOW, startDate);
-        startTime2[i] = CDI_INDEX.getDayCount().getDayCountFraction(NOW, startDate, RIO);
+        startTime2[i] = CDI_INDEX.getDayCount().getDayCountFraction(NOW, startDate, CalendarAdapter.of(RIO));
         final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, CDI_INDEX.getPublicationLag(), RIO);
         final double endTime = TimeCalculator.getTimeBetween(NOW, endDate);
-        final double endTime2 = CDI_INDEX.getDayCount().getDayCountFraction(NOW, endDate, RIO);
-        accrualFactor[i] = CDI_INDEX.getDayCount().getDayCountFraction(startDate, endDate, RIO);
+        final double endTime2 = CDI_INDEX.getDayCount().getDayCountFraction(NOW, endDate, CalendarAdapter.of(RIO));
+        accrualFactor[i] = CDI_INDEX.getDayCount().getDayCountFraction(startDate, endDate, CalendarAdapter.of(RIO));
         accrualFactorActAct[i] = TimeCalculator.getTimeBetween(startDate, endDate);
         dscstart[i] = marketDsc.getDiscountFactor(Currency.BRL, startTime2[i]);
         dscend[i] = marketDsc.getDiscountFactor(Currency.BRL, endTime2);
@@ -226,7 +235,8 @@ public class BrlDiscountingOvernight1Test extends CurveBuildingTests {
         rateDsc2[i] = marketDsc.getSimplyCompoundForwardRate(CDI_INDEX, startTime[i], endTime, accrualFactor[i]);
         rateDscNormal[i] = marketDsc.getSimplyCompoundForwardRate(CDI_INDEX, startTime[i], endTime, accrualFactorActAct[i]);
         startDate = ScheduleCalculator.getAdjustedDate(startDate, jump, RIO);
-        writer.append(0.0 + "," + startTime[i] + "," + dscstart[i] + "," + dscend[i] + "," + rateDsc[i] + "," + rateDsc2[i] + "," + rateDscNormal[i] + "\n");
+        writer.append(0.0 + "," + startTime[i] + "," + dscstart[i] + "," + dscend[i] + "," + rateDsc[i] + "," + rateDsc2[i] + ","
+            + rateDscNormal[i] + "\n");
       }
       writer.flush();
       writer.close();

@@ -18,13 +18,14 @@ import com.opengamma.util.time.DateUtils;
 public class HoLeeInterestRateModel implements DiscountBondModel<StandardDiscountBondModelDataBundle> {
 
   @Override
-  public Function1D<StandardDiscountBondModelDataBundle, Double> getDiscountBondFunction(final ZonedDateTime time, final ZonedDateTime maturity) {
+  public Function1D<StandardDiscountBondModelDataBundle, Double> getDiscountBondFunction(final ZonedDateTime time,
+      final ZonedDateTime maturity) {
     Validate.notNull(time);
     Validate.notNull(maturity);
     return new Function1D<StandardDiscountBondModelDataBundle, Double>() {
 
       @Override
-      public Double apply(final StandardDiscountBondModelDataBundle data) {
+      public Double evaluate(final StandardDiscountBondModelDataBundle data) {
         Validate.notNull(data);
         final double t = DateUtils.getDifferenceInYears(data.getDate(), time);
         final double s = DateUtils.getDifferenceInYears(data.getDate(), maturity);

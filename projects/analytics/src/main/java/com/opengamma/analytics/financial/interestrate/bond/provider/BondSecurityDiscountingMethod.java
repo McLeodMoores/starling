@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondSecurity;
@@ -31,7 +32,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.analytics.math.rootfinding.BrentSingleRootFinder;
 import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
@@ -74,7 +75,8 @@ public final class BondSecurityDiscountingMethod {
   /**
    * The present value curve sensitivity calculator (for the different parts of the bond security).
    */
-  private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
+  private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator
+      .getInstance();
   /**
    * The present value parallel shifts curve sensitivity calculator.
    */
@@ -102,9 +104,11 @@ public final class BondSecurityDiscountingMethod {
    *          The issuer and multi-curves provider.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValue(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves) {
+  public MultipleCurrencyAmount presentValue(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final IssuerProviderInterface issuerMulticurves) {
     ArgumentChecker.notNull(bond, "Bond");
-    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves, bond.getCurrency(),
+    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves,
+        bond.getCurrency(),
         bond.getIssuerEntity());
     final MultipleCurrencyAmount pvNominal = bond.getNominal().accept(PVDC, multicurvesDecorated);
     final MultipleCurrencyAmount pvCoupon = bond.getCoupon().accept(PVDC, multicurvesDecorated);
@@ -151,8 +155,8 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bond
-   * (Issuer Entity). The parallel shift is done in the curve convention.
+   * Computes the present value of a bond security from z-spread. The z-spread is a parallel shift applied to the discounting curve
+   * associated to the bond (Issuer Entity). The parallel shift is done in the curve convention.
    *
    * @param bond
    *          The bond security.
@@ -164,7 +168,8 @@ public final class BondSecurityDiscountingMethod {
    */
   public MultipleCurrencyAmount presentValueFromZSpread(final BondSecurity<? extends Payment, ? extends Coupon> bond,
       final IssuerProviderInterface issuerMulticurves, final double zSpread) {
-    final IssuerProviderInterface issuerShifted = new IssuerProviderIssuerDecoratedSpread(issuerMulticurves, bond.getIssuerEntity(), zSpread);
+    final IssuerProviderInterface issuerShifted = new IssuerProviderIssuerDecoratedSpread(issuerMulticurves, bond.getIssuerEntity(),
+        zSpread);
     return presentValue(bond, issuerShifted);
   }
 
@@ -177,9 +182,11 @@ public final class BondSecurityDiscountingMethod {
    *          The z-spread.
    * @return The Z spread sensitivity.
    */
-  public double presentValueZSpreadSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves,
+  public double presentValueZSpreadSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final IssuerProviderInterface issuerMulticurves,
       final double zSpread) {
-    final IssuerProviderInterface issuerShifted = new IssuerProviderIssuerDecoratedSpread(issuerMulticurves, bond.getIssuerEntity(), zSpread);
+    final IssuerProviderInterface issuerShifted = new IssuerProviderIssuerDecoratedSpread(issuerMulticurves, bond.getIssuerEntity(),
+        zSpread);
     final StringAmount parallelSensi = presentValueParallelCurveSensitivity(bond, issuerShifted);
     return parallelSensi.getMap().get(issuerMulticurves.getName(bond.getIssuerEntity()));
   }
@@ -234,7 +241,8 @@ public final class BondSecurityDiscountingMethod {
     if (nbCoupon == 1) {
       if (yieldConvention.equals(US_STREET) || yieldConvention.equals(GERMAN_BOND) || yieldConvention.equals(ITALY_TREASURY_BONDS)
           || yieldConvention.equals(AUSTRALIA_EX_DIVIDEND) || yieldConvention.equals(MEXICAN_BONOS)) {
-        return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) / (1.0 + bond.getFactorToNextCoupon() * yield / bond.getCouponPerYear()) / nominal;
+        return (nominal + bond.getCoupon().getNthPayment(0).getAmount())
+            / (1.0 + bond.getFactorToNextCoupon() * yield / bond.getCouponPerYear()) / nominal;
       }
       if (yieldConvention.equals(FRANCE_COMPOUND_METHOD)) {
         return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) / nominal
@@ -242,7 +250,8 @@ public final class BondSecurityDiscountingMethod {
       }
     }
     if (yieldConvention.equals(US_STREET) || yieldConvention.equals(UK_BUMP_DMO_METHOD) || yieldConvention.equals(GERMAN_BOND)
-        || yieldConvention.equals(FRANCE_COMPOUND_METHOD) || yieldConvention.equals(AUSTRALIA_EX_DIVIDEND) || yieldConvention.equals(MEXICAN_BONOS)) {
+        || yieldConvention.equals(FRANCE_COMPOUND_METHOD) || yieldConvention.equals(AUSTRALIA_EX_DIVIDEND)
+        || yieldConvention.equals(MEXICAN_BONOS)) {
       return dirtyPriceFromYieldStandard(bond, yield);
     }
     if (yieldConvention.equals(ITALY_TREASURY_BONDS)) {
@@ -358,14 +367,9 @@ public final class BondSecurityDiscountingMethod {
     /**
      * Inner function used to find the yield.
      */
-    final Function1D<Double, Double> priceResidual = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double y) {
-        return dirtyPriceFromYield(bond, y) - dirtyPrice;
-      }
-    };
+    final Function<Double, Double> priceResidual = y -> dirtyPriceFromYield(bond, y) - dirtyPrice;
     final double[] range = BRACKETER.getBracketedPoints(priceResidual, 0.00, 0.20);
-    final double yield = ROOT_FINDER.getRoot(priceResidual, range[0], range[1]);
+    final double yield = ROOT_FINDER.getRoot(Function1dAdapter.of(priceResidual), range[0], range[1]);
     return yield;
   }
 
@@ -414,7 +418,8 @@ public final class BondSecurityDiscountingMethod {
     if (nbCoupon == 1) {
       if (yieldConvention.equals(US_STREET) || yieldConvention.equals(GERMAN_BOND) || yieldConvention.equals(ITALY_TREASURY_BONDS)
           || yieldConvention.equals(AUSTRALIA_EX_DIVIDEND) || yieldConvention.equals(MEXICAN_BONOS)) {
-        return bond.getFactorToNextCoupon() / bond.getCouponPerYear() / (1.0 + bond.getFactorToNextCoupon() * yield / bond.getCouponPerYear());
+        return bond.getFactorToNextCoupon() / bond.getCouponPerYear()
+            / (1.0 + bond.getFactorToNextCoupon() * yield / bond.getCouponPerYear());
       }
       if (yieldConvention.equals(FRANCE_COMPOUND_METHOD)) {
         return bond.getFactorToNextCoupon() / bond.getCouponPerYear() / (1.0 + yield / bond.getCouponPerYear());
@@ -430,7 +435,8 @@ public final class BondSecurityDiscountingMethod {
       final double modifiedDuration = modifiedDurationSemiAnnual / Math.sqrt(1 + yield);
       return modifiedDuration;
     }
-    throw new UnsupportedOperationException("The convention " + yieldConvention.getName() + " is not supported for modified duration computation.");
+    throw new UnsupportedOperationException(
+        "The convention " + yieldConvention.getName() + " is not supported for modified duration computation.");
   }
 
   /**
@@ -597,7 +603,8 @@ public final class BondSecurityDiscountingMethod {
         return 2 * timeToPay * timeToPay / (disc * disc);
       }
       if (yieldConvention.equals(FRANCE_COMPOUND_METHOD)) {
-        throw new UnsupportedOperationException("The convention " + bond.getYieldConvention().getName() + " with only one coupon is not supported.");
+        throw new UnsupportedOperationException(
+            "The convention " + bond.getYieldConvention().getName() + " with only one coupon is not supported.");
       }
     }
     if (yieldConvention.equals(US_STREET)
@@ -639,10 +646,12 @@ public final class BondSecurityDiscountingMethod {
     final double accrualFraction = bond.getFactorToNextCoupon();
     for (int i = 0; i < n; i++) {
       final double ithPayment = bond.getCoupon().getNthPayment(i).getAmount();
-      cvAtFirstCoupon += ithPayment / Math.pow(factorOnPeriod, i + 2) * (i + accrualFraction) * (i + accrualFraction + 1) / (couponsPerYear * couponsPerYear);
+      cvAtFirstCoupon += ithPayment / Math.pow(factorOnPeriod, i + 2) * (i + accrualFraction) * (i + accrualFraction + 1)
+          / (couponsPerYear * couponsPerYear);
       pvAtFirstCoupon += ithPayment / Math.pow(factorOnPeriod, i);
     }
-    cvAtFirstCoupon += nominal / Math.pow(factorOnPeriod, n + 1) * (n - 1 + accrualFraction) * (n + accrualFraction) / (couponsPerYear * couponsPerYear);
+    cvAtFirstCoupon += nominal / Math.pow(factorOnPeriod, n + 1) * (n - 1 + accrualFraction) * (n + accrualFraction)
+        / (couponsPerYear * couponsPerYear);
     pvAtFirstCoupon += nominal / Math.pow(factorOnPeriod, n - 1);
     return cvAtFirstCoupon / pvAtFirstCoupon;
   }
@@ -690,8 +699,8 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Computes a bond z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve associated to the bond
-   * (Issuer Entity) to match the present value.
+   * Computes a bond z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve
+   * associated to the bond (Issuer Entity) to match the present value.
    *
    * @param bond
    *          The bond.
@@ -701,21 +710,17 @@ public final class BondSecurityDiscountingMethod {
    *          The target present value.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndPV(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves,
+  public double zSpreadFromCurvesAndPV(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final IssuerProviderInterface issuerMulticurves,
       final MultipleCurrencyAmount pv) {
     ArgumentChecker.notNull(bond, "Bond");
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
     final Currency ccy = bond.getCurrency();
 
-    final Function1D<Double, Double> residual = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double z) {
-        return presentValueFromZSpread(bond, issuerMulticurves, z).getAmount(ccy) - pv.getAmount(ccy);
-      }
-    };
+    final Function<Double, Double> residual = z -> presentValueFromZSpread(bond, issuerMulticurves, z).getAmount(ccy) - pv.getAmount(ccy);
 
     final double[] range = ROOT_BRACKETER.getBracketedPoints(residual, -0.01, 0.01); // Starting range is [-1%, 1%]
-    return ROOT_FINDER.getRoot(residual, range[0], range[1]);
+    return ROOT_FINDER.getRoot(Function1dAdapter.of(residual), range[0], range[1]);
   }
 
   /**
@@ -739,8 +744,8 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Computes a bond z-spread from the curves and a clean price. The z-spread is a parallel shift applied to the discounting curve associated to the bond
-   * (Issuer Entity) to match the CleanPrice present value.
+   * Computes a bond z-spread from the curves and a clean price. The z-spread is a parallel shift applied to the discounting curve
+   * associated to the bond (Issuer Entity) to match the CleanPrice present value.
    *
    * @param bond
    *          The bond.
@@ -750,9 +755,11 @@ public final class BondSecurityDiscountingMethod {
    *          The target clean price.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndClean(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves,
+  public double zSpreadFromCurvesAndClean(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final IssuerProviderInterface issuerMulticurves,
       final double cleanPrice) {
-    return zSpreadFromCurvesAndPV(bond, issuerMulticurves, presentValueFromCleanPrice(bond, issuerMulticurves.getMulticurveProvider(), cleanPrice));
+    return zSpreadFromCurvesAndPV(bond, issuerMulticurves,
+        presentValueFromCleanPrice(bond, issuerMulticurves.getMulticurveProvider(), cleanPrice));
   }
 
   /**
@@ -766,7 +773,8 @@ public final class BondSecurityDiscountingMethod {
    *          The yield.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndYield(final BondSecurity<? extends Payment, ? extends Coupon> bond, final IssuerProviderInterface issuerMulticurves,
+  public double zSpreadFromCurvesAndYield(final BondSecurity<? extends Payment, ? extends Coupon> bond,
+      final IssuerProviderInterface issuerMulticurves,
       final double yield) {
     return zSpreadFromCurvesAndPV(bond, issuerMulticurves, presentValueFromYield(bond, issuerMulticurves.getMulticurveProvider(), yield));
   }
@@ -801,7 +809,8 @@ public final class BondSecurityDiscountingMethod {
   public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond,
       final IssuerProviderInterface issuerMulticurves) {
     ArgumentChecker.notNull(bond, "Bond");
-    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves, bond.getCurrency(),
+    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves,
+        bond.getCurrency(),
         bond.getIssuerEntity());
     final MultipleCurrencyMulticurveSensitivity pvcsNominal = bond.getNominal().accept(PVCSDC, multicurvesDecorated);
     final MultipleCurrencyMulticurveSensitivity pvcsCoupon = bond.getCoupon().accept(PVCSDC, multicurvesDecorated);
@@ -820,7 +829,8 @@ public final class BondSecurityDiscountingMethod {
   public StringAmount presentValueParallelCurveSensitivity(final BondSecurity<? extends Payment, ? extends Coupon> bond,
       final IssuerProviderInterface issuerMulticurves) {
     ArgumentChecker.notNull(bond, "Bond");
-    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves, bond.getCurrency(),
+    final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(issuerMulticurves,
+        bond.getCurrency(),
         bond.getIssuerEntity());
     final StringAmount pvpcsNominal = bond.getNominal().accept(PVPCSDC, multicurvesDecorated);
     final StringAmount pvpcsCoupon = bond.getCoupon().accept(PVPCSDC, multicurvesDecorated);
@@ -842,7 +852,8 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Calculates the accrued interest for a fixed-coupon bond using the dirty price. The accrued interest is defined as dirty price - clean price.
+   * Calculates the accrued interest for a fixed-coupon bond using the dirty price. The accrued interest is defined as dirty price - clean
+   * price.
    *
    * @param bond
    *          The bond, not null
@@ -856,7 +867,8 @@ public final class BondSecurityDiscountingMethod {
   }
 
   /**
-   * Calculates the accrued interest for a fixed-coupon bond using the clean price. The accrued interest is defined as dirty price - clean price.
+   * Calculates the accrued interest for a fixed-coupon bond using the clean price. The accrued interest is defined as dirty price - clean
+   * price.
    *
    * @param bond
    *          The bond, not null

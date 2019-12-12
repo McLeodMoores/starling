@@ -103,23 +103,12 @@ public final class CapFloorCMSHullWhiteApproximationMethod {
     final double a0 = MODEL.swapRate(x0, discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor) - cms.getStrike();
     final double a1 = MODEL.swapRateDx1(x0, discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor);
     final double a2 = MODEL.swapRateDx2(x0, discountedCashFlowFixed, alphaFixed, discountedCashFlowIbor, alphaIbor);
-
-    // AnnuityPaymentFixed cfe = CFEC.visit(swap.withCoupon(cms.getStrike()), hwData);
-    // double[] alpha = new double[cfe.getNumberOfPayments()];
-    // double[] df = new double[cfe.getNumberOfPayments()];
-    // double[] discountedCashFlow = new double[cfe.getNumberOfPayments()];
-    // for (int loopcf = 0; loopcf < cfe.getNumberOfPayments(); loopcf++) {
-    // alpha[loopcf] = MODEL.alpha(hwData.getHullWhiteParameter(), 0.0, expiryTime, expiryTime, cfe.getNthPayment(loopcf).getPaymentTime());
-    // df[loopcf] = hwData.getCurve(cfe.getDiscountCurve()).getDiscountFactor(cfe.getNthPayment(loopcf).getPaymentTime());
-    // discountedCashFlow[loopcf] = df[loopcf] * cfe.getNthPayment(loopcf).getAmount();
-    // }
-    // double kappaTest = MODEL.kappa(discountedCashFlow, alpha);
-
     final double kappa = -a0 / a1 - alphaPayment; // approximation
     final double kappatilde = kappa + alphaPayment;
     final double omega = cms.isCap() ? 1.0 : -1.0;
     final double s2pi = 1.0 / Math.sqrt(2.0 * Math.PI);
-    double pv = omega * (a0 + a2 / 2) * NORMAL.getCDF(-omega * kappatilde) + s2pi * Math.exp(-kappatilde * kappatilde / 2) * (a1 + a2 * kappatilde);
+    double pv = omega * (a0 + a2 / 2) * NORMAL.getCDF(-omega * kappatilde)
+        + s2pi * Math.exp(-kappatilde * kappatilde / 2) * (a1 + a2 * kappatilde);
     pv *= dfPayment * cms.getNotional() * cms.getPaymentYearFraction();
     return MultipleCurrencyAmount.of(cms.getCurrency(), pv);
   }

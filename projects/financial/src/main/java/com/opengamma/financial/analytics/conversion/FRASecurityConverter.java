@@ -41,6 +41,16 @@ public class FRASecurityConverter extends FinancialSecurityVisitorAdapter<Instru
   private final RegionSource _regionSource;
   private final ConventionSource _conventionSource;
 
+  /**
+   * @param securitySource
+   *          a security source, not null
+   * @param holidaySource
+   *          a holiday source, not null
+   * @param regionSource
+   *          a region source, not null
+   * @param conventionSource
+   *          a convention source, not null
+   */
   public FRASecurityConverter(final SecuritySource securitySource, final HolidaySource holidaySource, final RegionSource regionSource,
       final ConventionSource conventionSource) {
     ArgumentChecker.notNull(holidaySource, "holiday source");
@@ -96,15 +106,11 @@ public class FRASecurityConverter extends FinancialSecurityVisitorAdapter<Instru
     }
     final IborIndexConvention iborIndexConvention = (IborIndexConvention) iborConvention;
 
-    final IborIndex index = new IborIndex(iborIndexConvention.getCurrency(),
-        ((VanillaIborLegConvention) iborLegConvention).getResetTenor().getPeriod(),
+    final IborIndex index = new IborIndex(iborIndexConvention.getCurrency(), ((VanillaIborLegConvention) iborLegConvention).getResetTenor().getPeriod(),
         iborIndexConvention.getSettlementDays(), // fixing lag
-        iborIndexConvention.getDayCount(),
-        iborIndexConvention.getBusinessDayConvention(),
-        ((VanillaIborLegConvention) iborLegConvention).isIsEOM(),
+        iborIndexConvention.getDayCount(), iborIndexConvention.getBusinessDayConvention(), ((VanillaIborLegConvention) iborLegConvention).isIsEOM(),
         security.getUnderlyingId().getValue());
-    return ForwardRateAgreementDefinition.from(accrualStartDate, accrualEndDate, notional, index, security.getRate(),
-        calendar, paymentCalendar);
+    return ForwardRateAgreementDefinition.from(accrualStartDate, accrualEndDate, notional, index, security.getRate(), calendar, paymentCalendar);
   }
 
 }

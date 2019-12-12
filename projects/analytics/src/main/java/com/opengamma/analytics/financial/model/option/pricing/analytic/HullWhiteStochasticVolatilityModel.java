@@ -24,7 +24,8 @@ import com.opengamma.util.CompareUtils;
  *
  */
 
-public class HullWhiteStochasticVolatilityModel extends AnalyticOptionModel<OptionDefinition, HullWhiteStochasticVolatilityModelDataBundle> {
+public class HullWhiteStochasticVolatilityModel
+    extends AnalyticOptionModel<OptionDefinition, HullWhiteStochasticVolatilityModelDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
   private static final BlackScholesMertonModel BSM = new BlackScholesMertonModel();
   private static final double ZERO = 1e-4;
@@ -32,12 +33,11 @@ public class HullWhiteStochasticVolatilityModel extends AnalyticOptionModel<Opti
   @Override
   public Function1D<HullWhiteStochasticVolatilityModelDataBundle, Double> getPricingFunction(final OptionDefinition definition) {
     Validate.notNull(definition);
-    final Function1D<HullWhiteStochasticVolatilityModelDataBundle, Double> pricingFunction =
-        new Function1D<HullWhiteStochasticVolatilityModelDataBundle, Double>() {
+    final Function1D<HullWhiteStochasticVolatilityModelDataBundle, Double> pricingFunction = new Function1D<HullWhiteStochasticVolatilityModelDataBundle, Double>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final HullWhiteStochasticVolatilityModelDataBundle data) {
+      public Double evaluate(final HullWhiteStochasticVolatilityModelDataBundle data) {
         Validate.notNull(data);
         final ZonedDateTime date = data.getDate();
         final double s = data.getSpot();
@@ -51,7 +51,8 @@ public class HullWhiteStochasticVolatilityModel extends AnalyticOptionModel<Opti
         final double volOfSigma = data.getVolatilityOfVolatility();
         final double rho = data.getCorrelation();
         final StandardOptionDataBundle bsmData = new StandardOptionDataBundle(data);
-        final OptionDefinition call = definition.isCall() ? definition : new EuropeanVanillaOptionDefinition(k, definition.getExpiry(), true);
+        final OptionDefinition call = definition.isCall() ? definition
+            : new EuropeanVanillaOptionDefinition(k, definition.getExpiry(), true);
         final double beta = -Math.log(2) / lambda;
         final double alpha = -beta * sigmaLR * sigmaLR;
         final double delta = beta * t;
@@ -79,7 +80,8 @@ public class HullWhiteStochasticVolatilityModel extends AnalyticOptionModel<Opti
     return pricingFunction;
   }
 
-  double getMeanVariance(final boolean betaIsZero, final double variance, final double alpha, final double t, final double beta, final double eDelta,
+  double getMeanVariance(final boolean betaIsZero, final double variance, final double alpha, final double t, final double beta,
+      final double eDelta,
       final double delta) {
     if (betaIsZero) {
       return variance + alpha * t / 2.;
@@ -88,26 +90,33 @@ public class HullWhiteStochasticVolatilityModel extends AnalyticOptionModel<Opti
     return (variance + ratio) * (eDelta - 1) / delta - ratio;
   }
 
-  private double getPhi1(final boolean betaIsZero, final double variance, final double rho, final double alpha, final double t, final double beta,
+  private double getPhi1(final boolean betaIsZero, final double variance, final double rho, final double alpha, final double t,
+      final double beta,
       final double beta4, final double eDelta,
       final double delta) {
     if (betaIsZero) {
       return rho * rho * (variance + alpha * t / 4.) * t * t * t / 6.;
     }
-    return rho * rho * ((alpha + beta * variance) * (eDelta * (delta * delta / 2. - delta + 1) - 1) + alpha * (eDelta * (2 - delta) - 2 - delta)) / beta4;
+    return rho * rho
+        * ((alpha + beta * variance) * (eDelta * (delta * delta / 2. - delta + 1) - 1) + alpha * (eDelta * (2 - delta) - 2 - delta))
+        / beta4;
   }
 
-  private double getPhi2(final boolean betaIsZero, final double phi1, final double variance, final double rho, final double alpha, final double beta,
+  private double getPhi2(final boolean betaIsZero, final double phi1, final double variance, final double rho, final double alpha,
+      final double beta,
       final double beta4, final double eDelta,
       final double delta) {
     if (betaIsZero) {
       return phi1 * (2 + 1. / (rho * rho));
     }
     final double eDeltaSq = eDelta * eDelta;
-    return 2 * phi1 + ((alpha + beta * variance) * (eDeltaSq - 2 * delta * eDelta - 1) - alpha * (eDeltaSq - 4 * eDelta + 2 * delta + 3) / 2.) / (2 * beta4);
+    return 2 * phi1
+        + ((alpha + beta * variance) * (eDeltaSq - 2 * delta * eDelta - 1) - alpha * (eDeltaSq - 4 * eDelta + 2 * delta + 3) / 2.)
+            / (2 * beta4);
   }
 
-  private double getPhi3(final boolean betaIsZero, final double variance, final double rho, final double alpha, final double t, final double beta,
+  private double getPhi3(final boolean betaIsZero, final double variance, final double rho, final double alpha, final double t,
+      final double beta,
       final double beta4, final double eDelta,
       final double delta) {
     if (betaIsZero) {
@@ -129,7 +138,8 @@ public class HullWhiteStochasticVolatilityModel extends AnalyticOptionModel<Opti
     return -sDf * nD1 * d2 / (2 * meanVariance);
   }
 
-  private double getCVV(final double sDf, final double sqrtT, final double nD1, final double d1, final double d2, final double meanVariance) {
+  private double getCVV(final double sDf, final double sqrtT, final double nD1, final double d1, final double d2,
+      final double meanVariance) {
     return sDf * sqrtT * nD1 * (d1 * d2 - 1) / (4 * Math.pow(meanVariance, 1.5));
   }
 
@@ -137,21 +147,25 @@ public class HullWhiteStochasticVolatilityModel extends AnalyticOptionModel<Opti
     return sDf * nD1 * (-d1 * d2 * d2 + d1 + 2 * d2) / (4 * meanVariance * meanVariance);
   }
 
-  private double getCVVV(final double sDf, final double sqrtT, final double nD1, final double d1, final double d2, final double meanVariance) {
+  private double getCVVV(final double sDf, final double sqrtT, final double nD1, final double d1, final double d2,
+      final double meanVariance) {
     return sDf * sqrtT * nD1 * ((d1 * d2 - 1) * (d1 * d2 - 3) - d1 * d1 - d2 * d2) / (8 * Math.pow(meanVariance, 2.5));
   }
 
-  double getF1(final boolean betaIsZero, final double variance, final double rho, final double alpha, final double t, final double beta, final double delta,
+  double getF1(final boolean betaIsZero, final double variance, final double rho, final double alpha, final double t, final double beta,
+      final double delta,
       final double eDelta, final double sDf,
       final double nD1, final double d2, final double meanVariance) {
     final double cSV = getCSV(sDf, nD1, d2, meanVariance);
     if (betaIsZero) {
       return rho * (variance + alpha * t / 3.) * t * cSV / 2.;
     }
-    return rho * cSV * ((alpha + beta * variance) * (1 - eDelta + delta * eDelta) + alpha * (1 + delta - eDelta)) / (beta * beta * beta * t);
+    return rho * cSV * ((alpha + beta * variance) * (1 - eDelta + delta * eDelta) + alpha * (1 + delta - eDelta))
+        / (beta * beta * beta * t);
   }
 
-  double getF2(final boolean betaIsZero, final double variance, final double rho, final double alpha, final double t, final double beta, final double delta,
+  double getF2(final boolean betaIsZero, final double variance, final double rho, final double alpha, final double t, final double beta,
+      final double delta,
       final double eDelta, final double sDf,
       final double nD1, final double d1, final double d2, final double meanVariance) {
     final double beta4 = beta * beta * beta * beta;

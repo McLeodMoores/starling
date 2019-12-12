@@ -28,13 +28,14 @@ public class DoubleExponentialMeshing extends MeshingFunction {
    * @param nPoints
    *          Number of Points
    * @param lambdaLower
-   *          Bunching parameter. lambda = 0 is uniform, lambda &gt; 0 gives a high density of points near X_0 and lambda &lt; 0 gives a high density of points
-   *          near centre
+   *          Bunching parameter. lambda = 0 is uniform, lambda &gt; 0 gives a high density of points near X_0 and lambda &lt; 0 gives a
+   *          high density of points near centre
    * @param lambdaUpper
-   *          Bunching parameter. lambda = 0 is uniform, lambda &gt; 0 gives a high density of points near centre and lambda &lt; 0 gives a high density of
-   *          points near x_N
+   *          Bunching parameter. lambda = 0 is uniform, lambda &gt; 0 gives a high density of points near centre and lambda &lt; 0 gives a
+   *          high density of points near x_N
    */
-  public DoubleExponentialMeshing(final double lowerBound, final double upperBound, final double centre, final int nPoints, final double lambdaLower,
+  public DoubleExponentialMeshing(final double lowerBound, final double upperBound, final double centre, final int nPoints,
+      final double lambdaLower,
       final double lambdaUpper) {
     super(nPoints);
     Validate.isTrue(centre > lowerBound, "need centre > lowerBound");
@@ -48,7 +49,7 @@ public class DoubleExponentialMeshing extends MeshingFunction {
   }
 
   @Override
-  public Double apply(final Integer i) {
+  public Double evaluate(final Integer i) {
     if (i < _nPointsLower) {
       return _lowerMesh.apply(i);
     }

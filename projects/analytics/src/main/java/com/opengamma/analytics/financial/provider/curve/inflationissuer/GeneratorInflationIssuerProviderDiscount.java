@@ -29,7 +29,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
- *  Generator of MarketDiscountBundle from the parameters.
+ * Generator of MarketDiscountBundle from the parameters.
  */
 public class GeneratorInflationIssuerProviderDiscount extends Function1D<DoubleMatrix1D, InflationIssuerProviderInterface> {
 
@@ -65,11 +65,16 @@ public class GeneratorInflationIssuerProviderDiscount extends Function1D<DoubleM
 
   /**
    * Constructor without the discount curve.
-   * @param knownData The yield curve bundle with known data (curves).
-   * @param inflationMap The discounting curves names map.
-   * @param generatorsInflationMap The inflation generators map.
+   * 
+   * @param knownData
+   *          The yield curve bundle with known data (curves).
+   * @param inflationMap
+   *          The discounting curves names map.
+   * @param generatorsInflationMap
+   *          The inflation generators map.
    */
-  public GeneratorInflationIssuerProviderDiscount(final InflationIssuerProviderDiscount knownData, final LinkedHashMap<String, IndexPrice[]> inflationMap,
+  public GeneratorInflationIssuerProviderDiscount(final InflationIssuerProviderDiscount knownData,
+      final LinkedHashMap<String, IndexPrice[]> inflationMap,
       final LinkedHashMap<String, GeneratorPriceIndexCurve> generatorsInflationMap) {
     ArgumentChecker.notNull(inflationMap, "Inflation curves names map");
     _knownData = knownData;
@@ -83,14 +88,22 @@ public class GeneratorInflationIssuerProviderDiscount extends Function1D<DoubleM
 
   /**
    * Constructor with the discount curve.
-   * @param knownData The yield curve bundle with known data (curves).
-   * @param discountingMap The discounting curves names map.
-   * @param forwardONMap The ON curves names map.
-   * @param inflationMap The inflation curves names map.
-   * @param issuerMap The issuer curves  legal entity map.
-   * @param generatorsMap The inflation generators map.
+   * 
+   * @param knownData
+   *          The yield curve bundle with known data (curves).
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardONMap
+   *          The ON curves names map.
+   * @param inflationMap
+   *          The inflation curves names map.
+   * @param issuerMap
+   *          The issuer curves legal entity map.
+   * @param generatorsMap
+   *          The inflation generators map.
    */
-  public GeneratorInflationIssuerProviderDiscount(final InflationIssuerProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap,
+  public GeneratorInflationIssuerProviderDiscount(final InflationIssuerProviderDiscount knownData,
+      final LinkedHashMap<String, Currency> discountingMap,
       final LinkedHashMap<String, IndexON[]> forwardONMap, final LinkedHashMap<String, IndexPrice[]> inflationMap,
       final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerMap,
       final LinkedHashMap<String, GeneratorCurve> generatorsMap) {
@@ -106,6 +119,7 @@ public class GeneratorInflationIssuerProviderDiscount extends Function1D<DoubleM
 
   /**
    * Gets the know data.
+   * 
    * @return The known data.
    */
   public InflationIssuerProviderDiscount getKnownData() {
@@ -114,6 +128,7 @@ public class GeneratorInflationIssuerProviderDiscount extends Function1D<DoubleM
 
   /**
    * Gets the set of generators of curves . The set order is the order in which they are build.
+   * 
    * @return The set.
    */
   public Set<String> getInflationCurvesList() {
@@ -121,7 +136,7 @@ public class GeneratorInflationIssuerProviderDiscount extends Function1D<DoubleM
   }
 
   @Override
-  public InflationIssuerProviderDiscount apply(final DoubleMatrix1D x) {
+  public InflationIssuerProviderDiscount evaluate(final DoubleMatrix1D x) {
     final InflationIssuerProviderDiscount provider = _knownData.copy();
     final Set<String> nameSet = _generatorsMap.keySet();
     int indexParam = 0;

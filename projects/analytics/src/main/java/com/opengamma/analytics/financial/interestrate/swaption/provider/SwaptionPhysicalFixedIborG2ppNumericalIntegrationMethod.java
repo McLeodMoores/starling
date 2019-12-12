@@ -53,10 +53,10 @@ public class SwaptionPhysicalFixedIborG2ppNumericalIntegrationMethod {
     final double[] t = new double[nbCf];
     final double[] df = new double[nbCf];
     final double[] discountedCashFlow = new double[nbCf];
-    for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      t[loopcf] = cfe.getNthPayment(loopcf).getPaymentTime();
-      df[loopcf] = multicurves.getDiscountFactor(ccy, cfe.getNthPayment(loopcf).getPaymentTime());
-      discountedCashFlow[loopcf] = df[loopcf] * cfe.getNthPayment(loopcf).getAmount();
+    for (int i = 0; i < nbCf; i++) {
+      t[i] = cfe.getNthPayment(i).getPaymentTime();
+      df[i] = multicurves.getDiscountFactor(ccy, cfe.getNthPayment(i).getPaymentTime());
+      discountedCashFlow[i] = df[i] * cfe.getNthPayment(i).getAmount();
     }
 
     final double rhog2pp = g2Data.getG2ppParameters().getCorrelation();
@@ -64,11 +64,11 @@ public class SwaptionPhysicalFixedIborG2ppNumericalIntegrationMethod {
     final double[][] gamma = MODEL_G2PP.gamma(g2Data.getG2ppParameters(), 0, theta);
     final double[][] alpha = new double[2][nbCf];
     final double[] tau2 = new double[nbCf];
-    for (int loopcf = 0; loopcf < nbCf; loopcf++) {
-      alpha[0][loopcf] = Math.sqrt(gamma[0][0]) * htheta[0][loopcf];
-      alpha[1][loopcf] = Math.sqrt(gamma[1][1]) * htheta[1][loopcf];
-      tau2[loopcf] = alpha[0][loopcf] * alpha[0][loopcf] + alpha[1][loopcf] * alpha[1][loopcf]
-          + 2 * rhog2pp * gamma[0][1] * htheta[0][loopcf] * htheta[1][loopcf];
+    for (int i = 0; i < nbCf; i++) {
+      alpha[0][i] = Math.sqrt(gamma[0][0]) * htheta[0][i];
+      alpha[1][i] = Math.sqrt(gamma[1][1]) * htheta[1][i];
+      tau2[i] = alpha[0][i] * alpha[0][i] + alpha[1][i] * alpha[1][i]
+          + 2 * rhog2pp * gamma[0][1] * htheta[0][i] * htheta[1][i];
     }
     final double rhobar = rhog2pp * gamma[0][1] / Math.sqrt(gamma[0][0] * gamma[1][1]);
 

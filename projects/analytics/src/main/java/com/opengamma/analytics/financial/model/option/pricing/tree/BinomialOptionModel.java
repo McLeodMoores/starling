@@ -6,6 +6,7 @@
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
 import java.util.Set;
+import java.util.function.Function;
 
 import org.apache.commons.lang.Validate;
 
@@ -48,7 +49,8 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
     ArgumentChecker.notNegativeOrZero(n, "n");
     ArgumentChecker.notNegative(maxDepthToSave, "max. depth to save");
     if (maxDepthToSave > n) {
-      throw new IllegalArgumentException("Asked for tree to be saved to depth " + maxDepthToSave + " but will only have a tree of depth " + n);
+      throw new IllegalArgumentException(
+          "Asked for tree to be saved to depth " + maxDepthToSave + " but will only have a tree of depth " + n);
     }
     _model = model;
     _n = n;
@@ -59,7 +61,7 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
 
   @Override
   public GreekResultCollection getGreeks(final OptionDefinition definition, final T data, final Set<Greek> requiredGreeks) {
-    final Function1D<T, RecombiningBinomialTree<DoublesPair>> treeFunction = getTreeGeneratingFunction(definition);
+    final Function<T, RecombiningBinomialTree<DoublesPair>> treeFunction = getTreeGeneratingFunction(definition);
     final GreekResultCollection results = new GreekResultCollection();
     final GreekVisitor<Double> visitor = getGreekVisitor(treeFunction, data, definition);
     for (final Greek greek : requiredGreeks) {
@@ -69,16 +71,9 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
     return results;
   }
 
-  public GreekVisitor<Double> getGreekVisitor(final Function1D<T, RecombiningBinomialTree<DoublesPair>> treeFunction, final T data,
+  public GreekVisitor<Double> getGreekVisitor(final Function<T, RecombiningBinomialTree<DoublesPair>> treeFunction, final T data,
       final OptionDefinition definition) {
-    final Function1D<T, Double> function = new Function1D<T, Double>() {
-
-      @Override
-      public Double apply(final T t) {
-        return treeFunction.apply(t).getNode(0, 0).second;
-      }
-
-    };
+    final Function<T, Double> function = t -> treeFunction.apply(t).getNode(0, 0).second;
     return new BinomialModelFiniteDifferenceGreekVisitor(treeFunction.apply(data), function, data, definition);
   }
 
@@ -88,7 +83,7 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
 
       @SuppressWarnings({ "synthetic-access", "unchecked" })
       @Override
-      public RecombiningBinomialTree<DoublesPair> apply(final T data) {
+      public RecombiningBinomialTree<DoublesPair> evaluate(final T data) {
         final DoublesPair[] tempResults = new DoublesPair[_j];
         final DoublesPair[][] spotAndOptionPrices = new DoublesPair[_maxDepthToSave + 1][_maxWidthToSave];
         final OptionPayoffFunction<T> payoffFunction = definition.getPayoffFunction();
@@ -137,8 +132,8 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
     private final double _dt;
 
     @SuppressWarnings("synthetic-access")
-    public BinomialModelFiniteDifferenceGreekVisitor(final RecombiningBinomialTree<DoublesPair> tree, final Function1D<T, Double> function, final T data,
-        final OptionDefinition definition) {
+    public BinomialModelFiniteDifferenceGreekVisitor(final RecombiningBinomialTree<DoublesPair> tree, final Function<T, Double> function,
+        final T data, final OptionDefinition definition) {
       super(function, data, definition);
       _tree = tree;
       _dt = definition.getTimeToExpiry(data.getDate()) / _n;
@@ -157,7 +152,8 @@ public class BinomialOptionModel<T extends StandardOptionDataBundle> extends Tre
       final DoublesPair node22 = _tree.getNode(2, 2);
       final DoublesPair node21 = _tree.getNode(2, 1);
       final DoublesPair node20 = _tree.getNode(2, 0);
-      double gamma = (node22.second - node21.second) / (node22.first - node21.first) - (node21.second - node20.second) / (node21.first - node20.first);
+      double gamma = (node22.second - node21.second) / (node22.first - node21.first)
+          - (node21.second - node20.second) / (node21.first - node20.first);
       gamma /= 0.5 * (node22.first - node20.first);
       return gamma;
     }

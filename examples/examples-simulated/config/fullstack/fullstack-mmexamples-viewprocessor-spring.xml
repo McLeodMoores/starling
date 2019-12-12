@@ -162,7 +162,6 @@
     <property name="masters">
       <list>
         <ref bean="sharedConfigSource" />
-        <ref bean="userInterpolatedYieldCurveDefinitionSource" />
         <bean class="com.opengamma.financial.config.ConfigSourceChangeProvider">
           <constructor-arg ref="sharedConfigSource" />
         </bean>
@@ -180,13 +179,6 @@
             <set>
               <value>UserCurves</value>
             </set>
-          </constructor-arg>
-        </bean>
-        <bean class="com.opengamma.financial.view.StaticWatchSetProvider">
-          <constructor-arg>
-            <map>
-              <entry key="OpenGamma~InterpolatedYieldCurveSpecification" value="ConfigItemType~CurveSpecificationBuilderConfiguration" />
-            </map>
           </constructor-arg>
         </bean>
       </set>

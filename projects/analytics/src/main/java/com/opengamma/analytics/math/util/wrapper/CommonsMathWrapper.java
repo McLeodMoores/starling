@@ -29,8 +29,8 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * Utility class for converting OpenGamma mathematical objects into <a href="http://commons.apache.org/math/api-2.1/index.html">Commons</a> objects and vice
- * versa.
+ * Utility class for converting OpenGamma mathematical objects into <a href="http://commons.apache.org/math/api-2.1/index.html">Commons</a>
+ * objects and vice versa.
  */
 public final class CommonsMathWrapper {
 
@@ -149,7 +149,7 @@ public final class CommonsMathWrapper {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         try {
           return lagrange.value(x);
         } catch (final org.apache.commons.math.MathException e) {

@@ -5,19 +5,21 @@
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.analytics.math.rootfinding.BrentSingleRootFinder;
 import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * This is a bootstrapper for the credit curve that is consistent with ISDA in that it will produce the same curve from the same inputs (up to numerical
- * round-off).
+ * This is a bootstrapper for the credit curve that is consistent with ISDA in that it will produce the same curve from the same inputs (up
+ * to numerical round-off).
  *
  * @deprecated Use the faster ISDACompliantCreditCurveBuild
  */
@@ -97,7 +99,7 @@ public class SimpleCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
     for (int i = 0; i < n; i++) {
       final CDSPricer func = new CDSPricer(i, cds[i], premiums[i], creditCurve, yieldCurve, pointsUpfront[i]);
       final double[] bracket = BRACKER.getBracketedPoints(func, 0.8 * guess[i], 1.25 * guess[i], 0.0, Double.POSITIVE_INFINITY);
-      final double zeroRate = ROOTFINDER.getRoot(func, bracket[0], bracket[1]);
+      final double zeroRate = ROOTFINDER.getRoot(Function1dAdapter.of(func), bracket[0], bracket[1]);
       creditCurve = creditCurve.withRate(zeroRate, i);
     }
 
@@ -153,7 +155,7 @@ public class SimpleCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
     return calibrateCreditCurve(cds, couponRates, yieldCurve);
   }
 
-  private class CDSPricer extends Function1D<Double, Double> {
+  private class CDSPricer implements Function<Double, Double> {
 
     private final int _index;
     private final CDSAnalytic _cds;

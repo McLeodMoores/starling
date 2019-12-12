@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.leastsquare;
@@ -8,13 +8,12 @@ package com.opengamma.analytics.math.statistics.leastsquare;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
-
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.MersenneTwister64;
 
 import com.opengamma.analytics.math.FunctionUtils;
 import com.opengamma.analytics.math.function.Function1D;
@@ -32,6 +31,9 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.util.monitor.OperationTimer;
 import com.opengamma.util.test.TestGroup;
 
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister64;
+
 /**
  * Test.
  */
@@ -47,15 +49,9 @@ public class NonLinearLeastSquareTest {
   private static final DoubleMatrix1D SIGMA;
   private static final NonLinearLeastSquare LS;
 
-  private static final Function1D<Double, Double> TARGET = new Function1D<Double, Double>() {
+  private static final Function<Double, Double> TARGET = x -> Math.sin(x);
 
-    @Override
-    public Double apply(final Double x) {
-      return Math.sin(x);
-    }
-  };
-
-  private static final Function1D<DoubleMatrix1D, DoubleMatrix1D> FUNCTION = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
+  private static final Function<DoubleMatrix1D, DoubleMatrix1D> FUNCTION = new Function<DoubleMatrix1D, DoubleMatrix1D>() {
 
     @SuppressWarnings("synthetic-access")
     @Override
@@ -95,7 +91,7 @@ public class NonLinearLeastSquareTest {
     }
   };
 
-  private static final Function1D<DoubleMatrix1D, DoubleMatrix2D> GRAD = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
+  private static final Function<DoubleMatrix1D, DoubleMatrix2D> GRAD = new Function<DoubleMatrix1D, DoubleMatrix2D>() {
 
     @SuppressWarnings("synthetic-access")
     @Override
@@ -130,7 +126,7 @@ public class NonLinearLeastSquareTest {
 
   @Test
   public void solveExactTest() {
-    final DoubleMatrix1D start = new DoubleMatrix1D(new double[] {1.2, 0.8, -0.2, -0.3 });
+    final DoubleMatrix1D start = new DoubleMatrix1D(new double[] { 1.2, 0.8, -0.2, -0.3 });
     LeastSquareResults result = LS.solve(X, Y, SIGMA, PARAM_FUNCTION, PARAM_GRAD, start);
     assertEquals(0.0, result.getChiSq(), 1e-8);
     assertEquals(1.0, result.getFitParameters().getEntry(0), 1e-8);
@@ -153,7 +149,7 @@ public class NonLinearLeastSquareTest {
 
   @Test
   public void solveExactTest2() {
-    final DoubleMatrix1D start = new DoubleMatrix1D(new double[] {0.2, 1.8, 0.2, 0.3 });
+    final DoubleMatrix1D start = new DoubleMatrix1D(new double[] { 0.2, 1.8, 0.2, 0.3 });
     final LeastSquareResults result = LS.solve(Y, SIGMA, FUNCTION, start);
     assertEquals(0.0, result.getChiSq(), 1e-8);
     assertEquals(1.0, result.getFitParameters().getEntry(0), 1e-8);
@@ -163,7 +159,7 @@ public class NonLinearLeastSquareTest {
   }
 
   public void solveExactFromChiSqTest() {
-    final DoubleMatrix1D start = new DoubleMatrix1D(new double[] {1.2, 0.8, -0.2, -0.3 });
+    final DoubleMatrix1D start = new DoubleMatrix1D(new double[] { 1.2, 0.8, -0.2, -0.3 });
     final Function1D<DoubleMatrix1D, Double> f = getChiSqFunction(X, Y, SIGMA, PARAM_FUNCTION);
     final ConjugateGradientVectorMinimizer minimizer = new ConjugateGradientVectorMinimizer(new BrentMinimizer1D());
     final DoubleMatrix1D solution = minimizer.minimize(f, start);
@@ -205,7 +201,7 @@ public class NonLinearLeastSquareTest {
   @Test
   public void solveExactWithoutGradientTest() {
 
-    final DoubleMatrix1D start = new DoubleMatrix1D(new double[] {1.2, 0.8, -0.2, -0.3 });
+    final DoubleMatrix1D start = new DoubleMatrix1D(new double[] { 1.2, 0.8, -0.2, -0.3 });
 
     final NonLinearLeastSquare ls = new NonLinearLeastSquare();
     final LeastSquareResults result = ls.solve(X, Y, SIGMA, PARAM_FUNCTION, start);
@@ -223,7 +219,7 @@ public class NonLinearLeastSquareTest {
     for (int i = 0; i < 20; i++) {
       y[i] = Y.getEntry(i) + SIGMA.getEntry(i) * NORMAL.nextRandom();
     }
-    final DoubleMatrix1D start = new DoubleMatrix1D(new double[] {0.7, 1.4, 0.2, -0.3 });
+    final DoubleMatrix1D start = new DoubleMatrix1D(new double[] { 0.7, 1.4, 0.2, -0.3 });
     final NonLinearLeastSquare ls = new NonLinearLeastSquare();
     final LeastSquareResults res = ls.solve(X, new DoubleMatrix1D(y), SIGMA, PARAM_FUNCTION, PARAM_GRAD, start);
 
@@ -231,7 +227,7 @@ public class NonLinearLeastSquareTest {
     assertTrue(chiSqDoF > 0.25);
     assertTrue(chiSqDoF < 3.0);
 
-    final DoubleMatrix1D trueValues = new DoubleMatrix1D(new double[] {1, 1, 0, 0 });
+    final DoubleMatrix1D trueValues = new DoubleMatrix1D(new double[] { 1, 1, 0, 0 });
     final DoubleMatrix1D delta = (DoubleMatrix1D) ma.subtract(res.getFitParameters(), trueValues);
 
     final LUDecompositionCommons decmp = new LUDecompositionCommons();
@@ -243,10 +239,10 @@ public class NonLinearLeastSquareTest {
 
     assertTrue(z < 3.0);
 
-    //     System.out.println("chiSqr: " + res.getChiSq());
-    //     System.out.println("params: " + res.getParameters());
-    //     System.out.println("covariance: " + res.getCovariance());
-    //     System.out.println("z: " + z);
+    // System.out.println("chiSqr: " + res.getChiSq());
+    // System.out.println("params: " + res.getParameters());
+    // System.out.println("covariance: " + res.getCovariance());
+    // System.out.println("z: " + z);
   }
 
   @Test
@@ -257,10 +253,10 @@ public class NonLinearLeastSquareTest {
       dy[i] = 0.1 * SIGMA.getEntry(i) * NORMAL.nextRandom();
     }
     final DoubleMatrix1D deltaY = new DoubleMatrix1D(dy);
-    final DoubleMatrix1D solution = new DoubleMatrix1D(new double[] {1.0, 1.0, 0.0, 0.0 });
+    final DoubleMatrix1D solution = new DoubleMatrix1D(new double[] { 1.0, 1.0, 0.0, 0.0 });
     final NonLinearLeastSquare ls = new NonLinearLeastSquare();
     final DoubleMatrix2D res = ls.calInverseJacobian(SIGMA, FUNCTION, GRAD, solution);
-    //  System.out.println("invese Jac: " + res);
+    // System.out.println("invese Jac: " + res);
 
     final DoubleMatrix1D deltaParms = (DoubleMatrix1D) ma.multiply(res, deltaY);
     // System.out.println("delta parms: " + deltaParms);
@@ -298,7 +294,7 @@ public class NonLinearLeastSquareTest {
 
     final Function1D<DoubleMatrix1D, Double> func = new Function1D<DoubleMatrix1D, Double>() {
       @Override
-      public Double apply(final DoubleMatrix1D params) {
+      public Double evaluate(final DoubleMatrix1D params) {
         double sum = 0;
         for (int k = 0; k < n; k++) {
           sum += invSigmaSq[k] * FunctionUtils.square(y.getEntry(k) - paramFunc.evaluate(x.getEntry(k), params));

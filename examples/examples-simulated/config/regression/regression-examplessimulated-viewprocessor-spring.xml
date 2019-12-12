@@ -166,7 +166,6 @@
     <property name="mastersAndSources">
       <map>
         <entry key-ref="centralConfigMaster" value-ref="sharedConfigSource" />
-        <entry key-ref="userInterpolatedYieldCurveDefinitionMaster" value-ref="userInterpolatedYieldCurveDefinitionSource" />
       </map>
     </property>
     <property name="watchSetProviders">

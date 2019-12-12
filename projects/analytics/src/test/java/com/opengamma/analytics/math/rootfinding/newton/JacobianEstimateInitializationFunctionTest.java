@@ -7,9 +7,10 @@ package com.opengamma.analytics.math.rootfinding.newton;
 
 import static org.testng.AssertJUnit.assertEquals;
 
+import java.util.function.Function;
+
 import org.testng.annotations.Test;
 
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.test.TestGroup;
@@ -21,27 +22,31 @@ import com.opengamma.util.test.TestGroup;
 public class JacobianEstimateInitializationFunctionTest {
 
   private static final JacobianEstimateInitializationFunction ESTIMATE = new JacobianEstimateInitializationFunction();
-  private static final Function1D<DoubleMatrix1D, DoubleMatrix2D> J = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
-
-    @Override
-    public DoubleMatrix2D apply(final DoubleMatrix1D v) {
-      final double[] x = v.getData();
-      return new DoubleMatrix2D(new double[][] { {x[0] * x[0], x[0] * x[1]}, {x[0] - x[1], x[1] * x[1]}});
-    }
-
+  private static final Function<DoubleMatrix1D, DoubleMatrix2D> J = v -> {
+    final double[] x = v.getData();
+    return new DoubleMatrix2D(new double[][] { { x[0] * x[0], x[0] * x[1] }, { x[0] - x[1], x[1] * x[1] } });
   };
-  private static final DoubleMatrix1D X = new DoubleMatrix1D(new double[] {1, 2});
+  private static final DoubleMatrix1D X = new DoubleMatrix1D(new double[] { 1, 2 });
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullFunction() {
     ESTIMATE.getInitializedMatrix(null, X);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullVector() {
     ESTIMATE.getInitializedMatrix(J, null);
   }
 
+  /**
+   *
+   */
   @Test
   public void test() {
     final DoubleMatrix2D m1 = ESTIMATE.getInitializedMatrix(J, X);

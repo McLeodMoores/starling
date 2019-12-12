@@ -31,12 +31,6 @@ import com.opengamma.core.security.impl.RemoteSecuritySource;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.view.ViewProcessor;
 import com.opengamma.engine.view.helper.AvailableOutputsProvider;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionMaster;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionSource;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
-import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveDefinitionMaster;
-import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveDefinitionSource;
-import com.opengamma.financial.analytics.ircurve.rest.RemoteInterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.currency.CurrencyMatrixSource;
 import com.opengamma.financial.currency.rest.RemoteCurrencyMatrixSource;
 import com.opengamma.financial.function.rest.RemoteFunctionConfigurationSource;
@@ -124,7 +118,7 @@ public class RemoteEngine {
 
   /**
    * Gets the components.
-   * 
+   *
    * @return the components
    */
   public ComponentServer getComponents() {
@@ -199,21 +193,6 @@ public class RemoteEngine {
   public RemoteHolidayMaster getHolidayMaster(final String name) {
     final URI uri = _components.getComponentInfo(HolidayMaster.class, name).getUri();
     return new RemoteHolidayMaster(uri);
-  }
-
-  public RemoteInterpolatedYieldCurveDefinitionSource getInterpolatedYieldCurveDefinitionSource(final String name) {
-    final URI uri = _components.getComponentInfo(InterpolatedYieldCurveDefinitionSource.class, name).getUri();
-    return new RemoteInterpolatedYieldCurveDefinitionSource(uri);
-  }
-
-  public RemoteInterpolatedYieldCurveDefinitionMaster getInterpolatedYieldCurveDefinitionMaster(final String name) {
-    final URI uri = _components.getComponentInfo(InterpolatedYieldCurveDefinitionMaster.class, name).getUri();
-    return new RemoteInterpolatedYieldCurveDefinitionMaster(uri);
-  }
-
-  public RemoteInterpolatedYieldCurveSpecificationBuilder getInterpolatedYieldCurveSpecificationBuilder(final String name) {
-    final URI uri = _components.getComponentInfo(InterpolatedYieldCurveSpecificationBuilder.class, name).getUri();
-    return new RemoteInterpolatedYieldCurveSpecificationBuilder(uri);
   }
 
   // -------------------------------------------------------------------------

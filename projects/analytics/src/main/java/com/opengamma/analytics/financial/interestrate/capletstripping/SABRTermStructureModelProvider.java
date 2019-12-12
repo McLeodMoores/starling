@@ -20,9 +20,10 @@ import com.opengamma.analytics.math.minimization.ParameterLimitsTransform;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Gives the (Black) volatility for a given forward, strike and time-to-expiry based on a SABR term structure model - i.e., alpha, beta, nu and rho are (spline)
- * functions of the time-to-expiry of an option. <b>Note</b> the parameters are not functions of time but are have fixed values for a given option expiry that
- * does not change over the life time of the option. (Approximations do exist for the former case, but we do not deal with them here.)
+ * Gives the (Black) volatility for a given forward, strike and time-to-expiry based on a SABR term structure model - i.e., alpha, beta, nu
+ * and rho are (spline) functions of the time-to-expiry of an option. <b>Note</b> the parameters are not functions of time but are have
+ * fixed values for a given option expiry that does not change over the life time of the option. (Approximations do exist for the former
+ * case, but we do not deal with them here.)
  */
 public class SABRTermStructureModelProvider extends VolatilityModelProvider {
 
@@ -38,7 +39,8 @@ public class SABRTermStructureModelProvider extends VolatilityModelProvider {
    * General set up for a SABRTermStructureModelProvider.
    *
    * @param knotPoints
-   *          Map between parameter curve names ("alpha", "beta", "rho" and "nu") and the positions of the knot points on each of those curves
+   *          Map between parameter curve names ("alpha", "beta", "rho" and "nu") and the positions of the knot points on each of those
+   *          curves
    * @param interpolators
    *          Map between parameter curve names ("alpha", "beta", "rho" and "nu") and the interpolator used to describe that curve
    * @param parameterTransforms
@@ -46,7 +48,8 @@ public class SABRTermStructureModelProvider extends VolatilityModelProvider {
    * @param knownParameterTermSturctures
    *          Map between known curve names (could be "alpha", "beta", "rho" and "nu") and the known curve(s)
    */
-  public SABRTermStructureModelProvider(final LinkedHashMap<String, double[]> knotPoints, final LinkedHashMap<String, Interpolator1D> interpolators,
+  public SABRTermStructureModelProvider(final LinkedHashMap<String, double[]> knotPoints,
+      final LinkedHashMap<String, Interpolator1D> interpolators,
       final LinkedHashMap<String, ParameterLimitsTransform> parameterTransforms,
       final LinkedHashMap<String, InterpolatedDoublesCurve> knownParameterTermSturctures) {
 
@@ -60,13 +63,16 @@ public class SABRTermStructureModelProvider extends VolatilityModelProvider {
       ArgumentChecker.isTrue(knotPoints.containsKey(NU) && interpolators.containsKey(NU), "nu curve not found");
       ArgumentChecker.isTrue(knotPoints.containsKey(RHO) && interpolators.containsKey(RHO), "rho curve not found");
     } else {
-      ArgumentChecker.isTrue((knotPoints.containsKey(ALPHA) && interpolators.containsKey(ALPHA)) ^ knownParameterTermSturctures.containsKey(ALPHA),
+      ArgumentChecker.isTrue(
+          (knotPoints.containsKey(ALPHA) && interpolators.containsKey(ALPHA)) ^ knownParameterTermSturctures.containsKey(ALPHA),
           "alpha curve not found");
-      ArgumentChecker.isTrue((knotPoints.containsKey(BETA) && interpolators.containsKey(BETA)) ^ knownParameterTermSturctures.containsKey(BETA),
+      ArgumentChecker.isTrue(
+          (knotPoints.containsKey(BETA) && interpolators.containsKey(BETA)) ^ knownParameterTermSturctures.containsKey(BETA),
           "beta curve not found");
       ArgumentChecker.isTrue((knotPoints.containsKey(NU) && interpolators.containsKey(NU)) ^ knownParameterTermSturctures.containsKey(NU),
           "nu curve not found");
-      ArgumentChecker.isTrue((knotPoints.containsKey(RHO) && interpolators.containsKey(RHO)) ^ knownParameterTermSturctures.containsKey(RHO),
+      ArgumentChecker.isTrue(
+          (knotPoints.containsKey(RHO) && interpolators.containsKey(RHO)) ^ knownParameterTermSturctures.containsKey(RHO),
           "rho curve not found");
     }
 
@@ -90,7 +96,7 @@ public class SABRTermStructureModelProvider extends VolatilityModelProvider {
    * @return a VolatilityModel1D (SABRTermStructureParameters)
    */
   @Override
-  public VolatilityModel1D apply(final DoubleMatrix1D x) {
+  public VolatilityModel1D evaluate(final DoubleMatrix1D x) {
     final LinkedHashMap<String, InterpolatedDoublesCurve> curves = getCurves(x);
     return new SABRTermStructureParameters(curves.get(ALPHA), curves.get(BETA), curves.get(RHO), curves.get(NU));
   }

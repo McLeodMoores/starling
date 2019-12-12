@@ -25,7 +25,6 @@ import com.mcleodmoores.analytics.financial.curve.interestrate.CurveBuilder;
 import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodBondCurveBuilder;
 import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodBondCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
-import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
@@ -55,7 +54,6 @@ import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdap
 import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.convention.yield.YieldConvention;
 import com.opengamma.financial.convention.yield.YieldConventionFactory;
@@ -68,38 +66,39 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Builds and tests discounting and US government curves. The discounting curve is built first and then used when constructing the government curve. This means
- * that the government curve has sensitivities to both discounting and government market data, but the discounting curve only has sensitivities to the
- * discounting curve.
+ * Builds and tests discounting and US government curves. The discounting curve is built first and then used when constructing the
+ * government curve. This means that the government curve has sensitivities to both discounting and government market data, but the
+ * discounting curve only has sensitivities to the discounting curve.
  * <p>
- * The discounting curve contains the overnight deposit rate and OIS swaps. The government curve contains the overnight deposit rate and bills.
+ * The discounting curve contains the overnight deposit rate and OIS swaps. The government curve contains the overnight deposit rate and
+ * bills.
  */
 @Test(groups = TestGroup.UNIT)
 public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   /** The interpolator used for both curves */
-  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME,
+      FlatExtrapolator1dAdapter.NAME);
   /** A calendar containing only Saturday and Sunday holidays */
   private static final WorkingDayCalendar NYC = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
-  /** A calendar containing only Saturday and Sunday holidays */
-  private static final Calendar NYC_OLD = CalendarAdapter.of(NYC);
   /** The base FX matrix */
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.USD);
   /** Generates OIS swaps for the discounting curve */
-  private static final GeneratorSwapFixedON GENERATOR_OIS_USD = GeneratorSwapFixedONMaster.getInstance().getGenerator("USD1YFEDFUND", NYC_OLD);
+  private static final GeneratorSwapFixedON GENERATOR_OIS_USD = GeneratorSwapFixedONMaster.getInstance().getGenerator("USD1YFEDFUND", NYC);
   /** A Fed funds index */
   private static final IndexON FED_FUNDS_INDEX = GENERATOR_OIS_USD.getIndex();
   /** Generates the overnight deposit */
-  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_USD = new GeneratorDepositON("USD Deposit ON", Currency.USD, NYC_OLD,
+  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_USD = new GeneratorDepositON("USD Deposit ON", Currency.USD, NYC,
       FED_FUNDS_INDEX.getDayCount());
   /** The issuer */
   private static final String NAME_COUNTERPART = "US GOVT";
   /** Generates a deposit with the counterparty (issuer) */
-  private static final GeneratorDepositONCounterpart GENERATOR_DEPOSIT_ON_USGOVT = new GeneratorDepositONCounterpart("US GOVT Deposit ON", Currency.USD,
-      NYC_OLD, DayCounts.ACT_360, NAME_COUNTERPART);
+  private static final GeneratorDepositONCounterpart GENERATOR_DEPOSIT_ON_USGOVT = new GeneratorDepositONCounterpart("US GOVT Deposit ON",
+      Currency.USD, NYC, DayCounts.ACT_360, NAME_COUNTERPART);
   /** Yield convention for bills */
   private static final YieldConvention YIELD_BILL_USGOVT = YieldConventionFactory.INSTANCE.getYieldConvention("INTEREST@MTY");
   /** The bill maturities */
-  private static final ZonedDateTime[] BILL_MATURITY = new ZonedDateTime[] { DateUtils.getUTCDate(2012, 9, 28), DateUtils.getUTCDate(2012, 11, 30),
+  private static final ZonedDateTime[] BILL_MATURITY = new ZonedDateTime[] { DateUtils.getUTCDate(2012, 9, 28),
+      DateUtils.getUTCDate(2012, 11, 30),
       DateUtils.getUTCDate(2013, 2, 28) };
   /** The bill securities */
   private static final BillSecurityDefinition[] BILL_SECURITY = new BillSecurityDefinition[BILL_MATURITY.length];
@@ -107,7 +106,8 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   private static final GeneratorBill[] GENERATOR_BILL = new GeneratorBill[BILL_MATURITY.length];
   static {
     for (int i = 0; i < BILL_MATURITY.length; i++) {
-      BILL_SECURITY[i] = new BillSecurityDefinition(Currency.USD, BILL_MATURITY[i], 1, 1, NYC, YIELD_BILL_USGOVT, DayCounts.ACT_360, NAME_COUNTERPART);
+      BILL_SECURITY[i] = new BillSecurityDefinition(Currency.USD, BILL_MATURITY[i], 1, 1, NYC, YIELD_BILL_USGOVT, DayCounts.ACT_360,
+          NAME_COUNTERPART);
       GENERATOR_BILL[i] = new GeneratorBill("GeneratorBill" + i, BILL_SECURITY[i]);
     }
   }
@@ -135,22 +135,29 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   private static final IssuerProviderDiscount KNOWN_DATA = new IssuerProviderDiscount(new MulticurveProviderDiscount(FX_MATRIX),
       new HashMap<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve>());
   /** The curve builder */
-  private static final DiscountingMethodBondCurveSetUp BUILDER_FOR_TEST = DiscountingMethodBondCurveBuilder.setUp().buildingFirst(CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+  private static final DiscountingMethodBondCurveSetUp BUILDER_FOR_TEST = DiscountingMethodBondCurveBuilder.setUp()
+      .buildingFirst(CURVE_NAME_DSC_USD)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex())
+      .withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_GOVTUS_USD).using(CURVE_NAME_GOVTUS_USD)
-      .forIssuer(Pairs.<Object, LegalEntityFilter<LegalEntity>> of(NAME_COUNTERPART, new LegalEntityShortName())).withInterpolator(INTERPOLATOR)
+      .forIssuer(Pairs.<Object, LegalEntityFilter<LegalEntity>> of(NAME_COUNTERPART, new LegalEntityShortName()))
+      .withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA);
   /** Market values for the discounting curve */
-  private static final double[] DSC_USD_MARKET_QUOTES = new double[] { 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400,
+  private static final double[] DSC_USD_MARKET_QUOTES = new double[] { 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400,
+      0.0400, 0.0400, 0.0400,
       0.0400 };
   /** Vanilla instrument generators for the discounting curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_USD_GENERATORS = new GeneratorInstrument<?>[] { GENERATOR_DEPOSIT_ON_USD,
-      GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD,
+  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_USD_GENERATORS = new GeneratorInstrument<?>[] {
+      GENERATOR_DEPOSIT_ON_USD,
+      GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD,
+      GENERATOR_OIS_USD,
       GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD };
   /** Attribute generators for the discounting curve */
   private static final GeneratorAttributeIR[] DSC_USD_ATTR;
   static {
-    final Period[] tenors = new Period[] { Period.ofDays(0), Period.ofMonths(1), Period.ofMonths(2), Period.ofMonths(3), Period.ofMonths(6), Period.ofMonths(9),
+    final Period[] tenors = new Period[] { Period.ofDays(0), Period.ofMonths(1), Period.ofMonths(2), Period.ofMonths(3), Period.ofMonths(6),
+        Period.ofMonths(9),
         Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(10) };
     DSC_USD_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
@@ -161,7 +168,8 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   /** Market values for the government curve */
   private static final double[] GOVTUS_USD_MARKET_QUOTES = new double[] { 0.0010, 0.0015, 0.0020, 0.0015 };
   /** Vanilla instrument generators for the government curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] GOVTUS_USD_GENERATORS = new GeneratorInstrument<?>[] { GENERATOR_DEPOSIT_ON_USGOVT,
+  private static final GeneratorInstrument<? extends GeneratorAttribute>[] GOVTUS_USD_GENERATORS = new GeneratorInstrument<?>[] {
+      GENERATOR_DEPOSIT_ON_USGOVT,
       GENERATOR_BILL[0], GENERATOR_BILL[1], GENERATOR_BILL[2] };
   /** Attribute generates for the government curve */
   private static final GeneratorAttributeIR[] GOVTUS_USD_ATTR;
@@ -204,12 +212,15 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
         .getDefinitionsForCurves(NOW);
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), BEFORE_TODAYS_FIXING.getFirst(), PresentValueIssuerCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
-    curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), BEFORE_TODAYS_FIXING.getFirst(), PresentValueIssuerCalculator.getInstance(),
+    curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), BEFORE_TODAYS_FIXING.getFirst(),
+        PresentValueIssuerCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     definitions = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().getDefinitionsForCurves(NOW);
-    curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), AFTER_TODAYS_FIXING.getFirst(), PresentValueIssuerCalculator.getInstance(), FIXING_TS_WITH_TODAY,
+    curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), AFTER_TODAYS_FIXING.getFirst(), PresentValueIssuerCalculator.getInstance(),
+        FIXING_TS_WITH_TODAY,
         FX_MATRIX, NOW, Currency.USD);
-    curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), AFTER_TODAYS_FIXING.getFirst(), PresentValueIssuerCalculator.getInstance(),
+    curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), AFTER_TODAYS_FIXING.getFirst(),
+        PresentValueIssuerCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
   }
 
@@ -223,8 +234,8 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve. There are no sensitivities to the
-   * government curve.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve. There are no
+   * sensitivities to the government curve.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities
@@ -234,7 +245,8 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   private static void testDiscountingCurveSensitivities(final CurveBuildingBlockBundle fullInverseJacobian,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
     // sensitivities to discounting
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, BUILDER_FOR_TEST, CURVE_NAME_DSC_USD, CURVE_NAME_DSC_USD, NOW, DSC_USD_GENERATORS,
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, BUILDER_FOR_TEST, CURVE_NAME_DSC_USD, CURVE_NAME_DSC_USD, NOW,
+        DSC_USD_GENERATORS,
         DSC_USD_ATTR, DSC_USD_MARKET_QUOTES, false);
     // sensitivities to the government curve should not have been calculated
     assertNoSensitivities(fullInverseJacobian, CURVE_NAME_DSC_USD, CURVE_NAME_GOVTUS_USD);
@@ -251,7 +263,8 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   private static void testGovernmentCurveSensitivities(final CurveBuildingBlockBundle fullInverseJacobian,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
     // sensitivities to discounting
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, BUILDER_FOR_TEST, CURVE_NAME_GOVTUS_USD, CURVE_NAME_DSC_USD, NOW, DSC_USD_GENERATORS,
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, BUILDER_FOR_TEST, CURVE_NAME_GOVTUS_USD, CURVE_NAME_DSC_USD, NOW,
+        DSC_USD_GENERATORS,
         DSC_USD_ATTR, DSC_USD_MARKET_QUOTES, false);
     // sensitivities to the government curve
     assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, BUILDER_FOR_TEST, CURVE_NAME_GOVTUS_USD, CURVE_NAME_GOVTUS_USD, NOW,

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.leastsquare;
@@ -15,10 +15,6 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.testng.annotations.Test;
 
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.MersenneTwister64;
-import cern.jet.random.engine.RandomEngine;
-
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.interpolation.BasisFunctionAggregation;
 import com.opengamma.analytics.math.interpolation.BasisFunctionGenerator;
@@ -32,6 +28,10 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.util.test.TestGroup;
 
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
+
 /**
  * Test.
  */
@@ -41,7 +41,7 @@ public class GeneralizedLeastSquareTest {
 
   protected static final RandomEngine RANDOM = new MersenneTwister64(MersenneTwister.DEFAULT_SEED);
   private static final NormalDistribution NORMAL = new NormalDistribution(0, 1.0, RANDOM);
-  private static final double[] WEIGHTS = new double[] {1.0, -0.5, 2.0, 0.23, 1.45 };
+  private static final double[] WEIGHTS = new double[] { 1.0, -0.5, 2.0, 0.23, 1.45 };
   // private static final double[] WEIGHTS = new double[] {1.0, 1.0, 0.0, 0.0, 0};
   private static final Double[] X;
   private static final double[] Y;
@@ -56,7 +56,7 @@ public class GeneralizedLeastSquareTest {
   private static final Function1D<Double, Double> TEST_FUNCTION;
   private static final List<Function1D<Double, Double>> BASIS_FUNCTIONS;
   private static final List<Function1D<double[], Double>> BASIS_FUNCTIONS_2D;
-  private static Function1D<double[], Double> COS_EXP_FUNCTION;
+  private static final Function1D<double[], Double> COS_EXP_FUNCTION;
 
   private static final List<Function1D<DoubleMatrix1D, Double>> VECTOR_TRIG_FUNCTIONS;
   private static final Function1D<DoubleMatrix1D, Double> VECTOR_TEST_FUNCTION;
@@ -68,7 +68,7 @@ public class GeneralizedLeastSquareTest {
       final Function1D<Double, Double> func = new Function1D<Double, Double>() {
 
         @Override
-        public Double apply(final Double x) {
+        public Double evaluate(final Double x) {
           return Math.sin((2 * k + 1) * x);
         }
       };
@@ -81,7 +81,7 @@ public class GeneralizedLeastSquareTest {
       final int k = i;
       final Function1D<DoubleMatrix1D, Double> func = new Function1D<DoubleMatrix1D, Double>() {
         @Override
-        public Double apply(final DoubleMatrix1D x) {
+        public Double evaluate(final DoubleMatrix1D x) {
           Validate.isTrue(x.getNumberOfElements() == 2);
           return Math.sin((2 * k + 1) * x.getEntry(0)) * Math.cos((2 * k + 1) * x.getEntry(1));
         }
@@ -93,7 +93,7 @@ public class GeneralizedLeastSquareTest {
     COS_EXP_FUNCTION = new Function1D<double[], Double>() {
 
       @Override
-      public Double apply(final double[] x) {
+      public Double evaluate(final double[] x) {
         return Math.sin(Math.PI * x[0] / 10.0) * Math.exp(-x[1] / 5.);
       }
     };
@@ -132,7 +132,8 @@ public class GeneralizedLeastSquareTest {
 
     final BasisFunctionGenerator generator = new BasisFunctionGenerator();
     BASIS_FUNCTIONS = generator.generateSet(0.0, 2.0, 20, 3);
-    BASIS_FUNCTIONS_2D = generator.generateSet(new double[] {0.0, 0.0 }, new double[] {10.0, 10.0 }, new int[] {10, 10 }, new int[] {3, 3 });
+    BASIS_FUNCTIONS_2D = generator.generateSet(new double[] { 0.0, 0.0 }, new double[] { 10.0, 10.0 }, new int[] { 10, 10 },
+        new int[] { 3, 3 });
 
     // for (int i = 0; i < 101; i++) {
     // double xx = 0 + 2.0 * i / 100.0;
@@ -230,7 +231,7 @@ public class GeneralizedLeastSquareTest {
     final LeastSquareResults results = gls.solve(X_COS_EXP, Y_COS_EXP, SIGMA_COS_EXP, BASIS_FUNCTIONS_2D);
     final Function1D<double[], Double> spline = new BasisFunctionAggregation<>(BASIS_FUNCTIONS_2D, results.getFitParameters().getData());
     assertEquals(0.0, results.getChiSq(), 1e-25);
-    assertEquals(0.05161579, spline.apply(new double[] {4, 3 }), 1e-8);
+    assertEquals(0.05161579, spline.apply(new double[] { 4, 3 }), 1e-8);
 
     /*
      * Print out function for debugging
@@ -288,18 +289,18 @@ public class GeneralizedLeastSquareTest {
   @Test
   public void testPSplineFit2() {
     final BasisFunctionGenerator generator = new BasisFunctionGenerator();
-    List<Function1D<Double, Double>> basisFuncs = generator.generateSet(0, 12, 100, 3);
-    List<Function1D<Double, Double>> basisFuncsLog = generator.generateSet(-5, 3, 100, 3);
+    final List<Function1D<Double, Double>> basisFuncs = generator.generateSet(0, 12, 100, 3);
+    final List<Function1D<Double, Double>> basisFuncsLog = generator.generateSet(-5, 3, 100, 3);
 
     final GeneralizedLeastSquare gls = new GeneralizedLeastSquare();
 
     final Interpolator1D interpolator = new CombinedInterpolatorExtrapolator(new DoubleQuadraticInterpolator1D(), new FlatExtrapolator1D());
 
-    //  final double[] xData = new double[] {0.4, 0.9, 1.0, 1.8, 2.8, 5 };
-    //  final double[] yData = new double[] {0.8, 4., 4.1, 5.6, 7., 8.1 };
+    // final double[] xData = new double[] {0.4, 0.9, 1.0, 1.8, 2.8, 5 };
+    // final double[] yData = new double[] {0.8, 4., 4.1, 5.6, 7., 8.1 };
 
-    final double[] xData = new double[] {7. / 365, 14 / 365., 21 / 365., 1 / 12., 3 / 12., 0.5, 0.75, 1, 5, 10 };
-    final double[] yData = new double[] {0.972452371,
+    final double[] xData = new double[] { 7. / 365, 14 / 365., 21 / 365., 1 / 12., 3 / 12., 0.5, 0.75, 1, 5, 10 };
+    final double[] yData = new double[] { 0.972452371,
         0.749039802,
         0.759792085,
         0.714206462,
@@ -320,10 +321,10 @@ public class GeneralizedLeastSquareTest {
       yData2[i] = yData[i] * yData[i] * xData[i];
     }
 
-    Interpolator1DDataBundle db = interpolator.getDataBundle(xData, yData);
-    Interpolator1DDataBundle dbLog = interpolator.getDataBundle(lnX, yData);
-    Interpolator1DDataBundle dbVar = interpolator.getDataBundle(xData, yData2);
-    Interpolator1DDataBundle dbVarLog = interpolator.getDataBundle(lnX, yData2);
+    final Interpolator1DDataBundle db = interpolator.getDataBundle(xData, yData);
+    final Interpolator1DDataBundle dbLog = interpolator.getDataBundle(lnX, yData);
+    final Interpolator1DDataBundle dbVar = interpolator.getDataBundle(xData, yData2);
+    final Interpolator1DDataBundle dbVarLog = interpolator.getDataBundle(lnX, yData2);
 
     final double[] sigma = new double[n];
     Arrays.fill(sigma, 0.01);
@@ -358,13 +359,14 @@ public class GeneralizedLeastSquareTest {
   public void testPSplineFit2D() {
 
     final PSplineFitter psf = new PSplineFitter();
-    final GeneralizedLeastSquareResults<double[]> results = psf.solve(X_COS_EXP, Y_COS_EXP, SIGMA_COS_EXP, new double[] {0.0, 0.0 }, new double[] {10.0, 10.0 }, new int[] {10, 10 },
-        new int[] {3, 3 },
-        new double[] {0.001, 0.001 }, new int[] {3, 3 });
+    final GeneralizedLeastSquareResults<double[]> results = psf.solve(X_COS_EXP, Y_COS_EXP, SIGMA_COS_EXP, new double[] { 0.0, 0.0 },
+        new double[] { 10.0, 10.0 }, new int[] { 10, 10 },
+        new int[] { 3, 3 },
+        new double[] { 0.001, 0.001 }, new int[] { 3, 3 });
 
     assertEquals(0.0, results.getChiSq(), 1e-9);
     final Function1D<double[], Double> spline = results.getFunction();
-    assertEquals(0.462288104, spline.apply(new double[] {4, 3 }), 1e-8);
+    assertEquals(0.462288104, spline.apply(new double[] { 4, 3 }), 1e-8);
 
     /*
      * Print out function for debugging

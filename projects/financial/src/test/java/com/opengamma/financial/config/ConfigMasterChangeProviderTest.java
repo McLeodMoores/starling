@@ -24,8 +24,8 @@ import com.opengamma.core.change.ChangeListener;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.change.ChangeType;
 import com.opengamma.core.config.impl.ConfigItem;
-import com.opengamma.core.convention.Convention;
-import com.opengamma.financial.convention.ConventionBundle;
+import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
+import com.opengamma.financial.analytics.curve.InterpolatedCurveDefinition;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.config.ConfigDocument;
@@ -119,21 +119,21 @@ public class ConfigMasterChangeProviderTest {
   }
 
   public void testChangeNotification1() {
-    final List<ChangeEvent> events = testChangeNotification(Convention.class, Convention.class);
+    final List<ChangeEvent> events = testChangeNotification(CurveConstructionConfiguration.class, CurveConstructionConfiguration.class);
     assertEquals(events.size(), 1);
     final ChangeEvent e = events.get(0);
-    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, Convention.class.getName()));
+    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, CurveConstructionConfiguration.class.getName()));
     assertEquals(e.getType(), ChangeType.CHANGED);
   }
 
   public void testChangeNotification2() {
-    final List<ChangeEvent> events = testChangeNotification(Convention.class, ConventionBundle.class);
+    final List<ChangeEvent> events = testChangeNotification(CurveConstructionConfiguration.class, InterpolatedCurveDefinition.class);
     assertEquals(events.size(), 2);
     ChangeEvent e = events.get(0);
-    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, Convention.class.getName()));
+    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, CurveConstructionConfiguration.class.getName()));
     assertEquals(e.getType(), ChangeType.REMOVED);
     e = events.get(1);
-    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, ConventionBundle.class.getName()));
+    assertEquals(e.getObjectId(), ObjectId.of(AbstractConfigChangeProvider.CONFIG_TYPE_SCHEME, InterpolatedCurveDefinition.class.getName()));
     assertEquals(e.getType(), ChangeType.ADDED);
   }
 

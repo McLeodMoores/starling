@@ -27,6 +27,12 @@ public class EquityTrsDataBundle implements ParameterProviderInterface {
   /** The multi-curve provider */
   private final MulticurveProviderInterface _curves;
 
+  /**
+   * @param spotEquity
+   *          the spot equity price
+   * @param curves
+   *          discounting curves, not null
+   */
   public EquityTrsDataBundle(final double spotEquity, final MulticurveProviderInterface curves) {
     ArgumentChecker.notNull(curves, "curves");
     _spotEquity = spotEquity;
@@ -35,6 +41,7 @@ public class EquityTrsDataBundle implements ParameterProviderInterface {
 
   /**
    * Gets the spot equity price.
+   * 
    * @return the spot equity price
    */
   public double getSpotEquity() {
@@ -43,6 +50,7 @@ public class EquityTrsDataBundle implements ParameterProviderInterface {
 
   /**
    * Gets the curves.
+   * 
    * @return the curves
    */
   public MulticurveProviderInterface getCurves() {

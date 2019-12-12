@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.financial.credit.options;
 
+import java.util.function.Function;
+
 import com.opengamma.analytics.financial.credit.index.CDSIndexCalculator;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.AnnuityForSpreadApproxFunction;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.AnnuityForSpreadFunction;
@@ -41,15 +43,16 @@ public class IndexOptionPricer {
   private final double _minExercisePrice;
   private final double _maxExercisePrice;
 
-  public IndexOptionPricer(final CDSAnalytic fwdCDS, final double timeToExpiry, final ISDACompliantYieldCurve yieldCurve, final double coupon) {
+  public IndexOptionPricer(final CDSAnalytic fwdCDS, final double timeToExpiry, final ISDACompliantYieldCurve yieldCurve,
+      final double coupon) {
     this(fwdCDS, timeToExpiry, yieldCurve, coupon, false);
   }
 
   /**
    *
    * @param fwdCDS
-   *          Forward CDS - this represents the index (a CDSAnayltic which holds the cash flow details) at <b>the option expiry</b> - i.e. the 'trade date' of
-   *          the CDS should be the option expiry and <b>not</b> today (where we are valuing the option)
+   *          Forward CDS - this represents the index (a CDSAnayltic which holds the cash flow details) at <b>the option expiry</b> - i.e.
+   *          the 'trade date' of the CDS should be the option expiry and <b>not</b> today (where we are valuing the option)
    * @param timeToExpiry
    *          time to expiry of the option
    * @param yieldCurve
@@ -59,7 +62,8 @@ public class IndexOptionPricer {
    * @param useExactAnnuityCal
    *          if true the ISDA model (up-front) is use to compute the annuity, otherwise a credit triangle approximation is used.
    */
-  public IndexOptionPricer(final CDSAnalytic fwdCDS, final double timeToExpiry, final ISDACompliantYieldCurve yieldCurve, final double coupon,
+  public IndexOptionPricer(final CDSAnalytic fwdCDS, final double timeToExpiry, final ISDACompliantYieldCurve yieldCurve,
+      final double coupon,
       final boolean useExactAnnuityCal) {
     ArgumentChecker.notNull(fwdCDS, "fwdCDS");
     ArgumentChecker.isTrue(fwdCDS.getEffectiveProtectionStart() == 0.0, "fwdCDS should be a Forward CDS - set Java docs");
@@ -96,7 +100,8 @@ public class IndexOptionPricer {
    *          true for payer and false for receiver option
    * @return The option premium
    */
-  public double getOptionPremium(final double defaultAdjIndexValue, final double vol, final IndexOptionStrike strike, final boolean isPayer) {
+  public double getOptionPremium(final double defaultAdjIndexValue, final double vol, final IndexOptionStrike strike,
+      final boolean isPayer) {
     ArgumentChecker.notNull(strike, "strike");
     if (strike instanceof SpreadBasedStrike) {
       return getOptionPriceForSpreadQuotedIndex(defaultAdjIndexValue, vol, strike.amount(), isPayer);
@@ -107,7 +112,8 @@ public class IndexOptionPricer {
     }
   }
 
-  public double getOptionPriceForSpreadQuotedIndex(final double defaultAdjIndexValue, final double vol, final double strike, final boolean isPayer) {
+  public double getOptionPriceForSpreadQuotedIndex(final double defaultAdjIndexValue, final double vol, final double strike,
+      final boolean isPayer) {
     ArgumentChecker.isTrue(strike >= 0.0, "strike cannot be negative");
     final double x0 = calibrateX0(defaultAdjIndexValue, vol); // mean of pseudo-spread
     final double gK = (strike - _coupon) * _annuityFunc.apply(strike); // the excise price
@@ -115,7 +121,8 @@ public class IndexOptionPricer {
   }
 
   /**
-   * Price an option of a CDS index that is priced based. The ATM forward (default adjusted index value) and exercise price are given for a unit notional
+   * Price an option of a CDS index that is priced based. The ATM forward (default adjusted index value) and exercise price are given for a
+   * unit notional
    *
    * @param defaultAdjIndexValue
    *          The expected value of the index plus default settlement at option expiry (rolled to expiry settlement)
@@ -127,11 +134,14 @@ public class IndexOptionPricer {
    *          true for payer, false for receiver
    * @return The option price
    */
-  public double getOptionPriceForPriceQuotedIndex(final double defaultAdjIndexValue, final double vol, final double gK, final boolean isPayer) {
+  public double getOptionPriceForPriceQuotedIndex(final double defaultAdjIndexValue, final double vol, final double gK,
+      final boolean isPayer) {
     ArgumentChecker.isTrue(defaultAdjIndexValue >= _minExercisePrice && defaultAdjIndexValue < _maxExercisePrice,
-        "The defaulted adjusted forward index price must be in the range {} to {} - value of {} is outside this", _minExercisePrice, _maxExercisePrice,
+        "The defaulted adjusted forward index price must be in the range {} to {} - value of {} is outside this", _minExercisePrice,
+        _maxExercisePrice,
         defaultAdjIndexValue);
-    ArgumentChecker.isTrue(gK >= _minExercisePrice && gK < _maxExercisePrice, "The exercise price must be in the range {} to {} - value of {} is outside this",
+    ArgumentChecker.isTrue(gK >= _minExercisePrice && gK < _maxExercisePrice,
+        "The exercise price must be in the range {} to {} - value of {} is outside this",
         _minExercisePrice, _maxExercisePrice, gK);
 
     final double x0 = calibrateX0(defaultAdjIndexValue, vol); // mean of pseudo-spread
@@ -176,20 +186,17 @@ public class IndexOptionPricer {
   }
 
   private double impliedVol(final double atmFwd, final double gK, final double otmPrice) {
-    final Function1D<Double, Double> func = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double vol) {
-        final double x0 = calibrateX0(atmFwd, vol);
-        final double ratio = otmOptionPrice(atmFwd, x0, vol, gK) / otmPrice;
-        return ratio - 1.0;
-      }
+    final Function<Double, Double> func = vol -> {
+      final double x0 = calibrateX0(atmFwd, vol);
+      final double ratio = otmOptionPrice(atmFwd, x0, vol, gK) / otmPrice;
+      return ratio - 1.0;
     };
     return ROOTFINDER.getRoot(func, 0.3);
   }
 
   /**
-   * This calibrates X0 (the mean value of the pseudo-spread, X) for a given volatility (vol) such that the expected value of $F_I(X)$ equals the calculated
-   * value of the default-adjusted forward portfolio swap.
+   * This calibrates X0 (the mean value of the pseudo-spread, X) for a given volatility (vol) such that the expected value of $F_I(X)$
+   * equals the calculated value of the default-adjusted forward portfolio swap.
    *
    * @param defaultAdjIndexValue
    *          The calculated value of the default-adjusted forward portfolio swap
@@ -201,7 +208,7 @@ public class IndexOptionPricer {
 
     final DoubleFunction1D funcLowAccuracy = new DoubleFunction1D() {
       @Override
-      public Double apply(final Double x0) {
+      public Double evaluate(final Double x0) {
         final Function1D<Double, Double> intergrand = getGaussHermiteIntegrand(x0, vol);
         return GHQ2.integrateFromPolyFunc(intergrand) - defaultAdjIndexValue;
       }
@@ -209,7 +216,7 @@ public class IndexOptionPricer {
 
     final DoubleFunction1D funcHiAccuracy = new DoubleFunction1D() {
       @Override
-      public Double apply(final Double x0) {
+      public Double evaluate(final Double x0) {
         final Function1D<Double, Double> intergrand = getGaussHermiteIntegrand(x0, vol);
         return GHQ7.integrateFromPolyFunc(intergrand) - defaultAdjIndexValue;
       }
@@ -221,8 +228,8 @@ public class IndexOptionPricer {
   }
 
   /**
-   * The <em>default-adjusted forward portfolio swap</em> (Pedersen 2003, F_I, is the index plus the right to exchange bonds on defaulted entries for par at the
-   * option excise date. Its expected value today can be expressed as a function of a pseudo spread, x.
+   * The <em>default-adjusted forward portfolio swap</em> (Pedersen 2003, F_I, is the index plus the right to exchange bonds on defaulted
+   * entries for par at the option excise date. Its expected value today can be expressed as a function of a pseudo spread, x.
    *
    * @param coupon
    *          This index coupon
@@ -231,15 +238,15 @@ public class IndexOptionPricer {
   public Function1D<Double, Double> getDefaultAdjForwardForX(final double coupon) {
     return new Function1D<Double, Double>() {
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         return (x - coupon) * _annuityFunc.apply(x);
       }
     };
   }
 
   /**
-   * This is ultimately used to calibrate x0 for a given vol and $F_I$ (The default-adjusted forward portfolio swap). It gives the integrand in a form for use
-   * by Gauss-Hermite (i.e. the $exp(-z^2)$ is <b>not</b> included)
+   * This is ultimately used to calibrate x0 for a given vol and $F_I$ (The default-adjusted forward portfolio swap). It gives the integrand
+   * in a form for use by Gauss-Hermite (i.e. the $exp(-z^2)$ is <b>not</b> included)
    *
    * @param x0
    *          The mean value of the pseudo-spread at expiry
@@ -252,7 +259,7 @@ public class IndexOptionPricer {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double apply(final Double zeta) {
+      public Double evaluate(final Double zeta) {
         return func.apply(zeta * Math.sqrt(2)) * ONE_OVER_ROOT_PI;
       }
     };
@@ -265,14 +272,15 @@ public class IndexOptionPricer {
    *          The mean value of the pseudo-spread at expiry
    * @param vol
    *          The volatility of the pseudo-spread
-   * @return The function $F_I(Z | X0, \sigma)$ - terminal value of the default-adjusted forward portfolio swap as a function of the Gaussian random variable Z
+   * @return The function $F_I(Z | X0, \sigma)$ - terminal value of the default-adjusted forward portfolio swap as a function of the
+   *         Gaussian random variable Z
    */
   private Function1D<Double, Double> getFiForZ(final double x0, final double vol) {
     final double sigmaRootT = vol * Math.sqrt(_expiry);
     final double sigmaSqrTOver2 = vol * vol * _expiry / 2;
     return new Function1D<Double, Double>() {
       @Override
-      public Double apply(final Double z) {
+      public Double evaluate(final Double z) {
         final double x = x0 * Math.exp(sigmaRootT * z - sigmaSqrTOver2);
         return (x - _coupon) * _annuityFuncQuick.apply(x);
       }
@@ -285,7 +293,7 @@ public class IndexOptionPricer {
     final Function1D<Double, Double> fi = getFiForZ(x0, vol);
     return new Function1D<Double, Double>() {
       @Override
-      public Double apply(final Double z) {
+      public Double evaluate(final Double z) {
         return Math.max(0.0, sign * (fi.apply(z) - exciseAmt)) * NORMAL.getPDF(z);
       }
     };
@@ -304,13 +312,8 @@ public class IndexOptionPricer {
    * @return The critical value, $Z^*$ where $F_I(Z^*) = G(K)$
    */
   private double getZStar(final double x0, final double vol, final double exciseAmt) {
-    final Function1D<Double, Double> fi = getFiForZ(x0, vol);
-    final Function1D<Double, Double> func = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double z) {
-        return fi.apply(z) - exciseAmt;
-      }
-    };
+    final Function<Double, Double> fi = getFiForZ(x0, vol);
+    final Function<Double, Double> func = z -> fi.apply(z) - exciseAmt;
 
     return ROOTFINDER.getRoot(func, 0.0);
   }

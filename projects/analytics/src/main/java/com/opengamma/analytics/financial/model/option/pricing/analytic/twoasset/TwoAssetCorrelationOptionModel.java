@@ -16,7 +16,8 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 /**
  * Prices a two-asset correlation option.
  */
-public class TwoAssetCorrelationOptionModel extends TwoAssetAnalyticOptionModel<TwoAssetCorrelationOptionDefinition, StandardTwoAssetOptionDataBundle> {
+public class TwoAssetCorrelationOptionModel
+    extends TwoAssetAnalyticOptionModel<TwoAssetCorrelationOptionDefinition, StandardTwoAssetOptionDataBundle> {
   private static final ProbabilityDistribution<double[]> BIVARIATE = new BivariateNormalDistribution();
 
   /**
@@ -35,7 +36,7 @@ public class TwoAssetCorrelationOptionModel extends TwoAssetAnalyticOptionModel<
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardTwoAssetOptionDataBundle data) {
+      public Double evaluate(final StandardTwoAssetOptionDataBundle data) {
         Validate.notNull(data, "data");
         final double s1 = data.getFirstSpot();
         final double s2 = data.getSecondSpot();

@@ -7,6 +7,7 @@ package com.opengamma.analytics.math.rootfinding;
 
 import java.util.function.Function;
 
+import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -15,13 +16,13 @@ import com.opengamma.util.ArgumentChecker;
 public abstract class RealSingleRootFinder implements SingleRootFinder<Double, Double> {
 
   @Override
-  public Double getRoot(final Function<Double, Double> function, final Double... startingPoints) {
+  public Double getRoot(final Function1D<Double, Double> function, final Double... startingPoints) {
     ArgumentChecker.notNull(startingPoints, "startingPoints");
     ArgumentChecker.isTrue(startingPoints.length == 2, "Number of starting points must be two: have {}", startingPoints.length);
     return getRoot(function, startingPoints[0], startingPoints[1]);
   }
 
-  public abstract Double getRoot(Function<Double, Double> function, Double x1, Double x2);
+  public abstract Double getRoot(Function1D<Double, Double> function, Double x1, Double x2);
 
   /**
    * Tests that the inputs to the root-finder are not null, and that a root is bracketed by the bounding values.

@@ -30,15 +30,15 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 class SeasonalFunction extends Function1D<Double, Double> implements Bean {
 
   /**
-   * The cumulative multiplicative seasonal factors from the reference time to the next. Array of size 12 (the 1st is 1.0, it is added to simplify the
-   * implementation).
+   * The cumulative multiplicative seasonal factors from the reference time to the next. Array of size 12 (the 1st is 1.0, it is added to
+   * simplify the implementation).
    */
   @PropertyDefinition(get = "private")
   private final double[] _monthlyCumulativeFactors;
 
   /**
-   * The cumulative multiplicative seasonal factors from the reference time to the next. Array of size 12 (the 1st is 1.0, it is added to simplify the
-   * implementation).
+   * The cumulative multiplicative seasonal factors from the reference time to the next. Array of size 12 (the 1st is 1.0, it is added to
+   * simplify the implementation).
    */
   @PropertyDefinition(get = "private")
   private final double[] _steps;
@@ -79,7 +79,7 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
   }
 
   @Override
-  public Double apply(final Double x) {
+  public Double evaluate(final Double x) {
     final StepInterpolator1D interpolator = new StepInterpolator1D();
     final Interpolator1DDataBundle dataBundle = interpolator.getDataBundleFromSortedArrays(_steps, _monthlyCumulativeFactors);
     return interpolator.interpolate(dataBundle, x);
@@ -117,8 +117,8 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
 
   // -----------------------------------------------------------------------
   /**
-   * Gets the cumulative multiplicative seasonal factors from the reference time to the next. Array of size 12 (the 1st is 1.0, it is added to simplify the
-   * implementation).
+   * Gets the cumulative multiplicative seasonal factors from the reference time to the next. Array of size 12 (the 1st is 1.0, it is added
+   * to simplify the implementation).
    *
    * @return the value of the property
    */
@@ -137,8 +137,8 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
 
   // -----------------------------------------------------------------------
   /**
-   * Gets the cumulative multiplicative seasonal factors from the reference time to the next. Array of size 12 (the 1st is 1.0, it is added to simplify the
-   * implementation).
+   * Gets the cumulative multiplicative seasonal factors from the reference time to the next. Array of size 12 (the 1st is 1.0, it is added
+   * to simplify the implementation).
    *
    * @return the value of the property
    */
@@ -178,7 +178,8 @@ class SeasonalFunction extends Function1D<Double, Double> implements Bean {
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       final SeasonalFunction other = (SeasonalFunction) obj;
-      return JodaBeanUtils.equal(getMonthlyCumulativeFactors(), other.getMonthlyCumulativeFactors()) && JodaBeanUtils.equal(getSteps(), other.getSteps());
+      return JodaBeanUtils.equal(getMonthlyCumulativeFactors(), other.getMonthlyCumulativeFactors())
+          && JodaBeanUtils.equal(getSteps(), other.getSteps());
     }
     return false;
   }

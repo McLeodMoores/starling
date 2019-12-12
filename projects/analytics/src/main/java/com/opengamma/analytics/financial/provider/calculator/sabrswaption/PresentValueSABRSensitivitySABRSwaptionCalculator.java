@@ -12,10 +12,15 @@ import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CapFloorCMS;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CapFloorCMSSpread;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponCMS;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixed;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIbor;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborGearing;
+import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponIborSpread;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
 import com.opengamma.analytics.financial.interestrate.payments.provider.CapFloorCMSSABRReplicationMethod;
 import com.opengamma.analytics.financial.interestrate.payments.provider.CapFloorCMSSpreadSABRBinormalMethod;
 import com.opengamma.analytics.financial.interestrate.payments.provider.CouponCMSSABRReplicationMethod;
+import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionCashFixedIbor;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedIbor;
 import com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionCashFixedIborSABRMethod;
@@ -76,11 +81,13 @@ public final class PresentValueSABRSensitivitySABRSwaptionCalculator
   }
 
   @Override
-  public PresentValueSABRSensitivityDataBundle visitCapFloorCMSSpread(final CapFloorCMSSpread payment, final SABRSwaptionProviderInterface sabr) {
+  public PresentValueSABRSensitivityDataBundle visitCapFloorCMSSpread(final CapFloorCMSSpread payment,
+      final SABRSwaptionProviderInterface sabr) {
     if (sabr.getSABRParameter() instanceof SABRInterestRateCorrelationParameters) {
       // TODO: improve correlation data handling
       final SABRInterestRateCorrelationParameters sabrCorrelation = (SABRInterestRateCorrelationParameters) sabr.getSABRParameter();
-      final CapFloorCMSSpreadSABRBinormalMethod method = new CapFloorCMSSpreadSABRBinormalMethod(sabrCorrelation.getCorrelation(), METHOD_CMS_CAP,
+      final CapFloorCMSSpreadSABRBinormalMethod method = new CapFloorCMSSpreadSABRBinormalMethod(sabrCorrelation.getCorrelation(),
+          METHOD_CMS_CAP,
           METHOD_CMS_CPN);
       return method.presentValueSABRSensitivity(payment, sabr);
     }
@@ -91,11 +98,12 @@ public final class PresentValueSABRSensitivitySABRSwaptionCalculator
   // ----- Annuity ------
 
   @Override
-  public PresentValueSABRSensitivityDataBundle visitGenericAnnuity(final Annuity<? extends Payment> annuity, final SABRSwaptionProviderInterface sabr) {
+  public PresentValueSABRSensitivityDataBundle visitGenericAnnuity(final Annuity<? extends Payment> annuity,
+      final SABRSwaptionProviderInterface sabr) {
     ArgumentChecker.notNull(annuity, "Annuity");
     PresentValueSABRSensitivityDataBundle cs = visit(annuity.getNthPayment(0), sabr);
-    for (int loopp = 1; loopp < annuity.getNumberOfPayments(); loopp++) {
-      cs = cs.plus(visit(annuity.getNthPayment(loopp), sabr));
+    for (int i = 1; i < annuity.getNumberOfPayments(); i++) {
+      cs = cs.plus(visit(annuity.getNthPayment(i), sabr));
     }
     return cs;
   }
@@ -109,7 +117,8 @@ public final class PresentValueSABRSensitivitySABRSwaptionCalculator
   }
 
   @Override
-  public PresentValueSABRSensitivityDataBundle visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption, final SABRSwaptionProviderInterface sabr) {
+  public PresentValueSABRSensitivityDataBundle visitSwaptionCashFixedIbor(final SwaptionCashFixedIbor swaption,
+      final SABRSwaptionProviderInterface sabr) {
     return METHOD_SWT_CASH.presentValueSABRSensitivity(swaption, sabr);
   }
 
@@ -118,4 +127,38 @@ public final class PresentValueSABRSensitivitySABRSwaptionCalculator
     throw new UnsupportedOperationException();
   }
 
+  @Override
+  public PresentValueSABRSensitivityDataBundle visitSwap(final Swap<?, ?> swap, final SABRSwaptionProviderInterface curves) {
+    PresentValueSABRSensitivityDataBundle pvss = new PresentValueSABRSensitivityDataBundle();
+    for (final Payment p : swap.getFirstLeg().getPayments()) {
+      pvss = pvss.plus(p.accept(this, curves));
+    }
+    for (final Payment p : swap.getSecondLeg().getPayments()) {
+      pvss = pvss.plus(p.accept(this, curves));
+    }
+    return pvss;
+  }
+
+  // no sensitivities for any of these instruments
+  @Override
+  public PresentValueSABRSensitivityDataBundle visitCouponFixed(final CouponFixed coupon, final SABRSwaptionProviderInterface curves) {
+    return new PresentValueSABRSensitivityDataBundle();
+  }
+
+  @Override
+  public PresentValueSABRSensitivityDataBundle visitCouponIbor(final CouponIbor coupon, final SABRSwaptionProviderInterface curves) {
+    return new PresentValueSABRSensitivityDataBundle();
+  }
+
+  @Override
+  public PresentValueSABRSensitivityDataBundle visitCouponIborSpread(final CouponIborSpread coupon,
+      final SABRSwaptionProviderInterface curves) {
+    return new PresentValueSABRSensitivityDataBundle();
+  }
+
+  @Override
+  public PresentValueSABRSensitivityDataBundle visitCouponIborGearing(final CouponIborGearing coupon,
+      final SABRSwaptionProviderInterface curves) {
+    return new PresentValueSABRSensitivityDataBundle();
+  }
 }

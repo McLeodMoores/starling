@@ -26,7 +26,7 @@ public class CEVPriceFunction implements OptionPriceFunction<CEVFunctionData> {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final CEVFunctionData data) {
+      public Double evaluate(final CEVFunctionData data) {
         Validate.notNull(data, "data");
         final double forward = data.getForward();
         final double numeraire = data.getNumeraire();

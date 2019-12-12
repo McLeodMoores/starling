@@ -27,7 +27,7 @@ public class ForwardStartOptionModel extends AnalyticOptionModel<ForwardStartOpt
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         Validate.notNull(data, "data");
         final ZonedDateTime date = data.getDate();
         final double s = data.getSpot();

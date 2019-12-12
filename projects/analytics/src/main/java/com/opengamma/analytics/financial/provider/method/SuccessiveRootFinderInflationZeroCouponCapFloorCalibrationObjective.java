@@ -18,11 +18,13 @@ import com.opengamma.util.money.Currency;
 /**
  * Specific objective function for cap floor zero coupon in price index model model calibration.
  */
-public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective extends SuccessiveRootFinderCalibrationObjectivewithInflation {
+public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
+    extends SuccessiveRootFinderCalibrationObjectivewithInflation {
   /**
    * The pricing method used to price the cap/floor.
    */
-  private static final PresentValueBlackSmileInflationZeroCouponCalculator PVIC = PresentValueBlackSmileInflationZeroCouponCalculator.getInstance();
+  private static final PresentValueBlackSmileInflationZeroCouponCalculator PVIC = PresentValueBlackSmileInflationZeroCouponCalculator
+      .getInstance();
   /**
    * The cap floor Zero Coupon in price index model parameters before calibration. The calibration is done on the last volatility.
    */
@@ -52,15 +54,16 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
   private final double[][] _volatilityInit;
 
   /**
-   * Constructor of the objective function with the year on year cap/floor parameters. The parameters range and accuracy are set at some default value (minimum:
-   * 1.0E-6; maximum: 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
-   * 
+   * Constructor of the objective function with the year on year cap/floor parameters. The parameters range and accuracy are set at some
+   * default value (minimum: 1.0E-6; maximum: 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
+   *
    * @param parameters
    *          The Zero Coupon cap/floor parameters.
    * @param ccy
    *          The currency for which the Hull-White parameters are valid.
    */
-  public SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective(final InflationZeroCouponCapFloorParameters parameters, final Currency ccy) {
+  public SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective(final InflationZeroCouponCapFloorParameters parameters,
+      final Currency ccy) {
     super(new FXMatrix(ccy), ccy);
     _inflationCapZeroCouponParameters = parameters;
     _ccyInflationcapZeroCoupon = ccy;
@@ -78,7 +81,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
 
   /**
    * Sets the year on year cap/floor curve bundle using the Hull-White parameters and a given set of curves.
-   * 
+   *
    * @param inflation
    *          The multi-curves provider.
    */
@@ -90,7 +93,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
 
   /**
    * Gets the inflation Zero Couponr cap/floor data.
-   * 
+   *
    * @return The inflation Zero Coupon cap/floor data.
    */
   public InflationZeroCouponCapFloorParameters getInflationCapZeroCouponParameters() {
@@ -99,7 +102,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
 
   /**
    * Sets the inflation Zero Coupon cap/floor curve bundle.
-   * 
+   *
    * @return The inflation Zero Coupon cap/floor curve bundle.
    */
   public BlackSmileCapInflationZeroCouponProvider getInflationCapZeroCouponProvider() {
@@ -113,7 +116,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
 
   /**
    * Gets the expiry index.
-   * 
+   *
    * @return The expiry index.
    */
   public int getExpiryIndex() {
@@ -122,7 +125,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
 
   /**
    * Sets the expiry index.
-   * 
+   *
    * @param index
    *          The expiry index.
    */
@@ -132,7 +135,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
 
   /**
    * Gets the strike index.
-   * 
+   *
    * @return The strike index.
    */
   public int getStrikeIndex() {
@@ -141,7 +144,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
 
   /**
    * Sets the strike index.
-   * 
+   *
    * @param index
    *          The strike index.
    */
@@ -150,7 +153,7 @@ public class SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective
   }
 
   @Override
-  public Double apply(final Double x) {
+  public Double evaluate(final Double x) {
 
     // setting the volatility in the volatility matrix
     _inflationCapZeroCouponParameters.setVolatility(x, _expiryIndex, _strikeIndex);

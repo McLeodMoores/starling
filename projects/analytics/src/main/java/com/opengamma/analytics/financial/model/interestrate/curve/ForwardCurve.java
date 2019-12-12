@@ -5,12 +5,15 @@
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.ObjectUtils;
 
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.curve.Curve;
 import com.opengamma.analytics.math.curve.FunctionalDoublesCurve;
 import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 import com.opengamma.analytics.util.serialization.InvokedSerializedForm;
 import com.opengamma.util.ArgumentChecker;
@@ -113,14 +116,7 @@ public class ForwardCurve {
       final YieldAndDiscountCurve costOfCarryCurve) {
     ArgumentChecker.notNull(riskFreeCurve, "risk-free curve");
     ArgumentChecker.notNull(costOfCarryCurve, "cost-of-carry curve");
-    final Function1D<Double, Double> f = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double t) {
-        return spot * costOfCarryCurve.getDiscountFactor(t) / riskFreeCurve.getDiscountFactor(t);
-      }
-
-    };
+    final Function<Double, Double> f = t -> spot * costOfCarryCurve.getDiscountFactor(t) / riskFreeCurve.getDiscountFactor(t);
     return new FunctionalDoublesCurve(f) {
       public Object writeReplace() {
         return new InvokedSerializedForm(ForwardCurve.class, "getForwardCurve", spot, riskFreeCurve, costOfCarryCurve);
@@ -129,14 +125,7 @@ public class ForwardCurve {
   }
 
   protected static Curve<Double, Double> getForwardCurve(final Double spot, final Double drift) {
-    final Function1D<Double, Double> fwd = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double t) {
-        return spot * Math.exp(drift * t);
-      }
-
-    };
+    final Function<Double, Double> fwd = t -> spot * Math.exp(drift * t);
 
     return new FunctionalDoublesCurve(fwd) {
 
@@ -147,23 +136,11 @@ public class ForwardCurve {
   }
 
   protected static Curve<Double, Double> getForwardCurve(final Double spot, final Curve<Double, Double> driftCurve) {
-    final Function1D<Double, Double> fwd = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double t) {
-        final Function1D<Double, Double> driftFunc = new Function1D<Double, Double>() {
-
-          @Override
-          public Double apply(final Double y) {
-            return driftCurve.getYValue(y);
-          }
-
-        };
-        @SuppressWarnings("synthetic-access")
-        final double temp = INTEGRATOR.integrate(driftFunc, 0.0, t);
-        return spot * Math.exp(temp);
-      }
-
+    final Function<Double, Double> fwd = t -> {
+      final Function<Double, Double> driftFunc = y -> driftCurve.getYValue(y);
+      @SuppressWarnings("synthetic-access")
+      final double temp = INTEGRATOR.integrate(Function1dAdapter.of(driftFunc), 0.0, t);
+      return spot * Math.exp(temp);
     };
     return new FunctionalDoublesCurve(fwd) {
 
@@ -174,7 +151,7 @@ public class ForwardCurve {
   }
 
   protected static Curve<Double, Double> getDriftCurve(final Curve<Double, Double> fwdCurve) {
-    final Function1D<Double, Double> drift = new Function1D<Double, Double>() {
+    final Function<Double, Double> drift = new Function<Double, Double>() {
       private final double _eps = 1e-3;
 
       @Override
@@ -208,14 +185,7 @@ public class ForwardCurve {
    */
   public ForwardCurve withFractionalShift(final double shift) {
     ArgumentChecker.isTrue(shift > -1, "shift must be > -1");
-
-    final Function1D<Double, Double> func = new Function1D<Double, Double>() {
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public Double apply(final Double t) {
-        return (1 + shift) * _fwdCurve.getYValue(t);
-      }
-    };
+    final Function<Double, Double> func = t -> (1 + shift) * _fwdCurve.getYValue(t);
     return new ForwardCurve(FunctionalDoublesCurve.from(func), _drift);
   }
 

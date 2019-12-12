@@ -16,12 +16,13 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 /**
  * Prices a European-style exchange-asset option.
  */
-public class EuropeanExchangeAssetOptionModel extends TwoAssetAnalyticOptionModel<EuropeanExchangeAssetOptionDefinition, StandardTwoAssetOptionDataBundle> {
+public class EuropeanExchangeAssetOptionModel
+    extends TwoAssetAnalyticOptionModel<EuropeanExchangeAssetOptionDefinition, StandardTwoAssetOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
   /**
    * Gets the pricing function for a European-style exchange asset option.
-   * 
+   *
    * @param definition
    *          The option definition
    * @return The pricing function
@@ -35,7 +36,7 @@ public class EuropeanExchangeAssetOptionModel extends TwoAssetAnalyticOptionMode
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardTwoAssetOptionDataBundle data) {
+      public Double evaluate(final StandardTwoAssetOptionDataBundle data) {
         Validate.notNull(data, "data");
         final double s1 = data.getFirstSpot();
         final double s2 = data.getSecondSpot();

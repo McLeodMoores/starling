@@ -6,14 +6,15 @@
 package com.opengamma.analytics.financial.model.finitedifference;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.surface.Surface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * This class contains all the relevant information to solve a 1D PDE on a finite difference grid - the (functional) coefficients that describe the PDE; the
- * initial condition; the boundary conditions; the free boundary (if any); and the grid.
+ * This class contains all the relevant information to solve a 1D PDE on a finite difference grid - the (functional) coefficients that
+ * describe the PDE; the initial condition; the boundary conditions; the free boundary (if any); and the grid.
  *
  * @param <T>
  *          The type of PDE
@@ -42,7 +43,7 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
    *          2D grid (t &amp; x) on which the PDE will be solved
    */
   public PDE1DDataBundle(final T coefficients,
-      final Function1D<Double, Double> initialCondition,
+      final Function<Double, Double> initialCondition,
       final BoundaryCondition lowerBoundary,
       final BoundaryCondition upperBoundary,
       final PDEGrid1D grid) {
@@ -67,8 +68,8 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
    * @param upperBoundary
    *          Boundary condition at the highest value of x
    * @param freeBoundary
-   *          for a free-boundary function, $H(t,x)$, the solution to the PDE at $(t,x)$ is $max(V^*(t,x),H(t,x))$ where $max(V^*(t,x)$ is the value calculated
-   *          before the free-boundary condition is applied
+   *          for a free-boundary function, $H(t,x)$, the solution to the PDE at $(t,x)$ is $max(V^*(t,x),H(t,x))$ where $max(V^*(t,x)$ is
+   *          the value calculated before the free-boundary condition is applied
    * @param grid
    *          2D grid (t &amp; x) on which the PDE will be solved
    */
@@ -129,8 +130,8 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
    * @param upperBoundary
    *          Boundary condition at the highest value of x
    * @param freeBoundary
-   *          for a free-boundary function, $H(t,x)$, the solution to the PDE at $(t,x)$ is $max(V^*(t,x),H(t,x))$ where $max(V^*(t,x)$ is the value calculated
-   *          before the free-boundary condition is applied
+   *          for a free-boundary function, $H(t,x)$, the solution to the PDE at $(t,x)$ is $max(V^*(t,x),H(t,x))$ where $max(V^*(t,x)$ is
+   *          the value calculated before the free-boundary condition is applied
    * @param grid
    *          2D grid (t &amp; x) on which the PDE will be solved
    */
@@ -294,7 +295,7 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
     return true;
   }
 
-  private static double[] getInitialConditions(final PDE1DCoefficients coefficients, final Function1D<Double, Double> initialCondition,
+  private static double[] getInitialConditions(final PDE1DCoefficients coefficients, final Function<Double, Double> initialCondition,
       final BoundaryCondition lowerBoundary, final BoundaryCondition upperBoundary, final PDEGrid1D grid) {
     ArgumentChecker.notNull(coefficients, "null coefficients");
     ArgumentChecker.notNull(initialCondition, "null initialCondition");
@@ -307,9 +308,11 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
     ArgumentChecker.isTrue(Math.abs((grid.getSpaceNode(0) - lowerBoundary.getLevel()) / (1.0 + Math.abs(lowerBoundary.getLevel()))) < 1e-12,
         "space grid not consistent with lower boundary level. Lowerst grid point at " + grid.getSpaceNode(0) + " but lower boundary at "
             + lowerBoundary.getLevel());
-    ArgumentChecker.isTrue(Math.abs((grid.getSpaceNode(n - 1) - upperBoundary.getLevel()) / (1.0 + Math.abs(upperBoundary.getLevel()))) < 1e-12,
-        "space grid not consistent with upper boundary level. Highest grid point at " + grid.getSpaceNode(n - 1) + " but upper boundary at "
-            + upperBoundary.getLevel());
+    ArgumentChecker
+        .isTrue(Math.abs((grid.getSpaceNode(n - 1) - upperBoundary.getLevel()) / (1.0 + Math.abs(upperBoundary.getLevel()))) < 1e-12,
+            "space grid not consistent with upper boundary level. Highest grid point at " + grid.getSpaceNode(n - 1)
+                + " but upper boundary at "
+                + upperBoundary.getLevel());
 
     final double[] res = new double[n];
     for (int i = 0; i < n; i++) {
@@ -318,7 +321,8 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
     return res;
   }
 
-  private static void checkData(final PDE1DCoefficients coefficients, final double[] initialCondition, final BoundaryCondition lowerBoundary,
+  private static void checkData(final PDE1DCoefficients coefficients, final double[] initialCondition,
+      final BoundaryCondition lowerBoundary,
       final BoundaryCondition upperBoundary, final PDEGrid1D grid) {
     ArgumentChecker.notNull(coefficients, "null coefficients");
     ArgumentChecker.notNull(initialCondition, "null initialCondition");
@@ -327,7 +331,8 @@ public class PDE1DDataBundle<T extends PDE1DCoefficients> {
     ArgumentChecker.notNull(grid, "null grid");
 
     final int n = grid.getNumSpaceNodes();
-    ArgumentChecker.isTrue(initialCondition.length == n, n + " space nodes, but " + initialCondition.length + " values specified for initial condition");
+    ArgumentChecker.isTrue(initialCondition.length == n,
+        n + " space nodes, but " + initialCondition.length + " values specified for initial condition");
     ArgumentChecker.isTrue(Math.abs((grid.getSpaceNode(0) - lowerBoundary.getLevel()) / (1.0 + lowerBoundary.getLevel())) < 1e-12,
         "space grid not consistent with lower boundary level. Lowerst grid point at " + grid.getSpaceNode(0) + " but lower boundary at "
             + lowerBoundary.getLevel());

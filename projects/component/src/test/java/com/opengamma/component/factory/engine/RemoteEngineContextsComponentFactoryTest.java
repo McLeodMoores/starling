@@ -40,6 +40,12 @@ import net.sf.ehcache.CacheManager;
 @Test(groups = TestGroup.UNIT)
 public class RemoteEngineContextsComponentFactoryTest {
 
+  /**
+   * @param factory
+   *          the factory to test
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   protected void testFactory(final RemoteEngineContextsComponentFactory factory) throws Exception {
     factory.setClassifier("test");
     factory.setStrict(true);
@@ -61,6 +67,10 @@ public class RemoteEngineContextsComponentFactoryTest {
     assertNotNull(repo.findInstance(ConfigSource.class, "testRemoteEngine"));
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test(groups = TestGroup.UNIT)
   public void testLocalSimulation() throws Exception {
     final MutableFudgeMsg configurationMsg = FudgeContext.GLOBAL_DEFAULT.newMessage();
@@ -68,7 +78,7 @@ public class RemoteEngineContextsComponentFactoryTest {
 
       @Override
       protected Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> fetchConfiguration() {
-        return Pairs.<UriEndPointDescriptionProvider.Validater, FudgeMsg>of(null, configurationMsg);
+        return Pairs.<UriEndPointDescriptionProvider.Validater, FudgeMsg> of(null, configurationMsg);
       }
 
       @Override
@@ -85,6 +95,10 @@ public class RemoteEngineContextsComponentFactoryTest {
     testFactory(factory);
   }
 
+  /**
+   * @throws Exception
+   *           if there is an unexpected problem
+   */
   @Test(groups = TestGroup.INTEGRATION)
   public void testRemoteAccess() throws Exception {
     final Properties properties = TestProperties.getTestProperties();

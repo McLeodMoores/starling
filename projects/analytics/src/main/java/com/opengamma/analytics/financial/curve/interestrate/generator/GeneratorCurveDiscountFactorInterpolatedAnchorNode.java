@@ -5,7 +5,6 @@
  */
 package com.opengamma.analytics.financial.curve.interestrate.generator;
 
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.interestrate.curve.DiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
@@ -14,12 +13,10 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Store the details and generate the required curve. The curve is interpolated on the discount factor.
- * One extra node with value zero is added at the mid point between the first and second point.
- * This extra anchor is required when two translation invariant curves descriptions
- * are added in a spread curve (two translations would create a singular system).
+ * Store the details and generate the required curve. The curve is interpolated on the discount factor. One extra node with value zero is
+ * added at the mid point between the first and second point. This extra anchor is required when two translation invariant curves
+ * descriptions are added in a spread curve (two translations would create a singular system).
  */
-@SuppressWarnings("deprecation")
 public class GeneratorCurveDiscountFactorInterpolatedAnchorNode extends GeneratorYDCurve {
 
   /**
@@ -41,11 +38,16 @@ public class GeneratorCurveDiscountFactorInterpolatedAnchorNode extends Generato
 
   /**
    * Constructor.
-   * @param nodePoints The node points (X) used to define the interpolated curve.
-   * @param anchor The anchor with zero value.
-   * @param interpolator The interpolator.
+   * 
+   * @param nodePoints
+   *          The node points (X) used to define the interpolated curve.
+   * @param anchor
+   *          The anchor with zero value.
+   * @param interpolator
+   *          The interpolator.
    */
-  public GeneratorCurveDiscountFactorInterpolatedAnchorNode(final double[] nodePoints, final double anchor, final Interpolator1D interpolator) {
+  public GeneratorCurveDiscountFactorInterpolatedAnchorNode(final double[] nodePoints, final double anchor,
+      final Interpolator1D interpolator) {
     ArgumentChecker.notNull(nodePoints, "Node points");
     ArgumentChecker.notNull(interpolator, "Interpolator");
     _nbPoints = nodePoints.length;
@@ -63,16 +65,6 @@ public class GeneratorCurveDiscountFactorInterpolatedAnchorNode extends Generato
   public YieldAndDiscountCurve generateCurve(final String name, final double[] x) {
     ArgumentChecker.isTrue(x.length == _nbPoints, "Incorrect dimension for the rates");
     return new DiscountCurve(name, DoublesCurveInterpolatedAnchor.from(_nodePoints, x, _anchor, 1.0, _interpolator, name));
-  }
-
-  /**
-   * {@inheritDoc}
-   * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
-   */
-  @Deprecated
-  @Override
-  public YieldAndDiscountCurve generateCurve(final String name, final YieldCurveBundle bundle, final double[] parameters) {
-    return generateCurve(name, parameters);
   }
 
   @Override

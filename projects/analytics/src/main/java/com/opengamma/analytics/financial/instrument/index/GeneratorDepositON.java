@@ -8,6 +8,8 @@ package com.opengamma.analytics.financial.instrument.index;
 import org.apache.commons.lang.ObjectUtils;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -35,10 +37,15 @@ public class GeneratorDepositON extends GeneratorInstrument<GeneratorAttributeIR
 
   /**
    * Deposit generator from all the financial details.
-   * @param name The generator name. Not null.
-   * @param currency The index currency. Not null.
-   * @param calendar The calendar associated to the index. Not null.
-   * @param dayCount The day count convention associated to the index.
+   * 
+   * @param name
+   *          The generator name. Not null.
+   * @param currency
+   *          The index currency. Not null.
+   * @param calendar
+   *          The calendar associated to the index. Not null.
+   * @param dayCount
+   *          The day count convention associated to the index.
    */
   public GeneratorDepositON(final String name, final Currency currency, final Calendar calendar, final DayCount dayCount) {
     super(name);
@@ -51,7 +58,30 @@ public class GeneratorDepositON extends GeneratorInstrument<GeneratorAttributeIR
   }
 
   /**
+   * Deposit generator from all the financial details.
+   * 
+   * @param name
+   *          The generator name. Not null.
+   * @param currency
+   *          The index currency. Not null.
+   * @param calendar
+   *          The calendar associated to the index. Not null.
+   * @param dayCount
+   *          The day count convention associated to the index.
+   */
+  public GeneratorDepositON(final String name, final Currency currency, final WorkingDayCalendar calendar, final DayCount dayCount) {
+    super(name);
+    ArgumentChecker.notNull(currency, "Currency");
+    ArgumentChecker.notNull(calendar, "Calendar");
+    ArgumentChecker.notNull(dayCount, "Day count");
+    _currency = currency;
+    _calendar = CalendarAdapter.of(calendar);
+    _dayCount = dayCount;
+  }
+
+  /**
    * Gets the index currency.
+   * 
    * @return The currency.
    */
   public Currency getCurrency() {
@@ -60,6 +90,7 @@ public class GeneratorDepositON extends GeneratorInstrument<GeneratorAttributeIR
 
   /**
    * Gets the calendar associated to the index.
+   * 
    * @return The calendar.
    */
   public Calendar getCalendar() {
@@ -68,6 +99,7 @@ public class GeneratorDepositON extends GeneratorInstrument<GeneratorAttributeIR
 
   /**
    * Gets the day count convention associated to the index.
+   * 
    * @return The day count convention.
    */
   public DayCount getDayCount() {
@@ -76,14 +108,20 @@ public class GeneratorDepositON extends GeneratorInstrument<GeneratorAttributeIR
 
   /**
    * Generate an overnight deposit.
-   * @param date The reference date.
-   * @param rate The deposit rate.
-   * @param notional The deposit notional.
-   * @param attribute The ON deposit attributes. The deposit starts at today+start period. Only the start period is used.
+   * 
+   * @param date
+   *          The reference date.
+   * @param rate
+   *          The deposit rate.
+   * @param notional
+   *          The deposit notional.
+   * @param attribute
+   *          The ON deposit attributes. The deposit starts at today+start period. Only the start period is used.
    * @return The overnight deposit.
    */
   @Override
-  public CashDefinition generateInstrument(final ZonedDateTime date, final double rate, final double notional, final GeneratorAttributeIR attribute) {
+  public CashDefinition generateInstrument(final ZonedDateTime date, final double rate, final double notional,
+      final GeneratorAttributeIR attribute) {
     ArgumentChecker.notNull(date, "Reference date");
     final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(date, attribute.getStartPeriod(), _calendar);
     final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, 1, _calendar);

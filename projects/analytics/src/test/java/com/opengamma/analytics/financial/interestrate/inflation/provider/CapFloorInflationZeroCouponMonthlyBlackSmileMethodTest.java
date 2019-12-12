@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.index.IndexPrice;
 import com.opengamma.analytics.financial.instrument.inflation.CapFloorInflationZeroCouponMonthlyDefinition;
 import com.opengamma.analytics.financial.instrument.inflation.CouponInflationZeroCouponMonthlyDefinition;
@@ -36,7 +37,6 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.MultipleCurrencyAmount;
@@ -44,19 +44,20 @@ import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 
 /**
- *  Tests the present value and its sensitivities for zero-coupon cap/floor with reference index on the first of the month.
+ * Tests the present value and its sensitivities for zero-coupon cap/floor with reference index on the first of the month.
  */
 @Test(groups = TestGroup.UNIT)
 public class CapFloorInflationZeroCouponMonthlyBlackSmileMethodTest {
   private static final InflationIssuerProviderDiscount MARKET = MulticurveProviderDiscountDataSets.createMarket1();
   private static final IndexPrice[] PRICE_INDEXES = MARKET.getPriceIndexes().toArray(new IndexPrice[MARKET.getPriceIndexes().size()]);
   private static final IndexPrice PRICE_INDEX_EUR = PRICE_INDEXES[0];
-  private static final Calendar CALENDAR_EUR = MulticurveProviderDiscountDataSets.getEURCalendar();
+  private static final WorkingDayCalendar CALENDAR_EUR = MulticurveProviderDiscountDataSets.getEURCalendar();
   private static final BusinessDayConvention BUSINESS_DAY = BusinessDayConventions.MODIFIED_FOLLOWING;
   private static final ZonedDateTime START_DATE = DateUtils.getUTCDate(2008, 8, 18);
   private static final int MATURITY = 10;
   private static final Period COUPON_TENOR = Period.ofYears(MATURITY);
-  private static final ZonedDateTime PAYMENT_DATE = ScheduleCalculator.getAdjustedDate(START_DATE, COUPON_TENOR, BUSINESS_DAY, CALENDAR_EUR);
+  private static final ZonedDateTime PAYMENT_DATE = ScheduleCalculator.getAdjustedDate(START_DATE, COUPON_TENOR, BUSINESS_DAY,
+      CALENDAR_EUR);
   private static final double NOTIONAL = 98765432;
   private static final int MONTH_LAG = 3;
   private static final double INDEX_1MAY_2008 = 108.23; // 3 m before Aug: May / 1 May index = May index: 108.23
@@ -70,25 +71,36 @@ public class CapFloorInflationZeroCouponMonthlyBlackSmileMethodTest {
   private static final double TOLERANCE_PV_DELTA = 1.0E+2;
 
   private static final InterpolatedDoublesSurface BLACK_SURF = BlackDataSets.createBlackSurfaceExpiryStrike();
-  private static final BlackSmileCapInflationZeroCouponParameters BLACK_PARAM = new BlackSmileCapInflationZeroCouponParameters(BLACK_SURF, PRICE_INDEX_EUR);
-  private static final BlackSmileCapInflationZeroCouponProviderDiscount BLACK_INFLATION = new BlackSmileCapInflationZeroCouponProviderDiscount(MARKET.getInflationProvider(), BLACK_PARAM);
+  private static final BlackSmileCapInflationZeroCouponParameters BLACK_PARAM = new BlackSmileCapInflationZeroCouponParameters(BLACK_SURF,
+      PRICE_INDEX_EUR);
+  private static final BlackSmileCapInflationZeroCouponProviderDiscount BLACK_INFLATION = new BlackSmileCapInflationZeroCouponProviderDiscount(
+      MARKET.getInflationProvider(), BLACK_PARAM);
 
   private static final ZonedDateTime PRICING_DATE = DateUtils.getUTCDate(2011, 8, 3);
-  private static final CouponInflationZeroCouponMonthlyDefinition ZERO_COUPON_DEFINITION = CouponInflationZeroCouponMonthlyDefinition.from(START_DATE, PAYMENT_DATE, NOTIONAL, PRICE_INDEX_EUR,
+  private static final CouponInflationZeroCouponMonthlyDefinition ZERO_COUPON_DEFINITION = CouponInflationZeroCouponMonthlyDefinition.from(
+      START_DATE, PAYMENT_DATE, NOTIONAL, PRICE_INDEX_EUR,
       MONTH_LAG, MONTH_LAG, false);
-  private static final CapFloorInflationZeroCouponMonthlyDefinition ZERO_COUPON_DEFINITION_CAP = CapFloorInflationZeroCouponMonthlyDefinition.from(ZERO_COUPON_DEFINITION,
-      LAST_KNOWN_FIXING_DATE, MATURITY, STRIKE, IS_CAP);
+  private static final CapFloorInflationZeroCouponMonthlyDefinition ZERO_COUPON_DEFINITION_CAP = CapFloorInflationZeroCouponMonthlyDefinition
+      .from(ZERO_COUPON_DEFINITION,
+          LAST_KNOWN_FIXING_DATE, MATURITY, STRIKE, IS_CAP);
 
   private static final DoubleTimeSeries<ZonedDateTime> PRICE_INDEX_TS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
-      new ZonedDateTime[] {DateUtils.getUTCDate(2008, 5, 31), DateUtils.getUTCDate(2018, 5, 31), DateUtils.getUTCDate(2018, 6, 30) }, new double[] {108.23, 128.23, 128.43 });
+      new ZonedDateTime[] { DateUtils.getUTCDate(2008, 5, 31), DateUtils.getUTCDate(2018, 5, 31), DateUtils.getUTCDate(2018, 6, 30) },
+      new double[] { 108.23, 128.23, 128.43 });
 
-  private static final CapFloorInflationZeroCouponMonthly ZERO_COUPON_CAP = (CapFloorInflationZeroCouponMonthly) ZERO_COUPON_DEFINITION_CAP.toDerivative(PRICING_DATE, PRICE_INDEX_TS);
+  private static final CapFloorInflationZeroCouponMonthly ZERO_COUPON_CAP = (CapFloorInflationZeroCouponMonthly) ZERO_COUPON_DEFINITION_CAP
+      .toDerivative(PRICING_DATE, PRICE_INDEX_TS);
 
-  private static final CapFloorInflationZeroCouponMonthlyBlackSmileMethod METHOD = CapFloorInflationZeroCouponMonthlyBlackSmileMethod.getInstance();
-  private static final PresentValueBlackSmileInflationZeroCouponCalculator PVIC = PresentValueBlackSmileInflationZeroCouponCalculator.getInstance();
-  private static final PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalculator PVCSDC = PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalculator.getInstance();
-  private static final ParameterInflationSensitivityParameterCalculator<BlackSmileCapInflationZeroCouponProviderInterface> PSC = new ParameterInflationSensitivityParameterCalculator<>(PVCSDC);
-  private static final ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCalculator PS_PV_FDC = new ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCalculator(PVIC,
+  private static final CapFloorInflationZeroCouponMonthlyBlackSmileMethod METHOD = CapFloorInflationZeroCouponMonthlyBlackSmileMethod
+      .getInstance();
+  private static final PresentValueBlackSmileInflationZeroCouponCalculator PVIC = PresentValueBlackSmileInflationZeroCouponCalculator
+      .getInstance();
+  private static final PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalculator PVCSDC = PresentValueCurveSensitivityBlackSmileInflationZeroCouponCalculator
+      .getInstance();
+  private static final ParameterInflationSensitivityParameterCalculator<BlackSmileCapInflationZeroCouponProviderInterface> PSC = new ParameterInflationSensitivityParameterCalculator<>(
+      PVCSDC);
+  private static final ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCalculator PS_PV_FDC = new ParameterSensitivityBlackSmileZeroCouponCapDiscountInterpolatedFDCalculator(
+      PVIC,
       SHIFT_FD);
 
   /**
@@ -106,12 +118,15 @@ public class CapFloorInflationZeroCouponMonthlyBlackSmileMethodTest {
     final double df = MARKET.getCurve(ZERO_COUPON_CAP.getCurrency()).getDiscountFactor(ZERO_COUPON_CAP.getPaymentTime());
     final double finalIndex = MARKET.getCurve(PRICE_INDEX_EUR).getPriceIndex(ZERO_COUPON_CAP.getReferenceEndTime());
     final double forward = finalIndex / INDEX_1MAY_2008;
-    final EuropeanVanillaOption option = new EuropeanVanillaOption(Math.pow(1 + ZERO_COUPON_CAP.getStrike(), ZERO_COUPON_CAP.getMaturity()), timeToMaturity, ZERO_COUPON_CAP.isCap());
-    final double volatility = BLACK_INFLATION.getBlackParameters().getVolatility(ZERO_COUPON_CAP.getReferenceEndTime(), ZERO_COUPON_CAP.getStrike());
+    final EuropeanVanillaOption option = new EuropeanVanillaOption(Math.pow(1 + ZERO_COUPON_CAP.getStrike(), ZERO_COUPON_CAP.getMaturity()),
+        timeToMaturity, ZERO_COUPON_CAP.isCap());
+    final double volatility = BLACK_INFLATION.getBlackParameters().getVolatility(ZERO_COUPON_CAP.getReferenceEndTime(),
+        ZERO_COUPON_CAP.getStrike());
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, 1.0, volatility);
     final Function1D<BlackFunctionData, Double> func = BLACK_FUNCTION.getPriceFunction(option);
     final double pvExpected = df * func.apply(dataBlack) * ZERO_COUPON_CAP.getNotional() * ZERO_COUPON_CAP.getPaymentYearFraction();
-    assertEquals("Zero-coupon inflation DiscountingMethod: Present value", pvExpected, pv.getAmount(ZERO_COUPON_CAP.getCurrency()), TOLERANCE_PV);
+    assertEquals("Zero-coupon inflation DiscountingMethod: Present value", pvExpected, pv.getAmount(ZERO_COUPON_CAP.getCurrency()),
+        TOLERANCE_PV);
   }
 
   /**
@@ -133,7 +148,8 @@ public class CapFloorInflationZeroCouponMonthlyBlackSmileMethodTest {
     final MultipleCurrencyParameterSensitivity pvicsFD = PS_PV_FDC.calculateSensitivity(ZERO_COUPON_CAP, BLACK_INFLATION);
     final MultipleCurrencyParameterSensitivity pvicsExact = PSC.calculateSensitivity(ZERO_COUPON_CAP, BLACK_INFLATION);
 
-    AssertSensitivityObjects.assertEquals("Zero-coupon inflation DiscountingMethod: presentValueCurveSensitivity ", pvicsExact, pvicsFD, TOLERANCE_PV_DELTA);
+    AssertSensitivityObjects.assertEquals("Zero-coupon inflation DiscountingMethod: presentValueCurveSensitivity ", pvicsExact, pvicsFD,
+        TOLERANCE_PV_DELTA);
 
   }
 
@@ -141,7 +157,8 @@ public class CapFloorInflationZeroCouponMonthlyBlackSmileMethodTest {
   public void presentValueMarketSensitivityMethodVsCalculator() {
     final MultipleCurrencyInflationSensitivity pvcisMethod = METHOD.presentValueCurveSensitivity(ZERO_COUPON_CAP, BLACK_INFLATION);
     final MultipleCurrencyInflationSensitivity pvcisCalculator = ZERO_COUPON_CAP.accept(PVCSDC, BLACK_INFLATION);
-    AssertSensitivityObjects.assertEquals("Zero-coupon inflation DiscountingMethod: presentValueMarketSensitivity", pvcisMethod, pvcisCalculator, TOLERANCE_PV_DELTA);
+    AssertSensitivityObjects.assertEquals("Zero-coupon inflation DiscountingMethod: presentValueMarketSensitivity", pvcisMethod,
+        pvcisCalculator, TOLERANCE_PV_DELTA);
   }
 
 }

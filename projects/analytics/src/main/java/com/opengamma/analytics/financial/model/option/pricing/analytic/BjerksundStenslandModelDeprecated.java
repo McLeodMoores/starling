@@ -31,7 +31,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
     final Function1D<StandardOptionDataBundle, Double> pricingFunction = new Function1D<StandardOptionDataBundle, Double>() {
 
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         ArgumentChecker.notNull(data, "data");
         final ZonedDateTime date = data.getDate();
         final double s = data.getSpot();
@@ -71,7 +71,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    *          true for calls
    * @return The American option price
    */
-  public double price(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
+  public double price(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall) {
     return MODEL.price(s0, k, r, b, t, sigma, isCall);
   }
 
@@ -97,12 +98,14 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
     return MODEL.price(s0, k, r, b, t, sigma, true);
   }
 
-  protected double getPhi(final double s, final double t, final double gamma, final double h, final double x, final double r, final double b,
+  protected double getPhi(final double s, final double t, final double gamma, final double h, final double x, final double r,
+      final double b,
       final double sigma) {
     return MODEL.getPhi(s, t, gamma, h, x, r, b, sigma);
   }
 
-  protected double getPsi(final double s, final double t1, final double t2, final double gamma, final double h, final double x2, final double x1,
+  protected double getPsi(final double s, final double t1, final double t2, final double gamma, final double h, final double x2,
+      final double x1,
       final double r, final double b, final double sigma) {
     return MODEL.getPsi(s, t1, t2, gamma, h, x2, x1, r, b, sigma);
   }
@@ -111,8 +114,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
   // adjoint stuff
 
   /**
-   * get the price and all the first order Greeks (i.e. delta (spot), dual-delta (strike), rho (risk-free rate), b-rho (cost-of-carry), theta (expiry), vega
-   * (sigma)) of an American option with the Bjerksund &amp; Stensland (2002) approximation
+   * get the price and all the first order Greeks (i.e. delta (spot), dual-delta (strike), rho (risk-free rate), b-rho (cost-of-carry),
+   * theta (expiry), vega (sigma)) of an American option with the Bjerksund &amp; Stensland (2002) approximation
    *
    * @param s0
    *          The spot
@@ -128,16 +131,17 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    *          The volatility
    * @param isCall
    *          true for calls
-   * @return length 7 arrays containing the price, then the sensitivities (Greeks): delta (spot), dual-delta (strike), rho (risk-free rate), b-rho
-   *         (cost-of-carry), theta (expiry), vega (sigma)
+   * @return length 7 arrays containing the price, then the sensitivities (Greeks): delta (spot), dual-delta (strike), rho (risk-free rate),
+   *         b-rho (cost-of-carry), theta (expiry), vega (sigma)
    */
-  public double[] getPriceAdjoint(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
+  public double[] getPriceAdjoint(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall) {
     return MODEL.getPriceAdjoint(s0, k, r, b, t, sigma, isCall);
   }
 
   /**
-   * Get the option price, plus its delta and gamma. <b>Note</b> if a put is required, the gamma is found by divided difference on the delta. For a call both
-   * delta and gamma are found by Algorithmic Differentiation.
+   * Get the option price, plus its delta and gamma. <b>Note</b> if a put is required, the gamma is found by divided difference on the
+   * delta. For a call both delta and gamma are found by Algorithmic Differentiation.
    *
    * @param s0
    *          The spot
@@ -179,14 +183,15 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    *          true for calls
    * @return length 2 arrays containing the price and vega
    */
-  public double[] getPriceAndVega(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
+  public double[] getPriceAndVega(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall) {
     return MODEL.getPriceAndVega(s0, k, r, b, t, sigma, isCall);
   }
 
   /**
-   * Get a function for the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation in terms of the volatility (sigma). This
-   * is primarily used by the GenericImpliedVolatiltySolver to find a (Bjerksund &amp; Stensland) implied volatility for a given market price of an American
-   * option
+   * Get a function for the price and vega of an American option by the Bjerksund &amp; Stensland (2002) approximation in terms of the
+   * volatility (sigma). This is primarily used by the GenericImpliedVolatiltySolver to find a (Bjerksund &amp; Stensland) implied
+   * volatility for a given market price of an American option
    *
    * @param s0
    *          The spot
@@ -202,15 +207,16 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    *          true for calls
    * @return A function from volatility (sigma) to price and vega
    */
-  public Function1D<Double, double[]> getPriceAndVegaFunction(final double s0, final double k, final double r, final double b, final double t,
+  public Function1D<Double, double[]> getPriceAndVegaFunction(final double s0, final double k, final double r, final double b,
+      final double t,
       final boolean isCall) {
     return MODEL.getPriceAndVegaFunction(s0, k, r, b, t, isCall);
   }
 
   /**
-   * Get the implied volatility according to the Bjerksund &amp; Stensland (2002) approximation for the price of an American option quoted in the market. It is
-   * the number that put into the Bjerksund &amp; Stensland (2002) approximation gives the market price. <b>This is not the same as the Black implied
-   * volatility</b> (which is only applicable to European options), although it may be numerically close.
+   * Get the implied volatility according to the Bjerksund &amp; Stensland (2002) approximation for the price of an American option quoted
+   * in the market. It is the number that put into the Bjerksund &amp; Stensland (2002) approximation gives the market price. <b>This is not
+   * the same as the Black implied volatility</b> (which is only applicable to European options), although it may be numerically close.
    *
    * @param price
    *          The market price of an American option
@@ -228,11 +234,13 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    *          true for calls
    * @return The (Bjerksund &amp; Stensland (2002)) implied volatility.
    */
-  public double impliedVolatility(final double price, final double s0, final double k, final double r, final double b, final double t, final boolean isCall) {
+  public double impliedVolatility(final double price, final double s0, final double k, final double r, final double b, final double t,
+      final boolean isCall) {
     return MODEL.impliedVolatility(price, s0, k, r, b, t, isCall);
   }
 
-  protected double[] getCallPriceAdjoint(final double s0, final double k, final double r, final double b, final double t, final double sigma) {
+  protected double[] getCallPriceAdjoint(final double s0, final double k, final double r, final double b, final double t,
+      final double sigma) {
     return MODEL.getCallPriceAdjoint(s0, k, r, b, t, sigma);
   }
 
@@ -240,7 +248,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
     return MODEL.getPutPriceAdjoint(s0, k, r, b, t, sigma);
   }
 
-  protected double[] getCallDeltaGamma(final double s0, final double k, final double r, final double b, final double t, final double sigma) {
+  protected double[] getCallDeltaGamma(final double s0, final double k, final double r, final double b, final double t,
+      final double sigma) {
     return MODEL.getCallDeltaGamma(s0, k, r, b, t, sigma);
   }
 
@@ -317,7 +326,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    *          The volatility
    * @return length 9 array of phi and its sensitivity to s, t, gamma, h, x (I), r, b &amp; sigma
    */
-  protected double[] getPhiAdjoint(final double s, final double t, final double gamma, final double h, final double x, final double r, final double b,
+  protected double[] getPhiAdjoint(final double s, final double t, final double gamma, final double h, final double x, final double r,
+      final double b,
       final double sigma) {
 
     return MODEL.getPhiAdjoint(s, t, gamma, h, x, r, b, sigma);
@@ -342,7 +352,8 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    *          The volatility
    * @return The phi delta array
    */
-  protected double[] getPhiDelta(final double s, final double t, final double gamma, final double h, final double x, final double r, final double b,
+  protected double[] getPhiDelta(final double s, final double t, final double gamma, final double h, final double x, final double r,
+      final double b,
       final double sigma) {
 
     return MODEL.getPhiDelta(s, t, gamma, h, x, r, b, sigma);

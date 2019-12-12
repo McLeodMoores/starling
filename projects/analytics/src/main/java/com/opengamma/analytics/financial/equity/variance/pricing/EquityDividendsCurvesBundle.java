@@ -25,9 +25,12 @@ public class EquityDividendsCurvesBundle {
   private final Function1D<Double, Double> _d;
 
   /**
-   * @param spot The spot, greater than zero
-   * @param discountCurve The discount curve, not null
-   * @param dividends The dividends, not null
+   * @param spot
+   *          The spot, greater than zero
+   * @param discountCurve
+   *          The discount curve, not null
+   * @param dividends
+   *          The dividends, not null
    */
   public EquityDividendsCurvesBundle(final double spot, final YieldAndDiscountCurve discountCurve, final AffineDividends dividends) {
 
@@ -42,6 +45,7 @@ public class EquityDividendsCurvesBundle {
 
   /**
    * Gets the forward curve.
+   * 
    * @return the forward curve
    */
   public Function1D<Double, Double> getF() {
@@ -50,6 +54,7 @@ public class EquityDividendsCurvesBundle {
 
   /**
    * Gets the growth factor curve.
+   * 
    * @return the growth factor curve
    */
   public Function1D<Double, Double> getR() {
@@ -58,6 +63,7 @@ public class EquityDividendsCurvesBundle {
 
   /**
    * Gets the growth factor discounted cash dividends curve.
+   * 
    * @return the growth factor discounted cash dividends curve
    */
   public Function1D<Double, Double> getD() {
@@ -66,7 +72,9 @@ public class EquityDividendsCurvesBundle {
 
   /**
    * Gets the forward value.
-   * @param t time
+   * 
+   * @param t
+   *          time
    * @return the forward value
    */
   public double getF(final double t) {
@@ -75,7 +83,9 @@ public class EquityDividendsCurvesBundle {
 
   /**
    * Gets the Growth Factor value.
-   * @param t time
+   * 
+   * @param t
+   *          time
    * @return the growth factor value
    */
   public double getR(final double t) {
@@ -84,7 +94,9 @@ public class EquityDividendsCurvesBundle {
 
   /**
    * Gets the growth factor discounted cash dividends value.
-   * @param t time
+   * 
+   * @param t
+   *          time
    * @return the growth factor discounted cash dividends value
    */
   public double getD(final double t) {
@@ -131,7 +143,7 @@ public class EquityDividendsCurvesBundle {
     if (dividends.getNumberOfDividends() == 0) {
       return new Function1D<Double, Double>() {
         @Override
-        public Double apply(final Double t) {
+        public Double evaluate(final Double t) {
           return spot * growthFactorCurve.apply(t);
         }
       };
@@ -148,7 +160,7 @@ public class EquityDividendsCurvesBundle {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double apply(final Double t) {
+      public Double evaluate(final Double t) {
         if (t < dividends.getTau(0)) {
           return spot * growthFactorCurve.apply(t);
         }
@@ -166,7 +178,7 @@ public class EquityDividendsCurvesBundle {
     if (dividends.getNumberOfDividends() == 0) {
       return new Function1D<Double, Double>() {
         @Override
-        public Double apply(final Double t) {
+        public Double evaluate(final Double t) {
           return 0.0;
         }
       };
@@ -183,7 +195,7 @@ public class EquityDividendsCurvesBundle {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double apply(final Double t) {
+      public Double evaluate(final Double t) {
         if (t >= dividends.getTau(n - 1)) {
           return 0.0;
         }
@@ -203,7 +215,7 @@ public class EquityDividendsCurvesBundle {
     if (dividends.getNumberOfDividends() == 0) {
       return new Function1D<Double, Double>() {
         @Override
-        public Double apply(final Double t) {
+        public Double evaluate(final Double t) {
           return 1.0 / discCurve.getDiscountFactor(t);
         }
       };
@@ -219,7 +231,7 @@ public class EquityDividendsCurvesBundle {
 
     return new Function1D<Double, Double>() {
       @Override
-      public Double apply(final Double t) {
+      public Double evaluate(final Double t) {
         if (t < dividends.getTau(0)) {
           return 1.0 / discCurve.getDiscountFactor(t);
         }

@@ -38,14 +38,14 @@ public class UniformMeshing extends MeshingFunction {
   }
 
   /**
-   * Crates a set of points (mesh) approximately equally spaced between 0.0 and 1.0 inclusive, such that the specified <em>fixedPoints</em> are included as
-   * points.
+   * Crates a set of points (mesh) approximately equally spaced between 0.0 and 1.0 inclusive, such that the specified <em>fixedPoints</em>
+   * are included as points.
    *
    * @param nPoints
    *          Number of points in the mesh
    * @param fixedPoints
-   *          Set of points that must be in the mesh. <b>Note:</b> the mesh can be far from uniform if fixed-points are close together and/or a small number of
-   *          points are used
+   *          Set of points that must be in the mesh. <b>Note:</b> the mesh can be far from uniform if fixed-points are close together
+   *          and/or a small number of points are used
    */
   public UniformMeshing(final int nPoints, final double[] fixedPoints) {
     super(nPoints);
@@ -133,7 +133,7 @@ public class UniformMeshing extends MeshingFunction {
   }
 
   @Override
-  public Double apply(final Integer x) {
+  public Double evaluate(final Integer x) {
     if (x < 0 || x >= getNumberOfPoints()) {
       throw new IllegalArgumentException("index out of range");
     }

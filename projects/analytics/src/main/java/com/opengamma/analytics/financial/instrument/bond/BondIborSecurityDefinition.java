@@ -51,7 +51,8 @@ public class BondIborSecurityDefinition extends BondSecurityDefinition<PaymentFi
   private final DayCount _dayCount;
 
   /**
-   * Fixed coupon bond constructor from all the bond details. This constructor creates a legal entity that contains only the short name of the issuer.
+   * Fixed coupon bond constructor from all the bond details. This constructor creates a legal entity that contains only the short name of
+   * the issuer.
    *
    * @param nominal
    *          The notional payments. For bullet bond, it is restricted to a single payment.
@@ -68,7 +69,8 @@ public class BondIborSecurityDefinition extends BondSecurityDefinition<PaymentFi
    * @param issuer
    *          The issuer name.
    */
-  public BondIborSecurityDefinition(final AnnuityPaymentFixedDefinition nominal, final AnnuityCouponIborDefinition coupon, final int exCouponDays,
+  public BondIborSecurityDefinition(final AnnuityPaymentFixedDefinition nominal, final AnnuityCouponIborDefinition coupon,
+      final int exCouponDays,
       final int settlementDays, final Calendar calendar, final DayCount dayCount, final String issuer) {
     this(nominal, coupon, exCouponDays, settlementDays, calendar, dayCount, new LegalEntity(null, issuer, null, null, null));
   }
@@ -91,7 +93,8 @@ public class BondIborSecurityDefinition extends BondSecurityDefinition<PaymentFi
    * @param issuer
    *          The issuer name.
    */
-  public BondIborSecurityDefinition(final AnnuityPaymentFixedDefinition nominal, final AnnuityCouponIborDefinition coupon, final int exCouponDays,
+  public BondIborSecurityDefinition(final AnnuityPaymentFixedDefinition nominal, final AnnuityCouponIborDefinition coupon,
+      final int exCouponDays,
       final int settlementDays, final Calendar calendar, final DayCount dayCount, final LegalEntity issuer) {
     super(nominal, coupon, exCouponDays, settlementDays, calendar, issuer);
     ArgumentChecker.notNull(dayCount, "day count");
@@ -99,8 +102,8 @@ public class BondIborSecurityDefinition extends BondSecurityDefinition<PaymentFi
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
-   * convention.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according
+   * to the business day convention.
    *
    * @param maturityDate
    *          The maturity date.
@@ -122,15 +125,17 @@ public class BondIborSecurityDefinition extends BondSecurityDefinition<PaymentFi
    *          The holiday calendar for the ibor leg.
    * @return The fixed coupon bond.
    */
-  public static BondIborSecurityDefinition from(final ZonedDateTime maturityDate, final ZonedDateTime firstAccrualDate, final IborIndex index,
+  public static BondIborSecurityDefinition from(final ZonedDateTime maturityDate, final ZonedDateTime firstAccrualDate,
+      final IborIndex index,
       final int settlementDays, final DayCount dayCount, final BusinessDayConvention businessDay, final boolean isEOM, final String issuer,
       final Calendar calendar) {
-    return from(maturityDate, firstAccrualDate, index, settlementDays, dayCount, businessDay, isEOM, new LegalEntity(null, issuer, null, null, null), calendar);
+    return from(maturityDate, firstAccrualDate, index, settlementDays, dayCount, businessDay, isEOM,
+        new LegalEntity(null, issuer, null, null, null), calendar);
   }
 
   /**
-   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according to the business day
-   * convention.
+   * Fixed coupon bond builder from standard financial details. The accrual dates are unadjusted; the payment dates are adjusted according
+   * to the business day convention.
    *
    * @param maturityDate
    *          The maturity date.
@@ -152,15 +157,18 @@ public class BondIborSecurityDefinition extends BondSecurityDefinition<PaymentFi
    *          The holiday calendar for the ibor leg.
    * @return The fixed coupon bond.
    */
-  public static BondIborSecurityDefinition from(final ZonedDateTime maturityDate, final ZonedDateTime firstAccrualDate, final IborIndex index,
-      final int settlementDays, final DayCount dayCount, final BusinessDayConvention businessDay, final boolean isEOM, final LegalEntity issuer,
+  public static BondIborSecurityDefinition from(final ZonedDateTime maturityDate, final ZonedDateTime firstAccrualDate,
+      final IborIndex index,
+      final int settlementDays, final DayCount dayCount, final BusinessDayConvention businessDay, final boolean isEOM,
+      final LegalEntity issuer,
       final Calendar calendar) {
     ArgumentChecker.notNull(maturityDate, "Maturity date");
     ArgumentChecker.notNull(firstAccrualDate, "First accrual date");
     ArgumentChecker.notNull(index, "Ibor index");
     ArgumentChecker.notNull(dayCount, "Day count");
     ArgumentChecker.notNull(businessDay, "Business day convention");
-    final AnnuityCouponIborDefinition coupon = AnnuityCouponIborDefinition.fromAccrualUnadjusted(firstAccrualDate, maturityDate, DEFAULT_NOTIONAL, index, false,
+    final AnnuityCouponIborDefinition coupon = AnnuityCouponIborDefinition.fromAccrualUnadjusted(firstAccrualDate, maturityDate,
+        DEFAULT_NOTIONAL, index, false,
         calendar);
     final PaymentFixedDefinition[] nominalPayment = new PaymentFixedDefinition[] {
         new PaymentFixedDefinition(index.getCurrency(), businessDay.adjustDate(calendar, maturityDate), DEFAULT_NOTIONAL) };
@@ -197,7 +205,8 @@ public class BondIborSecurityDefinition extends BondSecurityDefinition<PaymentFi
    */
   @Deprecated
   @Override
-  public BondIborSecurity toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS, final String... yieldCurveNames) {
+  public BondIborSecurity toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS,
+      final String... yieldCurveNames) {
     ArgumentChecker.notNull(date, "date");
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, getSettlementDays(), getCalendar());
     return toDerivative(date, indexFixingTS, spot, yieldCurveNames);
@@ -217,7 +226,8 @@ public class BondIborSecurityDefinition extends BondSecurityDefinition<PaymentFi
    */
   @SuppressWarnings("unchecked")
   @Deprecated
-  public BondIborSecurity toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS, final ZonedDateTime settlementDate,
+  public BondIborSecurity toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS,
+      final ZonedDateTime settlementDate,
       final String... yieldCurveNames) {
     // Implementation note: First yield curve used for coupon and notional (credit), the second for risk free settlement.
     ArgumentChecker.notNull(date, "date");
@@ -262,7 +272,8 @@ public class BondIborSecurityDefinition extends BondSecurityDefinition<PaymentFi
    * @return The security
    */
   @SuppressWarnings("unchecked")
-  public BondIborSecurity toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS, final ZonedDateTime settlementDate) {
+  public BondIborSecurity toDerivative(final ZonedDateTime date, final DoubleTimeSeries<ZonedDateTime> indexFixingTS,
+      final ZonedDateTime settlementDate) {
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(indexFixingTS, "fixing time series");
     ArgumentChecker.notNull(settlementDate, "settlement date");
@@ -274,7 +285,7 @@ public class BondIborSecurityDefinition extends BondSecurityDefinition<PaymentFi
     }
     final AnnuityPaymentFixed nominal = (AnnuityPaymentFixed) getNominal().toDerivative(date);
     final Annuity<Coupon> coupon = (Annuity<Coupon>) getCoupons().toDerivative(date, indexFixingTS);
-    return new BondIborSecurity(nominal.trimBefore(settlementTime), coupon.trimBefore(settlementTime), settlementTime);
+    return new BondIborSecurity(nominal.trimBefore(settlementTime), coupon.trimBefore(settlementTime), settlementTime, getIssuerEntity());
   }
 
   @Override

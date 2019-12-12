@@ -24,7 +24,7 @@ public class HullWhiteTwoFactorInterestRateModel implements DiscountBondModel<Hu
     return new Function1D<HullWhiteTwoFactorDataBundle, Double>() {
 
       @Override
-      public Double apply(final HullWhiteTwoFactorDataBundle data) {
+      public Double evaluate(final HullWhiteTwoFactorDataBundle data) {
         Validate.notNull(data, "data");
         final double t1 = 0;
         final double t2 = DateUtils.getDifferenceInYears(data.getDate(), time);
@@ -58,7 +58,8 @@ public class HullWhiteTwoFactorInterestRateModel implements DiscountBondModel<Hu
     return Math.exp(-a * dt) / (a * (a - b)) - Math.exp(-b * dt) / (b * (a - b)) + 1. / (a * b);
   }
 
-  protected Double getEta(final double t1, final double t2, final double t3, final double a, final double b, final double sigma1, final double sigma2,
+  protected Double getEta(final double t1, final double t2, final double t3, final double a, final double b, final double sigma1,
+      final double sigma2,
       final double rho) {
     final double dt12 = t2 - t1;
     final double dt13 = t3 - t1;
@@ -79,7 +80,8 @@ public class HullWhiteTwoFactorInterestRateModel implements DiscountBondModel<Hu
     final double abM = a - b;
     final double gamma1 = Math.exp(-abP * dt13) * (Math.exp(abP * dt12) - 1) / (abP * abM)
         - Math.exp(-2 * a * dt13) * (Math.exp(2 * a * dt12) - 1) / (2 * a * abM);
-    final double gamma2 = (gamma1 + c23 - c13 + 0.5 * b23Sq - 0.5 * b13Sq + dt12 / a - (Math.exp(-a * dt23) - Math.exp(-a * dt13)) / (a * a)) / (a * b);
+    final double gamma2 = (gamma1 + c23 - c13 + 0.5 * b23Sq - 0.5 * b13Sq + dt12 / a
+        - (Math.exp(-a * dt23) - Math.exp(-a * dt13)) / (a * a)) / (a * b);
     final double gamma3 = -(Math.exp(-abP * dt12) - 1) / (abP * abM) + (Math.exp(-2 * a * dt12) - 1) / (2 * a * abM);
     final double gamma4 = (gamma3 - c12 - 0.5 * b12Sq + dt12 / a + (Math.exp(-a * dt12) - 1) / (a * a)) / (a * b);
     final double gamma5 = (0.5 * (c23Sq - c13Sq) + gamma2) / b;

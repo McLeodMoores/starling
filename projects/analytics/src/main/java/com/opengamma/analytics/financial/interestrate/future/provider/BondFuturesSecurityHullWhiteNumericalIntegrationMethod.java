@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.financial.interestrate.future.provider;
 
+import java.util.function.Function;
+
 import org.apache.commons.math.stat.descriptive.rank.Min;
 
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
@@ -14,7 +16,7 @@ import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.model.interestrate.HullWhiteOneFactorPiecewiseConstantInterestRateModel;
 import com.opengamma.analytics.financial.provider.calculator.discounting.CashFlowEquivalentCalculator;
 import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteIssuerProviderInterface;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -106,7 +108,7 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
         df[loopb][loopcf] = data.getIssuerProvider().getDiscountFactor(issuer, cfe[loopb].getNthPayment(loopcf).getPaymentTime());
         discountedCashFlow[loopb][loopcf] = df[loopb][loopcf] / df[loopb][0] * cfe[loopb].getNthPayment(loopcf).getAmount()
             * beta[loopb][loopcf]
-                / futures.getConversionFactor()[loopb];
+            / futures.getConversionFactor()[loopb];
       }
     }
     // Integration
@@ -117,7 +119,7 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
     final RungeKuttaIntegrator1D integrator = new RungeKuttaIntegrator1D(absoluteTolerance, relativeTolerance, NB_INTEGRATION);
     double price = 0.0;
     try {
-      price = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(integrant, -limit, limit);
+      price = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(Function1dAdapter.of(integrant), -limit, limit);
     } catch (final Exception e) {
       throw new RuntimeException(e);
     }
@@ -127,7 +129,7 @@ public final class BondFuturesSecurityHullWhiteNumericalIntegrationMethod {
   /**
    * Inner class to implement the integration used in price replication.
    */
-  private static final class FuturesIntegrant extends Function1D<Double, Double> {
+  private static final class FuturesIntegrant implements Function<Double, Double> {
 
     private final double[][] _discountedCashFlow;
     private final double[][] _alpha;

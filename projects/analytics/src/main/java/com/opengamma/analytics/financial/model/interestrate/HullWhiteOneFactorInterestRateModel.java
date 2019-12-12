@@ -25,7 +25,7 @@ public class HullWhiteOneFactorInterestRateModel implements DiscountBondModel<Hu
     return new Function1D<HullWhiteOneFactorDataBundle, Double>() {
 
       @Override
-      public Double apply(final HullWhiteOneFactorDataBundle data) {
+      public Double evaluate(final HullWhiteOneFactorDataBundle data) {
         Validate.notNull(data);
         final double t = DateUtils.getDifferenceInYears(data.getDate(), time);
         final double s = DateUtils.getDifferenceInYears(data.getDate(), maturity);
@@ -41,7 +41,8 @@ public class HullWhiteOneFactorInterestRateModel implements DiscountBondModel<Hu
         final double downT = t - _delta;
         final double dlnPdt = (-data.getShortRate(upT) * upT + data.getShortRate(downT) * downT) / (2 * _delta);
         final double lnA = Math.log(ps / pT) - b * dlnPdt
-            - sigma * sigma * Math.pow(Math.exp(-speed * s) - Math.exp(-speed * t), 2) * (Math.exp(2 * speed * t) - 1) / (4 * speed * speed * speed);
+            - sigma * sigma * Math.pow(Math.exp(-speed * s) - Math.exp(-speed * t), 2) * (Math.exp(2 * speed * t) - 1)
+                / (4 * speed * speed * speed);
         return Math.exp(lnA - b * rT);
       }
 

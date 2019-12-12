@@ -7,14 +7,10 @@ package com.opengamma.financial.analytics;
 
 import org.testng.annotations.Test;
 
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
-import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
-import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.model.option.definition.SABRInterestRateParameters;
 import com.opengamma.analytics.financial.model.volatility.smile.function.SABRFormulaData;
 import com.opengamma.analytics.financial.model.volatility.smile.function.SABRHaganVolatilityFunction;
 import com.opengamma.analytics.financial.model.volatility.smile.function.VolatilityFunctionProvider;
-import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
@@ -23,7 +19,7 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * Sets of market data used in tests.
- * 
+ *
  * @deprecated used by deprecated tests
  */
 @Deprecated
@@ -94,22 +90,15 @@ public class TestsDataSets {
    * @return The SABR parameters parameters.
    */
   public static SABRInterestRateParameters createSABR1AlphaBumped(final VolatilityFunctionProvider<SABRFormulaData> sabrFunction, final double shift) {
-    final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(
-        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
-            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
-        new double[] { 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift,
-            0.05 + shift, 0.05 + shift, 0.05 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift },
-        new GridInterpolator2D(LINEAR, LINEAR));
-    // final VolatilitySurface alphaVolatility = new VolatilitySurface(alphaSurface);
-    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(
-        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
-            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
-        new double[] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 }, new GridInterpolator2D(LINEAR, LINEAR));
-    // final VolatilitySurface betaVolatility = new VolatilitySurface(betaSurface);
-    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(
-        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
-            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
-        new double[] { -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00 },
+    final InterpolatedDoublesSurface alphaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
+        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift, 0.05 + shift,
+            0.05 + shift, 0.05 + shift, 0.05 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift, 0.06 + shift}, new GridInterpolator2D(LINEAR, LINEAR));
+    //    final VolatilitySurface alphaVolatility = new VolatilitySurface(alphaSurface);
+    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
+        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, new GridInterpolator2D(LINEAR, LINEAR));
+    //    final VolatilitySurface betaVolatility = new VolatilitySurface(betaSurface);
+    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
+        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {-0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, -0.25, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00},
         new GridInterpolator2D(LINEAR, LINEAR));
     // final VolatilitySurface rhoVolatility = new VolatilitySurface(rhoSurface);
     final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(
@@ -168,23 +157,16 @@ public class TestsDataSets {
             1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
         new double[] { 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06 }, new GridInterpolator2D(
             LINEAR, LINEAR));
-    // final VolatilitySurface alphaVolatility = new VolatilitySurface(alphaSurface);
-    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(
-        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
-            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
-        new double[] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 }, new GridInterpolator2D(LINEAR, LINEAR));
-    // final VolatilitySurface betaVolatility = new VolatilitySurface(betaSurface);
-    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(
-        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0,
-            1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
-        new double[] { -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift,
-            -0.25 + shift, -0.25 + shift, -0.25 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift },
-        new GridInterpolator2D(LINEAR, LINEAR));
-    // final VolatilitySurface rhoVolatility = new VolatilitySurface(rhoSurface);
-    final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(
-        new double[] { 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10 }, new double[] { 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10 },
-        new double[] { 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30 }, new GridInterpolator2D(
+    //    final VolatilitySurface alphaVolatility = new VolatilitySurface(alphaSurface);
+    final InterpolatedDoublesSurface betaSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
+        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, new GridInterpolator2D(LINEAR, LINEAR));
+    //    final VolatilitySurface betaVolatility = new VolatilitySurface(betaSurface);
+    final InterpolatedDoublesSurface rhoSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0,
+        1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {-0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift, -0.25 + shift,
+            -0.25 + shift, -0.25 + shift, -0.25 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift, 0.00 + shift}, new GridInterpolator2D(LINEAR, LINEAR));
+    //    final VolatilitySurface rhoVolatility = new VolatilitySurface(rhoSurface);
+    final InterpolatedDoublesSurface nuSurface = InterpolatedDoublesSurface.from(new double[] {0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10, 0.0, 0.5, 1, 2, 5, 10}, new double[] {0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10}, new double[] {0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30}, new GridInterpolator2D(
             LINEAR, LINEAR));
     // final VolatilitySurface nuVolatility = new VolatilitySurface(nuSurface);
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, sabrFunction);
@@ -256,7 +238,7 @@ public class TestsDataSets {
         new double[] { 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift, 0.50 + shift,
             0.50 + shift, 0.50 + shift, 0.50 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift, 0.30 + shift },
         new GridInterpolator2D(LINEAR, LINEAR));
-    // final VolatilitySurface nuVolatility = new VolatilitySurface(nuSurface);
+    //    final VolatilitySurface nuVolatility = new VolatilitySurface(nuSurface);
     return new SABRInterestRateParameters(alphaSurface, betaSurface, rhoSurface, nuSurface, sabrFunction);
   }
 
@@ -291,62 +273,6 @@ public class TestsDataSets {
   public static SABRInterestRateParameters createSABR1NuBumped() {
     final double shift = 0.0001;
     return createSABR1NuBumped(new SABRHaganVolatilityFunction(), shift);
-  }
-
-  /**
-   * Create a yield curve bundle with two curves. One called "Funding" with a constant rate of 5% and one called "Forward" with a constant rate of 4%;
-   *
-   * @return The yield curve bundle.
-   */
-  public static YieldCurveBundle createCurves1() {
-    final String fundingCurveName = "Funding";
-    final String forwardCurveName = "Forward";
-    final YieldAndDiscountCurve curve5 = YieldCurve.from(ConstantDoublesCurve.from(0.05));
-    final YieldAndDiscountCurve curve4 = YieldCurve.from(ConstantDoublesCurve.from(0.04));
-    final YieldCurveBundle curves = new YieldCurveBundle();
-    curves.setCurve(fundingCurveName, curve5);
-    curves.setCurve(forwardCurveName, curve4);
-    return curves;
-  }
-
-  /**
-   * Create a yield curve bundle with three curves. One called "Credit" with a constant rate of 5%, one called "Discounting" with a constant rate of 4%, and one
-   * called "Forward" with a constant rate of 4.5%.
-   *
-   * @return The yield curve bundle.
-   */
-  public static YieldCurveBundle createCurvesBond1() {
-    final String creditCurveName = "Credit";
-    final String discountingCurveName = "Repo";
-    final String forwardCurveName = "Forward";
-    final YieldAndDiscountCurve curve5 = YieldCurve.from(ConstantDoublesCurve.from(0.05));
-    final YieldAndDiscountCurve curve4 = YieldCurve.from(ConstantDoublesCurve.from(0.04));
-    final YieldAndDiscountCurve curve45 = YieldCurve.from(ConstantDoublesCurve.from(0.045));
-    final YieldCurveBundle curves = new YieldCurveBundle();
-    curves.setCurve(creditCurveName, curve5);
-    curves.setCurve(discountingCurveName, curve4);
-    curves.setCurve(forwardCurveName, curve45);
-    return curves;
-  }
-
-  /**
-   * Create a yield curve bundle with three curves. One called "Credit" with a constant rate of 6%, one called "Discounting" with a constant rate of 5%, and one
-   * called "Forward" with a constant rate of 5.5%.
-   *
-   * @return The yield curve bundle.
-   */
-  public static YieldCurveBundle createCurvesBond2() {
-    final String creditCurveName = "Credit";
-    final String discountingCurveName = "Repo";
-    final String forwardCurveName = "Forward";
-    final YieldAndDiscountCurve curve6 = YieldCurve.from(ConstantDoublesCurve.from(0.06));
-    final YieldAndDiscountCurve curve5 = YieldCurve.from(ConstantDoublesCurve.from(0.05));
-    final YieldAndDiscountCurve curve55 = YieldCurve.from(ConstantDoublesCurve.from(0.0550));
-    final YieldCurveBundle curves = new YieldCurveBundle();
-    curves.setCurve(creditCurveName, curve6);
-    curves.setCurve(discountingCurveName, curve5);
-    curves.setCurve(forwardCurveName, curve55);
-    return curves;
   }
 
 }

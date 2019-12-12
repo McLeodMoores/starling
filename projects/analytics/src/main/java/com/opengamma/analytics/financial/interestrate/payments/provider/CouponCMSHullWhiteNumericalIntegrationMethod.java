@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
 
+import java.util.function.Function;
+
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponCMS;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
@@ -15,7 +17,7 @@ import com.opengamma.analytics.financial.provider.calculator.discounting.CashFlo
 import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderInterface;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.math.MathException;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -105,7 +107,8 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod {
     final RungeKuttaIntegrator1D integrator = new RungeKuttaIntegrator1D(absoluteTolerance, relativeTolerance, NB_INTEGRATION);
     double pv = 0.0;
     try {
-      pv = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(integrant, -limit, limit) * dfPayment * cms.getNotional() * cms.getPaymentYearFraction();
+      pv = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(Function1dAdapter.of(integrant), -limit, limit) * dfPayment
+          * cms.getNotional() * cms.getPaymentYearFraction();
     } catch (final Exception e) {
       throw new MathException(e);
     }
@@ -115,7 +118,7 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod {
   /**
    * Inner class to implement the integration used in price computation.
    */
-  private static final class CMSIntegrant extends Function1D<Double, Double> {
+  private static final class CMSIntegrant implements Function<Double, Double> {
 
     private final double[] _discountedCashFlowFixed;
     private final double[] _alphaFixed;
@@ -137,7 +140,8 @@ public final class CouponCMSHullWhiteNumericalIntegrationMethod {
      * @param alphaPayment
      *          The bond volatilities of the payment discount factor.
      */
-    CMSIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor, final double[] alphaIbor,
+    CMSIntegrant(final double[] discountedCashFlowFixed, final double[] alphaFixed, final double[] discountedCashFlowIbor,
+        final double[] alphaIbor,
         final double alphaPayment) {
       _discountedCashFlowFixed = discountedCashFlowFixed;
       _alphaFixed = alphaFixed;

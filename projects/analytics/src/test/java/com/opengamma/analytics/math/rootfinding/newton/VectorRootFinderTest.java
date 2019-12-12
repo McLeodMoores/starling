@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.rootfinding.newton;
@@ -8,9 +8,10 @@ package com.opengamma.analytics.math.rootfinding.newton;
 import static com.opengamma.analytics.math.matrix.MatrixAlgebraFactory.OG_ALGEBRA;
 import static org.testng.AssertJUnit.assertEquals;
 
+import java.util.function.Function;
+
 import org.testng.annotations.Test;
 
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.rootfinding.VectorRootFinder;
@@ -24,95 +25,73 @@ public abstract class VectorRootFinderTest {
   static final double EPS = 1e-6;
   static final double TOLERANCE = 1e-8;
   static final int MAXSTEPS = 100;
-  static final Function1D<DoubleMatrix1D, DoubleMatrix1D> LINEAR = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
-
-    @Override
-    public DoubleMatrix1D apply(final DoubleMatrix1D x) {
-      final double[] data = x.getData();
-      if (data.length != 2) {
-        throw new IllegalArgumentException("This test is for 2-d vector only");
-      }
-      final double[] res = new double[2];
-      res[0] = data[0] + data[1];
-      res[1] = 2 * data[0] - data[1] - 3.0;
-      return new DoubleMatrix1D(res);
+  static final Function<DoubleMatrix1D, DoubleMatrix1D> LINEAR = x -> {
+    final double[] data = x.getData();
+    if (data.length != 2) {
+      throw new IllegalArgumentException("This test is for 2-d vector only");
     }
+    final double[] res = new double[2];
+    res[0] = data[0] + data[1];
+    res[1] = 2 * data[0] - data[1] - 3.0;
+    return new DoubleMatrix1D(res);
   };
-  static final Function1D<DoubleMatrix1D, DoubleMatrix1D> FUNCTION2D = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
-
-    @Override
-    public DoubleMatrix1D apply(final DoubleMatrix1D x) {
-      final double[] data = x.getData();
-      if (data.length != 2) {
-        throw new IllegalArgumentException("This test is for 2-d vector only");
-      }
-      final double[] res = new double[2];
-      res[0] = data[1] * Math.exp(data[0]) - Math.E;
-      res[1] = data[0] * data[0] + data[1] * data[1] - 2.0;
-      return new DoubleMatrix1D(res);
+  static final Function<DoubleMatrix1D, DoubleMatrix1D> FUNCTION2D = x -> {
+    final double[] data = x.getData();
+    if (data.length != 2) {
+      throw new IllegalArgumentException("This test is for 2-d vector only");
     }
+    final double[] res = new double[2];
+    res[0] = data[1] * Math.exp(data[0]) - Math.E;
+    res[1] = data[0] * data[0] + data[1] * data[1] - 2.0;
+    return new DoubleMatrix1D(res);
   };
-  static final Function1D<DoubleMatrix1D, DoubleMatrix2D> JACOBIAN2D = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
+  static final Function<DoubleMatrix1D, DoubleMatrix2D> JACOBIAN2D = x -> {
+    if (x.getNumberOfElements() != 2) {
+      throw new IllegalArgumentException("This test is for 2-d vector only");
+    }
+    final double[][] res = new double[2][2];
+    final double temp = Math.exp(x.getEntry(0));
 
-    @Override
-    public DoubleMatrix2D apply(final DoubleMatrix1D x) {
-      if (x.getNumberOfElements() != 2) {
-        throw new IllegalArgumentException("This test is for 2-d vector only");
-      }
-      final double[][] res = new double[2][2];
-      final double temp = Math.exp(x.getEntry(0));
-
-      res[0][0] = x.getEntry(1) * temp;
-      res[0][1] = temp;
-      for (int i = 0; i < 2; i++) {
-        res[1][i] = 2 * x.getEntry(i);
-      }
-
-      return new DoubleMatrix2D(res);
+    res[0][0] = x.getEntry(1) * temp;
+    res[0][1] = temp;
+    for (int i = 0; i < 2; i++) {
+      res[1][i] = 2 * x.getEntry(i);
     }
 
+    return new DoubleMatrix2D(res);
   };
 
-  static final Function1D<DoubleMatrix1D, DoubleMatrix1D> FUNCTION3D = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
-
-    @Override
-    public DoubleMatrix1D apply(final DoubleMatrix1D x) {
-      if (x.getNumberOfElements() != 3) {
-        throw new IllegalArgumentException("This test is for 3-d vector only");
-      }
-      final double[] res = new double[3];
-      res[0] = Math.exp(x.getEntry(0) + x.getEntry(1)) + x.getEntry(2) - Math.E + 1.0;
-      res[1] = x.getEntry(2) * Math.exp(x.getEntry(0) - x.getEntry(1)) + Math.E;
-      res[2] = OG_ALGEBRA.getInnerProduct(x, x) - 2.0;
-      return new DoubleMatrix1D(res);
+  static final Function<DoubleMatrix1D, DoubleMatrix1D> FUNCTION3D = x -> {
+    if (x.getNumberOfElements() != 3) {
+      throw new IllegalArgumentException("This test is for 3-d vector only");
     }
+    final double[] res = new double[3];
+    res[0] = Math.exp(x.getEntry(0) + x.getEntry(1)) + x.getEntry(2) - Math.E + 1.0;
+    res[1] = x.getEntry(2) * Math.exp(x.getEntry(0) - x.getEntry(1)) + Math.E;
+    res[2] = OG_ALGEBRA.getInnerProduct(x, x) - 2.0;
+    return new DoubleMatrix1D(res);
   };
-  static final Function1D<DoubleMatrix1D, DoubleMatrix2D> JACOBIAN3D = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
-
-    @Override
-    public DoubleMatrix2D apply(final DoubleMatrix1D x) {
-      if (x.getNumberOfElements() != 3) {
-        throw new IllegalArgumentException("This test is for 3-d vector only");
-      }
-      final double[][] res = new double[3][3];
-      final double temp1 = Math.exp(x.getEntry(0) + x.getEntry(1));
-      final double temp2 = Math.exp(x.getEntry(0) - x.getEntry(1));
-      res[0][0] = res[0][1] = temp1;
-      res[0][2] = 1.0;
-      res[1][0] = x.getEntry(2) * temp2;
-      res[1][1] = -x.getEntry(2) * temp2;
-      res[1][2] = temp2;
-      for (int i = 0; i < 3; i++) {
-        res[2][i] = 2 * x.getEntry(i);
-      }
-
-      return new DoubleMatrix2D(res);
+  static final Function<DoubleMatrix1D, DoubleMatrix2D> JACOBIAN3D = x -> {
+    if (x.getNumberOfElements() != 3) {
+      throw new IllegalArgumentException("This test is for 3-d vector only");
+    }
+    final double[][] res = new double[3][3];
+    final double temp1 = Math.exp(x.getEntry(0) + x.getEntry(1));
+    final double temp2 = Math.exp(x.getEntry(0) - x.getEntry(1));
+    res[0][0] = res[0][1] = temp1;
+    res[0][2] = 1.0;
+    res[1][0] = x.getEntry(2) * temp2;
+    res[1][1] = -x.getEntry(2) * temp2;
+    res[1][2] = temp2;
+    for (int i = 0; i < 3; i++) {
+      res[2][i] = 2 * x.getEntry(i);
     }
 
+    return new DoubleMatrix2D(res);
   };
 
-  static final double[] TIME_GRID = new double[] {0.25, 0.5, 1.0, 1.5, 2.0, 3.0, 5.0, 7.0, 10.0, 15.0, 20.0, 25.0, 30.0};
-  static final Function1D<Double, Double> DUMMY_YIELD_CURVE = new Function1D<Double, Double>() {
+  static final double[] TIME_GRID = new double[] { 0.25, 0.5, 1.0, 1.5, 2.0, 3.0, 5.0, 7.0, 10.0, 15.0, 20.0, 25.0, 30.0 };
+  static final Function<Double, Double> DUMMY_YIELD_CURVE = new Function<Double, Double>() {
 
     private static final double A = -0.03;
     private static final double B = 0.02;
@@ -124,7 +103,7 @@ public abstract class VectorRootFinderTest {
       return Math.exp(-x * ((A + B * x) * Math.exp(-C * x) + D));
     }
   };
-  static final Function1D<DoubleMatrix1D, DoubleMatrix1D> SWAP_RATES = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
+  static final Function<DoubleMatrix1D, DoubleMatrix1D> SWAP_RATES = new Function<DoubleMatrix1D, DoubleMatrix1D>() {
 
     private final int n = TIME_GRID.length;
     private double[] _swapRates = null;
@@ -163,7 +142,7 @@ public abstract class VectorRootFinderTest {
   private static final VectorRootFinder DUMMY = new VectorRootFinder() {
 
     @Override
-    public DoubleMatrix1D getRoot(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function, final DoubleMatrix1D x) {
+    public DoubleMatrix1D getRoot(final Function<DoubleMatrix1D, DoubleMatrix1D> function, final DoubleMatrix1D x) {
       checkInputs(function, x);
       return null;
     }
@@ -181,25 +160,25 @@ public abstract class VectorRootFinderTest {
   }
 
   protected void assertLinear(final VectorRootFinder rootFinder, final double eps) {
-    final DoubleMatrix1D x0 = new DoubleMatrix1D(new double[] {0.0, 0.0});
+    final DoubleMatrix1D x0 = new DoubleMatrix1D(new double[] { 0.0, 0.0 });
     final DoubleMatrix1D x1 = rootFinder.getRoot(LINEAR, x0);
     assertEquals(1.0, x1.getData()[0], eps);
     assertEquals(-1.0, x1.getData()[1], eps);
   }
 
   /**
-   * Note: at the root (1,1) the Jacobian is singular which leads to very slow convergence and is why
-   * we switch to using SVD rather than the default LU
+   * Note: at the root (1,1) the Jacobian is singular which leads to very slow convergence and is why we switch to using SVD rather than the
+   * default LU
    */
   protected void assertFunction2D(final NewtonVectorRootFinder rootFinder, final double eps) {
-    final DoubleMatrix1D x0 = new DoubleMatrix1D(new double[] {-0.0, 0.0});
+    final DoubleMatrix1D x0 = new DoubleMatrix1D(new double[] { -0.0, 0.0 });
     final DoubleMatrix1D x1 = rootFinder.getRoot(FUNCTION2D, JACOBIAN2D, x0);
     assertEquals(1.0, x1.getEntry(0), eps);
     assertEquals(1.0, x1.getEntry(1), eps);
   }
 
   protected void assertFunction3D(final NewtonVectorRootFinder rootFinder, final double eps) {
-    final DoubleMatrix1D x0 = new DoubleMatrix1D(new double[] {0.8, 0.2, -0.7});
+    final DoubleMatrix1D x0 = new DoubleMatrix1D(new double[] { 0.8, 0.2, -0.7 });
     final DoubleMatrix1D x1 = rootFinder.getRoot(FUNCTION3D, JACOBIAN3D, x0);
     assertEquals(1.0, x1.getData()[0], eps);
     assertEquals(0.0, x1.getData()[1], eps);

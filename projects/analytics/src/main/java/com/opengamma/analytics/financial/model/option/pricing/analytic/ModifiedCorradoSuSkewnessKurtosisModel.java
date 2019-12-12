@@ -16,8 +16,8 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * The Corrado-Su option pricing formula extends the Black-Scholes-Merton model
- * for non-normal skewness and kurtosis in the underlying return distribution.
+ * The Corrado-Su option pricing formula extends the Black-Scholes-Merton model for non-normal skewness and kurtosis in the underlying
+ * return distribution.
  */
 public class ModifiedCorradoSuSkewnessKurtosisModel extends AnalyticOptionModel<OptionDefinition, SkewKurtosisOptionDataBundle> {
   /** The Black-Scholes Merton model */
@@ -32,7 +32,7 @@ public class ModifiedCorradoSuSkewnessKurtosisModel extends AnalyticOptionModel<
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final SkewKurtosisOptionDataBundle data) {
+      public Double evaluate(final SkewKurtosisOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getStrike();
@@ -66,7 +66,8 @@ public class ModifiedCorradoSuSkewnessKurtosisModel extends AnalyticOptionModel<
     return skew * sigma3 * Math.pow(t, 1.5) / 6. + kurtosis * sigma * sigma3 * t * t / 24.;
   }
 
-  private double getD(final double s, final double k, final double sigma, final double t, final double b, final double w, final double sigmaT) {
+  private double getD(final double s, final double k, final double sigma, final double t, final double b, final double w,
+      final double sigmaT) {
     return getD1(s, k, t, sigma, b) - Math.log(1 + w) / sigmaT;
   }
 

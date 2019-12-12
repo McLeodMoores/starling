@@ -11,7 +11,6 @@ import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
-import com.opengamma.financial.analytics.model.forex.forward.ForwardFunctions;
 import com.opengamma.financial.analytics.model.forex.option.OptionFunctions;
 
 /**
@@ -34,24 +33,13 @@ public class ForexFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(SecurityFXHistoricalTimeSeriesFunction.class));
   }
 
-  /**
-   * Adds deprecated FX forward functions to the repository.
-   * 
-   * @return The configuration source populated with FX forward functions.
-   * @deprecated The functions that are added are deprecated
-   */
-  @Deprecated
-  protected FunctionConfigurationSource forwardFunctionConfiguration() {
-    return ForwardFunctions.instance();
-  }
-
   protected FunctionConfigurationSource optionFunctionConfiguration() {
     return OptionFunctions.instance();
   }
 
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(), forwardFunctionConfiguration(), optionFunctionConfiguration());
+    return CombiningFunctionConfigurationSource.of(super.createObject(), optionFunctionConfiguration());
   }
 
 }

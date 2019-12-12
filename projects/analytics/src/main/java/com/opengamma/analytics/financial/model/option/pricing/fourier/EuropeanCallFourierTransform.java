@@ -17,8 +17,8 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * Gives the Fourier transform of a European call $\hat{C}(z) = -\frac{\phi(z)}{z(z+i)}$ where $\phi(z)$ is the characteristic function of the (normalised)
- * terminal distribution of the underlying .
+ * Gives the Fourier transform of a European call $\hat{C}(z) = -\frac{\phi(z)}{z(z+i)}$ where $\phi(z)$ is the characteristic function of
+ * the (normalised) terminal distribution of the underlying .
  */
 public class EuropeanCallFourierTransform {
   private final CharacteristicExponent _ce;
@@ -33,7 +33,7 @@ public class EuropeanCallFourierTransform {
     return new Function1D<ComplexNumber, ComplexNumber>() {
 
       @Override
-      public ComplexNumber apply(final ComplexNumber z) {
+      public ComplexNumber evaluate(final ComplexNumber z) {
         final ComplexNumber num = exp(function.apply(z));
         final ComplexNumber denom = multiply(z, add(z, ComplexNumber.I));
         final ComplexNumber res = multiply(-1.0, divide(num, denom));

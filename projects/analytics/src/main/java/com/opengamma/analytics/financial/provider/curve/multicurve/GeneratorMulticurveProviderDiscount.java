@@ -60,7 +60,8 @@ public class GeneratorMulticurveProviderDiscount extends Function1D<DoubleMatrix
    * @param generatorsMap
    *          The generators map.
    */
-  public GeneratorMulticurveProviderDiscount(final MulticurveProviderDiscount knownData, final LinkedHashMap<String, Currency> discountingMap,
+  public GeneratorMulticurveProviderDiscount(final MulticurveProviderDiscount knownData,
+      final LinkedHashMap<String, Currency> discountingMap,
       final LinkedHashMap<String, IborIndex[]> forwardIborMap,
       final LinkedHashMap<String, IndexON[]> forwardONMap, final LinkedHashMap<String, GeneratorYDCurve> generatorsMap) {
     ArgumentChecker.notNull(discountingMap, "Discounting curves names map");
@@ -92,7 +93,7 @@ public class GeneratorMulticurveProviderDiscount extends Function1D<DoubleMatrix
   }
 
   @Override
-  public MulticurveProviderDiscount apply(final DoubleMatrix1D x) {
+  public MulticurveProviderDiscount evaluate(final DoubleMatrix1D x) {
     final MulticurveProviderDiscount provider = _knownData.copy();
     final Set<String> nameSet = _generatorsMap.keySet();
     int indexParam = 0;

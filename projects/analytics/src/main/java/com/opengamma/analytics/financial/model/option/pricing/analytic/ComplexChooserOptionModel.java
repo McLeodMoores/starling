@@ -5,12 +5,15 @@
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.financial.model.option.definition.ComplexChooserOptionDefinition;
 import com.opengamma.analytics.financial.model.option.definition.StandardOptionDataBundle;
 import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.rootfinding.BisectionSingleRootFinder;
 import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
 import com.opengamma.analytics.math.statistics.distribution.BivariateNormalDistribution;
@@ -32,7 +35,7 @@ public class ComplexChooserOptionModel extends AnalyticOptionModel<ComplexChoose
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         Validate.notNull(data, "data");
         final double s = data.getSpot();
         final double kCall = definition.getCallStrike();
@@ -46,7 +49,8 @@ public class ComplexChooserOptionModel extends AnalyticOptionModel<ComplexChoose
         final double b = data.getCostOfCarry();
         final double deltaTCall = tCall - tChoose;
         final double deltaTPut = tPut - tChoose;
-        final double criticalValue = getCriticalValue(Math.exp(deltaTCall * (b - r)), Math.exp(-deltaTCall * r), Math.exp(deltaTPut * (b - r)),
+        final double criticalValue = getCriticalValue(Math.exp(deltaTCall * (b - r)), Math.exp(-deltaTCall * r),
+            Math.exp(deltaTPut * (b - r)),
             Math.exp(-deltaTPut * r), sigma, b, kCall, kPut,
             deltaTCall, deltaTPut);
         final double d1 = getD1(s, criticalValue, tChoose, sigma, b);
@@ -59,17 +63,16 @@ public class ComplexChooserOptionModel extends AnalyticOptionModel<ComplexChoose
         final double rho2 = Math.sqrt(tChoose / tPut);
         return s * Math.exp(tCall * (b - r)) * BIVARIATE_NORMAL.getCDF(new double[] { d1, d3, rho1 })
             - kCall * Math.exp(-r * tCall) * BIVARIATE_NORMAL.getCDF(new double[] { d2, d4, rho1 }) - s
-            * Math.exp(tPut * (b - r)) * BIVARIATE_NORMAL.getCDF(new double[] { -d1, -d5, rho2 })
+                * Math.exp(tPut * (b - r)) * BIVARIATE_NORMAL.getCDF(new double[] { -d1, -d5, rho2 })
             + kPut * Math.exp(-r * tPut) * BIVARIATE_NORMAL.getCDF(new double[] { -d2, -d6, rho2 });
       }
 
     };
   }
 
-  private Double getCriticalValue(final double dfCall1, final double dfCall2, final double dfPut1, final double dfPut2, final double sigma, final double b,
-      final double kCall, final double kPut,
-      final double deltaTCall, final double deltaTPut) {
-    final Function1D<Double, Double> function = new Function1D<Double, Double>() {
+  private Double getCriticalValue(final double dfCall1, final double dfCall2, final double dfPut1, final double dfPut2, final double sigma,
+      final double b, final double kCall, final double kPut, final double deltaTCall, final double deltaTPut) {
+    final Function<Double, Double> function = new Function<Double, Double>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
@@ -78,11 +81,12 @@ public class ComplexChooserOptionModel extends AnalyticOptionModel<ComplexChoose
         final double d2Call = getD2(d1Call, sigma, deltaTCall);
         final double d1Put = getD1(criticalValue, kPut, deltaTPut, sigma, b);
         final double d2Put = getD2(d1Put, sigma, deltaTPut);
-        return criticalValue * dfCall1 * NORMAL.getCDF(d1Call) - kCall * dfCall2 * NORMAL.getCDF(d2Call) + criticalValue * dfPut1 * NORMAL.getCDF(-d1Put)
-        - kPut * dfPut2 * NORMAL.getCDF(-d2Put);
+        return criticalValue * dfCall1 * NORMAL.getCDF(d1Call) - kCall * dfCall2 * NORMAL.getCDF(d2Call)
+            + criticalValue * dfPut1 * NORMAL.getCDF(-d1Put)
+            - kPut * dfPut2 * NORMAL.getCDF(-d2Put);
       }
 
     };
-    return ROOT_FINDER.getRoot(function, 1e-9, 1000.);
+    return ROOT_FINDER.getRoot(Function1dAdapter.of(function), 1e-9, 1000.);
   }
 }

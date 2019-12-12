@@ -13,7 +13,6 @@ import org.testng.annotations.Test;
 import com.opengamma.component.tool.ToolContextUtils;
 import com.opengamma.examples.bloomberg.DBTestUtils;
 import com.opengamma.examples.bloomberg.loader.ExampleEquityPortfolioLoader;
-import com.opengamma.examples.bloomberg.loader.ExampleMultiCurrencySwapPortfolioLoader;
 import com.opengamma.integration.tool.IntegrationToolContext;
 import com.opengamma.master.portfolio.PortfolioMaster;
 import com.opengamma.master.portfolio.PortfolioSearchRequest;
@@ -48,7 +47,6 @@ public class ExampleDatabasePopulatorTest {
       final IntegrationToolContext toolContext = getToolContext();
       try {
         assertEquityPortfolio(toolContext);
-        assertMultiCurrencySwapPortfolio(toolContext);
 
       } finally {
         if (toolContext != null) {
@@ -57,11 +55,6 @@ public class ExampleDatabasePopulatorTest {
       }
       DBTestUtils.cleanUp(CONFIG_RESOURCE_LOCATION);
     }
-  }
-
-  private void assertMultiCurrencySwapPortfolio(final IntegrationToolContext toolContext) {
-    final PortfolioMaster portfolioMaster = toolContext.getPortfolioMaster();
-    assertPortfolio(portfolioMaster, ExampleMultiCurrencySwapPortfolioLoader.PORTFOLIO_NAME);
   }
 
   private void assertEquityPortfolio(final IntegrationToolContext toolContext) {

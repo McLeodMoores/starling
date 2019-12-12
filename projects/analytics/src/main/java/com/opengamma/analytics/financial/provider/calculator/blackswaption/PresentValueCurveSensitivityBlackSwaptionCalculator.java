@@ -6,9 +6,13 @@
 package com.opengamma.analytics.financial.provider.calculator.blackswaption;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
+import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionCashFixedCompoundedONCompounded;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionCashFixedIbor;
+import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedCompoundedONCompounded;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedIbor;
+import com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionCashFixedCompoundedONCompoundedBlackMethod;
 import com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionCashFixedIborBlackMethod;
+import com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod;
 import com.opengamma.analytics.financial.interestrate.swaption.provider.SwaptionPhysicalFixedIborBlackMethod;
 import com.opengamma.analytics.financial.provider.description.interestrate.BlackSwaptionFlatProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
@@ -26,7 +30,7 @@ public final class PresentValueCurveSensitivityBlackSwaptionCalculator
 
   /**
    * Gets the calculator instance.
-   * 
+   *
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityBlackSwaptionCalculator getInstance() {
@@ -55,4 +59,19 @@ public final class PresentValueCurveSensitivityBlackSwaptionCalculator
       final BlackSwaptionFlatProviderInterface black) {
     return METHOD_SWT_CASH.presentValueCurveSensitivity(swaption, black);
   }
+
+  @Override
+  public MultipleCurrencyMulticurveSensitivity visitSwaptionPhysicalFixedCompoundedONCompounded(
+      final SwaptionPhysicalFixedCompoundedONCompounded swaption,
+      final BlackSwaptionFlatProviderInterface curves) {
+    return SwaptionPhysicalFixedCompoundedONCompoundedBlackMethod.getInstance().presentValueCurveSensitivity(swaption, curves);
+  }
+
+  @Override
+  public MultipleCurrencyMulticurveSensitivity visitSwaptionCashFixedCompoundedONCompounded(
+      final SwaptionCashFixedCompoundedONCompounded swaption,
+      final BlackSwaptionFlatProviderInterface curves) {
+    return SwaptionCashFixedCompoundedONCompoundedBlackMethod.getInstance().presentValueCurveSensitivity(swaption, curves);
+  }
+
 }

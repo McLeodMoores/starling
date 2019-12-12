@@ -24,15 +24,17 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 public class CoupledPDEDataBundleProvider {
 
   /**
-   * Set up a backwards coupled PDE for a model where the underlying follows the SDE $ds = \mu(t)sdt + \sigma_i s^{\beta} dW$, with local volatility overlay
-   * $\sigma(t,s)$ and level $\sigma_i $ which takes on one of two values depending on the state of the continuous 2-state hidden Markov chain. The resulting
-   * pair of PDEs is $$\begin{eqnarray} \frac{\partial V_1}{\partial \tau} - \frac{\sigma_1^2 s^{2\beta}}{2} \frac{\partial^2 V_1}{\partial s^2} -\mu(t)s
-   * \frac{\partial V_1}{\partial s} + (\mu(t) + \lambda_{12})V_1 - \lambda_{12} V_2= 0 \\ \frac{\partial V_2}{\partial \tau} - \frac{\sigma_2^2 s^{2\beta}}{2}
-   * \frac{\partial^2 V_2}{\partial s^2} -\mu(t)s \frac{\partial V_2}{\partial s} + (\mu(t) + \lambda_{21})V_2 - \lambda_{21} V_1= 0 \end{eqnarray}$$ As usual
-   * with the backwards PDEs, 'time' is time-to-maturity ($\tau$) and thus starts at zero (i.e. at maturity). The initial condition is a call payoff (so
-   * $V_1(0,s) = V_2(0,s) = (s-k)^+$). Real (i.e. calendar) time, $t$, appears in the drift term with $t = T - \tau$ where $T$ is the maturity. The solution at
-   * $t=0$ $(\tau=T)$ for $V_1$ and $V_2$ is the option price if the Markov chain started in state 1 or 2. If the initial state of the Markov chain is unknown
-   * (but the probability of being in a state is known), then the option price is the probability weighting of the two solutions.
+   * Set up a backwards coupled PDE for a model where the underlying follows the SDE $ds = \mu(t)sdt + \sigma_i s^{\beta} dW$, with local
+   * volatility overlay $\sigma(t,s)$ and level $\sigma_i $ which takes on one of two values depending on the state of the continuous
+   * 2-state hidden Markov chain. The resulting pair of PDEs is $$\begin{eqnarray} \frac{\partial V_1}{\partial \tau} - \frac{\sigma_1^2
+   * s^{2\beta}}{2} \frac{\partial^2 V_1}{\partial s^2} -\mu(t)s \frac{\partial V_1}{\partial s} + (\mu(t) + \lambda_{12})V_1 - \lambda_{12}
+   * V_2= 0 \\ \frac{\partial V_2}{\partial \tau} - \frac{\sigma_2^2 s^{2\beta}}{2} \frac{\partial^2 V_2}{\partial s^2} -\mu(t)s
+   * \frac{\partial V_2}{\partial s} + (\mu(t) + \lambda_{21})V_2 - \lambda_{21} V_1= 0 \end{eqnarray}$$ As usual with the backwards PDEs,
+   * 'time' is time-to-maturity ($\tau$) and thus starts at zero (i.e. at maturity). The initial condition is a call payoff (so $V_1(0,s) =
+   * V_2(0,s) = (s-k)^+$). Real (i.e. calendar) time, $t$, appears in the drift term with $t = T - \tau$ where $T$ is the maturity. The
+   * solution at $t=0$ $(\tau=T)$ for $V_1$ and $V_2$ is the option price if the Markov chain started in state 1 or 2. If the initial state
+   * of the Markov chain is unknown (but the probability of being in a state is known), then the option price is the probability weighting
+   * of the two solutions.
    *
    * @param forward
    *          The forward curve
@@ -49,16 +51,17 @@ public class CoupledPDEDataBundleProvider {
   }
 
   /**
-   * Set up a backwards coupled PDE for a model where the underlying follows the SDE $ ds = \mu(t)sdt + \sigma(t,s)\sigma_i s^{\beta} dW$, with local volatility
-   * overlay $\sigma(t,s)$ and level $\sigma_i $ which takes on one of two values depending on the state of the continuous 2-state hidden Markov chain. The
-   * resulting pair of PDEs is $$\begin{eqnarray} \frac{\partial V_1}{\partial \tau} - \sigma(t,s)\frac{\sigma_1^2 s^{2\beta}}{2} \frac{\partial^2 V_1}{\partial
-   * s^2} -\mu(t)s \frac{\partial V_1}{\partial s} + (\mu(t) + \lambda_{12})V_1 - \lambda_{12} V_2= 0 \\ \frac{\partial V_2}{\partial \tau} -
-   * \sigma(t,s)\frac{\sigma_2^2 s^{2\beta}}{2} \frac{\partial^2 V_2}{\partial s^2} -\mu(t)s \frac{\partial V_2}{\partial s} + (\mu(t) + \lambda_{21})V_2 -
-   * \lambda_{21} V_1= 0 \end{eqnarray}$$ As usual with the backwards PDEs, 'time' is time-to-maturity ($\tau$) and thus starts at zero (i.e. at maturity). The
-   * initial condition is a call payoff (so $V_1(0,s) = V_2(0,s) = (s-k)^+$). Real (i.e. calendar) time, $t$, appears in the local volatility and drift terms
-   * with $t = T - \tau$ where $T$ is the maturity. The solution at $t = 0$ $(\tau=T)$ for $V_1$ and $V_2$ is the option price if the Markov chain started in
-   * state 1 or 2. If the initial state of the Markov chain is unknown (but the probability of being in a state is know), then the option price is the
-   * probability weighting of the two solutions.
+   * Set up a backwards coupled PDE for a model where the underlying follows the SDE $ ds = \mu(t)sdt + \sigma(t,s)\sigma_i s^{\beta} dW$,
+   * with local volatility overlay $\sigma(t,s)$ and level $\sigma_i $ which takes on one of two values depending on the state of the
+   * continuous 2-state hidden Markov chain. The resulting pair of PDEs is $$\begin{eqnarray} \frac{\partial V_1}{\partial \tau} -
+   * \sigma(t,s)\frac{\sigma_1^2 s^{2\beta}}{2} \frac{\partial^2 V_1}{\partial s^2} -\mu(t)s \frac{\partial V_1}{\partial s} + (\mu(t) +
+   * \lambda_{12})V_1 - \lambda_{12} V_2= 0 \\ \frac{\partial V_2}{\partial \tau} - \sigma(t,s)\frac{\sigma_2^2 s^{2\beta}}{2}
+   * \frac{\partial^2 V_2}{\partial s^2} -\mu(t)s \frac{\partial V_2}{\partial s} + (\mu(t) + \lambda_{21})V_2 - \lambda_{21} V_1= 0
+   * \end{eqnarray}$$ As usual with the backwards PDEs, 'time' is time-to-maturity ($\tau$) and thus starts at zero (i.e. at maturity). The
+   * initial condition is a call payoff (so $V_1(0,s) = V_2(0,s) = (s-k)^+$). Real (i.e. calendar) time, $t$, appears in the local
+   * volatility and drift terms with $t = T - \tau$ where $T$ is the maturity. The solution at $t = 0$ $(\tau=T)$ for $V_1$ and $V_2$ is the
+   * option price if the Markov chain started in state 1 or 2. If the initial state of the Markov chain is unknown (but the probability of
+   * being in a state is know), then the option price is the probability weighting of the two solutions.
    *
    * @param forward
    *          The forward curve
@@ -84,14 +87,15 @@ public class CoupledPDEDataBundleProvider {
   }
 
   /**
-   * Set up a forward coupled PDE for a model where the underlying follows the SDE $ds = \mu(t)sdt + \sigma_i s^{\beta} dW$, with level $\sigma_i$ which takes
-   * on one of two values depending on the state of the continuous 2-state hidden Markov chain, and the payoff is a standard European call. The coupled PDEs are
-   * in maturity ($T$) and strike ($k$) coordinates and read $$\begin{eqnarray}\frac{\partial V_1}{\partial T} - \frac{\sigma_1^2 k^{2\beta}}{2}
-   * \frac{\partial^2 V_1}{\partial k^2} -\mu(T)k \frac{\partial V_1}{\partial k} + \lambda_{12}V_1 - \lambda_{21} V_2= 0 \\ \frac{\partial V_2}{\partial T} -
-   * \frac{\sigma_2^2 k^{2\beta}}{2} \frac{\partial^2 V_2}{\partial k^2} -\mu(T)k \frac{\partial V_2}{\partial k} + \lambda_{21}V_2 - \lambda_{12} V_1= 0
-   * \end{eqnarray}$$ The initial condition is $V_1(0,k) = p_1(0)(s_0-k)^+$ and $V_2(0,k) = p_2(0)(s_0-k)^+$ where $p_1(0)$ and $p_2(0)$ are the probabilities
-   * of the Markov chain starting in a given state and $s_0$ is the spot. The option value at a particular maturity ($T$) and strike ($k$) is given by $V(T,k) =
-   * V_1(T,k) + V_2(T,k)$
+   * Set up a forward coupled PDE for a model where the underlying follows the SDE $ds = \mu(t)sdt + \sigma_i s^{\beta} dW$, with level
+   * $\sigma_i$ which takes on one of two values depending on the state of the continuous 2-state hidden Markov chain, and the payoff is a
+   * standard European call. The coupled PDEs are in maturity ($T$) and strike ($k$) coordinates and read $$\begin{eqnarray}\frac{\partial
+   * V_1}{\partial T} - \frac{\sigma_1^2 k^{2\beta}}{2} \frac{\partial^2 V_1}{\partial k^2} -\mu(T)k \frac{\partial V_1}{\partial k} +
+   * \lambda_{12}V_1 - \lambda_{21} V_2= 0 \\ \frac{\partial V_2}{\partial T} - \frac{\sigma_2^2 k^{2\beta}}{2} \frac{\partial^2
+   * V_2}{\partial k^2} -\mu(T)k \frac{\partial V_2}{\partial k} + \lambda_{21}V_2 - \lambda_{12} V_1= 0 \end{eqnarray}$$ The initial
+   * condition is $V_1(0,k) = p_1(0)(s_0-k)^+$ and $V_2(0,k) = p_2(0)(s_0-k)^+$ where $p_1(0)$ and $p_2(0)$ are the probabilities of the
+   * Markov chain starting in a given state and $s_0$ is the spot. The option value at a particular maturity ($T$) and strike ($k$) is given
+   * by $V(T,k) = V_1(T,k) + V_2(T,k)$
    *
    * @param forward
    *          The forward curve
@@ -99,20 +103,22 @@ public class CoupledPDEDataBundleProvider {
    *          Data relating to the Markov chain
    * @return a pair of convection diffusion data bundles
    */
-  public ConvectionDiffusionPDE1DCoupledCoefficients[] getCoupledForwardPair(final ForwardCurve forward, final TwoStateMarkovChainDataBundle data) {
+  public ConvectionDiffusionPDE1DCoupledCoefficients[] getCoupledForwardPair(final ForwardCurve forward,
+      final TwoStateMarkovChainDataBundle data) {
     final AbsoluteLocalVolatilitySurface localVolOverlay = new AbsoluteLocalVolatilitySurface(ConstantDoublesSurface.from(1.0));
     return getCoupledForwardPair(forward, data, localVolOverlay);
   }
 
   /**
-   * Set up a forward coupled PDE for a model where the underlying follows the SDE $ ds = \mu(t)sdt + \sigma(t,s)\sigma_i s^{\beta} dW$, with local volatility
-   * overlay $\sigma(t,s)$ and level $\sigma_i $ which takes on one of two values depending on the state of the continuous 2-state hidden Markov chain, and the
-   * payoff is a standard European call. The coupled PDEs are in maturity (T) and strike (k) coordinates and read $$\begin{eqnarray}\frac{\partial V_1}{\partial
-   * T} - \sigma(T,k)\frac{\sigma_1^2 k^{2\beta}}{2} \frac{\partial^2 V_1}{\partial k^2} -\mu(T)k \frac{\partial V_1}{\partial k} + \lambda_{12}V_1 -
-   * \lambda_{21} V_2= 0 \\ \frac{\partial V_2}{\partial T} - \sigma(T,k)\frac{\sigma_2^2 k^{2\beta}}{2} \frac{\partial^2 V_2}{\partial k^2} -\mu(T)k
-   * \frac{\partial V_2}{\partial k} + \lambda_{21}V_2 - \lambda_{12} V_1= 0 \end{eqnarray}$$ The initial condition is $V_1(0,k) = p_1(0)(s_0-k)^+$ and
-   * $V_2(0,k) = p_2(0)(s_0-k)^+$ where $p_1(0)$ and $p_2(0)$ are the probabilities of the Markov chain starting in a given state and $s_0$ is the spot. The
-   * option value at a particular maturity ($T$) and strike ($k$) is given by $V(T,k) = V_1(T,k) + V_2(T,k)$
+   * Set up a forward coupled PDE for a model where the underlying follows the SDE $ ds = \mu(t)sdt + \sigma(t,s)\sigma_i s^{\beta} dW$,
+   * with local volatility overlay $\sigma(t,s)$ and level $\sigma_i $ which takes on one of two values depending on the state of the
+   * continuous 2-state hidden Markov chain, and the payoff is a standard European call. The coupled PDEs are in maturity (T) and strike (k)
+   * coordinates and read $$\begin{eqnarray}\frac{\partial V_1}{\partial T} - \sigma(T,k)\frac{\sigma_1^2 k^{2\beta}}{2} \frac{\partial^2
+   * V_1}{\partial k^2} -\mu(T)k \frac{\partial V_1}{\partial k} + \lambda_{12}V_1 - \lambda_{21} V_2= 0 \\ \frac{\partial V_2}{\partial T}
+   * - \sigma(T,k)\frac{\sigma_2^2 k^{2\beta}}{2} \frac{\partial^2 V_2}{\partial k^2} -\mu(T)k \frac{\partial V_2}{\partial k} +
+   * \lambda_{21}V_2 - \lambda_{12} V_1= 0 \end{eqnarray}$$ The initial condition is $V_1(0,k) = p_1(0)(s_0-k)^+$ and $V_2(0,k) =
+   * p_2(0)(s_0-k)^+$ where $p_1(0)$ and $p_2(0)$ are the probabilities of the Markov chain starting in a given state and $s_0$ is the spot.
+   * The option value at a particular maturity ($T$) and strike ($k$) is given by $V(T,k) = V_1(T,k) + V_2(T,k)$
    *
    * @param forward
    *          The forward curve
@@ -122,7 +128,8 @@ public class CoupledPDEDataBundleProvider {
    *          The local vol term
    * @return a pair of convection diffusion data bundles
    */
-  public ConvectionDiffusionPDE1DCoupledCoefficients[] getCoupledForwardPair(final ForwardCurve forward, final TwoStateMarkovChainDataBundle data,
+  public ConvectionDiffusionPDE1DCoupledCoefficients[] getCoupledForwardPair(final ForwardCurve forward,
+      final TwoStateMarkovChainDataBundle data,
       final AbsoluteLocalVolatilitySurface localVolOverlay) {
     Validate.notNull(forward, "null forward");
     Validate.notNull(data, "null data");
@@ -135,14 +142,16 @@ public class CoupledPDEDataBundleProvider {
   }
 
   /**
-   * Set up a coupled Fokker-Plank PDE for a model where the underlying follows the SDE $ ds = \mu(t)sdt + \sigma_i s^{\beta} dW$, with level $\sigma_i$ which
-   * takes on one of two values depending on the state of the continuous 2-state hidden Markov chain. The resultant PDE is $$\begin{eqnarray}\frac{\partial
-   * \rho_1}{\partial t} - \frac{\partial^2 }{\partial s^2}\left[\frac{\sigma_1^2 s^{2\beta}}{2}\rho_1 \right] - \frac{\partial}{\partial
-   * s}\left[\mu(t)s\rho_1\right] + \lambda_{12}\rho_1 - \lambda_{21}\rho_2= 0 \\ \frac{\partial \rho_2}{\partial t} - \frac{\partial^2 }{\partial
-   * s^2}\left[\frac{\sigma_2^2 s^{2\beta}}{2}\rho_2 \right] - \frac{\partial }{\partial s}\left[\mu(t)s\rho_2\right] + \lambda_{21}\rho_2 - \lambda_{12}
-   * \rho_1= 0 \end{eqnarray}$$ where $\rho_i(t,s)$ is the probabilty density of being in state $i$ with a value of the underlying $s$ at time $t$. The inital
-   * state is $\rho_i(0,s) = p_i(0)\delta(s-s_0)$ where $p_i(0)$ is the probability of the Markov chain starting in state $i$ and $s_0$ is the spot. Since a
-   * delta function cannot be used directly it is replaced with a log-normal distrubution (of $s/s_0$) with a standard deviation of 0.01;
+   * Set up a coupled Fokker-Plank PDE for a model where the underlying follows the SDE $ ds = \mu(t)sdt + \sigma_i s^{\beta} dW$, with
+   * level $\sigma_i$ which takes on one of two values depending on the state of the continuous 2-state hidden Markov chain. The resultant
+   * PDE is $$\begin{eqnarray}\frac{\partial \rho_1}{\partial t} - \frac{\partial^2 }{\partial s^2}\left[\frac{\sigma_1^2
+   * s^{2\beta}}{2}\rho_1 \right] - \frac{\partial}{\partial s}\left[\mu(t)s\rho_1\right] + \lambda_{12}\rho_1 - \lambda_{21}\rho_2= 0 \\
+   * \frac{\partial \rho_2}{\partial t} - \frac{\partial^2 }{\partial s^2}\left[\frac{\sigma_2^2 s^{2\beta}}{2}\rho_2 \right] -
+   * \frac{\partial }{\partial s}\left[\mu(t)s\rho_2\right] + \lambda_{21}\rho_2 - \lambda_{12} \rho_1= 0 \end{eqnarray}$$ where
+   * $\rho_i(t,s)$ is the probabilty density of being in state $i$ with a value of the underlying $s$ at time $t$. The inital state is
+   * $\rho_i(0,s) = p_i(0)\delta(s-s_0)$ where $p_i(0)$ is the probability of the Markov chain starting in state $i$ and $s_0$ is the spot.
+   * Since a delta function cannot be used directly it is replaced with a log-normal distrubution (of $s/s_0$) with a standard deviation of
+   * 0.01;
    *
    * @param forward
    *          The forward curve
@@ -156,15 +165,16 @@ public class CoupledPDEDataBundleProvider {
   }
 
   /**
-   * Set up a coupled Fokker-Plank PDE for a model where the underlying follows the SDE $ ds = \mu(t)sdt + \sigma(t,s)\sigma_i s^{\beta} dW$, with local
-   * volatility overlay $\sigma(t,s)$ and level $\sigma_i $ which takes on one of two values depending on the state of the continuous 2-state hidden Markov
-   * chain. The resultant PDE is $$\begin{eqnarray}\frac{\partial \rho_1}{\partial t} - \frac{\partial^2 }{\partial s^2}\left[ \sigma(t,s)\frac{\sigma_1^2
-   * s^{2\beta}}{2}\rho_1 \right] - \frac{\partial}{\partial s}\left[\mu(t)s\rho_1\right] + \lambda_{12}\rho_1 - \lambda_{21}\rho_2= 0 \\ \frac{\partial
-   * \rho_2}{\partial t} - \frac{\partial^2 }{\partial s^2}\left[ \sigma(t,s)\frac{\sigma_2^2 s^{2\beta}}{2}\rho_2 \right] - \frac{\partial }{\partial
-   * s}\left[\mu(t)s\rho_2\right] + \lambda_{21}\rho_2 - \lambda_{12} \rho_1= 0 \end{eqnarray}$$ where $\rho_i(t,s)$ is the probabilty density of being in state
-   * $i$ with a value of the underlying $s$ at time $t$. The initial state is $\rho_i(0,s) = p_i(0)\delta(s-s_0)$ where $p_i(0)$ is the probability of the
-   * Markov chain starting in state $i$ and $s_0$ is the spot. Since a delta function cannot be used directly it is replaced with a log-normal distrubution (of
-   * $s/s_0$) with a standard deviation of 0.01;
+   * Set up a coupled Fokker-Plank PDE for a model where the underlying follows the SDE $ ds = \mu(t)sdt + \sigma(t,s)\sigma_i s^{\beta}
+   * dW$, with local volatility overlay $\sigma(t,s)$ and level $\sigma_i $ which takes on one of two values depending on the state of the
+   * continuous 2-state hidden Markov chain. The resultant PDE is $$\begin{eqnarray}\frac{\partial \rho_1}{\partial t} - \frac{\partial^2
+   * }{\partial s^2}\left[ \sigma(t,s)\frac{\sigma_1^2 s^{2\beta}}{2}\rho_1 \right] - \frac{\partial}{\partial s}\left[\mu(t)s\rho_1\right]
+   * + \lambda_{12}\rho_1 - \lambda_{21}\rho_2= 0 \\ \frac{\partial \rho_2}{\partial t} - \frac{\partial^2 }{\partial s^2}\left[
+   * \sigma(t,s)\frac{\sigma_2^2 s^{2\beta}}{2}\rho_2 \right] - \frac{\partial }{\partial s}\left[\mu(t)s\rho_2\right] + \lambda_{21}\rho_2
+   * - \lambda_{12} \rho_1= 0 \end{eqnarray}$$ where $\rho_i(t,s)$ is the probabilty density of being in state $i$ with a value of the
+   * underlying $s$ at time $t$. The initial state is $\rho_i(0,s) = p_i(0)\delta(s-s_0)$ where $p_i(0)$ is the probability of the Markov
+   * chain starting in state $i$ and $s_0$ is the spot. Since a delta function cannot be used directly it is replaced with a log-normal
+   * distrubution (of $s/s_0$) with a standard deviation of 0.01;
    *
    * @param forward
    *          The forward curve
@@ -181,13 +191,16 @@ public class CoupledPDEDataBundleProvider {
     Validate.notNull(localVolOverlay, "null localVolOverlay");
 
     final ExtendedCoupledPDEDataBundle[] res = new ExtendedCoupledPDEDataBundle[2];
-    res[0] = getCoupledFokkerPlank(forward, data.getVol1(), data.getLambda12(), data.getLambda21(), data.getP0(), data.getBeta1(), localVolOverlay);
-    res[1] = getCoupledFokkerPlank(forward, data.getVol2(), data.getLambda21(), data.getLambda12(), 1.0 - data.getP0(), data.getBeta2(), localVolOverlay);
+    res[0] = getCoupledFokkerPlank(forward, data.getVol1(), data.getLambda12(), data.getLambda21(), data.getP0(), data.getBeta1(),
+        localVolOverlay);
+    res[1] = getCoupledFokkerPlank(forward, data.getVol2(), data.getLambda21(), data.getLambda12(), 1.0 - data.getP0(), data.getBeta2(),
+        localVolOverlay);
 
     return res;
   }
 
-  private ConvectionDiffusionPDE1DCoupledCoefficients getCoupledBackwardsPDE(final ForwardCurve forward, final double vol, final double maturity,
+  private ConvectionDiffusionPDE1DCoupledCoefficients getCoupledBackwardsPDE(final ForwardCurve forward, final double vol,
+      final double maturity,
       final double lambda, final double beta,
       final AbsoluteLocalVolatilitySurface localVol) {
 
@@ -215,11 +228,13 @@ public class CoupledPDEDataBundleProvider {
       return forward.getDrift(t) + lambda;
     };
 
-    return new ConvectionDiffusionPDE1DCoupledCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
+    return new ConvectionDiffusionPDE1DCoupledCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        FunctionalDoublesSurface.from(c),
         -lambda);
   }
 
-  private ConvectionDiffusionPDE1DCoupledCoefficients getCoupledForwardPDE(final ForwardCurve forward, final double vol, final double lambda1,
+  private ConvectionDiffusionPDE1DCoupledCoefficients getCoupledForwardPDE(final ForwardCurve forward, final double vol,
+      final double lambda1,
       final double lambda2,
       final double beta,
       final AbsoluteLocalVolatilitySurface localVol) {
@@ -243,11 +258,13 @@ public class CoupledPDEDataBundleProvider {
       return lambda1;
     };
 
-    return new ConvectionDiffusionPDE1DCoupledCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
+    return new ConvectionDiffusionPDE1DCoupledCoefficients(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        FunctionalDoublesSurface.from(c),
         -lambda2);
   }
 
-  private ExtendedCoupledPDEDataBundle getCoupledFokkerPlank(final ForwardCurve forward, final double vol, final double lambda1, final double lambda2,
+  private ExtendedCoupledPDEDataBundle getCoupledFokkerPlank(final ForwardCurve forward, final double vol, final double lambda1,
+      final double lambda2,
       final double initialProb, final double beta,
       final AbsoluteLocalVolatilitySurface localVol) {
 
@@ -289,7 +306,7 @@ public class CoupledPDEDataBundleProvider {
       private final double _volRootTOffset = 0.01;
 
       @Override
-      public Double apply(final Double s) {
+      public Double evaluate(final Double s) {
         if (s == 0) {
           return 0.0;
         }
@@ -299,7 +316,8 @@ public class CoupledPDEDataBundleProvider {
       }
     };
 
-    return new ExtendedCoupledPDEDataBundle(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b), FunctionalDoublesSurface.from(c),
+    return new ExtendedCoupledPDEDataBundle(FunctionalDoublesSurface.from(a), FunctionalDoublesSurface.from(b),
+        FunctionalDoublesSurface.from(c),
         FunctionalDoublesSurface.from(aStar),
         FunctionalDoublesSurface.from(bStar), -lambda2, initialCondition);
 

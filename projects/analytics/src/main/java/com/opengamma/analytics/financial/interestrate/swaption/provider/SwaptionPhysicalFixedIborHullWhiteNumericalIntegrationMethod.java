@@ -5,27 +5,29 @@
  */
 package com.opengamma.analytics.financial.interestrate.swaption.provider;
 
+import java.util.function.Function;
+
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedIbor;
 import com.opengamma.analytics.financial.model.interestrate.HullWhiteOneFactorPiecewiseConstantInterestRateModel;
 import com.opengamma.analytics.financial.provider.calculator.discounting.CashFlowEquivalentCalculator;
 import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderInterface;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Method to compute the present value of physical delivery European swaptions with the Hull-White one factor model by numerical integration.
+ * Method to compute the present value of physical delivery European swaptions with the Hull-White one factor model by numerical
+ * integration.
  */
 public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod {
 
   /**
    * The method unique instance.
    */
-  private static final SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod INSTANCE =
-      new SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod();
+  private static final SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod INSTANCE = new SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod();
 
   /**
    * Return the unique instance of the class.
@@ -64,7 +66,8 @@ public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod 
    *          The Hull-White parameters and the curves.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption, final HullWhiteOneFactorProviderInterface hullWhite) {
+  public MultipleCurrencyAmount presentValue(final SwaptionPhysicalFixedIbor swaption,
+      final HullWhiteOneFactorProviderInterface hullWhite) {
     ArgumentChecker.notNull(swaption, "Swaption");
     ArgumentChecker.notNull(hullWhite, "Hull-White provider");
     final Currency ccy = swaption.getCurrency();
@@ -74,7 +77,8 @@ public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod 
     final double[] df = new double[cfe.getNumberOfPayments()];
     final double[] discountedCashFlow = new double[cfe.getNumberOfPayments()];
     for (int loopcf = 0; loopcf < cfe.getNumberOfPayments(); loopcf++) {
-      alpha[loopcf] = MODEL.alpha(hullWhite.getHullWhiteParameters(), 0.0, expiryTime, expiryTime, cfe.getNthPayment(loopcf).getPaymentTime());
+      alpha[loopcf] = MODEL.alpha(hullWhite.getHullWhiteParameters(), 0.0, expiryTime, expiryTime,
+          cfe.getNthPayment(loopcf).getPaymentTime());
       df[loopcf] = hullWhite.getMulticurveProvider().getDiscountFactor(ccy, cfe.getNthPayment(loopcf).getPaymentTime());
       discountedCashFlow[loopcf] = df[loopcf] * cfe.getNthPayment(loopcf).getAmount();
     }
@@ -86,7 +90,8 @@ public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod 
     final RungeKuttaIntegrator1D integrator = new RungeKuttaIntegrator1D(absoluteTolerance, relativeTolerance, NB_INTEGRATION);
     double pv = 0.0;
     try {
-      pv = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(integrant, -limit, limit) * (swaption.isLong() ? 1.0 : -1.0);
+      pv = 1.0 / Math.sqrt(2.0 * Math.PI) * integrator.integrate(Function1dAdapter.of(integrant), -limit, limit)
+          * (swaption.isLong() ? 1.0 : -1.0);
     } catch (final Exception e) {
       throw new RuntimeException(e);
     }
@@ -96,7 +101,7 @@ public final class SwaptionPhysicalFixedIborHullWhiteNumericalIntegrationMethod 
   /**
    * Inner class to implement the integration used in price replication.
    */
-  private static final class SwaptionIntegrant extends Function1D<Double, Double> {
+  private static final class SwaptionIntegrant implements Function<Double, Double> {
 
     private final double[] _discountedCashFlow;
     private final double[] _alpha;

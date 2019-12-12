@@ -11,7 +11,6 @@ import javax.ws.rs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opengamma.financial.analytics.ircurve.rest.DataInterpolatedYieldCurveDefinitionMasterResource;
 import com.opengamma.financial.user.FinancialClient;
 import com.opengamma.master.config.impl.DataConfigMasterResource;
 import com.opengamma.master.marketdatasnapshot.impl.DataMarketDataSnapshotMasterResource;
@@ -67,13 +66,14 @@ public class DataFinancialClientResource extends AbstractDataResource {
   /**
    * Creates an instance.
    *
-   * @param client  the client, not null
+   * @param client
+   *          the client, not null
    */
   public DataFinancialClientResource(final FinancialClient client) {
     _client = client;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   /**
    * Gets the client.
    *
@@ -83,7 +83,7 @@ public class DataFinancialClientResource extends AbstractDataResource {
     return _client;
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Path(SECURITY_MASTER_PATH)
   public DataSecurityMasterResource getSecurityMaster() {
     LOGGER.debug("Accessed UserSecurityMaster for {}", getClient());
@@ -108,19 +108,13 @@ public class DataFinancialClientResource extends AbstractDataResource {
     return new DataConfigMasterResource(getClient().getConfigMaster());
   }
 
-  @Path(INTERPOLATED_YIELD_CURVE_DEFINITION_MASTER_PATH)
-  public DataInterpolatedYieldCurveDefinitionMasterResource getInterpolatedYieldCurveDefinitionMaster() {
-    LOGGER.debug("Accessed UserYieldCurveMaster for {}", getClient());
-    return new DataInterpolatedYieldCurveDefinitionMasterResource(getClient().getInterpolatedYieldCurveDefinitionMaster());
-  }
-
   @Path(MARKET_DATA_SNAPSHOT_MASTER_PATH)
   public DataMarketDataSnapshotMasterResource getSnapshotMaster() {
     LOGGER.debug("Accessed UserSnapshotMaster for {}", getClient());
     return new DataMarketDataSnapshotMasterResource(getClient().getSnapshotMaster());
   }
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @POST
   @Path(HEARTBEAT_PATH)
   public void heartbeat() {

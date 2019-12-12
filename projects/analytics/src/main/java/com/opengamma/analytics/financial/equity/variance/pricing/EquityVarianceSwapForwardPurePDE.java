@@ -29,13 +29,13 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class to calculate the expected variance (<b>not</b> annualised) of an equity variance swap when a discount curve, affine dividends
- * and a <b>pure</b> local volatility surface is specified. See White (2012), Equity Variance Swap with Dividends, for details of the model.
+ * Class to calculate the expected variance (<b>not</b> annualised) of an equity variance swap when a discount curve, affine dividends and a
+ * <b>pure</b> local volatility surface is specified. See White (2012), Equity Variance Swap with Dividends, for details of the model.
  */
 public class EquityVarianceSwapForwardPurePDE {
-  //  TODO The parameters here (in particular those of the meshing functions) have been chosen to minimise the errors in
+  // TODO The parameters here (in particular those of the meshing functions) have been chosen to minimise the errors in
   // VarianceSwapWithDividendsTest, and will not be the
-  //  best choice of parameters in other situations
+  // best choice of parameters in other situations
   /** Default weighting for averaging an explicit and implicit scheme */
   private static final double DEFAULT_THETA = 0.5;
   /** Sets up the PDE */
@@ -63,11 +63,15 @@ public class EquityVarianceSwapForwardPurePDE {
   }
 
   /**
-   * @param nTimeSteps The number of time steps, greater than zero
-   * @param nSpaceSteps The number of space steps, greater than zero
-   * @param minStepsBetweenDividends The minimum number of steps to use between dividends, greater than zero
-   * @param theta The weight used in the finite difference scheme in the range 0 to 1 inclusive, where 0 is fully explicit,
-   * 1 is fully implicit, and 0.5 gives the Crank-Nicolson scheme.
+   * @param nTimeSteps
+   *          The number of time steps, greater than zero
+   * @param nSpaceSteps
+   *          The number of space steps, greater than zero
+   * @param minStepsBetweenDividends
+   *          The minimum number of steps to use between dividends, greater than zero
+   * @param theta
+   *          The weight used in the finite difference scheme in the range 0 to 1 inclusive, where 0 is fully explicit, 1 is fully implicit,
+   *          and 0.5 gives the Crank-Nicolson scheme.
    */
   public EquityVarianceSwapForwardPurePDE(final int nTimeSteps, final int nSpaceSteps, final int minStepsBetweenDividends,
       final double theta) {
@@ -82,25 +86,33 @@ public class EquityVarianceSwapForwardPurePDE {
   }
 
   /**
-   * Computes the expected variance by solving the forward PDE for the price of a call on the pure stock price, then using these computed prices at the expiry
-   * and all dividend dates, computes the expected variance with and without adjustments for the dividend payments.
-   * @param spot The current level of the stock or index, greater than zero
-   * @param discountCurve The risk free interest rate curve, not null
-   * @param dividends The dividends structure, not null
-   * @param expiry The expiry of the variance swap, greater than zero
-   * @param pureLocalVolSurface A <b>pure</b> local volatility surface, not null
-   * @return The expected variance with and without adjustments for the dividend payments
-   * (the former is usually the case for single stock and the latter for indices)
+   * Computes the expected variance by solving the forward PDE for the price of a call on the pure stock price, then using these computed
+   * prices at the expiry and all dividend dates, computes the expected variance with and without adjustments for the dividend payments.
+   * 
+   * @param spot
+   *          The current level of the stock or index, greater than zero
+   * @param discountCurve
+   *          The risk free interest rate curve, not null
+   * @param dividends
+   *          The dividends structure, not null
+   * @param expiry
+   *          The expiry of the variance swap, greater than zero
+   * @param pureLocalVolSurface
+   *          A <b>pure</b> local volatility surface, not null
+   * @return The expected variance with and without adjustments for the dividend payments (the former is usually the case for single stock
+   *         and the latter for indices)
    */
-  public double[] expectedVariance(final double spot, final YieldAndDiscountCurve discountCurve, final AffineDividends dividends, final double expiry,
+  public double[] expectedVariance(final double spot, final YieldAndDiscountCurve discountCurve, final AffineDividends dividends,
+      final double expiry,
       final PureLocalVolatilitySurface pureLocalVolSurface) {
     ArgumentChecker.isTrue(spot > 0, "spot > 0");
     ArgumentChecker.notNull(discountCurve, "discount curve");
     ArgumentChecker.notNull(dividends, "dividends");
     ArgumentChecker.isTrue(expiry > 0, "expiry > 0");
     ArgumentChecker.notNull(pureLocalVolSurface, "pure local volatility surface");
-    //"convert" to a LocalVolatilitySurfaceMoneyness _ DO NOT interpret this as an actual LocalVolatilitySurfaceMoneyness
-    final LocalVolatilitySurfaceMoneyness localVolSurface = new LocalVolatilitySurfaceMoneyness(pureLocalVolSurface.getSurface(), new ForwardCurve(1.0));
+    // "convert" to a LocalVolatilitySurfaceMoneyness _ DO NOT interpret this as an actual LocalVolatilitySurfaceMoneyness
+    final LocalVolatilitySurfaceMoneyness localVolSurface = new LocalVolatilitySurfaceMoneyness(pureLocalVolSurface.getSurface(),
+        new ForwardCurve(1.0));
 
     final ConvectionDiffusionPDE1DStandardCoefficients pde = PDE_PROVIDER.getForwardLocalVol(localVolSurface);
     final Function1D<Double, Double> initialCond = INITIAL_COND_PROVIDER.getForwardCallPut(true);
@@ -125,13 +137,13 @@ public class EquityVarianceSwapForwardPurePDE {
     }
     steps[nDivsBeforeExpiry] = Math.max(_minStepsBetweenDividends, _nTimeSteps - tSteps);
 
-    //common boundary conditions
-    //TODO the grid involves some magic numbers that should be possible to alter externally by expert users
+    // common boundary conditions
+    // TODO the grid involves some magic numbers that should be possible to alter externally by expert users
     final double xL = 0.0;
     final double xH = 6;
     final BoundaryCondition lower = new DirichletBoundaryCondition(1.0, xL);
     final BoundaryCondition upper = new NeumannBoundaryCondition(0.0, xH, false);
-    final MeshingFunction spaceMesh = new HyperbolicMeshing(xL, xH, 1.0, _nSpaceSteps + 1, 0.001); //0.05
+    final MeshingFunction spaceMesh = new HyperbolicMeshing(xL, xH, 1.0, _nSpaceSteps + 1, 0.001); // 0.05
     final MeshingFunction[] timeMeshes = new MeshingFunction[nDivsBeforeExpiry + 1];
     final PDEGrid1D[] grids = new PDEGrid1D[nDivsBeforeExpiry + 1];
     if (nDivsBeforeExpiry == 0) {
@@ -141,12 +153,12 @@ public class EquityVarianceSwapForwardPurePDE {
       for (int i = 1; i < nDivsBeforeExpiry; i++) {
         timeMeshes[i] = new ExponentialMeshing(dividends.getTau(i - 1), dividends.getTau(i), steps[i], 0.0);
       }
-      timeMeshes[nDivsBeforeExpiry] = new ExponentialMeshing(dividends.getTau(nDivsBeforeExpiry - 1), expiry, steps[nDivsBeforeExpiry], 0.0);
+      timeMeshes[nDivsBeforeExpiry] = new ExponentialMeshing(dividends.getTau(nDivsBeforeExpiry - 1), expiry, steps[nDivsBeforeExpiry],
+          0.0);
     }
     final PDETerminalResults1D[] res = new PDETerminalResults1D[nDivsBeforeExpiry + 1];
     grids[0] = new PDEGrid1D(timeMeshes[0], spaceMesh);
-    PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> db =
-        new PDE1DDataBundle<>(pde, initialCond, lower, upper, grids[0]);
+    PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> db = new PDE1DDataBundle<>(pde, initialCond, lower, upper, grids[0]);
     res[0] = (PDETerminalResults1D) _solver.solve(db);
     for (int i = 1; i <= nDivsBeforeExpiry; i++) {
       grids[i] = new PDEGrid1D(timeMeshes[i], spaceMesh);
@@ -158,8 +170,10 @@ public class EquityVarianceSwapForwardPurePDE {
     double uncorrDivAdj = 0;
     for (int i = 0; i < nDivsBeforeExpiry; i++) {
       final double f = divCurves.getF(dividends.getTau(i));
-      corrDivAdj += integrate(getCorrectedDividendAdjustmentWeight(i, divCurves, dividends), res[i]) + getCorrectedDividendAdjustment(f, i, dividends);
-      uncorrDivAdj += integrate(getUncorrectedDividendAdjustmentWeight(i, divCurves, dividends), res[i]) + getUncorrectedDividendAdjustment(f, i, dividends);
+      corrDivAdj += integrate(getCorrectedDividendAdjustmentWeight(i, divCurves, dividends), res[i])
+          + getCorrectedDividendAdjustment(f, i, dividends);
+      uncorrDivAdj += integrate(getUncorrectedDividendAdjustmentWeight(i, divCurves, dividends), res[i])
+          + getUncorrectedDividendAdjustment(f, i, dividends);
     }
     if (divAtExp) {
       corrDivAdj += integrate(getCorrectedDividendAdjustmentWeight(nDivsBeforeExpiry, divCurves, dividends), res[nDivsBeforeExpiry])
@@ -173,7 +187,7 @@ public class EquityVarianceSwapForwardPurePDE {
     final double rvNoDivs = -2 * (logContract - logNoDivFwd);
     final double rvCorrDivs = rvNoDivs + 2 * corrDivAdj;
     final double rvUncorrDivs = rvNoDivs + 2 * uncorrDivAdj;
-    return new double[] {rvCorrDivs, rvUncorrDivs };
+    return new double[] { rvCorrDivs, rvUncorrDivs };
   }
 
   private double integrate(final Function1D<Double, Double> weightFunc, final PDETerminalResults1D pdeRes) {
@@ -187,7 +201,7 @@ public class EquityVarianceSwapForwardPurePDE {
       sum += w * otmPrice * (x[i + 1] - x[i - 1]);
     }
     sum /= 2.0;
-    //don't add on the end points;
+    // don't add on the end points;
     return sum;
   }
 
@@ -196,7 +210,7 @@ public class EquityVarianceSwapForwardPurePDE {
     final double d = divCurves.getD(expiry);
     return new Function1D<Double, Double>() {
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         return -FunctionUtils.square((f - d) / ((f - d) * x + d));
       }
     };
@@ -213,7 +227,7 @@ public class EquityVarianceSwapForwardPurePDE {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         final double s = (f - d) * x + d;
         final double sPalpha = s + alpha;
         final double ddH = -alpha * (s + sPalpha) / s / s / sPalpha / sPalpha;
@@ -235,7 +249,7 @@ public class EquityVarianceSwapForwardPurePDE {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         final double s = (f - d) * x + d;
         final double sPalpha = s + alpha;
         final double h = Math.log(s * (1 - beta) / sPalpha);

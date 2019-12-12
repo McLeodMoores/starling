@@ -5,12 +5,14 @@
  */
 package com.opengamma.analytics.financial.model.finitedifference;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackFunctionData;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackPriceFunction;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.EuropeanVanillaOption;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.integration.Integrator1D;
 import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 
@@ -27,7 +29,8 @@ public class MarkovChainSmallTimeApprox {
   private final Integrator1D<Double, Double> _integrator = new RungeKuttaIntegrator1D();
   private final BlackPriceFunction _black = new BlackPriceFunction();
 
-  public MarkovChainSmallTimeApprox(final double vol1, final double vol2, final double lambda12, final double lambda21, final double probState1) {
+  public MarkovChainSmallTimeApprox(final double vol1, final double vol2, final double lambda12, final double lambda21,
+      final double probState1) {
     Validate.isTrue(vol1 >= 0);
     Validate.isTrue(vol2 >= 0);
     Validate.isTrue(lambda12 >= 0);
@@ -43,9 +46,9 @@ public class MarkovChainSmallTimeApprox {
   public double price(final double forward, final double df, final double strike, final double expiry) {
 
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, expiry, true);
-    final Function1D<BlackFunctionData, Double> priceFunc = _black.getPriceFunction(option);
+    final Function<BlackFunctionData, Double> priceFunc = _black.getPriceFunction(option);
 
-    final Function1D<Double, Double> fun1 = new Function1D<Double, Double>() {
+    final Function<Double, Double> fun1 = new Function<Double, Double>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
@@ -57,7 +60,7 @@ public class MarkovChainSmallTimeApprox {
       }
     };
 
-    final Function1D<Double, Double> fun2 = new Function1D<Double, Double>() {
+    final Function<Double, Double> fun2 = new Function<Double, Double>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
@@ -74,12 +77,12 @@ public class MarkovChainSmallTimeApprox {
 
     if (_probState1 > 0.0) {
       final BlackFunctionData data = new BlackFunctionData(forward, df, _vol1);
-      p1 = _integrator.integrate(fun1, 0.0, expiry) + priceFunc.apply(data) * Math.exp(-_lambda12 * expiry);
+      p1 = _integrator.integrate(Function1dAdapter.of(fun1), 0.0, expiry) + priceFunc.apply(data) * Math.exp(-_lambda12 * expiry);
     }
 
     if (_probState1 < 1.0) {
       final BlackFunctionData data = new BlackFunctionData(forward, df, _vol2);
-      p2 = _integrator.integrate(fun2, 0.0, expiry) + priceFunc.apply(data) * Math.exp(-_lambda21 * expiry);
+      p2 = _integrator.integrate(Function1dAdapter.of(fun2), 0.0, expiry) + priceFunc.apply(data) * Math.exp(-_lambda21 * expiry);
     }
     return _probState1 * p1 + (1 - _probState1) * p2;
   }

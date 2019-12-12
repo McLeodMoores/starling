@@ -18,16 +18,17 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.NamedInstance;
 
 /**
- * Parent class for root-finders that calculate a root for a vector function (i.e. $\mathbf{y} = f(\mathbf{x})$, where $\mathbf{x}$ and $\mathbf{y}$ are
- * vectors).
+ * Parent class for root-finders that calculate a root for a vector function (i.e. $\mathbf{y} = f(\mathbf{x})$, where $\mathbf{x}$ and
+ * $\mathbf{y}$ are vectors).
  */
 public abstract class VectorRootFinder implements SingleRootFinder<DoubleMatrix1D, DoubleMatrix1D>, NamedInstance {
 
   /**
-   * {@inheritDoc} Vector root finders only need a single starting point; if more than one is provided, the first is used and any other points ignored.
+   * {@inheritDoc} Vector root finders only need a single starting point; if more than one is provided, the first is used and any other
+   * points ignored.
    */
   @Override
-  public DoubleMatrix1D getRoot(final Function<DoubleMatrix1D, DoubleMatrix1D> function, final DoubleMatrix1D... startingPoint) {
+  public DoubleMatrix1D getRoot(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function, final DoubleMatrix1D... startingPoint) {
     ArgumentChecker.notNull(startingPoint, "starting point");
     return getRoot(function, startingPoint[0]);
   }
@@ -47,7 +48,7 @@ public abstract class VectorRootFinder implements SingleRootFinder<DoubleMatrix1
    * @param x0
    *          The starting point, not null
    */
-  protected void checkInputs(final Function1D<DoubleMatrix1D, DoubleMatrix1D> function, final DoubleMatrix1D x0) {
+  protected void checkInputs(final Function<DoubleMatrix1D, DoubleMatrix1D> function, final DoubleMatrix1D x0) {
     ArgumentChecker.notNull(function, "function");
     ArgumentChecker.notNull(x0, "x0");
     final int n = x0.getNumberOfElements();

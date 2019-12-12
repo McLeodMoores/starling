@@ -28,7 +28,7 @@ public class LogOptionModel extends AnalyticOptionModel<LogOptionDefinition, Sta
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getStrike();

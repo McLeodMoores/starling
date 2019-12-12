@@ -6,21 +6,21 @@
 package com.opengamma.analytics.financial.model.interestrate.definition;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityCouponDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponDefinition;
 import com.opengamma.analytics.financial.interestrate.swaption.derivative.SwaptionPhysicalFixedIbor;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Parameters related to a multi-factor Libor Market Model with separable displaced diffusion dynamic. The equations underlying the Libor Market Model in the
- * probability space with numeraire $P(.,t_{j+1})$ are $$ \begin{equation*} dL_t^j = \alpha(t) (L+a_{j}) \gamma_{j} . dW_t^{j+1} \end{equation*} $$ with
- * $\alpha(t) = \exp(a t)$. The $\gamma_j$ are m-dimensional vectors.
+ * Parameters related to a multi-factor Libor Market Model with separable displaced diffusion dynamic. The equations underlying the Libor
+ * Market Model in the probability space with numeraire $P(.,t_{j+1})$ are $$ \begin{equation*} dL_t^j = \alpha(t) (L+a_{j}) \gamma_{j} .
+ * dW_t^{j+1} \end{equation*} $$ with $\alpha(t) = \exp(a t)$. The $\gamma_j$ are m-dimensional vectors.
  */
 public class LiborMarketModelDisplacedDiffusionParameters {
 
@@ -73,7 +73,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Constructor from the model details.
-   * 
+   *
    * @param iborTime
    *          The times separating the Ibor periods.
    * @param accrualFactor
@@ -105,7 +105,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Create a new copy of the object with the same data. All the arrays are cloned.
-   * 
+   *
    * @return The LMM parameters.
    */
   public LiborMarketModelDisplacedDiffusionParameters copy() {
@@ -113,12 +113,13 @@ public class LiborMarketModelDisplacedDiffusionParameters {
     for (int loopperiod = 0; loopperiod < _volatility.length; loopperiod++) {
       vol[loopperiod] = _volatility[loopperiod].clone();
     }
-    return new LiborMarketModelDisplacedDiffusionParameters(_iborTime.clone(), _accrualFactor.clone(), _displacement.clone(), vol, _meanReversion);
+    return new LiborMarketModelDisplacedDiffusionParameters(_iborTime.clone(), _accrualFactor.clone(), _displacement.clone(), vol,
+        _meanReversion);
   }
 
   /**
    * Create model parameters adapted to a specific annuity.
-   * 
+   *
    * @param modelDate
    *          The pricing date, not null
    * @param annuity
@@ -130,12 +131,13 @@ public class LiborMarketModelDisplacedDiffusionParameters {
    * @param meanReversion
    *          The mean reversion.
    * @param volatilityFunction
-   *          The volatility function. For a given time to Ibor period start date it provides the volatilities (or weights) of the different factors, not null
+   *          The volatility function. For a given time to Ibor period start date it provides the volatilities (or weights) of the different
+   *          factors, not null
    * @return A Libor Market Model parameter set.
    */
   public static LiborMarketModelDisplacedDiffusionParameters from(final ZonedDateTime modelDate,
       final AnnuityCouponDefinition<? extends CouponDefinition> annuity,
-      final DayCount dayCount, final double displacement, final double meanReversion, final Function1D<Double, Double[]> volatilityFunction) {
+      final DayCount dayCount, final double displacement, final double meanReversion, final Function<Double, Double[]> volatilityFunction) {
     ArgumentChecker.notNull(modelDate, "modelDate");
     ArgumentChecker.notNull(annuity, "annuity");
     ArgumentChecker.notNull(dayCount, "dayCount");
@@ -149,15 +151,15 @@ public class LiborMarketModelDisplacedDiffusionParameters {
     final double[][] vol = new double[nbPeriod][tmp.length];
     iborDate[0] = annuity.getNthPayment(0).getAccrualStartDate();
     iborTime[0] = TimeCalculator.getTimeBetween(modelDate, iborDate[0]);
-    for (int loopcf = 0; loopcf < nbPeriod; loopcf++) {
-      iborDate[loopcf + 1] = annuity.getNthPayment(loopcf).getPaymentDate();
-      iborTime[loopcf + 1] = TimeCalculator.getTimeBetween(modelDate, iborDate[loopcf + 1]);
-      accrualFactor[loopcf] = dayCount.getDayCountFraction(iborDate[loopcf], iborDate[loopcf + 1], annuity.getCalendar());
-      d[loopcf] = displacement;
+    for (int i = 0; i < nbPeriod; i++) {
+      iborDate[i + 1] = annuity.getNthPayment(i).getPaymentDate();
+      iborTime[i + 1] = TimeCalculator.getTimeBetween(modelDate, iborDate[i + 1]);
+      accrualFactor[i] = dayCount.getDayCountFraction(iborDate[i], iborDate[i + 1], annuity.getCalendar());
+      d[i] = displacement;
       // TODO: better conversion to double[]
-      final Double[] tmp2 = volatilityFunction.apply(iborTime[loopcf]);
-      for (int looptmp = 0; looptmp < tmp2.length; looptmp++) {
-        vol[loopcf][looptmp] = tmp2[looptmp];
+      final Double[] tmp2 = volatilityFunction.apply(iborTime[i]);
+      for (int j = 0; j < tmp2.length; j++) {
+        vol[i][j] = tmp2[j];
       }
     }
     return new LiborMarketModelDisplacedDiffusionParameters(iborTime, accrualFactor, d, vol, meanReversion);
@@ -165,7 +167,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Creates model parameters adapted to a specific physical delivery fixed-float swaption.
-   * 
+   *
    * @param swaption
    *          The swaption, not null
    * @param displacement
@@ -173,11 +175,12 @@ public class LiborMarketModelDisplacedDiffusionParameters {
    * @param meanReversion
    *          The mean reversion
    * @param volatilityFunction
-   *          The volatility function. For a given time to Ibor period start date it provides the volatilities (or weights) of the different factors, not null
+   *          The volatility function. For a given time to Ibor period start date it provides the volatilities (or weights) of the different
+   *          factors, not null
    * @return A Libor Market Model parameter set.
    */
   public static LiborMarketModelDisplacedDiffusionParameters from(final SwaptionPhysicalFixedIbor swaption, final double displacement,
-      final double meanReversion, final Function1D<Double, Double[]> volatilityFunction) {
+      final double meanReversion, final Function<Double, Double[]> volatilityFunction) {
     ArgumentChecker.notNull(swaption, "swaption");
     ArgumentChecker.notNull(volatilityFunction, "volatilityFunction");
     final int nbPeriod = swaption.getUnderlyingSwap().getSecondLeg().getNumberOfPayments();
@@ -187,14 +190,14 @@ public class LiborMarketModelDisplacedDiffusionParameters {
     final Double[] tmp = volatilityFunction.apply(0.0);
     final double[][] vol = new double[nbPeriod][tmp.length];
     iborTime[0] = swaption.getSettlementTime();
-    for (int loopcf = 0; loopcf < nbPeriod; loopcf++) {
-      iborTime[loopcf + 1] = swaption.getUnderlyingSwap().getSecondLeg().getNthPayment(loopcf).getPaymentTime();
-      accrualFactor[loopcf] = swaption.getUnderlyingSwap().getSecondLeg().getNthPayment(loopcf).getPaymentYearFraction();
-      d[loopcf] = displacement;
+    for (int i = 0; i < nbPeriod; i++) {
+      iborTime[i + 1] = swaption.getUnderlyingSwap().getSecondLeg().getNthPayment(i).getPaymentTime();
+      accrualFactor[i] = swaption.getUnderlyingSwap().getSecondLeg().getNthPayment(i).getPaymentYearFraction();
+      d[i] = displacement;
       // TODO: better conversion to double[]
-      final Double[] tmp2 = volatilityFunction.apply(iborTime[loopcf]);
-      for (int looptmp = 0; looptmp < tmp2.length; looptmp++) {
-        vol[loopcf][looptmp] = tmp2[looptmp];
+      final Double[] tmp2 = volatilityFunction.apply(iborTime[i]);
+      for (int j = 0; j < tmp2.length; j++) {
+        vol[i][j] = tmp2[j];
       }
     }
     return new LiborMarketModelDisplacedDiffusionParameters(iborTime, accrualFactor, d, vol, meanReversion);
@@ -202,7 +205,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Gets the _iborTime field.
-   * 
+   *
    * @return the _iborTime
    */
   public double[] getIborTime() {
@@ -211,7 +214,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Gets the _accrualFactor field.
-   * 
+   *
    * @return the _accrualFactor
    */
   public double[] getAccrualFactor() {
@@ -220,7 +223,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Gets the _displacement field.
-   * 
+   *
    * @return the _displacement
    */
   public double[] getDisplacement() {
@@ -229,7 +232,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Gets the _volatility field.
-   * 
+   *
    * @return the _volatility
    */
   public double[][] getVolatility() {
@@ -238,7 +241,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Gets the _meanReversion field.
-   * 
+   *
    * @return the _meanReversion
    */
   public double getMeanReversion() {
@@ -247,7 +250,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Gets the _nbPeriod field.
-   * 
+   *
    * @return the _nbPeriod
    */
   public int getNbPeriod() {
@@ -256,7 +259,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Gets the _nbFactor field.
-   * 
+   *
    * @return the _nbFactor
    */
   public int getNbFactor() {
@@ -265,7 +268,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Gets the time tolerance.
-   * 
+   *
    * @return The time tolerance
    */
   public double getTimeTolerance() {
@@ -273,9 +276,9 @@ public class LiborMarketModelDisplacedDiffusionParameters {
   }
 
   /**
-   * Return the index in the Ibor time list of a given time. The match does not need to be exact (to allow rounding effects and 1 day discrepancy). The allowed
-   * difference is set in the TIME_TOLERANCE variable.
-   * 
+   * Return the index in the Ibor time list of a given time. The match does not need to be exact (to allow rounding effects and 1 day
+   * discrepancy). The allowed difference is set in the TIME_TOLERANCE variable.
+   *
    * @param time
    *          The time.
    * @return The index.
@@ -298,7 +301,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Change the model volatility in a block to a given volatility matrix.
-   * 
+   *
    * @param volatility
    *          The changed volatility.
    * @param startIndex
@@ -314,7 +317,7 @@ public class LiborMarketModelDisplacedDiffusionParameters {
 
   /**
    * Change the model displacement in a block to a given displacement vector.
-   * 
+   *
    * @param displacement
    *          The change displacement.
    * @param startIndex

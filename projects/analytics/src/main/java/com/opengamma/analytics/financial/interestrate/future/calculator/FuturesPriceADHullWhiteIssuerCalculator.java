@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
@@ -22,7 +23,6 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Issue
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscountingDecoratedIssuer;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.analytics.math.rootfinding.RidderSingleRootFinder;
 import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.Pairs;
  * Computes the par rate for different instrument. The meaning of "par rate" is instrument dependent.
  */
 public final class FuturesPriceADHullWhiteIssuerCalculator
-extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, Pair<Double, MulticurveSensitivity>> {
+    extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, Pair<Double, MulticurveSensitivity>> {
 
   /**
    * The unique instance of the calculator.
@@ -225,7 +225,7 @@ extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, Pai
         cfaAdjustedBar[ctd.get(0)][loopcf] = priceBar;
         dfBar[ctd.get(0)][loopcf] = beta[ctd.get(0)][loopcf] / dfdelivery * cf[ctd.get(0)].getNthPayment(loopcf).getAmount()
             / futures.getConversionFactor()[ctd.get(0)]
-                * cfaAdjustedBar[ctd.get(0)][loopcf];
+            * cfaAdjustedBar[ctd.get(0)][loopcf];
         listCredit.add(
             DoublesPair.of(cfTime[ctd.get(0)][loopcf], -cfTime[ctd.get(0)][loopcf] * df[ctd.get(0)][loopcf] * dfBar[ctd.get(0)][loopcf]));
         dfdeliveryBar += -cfaAdjusted[ctd.get(0)][loopcf] / dfdelivery * cfaAdjustedBar[ctd.get(0)][loopcf];
@@ -264,7 +264,7 @@ extends InstrumentDerivativeVisitorAdapter<HullWhiteIssuerProviderInterface, Pai
   /**
    * Internal class to estimate the price difference between two bonds (used for bond futures).
    */
-  private static final class BondDifference extends Function1D<Double, Double> {
+  private static final class BondDifference implements Function<Double, Double> {
     private final double[] _cfa1;
     private final double[] _alpha1;
     private final double _e1;

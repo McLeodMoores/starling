@@ -54,7 +54,7 @@ public class EuropeanPriceIntegrand {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         @SuppressWarnings("synthetic-access")
         final ComplexNumber res = getIntegrand(x, characteristicFunction, gaussianFunction, k);
         return res.getReal();
@@ -62,7 +62,8 @@ public class EuropeanPriceIntegrand {
     };
   }
 
-  private ComplexNumber getIntegrand(final double x, final Function1D<ComplexNumber, ComplexNumber> ce, final Function1D<ComplexNumber, ComplexNumber> gaussian,
+  private ComplexNumber getIntegrand(final double x, final Function1D<ComplexNumber, ComplexNumber> ce,
+      final Function1D<ComplexNumber, ComplexNumber> gaussian,
       final double k) {
     final ComplexNumber z = new ComplexNumber(x, -1 - _alpha);
     final ComplexNumber num1 = exp(add(new ComplexNumber(0, -x * k), ce.apply(z)));

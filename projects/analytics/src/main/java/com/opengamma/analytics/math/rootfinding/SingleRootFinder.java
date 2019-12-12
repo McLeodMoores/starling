@@ -5,11 +5,12 @@
  */
 package com.opengamma.analytics.math.rootfinding;
 
-import java.util.function.Function;
+import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * Interface for classes that attempt to find a root for a one-dimensional function (see {@link com.opengamma.analytics.math.function.Function1D}) $f(x)$
- * bounded by user-supplied values, $x_1$ and $x_2$. If there is not a single root between these bounds, an exception is thrown.
+ * Interface for classes that attempt to find a root for a one-dimensional function (see
+ * {@link com.opengamma.analytics.math.function.Function1D}) $f(x)$ bounded by user-supplied values, $x_1$ and $x_2$. If there is not a
+ * single root between these bounds, an exception is thrown.
  *
  * @param <S>
  *          The input type of the function
@@ -26,6 +27,6 @@ public interface SingleRootFinder<S, T> {
    * @return A root lying between x1 and x2
    */
   @SuppressWarnings("unchecked")
-  S getRoot(Function<S, T> function, S... x);
+  S getRoot(Function1D<S, T> function, S... x);
 
 }

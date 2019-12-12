@@ -14,8 +14,9 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * Class for pricing cash-or-nothing options (see {@link com.opengamma.analytics.financial.model.option.definition.CashOrNothingOptionDefinition}). The price is
- * calculated using the Reiner-Rubenstein formula.
+ * Class for pricing cash-or-nothing options (see
+ * {@link com.opengamma.analytics.financial.model.option.definition.CashOrNothingOptionDefinition}). The price is calculated using the
+ * Reiner-Rubenstein formula.
  */
 public class CashOrNothingOptionModel extends AnalyticOptionModel<CashOrNothingOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -30,7 +31,7 @@ public class CashOrNothingOptionModel extends AnalyticOptionModel<CashOrNothingO
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getStrike();

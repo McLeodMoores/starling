@@ -25,8 +25,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Class describing a "market" with discounting, forward, price index and credit curves. The forward rate are computed as the ratio of discount factors stored
- * in {@link YieldAndDiscountCurve}.
+ * Class describing a "market" with discounting, forward, price index and credit curves. The forward rate are computed as the ratio of
+ * discount factors stored in {@link YieldAndDiscountCurve}.
  */
 public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
@@ -80,7 +80,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Constructor with empty maps for discounting, forward and price index.
-   * 
+   *
    * @param fxMatrix
    *          The FXMatrix, not null
    */
@@ -98,7 +98,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Constructor from an existing market. The given market maps are used for the new market (the same maps are used, not copied).
-   * 
+   *
    * @param discountingCurves
    *          A map with one (discounting) curve by currency, not null
    * @param forwardIborCurves
@@ -108,7 +108,8 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
    * @param fxMatrix
    *          The FXMatrix, not null
    */
-  public MulticurveProviderDiscount(final Map<Currency, YieldAndDiscountCurve> discountingCurves, final Map<IborIndex, YieldAndDiscountCurve> forwardIborCurves,
+  public MulticurveProviderDiscount(final Map<Currency, YieldAndDiscountCurve> discountingCurves,
+      final Map<IborIndex, YieldAndDiscountCurve> forwardIborCurves,
       final Map<IndexON, YieldAndDiscountCurve> forwardONCurves, final FXMatrix fxMatrix) {
     ArgumentChecker.notNull(discountingCurves, "discounting curve");
     ArgumentChecker.notNull(forwardIborCurves, "forward ibor curve");
@@ -123,7 +124,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Constructor from exiting maps. The given maps are used for the new market (the same maps are used, not copied).
-   * 
+   *
    * @param market
    *          The existing market, not null
    */
@@ -219,7 +220,8 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
         final double startTime = timeAndS.getStartTime();
         final double endTime = timeAndS.getEndTime();
         final double forwardBar = timeAndS.getValue();
-        // Implementation note: only the sensitivity to the forward is available. The sensitivity to the pseudo-discount factors need to be computed.
+        // Implementation note: only the sensitivity to the forward is available. The sensitivity to the pseudo-discount factors need to be
+        // computed.
         final double dfForwardStart = curve.getDiscountFactor(startTime);
         final double dfForwardEnd = curve.getDiscountFactor(endTime);
         final double dFwddyStart = timeAndS.derivativeToYieldStart(dfForwardStart, dfForwardEnd);
@@ -247,7 +249,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Gets a named curve.
-   * 
+   *
    * @param name
    *          The name
    * @return The curve, null if not found
@@ -258,7 +260,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Gets the currency of a named discounting curve. If there is no curve with this name in this provider, returns null.
-   * 
+   *
    * @param name
    *          The name of a curve
    * @return The currency, null if not found
@@ -269,7 +271,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Gets the ibor index of a named forward ibor index curve. If there is no curve with this name in this provider, returns null.
-   * 
+   *
    * @param name
    *          The name of a curve
    * @return The ibor index, null if not found
@@ -280,7 +282,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Gets the overnight index of a named overnight index curve. If there is no curve with this name in this provider, returns null.
-   * 
+   *
    * @param name
    *          The name of a curve
    * @return The overnight index, null if not found
@@ -295,6 +297,22 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
       return _discountingCurves.get(ccy).getDiscountFactor(time);
     }
     throw new IllegalArgumentException("Currency discounting curve not found: " + ccy);
+  }
+
+  @Override
+  public double getDiscountFactor(final IborIndex index, final Double time) {
+    if (_forwardIborCurves.containsKey(index)) {
+      return _forwardIborCurves.get(index).getDiscountFactor(time);
+    }
+    throw new IllegalArgumentException("Index curve not found: " + index);
+  }
+
+  @Override
+  public double getDiscountFactor(final IndexON index, final Double time) {
+    if (_forwardONCurves.containsKey(index)) {
+      return _forwardONCurves.get(index).getDiscountFactor(time);
+    }
+    throw new IllegalArgumentException("Index curve not found: " + index);
   }
 
   @Override
@@ -319,9 +337,11 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
   }
 
   @Override
-  public double getSimplyCompoundForwardRate(final IborIndex index, final double startTime, final double endTime, final double accrualFactor) {
+  public double getSimplyCompoundForwardRate(final IborIndex index, final double startTime, final double endTime,
+      final double accrualFactor) {
     if (_forwardIborCurves.containsKey(index)) {
-      return (_forwardIborCurves.get(index).getDiscountFactor(startTime) / _forwardIborCurves.get(index).getDiscountFactor(endTime) - 1) / accrualFactor;
+      return (_forwardIborCurves.get(index).getDiscountFactor(startTime) / _forwardIborCurves.get(index).getDiscountFactor(endTime) - 1)
+          / accrualFactor;
     }
     throw new IllegalArgumentException("Forward curve not found: " + index);
   }
@@ -334,10 +354,12 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
   }
 
   @Override
-  public double getAnnuallyCompoundForwardRate(final IborIndex index, final double startTime, final double endTime, final double accrualFactor) {
+  public double getAnnuallyCompoundForwardRate(final IborIndex index, final double startTime, final double endTime,
+      final double accrualFactor) {
     ArgumentChecker.isFalse(accrualFactor == 0.0, "The accrual factor can't be null");
     if (_forwardIborCurves.containsKey(index)) {
-      return Math.pow(_forwardIborCurves.get(index).getDiscountFactor(startTime) / _forwardIborCurves.get(index).getDiscountFactor(endTime), 1 / accrualFactor)
+      return Math.pow(_forwardIborCurves.get(index).getDiscountFactor(startTime) / _forwardIborCurves.get(index).getDiscountFactor(endTime),
+          1 / accrualFactor)
           - 1;
     }
     throw new IllegalArgumentException("Forward curve not found: " + index);
@@ -372,9 +394,11 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
   }
 
   @Override
-  public double getSimplyCompoundForwardRate(final IndexON index, final double startTime, final double endTime, final double accrualFactor) {
+  public double getSimplyCompoundForwardRate(final IndexON index, final double startTime, final double endTime,
+      final double accrualFactor) {
     if (_forwardONCurves.containsKey(index)) {
-      return (_forwardONCurves.get(index).getDiscountFactor(startTime) / _forwardONCurves.get(index).getDiscountFactor(endTime) - 1) / accrualFactor;
+      return (_forwardONCurves.get(index).getDiscountFactor(startTime) / _forwardONCurves.get(index).getDiscountFactor(endTime) - 1)
+          / accrualFactor;
     }
     throw new IllegalArgumentException("Forward ON curve not found: " + index);
   }
@@ -387,10 +411,12 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
   }
 
   @Override
-  public double getAnnuallyCompoundForwardRate(final IndexON index, final double startTime, final double endTime, final double accrualFactor) {
+  public double getAnnuallyCompoundForwardRate(final IndexON index, final double startTime, final double endTime,
+      final double accrualFactor) {
     ArgumentChecker.isFalse(accrualFactor == 0.0, "The accrual factor can't be null");
     if (_forwardONCurves.containsKey(index)) {
-      return Math.pow(_forwardONCurves.get(index).getDiscountFactor(startTime) / _forwardONCurves.get(index).getDiscountFactor(endTime), 1 / accrualFactor) - 1;
+      return Math.pow(_forwardONCurves.get(index).getDiscountFactor(startTime) / _forwardONCurves.get(index).getDiscountFactor(endTime),
+          1 / accrualFactor) - 1;
     }
     throw new IllegalArgumentException("Forward ON curve not found: " + index);
   }
@@ -417,7 +443,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Gets the discounting curve associated in a given currency in the market.
-   * 
+   *
    * @param ccy
    *          The currency.
    * @return The curve.
@@ -431,7 +457,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Gets the forward curve associated to a given Ibor index in the market.
-   * 
+   *
    * @param index
    *          The Ibor index.
    * @return The curve.
@@ -445,7 +471,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Gets the forward curve associated to a given ON index in the market.
-   * 
+   *
    * @param index
    *          The ON index.
    * @return The curve.
@@ -468,7 +494,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Sets the discounting curve for a given currency.
-   * 
+   *
    * @param ccy
    *          The currency.
    * @param curve
@@ -487,7 +513,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Sets the curve associated to an Ibor index.
-   * 
+   *
    * @param index
    *          The index.
    * @param curve
@@ -506,7 +532,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Sets the curve associated to an ON index.
-   * 
+   *
    * @param index
    *          The index.
    * @param curve
@@ -525,7 +551,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Set all the curves contains in another bundle. If a currency or index is already present in the map, the associated curve is changed.
-   * 
+   *
    * @param other
    *          The other bundle.
    */
@@ -540,7 +566,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Sets the FX matrix.
-   * 
+   *
    * @param fxMatrix
    *          The FX matrix, not null
    */
@@ -551,7 +577,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Replaces the discounting curve for a given currency.
-   * 
+   *
    * @param ccy
    *          The currency.
    * @param curve
@@ -571,7 +597,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Replaces the forward curve for a given index.
-   * 
+   *
    * @param index
    *          The index.
    * @param curve
@@ -591,7 +617,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Replaces the forward curve for a given ON index.
-   * 
+   *
    * @param index
    *          The index.
    * @param curve
@@ -610,9 +636,9 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
   }
 
   /**
-   * Sets or replaces the discounting curve for a given currency. If the currency has not associated curve, the currency and the curve are added. If the
-   * currency has already an associated curve, the curve for that currency is replace by the one provided.
-   * 
+   * Sets or replaces the discounting curve for a given currency. If the currency has not associated curve, the currency and the curve are
+   * added. If the currency has already an associated curve, the curve for that currency is replace by the one provided.
+   *
    * @param ccy
    *          The currency.
    * @param curve
@@ -626,9 +652,9 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
   }
 
   /**
-   * Set or replaces the forward curve for a given index. If the currency has not associated curve, the currency and the curve are added. If the currency has
-   * already an associated curve, the curve for that currency is replace by the one provided.
-   * 
+   * Set or replaces the forward curve for a given index. If the currency has not associated curve, the currency and the curve are added. If
+   * the currency has already an associated curve, the curve for that currency is replace by the one provided.
+   *
    * @param index
    *          The index.
    * @param curve
@@ -644,9 +670,9 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
   }
 
   /**
-   * Set or replaces the forward curve for a given ON index. If the currency has not associated curve, the currency and the curve are added. If the currency has
-   * already an associated curve, the curve for that currency is replace by the one provided.
-   * 
+   * Set or replaces the forward curve for a given ON index. If the currency has not associated curve, the currency and the curve are added.
+   * If the currency has already an associated curve, the curve for that currency is replace by the one provided.
+   *
    * @param index
    *          The index.
    * @param curve
@@ -663,7 +689,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Remove the discounting curve for a given currency.
-   * 
+   *
    * @param ccy
    *          The currency.
    * @throws IllegalArgumentException
@@ -685,7 +711,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Gets the underlying FXMatrix containing the exchange rates.
-   * 
+   *
    * @return The matrix.
    */
   @Override
@@ -695,7 +721,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Returns an unmodifiable copy of the currency to discounting curves map.
-   * 
+   *
    * @return The discounting curve map
    */
   public Map<Currency, YieldAndDiscountCurve> getDiscountingCurves() {
@@ -704,7 +730,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Returns an unmodifiable copy of the ibor index to forward curves map.
-   * 
+   *
    * @return The forward ibor curve map
    */
   public Map<IborIndex, YieldAndDiscountCurve> getForwardIborCurves() {
@@ -713,7 +739,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Returns an unmodifiable copy of the overnight index to forward curves map.
-   * 
+   *
    * @return The forward overnight curve map
    */
   public Map<IndexON, YieldAndDiscountCurve> getForwardONCurves() {
@@ -732,7 +758,7 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
 
   /**
    * Returns a new provider with the discounting curve for a particular currency replaced.
-   * 
+   *
    * @param ccy
    *          The currency, not null
    * @param replacement
@@ -745,13 +771,14 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
     // REVIEW: Is this too slow for the pricing of cash-flows?
     final Map<Currency, YieldAndDiscountCurve> newDiscountCurves = new LinkedHashMap<>(_discountingCurves);
     newDiscountCurves.put(ccy, replacement); // TODO think about ccy not existing in current map
-    final MulticurveProviderDiscount decorated = new MulticurveProviderDiscount(newDiscountCurves, _forwardIborCurves, _forwardONCurves, _fxMatrix);
+    final MulticurveProviderDiscount decorated = new MulticurveProviderDiscount(newDiscountCurves, _forwardIborCurves, _forwardONCurves,
+        _fxMatrix);
     return decorated;
   }
 
   /**
    * Returns a new provider with the curve for a particular ibor index replaced.
-   * 
+   *
    * @param index
    *          The ibor index, not null
    * @param replacement
@@ -763,13 +790,14 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
     ArgumentChecker.notNull(replacement, "replacement");
     final Map<IborIndex, YieldAndDiscountCurve> newForwardCurves = new LinkedHashMap<>(_forwardIborCurves);
     newForwardCurves.put(index, replacement);
-    final MulticurveProviderDiscount decorated = new MulticurveProviderDiscount(_discountingCurves, newForwardCurves, _forwardONCurves, _fxMatrix);
+    final MulticurveProviderDiscount decorated = new MulticurveProviderDiscount(_discountingCurves, newForwardCurves, _forwardONCurves,
+        _fxMatrix);
     return decorated;
   }
 
   /**
    * Returns a new provider with the curve for a particular overnight index replaced.
-   * 
+   *
    * @param index
    *          The overnight index, not null
    * @param replacement
@@ -781,7 +809,8 @@ public class MulticurveProviderDiscount implements MulticurveProviderInterface {
     ArgumentChecker.notNull(replacement, "replacement");
     final Map<IndexON, YieldAndDiscountCurve> newForwardCurves = new LinkedHashMap<>(_forwardONCurves);
     newForwardCurves.put(index, replacement);
-    final MulticurveProviderDiscount decorated = new MulticurveProviderDiscount(_discountingCurves, _forwardIborCurves, newForwardCurves, _fxMatrix);
+    final MulticurveProviderDiscount decorated = new MulticurveProviderDiscount(_discountingCurves, _forwardIborCurves, newForwardCurves,
+        _fxMatrix);
     return decorated;
   }
 

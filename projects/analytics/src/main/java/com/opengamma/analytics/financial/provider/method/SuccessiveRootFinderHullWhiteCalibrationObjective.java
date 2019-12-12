@@ -38,10 +38,14 @@ public class SuccessiveRootFinderHullWhiteCalibrationObjective extends Successiv
   /**
    * Constructor of the objective function with the Hull-White parameters. The parameters range and accuracy are set at some default value
    * (minimum: 1.0E-6; maximum: 1.0, function value accuracy: 1.0E-4; parameter absolute accuracy: 1.0E-9).
-   * @param parameters The Hull-White parameters.
-   * @param ccy The currency for which the Hull-White parameters are valid (Hull-White on the discounting curve).
+   * 
+   * @param parameters
+   *          The Hull-White parameters.
+   * @param ccy
+   *          The currency for which the Hull-White parameters are valid (Hull-White on the discounting curve).
    */
-  public SuccessiveRootFinderHullWhiteCalibrationObjective(final HullWhiteOneFactorPiecewiseConstantParameters parameters, final Currency ccy) {
+  public SuccessiveRootFinderHullWhiteCalibrationObjective(final HullWhiteOneFactorPiecewiseConstantParameters parameters,
+      final Currency ccy) {
     super(new FXMatrix(ccy), ccy);
     _hwParameters = parameters;
     _ccyHW = ccy;
@@ -53,7 +57,9 @@ public class SuccessiveRootFinderHullWhiteCalibrationObjective extends Successiv
 
   /**
    * Sets the Hull-White curve bundle using the Hull-White parameters and a given set of curves.
-   * @param multicurves The multi-curves provider.
+   * 
+   * @param multicurves
+   *          The multi-curves provider.
    */
   @Override
   public void setMulticurves(final MulticurveProviderInterface multicurves) {
@@ -62,6 +68,7 @@ public class SuccessiveRootFinderHullWhiteCalibrationObjective extends Successiv
 
   /**
    * Gets the Hull-White data.
+   * 
    * @return The Hull-White data.
    */
   public HullWhiteOneFactorPiecewiseConstantParameters getHwParameters() {
@@ -70,6 +77,7 @@ public class SuccessiveRootFinderHullWhiteCalibrationObjective extends Successiv
 
   /**
    * Sets the Hull-White curve bundle.
+   * 
    * @return The Hull-White curve bundle.
    */
   public HullWhiteOneFactorProvider getHwProvider() {
@@ -78,7 +86,9 @@ public class SuccessiveRootFinderHullWhiteCalibrationObjective extends Successiv
 
   /**
    * Sets the calibration time for the next calibration.
-   * @param calibrationTime The calibration time.
+   * 
+   * @param calibrationTime
+   *          The calibration time.
    */
   public void setNextCalibrationTime(final double calibrationTime) {
     _hwParameters.addVolatility(_hwParameters.getLastVolatility(), calibrationTime);
@@ -90,9 +100,10 @@ public class SuccessiveRootFinderHullWhiteCalibrationObjective extends Successiv
   }
 
   @Override
-  public Double apply(final Double x) {
+  public Double evaluate(final Double x) {
     _hwProvider.getHullWhiteParameters().setLastVolatility(x);
-    return _hwProvider.getMulticurveProvider().getFxRates().convert(getInstrument().accept(PVHWC, _hwProvider), _ccyHW).getAmount() - getPrice();
+    return _hwProvider.getMulticurveProvider().getFxRates().convert(getInstrument().accept(PVHWC, _hwProvider), _ccyHW).getAmount()
+        - getPrice();
   }
 
 }

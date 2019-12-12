@@ -14,15 +14,16 @@ import com.opengamma.analytics.financial.provider.sensitivity.multicurve.Multicu
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
  * Method to compute the price of bond future as the cheapest forward.
- * 
+ *
  * @deprecated Use the {@link BondFuturesTransactionDiscountingMethod}.
  */
 @Deprecated
-public final class BondFutureDiscountingMethod extends BondFutureMethod {
+public final class BondFutureDiscountingMethod {
 
   /**
    * Creates the method unique instance.
@@ -31,7 +32,7 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
 
   /**
    * Return the method unique instance.
-   * 
+   *
    * @return The instance.
    */
   public static BondFutureDiscountingMethod getInstance() {
@@ -54,8 +55,22 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
   private static final Min MIN_FUNCTION = new Min();
 
   /**
+   * Compute the present value of a future transaction from a quoted price.
+   *
+   * @param future
+   *          The future.
+   * @param price
+   *          The quoted price.
+   * @return The present value.
+   */
+  public CurrencyAmount presentValueFromPrice(final BondFuture future, final double price) {
+    final double pv = (price - future.getReferencePrice()) * future.getNotional();
+    return CurrencyAmount.of(future.getCurrency(), pv);
+  }
+
+  /**
    * Computes the future price from the curves used to price the underlying bonds.
-   * 
+   *
    * @param future
    *          The future security.
    * @param issuerMulticurves
@@ -68,7 +83,7 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
 
   /**
    * Computes the future price from the curves used to price the underlying bonds and the net basis.
-   * 
+   *
    * @param future
    *          The future security.
    * @param issuerMulticurves
@@ -91,7 +106,7 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
 
   /**
    * Computes the present value of future from the curves using the cheapest-to-deliver and computing the value as a forward.
-   * 
+   *
    * @param future
    *          The future.
    * @param issuerMulticurves
@@ -99,12 +114,12 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final BondFuture future, final IssuerProviderInterface issuerMulticurves) {
-    return presentValueFromPrice(future, price(future, issuerMulticurves));
+    return MultipleCurrencyAmount.of(presentValueFromPrice(future, price(future, issuerMulticurves)));
   }
 
   /**
    * Computes the present value of future from the curves using the cheapest-to-deliver and computing the value as a forward.
-   * 
+   *
    * @param future
    *          The future.
    * @param issuerMulticurves
@@ -113,13 +128,14 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
    *          The net basis associated to the future.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValueFromNetBasis(final BondFuture future, final IssuerProviderInterface issuerMulticurves, final double netBasis) {
-    return presentValueFromPrice(future, priceFromNetBasis(future, issuerMulticurves, netBasis));
+  public MultipleCurrencyAmount presentValueFromNetBasis(final BondFuture future, final IssuerProviderInterface issuerMulticurves,
+      final double netBasis) {
+    return MultipleCurrencyAmount.of(presentValueFromPrice(future, priceFromNetBasis(future, issuerMulticurves, netBasis)));
   }
 
   /**
    * Computes the future price curve sensitivity.
-   * 
+   *
    * @param future
    *          The future security.
    * @param issuerMulticurves
@@ -132,12 +148,12 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
     final double[] priceFromBond = new double[future.getDeliveryBasket().length];
     int indexCTD = 0;
     double priceMin = 2.0;
-    for (int loopbasket = 0; loopbasket < future.getDeliveryBasket().length; loopbasket++) {
-      priceFromBond[loopbasket] = BOND_METHOD.cleanPriceFromCurves(future.getDeliveryBasket()[loopbasket], issuerMulticurves)
-          / future.getConversionFactor()[loopbasket];
-      if (priceFromBond[loopbasket] < priceMin) {
-        priceMin = priceFromBond[loopbasket];
-        indexCTD = loopbasket;
+    for (int i = 0; i < future.getDeliveryBasket().length; i++) {
+      priceFromBond[i] = BOND_METHOD.cleanPriceFromCurves(future.getDeliveryBasket()[i], issuerMulticurves)
+          / future.getConversionFactor()[i];
+      if (priceFromBond[i] < priceMin) {
+        priceMin = priceFromBond[i];
+        indexCTD = i;
       }
     }
     final MulticurveSensitivity result = BOND_METHOD.dirtyPriceCurveSensitivity(future.getDeliveryBasket()[indexCTD], issuerMulticurves);
@@ -146,14 +162,15 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
 
   /**
    * Compute the present value sensitivity to rates of a bond future by discounting.
-   * 
+   *
    * @param future
    *          The future.
    * @param issuerMulticurves
    *          The issuer and multi-curves provider.
    * @return The present value rate sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondFuture future, final IssuerProviderInterface issuerMulticurves) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final BondFuture future,
+      final IssuerProviderInterface issuerMulticurves) {
     final Currency ccy = future.getCurrency();
     final MulticurveSensitivity priceSensitivity = priceCurveSensitivity(future, issuerMulticurves);
     final MultipleCurrencyMulticurveSensitivity transactionSensitivity = MultipleCurrencyMulticurveSensitivity.of(ccy,
@@ -163,7 +180,7 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
 
   /**
    * Computes the gross basis of the bonds in the underlying basket from their clean prices.
-   * 
+   *
    * @param future
    *          The future security.
    * @param cleanPrices
@@ -177,15 +194,15 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
     final int nbBasket = future.getDeliveryBasket().length;
     ArgumentChecker.isTrue(cleanPrices.length == nbBasket, "Number of clean prices");
     final double[] grossBasis = new double[nbBasket];
-    for (int loopbasket = 0; loopbasket < future.getDeliveryBasket().length; loopbasket++) {
-      grossBasis[loopbasket] = cleanPrices[loopbasket] - futurePrice * future.getConversionFactor()[loopbasket];
+    for (int i = 0; i < future.getDeliveryBasket().length; i++) {
+      grossBasis[i] = cleanPrices[i] - futurePrice * future.getConversionFactor()[i];
     }
     return grossBasis;
   }
 
   /**
    * Computes the gross basis of the bonds in the underlying basket from the curves.
-   * 
+   *
    * @param future
    *          The future security.
    * @param issuerMulticurves
@@ -200,9 +217,9 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
     final int nbBasket = future.getDeliveryBasket().length;
     final double[] grossBasis = new double[nbBasket];
     final double[] cleanPrices = new double[nbBasket];
-    for (int loopbasket = 0; loopbasket < future.getDeliveryBasket().length; loopbasket++) {
-      cleanPrices[loopbasket] = BOND_METHOD.cleanPriceFromCurves(future.getDeliveryBasket()[loopbasket], issuerMulticurves);
-      grossBasis[loopbasket] = cleanPrices[loopbasket] - futurePrice * future.getConversionFactor()[loopbasket];
+    for (int i = 0; i < future.getDeliveryBasket().length; i++) {
+      cleanPrices[i] = BOND_METHOD.cleanPriceFromCurves(future.getDeliveryBasket()[i], issuerMulticurves);
+      grossBasis[i] = cleanPrices[i] - futurePrice * future.getConversionFactor()[i];
     }
     return grossBasis;
 
@@ -210,7 +227,7 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
 
   /**
    * Computes the net basis of all the bonds in the underlying basket from the curves and the future price.
-   * 
+   *
    * @param future
    *          The future security.
    * @param issuerMulticurves
@@ -224,16 +241,16 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
     final int nbBasket = future.getDeliveryBasket().length;
     final double[] netBasis = new double[nbBasket];
-    for (int loopbasket = 0; loopbasket < future.getDeliveryBasket().length; loopbasket++) {
-      netBasis[loopbasket] = BOND_METHOD.cleanPriceFromCurves(future.getDeliveryBasket()[loopbasket], issuerMulticurves)
-          - futurePrice * future.getConversionFactor()[loopbasket];
+    for (int i = 0; i < future.getDeliveryBasket().length; i++) {
+      netBasis[i] = BOND_METHOD.cleanPriceFromCurves(future.getDeliveryBasket()[i], issuerMulticurves)
+          - futurePrice * future.getConversionFactor()[i];
     }
     return netBasis;
   }
 
   /**
    * Computes the net basis of associated to the cheapest to deliver bonds in the underlying basket from the curves and the future price.
-   * 
+   *
    * @param future
    *          The future security.
    * @param issuerMulticurves
@@ -247,9 +264,9 @@ public final class BondFutureDiscountingMethod extends BondFutureMethod {
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
     final int nbBasket = future.getDeliveryBasket().length;
     final double[] netBasis = new double[nbBasket];
-    for (int loopbasket = 0; loopbasket < future.getDeliveryBasket().length; loopbasket++) {
-      netBasis[loopbasket] = BOND_METHOD.cleanPriceFromCurves(future.getDeliveryBasket()[loopbasket], issuerMulticurves)
-          - futurePrice * future.getConversionFactor()[loopbasket];
+    for (int i = 0; i < future.getDeliveryBasket().length; i++) {
+      netBasis[i] = BOND_METHOD.cleanPriceFromCurves(future.getDeliveryBasket()[i], issuerMulticurves)
+          - futurePrice * future.getConversionFactor()[i];
     }
     return MIN_FUNCTION.evaluate(netBasis);
   }

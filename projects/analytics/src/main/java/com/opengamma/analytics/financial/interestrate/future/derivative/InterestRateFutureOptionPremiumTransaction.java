@@ -7,7 +7,6 @@ package com.opengamma.analytics.financial.interestrate.future.derivative;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.PaymentFixed;
 import com.opengamma.util.ArgumentChecker;
@@ -15,7 +14,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Description of transaction on an interest rate future option with up-front margin security.
  */
-public class InterestRateFutureOptionPremiumTransaction implements InstrumentDerivative {
+public class InterestRateFutureOptionPremiumTransaction extends FuturesTransaction<InterestRateFutureOptionPremiumSecurity> {
 
   /**
    * The underlying option future security.
@@ -30,8 +29,8 @@ public class InterestRateFutureOptionPremiumTransaction implements InstrumentDer
    */
   private final double _tradePrice;
   /**
-   * The premium payment. If the payment is in the past, the paymentTime is 0 and the amount 0. If the payment is today or in the future, the premium amount is
-   * given by the the transaction price * future notional * future accrual factor.
+   * The premium payment. If the payment is in the past, the paymentTime is 0 and the amount 0. If the payment is today or in the future,
+   * the premium amount is given by the the transaction price * future notional * future accrual factor.
    */
   private PaymentFixed _premium;
 
@@ -50,7 +49,7 @@ public class InterestRateFutureOptionPremiumTransaction implements InstrumentDer
   @SuppressWarnings("deprecation")
   public InterestRateFutureOptionPremiumTransaction(final InterestRateFutureOptionPremiumSecurity underlyingOption, final int quantity,
       final double premiumTime, final double tradePrice) {
-    ArgumentChecker.notNull(underlyingOption, "underlying option");
+    super(underlyingOption, quantity, tradePrice);
     _underlyingOption = underlyingOption;
     _quantity = quantity;
     _tradePrice = tradePrice;
@@ -77,7 +76,8 @@ public class InterestRateFutureOptionPremiumTransaction implements InstrumentDer
    *
    * @return The quantity.
    */
-  public int getQuantity() {
+  @Override
+  public long getQuantity() {
     return _quantity;
   }
 

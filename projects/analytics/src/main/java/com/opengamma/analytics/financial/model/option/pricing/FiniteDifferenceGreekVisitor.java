@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.financial.model.option.pricing;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 import org.threeten.bp.ZonedDateTime;
 
@@ -15,7 +17,6 @@ import com.opengamma.analytics.financial.model.option.definition.OptionDefinitio
 import com.opengamma.analytics.financial.model.option.definition.StandardOptionDataBundle;
 import com.opengamma.analytics.financial.model.volatility.surface.VolatilitySurface;
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.surface.ConstantDoublesSurface;
 import com.opengamma.util.time.DateUtils;
 
@@ -25,13 +26,14 @@ import com.opengamma.util.time.DateUtils;
  * @param <T>
  *          Type of the option definition
  */
-public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T extends OptionDefinition> extends AbstractGreekVisitor<Double> {
+public class FiniteDifferenceGreekVisitor<S extends StandardOptionDataBundle, T extends OptionDefinition>
+    extends AbstractGreekVisitor<Double> {
   private static final double EPS = 1e-4; // TODO make this so it can be set
-  private final Function1D<S, Double> _pricingFunction;
+  private final Function<S, Double> _pricingFunction;
   private final S _data;
   private final T _definition;
 
-  public FiniteDifferenceGreekVisitor(final Function1D<S, Double> pricingFunction, final S data, final T definition) {
+  public FiniteDifferenceGreekVisitor(final Function<S, Double> pricingFunction, final S data, final T definition) {
     Validate.notNull(pricingFunction, "pricing function");
     Validate.notNull(data, "data");
     Validate.notNull(definition, "definition");

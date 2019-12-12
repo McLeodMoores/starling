@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.rootfinding.newton;
@@ -15,7 +15,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.matrix.DoubleMatrixUtils;
 
 /**
- * 
+ *
  */
 public class InverseJacobianEstimateInitializationFunction implements NewtonRootFinderMatrixInitializationFunction {
   private final Decomposition<?> _decomposition;

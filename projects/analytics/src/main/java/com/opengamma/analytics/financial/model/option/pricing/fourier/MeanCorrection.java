@@ -42,7 +42,7 @@ public abstract class MeanCorrection implements MartingaleCharacteristicExponent
 
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber apply(final ComplexNumber u) {
+      public ComplexNumber evaluate(final ComplexNumber u) {
         return add(func.apply(u), multiply(w, u));
       }
     };
@@ -63,7 +63,7 @@ public abstract class MeanCorrection implements MartingaleCharacteristicExponent
     return new Function1D<ComplexNumber, ComplexNumber[]>() {
 
       @Override
-      public ComplexNumber[] apply(final ComplexNumber u) {
+      public ComplexNumber[] evaluate(final ComplexNumber u) {
         final ComplexNumber[] uncorrected = func.apply(u);
         final ComplexNumber minusUi = multiply(MINUS_I, u);
         final ComplexNumber[] res = new ComplexNumber[temp.length];

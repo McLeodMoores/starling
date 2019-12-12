@@ -8,6 +8,8 @@ package com.opengamma.financial.analytics.fudgemsg;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
+import java.util.function.Function;
+
 import org.testng.annotations.Test;
 
 import com.opengamma.OpenGammaRuntimeException;
@@ -55,14 +57,7 @@ public class MathCurveTest extends AnalyticsTestBase {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testFunctionalCurveUnserializable() {
-    final Function1D<Double, Double> f = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double x) {
-        return x * x;
-      }
-
-    };
+    final Function<Double, Double> f = x -> x * x;
     cycleObject(Curve.class, FunctionalDoublesCurve.from(f));
   }
 

@@ -7,9 +7,10 @@ package com.opengamma.analytics.math.rootfinding.newton;
 
 import static org.testng.AssertJUnit.assertEquals;
 
+import java.util.function.Function;
+
 import org.testng.annotations.Test;
 
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.linearalgebra.Decomposition;
 import com.opengamma.analytics.math.linearalgebra.SVDecompositionColt;
 import com.opengamma.analytics.math.matrix.CommonsMatrixAlgebra;
@@ -27,17 +28,12 @@ public class InverseJacobianEstimateInitializationFunctionTest {
   private static final MatrixAlgebra ALGEBRA = new CommonsMatrixAlgebra();
   private static final Decomposition<?> SV = new SVDecompositionColt();
   private static final InverseJacobianEstimateInitializationFunction ESTIMATE = new InverseJacobianEstimateInitializationFunction(SV);
-  private static final Function1D<DoubleMatrix1D, DoubleMatrix2D> J = new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
-
-    @Override
-    public DoubleMatrix2D apply(final DoubleMatrix1D v) {
-      final double[] x = v.getData();
-      return new DoubleMatrix2D(new double[][] { {x[0] * x[0], x[0] * x[1]}, {x[0] - x[1], x[1] * x[1]}});
-    }
-
+  private static final Function<DoubleMatrix1D, DoubleMatrix2D> J = v -> {
+    final double[] x = v.getData();
+    return new DoubleMatrix2D(new double[][] { { x[0] * x[0], x[0] * x[1] }, { x[0] - x[1], x[1] * x[1] } });
   };
 
-  private static final DoubleMatrix1D X = new DoubleMatrix1D(new double[] {3, 4});
+  private static final DoubleMatrix1D X = new DoubleMatrix1D(new double[] { 3, 4 });
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullDecomposition() {

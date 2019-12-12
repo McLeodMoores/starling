@@ -30,7 +30,8 @@ public class VolTermStructureModelProvider extends VolatilityModelProvider {
     _interpolator = interpolator;
   }
 
-  public VolTermStructureModelProvider(final double[] knotPoints, final Interpolator1D baseInterpolator, final ParameterLimitsTransform parameterTransform) {
+  public VolTermStructureModelProvider(final double[] knotPoints, final Interpolator1D baseInterpolator,
+      final ParameterLimitsTransform parameterTransform) {
     ArgumentChecker.notEmpty(knotPoints, "null or empty knotPoints");
     ArgumentChecker.notNull(baseInterpolator, "null interpolator");
     ArgumentChecker.notNull(parameterTransform, "null parameterTransform");
@@ -39,7 +40,7 @@ public class VolTermStructureModelProvider extends VolatilityModelProvider {
   }
 
   @Override
-  public VolatilityModel1D apply(final DoubleMatrix1D x) {
+  public VolatilityModel1D evaluate(final DoubleMatrix1D x) {
     final InterpolatedDoublesCurve curve = InterpolatedDoublesCurve.from(_knots, x.getData(), _interpolator);
     return new VolatilityModel1D() {
 

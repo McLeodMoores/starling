@@ -6,12 +6,14 @@
 package com.opengamma.analytics.financial.model.volatility.smile.fitting;
 
 import java.util.BitSet;
+import java.util.function.Function;
 
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.model.volatility.smile.function.SmileModelData;
 import com.opengamma.analytics.financial.model.volatility.smile.function.VolatilityFunctionProvider;
 import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.linearalgebra.DecompositionFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
@@ -31,22 +33,17 @@ import com.opengamma.analytics.math.statistics.leastsquare.NonLinearLeastSquare;
 public abstract class SmileModelFitter<T extends SmileModelData> {
   private static final MatrixAlgebra MA = new OGMatrixAlgebra();
   private static final NonLinearLeastSquare SOLVER = new NonLinearLeastSquare(DecompositionFactory.SV_COLT, MA, 1e-12);
-  private static final Function1D<DoubleMatrix1D, Boolean> UNCONSTRAINED = new Function1D<DoubleMatrix1D, Boolean>() {
-    @Override
-    public Boolean apply(final DoubleMatrix1D x) {
-      return true;
-    }
-  };
+  private static final Function1D<DoubleMatrix1D, Boolean> UNCONSTRAINED = Function1dAdapter.of(x -> true);
 
   private final VolatilityFunctionProvider<T> _model;
-  private final Function1D<T, double[]> _volFunc;
-  private final Function1D<T, double[][]> _volAdjointFunc;
+  private final Function<T, double[]> _volFunc;
+  private final Function<T, double[][]> _volAdjointFunc;
   private final DoubleMatrix1D _marketValues;
   private final DoubleMatrix1D _errors;
 
   /**
-   * Attempts to calibrate a model to the implied volatilities of European vanilla options, by minimising the sum of squares between the market and model
-   * implied volatilities. All the options must be for the same expiry and (implicitly) on the same underlying.
+   * Attempts to calibrate a model to the implied volatilities of European vanilla options, by minimising the sum of squares between the
+   * market and model implied volatilities. All the options must be for the same expiry and (implicitly) on the same underlying.
    *
    * @param forward
    *          The forward value of the underlying
@@ -57,7 +54,8 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
    * @param impliedVols
    *          The market implied volatilities
    * @param error
-   *          The 'measurement' error to apply to the market volatility of a particular option TODO: Review should this be part of EuropeanOptionMarketData?
+   *          The 'measurement' error to apply to the market volatility of a particular option TODO: Review should this be part of
+   *          EuropeanOptionMarketData?
    * @param model
    *          VolatilityFunctionProvider
    */
@@ -91,8 +89,8 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
   }
 
   /**
-   * Solve using the default NonLinearParameterTransforms for the concrete implementation, but with some parameters fixed to their initial values (indicated by
-   * fixed).
+   * Solve using the default NonLinearParameterTransforms for the concrete implementation, but with some parameters fixed to their initial
+   * values (indicated by fixed).
    *
    * @param start
    *          The first guess at the parameter values
@@ -115,7 +113,8 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
    * @return The LeastSquareResults
    */
   public LeastSquareResultsWithTransform solve(final DoubleMatrix1D start, final NonLinearParameterTransforms transform) {
-    final NonLinearTransformFunction transFunc = new NonLinearTransformFunction(getModelValueFunction(), getModelJacobianFunction(), transform);
+    final NonLinearTransformFunction transFunc = new NonLinearTransformFunction(getModelValueFunction(), getModelJacobianFunction(),
+        transform);
 
     final LeastSquareResults solRes = SOLVER.solve(_marketValues, _errors, transFunc.getFittingFunction(), transFunc.getFittingJacobian(),
         transform.transform(start), getConstraintFunction(transform), getMaximumStep());
@@ -127,7 +126,7 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
     return new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix1D apply(final DoubleMatrix1D x) {
+      public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
         final T data = toSmileModelData(x);
         final double[] res = _volFunc.apply(data);
         return new DoubleMatrix1D(res);
@@ -140,7 +139,7 @@ public abstract class SmileModelFitter<T extends SmileModelData> {
     return new Function1D<DoubleMatrix1D, DoubleMatrix2D>() {
       @SuppressWarnings("synthetic-access")
       @Override
-      public DoubleMatrix2D apply(final DoubleMatrix1D x) {
+      public DoubleMatrix2D evaluate(final DoubleMatrix1D x) {
         final T data = toSmileModelData(x);
         // this thing will be (#strikes/vols) x (# model Params)
         final double[][] volAdjoint = _volAdjointFunc.apply(data);

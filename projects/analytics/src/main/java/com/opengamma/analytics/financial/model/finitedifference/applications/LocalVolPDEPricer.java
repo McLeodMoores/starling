@@ -34,14 +34,16 @@ public class LocalVolPDEPricer {
   private static final ThetaMethodFiniteDifference INITIAL_SOLVER = new ThetaMethodFiniteDifference(1.0, false);
   private static final ThetaMethodFiniteDifference SOLVER = new ThetaMethodFiniteDifference();
   /*
-   * Crank-Nicolson (i.e. theta = 0.5) is known to give poor results around at-the-money. This can be solved by using a short fully implicit (theta = 1.0)
-   * burn-in period. Eigenvalues associated with the discontinuity in the first derivative are not damped out when theta = 0.5, but are for theta = 1.0 - the
-   * time step for this phase should be such that the Crank-Nicolson (order(dt^2)) accuracy is not destroyed.
+   * Crank-Nicolson (i.e. theta = 0.5) is known to give poor results around at-the-money. This can be solved by using a short fully implicit
+   * (theta = 1.0) burn-in period. Eigenvalues associated with the discontinuity in the first derivative are not damped out when theta =
+   * 0.5, but are for theta = 1.0 - the time step for this phase should be such that the Crank-Nicolson (order(dt^2)) accuracy is not
+   * destroyed.
    */
   private static final boolean USE_BURNIN = true;
   private static final double BURNIN_FRACTION = 0.20;
 
-  public double price(final double s0, final double k, final double r, final double b, final double t, final LocalVolatilitySurfaceStrike locVol,
+  public double price(final double s0, final double k, final double r, final double b, final double t,
+      final LocalVolatilitySurfaceStrike locVol,
       final boolean isCall, final boolean isAmerican,
       final int spaceNodes, final int timeNodes) {
 
@@ -106,7 +108,7 @@ public class LocalVolPDEPricer {
         lower = new NeumannBoundaryCondition(0.0, sMin, true);
         final Function1D<Double, Double> upFunc = new Function1D<Double, Double>() {
           @Override
-          public Double apply(final Double time) {
+          public Double evaluate(final Double time) {
             return Math.exp(-q * time);
           }
         };
@@ -114,7 +116,7 @@ public class LocalVolPDEPricer {
       } else {
         final Function1D<Double, Double> downFunc = new Function1D<Double, Double>() {
           @Override
-          public Double apply(final Double time) {
+          public Double evaluate(final Double time) {
             return -Math.exp(-q * time);
           }
         };

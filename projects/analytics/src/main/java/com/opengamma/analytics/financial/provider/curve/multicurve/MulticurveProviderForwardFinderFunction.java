@@ -43,7 +43,7 @@ public class MulticurveProviderForwardFinderFunction extends Function1D<DoubleMa
   }
 
   @Override
-  public DoubleMatrix1D apply(final DoubleMatrix1D x) {
+  public DoubleMatrix1D evaluate(final DoubleMatrix1D x) {
     final MulticurveProviderForward bundle = _data.getKnownData().copy();
     final MulticurveProviderForward newCurves = _data.getGeneratorMarket().apply(x);
     bundle.setAll(newCurves);

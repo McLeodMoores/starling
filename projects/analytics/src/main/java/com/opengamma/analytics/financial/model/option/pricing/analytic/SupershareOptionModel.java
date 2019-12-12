@@ -29,7 +29,7 @@ public class SupershareOptionModel extends AnalyticOptionModel<SupershareOptionD
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         Validate.notNull(data, "data");
         final double s = data.getSpot();
         final double t = definition.getTimeToExpiry(data.getDate());

@@ -11,6 +11,8 @@ import static org.testng.AssertJUnit.assertTrue;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.payment.CapFloorIborDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponFixedDefinition;
@@ -38,7 +40,6 @@ import com.opengamma.analytics.financial.provider.sensitivity.parameter.Paramete
 import com.opengamma.analytics.financial.provider.sensitivity.sabrcap.ParameterSensitivitySABRCapDiscountInterpolatedFDCalculator;
 import com.opengamma.analytics.financial.util.AssertSensitivityObjects;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
@@ -54,22 +55,26 @@ public class CapFloorIborSABRMethodTest {
   private static final MulticurveProviderDiscount MULTICURVES = MulticurveProviderDiscountDataSets.createMulticurveEurUsd();
   private static final IborIndex EURIBOR3M = MulticurveProviderDiscountDataSets.getIndexesIborMulticurveEurUsd()[0];
   private static final Currency EUR = EURIBOR3M.getCurrency();
-  private static final Calendar CALENDAR = MulticurveProviderDiscountDataSets.getEURCalendar();
+  private static final WorkingDayCalendar CALENDAR = MulticurveProviderDiscountDataSets.getEURCalendar();
 
   private static final SABRInterestRateParameters SABR_PARAMETER = SABRDataSets.createSABR1();
   private static final SABRCapProviderDiscount SABR_MULTICURVES = new SABRCapProviderDiscount(MULTICURVES, SABR_PARAMETER, EURIBOR3M);
 
   // Details
   private static final ZonedDateTime FIXING_DATE = DateUtils.getUTCDate(2011, 1, 3);
-  private static final double NOTIONAL = 1000000; //1m
+  private static final double NOTIONAL = 1000000; // 1m
   private static final double STRIKE = 0.04;
   private static final boolean IS_CAP = true;
   // Definition description
-  private static final CapFloorIborDefinition CAP_LONG_DEFINITION = CapFloorIborDefinition.from(NOTIONAL, FIXING_DATE, EURIBOR3M, STRIKE, IS_CAP, CALENDAR);
-  private static final CouponIborDefinition COUPON_IBOR_DEFINITION = CouponIborDefinition.from(NOTIONAL, FIXING_DATE, EURIBOR3M, CALENDAR);
+  private static final CapFloorIborDefinition CAP_LONG_DEFINITION = CapFloorIborDefinition.from(NOTIONAL, FIXING_DATE, EURIBOR3M, STRIKE,
+      IS_CAP, CalendarAdapter.of(CALENDAR));
+  private static final CouponIborDefinition COUPON_IBOR_DEFINITION = CouponIborDefinition.from(NOTIONAL, FIXING_DATE, EURIBOR3M,
+      CalendarAdapter.of(CALENDAR));
   private static final CouponFixedDefinition COUPON_STRIKE_DEFINITION = new CouponFixedDefinition(COUPON_IBOR_DEFINITION, STRIKE);
-  private static final CapFloorIborDefinition CAP_SHORT_DEFINITION = CapFloorIborDefinition.from(-NOTIONAL, FIXING_DATE, EURIBOR3M, STRIKE, IS_CAP, CALENDAR);
-  private static final CapFloorIborDefinition FLOOR_SHORT_DEFINITION = CapFloorIborDefinition.from(-NOTIONAL, FIXING_DATE, EURIBOR3M, STRIKE, !IS_CAP, CALENDAR);
+  private static final CapFloorIborDefinition CAP_SHORT_DEFINITION = CapFloorIborDefinition.from(-NOTIONAL, FIXING_DATE, EURIBOR3M, STRIKE,
+      IS_CAP, CalendarAdapter.of(CALENDAR));
+  private static final CapFloorIborDefinition FLOOR_SHORT_DEFINITION = CapFloorIborDefinition.from(-NOTIONAL, FIXING_DATE, EURIBOR3M,
+      STRIKE, !IS_CAP, CalendarAdapter.of(CALENDAR));
   // Methods and calculator
   private static final CapFloorIborSABRCapMethod METHOD_CAP_SABR = CapFloorIborSABRCapMethod.getInstance();
   private static final BlackPriceFunction BLACK_FUNCTION = new BlackPriceFunction();
@@ -79,8 +84,10 @@ public class CapFloorIborSABRMethodTest {
   private static final PresentValueCurveSensitivitySABRCapCalculator PVCSSCC = PresentValueCurveSensitivitySABRCapCalculator.getInstance();
 
   private static final double SHIFT = 1.0E-7;
-  private static final ParameterSensitivityParameterCalculator<SABRCapProviderInterface> PS_SS_C = new ParameterSensitivityParameterCalculator<>(PVCSSCC);
-  private static final ParameterSensitivitySABRCapDiscountInterpolatedFDCalculator PS_SS_FDC = new ParameterSensitivitySABRCapDiscountInterpolatedFDCalculator(PVSCC, SHIFT);
+  private static final ParameterSensitivityParameterCalculator<SABRCapProviderInterface> PS_SS_C = new ParameterSensitivityParameterCalculator<>(
+      PVCSSCC);
+  private static final ParameterSensitivitySABRCapDiscountInterpolatedFDCalculator PS_SS_FDC = new ParameterSensitivitySABRCapDiscountInterpolatedFDCalculator(
+      PVSCC, SHIFT);
   // To derivative
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2008, 8, 18);
   private static final CapFloorIbor CAP_LONG = (CapFloorIbor) CAP_LONG_DEFINITION.toDerivative(REFERENCE_DATE);
@@ -92,14 +99,15 @@ public class CapFloorIborSABRMethodTest {
   private static final double TOLERANCE_PV = 1.0E-2;
   private static final double TOLERANCE_PV_DELTA = 1.0E+2;
 
-  @Test
   /**
    * Test the present value using the method with the direct formula (Black with implied volatility).
    */
+  @Test
   public void presentValue() {
     final MultipleCurrencyAmount methodPrice = METHOD_CAP_SABR.presentValue(CAP_LONG, SABR_MULTICURVES);
     final double df = MULTICURVES.getDiscountFactor(EUR, CAP_LONG.getPaymentTime());
-    final double forward = MULTICURVES.getSimplyCompoundForwardRate(EURIBOR3M, CAP_LONG.getFixingPeriodStartTime(), CAP_LONG.getFixingPeriodEndTime(), CAP_LONG.getFixingAccrualFactor());
+    final double forward = MULTICURVES.getSimplyCompoundForwardRate(EURIBOR3M, CAP_LONG.getFixingPeriodStartTime(),
+        CAP_LONG.getFixingPeriodEndTime(), CAP_LONG.getFixingAccrualFactor());
     final double maturity = CAP_LONG.getFixingPeriodEndTime() - CAP_LONG.getFixingPeriodStartTime();
     final double volatility = SABR_PARAMETER.getVolatility(CAP_LONG.getFixingTime(), maturity, STRIKE, forward);
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, df, volatility);
@@ -119,10 +127,10 @@ public class CapFloorIborSABRMethodTest {
     assertEquals("Cap/floor SABR pricing: method and calculator", expectedPv, pv, TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Test several present value parities: long/short, cap/floor/forward
    */
+  @Test
   public void presentValueParity() {
     final double priceCapLong = METHOD_CAP_SABR.presentValue(CAP_LONG, SABR_MULTICURVES).getAmount(EUR);
     final double priceCapShort = METHOD_CAP_SABR.presentValue(CAP_SHORT, SABR_MULTICURVES).getAmount(EUR);
@@ -133,30 +141,32 @@ public class CapFloorIborSABRMethodTest {
     assertEquals("Cap/floor - SABR pricing: cap/floor parity", priceIbor - priceStrike, priceCapLong + priceFloorShort, TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests present value curve sensitivity when the valuation date is on trade date.
    */
+  @Test
   public void presentValueCurveSensitivityCap() {
-    final MultipleCurrencyParameterSensitivity pvpsExact = PS_SS_C.calculateSensitivity(CAP_LONG, SABR_MULTICURVES, SABR_MULTICURVES.getMulticurveProvider().getAllNames());
+    final MultipleCurrencyParameterSensitivity pvpsExact = PS_SS_C.calculateSensitivity(CAP_LONG, SABR_MULTICURVES,
+        SABR_MULTICURVES.getMulticurveProvider().getAllNames());
     final MultipleCurrencyParameterSensitivity pvpsFD = PS_SS_FDC.calculateSensitivity(CAP_LONG, SABR_MULTICURVES);
-    AssertSensitivityObjects.assertEquals("SwaptionPhysicalFixedIborSABRMethod: presentValueCurveSensitivity ", pvpsExact, pvpsFD, TOLERANCE_PV_DELTA);
+    AssertSensitivityObjects.assertEquals("SwaptionPhysicalFixedIborSABRMethod: presentValueCurveSensitivity ", pvpsExact, pvpsFD,
+        TOLERANCE_PV_DELTA);
   }
 
-  @Test
   /**
    * Tests the present value SABR parameters sensitivity: Method vs Calculator.
    */
+  @Test
   public void presentValueCurveSensitivityMethodVsCalculator() {
     final MultipleCurrencyMulticurveSensitivity pvcsMethod = METHOD_CAP_SABR.presentValueCurveSensitivity(CAP_LONG, SABR_MULTICURVES);
     final MultipleCurrencyMulticurveSensitivity pvcsCalculator = CAP_LONG.accept(PVCSSCC, SABR_MULTICURVES);
     assertEquals("Cap/floor SABR: Present value SABR sensitivity: method vs calculator", pvcsMethod, pvcsCalculator);
   }
 
-  @Test
   /**
    * Test the present value SABR parameters sensitivity against a finite difference computation.
    */
+  @Test
   public void presentValueSABRSensitivity() {
     final double pv = METHOD_CAP_SABR.presentValue(CAP_LONG, SABR_MULTICURVES).getAmount(EUR);
     final PresentValueSABRSensitivityDataBundle pvsCapLong = METHOD_CAP_SABR.presentValueSABRSensitivity(CAP_LONG, SABR_MULTICURVES);
@@ -167,7 +177,8 @@ public class CapFloorIborSABRMethodTest {
     // SABR sensitivity vs finite difference
     final double shift = 0.0001;
     final double shiftAlpha = 0.00001;
-    final DoublesPair expectedExpiryTenor = DoublesPair.of(CAP_LONG.getFixingTime(), CAP_LONG.getFixingPeriodEndTime() - CAP_LONG.getFixingPeriodStartTime());
+    final DoublesPair expectedExpiryTenor = DoublesPair.of(CAP_LONG.getFixingTime(),
+        CAP_LONG.getFixingPeriodEndTime() - CAP_LONG.getFixingPeriodStartTime());
     // Alpha sensitivity vs finite difference computation
     final SABRInterestRateParameters sabrParameterAlphaBumped = SABRDataSets.createSABR1AlphaBumped(shiftAlpha);
     final SABRCapProviderDiscount sabrBundleAlphaBumped = new SABRCapProviderDiscount(MULTICURVES, sabrParameterAlphaBumped, EURIBOR3M);
@@ -194,10 +205,10 @@ public class CapFloorIborSABRMethodTest {
     assertEquals("Nu sensitivity value", pvsCapLong.getNu().getMap().get(expectedExpiryTenor), expectedNuSensi, 5.0E-2);
   }
 
-  @Test
   /**
    * Tests the present value SABR parameters sensitivity: Method vs Calculator.
    */
+  @Test
   public void presentValueSABRSensitivityMethodVsCalculator() {
     final PresentValueSABRSensitivityDataBundle pvssMethod = METHOD_CAP_SABR.presentValueSABRSensitivity(CAP_LONG, SABR_MULTICURVES);
     final PresentValueSABRSensitivityDataBundle pvssCalculator = CAP_LONG.accept(PVSSSCC, SABR_MULTICURVES);

@@ -8,6 +8,7 @@ package com.opengamma.analytics.financial.instrument.index;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -28,6 +29,7 @@ public final class GeneratorSwapFixedCompoundedONCompoundedMaster {
 
   /**
    * Return the unique instance of the class.
+   * 
    * @return The instance.
    */
   public static GeneratorSwapFixedCompoundedONCompoundedMaster getInstance() {
@@ -53,14 +55,16 @@ public final class GeneratorSwapFixedCompoundedONCompoundedMaster {
 
   }
 
-  public GeneratorSwapFixedCompoundedONCompounded getGenerator(final String name, final Calendar cal) {
+  public GeneratorSwapFixedCompoundedONCompounded getGenerator(final String name, final WorkingDayCalendar cal) {
     final GeneratorSwapFixedCompoundedONCompounded generatorNoCalendar = _generatorSwap.get(name);
     if (generatorNoCalendar == null) {
       throw new OpenGammaRuntimeException("Could not get Swap Fixed/ON Compounded generator for " + name);
     }
     final IndexON indexNoCalendar = generatorNoCalendar.getIndex();
-    final IndexON index = new IndexON(indexNoCalendar.getName(), indexNoCalendar.getCurrency(), indexNoCalendar.getDayCount(), indexNoCalendar.getPublicationLag());
-    return new GeneratorSwapFixedCompoundedONCompounded(generatorNoCalendar.getName(), index, generatorNoCalendar.getFixedLegDayCount(), generatorNoCalendar.getBusinessDayConvention(),
+    final IndexON index = new IndexON(indexNoCalendar.getName(), indexNoCalendar.getCurrency(), indexNoCalendar.getDayCount(),
+        indexNoCalendar.getPublicationLag());
+    return new GeneratorSwapFixedCompoundedONCompounded(generatorNoCalendar.getName(), index, generatorNoCalendar.getFixedLegDayCount(),
+        generatorNoCalendar.getBusinessDayConvention(),
         generatorNoCalendar.isEndOfMonth(), generatorNoCalendar.getSpotLag(), generatorNoCalendar.getPaymentLag(), cal);
   }
 

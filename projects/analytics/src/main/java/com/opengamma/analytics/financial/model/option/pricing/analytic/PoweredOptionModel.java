@@ -34,7 +34,7 @@ public class PoweredOptionModel extends AnalyticOptionModel<PoweredOptionDefinit
        */
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         if (Math.abs(definition.getPower() - Math.round(definition.getPower())) > 1e-15) {
           throw new OptionPricingException("Analytic powered option pricing model can only be used when then power is an integer");

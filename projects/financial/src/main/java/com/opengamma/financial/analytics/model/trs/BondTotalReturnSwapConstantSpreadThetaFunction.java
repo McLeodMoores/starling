@@ -22,8 +22,7 @@ import org.threeten.bp.ZonedDateTime;
 import com.google.common.collect.Iterables;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
-import com.opengamma.analytics.financial.horizon.BondTrsConstantSpreadHorizonCalculator;
-import com.opengamma.analytics.financial.horizon.HorizonCalculator;
+import com.opengamma.analytics.financial.horizon.constantspread.BondTrsConstantSpreadHorizonCalculator;
 import com.opengamma.analytics.financial.instrument.bond.BondTotalReturnSwapDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderInterface;
@@ -56,9 +55,6 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  * Calculates the value theta of a bond total return swap security.
  */
 public class BondTotalReturnSwapConstantSpreadThetaFunction extends BondTotalReturnSwapFunction {
-  /** The calculator */
-  private static final HorizonCalculator<BondTotalReturnSwapDefinition, IssuerProviderInterface, ZonedDateTimeDoubleTimeSeries> CALCULATOR =
-      BondTrsConstantSpreadHorizonCalculator.getInstance();
 
   /**
    * Sets the value requirement to {@link com.opengamma.engine.value.ValueRequirementNames#VALUE_THETA}.
@@ -95,7 +91,7 @@ public class BondTotalReturnSwapConstantSpreadThetaFunction extends BondTotalRet
           throw new OpenGammaRuntimeException("Cannot handle more than one fixing date calendar");
         }
         final Calendar calendar = CalendarUtils.getCalendar(regionSource, holidaySource, Iterables.getOnlyElement(fixingDateCalendars));
-        final MultipleCurrencyAmount theta = CALCULATOR.getTheta(definition, now, issuerCurves, daysForward, calendar, fixingSeries);
+        final MultipleCurrencyAmount theta = BondTrsConstantSpreadHorizonCalculator.INSTANCE.getTheta(definition, now, issuerCurves, daysForward, calendar, fixingSeries);
         if (theta.size() != 1) {
           throw new OpenGammaRuntimeException("Got result with more than one currency for theta: " + theta);
         }

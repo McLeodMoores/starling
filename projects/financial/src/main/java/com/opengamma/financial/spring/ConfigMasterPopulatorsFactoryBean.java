@@ -20,7 +20,6 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.opengamma.financial.analytics.fxforwardcurve.FXForwardCurveConfigPopulator;
-import com.opengamma.financial.analytics.ircurve.YieldCurveConfigPopulator;
 import com.opengamma.financial.analytics.ircurve.calcconfig.MultiCurveCalculationConfigPopulator;
 import com.opengamma.financial.analytics.volatility.surface.EquityOptionSurfaceConfigPopulator;
 import com.opengamma.financial.analytics.volatility.surface.FXOptionVolatilitySurfaceConfigPopulator;
@@ -91,16 +90,13 @@ public class ConfigMasterPopulatorsFactoryBean extends DirectBean implements Ini
   @PropertyDefinition
   private boolean _curveCalculationConfiguration;
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @SuppressWarnings("deprecation")
   @Override
   public void afterPropertiesSet() {
     final ConfigMaster cm = getConfigMaster();
     ArgumentChecker.notNull(cm, "ConfigMaster");
 
-    if (isYieldCurve()) {
-      new YieldCurveConfigPopulator(cm);
-    }
     if (isCurrencyMatrix()) {
       // TODO: [PLAT-2379] This won't work if the currency pair conventions aren't already loaded
       CurrencyMatrixConfigPopulator.populateCurrencyMatrixConfigMaster(cm);

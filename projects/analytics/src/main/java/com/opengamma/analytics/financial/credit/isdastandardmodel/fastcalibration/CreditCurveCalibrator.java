@@ -10,6 +10,7 @@ import static com.opengamma.analytics.financial.credit.isdastandardmodel.Doubles
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import com.opengamma.analytics.financial.credit.isdastandardmodel.AccrualOnDefaultFormulae;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSAnalytic;
@@ -18,7 +19,6 @@ import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantC
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantCreditCurveBuilder.ArbitrageHandling;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantYieldCurve;
 import com.opengamma.analytics.financial.credit.isdastandardmodel.MultiCDSAnalytic;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.rootfinding.NewtonRaphsonSingleRootFinder;
 import com.opengamma.util.ArgumentChecker;
 
@@ -64,12 +64,12 @@ public class CreditCurveCalibrator {
     }
     _valuationDF = yieldCurve.getDiscountFactor(multiCDS.getCashSettleTime());
 
-    //This is the global set of knots - it will be truncated down for the various leg elements
-    //TODO this will not match ISDA C for forward starting (i.e. accStart > tradeDate) CDS, and will give different answers
-    //if the Markit 'fix' is used in that case
+    // This is the global set of knots - it will be truncated down for the various leg elements
+    // TODO this will not match ISDA C for forward starting (i.e. accStart > tradeDate) CDS, and will give different answers
+    // if the Markit 'fix' is used in that case
     final double[] knots = getIntegrationsPoints(multiCDS.getEffectiveProtectionStart(), _t[_nCDS - 1], yieldCurve.getKnotTimes(), _t);
 
-    //The protection leg
+    // The protection leg
     _protElems = new ProtectionLegElement[_nCDS];
     for (int i = 0; i < _nCDS; i++) {
       _protElems[i] = new ProtectionLegElement(i == 0 ? multiCDS.getEffectiveProtectionStart() : _t[i - 1], _t[i], yieldCurve, i, knots);
@@ -88,7 +88,7 @@ public class CreditCurveCalibrator {
     }
     _cds2CouponsMap[_nCDS - 1] = temp;
 
-    //complete the list of unique coupons and fill out the cds2CouponsMap
+    // complete the list of unique coupons and fill out the cds2CouponsMap
     for (int i = 0; i < _nCDS - 1; i++) {
       final CDSCoupon c = multiCDS.getTerminalCoupon(i);
       final int nPayments = Math.max(0, multiCDS.getPaymentIndexForMaturity(i)) + 1;
@@ -96,8 +96,8 @@ public class CreditCurveCalibrator {
       for (int jj = 0; jj < nPayments - 1; jj++) {
         _cds2CouponsMap[i][jj] = jj;
       }
-      //because of business-day adjustment, a terminal coupon can be identical to a standard coupon,
-      //in which case it is not added again
+      // because of business-day adjustment, a terminal coupon can be identical to a standard coupon,
+      // in which case it is not added again
       int index = allCoupons.indexOf(c);
       if (index == -1) {
         index = allCoupons.size();
@@ -106,7 +106,7 @@ public class CreditCurveCalibrator {
       _cds2CouponsMap[i][nPayments - 1] = index;
     }
 
-    //loop over the coupons to populate the couponUpdateMap
+    // loop over the coupons to populate the couponUpdateMap
     _nCoupons = allCoupons.size();
     final int[] sizes = new int[_nCDS];
     final int[] map = new int[_nCoupons];
@@ -120,11 +120,12 @@ public class CreditCurveCalibrator {
       map[i] = index;
     }
 
-    //make the protection leg elements
+    // make the protection leg elements
     _premElems = new CouponOnlyElement[_nCoupons];
     if (multiCDS.isPayAccOnDefault()) {
       for (int i = 0; i < _nCoupons; i++) {
-        _premElems[i] = new PremiumLegElement(multiCDS.getEffectiveProtectionStart(), allCoupons.get(i), yieldCurve, map[i], knots, formula);
+        _premElems[i] = new PremiumLegElement(multiCDS.getEffectiveProtectionStart(), allCoupons.get(i), yieldCurve, map[i], knots,
+            formula);
       }
     } else {
       for (int i = 0; i < _nCoupons; i++) {
@@ -132,7 +133,7 @@ public class CreditCurveCalibrator {
       }
     }
 
-    //sort a map from coupon to curve node, to a map from curve node to coupons
+    // sort a map from coupon to curve node, to a map from curve node to coupons
     for (int i = 0; i < _nCDS; i++) {
       _knot2CouponsMap[i] = new int[sizes[i]];
     }
@@ -142,7 +143,7 @@ public class CreditCurveCalibrator {
       _knot2CouponsMap[index][indexes[index]++] = i;
     }
 
-    //the cdsCouponsUpdateMap is the intersection of the cds2CouponsMap and knot2CouponsMap
+    // the cdsCouponsUpdateMap is the intersection of the cds2CouponsMap and knot2CouponsMap
     for (int i = 0; i < _nCDS; i++) {
       _cdsCouponsUpdateMap[i] = intersection(_knot2CouponsMap[i], _cds2CouponsMap[i]);
     }
@@ -166,7 +167,7 @@ public class CreditCurveCalibrator {
     final double cashSettleTime = cds[0].getCashSettleTime();
     _t = new double[_nCDS];
     _t[0] = cds[0].getProtectionEnd();
-    //Check all the CDSs match
+    // Check all the CDSs match
     for (int i = 1; i < _nCDS; i++) {
       ArgumentChecker.isTrue(payAccOnDefault == cds[i].isPayAccOnDefault(), "All CDSs must have same pay-accrual on default status");
       ArgumentChecker.isTrue(accStart == cds[i].getAccStart(), "All CDSs must has same accrual start");
@@ -184,12 +185,12 @@ public class CreditCurveCalibrator {
       _unitAccrued[i] = cds[i].getAccruedYearFraction();
     }
 
-    //This is the global set of knots - it will be truncated down for the various leg elements
-    //TODO this will not match ISDA C for forward starting (i.e. accStart > tradeDate) CDS, and will give different answers
-    //if the Markit 'fix' is used in that case
+    // This is the global set of knots - it will be truncated down for the various leg elements
+    // TODO this will not match ISDA C for forward starting (i.e. accStart > tradeDate) CDS, and will give different answers
+    // if the Markit 'fix' is used in that case
     final double[] knots = getIntegrationsPoints(effectProtStart, _t[_nCDS - 1], yieldCurve.getKnotTimes(), _t);
 
-    //The protection leg
+    // The protection leg
     _protElems = new ProtectionLegElement[_nCDS];
     for (int i = 0; i < _nCDS; i++) {
       _protElems[i] = new ProtectionLegElement(i == 0 ? effectProtStart : _t[i - 1], _t[i], yieldCurve, i, knots);
@@ -208,7 +209,7 @@ public class CreditCurveCalibrator {
     }
     _cds2CouponsMap[_nCDS - 1] = temp;
 
-    //complete the list of unique coupons and fill out the cds2CouponsMap
+    // complete the list of unique coupons and fill out the cds2CouponsMap
     for (int i = 0; i < _nCDS - 1; i++) {
       final CDSCoupon[] c = cds[i].getCoupons();
       final int nPayments = c.length;
@@ -223,7 +224,7 @@ public class CreditCurveCalibrator {
       }
     }
 
-    //loop over the coupons to populate the couponUpdateMap
+    // loop over the coupons to populate the couponUpdateMap
     _nCoupons = allCoupons.size();
     final int[] sizes = new int[_nCDS];
     final int[] map = new int[_nCoupons];
@@ -237,7 +238,7 @@ public class CreditCurveCalibrator {
       map[i] = index;
     }
 
-    //make the protection leg elements
+    // make the protection leg elements
     _premElems = new CouponOnlyElement[_nCoupons];
     if (payAccOnDefault) {
       for (int i = 0; i < _nCoupons; i++) {
@@ -249,7 +250,7 @@ public class CreditCurveCalibrator {
       }
     }
 
-    //sort a map from coupon to curve node, to a map from curve node to coupons
+    // sort a map from coupon to curve node, to a map from curve node to coupons
     for (int i = 0; i < _nCDS; i++) {
       _knot2CouponsMap[i] = new int[sizes[i]];
     }
@@ -259,7 +260,7 @@ public class CreditCurveCalibrator {
       _knot2CouponsMap[index][indexes[index]++] = i;
     }
 
-    //the cdsCouponsUpdateMap is the intersection of the cds2CouponsMap and knot2CouponsMap
+    // the cdsCouponsUpdateMap is the intersection of the cds2CouponsMap and knot2CouponsMap
     for (int i = 0; i < _nCDS; i++) {
       _cdsCouponsUpdateMap[i] = intersection(_knot2CouponsMap[i], _cds2CouponsMap[i]);
     }
@@ -302,8 +303,8 @@ public class CreditCurveCalibrator {
 
       _creditCurve = new ISDACompliantCreditCurve(_t, guess);
       for (int i = 0; i < _nCDS; i++) {
-        final Function1D<Double, Double> func = getPointFunction(i, premiums[i], puf[i]);
-        final Function1D<Double, Double> grad = getPointDerivative(i, premiums[i]);
+        final Function<Double, Double> func = getPointFunction(i, premiums[i], puf[i]);
+        final Function<Double, Double> grad = getPointDerivative(i, premiums[i]);
         switch (_arbHandle) {
           case Ignore: {
             final double zeroRate = ROOTFINDER.getRoot(func, grad, guess[i]);
@@ -312,7 +313,7 @@ public class CreditCurveCalibrator {
           }
           case Fail: {
             final double minValue = i == 0 ? 0.0 : _creditCurve.getRTAtIndex(i - 1) / _creditCurve.getTimeAtIndex(i);
-            if (i > 0 && func.apply(minValue) > 0.0) { //can never fail on the first spread
+            if (i > 0 && func.apply(minValue) > 0.0) { // can never fail on the first spread
               final StringBuilder msg = new StringBuilder();
               if (puf[i] == 0.0) {
                 msg.append("The par spread of " + premiums[i] + " at index " + i);
@@ -329,8 +330,8 @@ public class CreditCurveCalibrator {
           }
           case ZeroHazardRate: {
             final double minValue = i == 0 ? 0.0 : _creditCurve.getRTAtIndex(i - 1) / _creditCurve.getTimeAtIndex(i);
-            if (i > 0 && func.apply(minValue) > 0.0) { //can never fail on the first spread
-              updateAll(minValue, i); //this is setting the forward hazard rate for this period to zero, rather than letting it go negative
+            if (i > 0 && func.apply(minValue) > 0.0) { // can never fail on the first spread
+              updateAll(minValue, i); // this is setting the forward hazard rate for this period to zero, rather than letting it go negative
             } else {
               guess[i] = Math.max(minValue, guess[i]);
               final double zeroRate = ROOTFINDER.getRoot(func, grad, guess[i]);
@@ -344,49 +345,43 @@ public class CreditCurveCalibrator {
       return _creditCurve;
     }
 
-    private Function1D<Double, Double> getPointFunction(final int index, final double premium, final double puf) {
+    private Function<Double, Double> getPointFunction(final int index, final double premium, final double puf) {
       final int[] iCoupons = _cds2CouponsMap[index];
       final int nCoupons = iCoupons.length;
       final double dirtyPV = puf - premium * _unitAccrued[index];
       final double lgd = _lgd[index];
-      return new Function1D<Double, Double>() {
-        @Override
-        public Double apply(final Double h) {
-          update(h, index);
-          double protLegPV = 0.0;
-          for (int i = 0; i <= index; i++) {
-            protLegPV += _protLegElmtPV[i][0];
-          }
-          double premLegPV = 0.0;
-          for (int i = 0; i < nCoupons; i++) {
-            final int jj = iCoupons[i];
-            premLegPV += _premLegElmtPV[jj][0];
-          }
-          final double pv = (lgd * protLegPV - premium * premLegPV) / _valuationDF - dirtyPV;
-          return pv;
+      return h -> {
+        update(h, index);
+        double protLegPV = 0.0;
+        for (int i1 = 0; i1 <= index; i1++) {
+          protLegPV += _protLegElmtPV[i1][0];
         }
+        double premLegPV = 0.0;
+        for (int i2 = 0; i2 < nCoupons; i2++) {
+          final int jj = iCoupons[i2];
+          premLegPV += _premLegElmtPV[jj][0];
+        }
+        final double pv = (lgd * protLegPV - premium * premLegPV) / _valuationDF - dirtyPV;
+        return pv;
       };
     }
 
-    private Function1D<Double, Double> getPointDerivative(final int index, final double premium) {
+    private Function<Double, Double> getPointDerivative(final int index, final double premium) {
       final int[] iCoupons = _cdsCouponsUpdateMap[index];
       final int nCoupons = iCoupons.length;
       final double lgd = _lgd[index];
-      return new Function1D<Double, Double>() {
-        @Override
-        public Double apply(final Double x) {
-          //do not call update - all ready called for getting the value
+      return x -> {
+        // do not call update - all ready called for getting the value
 
-          final double protLegPVSense = _protLegElmtPV[index][1];
+        final double protLegPVSense = _protLegElmtPV[index][1];
 
-          double premLegPVSense = 0.0;
-          for (int i = 0; i < nCoupons; i++) {
-            final int jj = iCoupons[i];
-            premLegPVSense += _premLegElmtPV[jj][1];
-          }
-          final double pvSense = (lgd * protLegPVSense - premium * premLegPVSense) / _valuationDF;
-          return pvSense;
+        double premLegPVSense = 0.0;
+        for (int i = 0; i < nCoupons; i++) {
+          final int jj = iCoupons[i];
+          premLegPVSense += _premLegElmtPV[jj][1];
         }
+        final double pvSense = (lgd * protLegPVSense - premium * premLegPVSense) / _valuationDF;
+        return pvSense;
       };
     }
 

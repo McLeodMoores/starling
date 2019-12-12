@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.opengamma.analytics.financial.interestrate.PresentValueSABRSensitivityDataBundle;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CapFloorCMS;
@@ -24,7 +25,7 @@ import com.opengamma.analytics.financial.provider.description.interestrate.SABRS
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
 import com.opengamma.analytics.math.MathException;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.integration.RungeKuttaIntegrator1D;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -32,9 +33,10 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Class used to compute the price of a CMS cap/floor by swaption replication on a SABR formula with extrapolation. Reference: Hagan, P. S. (2003). Convexity
- * conundrums: Pricing CMS swaps, caps, and floors. Wilmott Magazine, March, pages 38--44. OpenGamma implementation note: Replication pricing for linear and TEC
- * format CMS, Version 1.2, March 2011. OpenGamma implementation note for the extrapolation: Smile extrapolation, version 1.2, May 2011.
+ * Class used to compute the price of a CMS cap/floor by swaption replication on a SABR formula with extrapolation. Reference: Hagan, P. S.
+ * (2003). Convexity conundrums: Pricing CMS swaps, caps, and floors. Wilmott Magazine, March, pages 38--44. OpenGamma implementation note:
+ * Replication pricing for linear and TEC format CMS, Version 1.2, March 2011. OpenGamma implementation note for the extrapolation: Smile
+ * extrapolation, version 1.2, May 2011.
  */
 public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloorCMSSABRReplicationAbstractMethod {
 
@@ -122,9 +124,9 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
     double integralPart;
     try {
       if (cmsCapFloor.isCap()) {
-        integralPart = discountFactorTp * integrator.integrate(integrant, strike, strike + getIntegrationInterval());
+        integralPart = discountFactorTp * integrator.integrate(Function1dAdapter.of(integrant), strike, strike + getIntegrationInterval());
       } else {
-        integralPart = discountFactorTp * integrator.integrate(integrant, 0.0, strike);
+        integralPart = discountFactorTp * integrator.integrate(Function1dAdapter.of(integrant), 0.0, strike);
       }
     } catch (final Exception e) {
       throw new MathException(e);
@@ -134,7 +136,8 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
   }
 
   /**
-   * Computes the present value sensitivity to the yield curves of a CMS cap/floor by replication in the SABR framework with extrapolation on the right.
+   * Computes the present value sensitivity to the yield curves of a CMS cap/floor by replication in the SABR framework with extrapolation
+   * on the right.
    *
    * @param cmsCapFloor
    *          The CMS cap/floor.
@@ -176,9 +179,10 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
     double integralPartPrice;
     try {
       if (cmsCapFloor.isCap()) {
-        integralPartPrice = discountFactor * integrator.integrate(integrantPrice, strike, strike + getIntegrationInterval());
+        integralPartPrice = discountFactor
+            * integrator.integrate(Function1dAdapter.of(integrantPrice), strike, strike + getIntegrationInterval());
       } else {
-        integralPartPrice = discountFactor * integrator.integrate(integrantPrice, 0.0, strike);
+        integralPartPrice = discountFactor * integrator.integrate(Function1dAdapter.of(integrantPrice), 0.0, strike);
       }
     } catch (final Exception e) {
       throw new RuntimeException(e);
@@ -189,9 +193,10 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
     double integralPart;
     try {
       if (cmsCapFloor.isCap()) {
-        integralPart = discountFactor * integrator.integrate(integrantDelta, strike, strike + getIntegrationInterval());
+        integralPart = discountFactor
+            * integrator.integrate(Function1dAdapter.of(integrantDelta), strike, strike + getIntegrationInterval());
       } else {
-        integralPart = discountFactor * integrator.integrate(integrantDelta, 0.0, strike);
+        integralPart = discountFactor * integrator.integrate(Function1dAdapter.of(integrantDelta), 0.0, strike);
       }
     } catch (final Exception e) {
       throw new RuntimeException(e);
@@ -209,7 +214,8 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
   }
 
   /**
-   * Computes the present value sensitivity to the SABR parameters of a CMS cap/floor by replication in SABR framework with extrapolation on the right.
+   * Computes the present value sensitivity to the SABR parameters of a CMS cap/floor by replication in SABR framework with extrapolation on
+   * the right.
    *
    * @param cmsCapFloor
    *          The CMS cap/floor.
@@ -256,9 +262,10 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
       integrantVega.setParameterIndex(loopparameter);
       try {
         if (cmsCapFloor.isCap()) {
-          integralPart[loopparameter] = discountFactorTp * integrator.integrate(integrantVega, strike, strike + getIntegrationInterval());
+          integralPart[loopparameter] = discountFactorTp
+              * integrator.integrate(Function1dAdapter.of(integrantVega), strike, strike + getIntegrationInterval());
         } else {
-          integralPart[loopparameter] = discountFactorTp * integrator.integrate(integrantVega, 0.0, strike);
+          integralPart[loopparameter] = discountFactorTp * integrator.integrate(Function1dAdapter.of(integrantVega), 0.0, strike);
         }
       } catch (final Exception e) {
         throw new RuntimeException(e);
@@ -275,7 +282,8 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
   }
 
   /**
-   * Computes the present value sensitivity to the strike of a CMS cap/floor by replication in SABR framework with extrapolation on the right.
+   * Computes the present value sensitivity to the strike of a CMS cap/floor by replication in SABR framework with extrapolation on the
+   * right.
    *
    * @param cmsCapFloor
    *          The CMS cap/floor.
@@ -314,10 +322,10 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
     double thirdPart;
     if (cmsCapFloor.isCap()) {
       firstPart = -kpkpp[0] * integrant.bs(strike);
-      thirdPart = integrator.integrate(integrant, strike, strike + getIntegrationInterval());
+      thirdPart = integrator.integrate(Function1dAdapter.of(integrant), strike, strike + getIntegrationInterval());
     } else {
       firstPart = 3 * kpkpp[0] * integrant.bs(strike);
-      thirdPart = integrator.integrate(integrant, 0.0, strike);
+      thirdPart = integrator.integrate(Function1dAdapter.of(integrant), 0.0, strike);
     }
     final double secondPart = integrant.k(strike) * sabrExtrapolation.priceDerivativeStrike(option);
 
@@ -327,7 +335,7 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
   /**
    * Inner class to implement the integration used in price replication.
    */
-  private class CMSIntegrant extends Function1D<Double, Double> {
+  private class CMSIntegrant implements Function<Double, Double> {
     protected static final double EPS = 1E-10;
     private final int _nbFixedPeriod;
     private final int _nbFixedPaymentYear;
@@ -517,7 +525,7 @@ public class CapFloorCMSSABRExtrapolationRightReplicationMethod extends CapFloor
         gp = -g / x + _nbFixedPeriod / x / _nbFixedPaymentYear * nPeriodDiscount / periodFactor;
         gpp = 2.0 / (x * x) * g - 2.0 * _nbFixedPeriod / (x * x) / _nbFixedPaymentYear * nPeriodDiscount / periodFactor
             - (_nbFixedPeriod + 1.0) * _nbFixedPeriod / x
-            / (_nbFixedPaymentYear * _nbFixedPaymentYear) * nPeriodDiscount / (periodFactor * periodFactor);
+                / (_nbFixedPaymentYear * _nbFixedPaymentYear) * nPeriodDiscount / (periodFactor * periodFactor);
       } else {
         // Implementation comment: When x is (almost) 0, useful for CMS swaps which are priced as CMS cap of strike 0.
         g = (double) _nbFixedPeriod / _nbFixedPaymentYear;

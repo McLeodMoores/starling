@@ -27,7 +27,7 @@ public class FadeInOptionModel extends AnalyticOptionModel<FadeInOptionDefinitio
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionWithSpotTimeSeriesDataBundle data) {
+      public Double evaluate(final StandardOptionWithSpotTimeSeriesDataBundle data) {
         Validate.notNull(data, "data");
         final double s = data.getSpot();
         final double k = definition.getStrike();
@@ -54,8 +54,12 @@ public class FadeInOptionModel extends AnalyticOptionModel<FadeInOptionDefinitio
           d5 = getD1(s, u, tI, sigma, b);
           d6 = getD2(d5, sigma, tI);
           price += sign
-              * (s * df1 * (BIVARIATE_NORMAL.getCDF(new double[] {-d5, sign * d1, rho}) - BIVARIATE_NORMAL.getCDF(new double[] {-d3, sign * d1, rho})) - k * df2
-                  * (BIVARIATE_NORMAL.getCDF(new double[] {-d6, sign * d2, rho}) - BIVARIATE_NORMAL.getCDF(new double[] {-d4, sign * d2, rho})));
+              * (s * df1
+                  * (BIVARIATE_NORMAL.getCDF(new double[] { -d5, sign * d1, rho })
+                      - BIVARIATE_NORMAL.getCDF(new double[] { -d3, sign * d1, rho }))
+                  - k * df2
+                      * (BIVARIATE_NORMAL.getCDF(new double[] { -d6, sign * d2, rho })
+                          - BIVARIATE_NORMAL.getCDF(new double[] { -d4, sign * d2, rho })));
         }
         return price / n;
       }

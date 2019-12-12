@@ -5,19 +5,21 @@
  */
 package com.opengamma.analytics.financial.model.volatility;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.rootfinding.NewtonRaphsonSingleRootFinder;
 import com.opengamma.util.CompareUtils;
 
 /**
- * Black pricing in the forward measure. All prices, input/output, are *forward* prices, i.e. price(t,T) / Zero(t,T).
- * Similar to http://en.wikipedia.org/wiki/Black_model with fwdMtm = c / exp(-rT).
- * This permits us to disregard discounting, which is sufficient for purpose of implied volatility.
+ * Black pricing in the forward measure. All prices, input/output, are *forward* prices, i.e. price(t,T) / Zero(t,T). Similar to
+ * http://en.wikipedia.org/wiki/Black_model with fwdMtm = c / exp(-rT). This permits us to disregard discounting, which is sufficient for
+ * purpose of implied volatility.
  */
 public class BlackFormula {
   private static final Logger LOGGER = LoggerFactory.getLogger(BlackFormula.class);
@@ -29,16 +31,23 @@ public class BlackFormula {
   private boolean _isCall;
 
   /**
-   * @param forward Forward value of the underlying. The fair value agreed today to exchange for the underlying at expiry
-   * @param strike Strike of the option in question. If equal to the forward, it is considered at-the-money
-   * @param expiry Expiry date, as a double representing the number of years until the option expires
-   * @param lognormalVol Average lognormal volatility of the underlying that reproduces the price. May be null.
-   * @param fwdPrice Forward, i.e. undiscounted, price of the option. May be null.
-   * @param isCall True if the option is a Call; false if it is a Put.
+   * @param forward
+   *          Forward value of the underlying. The fair value agreed today to exchange for the underlying at expiry
+   * @param strike
+   *          Strike of the option in question. If equal to the forward, it is considered at-the-money
+   * @param expiry
+   *          Expiry date, as a double representing the number of years until the option expires
+   * @param lognormalVol
+   *          Average lognormal volatility of the underlying that reproduces the price. May be null.
+   * @param fwdPrice
+   *          Forward, i.e. undiscounted, price of the option. May be null.
+   * @param isCall
+   *          True if the option is a Call; false if it is a Put.
    * @deprecated This is stateful.
    */
   @Deprecated
-  public BlackFormula(final double forward, final double strike, final double expiry, final Double lognormalVol, final Double fwdPrice, final boolean isCall) {
+  public BlackFormula(final double forward, final double strike, final double expiry, final Double lognormalVol, final Double fwdPrice,
+      final boolean isCall) {
     _forward = forward;
     _strike = strike;
     _expiry = expiry;
@@ -48,9 +57,9 @@ public class BlackFormula {
   }
 
   /**
-   * Computes the forward price from forward, strike and variance.
-   * This is NOT a getter of the data member, _fwdMtm. For that, use getFwdMtm().
-   * Nor does this set any data member.
+   * Computes the forward price from forward, strike and variance. This is NOT a getter of the data member, _fwdMtm. For that, use
+   * getFwdMtm(). Nor does this set any data member.
+   *
    * @return Black formula price of the option
    */
   public final double computePrice() {
@@ -59,12 +68,12 @@ public class BlackFormula {
   }
 
   /**
-   * Computes the derivative of the *forward price* with respect to the forward.
-   * If the current value of a call with expiry, T is C(0,T), the forward price is this normalized by the terminal bond, Z(0,T) = exp(-rT).
-   * Hence *forward price* c(0,T) = C(0,T) / Z(0,T). And ForwardDelta = dc/dF == d(C/Z)/dF
-   * This is NOT a getter of the data member, _fwdMtm. For that, use getFwdMtm().
-   * Nor does this set any data member.
-   * @return  d/dF [C(0,T) / Z(0,T)]
+   * Computes the derivative of the *forward price* with respect to the forward. If the current value of a call with expiry, T is C(0,T),
+   * the forward price is this normalized by the terminal bond, Z(0,T) = exp(-rT). Hence *forward price* c(0,T) = C(0,T) / Z(0,T). And
+   * ForwardDelta = dc/dF == d(C/Z)/dF This is NOT a getter of the data member, _fwdMtm. For that, use getFwdMtm(). Nor does this set any
+   * data member.
+   *
+   * @return d/dF [C(0,T) / Z(0,T)]
    */
   public final double computeForwardDelta() {
     Validate.notNull(_lognormalVol, "Black Volatility parameter, _vol, has not been set.");
@@ -72,9 +81,9 @@ public class BlackFormula {
   }
 
   /**
-   * Via the BlackFormula, this converts a Delta-parameterised strike into the actual strike value. fwdDelta, defined here, is always positive, in [0,1]. At
-   * 0.5, a straddle has zero delta, occurring at K == F*exp(0.5 sig^2 T). So deltas &lt; 0.5 are out-of-the-money. Hence a 0.25 put and a 0.25 call will have a
-   * strike less and greater than the forward, respectively.
+   * Via the BlackFormula, this converts a Delta-parameterised strike into the actual strike value. fwdDelta, defined here, is always
+   * positive, in [0,1]. At 0.5, a straddle has zero delta, occurring at K == F*exp(0.5 sig^2 T). So deltas &lt; 0.5 are out-of-the-money.
+   * Hence a 0.25 put and a 0.25 call will have a strike less and greater than the forward, respectively.
    *
    * @param fwdDelta
    *          the first order derivative of the price with respect to the forward
@@ -93,9 +102,9 @@ public class BlackFormula {
   }
 
   /**
-   * Computes the implied lognormal volatility from forward mark-to-market, forward underlying and strike.
-   * This is NOT a getter of the data member, _lognormalVol. For that, use getLognormalVol().
-   * Nor does this set any data member.
+   * Computes the implied lognormal volatility from forward mark-to-market, forward underlying and strike. This is NOT a getter of the data
+   * member, _lognormalVol. For that, use getLognormalVol(). Nor does this set any data member.
+   *
    * @return Black formula price of the option
    */
   public final double computeImpliedVolatility() {
@@ -110,23 +119,19 @@ public class BlackFormula {
       Validate.isTrue(fwdDelta >= 0.0 && fwdDelta <= 1.0, "Delta must be between 0.0 and 1.0");
       final BlackFormula black = new BlackFormula(_forward, _strike, _expiry, _lognormalVol, _fwdMtm, forCall);
 
-      final Function1D<Double, Double> difference = new Function1D<Double, Double>() {
-
-        @Override
-        public Double apply(final Double strike) {
-          black.setStrike(strike);
-          final double delta = black.computeForwardDelta();
-          return delta - fwdDelta * (forCall ? 1.0 : -1.0); // TODO Case : confirm this is sufficient for calls and puts
-        }
+      final Function<Double, Double> difference = strike -> {
+        black.setStrike(strike);
+        final double delta = black.computeForwardDelta();
+        return delta - fwdDelta * (forCall ? 1.0 : -1.0); // TODO Case : confirm this is sufficient for calls and puts
       };
 
       final NewtonRaphsonSingleRootFinder rootFinder = new NewtonRaphsonSingleRootFinder();
       if (forCall && fwdDelta >= 0.5 || !forCall && fwdDelta <= 0.5) {
         // Strike is bounded below by 0 and above by the atmDelta
         final double atmDelta = _forward * Math.exp(0.5 * _lognormalVol * _lognormalVol * _expiry);
-        return rootFinder.getRoot(difference, 0.0, atmDelta);
+        return rootFinder.getRoot(Function1dAdapter.of(difference), 0.0, atmDelta);
       } // Give it a guess, and estimate finite-difference derivative
-      return rootFinder.getRoot(difference, _strike);
+      return rootFinder.getRoot(Function1dAdapter.of(difference), _strike);
 
     } catch (final com.opengamma.analytics.math.MathException e) {
       LOGGER.error("Failed to compute ImpliedVolatility, {}", e);
@@ -136,6 +141,7 @@ public class BlackFormula {
 
   /**
    * Gets the forward.
+   *
    * @return the forward
    */
   public final double getForward() {
@@ -144,7 +150,9 @@ public class BlackFormula {
 
   /**
    * Sets the forward.
-   * @param forward  the forward
+   *
+   * @param forward
+   *          the forward
    */
   public final void setForward(final double forward) {
     _forward = forward;
@@ -152,6 +160,7 @@ public class BlackFormula {
 
   /**
    * Gets the strike.
+   *
    * @return the strike
    */
   public final double getStrike() {
@@ -160,7 +169,9 @@ public class BlackFormula {
 
   /**
    * Sets the strike.
-   * @param strike  the strike
+   *
+   * @param strike
+   *          the strike
    */
   public final void setStrike(final double strike) {
     _strike = strike;
@@ -168,6 +179,7 @@ public class BlackFormula {
 
   /**
    * Gets the expiry.
+   *
    * @return the expiry
    */
   public final double getExpiry() {
@@ -176,7 +188,9 @@ public class BlackFormula {
 
   /**
    * Sets the expiry.
-   * @param expiry  the expiry
+   *
+   * @param expiry
+   *          the expiry
    */
   public final void setExpiry(final double expiry) {
     _expiry = expiry;
@@ -184,6 +198,7 @@ public class BlackFormula {
 
   /**
    * Gets the vol.
+   *
    * @return the vol
    */
   public final Double getLognormalVol() {
@@ -192,7 +207,9 @@ public class BlackFormula {
 
   /**
    * Sets the vol.
-   * @param vol  the vol
+   *
+   * @param vol
+   *          the vol
    */
   public final void setLognormalVol(final Double vol) {
     Validate.isTrue(vol > 0.0 || CompareUtils.closeEquals(vol, 0.0), "Cannot set vol to be negative.");
@@ -201,6 +218,7 @@ public class BlackFormula {
 
   /**
    * Returns the member, _FwdMtm, the forward mark-to-market price. It DOES NOT compute from vol. For that, use getPrice.
+   *
    * @return the fwdMtm
    */
   public final Double getFwdMtm() {
@@ -209,7 +227,9 @@ public class BlackFormula {
 
   /**
    * Sets the forward mark-to-market price.
-   * @param fwdMtm  forward mark-to-market price
+   *
+   * @param fwdMtm
+   *          forward mark-to-market price
    */
   public final void setMtm(final Double fwdMtm) {
     _fwdMtm = fwdMtm;
@@ -217,7 +237,9 @@ public class BlackFormula {
 
   /**
    * Sets the forward mark-to-market price.
-   * @param bCall  True if a call, false if a put
+   *
+   * @param bCall
+   *          True if a call, false if a put
    */
   public final void setIsCall(final boolean bCall) {
     _isCall = bCall;

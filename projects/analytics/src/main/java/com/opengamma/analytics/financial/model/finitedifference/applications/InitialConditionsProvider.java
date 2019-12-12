@@ -33,7 +33,7 @@ public class InitialConditionsProvider {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         if (isCall) {
           return Math.max(0, x - strike);
         }
@@ -55,7 +55,7 @@ public class InitialConditionsProvider {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         final double s = Math.exp(x);
         if (isCall) {
           return Math.max(0, s - strike);
@@ -73,7 +73,7 @@ public class InitialConditionsProvider {
   public Function1D<Double, Double> getLogContractPayoff() {
     return new Function1D<Double, Double>() {
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         return Math.log(x);
       }
     };
@@ -87,7 +87,7 @@ public class InitialConditionsProvider {
   public Function1D<Double, Double> getLogContractPayoffInLogCoordinate() {
     return new Function1D<Double, Double>() {
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         return x;
       }
     };
@@ -109,7 +109,7 @@ public class InitialConditionsProvider {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double apply(final Double k) {
+      public Double evaluate(final Double k) {
         if (isCall) {
           return Math.max(0, spot - k);
         }
@@ -129,7 +129,7 @@ public class InitialConditionsProvider {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         if (isCall) {
           return Math.max(0, 1.0 - x);
         }
@@ -146,7 +146,7 @@ public class InitialConditionsProvider {
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double apply(final Double s) {
+      public Double evaluate(final Double s) {
         if (s == 0) {
           return 0.0;
         }

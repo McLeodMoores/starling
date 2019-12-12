@@ -17,8 +17,8 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * The Barone-Adesi and Whaley approximation for the price of an American Option. <b>Note:</b> The Bjerksund and Stensland (2002) approximation
- * ({@link BjerksundStenslandModel}) is more accurate and should be used in place of this.
+ * The Barone-Adesi and Whaley approximation for the price of an American Option. <b>Note:</b> The Bjerksund and Stensland (2002)
+ * approximation ({@link BjerksundStenslandModel}) is more accurate and should be used in place of this.
  */
 public class BaroneAdesiWhaleyModel {
   /** A logger */
@@ -27,8 +27,8 @@ public class BaroneAdesiWhaleyModel {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
   /**
-   * Get the price of an American option by the Barone-Adesi &amp; Whaley approximation. <b>Note:</b> The Bjerksund and Stensland (2002) approximation
-   * ({@link BjerksundStenslandModel}) is more accurate and should be used in place of this.
+   * Get the price of an American option by the Barone-Adesi &amp; Whaley approximation. <b>Note:</b> The Bjerksund and Stensland (2002)
+   * approximation ({@link BjerksundStenslandModel}) is more accurate and should be used in place of this.
    *
    * @param s0
    *          The spot
@@ -46,7 +46,8 @@ public class BaroneAdesiWhaleyModel {
    *          true for calls
    * @return The American option price
    */
-  public double price(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
+  public double price(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall) {
     // TODO handle k = 0, t = 0 and sigma = 0
     ArgumentChecker.isTrue(s0 > 0.0, "spot must be greater than zero");
     ArgumentChecker.isTrue(k > 0.0, "strike must be greater than zero");
@@ -88,15 +89,17 @@ public class BaroneAdesiWhaleyModel {
    *          The volatility
    * @param isCall
    *          true for calls
-   * @return length 7 arrays containing the price, then the sensitivities (Greeks): delta (spot), dual-delta (strike), rho (risk-free rate), b-rho
-   *         (cost-of-carry), theta (expiry), vega (sigma)
+   * @return length 7 arrays containing the price, then the sensitivities (Greeks): delta (spot), dual-delta (strike), rho (risk-free rate),
+   *         b-rho (cost-of-carry), theta (expiry), vega (sigma)
    */
-  public double[] getPriceAdjoint(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
+  public double[] getPriceAdjoint(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall) {
 
     ArgumentChecker.isTrue(s0 > 0.0, "spot must be greater than zero");
     ArgumentChecker.isTrue(k > 0.0, "strike must be greater than zero");
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
-    // ArgumentChecker.isTrue(sigma > 0.0, "sigma must be greater than zero"); //sigma<0 is passed when implied volatility computed by using {@link
+    // ArgumentChecker.isTrue(sigma > 0.0, "sigma must be greater than zero"); //sigma<0 is passed when implied volatility computed by using
+    // {@link
     // BjerksundStenslandModel}
 
     if (isCall) {
@@ -164,7 +167,8 @@ public class BaroneAdesiWhaleyModel {
    *          is the option a call
    * @return The price and vega of the option
    */
-  public double[] getPriceAndVega(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
+  public double[] getPriceAndVega(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall) {
     ArgumentChecker.isTrue(s0 > 0.0, "spot must be greater than zero");
     ArgumentChecker.isTrue(k > 0.0, "strike must be greater than zero");
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
@@ -175,8 +179,9 @@ public class BaroneAdesiWhaleyModel {
   }
 
   /**
-   * Get a function for the price and vega of an American option by the Barone-Adesi &amp; Whaley approximation in terms of the volatility (sigma). This is
-   * primarily used by the GenericImpliedVolatiltySolver to find a (Barone-Adesi &amp; Whaley) implied volatility for a given market price of an American option
+   * Get a function for the price and vega of an American option by the Barone-Adesi &amp; Whaley approximation in terms of the volatility
+   * (sigma). This is primarily used by the GenericImpliedVolatiltySolver to find a (Barone-Adesi &amp; Whaley) implied volatility for a
+   * given market price of an American option
    *
    * @param s0
    *          The spot
@@ -192,26 +197,27 @@ public class BaroneAdesiWhaleyModel {
    *          true for calls
    * @return A function from volatility (sigma) to price and vega
    */
-  public Function1D<Double, double[]> getPriceAndVegaFunction(final double s0, final double k, final double r, final double b, final double t,
+  public Function1D<Double, double[]> getPriceAndVegaFunction(final double s0, final double k, final double r, final double b,
+      final double t,
       final boolean isCall) {
     ArgumentChecker.isTrue(s0 > 0.0, "spot must be greater than zero");
     ArgumentChecker.isTrue(k > 0.0, "strike must be greater than zero");
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
     return new Function1D<Double, double[]>() {
       @Override
-      public double[] apply(final Double sigma) {
+      public double[] evaluate(final Double sigma) {
         return getPriceAndVega(s0, k, r, b, t, sigma, isCall);
       }
     };
   }
 
   /**
-   * Get the implied volatility according to the Barone-Adesi &amp; Whaley approximation for the price of an American option quoted in the market. It is the
-   * number that put into the Barone-Adesi &amp; Whaley approximation gives the market price. <b>This is not the same as the Black implied volatility</b> (which
-   * is only applicable to European options), although it may be numerically close.
+   * Get the implied volatility according to the Barone-Adesi &amp; Whaley approximation for the price of an American option quoted in the
+   * market. It is the number that put into the Barone-Adesi &amp; Whaley approximation gives the market price. <b>This is not the same as
+   * the Black implied volatility</b> (which is only applicable to European options), although it may be numerically close.
    * <p>
-   * If the price indicates that the option should be exercised immediately (price = s0-k for calls and k-s0 for puts), then implied volatility does not exist,
-   * and zero is returned (with a warning)
+   * If the price indicates that the option should be exercised immediately (price = s0-k for calls and k-s0 for puts), then implied
+   * volatility does not exist, and zero is returned (with a warning)
    *
    * @param price
    *          The market price of an American option
@@ -229,15 +235,18 @@ public class BaroneAdesiWhaleyModel {
    *          true for calls
    * @return The (Barone-Adesi &amp; Whaley) implied volatility.
    */
-  public double impliedVolatility(final double price, final double s0, final double k, final double r, final double b, final double t, final boolean isCall) {
+  public double impliedVolatility(final double price, final double s0, final double k, final double r, final double b, final double t,
+      final boolean isCall) {
 
-    ArgumentChecker.isTrue(isCall && price >= s0 - k || !isCall && price >= k - s0, "The price is less than the exercised immediately price");
+    ArgumentChecker.isTrue(isCall && price >= s0 - k || !isCall && price >= k - s0,
+        "The price is less than the exercised immediately price");
     ArgumentChecker.isTrue(s0 > 0.0, "spot must be greater than zero");
     ArgumentChecker.isTrue(k > 0.0, "strike must be greater than zero");
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
 
     if (isCall && Double.compare(price, s0 - k) == 0 || !isCall && Double.compare(price, k - s0) == 0) {
-      LOGGER.warn("The price indicates that this option should be exercised immediately, therefore there is no implied volatility. Zero is returned.");
+      LOGGER.warn(
+          "The price indicates that this option should be exercised immediately, therefore there is no implied volatility. Zero is returned.");
       return 0.0;
     }
     final Function1D<Double, double[]> func = getPriceAndVegaFunction(s0, k, r, b, t, isCall);
@@ -263,7 +272,8 @@ public class BaroneAdesiWhaleyModel {
    *          true for calls
    * @return The critical spot price
    */
-  protected double sCrit(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
+  protected double sCrit(final double s0, final double k, final double r, final double b, final double t, final double sigma,
+      final boolean isCall) {
     if (isCall) {
       final CallSolver solver = new CallSolver(s0, k, r, b, t, sigma);
       return solver.getSStar();
@@ -273,8 +283,8 @@ public class BaroneAdesiWhaleyModel {
   }
 
   /**
-   * The critical spot price (when the spot is above (below) this for a call (put), it is optimal to excise early) and its sensitivity to spot (r), strike (k),
-   * risk-free rate (r), cost-of-carry (b), expiry (t) and volatility (sigma).
+   * The critical spot price (when the spot is above (below) this for a call (put), it is optimal to excise early) and its sensitivity to
+   * spot (r), strike (k), risk-free rate (r), cost-of-carry (b), expiry (t) and volatility (sigma).
    *
    * @param s0
    *          The spot
@@ -614,7 +624,8 @@ public class BaroneAdesiWhaleyModel {
       res[2] = -1 / _k * w2Bar; // 'dual-delta'
       res[3] = -_t * _df2 * df2Bar + q2Bar * q2Adjoint[1]; // rho
       res[4] = _t * w1Bar + _t * _df2 * df2Bar + q2Bar * q2Adjoint[2]; // b-rho
-      res[5] = (_b + _sigma * _sigma / 2) * w1Bar + 0.5 * _sigma / _rootT * sigmaRootTBar + (_b - _r) * _df2 * df2Bar + q2Bar * q2Adjoint[3]; // theta
+      res[5] = (_b + _sigma * _sigma / 2) * w1Bar + 0.5 * _sigma / _rootT * sigmaRootTBar + (_b - _r) * _df2 * df2Bar
+          + q2Bar * q2Adjoint[3]; // theta
       res[6] = _sigma * _t * w1Bar + _rootT * sigmaRootTBar + q2Bar * q2Adjoint[4]; // vega
       return res;
     }
@@ -966,7 +977,8 @@ public class BaroneAdesiWhaleyModel {
       res[2] = -1 / _k * w2Bar; // 'dual-delta'
       res[3] = -_t * _df2 * df2Bar + q1Bar * q1Adjoint[1]; // rho
       res[4] = _t * w1Bar + _t * _df2 * df2Bar + q1Bar * q1Adjoint[2]; // b-rho
-      res[5] = (_b + _sigma * _sigma / 2) * w1Bar + 0.5 * _sigma / _rootT * sigmaRootTBar + (_b - _r) * _df2 * df2Bar + q1Bar * q1Adjoint[3]; // theta
+      res[5] = (_b + _sigma * _sigma / 2) * w1Bar + 0.5 * _sigma / _rootT * sigmaRootTBar + (_b - _r) * _df2 * df2Bar
+          + q1Bar * q1Adjoint[3]; // theta
       res[6] = _sigma * _t * w1Bar + _rootT * sigmaRootTBar + q1Bar * q1Adjoint[4]; // vega
       return res;
     }

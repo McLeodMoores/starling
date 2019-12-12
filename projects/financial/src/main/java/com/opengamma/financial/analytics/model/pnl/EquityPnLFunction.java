@@ -41,16 +41,17 @@ public class EquityPnLFunction extends AbstractFunction.NonCompiledInvoker {
     return ComputationTargetType.POSITION;
   }
 
-  public boolean canApplyTo(FunctionCompilationContext context, ComputationTarget target) {
-    Collection<Trade> trades = target.getPosition().getTrades();
-    for (Trade trade : trades) {
+  @Override
+  public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
+    final Collection<Trade> trades = target.getPosition().getTrades();
+    for (final Trade trade : trades) {
       if (!(trade.getSecurity() instanceof EquitySecurity)) {
         return false;
       }
     }
     return true;
   }
-  
+
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final String currency = FinancialSecurityUtils.getCurrency(target.getPosition().getSecurity()).getCode();

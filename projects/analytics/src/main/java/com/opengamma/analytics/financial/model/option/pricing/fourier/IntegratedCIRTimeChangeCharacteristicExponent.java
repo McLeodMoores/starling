@@ -31,9 +31,12 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
 
   /**
    *
-   * @param kappa The mean-reverting speed
-   * @param theta The mean
-   * @param lambda The volatility
+   * @param kappa
+   *          The mean-reverting speed
+   * @param theta
+   *          The mean
+   * @param lambda
+   *          The volatility
    */
   public IntegratedCIRTimeChangeCharacteristicExponent(final double kappa, final double theta, final double lambda) {
     _kappa = kappa;
@@ -46,7 +49,7 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
   public Function1D<ComplexNumber, ComplexNumber> getFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber apply(final ComplexNumber u) {
+      public ComplexNumber evaluate(final ComplexNumber u) {
         return getValue(u, t);
       }
     };
@@ -60,7 +63,7 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
 
     final ComplexNumber ui = multiply(I, u);
 
-    //handle small lambda properly
+    // handle small lambda properly
     if (2 * mod(u) * _lambda * _lambda / _kappa / _kappa < 1e-6) {
       final double d = _theta * t + (1 - _theta) * (1 - Math.exp(-_kappa * t)) / _kappa;
       return multiply(d, ui);
@@ -102,6 +105,7 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
 
   /**
    * Gets the mean-reverting speed.
+   * 
    * @return kappa
    */
   public double getKappa() {
@@ -110,6 +114,7 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
 
   /**
    * Gets the mean.
+   * 
    * @return theta
    */
   public double getTheta() {
@@ -118,6 +123,7 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
 
   /**
    * Gets the volatility.
+   * 
    * @return lambda
    */
   public double getLambda() {
@@ -168,7 +174,5 @@ public class IntegratedCIRTimeChangeCharacteristicExponent implements StocasticC
   public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(final double t) {
     throw new NotImplementedException();
   }
-
-
 
 }

@@ -28,8 +28,8 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Sets up a PDE solver to solve the Black-Scholes-Merton PDE for the price of a European or American option on a commodity using a (near) uniform grid. This
- * code should be view as an example of how to setup the PDE solver.
+ * Sets up a PDE solver to solve the Black-Scholes-Merton PDE for the price of a European or American option on a commodity using a (near)
+ * uniform grid. This code should be view as an example of how to setup the PDE solver.
  */
 // TODO there is a lot of shared code with BlackScholesMertonPDEPricer
 public class LocalVolatilityBackwardsPDEPricer {
@@ -37,9 +37,10 @@ public class LocalVolatilityBackwardsPDEPricer {
   private static final InitialConditionsProvider ICP = new InitialConditionsProvider();
   private static final PDE1DCoefficientsProvider PDE = new PDE1DCoefficientsProvider();
   /*
-   * Crank-Nicolson (i.e. theta = 0.5) is known to give poor results around at-the-money. This can be solved by using a short fully implicit (theta = 1.0)
-   * burn-in period. Eigenvalues associated with the discontinuity in the first derivative are not damped out when theta = 0.5, but are for theta = 1.0 - the
-   * time step for this phase should be such that the Crank-Nicolson (order(dt^2)) accuracy is not destroyed.
+   * Crank-Nicolson (i.e. theta = 0.5) is known to give poor results around at-the-money. This can be solved by using a short fully implicit
+   * (theta = 1.0) burn-in period. Eigenvalues associated with the discontinuity in the first derivative are not damped out when theta =
+   * 0.5, but are for theta = 1.0 - the time step for this phase should be such that the Crank-Nicolson (order(dt^2)) accuracy is not
+   * destroyed.
    */
   private static final boolean USE_BURNIN = true;
   private static final double BURNIN_FRACTION = 0.20;
@@ -52,8 +53,8 @@ public class LocalVolatilityBackwardsPDEPricer {
   private final double _mainRunTheta;
 
   /**
-   * Finite difference PDE solver that uses a 'burn-in' period that consumes 20% of the time nodes (and hence the compute time) and runs with a theta of 1.0.
-   * <b>Note</b> These setting are ignored if user supplies own grids and thetas.
+   * Finite difference PDE solver that uses a 'burn-in' period that consumes 20% of the time nodes (and hence the compute time) and runs
+   * with a theta of 1.0. <b>Note</b> These setting are ignored if user supplies own grids and thetas.
    */
   public LocalVolatilityBackwardsPDEPricer() {
     _useBurnin = USE_BURNIN;
@@ -66,7 +67,8 @@ public class LocalVolatilityBackwardsPDEPricer {
    * All these setting are ignored if user supplies own grids and thetas.
    *
    * @param useBurnin
-   *          useBurnin if true use a 'burn-in' period that consumes 20% of the time nodes (and hence the compute time) and runs with a theta of 1.0
+   *          useBurnin if true use a 'burn-in' period that consumes 20% of the time nodes (and hence the compute time) and runs with a
+   *          theta of 1.0
    */
   public LocalVolatilityBackwardsPDEPricer(final boolean useBurnin) {
     _useBurnin = useBurnin;
@@ -79,7 +81,8 @@ public class LocalVolatilityBackwardsPDEPricer {
    * All these setting are ignored if user supplies own grids and thetas.
    *
    * @param useBurnin
-   *          if true use a 'burn-in' period that consumes some fraction of the time nodes (and hence the compute time) and runs with a theta of 1.0
+   *          if true use a 'burn-in' period that consumes some fraction of the time nodes (and hence the compute time) and runs with a
+   *          theta of 1.0
    * @param burninFrac
    *          The fraction of burn-in (ignored if useBurnin is false)
    */
@@ -95,7 +98,8 @@ public class LocalVolatilityBackwardsPDEPricer {
    * All these setting are ignored if user supplies own grids and thetas.
    *
    * @param useBurnin
-   *          if true use a 'burn-in' period that consumes some fraction of the time nodes (and hence the compute time) and runs with a different theta
+   *          if true use a 'burn-in' period that consumes some fraction of the time nodes (and hence the compute time) and runs with a
+   *          different theta
    * @param burninFrac
    *          The fraction of burn-in (ignored if useBurnin is false)
    * @param burninTheta
@@ -103,7 +107,8 @@ public class LocalVolatilityBackwardsPDEPricer {
    * @param mainTheta
    *          the theta to use for the main steps (default is 0.5)
    */
-  public LocalVolatilityBackwardsPDEPricer(final boolean useBurnin, final double burninFrac, final double burninTheta, final double mainTheta) {
+  public LocalVolatilityBackwardsPDEPricer(final boolean useBurnin, final double burninFrac, final double burninTheta,
+      final double mainTheta) {
     ArgumentChecker.isTrue(burninFrac < 0.5, "burn-in fraction too high");
     ArgumentChecker.isTrue(0 <= burninTheta && burninTheta <= 1.0, "burn-in theta must be between 0 and 1.0");
     ArgumentChecker.isTrue(0 <= mainTheta && mainTheta <= 1.0, "main theta must be between 0 and 1.0");
@@ -114,9 +119,9 @@ public class LocalVolatilityBackwardsPDEPricer {
   }
 
   /**
-   * Price a European or American option on a commodity under the Black-Scholes-Merton assumptions (i.e. constant risk-free rate, cost-of-carry, and volatility)
-   * by using finite difference methods to solve the Black-Scholes-Merton PDE. The grid is close to uniform in space (the strike and spot lie on the grid) and
-   * time
+   * Price a European or American option on a commodity under the Black-Scholes-Merton assumptions (i.e. constant risk-free rate,
+   * cost-of-carry, and volatility) by using finite difference methods to solve the Black-Scholes-Merton PDE. The grid is close to uniform
+   * in space (the strike and spot lie on the grid) and time
    * <p>
    * Since a rather famous analytic formula exists for the price of European options on commodities that should be used in place of this
    *
@@ -162,7 +167,8 @@ public class LocalVolatilityBackwardsPDEPricer {
         final int minNodes = (int) Math.ceil(_burninFrac * t);
         final double minFrac = timeNodes / t;
         throw new IllegalArgumentException(
-            "burn in period greater than total time. Either increase timeNodes to above " + minNodes + ", or reduce burninFrac to below " + minFrac);
+            "burn in period greater than total time. Either increase timeNodes to above " + minNodes + ", or reduce burninFrac to below "
+                + minFrac);
       }
       final MeshingFunction tBurnMesh = new ExponentialMeshing(0.0, tBurn, tBurnNodes, 0.0);
       final MeshingFunction tMesh = new ExponentialMeshing(tBurn, t, timeNodes - tBurnNodes, 0.0);
@@ -181,10 +187,11 @@ public class LocalVolatilityBackwardsPDEPricer {
   }
 
   /**
-   * Price a European or American option on a commodity under the Black-Scholes-Merton assumptions (i.e. constant risk-free rate, cost-of-carry, and volatility)
-   * by using finite difference methods to solve the Black-Scholes-Merton PDE. The spatial (spot) grid concentrates points around the spot level and ensures
-   * that strike and spot lie on the grid. The temporal grid concentrates points near time-to-expiry = 0 (i.e. the start). The PDE solver uses theta = 0.5
-   * (Crank-Nicolson) unless a burn-in period is use, in which case theta = 1.0 (fully implicit) in that region.
+   * Price a European or American option on a commodity under the Black-Scholes-Merton assumptions (i.e. constant risk-free rate,
+   * cost-of-carry, and volatility) by using finite difference methods to solve the Black-Scholes-Merton PDE. The spatial (spot) grid
+   * concentrates points around the spot level and ensures that strike and spot lie on the grid. The temporal grid concentrates points near
+   * time-to-expiry = 0 (i.e. the start). The PDE solver uses theta = 0.5 (Crank-Nicolson) unless a burn-in period is use, in which case
+   * theta = 1.0 (fully implicit) in that region.
    *
    * @param fwd
    *          the forward curve. This contains the spot and the instantaneous cost-of-carry (drift of spot)
@@ -201,8 +208,8 @@ public class LocalVolatilityBackwardsPDEPricer {
    * @param timeNodes
    *          Number of time nodes
    * @param beta
-   *          Bunching parameter for space (spot) nodes. A value great than zero. Very small values gives a very high density of points around the spot, with
-   *          the density quickly falling away in both directions
+   *          Bunching parameter for space (spot) nodes. A value great than zero. Very small values gives a very high density of points
+   *          around the spot, with the density quickly falling away in both directions
    * @param lambda
    *          Bunching parameter for time nodes. $\lambda = 0$ is uniform, $\lambda &gt; 0$ gives a high density of points near $\tau = 0$
    * @param sd
@@ -255,9 +262,9 @@ public class LocalVolatilityBackwardsPDEPricer {
   }
 
   /**
-   * Price a European or American option on a commodity under the Black-Scholes-Merton assumptions (i.e. constant risk-free rate, cost-of-carry, and volatility)
-   * by using finite difference methods to solve the Black-Scholes-Merton PDE. <b>Note</b> This is a specialist method that requires correct grid set up - if
-   * unsure use another method that sets up the grid for you.
+   * Price a European or American option on a commodity under the Black-Scholes-Merton assumptions (i.e. constant risk-free rate,
+   * cost-of-carry, and volatility) by using finite difference methods to solve the Black-Scholes-Merton PDE. <b>Note</b> This is a
+   * specialist method that requires correct grid set up - if unsure use another method that sets up the grid for you.
    *
    * @param fwd
    *          the forward curve. This contains the spot and the instantaneous cost-of-carry (drift of spot)
@@ -270,9 +277,9 @@ public class LocalVolatilityBackwardsPDEPricer {
    * @param isAmerican
    *          true if the option is American (false for European)
    * @param grid
-   *          the grids. If a single grid is used, the spot must be a grid point and the strike must lie in the range of the xNodes; the time nodes must start
-   *          at zero and finish at t (time-to-expiry). For multiple grids, the xNodes must be <b>identical</b>, and the last time node of one grid must be the
-   *          same as the first time node of the next.
+   *          the grids. If a single grid is used, the spot must be a grid point and the strike must lie in the range of the xNodes; the
+   *          time nodes must start at zero and finish at t (time-to-expiry). For multiple grids, the xNodes must be <b>identical</b>, and
+   *          the last time node of one grid must be the same as the first time node of the next.
    * @param theta
    *          the theta to use on different grids
    * @return The option price
@@ -292,7 +299,8 @@ public class LocalVolatilityBackwardsPDEPricer {
     // ensure the grids are consistent
     final double[] xNodes = grid[0].getSpaceNodes();
     ArgumentChecker.isTrue(grid[0].getTimeNode(0) == 0.0, "time nodes not starting from zero");
-    ArgumentChecker.isTrue(Double.compare(grid[n - 1].getTimeNode(grid[n - 1].getNumTimeNodes() - 1), t) == 0, "time nodes not ending at t");
+    ArgumentChecker.isTrue(Double.compare(grid[n - 1].getTimeNode(grid[n - 1].getNumTimeNodes() - 1), t) == 0,
+        "time nodes not ending at t");
     for (int ii = 1; ii < n; ii++) {
       ArgumentChecker.isTrue(Arrays.equals(grid[ii].getSpaceNodes(), xNodes), "different xNodes not supported");
       ArgumentChecker.isTrue(Double.compare(grid[ii - 1].getTimeNode(grid[ii - 1].getNumTimeNodes() - 1), grid[ii].getTimeNode(0)) == 0,
@@ -346,7 +354,7 @@ public class LocalVolatilityBackwardsPDEPricer {
         lower = new NeumannBoundaryCondition(0.0, sMin, true);
         final Function1D<Double, Double> upFunc = new Function1D<Double, Double>() {
           @Override
-          public Double apply(final Double tau) {
+          public Double evaluate(final Double tau) {
             return Math.exp((costOfCarry.getYValue(tau) - riskFreeRate.getYValue(tau)) * tau);
           }
         };
@@ -354,7 +362,7 @@ public class LocalVolatilityBackwardsPDEPricer {
       } else {
         final Function1D<Double, Double> downFunc = new Function1D<Double, Double>() {
           @Override
-          public Double apply(final Double tau) {
+          public Double evaluate(final Double tau) {
             return -Math.exp((costOfCarry.getYValue(tau) - riskFreeRate.getYValue(tau)) * tau);
           }
         };

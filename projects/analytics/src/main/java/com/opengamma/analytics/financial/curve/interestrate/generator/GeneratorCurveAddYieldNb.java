@@ -8,19 +8,16 @@ package com.opengamma.analytics.financial.curve.interestrate.generator;
 import java.util.Arrays;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
-import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountAddZeroSpreadCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Store the details and generate the required curve. The curve is the sum (or difference) of the curves
- * (operation on the continuously-compounded zero-coupon rates)  produced by the array of generators.
- * The number of parameter for each curve is imposed.
- * The generated curve is a YieldAndDiscountAddZeroSpreadCurve.
+ * Store the details and generate the required curve. The curve is the sum (or difference) of the curves (operation on the
+ * continuously-compounded zero-coupon rates) produced by the array of generators. The number of parameter for each curve is imposed. The
+ * generated curve is a YieldAndDiscountAddZeroSpreadCurve.
  */
-@SuppressWarnings("deprecation")
 public class GeneratorCurveAddYieldNb extends GeneratorYDCurve {
 
   /**
@@ -46,9 +43,14 @@ public class GeneratorCurveAddYieldNb extends GeneratorYDCurve {
 
   /**
    * Constructor.
-   * @param generators The array of constructors for the component curves.
-   * @param nbParameters The number of parameter associated to each generator.
-   * @param substract If true, the rate of all curves, except the first one, will be subtracted from the first one. If false, all the rates are added.
+   * 
+   * @param generators
+   *          The array of constructors for the component curves.
+   * @param nbParameters
+   *          The number of parameter associated to each generator.
+   * @param substract
+   *          If true, the rate of all curves, except the first one, will be subtracted from the first one. If false, all the rates are
+   *          added.
    */
   public GeneratorCurveAddYieldNb(final GeneratorYDCurve[] generators, final int[] nbParameters, final boolean substract) {
     ArgumentChecker.notNull(generators, "Generators");
@@ -85,26 +87,17 @@ public class GeneratorCurveAddYieldNb extends GeneratorYDCurve {
     return new YieldAndDiscountAddZeroSpreadCurve(name, _substract, underlyingCurves);
   }
 
-  /**
-   * {@inheritDoc}
-   * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
-   */
-  @Deprecated
-  @Override
-  public YieldAndDiscountCurve generateCurve(final String name, final YieldCurveBundle bundle, final double[] parameters) {
-    return generateCurve(name, parameters);
-  }
-
   @Override
   public YieldAndDiscountCurve generateCurve(final String name, final MulticurveProviderInterface multicurve, final double[] parameters) {
     return generateCurve(name, parameters);
   }
 
   /**
-   * Create the final generators.
-   * The relevant array of instrument is passed to each generator. For all the generator, except the first, the last instrument of the
-   * previous generator is also passed as an indication of the previous part (can be used in "anchor" for example).
-   * @param data The array of instrument used to construct the curve.
+   * Create the final generators. The relevant array of instrument is passed to each generator. For all the generator, except the first, the
+   * last instrument of the previous generator is also passed as an indication of the previous part (can be used in "anchor" for example).
+   * 
+   * @param data
+   *          The array of instrument used to construct the curve.
    * @return The final generator.
    */
   @Override

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
 import com.opengamma.analytics.financial.interestrate.future.derivative.BondFuture;
@@ -22,13 +23,13 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Multi
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.analytics.math.rootfinding.RidderSingleRootFinder;
 import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
@@ -41,7 +42,7 @@ import com.opengamma.util.tuple.DoublesPair;
  * @deprecated Use the {@link BondFuturesTransactionHullWhiteMethod}.
  */
 @Deprecated
-public final class BondFutureHullWhiteMethod extends BondFutureMethod {
+public final class BondFutureHullWhiteMethod {
 
   /**
    * Creates the method unique instance.
@@ -79,6 +80,20 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
    * The model used in computations.
    */
   private static final HullWhiteOneFactorPiecewiseConstantInterestRateModel MODEL = new HullWhiteOneFactorPiecewiseConstantInterestRateModel();
+
+  /**
+   * Compute the present value of a future transaction from a quoted price.
+   *
+   * @param future
+   *          The future.
+   * @param price
+   *          The quoted price.
+   * @return The present value.
+   */
+  public CurrencyAmount presentValueFromPrice(final BondFuture future, final double price) {
+    final double pv = (price - future.getReferencePrice()) * future.getNotional();
+    return CurrencyAmount.of(future.getCurrency(), pv);
+  }
 
   /**
    * Computes the future price from the curves used to price the underlying bonds and a Hull-White one factor model.
@@ -243,7 +258,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
    */
   public MultipleCurrencyAmount presentValue(final BondFuture future, final HullWhiteIssuerProviderInterface data) {
     final double futurePrice = price(future, data);
-    return presentValueFromPrice(future, futurePrice);
+    return MultipleCurrencyAmount.of(presentValueFromPrice(future, futurePrice));
   }
 
   /**
@@ -377,7 +392,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
         cfaAdjustedBar[ctd.get(0)][loopcf] = priceBar;
         dfBar[ctd.get(0)][loopcf] = beta[ctd.get(0)][loopcf] / dfdelivery * cf[ctd.get(0)].getNthPayment(loopcf).getAmount()
             / future.getConversionFactor()[ctd.get(0)]
-                * cfaAdjustedBar[ctd.get(0)][loopcf];
+            * cfaAdjustedBar[ctd.get(0)][loopcf];
         listCredit.add(
             DoublesPair.of(cfTime[ctd.get(0)][loopcf], -cfTime[ctd.get(0)][loopcf] * df[ctd.get(0)][loopcf] * dfBar[ctd.get(0)][loopcf]));
         dfdeliveryBar += -cfaAdjusted[ctd.get(0)][loopcf] / dfdelivery * cfaAdjustedBar[ctd.get(0)][loopcf];
@@ -447,7 +462,7 @@ public final class BondFutureHullWhiteMethod extends BondFutureMethod {
   /**
    * Internal class to estimate the price difference between two bonds.
    */
-  private static final class BondDifference extends Function1D<Double, Double> {
+  private static final class BondDifference implements Function<Double, Double> {
 
     private final double[] _cfa1;
     private final double[] _alpha1;

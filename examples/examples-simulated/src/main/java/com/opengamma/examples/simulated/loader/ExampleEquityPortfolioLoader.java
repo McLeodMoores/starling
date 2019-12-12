@@ -49,8 +49,9 @@ import au.com.bytecode.opencsv.CSVReader;
 /**
  * Example code to load a very simple equity portfolio.
  * <p>
- * This code is kept deliberately as simple as possible. There are no checks for the securities or portfolios already existing, so if you run it more than once
- * you will get multiple copies of portfolios and securities with the same names. It is designed to run against the HSQLDB example database.
+ * This code is kept deliberately as simple as possible. There are no checks for the securities or portfolios already existing, so if you
+ * run it more than once you will get multiple copies of portfolios and securities with the same names. It is designed to run against the
+ * HSQLDB example database.
  */
 @Scriptable
 public class ExampleEquityPortfolioLoader extends AbstractTool<ToolContext> {
@@ -80,8 +81,7 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<ToolContext> {
   private final LocalDate _tradeDate3;
 
   public ExampleEquityPortfolioLoader() {
-    final LocalDate dt = LocalDate.now().minusYears(2);
-    _tradeDate1 = DateUtils.nextWeekDay(dt);
+    _tradeDate1 = DateUtils.nextWeekDay(LocalDate.now().minusDays(10));
     _tradeDate2 = DateUtils.nextWeekDay(_tradeDate1);
     _tradeDate3 = DateUtils.nextWeekDay(_tradeDate2);
   }
@@ -138,7 +138,8 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<ToolContext> {
     addPortfolio(portfolio);
   }
 
-  protected EquitySecurity createEquitySecurity(final String companyName, final Currency currency, final String exchange, final String exchangeCode,
+  protected EquitySecurity createEquitySecurity(final String companyName, final Currency currency, final String exchange,
+      final String exchangeCode,
       final String gicsCode, final ExternalId... identifiers) {
     final EquitySecurity equitySecurity = new EquitySecurity(exchange, exchangeCode, companyName, currency);
     equitySecurity.setGicsCode(GICSCode.of(gicsCode));
@@ -252,19 +253,23 @@ public class ExampleEquityPortfolioLoader extends AbstractTool<ToolContext> {
     LOGGER.debug("Creating position {}", security);
     final int shares = (RandomUtils.nextInt(490) + 10) * 10;
 
-    final ExternalIdBundle bundle = security.getExternalIdBundle(); // we could add an identifier pointing back to the original source database if we're doing
+    final ExternalIdBundle bundle = security.getExternalIdBundle(); // we could add an identifier pointing back to the original source
+                                                                    // database if we're doing
     // an ETL.
 
     final ManageablePosition position = new ManageablePosition(BigDecimal.valueOf(shares), bundle);
 
     // create random trades that add up in shares to the position they're under (this is not enforced by the system)
     if (shares <= 2000) {
-      final ManageableTrade trade = new ManageableTrade(BigDecimal.valueOf(shares), bundle, _tradeDate3, null, ExternalId.of("CPARTY", "BACS"));
+      final ManageableTrade trade = new ManageableTrade(BigDecimal.valueOf(shares), bundle, _tradeDate3, null,
+          ExternalId.of("CPARTY", "BACS"));
       position.addTrade(trade);
     } else {
-      final ManageableTrade trade1 = new ManageableTrade(BigDecimal.valueOf(2000), bundle, _tradeDate1, null, ExternalId.of("CPARTY", "BACS"));
+      final ManageableTrade trade1 = new ManageableTrade(BigDecimal.valueOf(2000), bundle, _tradeDate1, null,
+          ExternalId.of("CPARTY", "BACS"));
       position.addTrade(trade1);
-      final ManageableTrade trade2 = new ManageableTrade(BigDecimal.valueOf(shares - 2000), bundle, _tradeDate2, null, ExternalId.of("CPARTY", "BACS"));
+      final ManageableTrade trade2 = new ManageableTrade(BigDecimal.valueOf(shares - 2000), bundle, _tradeDate2, null,
+          ExternalId.of("CPARTY", "BACS"));
       position.addTrade(trade2);
     }
     return position;

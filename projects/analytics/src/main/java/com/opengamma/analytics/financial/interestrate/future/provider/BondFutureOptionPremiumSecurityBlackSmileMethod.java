@@ -19,8 +19,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * Method for the pricing of bond future options. The pricing is done with a Black approach on the bond future. The Black parameters are represented by
- * (expiration-strike) surfaces.
+ * Method for the pricing of bond future options. The pricing is done with a Black approach on the bond future. The Black parameters are
+ * represented by (expiration-strike) surfaces.
  */
 public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
 
@@ -91,9 +91,9 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Computes the option security price curve sensitivity. It is supposed that for a given strike the volatility does not change with the curves. The option
-   * price and its derivative wrt the futures price is computed using the futures price. The derivatives of the futures price with respect to the curves are
-   * computed using the curves.
+   * Computes the option security price curve sensitivity. It is supposed that for a given strike the volatility does not change with the
+   * curves. The option price and its derivative wrt the futures price is computed using the futures price. The derivatives of the futures
+   * price with respect to the curves are computed using the curves.
    *
    * @param security
    *          The future option security, not null
@@ -115,13 +115,14 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
     // Backward sweep
     final double priceBar = 1.0;
     final double priceFutureBar = priceAdjoint[1] * priceBar;
-    final MulticurveSensitivity priceFutureDerivative = METHOD_FUTURE.priceCurveSensitivity(security.getUnderlyingFuture(), blackPrice.getIssuerProvider());
+    final MulticurveSensitivity priceFutureDerivative = METHOD_FUTURE.priceCurveSensitivity(security.getUnderlyingFuture(),
+        blackPrice.getIssuerProvider());
     return priceFutureDerivative.multipliedBy(priceFutureBar);
   }
 
   /**
-   * Computes the option security price curve sensitivity. It is supposed that for a given strike the volatility does not change with the curves. The futures
-   * price and its derivatives with respect to the curves are computed using the curves.
+   * Computes the option security price curve sensitivity. It is supposed that for a given strike the volatility does not change with the
+   * curves. The futures price and its derivatives with respect to the curves are computed using the curves.
    *
    * @param security
    *          The future option security, not null
@@ -129,7 +130,8 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
    *          The curve and Black volatility data, not null
    * @return The security price curve sensitivity.
    */
-  public MulticurveSensitivity priceCurveSensitivity(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmileProviderInterface black) {
+  public MulticurveSensitivity priceCurveSensitivity(final BondFutureOptionPremiumSecurity security,
+      final BlackBondFuturesSmileProviderInterface black) {
     ArgumentChecker.notNull(security, "security");
     ArgumentChecker.notNull(black, "Black  data");
     final double priceFuture = METHOD_FUTURE.price(security.getUnderlyingFuture(), black.getIssuerProvider());
@@ -137,8 +139,8 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Computes the option security price volatility sensitivity. The option price and its derivative wrt the futures price is computed using the futures price.
-   * The derivatives of the futures price with respect to the curves are computed using the curves.
+   * Computes the option security price volatility sensitivity. The option price and its derivative wrt the futures price is computed using
+   * the futures price. The derivatives of the futures price with respect to the curves are computed using the curves.
    *
    * @param security
    *          The future option security, not null
@@ -146,7 +148,8 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
    *          The curve, Black volatility data and future price, not null
    * @return The security price Black sensitivity.
    */
-  public SurfaceValue priceBlackSensitivity(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
+  public SurfaceValue priceBlackSensitivity(final BondFutureOptionPremiumSecurity security,
+      final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
     ArgumentChecker.notNull(security, "security");
     ArgumentChecker.notNull(blackPrice, "YieldCurveWithBlackCubeBundle was unexpectedly null");
     // Forward sweep
@@ -164,8 +167,8 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
   }
 
   /**
-   * Computes the option security price Black sensitivity. All the results are computed using the curves, including the futures price. The futures price is
-   * computed by discounting like a forward on the CTD.
+   * Computes the option security price Black sensitivity. All the results are computed using the curves, including the futures price. The
+   * futures price is computed by discounting like a forward on the CTD.
    *
    * @param security
    *          The future option security, not null
@@ -173,7 +176,8 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
    *          The curve, Black volatility data.
    * @return The security price Black sensitivity.
    */
-  public SurfaceValue priceBlackSensitivity(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmileProviderInterface black) {
+  public SurfaceValue priceBlackSensitivity(final BondFutureOptionPremiumSecurity security,
+      final BlackBondFuturesSmileProviderInterface black) {
     ArgumentChecker.notNull(black, "black data");
     ArgumentChecker.notNull(security, "security");
     final double priceFuture = METHOD_FUTURE.price(security.getUnderlyingFuture(), black.getIssuerProvider());
@@ -302,7 +306,8 @@ public final class BondFutureOptionPremiumSecurityBlackSmileMethod {
    *          The curve, Black volatility data and future price, not null
    * @return Lognormal Implied Volatility.
    */
-  public double impliedVolatility(final BondFutureOptionPremiumSecurity security, final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
+  public double impliedVolatility(final BondFutureOptionPremiumSecurity security,
+      final BlackBondFuturesSmilePriceProviderInterface blackPrice) {
     ArgumentChecker.notNull(security, "security");
     ArgumentChecker.notNull(blackPrice, "Black data");
     return blackPrice.getBlackProvider().getVolatility(security.getExpirationTime(), security.getStrike());

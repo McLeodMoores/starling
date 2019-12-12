@@ -16,6 +16,7 @@ import org.threeten.bp.Clock;
 import org.threeten.bp.LocalDate;
 
 import com.google.common.collect.Sets;
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.position.PositionOrTrade;
 import com.opengamma.core.position.Trade;
@@ -110,6 +111,9 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
           htsMarkToMarket = (HistoricalTimeSeries) input.getValue();
         }
       }
+    }
+    if (htsMarkToMarket == null) {
+      throw new OpenGammaRuntimeException("Could not get mark to market series");
     }
     final Security security = trade.getSecurity();
     LocalDate tradeDate = getPreferredTradeDate(executionContext.getValuationClock(), trade);

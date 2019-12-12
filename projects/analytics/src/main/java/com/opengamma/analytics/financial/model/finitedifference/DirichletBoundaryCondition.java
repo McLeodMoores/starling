@@ -5,24 +5,27 @@
  */
 package com.opengamma.analytics.financial.model.finitedifference;
 
-import org.apache.commons.lang.Validate;
+import java.util.function.Function;
 
-import com.opengamma.analytics.math.function.Function1D;
+import org.apache.commons.lang.Validate;
 
 /**
  * Dirichlet boundary condition, i.e. u(A,t) = f(t), where A is the boundary level, and f(t) is some specified function of time
  */
 public class DirichletBoundaryCondition implements BoundaryCondition {
 
-  private final Function1D<Double, Double> _timeValue;
+  private final Function<Double, Double> _timeValue;
   private final double _level;
 
   /**
    * Dirichlet boundary condition, i.e. u(A,t) = f(t), where A is the boundary level, and f(t) is some specified function of time
-   * @param timeValue The value of u at the boundary, i.e. u(A,t) = f(t)
-   * @param level The boundary level (A)
+   * 
+   * @param timeValue
+   *          The value of u at the boundary, i.e. u(A,t) = f(t)
+   * @param level
+   *          The boundary level (A)
    */
-  public DirichletBoundaryCondition(final Function1D<Double, Double> timeValue, final double level) {
+  public DirichletBoundaryCondition(final Function<Double, Double> timeValue, final double level) {
     Validate.notNull(timeValue, "null timeValue");
     _timeValue = timeValue;
     _level = level;
@@ -30,17 +33,14 @@ public class DirichletBoundaryCondition implements BoundaryCondition {
 
   /**
    * Special case of Dirichlet boundary condition, i.e. u(A,t) = constant, where A is the boundary level
-   * @param fixedValue The constant value at the boundary
-   * @param level The boundary level (A)
+   * 
+   * @param fixedValue
+   *          The constant value at the boundary
+   * @param level
+   *          The boundary level (A)
    */
   public DirichletBoundaryCondition(final double fixedValue, final double level) {
-    _timeValue = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double x) {
-        return fixedValue;
-      }
-    };
+    _timeValue = x -> fixedValue;
     _level = level;
   }
 
@@ -56,7 +56,7 @@ public class DirichletBoundaryCondition implements BoundaryCondition {
 
   @Override
   public double[] getLeftMatrixCondition(final ConvectionDiffusionPDE1DStandardCoefficients data, final PDEGrid1D grid, final double t) {
-    return new double[] {1.0 };
+    return new double[] { 1.0 };
   }
 
   @Override

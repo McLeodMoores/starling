@@ -24,11 +24,17 @@ public class PaymentFixedTest {
   private static final Currency CUR = Currency.EUR;
   private static final PaymentFixed PAYMENT = new PaymentFixed(CUR, PAYMENT_TIME, AMOUNT);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativePaymentTime() {
     new PaymentFixed(CUR, -1, AMOUNT);
   }
 
+  /**
+   *
+   */
   @Test
   public void testHashCodeAndEquals() {
     PaymentFixed other = new PaymentFixed(CUR, PAYMENT_TIME, AMOUNT);
@@ -40,6 +46,9 @@ public class PaymentFixedTest {
     assertFalse(other.equals(PAYMENT));
   }
 
+  /**
+   *
+   */
   @Test
   public void testGetters() {
     assertEquals(PAYMENT.getPaymentTime(), PAYMENT_TIME, 0);

@@ -12,12 +12,12 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.money.Currency;
@@ -32,7 +32,7 @@ public class CouponIborGearingTest {
   // The index: Libor 3m
   private static final Period TENOR = Period.ofMonths(3);
   private static final int SETTLEMENT_DAYS = 2;
-  private static final Calendar CALENDAR = new MondayToFridayCalendar("A");
+  private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final DayCount DAY_COUNT_INDEX = DayCounts.ACT_360;
   private static final BusinessDayConvention BUSINESS_DAY = BusinessDayConventions.MODIFIED_FOLLOWING;
   private static final boolean IS_EOM = true;
@@ -43,7 +43,7 @@ public class CouponIborGearingTest {
   private static final ZonedDateTime ACCRUAL_START_DATE = DateUtils.getUTCDate(2011, 5, 23);
   private static final ZonedDateTime ACCRUAL_END_DATE = DateUtils.getUTCDate(2011, 8, 22);
   private static final double ACCRUAL_FACTOR = DAY_COUNT_COUPON.getDayCountFraction(ACCRUAL_START_DATE, ACCRUAL_END_DATE);
-  private static final double NOTIONAL = 1000000; //1m
+  private static final double NOTIONAL = 1000000; // 1m
   private static final double FACTOR = 2.0;
   private static final double SPREAD = 0.0050;
   private static final ZonedDateTime FIXING_DATE = ScheduleCalculator.getAdjustedDate(ACCRUAL_START_DATE, -SETTLEMENT_DAYS, CALENDAR);
@@ -57,30 +57,43 @@ public class CouponIborGearingTest {
   private static final double FIXING_START_TIME = ACT_ACT.getDayCountFraction(REFERENCE_DATE, FIXING_START_DATE);
   private static final double FIXING_END_TIME = ACT_ACT.getDayCountFraction(REFERENCE_DATE, FIXING_END_DATE);
   private static final double FIXING_ACCRUAL_FACTOR = DAY_COUNT_INDEX.getDayCountFraction(FIXING_START_DATE, FIXING_END_DATE);
-  private static final CouponIborGearing COUPON = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME,
+  private static final CouponIborGearing COUPON = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX,
+      FIXING_START_TIME,
       FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD, FACTOR);
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrency() {
-    new CouponIborGearing(null, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD, FACTOR);
+    new CouponIborGearing(null, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME,
+        FIXING_ACCRUAL_FACTOR, SPREAD, FACTOR);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullIndex() {
-    new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, null, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD, FACTOR);
+    new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, null, FIXING_START_TIME, FIXING_END_TIME,
+        FIXING_ACCRUAL_FACTOR, SPREAD, FACTOR);
   }
 
+  /**
+   *
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testWrongCurrency() {
     final Currency otherCurrency = Currency.USD;
-    new CouponIborGearing(otherCurrency, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
+    new CouponIborGearing(otherCurrency, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME,
+        FIXING_ACCRUAL_FACTOR, SPREAD,
         FACTOR);
   }
 
-  @Test
   /**
    * Tests the getters.
    */
+  @Test
   public void getter() {
     assertEquals(CUR, COUPON.getCurrency());
     assertEquals(ACCRUAL_END_TIME, COUPON.getPaymentTime());
@@ -93,49 +106,63 @@ public class CouponIborGearingTest {
     assertEquals(FACTOR, COUPON.getFactor());
   }
 
+  /**
+   *
+   */
   @Test
   public void testWithNotional() {
     final double notional = NOTIONAL + 100;
-    final CouponIborGearing expected = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, notional, FIXING_TIME, INDEX, FIXING_START_TIME,
+    final CouponIborGearing expected = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, notional, FIXING_TIME, INDEX,
+        FIXING_START_TIME,
         FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD, FACTOR);
     assertEquals(expected, COUPON.withNotional(notional));
   }
 
-  @Test
   /**
    * Tests the equal and hash code.
    */
+  @Test
   public void testEqualHash() {
-    final CouponIborGearing newCoupon = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME,
+    final CouponIborGearing newCoupon = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX,
+        FIXING_START_TIME, FIXING_END_TIME,
         FIXING_ACCRUAL_FACTOR, SPREAD, FACTOR);
     assertEquals(newCoupon, COUPON);
     assertEquals(newCoupon.hashCode(), COUPON.hashCode());
     CouponIborGearing other;
-    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME + 0.1, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
+    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME + 0.1, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME,
+        FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
         FACTOR);
     assertFalse(COUPON.equals(other));
-    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR + 0.1, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
+    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR + 0.1, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME,
+        FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
         FACTOR);
     assertFalse(COUPON.equals(other));
-    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL + 0.1, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
+    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL + 0.1, FIXING_TIME, INDEX, FIXING_START_TIME,
+        FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
         FACTOR);
     assertFalse(COUPON.equals(other));
-    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME + 0.1, INDEX, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
+    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME + 0.1, INDEX, FIXING_START_TIME,
+        FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
         FACTOR);
     assertFalse(COUPON.equals(other));
-    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME + 0.1, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
+    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME + 0.1,
+        FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
         FACTOR);
     assertFalse(COUPON.equals(other));
-    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME + 0.1, FIXING_ACCRUAL_FACTOR, SPREAD,
+    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME,
+        FIXING_END_TIME + 0.1, FIXING_ACCRUAL_FACTOR, SPREAD,
         FACTOR);
     assertFalse(COUPON.equals(other));
-    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR + 0.1, SPREAD,
+    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME,
+        FIXING_ACCRUAL_FACTOR + 0.1, SPREAD,
         FACTOR);
     assertFalse(COUPON.equals(other));
-    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD + 0.1,
+    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME,
+        FIXING_ACCRUAL_FACTOR, SPREAD + 0.1,
         FACTOR);
     assertFalse(COUPON.equals(other));
-    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, SPREAD,
+    other = new CouponIborGearing(CUR, ACCRUAL_END_TIME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME,
+        FIXING_ACCRUAL_FACTOR, SPREAD,
         FACTOR + 0.1);
     assertFalse(COUPON.equals(other));
   }

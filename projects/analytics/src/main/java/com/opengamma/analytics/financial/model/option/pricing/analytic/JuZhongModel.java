@@ -38,7 +38,7 @@ public class JuZhongModel extends AnalyticOptionModel<AmericanVanillaOptionDefin
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         final GreekResultCollection bsmResult = BSM.getGreeks(definition, data, PRICE);
         final double bsmPrice = bsmResult.get(Greek.FAIR_PRICE);
@@ -98,13 +98,15 @@ public class JuZhongModel extends AnalyticOptionModel<AmericanVanillaOptionDefin
     return (1 - h) * alpha * lambdaDash / (2 * (2 * lambda + beta - 1));
   }
 
-  protected double getD(final double h, final double alpha, final double derivative, final double hA, final double lambdaDash, final double lambda,
+  protected double getD(final double h, final double alpha, final double derivative, final double hA, final double lambdaDash,
+      final double lambda,
       final double beta) {
     final double denom = 2 * lambda + beta - 1;
     return (1 - h) * alpha * (derivative / hA + 1 / h + lambdaDash / denom) / denom;
   }
 
-  protected double getDerivative(final double k, final double r, final double b, final double t, final double sigma, final double phi, final double sEstimate) {
+  protected double getDerivative(final double k, final double r, final double b, final double t, final double sigma, final double phi,
+      final double sEstimate) {
     final double df = Math.exp(t * (r - b));
     final double d1 = getD1(sEstimate, k, t, sigma, b);
     final double d2 = getD2(d1, sigma, t);
@@ -112,14 +114,15 @@ public class JuZhongModel extends AnalyticOptionModel<AmericanVanillaOptionDefin
         + phi * k * NORMAL.getCDF(phi * d2);
   }
 
-  protected Function1D<Double, Double> getFunction(final double phi, final double df, final double k, final double t, final double sigma, final double b,
+  protected Function1D<Double, Double> getFunction(final double phi, final double df, final double k, final double t, final double sigma,
+      final double b,
       final double lambda,
       final OptionDefinition definition, final StandardOptionDataBundle data) {
     return new Function1D<Double, Double>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         final GreekResultCollection bsmPrice = BSM.getGreeks(definition, data.withSpot(x), PRICE);
         final double price = bsmPrice.get(Greek.FAIR_PRICE);
         return phi * (df * NORMAL.getCDF(phi * getD1(x, k, t, sigma, b)) + lambda * (phi * (x - k) - price) / x - 1);

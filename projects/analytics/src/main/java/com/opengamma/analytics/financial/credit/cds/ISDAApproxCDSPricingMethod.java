@@ -14,7 +14,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.cds.ISDACDSDefinition;
 import com.opengamma.analytics.financial.instrument.cds.ISDACDSPremiumDefinition;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.financial.convention.calendar.Calendar;
 
 // CSOFF
@@ -113,14 +112,11 @@ public class ISDAApproxCDSPricingMethod {
 
     final double guess = dataPoints[0] / (1.0 - cds.getRecoveryRate());
 
-    dataPoints[0] = HAZARD_SOLVER.findRoot(new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double x) {
-        dataPoints[0] = x;
-        final ISDACurve tempCurve = new ISDACurve(cds.getSpreadCurveName(), timePoints, dataPoints, 0.0);
-        return valueCDS(bootstrapCDS, tempCurve, paymentTimeline, accrualTimeline, contingentTimeline, offsetStepinTime,
-            stepinDiscountFactor, settlementDiscountFactor, true);
-      }
+    dataPoints[0] = HAZARD_SOLVER.findRoot(x -> {
+      dataPoints[0] = x;
+      final ISDACurve tempCurve = new ISDACurve(cds.getSpreadCurveName(), timePoints, dataPoints, 0.0);
+      return valueCDS(bootstrapCDS, tempCurve, paymentTimeline, accrualTimeline, contingentTimeline, offsetStepinTime,
+          stepinDiscountFactor, settlementDiscountFactor, true);
     }, guess, HAZARD_SOLVER_LOWER_BOUND, HAZARD_SOLVER_UPPER_BOUND, HAZARD_SOLVER_INITIAL_STEP, HAZARD_SOLVER_INITIAL_DERIVATIVE);
 
     // In some cases the solver can diverge and report a root found at the upper bound

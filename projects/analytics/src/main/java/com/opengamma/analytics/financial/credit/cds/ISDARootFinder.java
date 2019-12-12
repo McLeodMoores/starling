@@ -5,17 +5,19 @@
  */
 package com.opengamma.analytics.financial.credit.cds;
 
+import java.util.function.Function;
+
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.rootfinding.BrentSingleRootFinder;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Numerical solver replicating the ISDA 'Brent' root finder algorithm. This algorithm is only intended for use with the ISDA CDS pricing method.
+ * Numerical solver replicating the ISDA 'Brent' root finder algorithm. This algorithm is only intended for use with the ISDA CDS pricing
+ * method.
  *
- * Bounds for an initial interval are taken from the guess parameter. Then the secant method is called to find an interval where the function straddles zero. If
- * the secant method fails to find an interval, the intervals between the initial guess and the upper and lower bounds are tried. Once an interval straddling
- * zero is found, the brent solver is called for that interval.
+ * Bounds for an initial interval are taken from the guess parameter. Then the secant method is called to find an interval where the
+ * function straddles zero. If the secant method fails to find an interval, the intervals between the initial guess and the upper and lower
+ * bounds are tried. Once an interval straddling zero is found, the brent solver is called for that interval.
  *
  * @see BrentSingleRootFinder
  * @see ISDAApproxCDSPricingMethod
@@ -41,7 +43,7 @@ public class ISDARootFinder {
     _brentRootFinder = new BrentSingleRootFinder(tolerance);
   }
 
-  public double findRoot(final Function1D<Double, Double> function, final double guess, final double lowerBound, final double upperBound,
+  public double findRoot(final Function<Double, Double> function, final double guess, final double lowerBound, final double upperBound,
       final double initialStep, final double initialDerivative) {
 
     ArgumentChecker.isTrue(upperBound > lowerBound, "Upper bound must be greater than lower bound");
@@ -120,7 +122,8 @@ public class ISDARootFinder {
     return _brentRootFinder.getRoot(function, x1, x2);
   }
 
-  private SecantResultData secantMethod(final Function1D<Double, Double> function, final double lowerBound, final double upperBound, final double xLow,
+  private SecantResultData secantMethod(final Function<Double, Double> function, final double lowerBound, final double upperBound,
+      final double xLow,
       final double xHigh, final double yLow, final double yHigh) {
 
     double x1, x2, x3, y1, y2, y3, dx, temp;
@@ -141,7 +144,8 @@ public class ISDARootFinder {
         y3 = temp;
       }
 
-      dx = Math.abs(y1 - y3) <= _tolerance ? y1 - y3 > 0 ? -y1 * (x1 - x3) / _tolerance : y1 * (x1 - x3) / _tolerance : (x3 - x1) * y1 / (y1 - y3);
+      dx = Math.abs(y1 - y3) <= _tolerance ? y1 - y3 > 0 ? -y1 * (x1 - x3) / _tolerance : y1 * (x1 - x3) / _tolerance
+          : (x3 - x1) * y1 / (y1 - y3);
 
       x2 = x1 + dx;
 
@@ -257,5 +261,5 @@ public class ISDARootFinder {
 
   private enum SecantResult {
     FOUND, BRACKETED, NOT_FOUND
-  };
+  }
 }

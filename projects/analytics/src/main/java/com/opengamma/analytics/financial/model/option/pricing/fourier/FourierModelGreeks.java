@@ -38,7 +38,8 @@ public class FourierModelGreeks {
     _integrator = integrator;
   }
 
-  public double[] getGreeks(final BlackFunctionData data, final EuropeanVanillaOption option, final MartingaleCharacteristicExponent ce, final double alpha,
+  public double[] getGreeks(final BlackFunctionData data, final EuropeanVanillaOption option, final MartingaleCharacteristicExponent ce,
+      final double alpha,
       final double limitTolerance) {
     Validate.notNull(data, "data");
     Validate.notNull(option, "option");
@@ -62,7 +63,8 @@ public class FourierModelGreeks {
     final Function1D<ComplexNumber, ComplexNumber[]> adjointFuncs = ce.getAdjointFunction(t);
     final double[] res = new double[n - 1];
 
-    // TODO This is inefficient as a call to ajointFuncs.evaluate(z), will return several values (the value of the characteristic function and its derivatives),
+    // TODO This is inefficient as a call to ajointFuncs.evaluate(z), will return several values (the value of the characteristic function
+    // and its derivatives),
     // but only one
     // of these values is used by each of the the integraters - a parallel quadrature scheme would be good here
     for (int i = 0; i < n - 1; i++) {
@@ -73,13 +75,14 @@ public class FourierModelGreeks {
     return res;
   }
 
-  public Function1D<Double, Double> getIntegrandFunction(final Function1D<ComplexNumber, ComplexNumber[]> ajointFunctions, final double alpha,
+  public Function1D<Double, Double> getIntegrandFunction(final Function1D<ComplexNumber, ComplexNumber[]> ajointFunctions,
+      final double alpha,
       final double kappa, final int index) {
 
     return new Function1D<Double, Double>() {
 
       @Override
-      public Double apply(final Double x) {
+      public Double evaluate(final Double x) {
         final ComplexNumber z = new ComplexNumber(x, -1 - alpha);
         final ComplexNumber[] ajoint = ajointFunctions.apply(z);
         ComplexNumber num = exp(add(new ComplexNumber(0, -x * kappa), ajoint[0]));

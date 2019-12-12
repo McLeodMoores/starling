@@ -5,7 +5,7 @@
  */
 package com.opengamma.analytics.financial.model.tree;
 
-import com.opengamma.analytics.math.function.Function1D;
+import java.util.function.Function;
 
 /**
  *
@@ -14,13 +14,7 @@ import com.opengamma.analytics.math.function.Function1D;
  */
 public class RecombiningBinomialTree<T> extends RecombiningTree<T> {
   /** Number of nodes at each level. */
-  public static final Function1D<Integer, Integer> NODES = new Function1D<Integer, Integer>() {
-
-    @Override
-    public Integer apply(final Integer i) {
-      return i + 1;
-    }
-  };
+  public static final Function<Integer, Integer> NODES = i -> i + 1;
 
   public RecombiningBinomialTree(final T[][] data) {
     super(data);

@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedIbor;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedIborMaster;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
@@ -42,7 +43,6 @@ import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.financial.util.AssertSensitivityObjects;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
@@ -57,32 +57,35 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
 
   private static final MulticurveProviderDiscount MULTICURVES = MulticurveProviderDiscountDataSets.createMulticurveEurUsd();
   private static final IborIndex EURIBOR6M = MulticurveProviderDiscountDataSets.getIndexesIborMulticurveEurUsd()[1];
-  private static final Calendar CALENDAR = MulticurveProviderDiscountDataSets.getEURCalendar();
+  private static final WorkingDayCalendar CALENDAR = MulticurveProviderDiscountDataSets.getEURCalendar();
   private static final Currency EUR = EURIBOR6M.getCurrency();
   // Data
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2012, 1, 10);
   private static final GeneratorSwapFixedIborMaster GENERATOR_SWAP_MASTER = GeneratorSwapFixedIborMaster.getInstance();
   private static final GeneratorSwapFixedIbor GENERATOR_EUR1YEURIBOR6M = GENERATOR_SWAP_MASTER.getGenerator("EUR1YEURIBOR6M", CALENDAR);
 
-
   private static final BlackFlatSwaptionParameters BLACK = BlackDataSets.createBlackSwaptionEUR6();
   private static final BlackSwaptionFlatProviderDiscount BLACK_MULTICURVES = new BlackSwaptionFlatProviderDiscount(MULTICURVES, BLACK);
   // Swaption
   private static final Period EXPIRY_TENOR = Period.ofMonths(26); // To be between nodes.
-  private static final ZonedDateTime EXPIRY_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, EXPIRY_TENOR, GENERATOR_EUR1YEURIBOR6M.getBusinessDayConvention(), CALENDAR,
+  private static final ZonedDateTime EXPIRY_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, EXPIRY_TENOR,
+      GENERATOR_EUR1YEURIBOR6M.getBusinessDayConvention(), CALENDAR,
       GENERATOR_EUR1YEURIBOR6M.isEndOfMonth());
-  private static final ZonedDateTime SETTLE_DATE = ScheduleCalculator.getAdjustedDate(EXPIRY_DATE, GENERATOR_EUR1YEURIBOR6M.getSpotLag(), CALENDAR);
+  private static final ZonedDateTime SETTLE_DATE = ScheduleCalculator.getAdjustedDate(EXPIRY_DATE, GENERATOR_EUR1YEURIBOR6M.getSpotLag(),
+      CALENDAR);
   private static final int SWAP_TENOR_YEAR = 5;
   private static final Period SWAP_TENOR = Period.ofYears(SWAP_TENOR_YEAR);
   private static final double NOTIONAL = 123456789.0;
   private static final double RATE = 0.02;
-  private static final SwapFixedIborDefinition SWAP_DEFINITION_REC = SwapFixedIborDefinition.from(SETTLE_DATE, SWAP_TENOR, GENERATOR_EUR1YEURIBOR6M, NOTIONAL, RATE, false);
-  private static final SwaptionPhysicalFixedIborDefinition SWAPTION_DEFINITION_LONG_REC = SwaptionPhysicalFixedIborDefinition.from(EXPIRY_DATE, SWAP_DEFINITION_REC, false, true);
+  private static final SwapFixedIborDefinition SWAP_DEFINITION_REC = SwapFixedIborDefinition.from(SETTLE_DATE, SWAP_TENOR,
+      GENERATOR_EUR1YEURIBOR6M, NOTIONAL, RATE, false);
+  private static final SwaptionPhysicalFixedIborDefinition SWAPTION_DEFINITION_LONG_REC = SwaptionPhysicalFixedIborDefinition
+      .from(EXPIRY_DATE, SWAP_DEFINITION_REC, false, true);
   private static final SwaptionPhysicalFixedIbor SWAPTION_LONG_REC = SWAPTION_DEFINITION_LONG_REC.toDerivative(REFERENCE_DATE);
   // Method - calculator
   private static final double TOLERANCE_PV = 1.0E-2;
   private static final double TOLERANCE_PV_DELTA = 1.0E+2;
-  //Testing note: Sensitivity is for a movement of 1. 1E+2 = 1 cent for a 1 bp move.
+  // Testing note: Sensitivity is for a movement of 1. 1E+2 = 1 cent for a 1 bp move.
 
   private static final SwaptionPhysicalFixedIborBlackMethod METHOD_BLACK = SwaptionPhysicalFixedIborBlackMethod.getInstance();
   private static final SwapFixedCouponDiscountingMethod METHOD_SWAP = SwapFixedCouponDiscountingMethod.getInstance();
@@ -91,16 +94,22 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
 
   private static final PresentValueBlackSwaptionCalculator PVBSC = PresentValueBlackSwaptionCalculator.getInstance();
-  private static final PresentValueCurveSensitivityBlackSwaptionCalculator PVCSBSC = PresentValueCurveSensitivityBlackSwaptionCalculator.getInstance();
-  private static final PresentValueBlackSensitivityBlackSwaptionCalculator PVBSSBSC = PresentValueBlackSensitivityBlackSwaptionCalculator.getInstance();
+  private static final PresentValueCurveSensitivityBlackSwaptionCalculator PVCSBSC = PresentValueCurveSensitivityBlackSwaptionCalculator
+      .getInstance();
+  private static final PresentValueBlackSensitivityBlackSwaptionCalculator PVBSSBSC = PresentValueBlackSensitivityBlackSwaptionCalculator
+      .getInstance();
 
   private static final double SHIFT = 1.0E-6;
-  private static final ParameterSensitivityParameterCalculator<BlackSwaptionFlatProviderInterface> PS_BS_C = new ParameterSensitivityParameterCalculator<>(PVCSBSC);
-  private static final ParameterSensitivityBlackSwaptionDiscountInterpolatedFDCalculator PS_BS_FDC = new ParameterSensitivityBlackSwaptionDiscountInterpolatedFDCalculator(PVBSC, SHIFT);
+  private static final ParameterSensitivityParameterCalculator<BlackSwaptionFlatProviderInterface> PS_BS_C = new ParameterSensitivityParameterCalculator<>(
+      PVCSBSC);
+  private static final ParameterSensitivityBlackSwaptionDiscountInterpolatedFDCalculator PS_BS_FDC = new ParameterSensitivityBlackSwaptionDiscountInterpolatedFDCalculator(
+      PVBSC, SHIFT);
 
   private static final BlackSwaptionSensitivityNodeCalculator BSSNC = new BlackSwaptionSensitivityNodeCalculator();
 
-  @Test
+  /**
+   *
+   */
   public void presentValue() {
     final MultipleCurrencyAmount pvMethod = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, BLACK_MULTICURVES);
     final double forward = SWAPTION_LONG_REC.getUnderlyingSwap().accept(PRDC, MULTICURVES);
@@ -113,13 +122,14 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
     assertEquals("Swaption Black method: present value", pvExpected, pvMethod.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests the payer/receiver parity for swaptions present value.
    */
   public void presentValuePayerReceiverParity() {
-    final SwapFixedIborDefinition swapDefinitionPay = SwapFixedIborDefinition.from(SETTLE_DATE, SWAP_TENOR, GENERATOR_EUR1YEURIBOR6M, NOTIONAL, RATE, true);
-    final SwaptionPhysicalFixedIborDefinition swaptionDefinitionShortPayer = SwaptionPhysicalFixedIborDefinition.from(EXPIRY_DATE, swapDefinitionPay, true, false);
+    final SwapFixedIborDefinition swapDefinitionPay = SwapFixedIborDefinition.from(SETTLE_DATE, SWAP_TENOR, GENERATOR_EUR1YEURIBOR6M,
+        NOTIONAL, RATE, true);
+    final SwaptionPhysicalFixedIborDefinition swaptionDefinitionShortPayer = SwaptionPhysicalFixedIborDefinition.from(EXPIRY_DATE,
+        swapDefinitionPay, true, false);
     final SwaptionPhysicalFixedIbor swaptionShortPayer = swaptionDefinitionShortPayer.toDerivative(REFERENCE_DATE);
     final InstrumentDerivative swapRec = SWAP_DEFINITION_REC.toDerivative(REFERENCE_DATE);
     final MultipleCurrencyAmount pvLR = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, BLACK_MULTICURVES);
@@ -128,7 +138,6 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
     assertEquals("Swaption Black method: present value", pvSwap.getAmount(EUR), pvLR.getAmount(EUR) + pvSP.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Compare the method figures to the Calculator figures.
    */
@@ -138,27 +147,26 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
     assertEquals("Swaption Black method: present value", pvCalculator.getAmount(EUR), pvMethod.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests the curve sensitivity for the explicit formula.
    */
   public void presentValueCurveSensitivity() {
-    final MultipleCurrencyParameterSensitivity pvpsExact = PS_BS_C.calculateSensitivity(SWAPTION_LONG_REC, BLACK_MULTICURVES, BLACK_MULTICURVES.getMulticurveProvider().getAllNames());
+    final MultipleCurrencyParameterSensitivity pvpsExact = PS_BS_C.calculateSensitivity(SWAPTION_LONG_REC, BLACK_MULTICURVES,
+        BLACK_MULTICURVES.getMulticurveProvider().getAllNames());
     final MultipleCurrencyParameterSensitivity pvpsFD = PS_BS_FDC.calculateSensitivity(SWAPTION_LONG_REC, BLACK_MULTICURVES);
     AssertSensitivityObjects.assertEquals("Swaption Black method: presentValueCurveSensitivity ", pvpsExact, pvpsFD, TOLERANCE_PV_DELTA);
   }
 
-  @Test
   /**
    * Compare the method figures to the Calculator figures.
    */
   public void presentValueCurveSensitivityMethodVsCalculator() {
-    final MultipleCurrencyMulticurveSensitivity pvcsMethod = METHOD_BLACK.presentValueCurveSensitivity(SWAPTION_LONG_REC, BLACK_MULTICURVES);
+    final MultipleCurrencyMulticurveSensitivity pvcsMethod = METHOD_BLACK.presentValueCurveSensitivity(SWAPTION_LONG_REC,
+        BLACK_MULTICURVES);
     final MultipleCurrencyMulticurveSensitivity pvcsCalculator = SWAPTION_LONG_REC.accept(PVCSBSC, BLACK_MULTICURVES);
     AssertSensitivityObjects.assertEquals("Swaption Black method: present value", pvcsMethod, pvcsCalculator, TOLERANCE_PV_DELTA);
   }
 
-  @Test
   /**
    * Tests the Black volatility sensitivity (vega).
    */
@@ -172,10 +180,10 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
     final BlackSwaptionFlatProviderDiscount curvesBlackM = new BlackSwaptionFlatProviderDiscount(MULTICURVES, blackM);
     final MultipleCurrencyAmount pvM = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, curvesBlackM);
     final DoublesPair point = DoublesPair.of(SWAPTION_LONG_REC.getTimeToExpiry(), SWAPTION_LONG_REC.getMaturityTime());
-    assertEquals("Swaption Black method: present value volatility sensitivity", (pvP.getAmount(EUR) - pvM.getAmount(EUR)) / (2 * shift), pvbvs.getSensitivity().getMap().get(point), TOLERANCE_PV_DELTA);
+    assertEquals("Swaption Black method: present value volatility sensitivity", (pvP.getAmount(EUR) - pvM.getAmount(EUR)) / (2 * shift),
+        pvbvs.getSensitivity().getMap().get(point), TOLERANCE_PV_DELTA);
   }
 
-  @Test
   /**
    * Tests the Black volatility sensitivity (vega).
    */
@@ -185,7 +193,6 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
     assertEquals("Swaption Black method: present value", pvbsMethod, pvbsCalculator);
   }
 
-  @Test
   /**
    * Tests the Black volatility sensitivity (vega).
    */
@@ -206,5 +213,20 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
           pvbns.getSensitivity().getMap().get(DoublesPair.of(x[loopindex], y[loopindex])), TOLERANCE_PV_DELTA);
     }
   }
+
+  // TODO
+  // @Test
+  // public void thetaBeforeExpiration() {
+  // final MultipleCurrencyAmount theta = THETAC.getTheta(SWAPTION_DEFINITION_LONG_REC, REFERENCE_DATE, CURVES_NAME, CURVES_BLACK, 1);
+  // final SwaptionPhysicalFixedIbor swaptionToday = SWAPTION_DEFINITION_LONG_REC.toDerivative(REFERENCE_DATE, CURVES_NAME);
+  // final SwaptionPhysicalFixedIbor swaptionTomorrow = SWAPTION_DEFINITION_LONG_REC.toDerivative(REFERENCE_DATE.plusDays(1), CURVES_NAME);
+  // final double pvToday = swaptionToday.accept(PVC_BLACK, CURVES_BLACK);
+  // final YieldCurveBundle tomorrowData = SWAPTION_ROLLDOWN.rollDown(CURVES_BLACK, TimeCalculator.getTimeBetween(REFERENCE_DATE,
+  // REFERENCE_DATE.plusDays(1)));
+  // final double pvTomorrow = swaptionTomorrow.accept(PVC_BLACK, tomorrowData);
+  // assertEquals("ThetaCalculator: fixed-coupon swap", pvTomorrow - pvToday, theta.getAmount(SWAPTION_DEFINITION_LONG_REC.getCurrency()),
+  // TOLERANCE_PV);
+  // assertEquals("ThetaCalculator: fixed-coupon swap", 1, theta.getCurrencyAmounts().length);
+  // }
 
 }

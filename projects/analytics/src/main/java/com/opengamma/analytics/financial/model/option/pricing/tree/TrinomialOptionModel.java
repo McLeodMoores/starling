@@ -6,6 +6,7 @@
 package com.opengamma.analytics.financial.model.option.pricing.tree;
 
 import java.util.Set;
+import java.util.function.Function;
 
 import com.opengamma.analytics.financial.greeks.Greek;
 import com.opengamma.analytics.financial.greeks.GreekResultCollection;
@@ -46,7 +47,8 @@ public class TrinomialOptionModel<T extends StandardOptionDataBundle> extends Tr
     ArgumentChecker.notNegativeOrZero(n, "n");
     ArgumentChecker.notNegative(maxDepthToSave, "max. depth to save");
     if (maxDepthToSave > n) {
-      throw new IllegalArgumentException("Asked for tree to be saved to depth " + maxDepthToSave + " but the tree will only be " + n + " levels deep");
+      throw new IllegalArgumentException(
+          "Asked for tree to be saved to depth " + maxDepthToSave + " but the tree will only be " + n + " levels deep");
     }
     _model = model;
     _n = n;
@@ -57,15 +59,8 @@ public class TrinomialOptionModel<T extends StandardOptionDataBundle> extends Tr
 
   @Override
   public GreekResultCollection getGreeks(final OptionDefinition definition, final T data, final Set<Greek> requiredGreeks) {
-    final Function1D<T, RecombiningTrinomialTree<DoublesPair>> treeFunction = getTreeGeneratingFunction(definition);
-    final Function1D<T, Double> function = new Function1D<T, Double>() {
-
-      @Override
-      public Double apply(final T t) {
-        return treeFunction.apply(t).getNode(0, 0).second;
-      }
-
-    };
+    final Function<T, RecombiningTrinomialTree<DoublesPair>> treeFunction = getTreeGeneratingFunction(definition);
+    final Function<T, Double> function = t -> treeFunction.apply(t).getNode(0, 0).second;
     final GreekResultCollection results = new GreekResultCollection();
     final GreekVisitor<Double> visitor = new FiniteDifferenceGreekVisitor<>(function, data, definition);
     for (final Greek greek : requiredGreeks) {
@@ -81,7 +76,7 @@ public class TrinomialOptionModel<T extends StandardOptionDataBundle> extends Tr
 
       @SuppressWarnings({ "unchecked" })
       @Override
-      public RecombiningTrinomialTree<DoublesPair> apply(final T data) {
+      public RecombiningTrinomialTree<DoublesPair> evaluate(final T data) {
         final DoublesPair[][] spotAndOptionPrices = new DoublesPair[_maxDepthToSave + 1][_maxWidthToSave];
         final OptionPayoffFunction<T> payoffFunction = definition.getPayoffFunction();
         final OptionExerciseFunction<T> exerciseFunction = definition.getExerciseFunction();

@@ -5,12 +5,14 @@
  */
 package com.opengamma.analytics.financial.equity.variance.pricing;
 
+import java.util.function.Function;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.minimization.ParameterLimitsTransform;
 import com.opengamma.analytics.math.minimization.ParameterLimitsTransform.LimitType;
@@ -21,12 +23,12 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.CompareUtils;
 
 /**
- * This is a model where the SDE for the forward are $\frac{df}{f+\alpha}=\sigma_{\alpha} dW$, that is, the forward, $f$, plus some displacement, $\alpha$,
- * follow a geometric Brownian motion (GBM). European options can be priced using the Black formula with forward $f \rightarrow f +\alpha$ and strike $k
- * \rightarrow k + \alpha$
+ * This is a model where the SDE for the forward are $\frac{df}{f+\alpha}=\sigma_{\alpha} dW$, that is, the forward, $f$, plus some
+ * displacement, $\alpha$, follow a geometric Brownian motion (GBM). European options can be priced using the Black formula with forward $f
+ * \rightarrow f +\alpha$ and strike $k \rightarrow k + \alpha$
  * <p>
- * <b> This should not be confused with Shifted Log-Normal</b>
- * (see {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction})
+ * <b> This should not be confused with Shifted Log-Normal</b> (see
+ * {@link com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackBarrierPriceFunction})
  */
 public class DisplacedDiffusionModel {
   /** A logger */
@@ -95,14 +97,16 @@ public class DisplacedDiffusionModel {
    * @param solver
    *          VectorRootFinder
    */
-  public DisplacedDiffusionModel(final double forward, final double expiry, final double targetStrike1, final double targetVol1, final double targetStrike2,
+  public DisplacedDiffusionModel(final double forward, final double expiry, final double targetStrike1, final double targetVol1,
+      final double targetStrike2,
       final double targetVol2, final double volGuess, final double shiftGuess, final VectorRootFinder solver) {
 
     _forward = forward;
     _expiry = expiry;
 
     // Find target volatilities
-    final DoubleMatrix1D volShift = fitShiftedLnParams(targetStrike1, targetVol1, targetStrike2, targetVol2, volGuess, shiftGuess * _forward, solver);
+    final DoubleMatrix1D volShift = fitShiftedLnParams(targetStrike1, targetVol1, targetStrike2, targetVol2, volGuess,
+        shiftGuess * _forward, solver);
     _vol = volShift.getEntry(0);
     _shift = volShift.getEntry(1);
 
@@ -124,7 +128,8 @@ public class DisplacedDiffusionModel {
    * @param targetVol2
    *          lognormal vol at the second target strike
    */
-  public DisplacedDiffusionModel(final double forward, final double expiry, final double targetStrike1, final double targetVol1, final double targetStrike2,
+  public DisplacedDiffusionModel(final double forward, final double expiry, final double targetStrike1, final double targetVol1,
+      final double targetStrike2,
       final double targetVol2) {
     this(forward, expiry, targetStrike1, targetVol1, targetStrike2, targetVol2, DEF_GUESS_VOL, DEF_GUESS_SHIFT, DEF_SOLVER);
   }
@@ -148,10 +153,12 @@ public class DisplacedDiffusionModel {
    */
   public DisplacedDiffusionModel from(final double forward, final double expiry, final double targetStrike1, final double targetVol1,
       final double targetStrike2, final double targetVol2) {
-    return new DisplacedDiffusionModel(forward, expiry, targetStrike1, targetVol1, targetStrike2, targetVol2, DEF_GUESS_VOL, DEF_GUESS_SHIFT, DEF_SOLVER);
+    return new DisplacedDiffusionModel(forward, expiry, targetStrike1, targetVol1, targetStrike2, targetVol2, DEF_GUESS_VOL,
+        DEF_GUESS_SHIFT, DEF_SOLVER);
   }
 
-  private DoubleMatrix1D fitShiftedLnParams(final double strikeTarget1, final double volTarget1, final double strikeTarget2, final double volTarget2,
+  private DoubleMatrix1D fitShiftedLnParams(final double strikeTarget1, final double volTarget1, final double strikeTarget2,
+      final double volTarget2,
       final double volGuess, final double shiftGuess, final VectorRootFinder solver) {
 
     ArgumentChecker.notNull(solver, "solver");
@@ -169,27 +176,28 @@ public class DisplacedDiffusionModel {
     }
 
     // Objective function - hit the two vol targets
-    final Function1D<DoubleMatrix1D, DoubleMatrix1D> priceDiffs = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
-      @Override
-      public DoubleMatrix1D apply(final DoubleMatrix1D volShiftPair) {
-        final double[] diffs = new double[] { 100, 100 };
-        final double vol = TRANSFORM.inverseTransform(volShiftPair.getEntry(0)); // Math.max(1e-9, volShiftPair.getEntry(0));
-        final double shift = volShiftPair.getEntry(1);
+    final Function<DoubleMatrix1D, DoubleMatrix1D> priceDiffs = volShiftPair -> {
+      final double[] diffs = new double[] { 100, 100 };
+      final double vol = TRANSFORM.inverseTransform(volShiftPair.getEntry(0)); // Math.max(1e-9, volShiftPair.getEntry(0));
+      final double shift = volShiftPair.getEntry(1);
 
-        diffs[0] = (target1Price - BlackFormulaRepository.price(_forward + shift, strikeTarget1 + shift, _expiry, vol, strikeTarget1 > _forward)) * 1e6;
-        diffs[1] = (target2Price - BlackFormulaRepository.price(_forward + shift, strikeTarget2 + shift, _expiry, vol, strikeTarget2 > _forward)) * 1e6;
-        return new DoubleMatrix1D(diffs);
-      }
+      diffs[0] = (target1Price
+          - BlackFormulaRepository.price(_forward + shift, strikeTarget1 + shift, _expiry, vol, strikeTarget1 > _forward)) * 1e6;
+      diffs[1] = (target2Price
+          - BlackFormulaRepository.price(_forward + shift, strikeTarget2 + shift, _expiry, vol, strikeTarget2 > _forward)) * 1e6;
+      return new DoubleMatrix1D(diffs);
     };
 
     try {
-      volShiftParams = solver.getRoot(priceDiffs, guess);
+      volShiftParams = solver.getRoot(Function1dAdapter.of(priceDiffs), guess);
     } catch (final Exception e) { // Failed on first solver attempt. Doing a second
       try {
-        volShiftParams = solver.getRoot(priceDiffs, new DoubleMatrix1D(new double[] { TRANSFORM.transform(volTarget2), 0.0 }));
+        volShiftParams = solver.getRoot(Function1dAdapter.of(priceDiffs),
+            new DoubleMatrix1D(new double[] { TRANSFORM.transform(volTarget2), 0.0 }));
       } catch (final Exception e2) {
         INSTANCE.error(
-            "Failed to find roots to fit a Shifted Lognormal Distribution to your targets. " + "Increase maxSteps, change guess, or change secondTarget.");
+            "Failed to find roots to fit a Shifted Lognormal Distribution to your targets. "
+                + "Increase maxSteps, change guess, or change secondTarget.");
         INSTANCE.error("K1 = " + strikeTarget1 + ",vol1 = " + volTarget1 + ",price1 = " + target1Price);
         INSTANCE.error("K2 = " + strikeTarget2 + ",vol2 = " + volTarget2 + ",price2 = " + target2Price);
         throw new OpenGammaRuntimeException(e.getMessage());

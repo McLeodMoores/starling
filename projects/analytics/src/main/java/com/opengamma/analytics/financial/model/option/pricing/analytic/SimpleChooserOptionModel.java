@@ -15,7 +15,8 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.time.DateUtils;
 
 /**
- * Pricing model for simple chooser options (see {@link com.opengamma.analytics.financial.model.option.definition.SimpleChooserOptionDefinition}).
+ * Pricing model for simple chooser options (see
+ * {@link com.opengamma.analytics.financial.model.option.definition.SimpleChooserOptionDefinition}).
  */
 public class SimpleChooserOptionModel extends AnalyticOptionModel<SimpleChooserOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -27,7 +28,7 @@ public class SimpleChooserOptionModel extends AnalyticOptionModel<SimpleChooserO
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getUnderlyingStrike();

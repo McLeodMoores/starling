@@ -16,10 +16,8 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.number.ComplexNumber;
 
 /**
- * This characteristic exponent converts a Levy process from calendar time to
- * business time (where time moves at a stochastic rate relative to calendar
- * time). This has the effect of introducing stochastic changes to the model
- * parameters of the original Levy process.
+ * This characteristic exponent converts a Levy process from calendar time to business time (where time moves at a stochastic rate relative
+ * to calendar time). This has the effect of introducing stochastic changes to the model parameters of the original Levy process.
  */
 public class TimeChangedCharacteristicExponent implements CharacteristicExponent {
   private final CharacteristicExponent _base;
@@ -27,8 +25,10 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
 
   /**
    *
-   * @param base The base characteristic exponent, not null
-   * @param timeChange The characteristic exponent to time change, not null
+   * @param base
+   *          The base characteristic exponent, not null
+   * @param timeChange
+   *          The characteristic exponent to time change, not null
    */
   public TimeChangedCharacteristicExponent(final CharacteristicExponent base, final StocasticClockCharcteristicExponent timeChange) {
     Validate.notNull(base, "base");
@@ -44,7 +44,7 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
 
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber apply(final ComplexNumber u) {
+      public ComplexNumber evaluate(final ComplexNumber u) {
         final ComplexNumber z = ComplexMathUtils.multiply(MINUS_I, baseFunction.apply(u));
         return timeChangeFunction.apply(z);
       }
@@ -77,6 +77,7 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
 
   /**
    * Gets the base field.
+   * 
    * @return the base
    */
   public CharacteristicExponent getBase() {
@@ -85,6 +86,7 @@ public class TimeChangedCharacteristicExponent implements CharacteristicExponent
 
   /**
    * Gets the timeChange field.
+   * 
    * @return the timeChange
    */
   public CharacteristicExponent getTimeChange() {

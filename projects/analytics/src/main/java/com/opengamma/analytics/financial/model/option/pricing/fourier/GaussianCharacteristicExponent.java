@@ -23,8 +23,10 @@ public class GaussianCharacteristicExponent implements CharacteristicExponent {
 
   /**
    *
-   * @param mu The mean of the Gaussian distribution
-   * @param sigma The standard deviation of the Gaussian distribution, not negative or zero
+   * @param mu
+   *          The mean of the Gaussian distribution
+   * @param sigma
+   *          The standard deviation of the Gaussian distribution, not negative or zero
    */
   public GaussianCharacteristicExponent(final double mu, final double sigma) {
     Validate.isTrue(sigma > 0.0, "sigma > 0");
@@ -36,7 +38,7 @@ public class GaussianCharacteristicExponent implements CharacteristicExponent {
   public Function1D<ComplexNumber, ComplexNumber> getFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber>() {
       @Override
-      public ComplexNumber apply(final ComplexNumber x) {
+      public ComplexNumber evaluate(final ComplexNumber x) {
         return getValue(x, t);
       }
     };
@@ -55,7 +57,7 @@ public class GaussianCharacteristicExponent implements CharacteristicExponent {
   public Function1D<ComplexNumber, ComplexNumber[]> getAdjointFunction(final double t) {
     return new Function1D<ComplexNumber, ComplexNumber[]>() {
       @Override
-      public ComplexNumber[] apply(final ComplexNumber x) {
+      public ComplexNumber[] evaluate(final ComplexNumber x) {
         return getCharacteristicExponentAdjoint(x, t);
       }
     };
@@ -90,6 +92,7 @@ public class GaussianCharacteristicExponent implements CharacteristicExponent {
 
   /**
    * Gets the mean.
+   * 
    * @return the mean
    */
   public double getMu() {
@@ -98,6 +101,7 @@ public class GaussianCharacteristicExponent implements CharacteristicExponent {
 
   /**
    * Gets the standard deviation.
+   * 
    * @return the standard deviation
    */
   public double getSigma() {

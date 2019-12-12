@@ -16,9 +16,10 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.timeseries.DoubleTimeSeries;
 
 /**
- * 
+ *
  */
-public class ExtremeSpreadOptionModel extends AnalyticOptionModel<ExtremeSpreadOptionDefinition, StandardOptionWithSpotTimeSeriesDataBundle> {
+public class ExtremeSpreadOptionModel
+    extends AnalyticOptionModel<ExtremeSpreadOptionDefinition, StandardOptionWithSpotTimeSeriesDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
   @Override
@@ -28,7 +29,7 @@ public class ExtremeSpreadOptionModel extends AnalyticOptionModel<ExtremeSpreadO
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionWithSpotTimeSeriesDataBundle data) {
+      public Double evaluate(final StandardOptionWithSpotTimeSeriesDataBundle data) {
         Validate.notNull(data, "data");
         final double s = data.getSpot();
         final double b = data.getCostOfCarry();
@@ -40,7 +41,7 @@ public class ExtremeSpreadOptionModel extends AnalyticOptionModel<ExtremeSpreadO
         final int eta = definition.isCall() ? 1 : -1;
         final int phi = definition.isReverse() ? -1 : 1;
         final double x = eta * phi == 1 ? ts.maxValue() : ts.minValue();
-        final double sigma = data.getVolatility(t2, x); //REVIEW emcleod 21-7-10 works for flat vol surfaces
+        final double sigma = data.getVolatility(t2, x); // REVIEW emcleod 21-7-10 works for flat vol surfaces
         final double m = Math.log(x / s);
         final double mu1 = b - sigma * sigma / 2;
         final double mu2 = b + sigma * sigma / 2;

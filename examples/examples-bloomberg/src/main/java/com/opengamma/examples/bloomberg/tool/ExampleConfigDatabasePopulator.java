@@ -18,12 +18,10 @@ import com.opengamma.bbg.loader.hts.BloombergHistoricalTimeSeriesLoader;
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.Security;
-import com.opengamma.examples.bloomberg.loader.CurveNodeHistoricalDataLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleCurveAndSurfaceDefinitionLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleCurveConfigurationLoader;
 import com.opengamma.examples.bloomberg.loader.ExampleFunctionConfigurationPopulator;
 import com.opengamma.examples.bloomberg.loader.ExampleTimeSeriesRatingLoader;
-import com.opengamma.examples.bloomberg.loader.FXSpotRateHistoricalDataLoader;
 import com.opengamma.financial.analytics.volatility.surface.FXOptionVolatilitySurfaceConfigPopulator;
 import com.opengamma.financial.convention.initializer.DefaultConventionMasterInitializer;
 import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
@@ -80,7 +78,6 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
     loadCurrencyConfiguration();
     loadCurveAndSurfaceDefinitions();
     loadCurveCalculationConfigurations();
-    loadCurveNodeHistoricalData();
     loadFutures();
 
     loadTimeSeriesRating();
@@ -171,24 +168,6 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
     }
   }
 
-  @SuppressWarnings("synthetic-access")
-  private void loadCurveNodeHistoricalData() {
-    final Log log = new Log("Loading historical and futures data");
-    try {
-      final CurveNodeHistoricalDataLoader curveNodeHistoricalDataLoader = new CurveNodeHistoricalDataLoader();
-      final FXSpotRateHistoricalDataLoader fxSpotRateHistoricalDataLoader = new FXSpotRateHistoricalDataLoader();
-      curveNodeHistoricalDataLoader.run(getToolContext());
-      fxSpotRateHistoricalDataLoader.run(getToolContext());
-      _historicalDataToLoad.addAll(curveNodeHistoricalDataLoader.getCurveNodesExternalIds());
-      _historicalDataToLoad.addAll(curveNodeHistoricalDataLoader.getInitialRateExternalIds());
-      _historicalDataToLoad.addAll(fxSpotRateHistoricalDataLoader.getFXSpotRateExternalIds());
-      _futuresToLoad.addAll(curveNodeHistoricalDataLoader.getFuturesExternalIds());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
   private void loadVolSurfaceData() {
     final Log log = new Log("Creating volatility surface configurations");
     try {
@@ -227,10 +206,8 @@ public class ExampleConfigDatabasePopulator extends AbstractTool<IntegrationTool
   private void loadHistoricalData() {
     final Log log = new Log("Loading historical reference data");
     try {
-      final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(
-          getToolContext().getHistoricalTimeSeriesMaster(),
-          getToolContext().getHistoricalTimeSeriesProvider(),
-          new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
+      final BloombergHistoricalTimeSeriesLoader loader = new BloombergHistoricalTimeSeriesLoader(getToolContext().getHistoricalTimeSeriesMaster(),
+          getToolContext().getHistoricalTimeSeriesProvider(), new BloombergIdentifierProvider(getToolContext().getBloombergReferenceDataProvider()));
       for (final SecurityDocument doc : readEquitySecurities()) {
         final Security security = doc.getSecurity();
         loader.loadTimeSeries(ImmutableSet.of(security.getExternalIdBundle().getExternalId(ExternalSchemes.BLOOMBERG_TICKER)), "UNKNOWN", "PX_LAST",

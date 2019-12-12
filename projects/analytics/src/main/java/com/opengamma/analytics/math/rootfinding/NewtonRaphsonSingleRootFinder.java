@@ -16,18 +16,18 @@ import com.opengamma.analytics.math.function.Function1D;
 /**
  * Class for finding the real root of a function within a range of $x$-values using the one-dimensional version of Newton's method.
  * <p>
- * For a function $f(x)$, the Taylor series expansion is given by: $$ \begin{align*} f(x + \delta) \approx f(x) + f'(x)\delta + \frac{f''(x)}{2}\delta^2 +
- * \cdots \end{align*} $$ As delta approaches zero (and if the function is well-behaved), this gives $$ \begin{align*} \delta = -\frac{f(x)}{f'(x)} \end{align*}
- * $$ when $f(x + \delta) = 0$.
+ * For a function $f(x)$, the Taylor series expansion is given by: $$ \begin{align*} f(x + \delta) \approx f(x) + f'(x)\delta +
+ * \frac{f''(x)}{2}\delta^2 + \cdots \end{align*} $$ As delta approaches zero (and if the function is well-behaved), this gives $$
+ * \begin{align*} \delta = -\frac{f(x)}{f'(x)} \end{align*} $$ when $f(x + \delta) = 0$.
  * <p>
- * There are several well-known problems with Newton's method, in particular when the range of values given includes a local maximum or minimum. In this
- * situation, the next iterative step can shoot off to $\pm\infty$. This implementation currently does not attempt to correct for this: if the value of $x$ goes
- * beyond the initial range of values $x_{low}$ and $x_{high}$, an exception is thrown.
+ * There are several well-known problems with Newton's method, in particular when the range of values given includes a local maximum or
+ * minimum. In this situation, the next iterative step can shoot off to $\pm\infty$. This implementation currently does not attempt to
+ * correct for this: if the value of $x$ goes beyond the initial range of values $x_{low}$ and $x_{high}$, an exception is thrown.
  * <p>
- * If the function that is provided does not override the {@link com.opengamma.analytics.math.function.DoubleFunction1D#derivative()} method, then the
- * derivative is approximated using finite difference. This is undesirable for several reasons: (i) the extra function evaluations will lead to slower
- * convergence; and (ii) the choice of shift size is very important (too small and the result will be dominated by rounding errors, too large and convergence
- * will be even slower). Use of another root-finder is recommended in this case.
+ * If the function that is provided does not override the {@link com.opengamma.analytics.math.function.DoubleFunction1D#derivative()}
+ * method, then the derivative is approximated using finite difference. This is undesirable for several reasons: (i) the extra function
+ * evaluations will lead to slower convergence; and (ii) the choice of shift size is very important (too small and the result will be
+ * dominated by rounding errors, too large and convergence will be even slower). Use of another root-finder is recommended in this case.
  */
 public class NewtonRaphsonSingleRootFinder extends RealSingleRootFinder {
   private static final int MAX_ITER = 10000;
@@ -41,8 +41,8 @@ public class NewtonRaphsonSingleRootFinder extends RealSingleRootFinder {
   }
 
   /**
-   * Takes the accuracy of the root as a parameter - this is the maximum difference between the true root and the returned value that is allowed. If this is
-   * negative, then the absolute value is used.
+   * Takes the accuracy of the root as a parameter - this is the maximum difference between the true root and the returned value that is
+   * allowed. If this is negative, then the absolute value is used.
    *
    * @param accuracy
    *          The accuracy
@@ -58,12 +58,23 @@ public class NewtonRaphsonSingleRootFinder extends RealSingleRootFinder {
    *           If the root is not found in 1000 attempts; if the Newton step takes the estimate for the root outside the original bounds.
    */
   @Override
-  public Double getRoot(final Function<Double, Double> function, final Double x1, final Double x2) {
+  public Double getRoot(final Function1D<Double, Double> function, final Double x1, final Double x2) {
     Validate.notNull(function, "function");
     return getRoot(DoubleFunction1D.from(function), x1, x2);
   }
 
-  public Double getRoot(final Function<Double, Double> function, final Double x) {
+  /**
+   * Uses the function and finite difference for the derivative. This method uses an initial guess for the root, rather than bounds.
+   *
+   * @param function
+   *          The function, not null
+   * @param x
+   *          The initial guess for the root, not null
+   * @return The root
+   * @throws MathException
+   *           If the root is not found in 1000 attempts.
+   */
+  public Double getRoot(final Function1D<Double, Double> function, final Double x) {
     Validate.notNull(function, "function");
     Validate.notNull(x, "x");
     final DoubleFunction1D f = DoubleFunction1D.from(function);
@@ -71,8 +82,8 @@ public class NewtonRaphsonSingleRootFinder extends RealSingleRootFinder {
   }
 
   /**
-   * Uses the {@link com.opengamma.analytics.math.function.DoubleFunction1D#derivative()} method. <i>x<sub>1</sub></i> and <i>x<sub>2</sub></i> do not have to
-   * be increasing.
+   * Uses the {@link com.opengamma.analytics.math.function.DoubleFunction1D#derivative()} method. <i>x<sub>1</sub></i> and
+   * <i>x<sub>2</sub></i> do not have to be increasing.
    *
    * @param function
    *          The function, not null
@@ -90,8 +101,8 @@ public class NewtonRaphsonSingleRootFinder extends RealSingleRootFinder {
   }
 
   /**
-   * Uses the {@link com.opengamma.analytics.math.function.DoubleFunction1D#derivative()} method. This method uses an initial guess for the root, rather than
-   * bounds.
+   * Uses the {@link com.opengamma.analytics.math.function.DoubleFunction1D#derivative()} method. This method uses an initial guess for the
+   * root, rather than bounds.
    *
    * @param function
    *          The function, not null
@@ -121,7 +132,8 @@ public class NewtonRaphsonSingleRootFinder extends RealSingleRootFinder {
    * @throws MathException
    *           If the root is not found in 1000 attempts; if the Newton step takes the estimate for the root outside the original bounds.
    */
-  public Double getRoot(final Function<Double, Double> function, final Function<Double, Double> derivative, final Double x1, final Double x2) {
+  public Double getRoot(final Function1D<Double, Double> function, final Function<Double, Double> derivative, final Double x1,
+      final Double x2) {
     checkInputs(function, x1, x2);
     Validate.notNull(derivative, "derivative");
     return getRoot(DoubleFunction1D.from(function), DoubleFunction1D.from(derivative), x1, x2);

@@ -14,7 +14,8 @@ import com.opengamma.analytics.financial.model.option.definition.StandardOptionD
 import com.opengamma.analytics.math.function.Function1D;
 
 /**
- * The Jarrow-Rudd option pricing formula extends the Black-Scholes-Merton model for non-normal skewness and kurtosis in the underlying price distribution.
+ * The Jarrow-Rudd option pricing formula extends the Black-Scholes-Merton model for non-normal skewness and kurtosis in the underlying
+ * price distribution.
  */
 public class JarrowRuddSkewnessKurtosisModel extends AnalyticOptionModel<OptionDefinition, SkewKurtosisOptionDataBundle> {
   private static final AnalyticOptionModel<OptionDefinition, StandardOptionDataBundle> BSM = new BlackScholesMertonModel();
@@ -29,7 +30,7 @@ public class JarrowRuddSkewnessKurtosisModel extends AnalyticOptionModel<OptionD
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final SkewKurtosisOptionDataBundle data) {
+      public Double evaluate(final SkewKurtosisOptionDataBundle data) {
         Validate.notNull(data);
         final double s = data.getSpot();
         final double k = definition.getStrike();
@@ -39,7 +40,8 @@ public class JarrowRuddSkewnessKurtosisModel extends AnalyticOptionModel<OptionD
         final double b = data.getCostOfCarry();
         final double skew = data.getAnnualizedSkew();
         final double kurtosis = data.getAnnualizedPearsonKurtosis();
-        final OptionDefinition callDefinition = definition.isCall() ? definition : new EuropeanVanillaOptionDefinition(k, definition.getExpiry(), true);
+        final OptionDefinition callDefinition = definition.isCall() ? definition
+            : new EuropeanVanillaOptionDefinition(k, definition.getExpiry(), true);
         final Function1D<StandardOptionDataBundle, Double> bsm = BSM.getPricingFunction(callDefinition);
         final double bsmCall = bsm.apply(data);
         final double d2 = getD2(getD1(s, k, t, sigma, b), sigma, t);
@@ -76,13 +78,15 @@ public class JarrowRuddSkewnessKurtosisModel extends AnalyticOptionModel<OptionD
     return kurtosis - kurtosisDistribution;
   }
 
-  private double getQ3(final double s, final double k, final double sigmaT, final double t, final double r, final double a, final double d2) {
+  private double getQ3(final double s, final double k, final double sigmaT, final double t, final double r, final double a,
+      final double d2) {
     final double da = a * (d2 - sigmaT) / (k * sigmaT);
     final double df = Math.exp(-r * t);
     return -Math.pow(s * df, 3) * Math.pow(Math.exp(sigmaT * sigmaT - 1), 1.5) * df * da / 6.;
   }
 
-  private double getQ4(final double s, final double k, final double sigmaT, final double t, final double r, final double a, final double d2) {
+  private double getQ4(final double s, final double k, final double sigmaT, final double t, final double r, final double a,
+      final double d2) {
     final double sigmaTSq = sigmaT * sigmaT;
     final double x = d2 - sigmaT;
     final double da2 = a * (x * x - sigmaT * x - 1) / (k * k * sigmaTSq);

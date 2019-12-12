@@ -26,16 +26,23 @@ public class HyperbolicMeshing extends MeshingFunction {
   private final double _r;
 
   /**
-   * Creates a non-uniform set of points according to the formula x_i = alpha * beta*Sinh(i/N*gamma + delta), where the points run from
-   * x_0 to x_N (i.e. there are N+1 points) and the highest concentration is around some specified point (e.g. the strike for solving option problems)
-   * @param xMin The value of x_0
-   * @param xMax The value of x_N
-   * @param xCent The value where the concentration of points is highest (<b>Note</b> there is no guarantee the a point will correspond exactly
-   * with this value)
-   * @param nPoints Number of Points (equal to N+1 in the above formula)
-   * @param beta Bunching parameter. A value great than zero. Very small values gives a very high density of points around the specified point, with the
-   * density quickly falling away in both directions (the total number of points is fixed), while the distribution tends to uniform for large values. Value
-   * greater than 1 are fairly uniform
+   * Creates a non-uniform set of points according to the formula x_i = alpha * beta*Sinh(i/N*gamma + delta), where the points run from x_0
+   * to x_N (i.e. there are N+1 points) and the highest concentration is around some specified point (e.g. the strike for solving option
+   * problems)
+   * 
+   * @param xMin
+   *          The value of x_0
+   * @param xMax
+   *          The value of x_N
+   * @param xCent
+   *          The value where the concentration of points is highest (<b>Note</b> there is no guarantee the a point will correspond exactly
+   *          with this value)
+   * @param nPoints
+   *          Number of Points (equal to N+1 in the above formula)
+   * @param beta
+   *          Bunching parameter. A value great than zero. Very small values gives a very high density of points around the specified point,
+   *          with the density quickly falling away in both directions (the total number of points is fixed), while the distribution tends
+   *          to uniform for large values. Value greater than 1 are fairly uniform
    */
   public HyperbolicMeshing(final double xMin, final double xMax, final double xCent, final int nPoints, final double beta) {
     super(nPoints);
@@ -53,7 +60,8 @@ public class HyperbolicMeshing extends MeshingFunction {
     _fpValues = null;
   }
 
-  public HyperbolicMeshing(final double xMin, final double xMax, final double xCent, final int nPoints, final double beta, final double[] fixedPoints) {
+  public HyperbolicMeshing(final double xMin, final double xMax, final double xCent, final int nPoints, final double beta,
+      final double[] fixedPoints) {
     super(nPoints);
     Validate.isTrue(xMax > xMin, "need xMax > xMin");
     Validate.isTrue(xMax >= xCent && xCent >= xMin, "need xCent between upper and lower bounds");
@@ -78,7 +86,7 @@ public class HyperbolicMeshing extends MeshingFunction {
   }
 
   @Override
-  public Double apply(final Integer i) {
+  public Double evaluate(final Integer i) {
     Validate.isTrue(i >= 0 && i < getNumberOfPoints(), "i out of range");
     if (i == 0) {
       return _l;
@@ -87,7 +95,7 @@ public class HyperbolicMeshing extends MeshingFunction {
       return _r;
     }
 
-    //short cut if required point is one of the specified fixed points
+    // short cut if required point is one of the specified fixed points
     if (_fpValues != null) {
       final int index = _um.getFixedPointIndex(i);
       if (index >= 0) {

@@ -131,7 +131,6 @@ public class SensitivitiesFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(ExternallyProvidedSensitivitiesCreditFactorsFunction.class));
     functions.add(functionConfiguration(ExternallyProvidedSensitivitiesNonYieldCurveFunction.class));
     functions.add(functionConfiguration(ExternallyProvidedSensitivitiesYieldCurveCS01Function.class));
-    functions.add(functionConfiguration(ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction.class));
     functions.add(functionConfiguration(ExternallyProvidedSensitivitiesYieldCurvePV01Function.class));
   }
 

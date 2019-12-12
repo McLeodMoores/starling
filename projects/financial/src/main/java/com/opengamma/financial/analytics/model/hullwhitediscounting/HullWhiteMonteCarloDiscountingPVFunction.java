@@ -36,7 +36,6 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.MersenneTwister64;
 
 /**
  * Calculates the present value of instruments using curves constructed using the Hull-White one-factor discounting method.
@@ -44,7 +43,7 @@ import cern.jet.random.engine.MersenneTwister64;
 public class HullWhiteMonteCarloDiscountingPVFunction extends HullWhiteDiscountingFunction {
   /** The present value calculator */
   private static final HullWhiteMonteCarloMethod CALCULATOR =
-      new HullWhiteMonteCarloMethod(new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister(MersenneTwister64.DEFAULT_SEED)),
+      new HullWhiteMonteCarloMethod(new NormalRandomNumberGenerator(0.0, 1.0, new MersenneTwister(MersenneTwister.DEFAULT_SEED)),
           125000);
 
   /**

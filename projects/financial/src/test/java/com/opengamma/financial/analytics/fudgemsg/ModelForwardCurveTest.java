@@ -8,6 +8,8 @@ package com.opengamma.financial.analytics.fudgemsg;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
+import java.util.function.Function;
+
 import org.testng.annotations.Test;
 
 import com.opengamma.analytics.financial.equity.variance.pricing.AffineDividends;
@@ -19,7 +21,6 @@ import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
 import com.opengamma.analytics.math.curve.Curve;
 import com.opengamma.analytics.math.curve.FunctionalDoublesCurve;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
@@ -98,12 +99,7 @@ public class ModelForwardCurveTest extends AnalyticsTestBase {
   }
 
   protected static Curve<Double, Double> getForwardCurve() {
-    final Function1D<Double, Double> f = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double x) {
-        return x * x;
-      }
-    };
+    final Function<Double, Double> f = x -> x * x;
     return new FunctionalDoublesCurve(f) {
       public Object writeReplace() {
         return new InvokedSerializedForm(ModelForwardCurveTest.class, "getForwardCurve");

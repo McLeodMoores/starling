@@ -23,10 +23,11 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 
 /**
- * This model can be used to approximate the value of call-on-call or
- * put-on-call options. It is most accurate for at- and in-the-money options.
+ * This model can be used to approximate the value of call-on-call or put-on-call options. It is most accurate for at- and in-the-money
+ * options.
  */
-public class BensoussanCrouhyGalaiOptionOnOptionModel extends AnalyticOptionModel<EuropeanOptionOnEuropeanVanillaOptionDefinition, StandardOptionDataBundle> {
+public class BensoussanCrouhyGalaiOptionOnOptionModel
+    extends AnalyticOptionModel<EuropeanOptionOnEuropeanVanillaOptionDefinition, StandardOptionDataBundle> {
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
   private static final BlackScholesMertonModel BSM = new BlackScholesMertonModel();
   private static final Set<Greek> REQUIRED_GREEKS = Sets.newHashSet(Greek.FAIR_PRICE, Greek.DELTA);
@@ -41,7 +42,7 @@ public class BensoussanCrouhyGalaiOptionOnOptionModel extends AnalyticOptionMode
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardOptionDataBundle data) {
+      public Double evaluate(final StandardOptionDataBundle data) {
         Validate.notNull(data, "data");
         final double s = data.getSpot();
         final OptionDefinition underlying = definition.getUnderlyingOption();
@@ -52,7 +53,8 @@ public class BensoussanCrouhyGalaiOptionOnOptionModel extends AnalyticOptionMode
         final double sigma = data.getVolatility(t1, k1);
         final double r = data.getInterestRate(t1);
         final double b = data.getCostOfCarry();
-        final OptionDefinition callDefinition = underlying.isCall() ? underlying : new EuropeanVanillaOptionDefinition(k2, underlying.getExpiry(), true);
+        final OptionDefinition callDefinition = underlying.isCall() ? underlying
+            : new EuropeanVanillaOptionDefinition(k2, underlying.getExpiry(), true);
         final GreekResultCollection result = BSM.getGreeks(callDefinition, data, REQUIRED_GREEKS);
         final double callBSM = result.get(Greek.FAIR_PRICE);
         final double callDelta = result.get(Greek.DELTA);

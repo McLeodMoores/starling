@@ -5,10 +5,12 @@
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
 
+import java.util.function.Function;
+
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.analytics.math.rootfinding.BrentSingleRootFinder;
 import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
@@ -68,14 +70,14 @@ public class ISDACompliantCurveCalibrator {
           payAccOnDefault,
           tenor, stubType, recoveryRate, yieldCurve, hazardCurve);
       final double[] bracket = BRACKER.getBracketedPoints(func, 0.9 * guess[i], 1.1 * guess[i], 0.0, Double.POSITIVE_INFINITY);
-      final double zeroRate = ROOTFINDER.getRoot(func, bracket[0], bracket[1]);
+      final double zeroRate = ROOTFINDER.getRoot(Function1dAdapter.of(func), bracket[0], bracket[1]);
       hazardCurve = hazardCurve.withRate(zeroRate, i);
     }
 
     return hazardCurve;
   }
 
-  private class CDSPricer extends Function1D<Double, Double> {
+  private class CDSPricer implements Function<Double, Double> {
 
     private final int _index;
     private final LocalDate _today;

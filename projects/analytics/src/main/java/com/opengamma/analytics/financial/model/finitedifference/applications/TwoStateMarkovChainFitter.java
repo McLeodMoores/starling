@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,6 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackFunctionData;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.EuropeanVanillaOption;
 import com.opengamma.analytics.financial.model.volatility.BlackImpliedVolatilityFormula;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
@@ -97,7 +97,8 @@ public class TwoStateMarkovChainFitter {
    *          The initial guess. Must have the same number of elements as the parameter transforms
    * @return The results of the least squared fit
    */
-  public LeastSquareResultsWithTransform fit(final ForwardCurve forward, final List<Pair<double[], Double>> marketVols, final DoubleMatrix1D initialGuess) {
+  public LeastSquareResultsWithTransform fit(final ForwardCurve forward, final List<Pair<double[], Double>> marketVols,
+      final DoubleMatrix1D initialGuess) {
 
     ArgumentChecker.isTrue(initialGuess.getNumberOfElements() == TRANSFORMS.getNumberOfModelParameters(),
         "Number of elements in initial guess {} did not match the number of parameter transforms {}", initialGuess.getNumberOfElements(),
@@ -140,7 +141,7 @@ public class TwoStateMarkovChainFitter {
     final MeshingFunction spaceMesh = new HyperbolicMeshing(0, 10.0 * forward.getForward(maxT), forward.getSpot(), xNodes, 0.01);
     final PDEGrid1D grid = new PDEGrid1D(timeMesh, spaceMesh);
 
-    final Function1D<DoubleMatrix1D, DoubleMatrix1D> funcAppox = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
+    final Function<DoubleMatrix1D, DoubleMatrix1D> funcAppox = new Function<DoubleMatrix1D, DoubleMatrix1D>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
@@ -172,7 +173,7 @@ public class TwoStateMarkovChainFitter {
       }
     };
 
-    final Function1D<DoubleMatrix1D, DoubleMatrix1D> func = new Function1D<DoubleMatrix1D, DoubleMatrix1D>() {
+    final Function<DoubleMatrix1D, DoubleMatrix1D> func = new Function<DoubleMatrix1D, DoubleMatrix1D>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
@@ -184,7 +185,8 @@ public class TwoStateMarkovChainFitter {
         final double lambda21 = y.getEntry(3);
         final double p0 = y.getEntry(4);
         final double beta = y.getEntry(5);
-        final TwoStateMarkovChainDataBundle chainData = new TwoStateMarkovChainDataBundle(vol1, vol1 + deltaVol, lambda12, lambda21, p0, beta, beta);
+        final TwoStateMarkovChainDataBundle chainData = new TwoStateMarkovChainDataBundle(vol1, vol1 + deltaVol, lambda12, lambda21, p0,
+            beta, beta);
         final TwoStateMarkovChainPricer mc = new TwoStateMarkovChainPricer(forward, chainData);
         final PDEFullResults1D res = mc.solve(grid, _theta);
         final Map<DoublesPair, Double> data = PDEUtilityTools.priceToImpliedVol(forward, res, minT, maxT, minK, maxK, true);
@@ -213,7 +215,8 @@ public class TwoStateMarkovChainFitter {
 
     final NonLinearLeastSquare ls = new NonLinearLeastSquare();
     // solve approx first
-    LeastSquareResults solverRes = ls.solve(new DoubleMatrix1D(mrkVols), new DoubleMatrix1D(sigma), funcAppox, TRANSFORMS.transform(initialGuess));
+    LeastSquareResults solverRes = ls.solve(new DoubleMatrix1D(mrkVols), new DoubleMatrix1D(sigma), funcAppox,
+        TRANSFORMS.transform(initialGuess));
     // now solve pde model
     solverRes = ls.solve(new DoubleMatrix1D(mrkVols), new DoubleMatrix1D(sigma), func, solverRes.getFitParameters());
     return new LeastSquareResultsWithTransform(solverRes, TRANSFORMS);
@@ -228,7 +231,8 @@ public class TwoStateMarkovChainFitter {
    * @return The transformed data
    */
   @SuppressWarnings("unused")
-  private List<Pair<double[], Double>> transformData(final ForwardCurve forward, final YieldCurve yield, final PDEFullResults1D prices, final double minT,
+  private List<Pair<double[], Double>> transformData(final ForwardCurve forward, final YieldCurve yield, final PDEFullResults1D prices,
+      final double minT,
       final double maxT, final double minK, final double maxK) {
     final int xNodes = prices.getNumberSpaceNodes();
     final int tNodes = prices.getNumberTimeNodes();
@@ -249,7 +253,8 @@ public class TwoStateMarkovChainFitter {
               final Pair<double[], Double> pair = Pairs.of(new double[] { prices.getTimeValue(i), prices.getSpaceValue(j) }, impVol);
               out.add(pair);
             } catch (final Exception e) {
-              LOGGER.error("can't find vol for strike: " + prices.getSpaceValue(j) + " and expiry " + prices.getTimeValue(i) + " . Not added to data set");
+              LOGGER.error("can't find vol for strike: " + prices.getSpaceValue(j) + " and expiry " + prices.getTimeValue(i)
+                  + " . Not added to data set");
             }
           }
         }

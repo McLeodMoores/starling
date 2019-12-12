@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.time.DateUtils;
 
 /**
- * 
+ *
  */
 public class VasicekInterestRateModel implements DiscountBondModel<VasicekDataBundle> {
 
@@ -24,7 +24,7 @@ public class VasicekInterestRateModel implements DiscountBondModel<VasicekDataBu
     return new Function1D<VasicekDataBundle, Double>() {
 
       @Override
-      public Double apply(final VasicekDataBundle data) {
+      public Double evaluate(final VasicekDataBundle data) {
         Validate.notNull(data);
         final double lt = data.getLongTermInterestRate();
         final double speed = data.getReversionSpeed();

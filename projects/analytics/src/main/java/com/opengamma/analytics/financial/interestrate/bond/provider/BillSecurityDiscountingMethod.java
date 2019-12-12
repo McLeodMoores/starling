@@ -13,13 +13,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.opengamma.analytics.financial.interestrate.bond.definition.BillSecurity;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderInterface;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderIssuerDecoratedSpread;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.analytics.math.rootfinding.BrentSingleRootFinder;
 import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
@@ -185,7 +186,8 @@ public final class BillSecurityDiscountingMethod {
   public MultipleCurrencyAmount presentValueFromPrice(final BillSecurity bill, final double price, final IssuerProviderInterface issuer) {
     ArgumentChecker.notNull(bill, "Bill");
     ArgumentChecker.notNull(issuer, "Issuer and multi-curves provider");
-    final double pvBill = bill.getNotional() * price * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime());
+    final double pvBill = bill.getNotional() * price
+        * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime());
     return MultipleCurrencyAmount.of(bill.getCurrency(), pvBill);
   }
 
@@ -202,7 +204,8 @@ public final class BillSecurityDiscountingMethod {
     ArgumentChecker.notNull(bill, "Bill");
     ArgumentChecker.notNull(issuer, "Issuer and multi-curves provider");
     final double pvBill = bill.getNotional() * issuer.getDiscountFactor(bill.getIssuerEntity(), bill.getEndTime());
-    final double price = pvBill / (bill.getNotional() * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime()));
+    final double price = pvBill
+        / (bill.getNotional() * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime()));
     return price;
   }
 
@@ -219,7 +222,8 @@ public final class BillSecurityDiscountingMethod {
     ArgumentChecker.notNull(bill, "Bill");
     ArgumentChecker.notNull(issuer, "Issuer and multi-curves provider");
     final double pvBill = bill.getNotional() * issuer.getDiscountFactor(bill.getIssuerEntity(), bill.getEndTime());
-    final double price = pvBill / (bill.getNotional() * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime()));
+    final double price = pvBill
+        / (bill.getNotional() * issuer.getMulticurveProvider().getDiscountFactor(bill.getCurrency(), bill.getSettlementTime()));
     return yieldFromCleanPrice(bill, price);
   }
 
@@ -248,8 +252,8 @@ public final class BillSecurityDiscountingMethod {
   }
 
   /**
-   * Computes a bill z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve associated to the bill
-   * (Issuer Entity) to match the present value.
+   * Computes a bill z-spread from the curves and a present value. The z-spread is a parallel shift applied to the discounting curve
+   * associated to the bill (Issuer Entity) to match the present value.
    *
    * @param bill
    *          The bill.
@@ -259,25 +263,21 @@ public final class BillSecurityDiscountingMethod {
    *          The target present value.
    * @return The z-spread.
    */
-  public double zSpreadFromCurvesAndPV(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves, final MultipleCurrencyAmount pv) {
+  public double zSpreadFromCurvesAndPV(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves,
+      final MultipleCurrencyAmount pv) {
     ArgumentChecker.notNull(bill, "bill");
     ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
     final Currency ccy = bill.getCurrency();
 
-    final Function1D<Double, Double> residual = new Function1D<Double, Double>() {
-      @Override
-      public Double apply(final Double z) {
-        return presentValueFromZSpread(bill, issuerMulticurves, z).getAmount(ccy) - pv.getAmount(ccy);
-      }
-    };
+    final Function<Double, Double> residual = z -> presentValueFromZSpread(bill, issuerMulticurves, z).getAmount(ccy) - pv.getAmount(ccy);
 
     final double[] range = ROOT_BRACKETER.getBracketedPoints(residual, -0.01, 0.01); // Starting range is [-1%, 1%]
-    return ROOT_FINDER.getRoot(residual, range[0], range[1]);
+    return ROOT_FINDER.getRoot(Function1dAdapter.of(residual), range[0], range[1]);
   }
 
   /**
-   * Computes the present value of a bill security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bill
-   * (Issuer Entity). The parallel shift is done in the curve convention.
+   * Computes the present value of a bill security from z-spread. The z-spread is a parallel shift applied to the discounting curve
+   * associated to the bill (Issuer Entity). The parallel shift is done in the curve convention.
    *
    * @param bill
    *          The bill security.
@@ -287,8 +287,10 @@ public final class BillSecurityDiscountingMethod {
    *          The z-spread.
    * @return The present value.
    */
-  public MultipleCurrencyAmount presentValueFromZSpread(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves, final double zSpread) {
-    final IssuerProviderInterface issuerShifted = new IssuerProviderIssuerDecoratedSpread(issuerMulticurves, bill.getIssuerEntity(), zSpread);
+  public MultipleCurrencyAmount presentValueFromZSpread(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves,
+      final double zSpread) {
+    final IssuerProviderInterface issuerShifted = new IssuerProviderIssuerDecoratedSpread(issuerMulticurves, bill.getIssuerEntity(),
+        zSpread);
     return presentValue(bill, issuerShifted);
   }
 
@@ -307,16 +309,43 @@ public final class BillSecurityDiscountingMethod {
     return zSpreadFromCurvesAndPV(bill, issuerMulticurves, presentValueFromYield(bill, yield, issuerMulticurves));
   }
 
+  /**
+   * Calculates the Macaulay duration using curve data.
+   *
+   * @param bill
+   *          the bill, not null
+   * @param marketData
+   *          the market data, not null
+   * @return the duration
+   */
   public double macaulayDurationFromCurves(final BillSecurity bill, final IssuerProviderInterface marketData) {
     return bill.getEndTime();
   }
 
+  /**
+   * Calculates the modified duration using curve data.
+   *
+   * @param bill
+   *          the bill, not null
+   * @param marketData
+   *          the market data, not null
+   * @return the duration
+   */
   public double modifiedDurationFromCurves(final BillSecurity bill, final IssuerProviderInterface marketData) {
     return macaulayDurationFromCurves(bill, marketData) / (1 + yieldFromCurves(bill, marketData));
   }
 
+  /**
+   * Calculates the convexity using curve data.
+   *
+   * @param bill
+   *          the bill, not null
+   * @param marketData
+   *          the market data, not null
+   * @return the convexity
+   */
   public double convexityFromCurves(final BillSecurity bill, final IssuerProviderInterface marketData) {
-    final double yield = yieldFromCurves(bill, marketData);
+    // final double yield = yieldFromCurves(bill, marketData);
     return 0; // convexityFromYield(bill, yield);
   }
 

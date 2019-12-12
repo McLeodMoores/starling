@@ -5,13 +5,15 @@
  */
 package com.opengamma.analytics.financial.interestrate.annuity;
 
+import java.util.function.Function;
+
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponFixed;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixed;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.PaymentFixed;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.function.Function1dAdapter;
 import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.analytics.math.rootfinding.BrentSingleRootFinder;
 import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
@@ -32,8 +34,8 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   * For a set of future cash flows with an assumed present value (dirty price), calculates the continuously compounded constant interest rate that gives the
-   * same present value.
+   * For a set of future cash flows with an assumed present value (dirty price), calculates the continuously compounded constant interest
+   * rate that gives the same present value.
    *
    * @param annuity
    *          Set of known cash flows
@@ -43,22 +45,15 @@ public final class YieldSensitivityCalculator {
    */
   public double calculateYield(final Annuity<? extends PaymentFixed> annuity, final double pv) {
     Validate.notNull(annuity, "annuity");
-    final Function1D<Double, Double> f = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double y) {
-        return calculatePriceForYield(annuity, y) - pv;
-      }
-
-    };
+    final Function<Double, Double> f = y -> calculatePriceForYield(annuity, y) - pv;
 
     final double[] range = BRACKETER.getBracketedPoints(f, 0.0, 0.2);
-    return ROOT_FINDER.getRoot(f, range[0], range[1]);
+    return ROOT_FINDER.getRoot(Function1dAdapter.of(f), range[0], range[1]);
   }
 
   /**
-   * For a set of future cash flows with an assumed present value (dirty price), calculates the continuously compounded constant interest rate that gives the
-   * same present value.
+   * For a set of future cash flows with an assumed present value (dirty price), calculates the continuously compounded constant interest
+   * rate that gives the same present value.
    *
    * @param annuity
    *          Set of known cash flows
@@ -68,17 +63,10 @@ public final class YieldSensitivityCalculator {
    */
   public double calculateYield(final AnnuityCouponFixed annuity, final double pv) {
     Validate.notNull(annuity, "annuity");
-    final Function1D<Double, Double> f = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double y) {
-        return calculatePriceForYield(annuity, y) - pv;
-      }
-
-    };
+    final Function<Double, Double> f = y -> calculatePriceForYield(annuity, y) - pv;
 
     final double[] range = BRACKETER.getBracketedPoints(f, 0.0, 0.2);
-    return ROOT_FINDER.getRoot(f, range[0], range[1]);
+    return ROOT_FINDER.getRoot(Function1dAdapter.of(f), range[0], range[1]);
   }
 
   /**
@@ -126,8 +114,8 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the factor (-1)^n which
-   * just keeps the sign positive when cash flows are positive.
+   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the
+   * factor (-1)^n which just keeps the sign positive when cash flows are positive.
    *
    * @param annuity
    *          Set of known cash flows
@@ -144,8 +132,8 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the factor (-1)^n which
-   * just keeps the sign positive when cash flows are positive.
+   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the
+   * factor (-1)^n which just keeps the sign positive when cash flows are positive.
    *
    * @param annuity
    *          Set of known cash flows
@@ -162,8 +150,8 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the factor (-1)^n which
-   * just keeps the sign positive when cash flows are positive.
+   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the
+   * factor (-1)^n which just keeps the sign positive when cash flows are positive.
    *
    * @param annuity
    *          Set of known cash flows
@@ -192,8 +180,8 @@ public final class YieldSensitivityCalculator {
   }
 
   /**
-   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the factor (-1)^n which
-   * just keeps the sign positive when cash flows are positive.
+   * For a set of cash flows calculates the nth derivative of its PV with respect to its continuously compounded yield multiplied by the
+   * factor (-1)^n which just keeps the sign positive when cash flows are positive.
    *
    * @param annuity
    *          Set of known cash flows

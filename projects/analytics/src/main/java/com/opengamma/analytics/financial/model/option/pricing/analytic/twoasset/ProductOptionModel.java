@@ -21,7 +21,7 @@ public class ProductOptionModel extends TwoAssetAnalyticOptionModel<ProductOptio
 
   /**
    * Gets the pricing function for a European-style product option.
-   * 
+   *
    * @param definition
    *          The option definition
    * @return The pricing function
@@ -35,7 +35,7 @@ public class ProductOptionModel extends TwoAssetAnalyticOptionModel<ProductOptio
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public Double apply(final StandardTwoAssetOptionDataBundle data) {
+      public Double evaluate(final StandardTwoAssetOptionDataBundle data) {
         Validate.notNull(data, "data");
         final double s1 = data.getFirstSpot();
         final double s2 = data.getSecondSpot();

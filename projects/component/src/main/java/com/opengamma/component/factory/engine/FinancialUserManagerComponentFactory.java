@@ -24,7 +24,6 @@ import com.opengamma.component.ComponentInfo;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 import com.opengamma.component.factory.ComponentInfoAttributes;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveDefinitionMaster;
 import com.opengamma.financial.user.DefaultFinancialUsersTracker;
 import com.opengamma.financial.user.FinancialUserManager;
 import com.opengamma.financial.user.FinancialUserServices;
@@ -88,11 +87,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
   @PropertyDefinition(validate = "notNull")
   private ConfigMaster _configMaster;
   /**
-   * The yield curve definition master.
-   */
-  @PropertyDefinition(validate = "notNull")
-  private InterpolatedYieldCurveDefinitionMaster _yieldCurveDefinitionMaster;
-  /**
    * The scheduler for deleting clients.
    */
   @PropertyDefinition
@@ -103,7 +97,7 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
   @PropertyDefinition
   private Duration _clientTimeOut = Duration.ofMinutes(30);
 
-  //-------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final FinancialUserServices services = new FinancialUserServices();
@@ -113,7 +107,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
     services.setUserPortfolioMaster(getPortfolioMaster());
     services.setUserSnapshotMaster(getSnapshotMaster());
     services.setUserConfigMaster(getConfigMaster());
-    services.setUserInterpolatedYieldCurveDefinitionMaster(getYieldCurveDefinitionMaster());
     final DefaultFinancialUsersTracker tracker = new DefaultFinancialUsersTracker(services);
     final FinancialUserManager manager = new FinancialUserManager(services, tracker, tracker);
     manager.createDeleteTask(getScheduler(), getClientTimeOut());
@@ -355,32 +348,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the yield curve definition master.
-   * @return the value of the property, not null
-   */
-  public InterpolatedYieldCurveDefinitionMaster getYieldCurveDefinitionMaster() {
-    return _yieldCurveDefinitionMaster;
-  }
-
-  /**
-   * Sets the yield curve definition master.
-   * @param yieldCurveDefinitionMaster  the new value of the property, not null
-   */
-  public void setYieldCurveDefinitionMaster(InterpolatedYieldCurveDefinitionMaster yieldCurveDefinitionMaster) {
-    JodaBeanUtils.notNull(yieldCurveDefinitionMaster, "yieldCurveDefinitionMaster");
-    this._yieldCurveDefinitionMaster = yieldCurveDefinitionMaster;
-  }
-
-  /**
-   * Gets the the {@code yieldCurveDefinitionMaster} property.
-   * @return the property, not null
-   */
-  public final Property<InterpolatedYieldCurveDefinitionMaster> yieldCurveDefinitionMaster() {
-    return metaBean().yieldCurveDefinitionMaster().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
    * Gets the scheduler for deleting clients.
    * @return the value of the property
    */
@@ -450,7 +417,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
           JodaBeanUtils.equal(getPortfolioMaster(), other.getPortfolioMaster()) &&
           JodaBeanUtils.equal(getSnapshotMaster(), other.getSnapshotMaster()) &&
           JodaBeanUtils.equal(getConfigMaster(), other.getConfigMaster()) &&
-          JodaBeanUtils.equal(getYieldCurveDefinitionMaster(), other.getYieldCurveDefinitionMaster()) &&
           JodaBeanUtils.equal(getScheduler(), other.getScheduler()) &&
           JodaBeanUtils.equal(getClientTimeOut(), other.getClientTimeOut()) &&
           super.equals(obj);
@@ -469,7 +435,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
     hash = hash * 31 + JodaBeanUtils.hashCode(getPortfolioMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getConfigMaster());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getYieldCurveDefinitionMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getScheduler());
     hash = hash * 31 + JodaBeanUtils.hashCode(getClientTimeOut());
     return hash ^ super.hashCode();
@@ -477,7 +442,7 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(384);
+    StringBuilder buf = new StringBuilder(352);
     buf.append("FinancialUserManagerComponentFactory{");
     int len = buf.length();
     toString(buf);
@@ -499,7 +464,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
     buf.append("portfolioMaster").append('=').append(JodaBeanUtils.toString(getPortfolioMaster())).append(',').append(' ');
     buf.append("snapshotMaster").append('=').append(JodaBeanUtils.toString(getSnapshotMaster())).append(',').append(' ');
     buf.append("configMaster").append('=').append(JodaBeanUtils.toString(getConfigMaster())).append(',').append(' ');
-    buf.append("yieldCurveDefinitionMaster").append('=').append(JodaBeanUtils.toString(getYieldCurveDefinitionMaster())).append(',').append(' ');
     buf.append("scheduler").append('=').append(JodaBeanUtils.toString(getScheduler())).append(',').append(' ');
     buf.append("clientTimeOut").append('=').append(JodaBeanUtils.toString(getClientTimeOut())).append(',').append(' ');
   }
@@ -555,11 +519,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
     private final MetaProperty<ConfigMaster> _configMaster = DirectMetaProperty.ofReadWrite(
         this, "configMaster", FinancialUserManagerComponentFactory.class, ConfigMaster.class);
     /**
-     * The meta-property for the {@code yieldCurveDefinitionMaster} property.
-     */
-    private final MetaProperty<InterpolatedYieldCurveDefinitionMaster> _yieldCurveDefinitionMaster = DirectMetaProperty.ofReadWrite(
-        this, "yieldCurveDefinitionMaster", FinancialUserManagerComponentFactory.class, InterpolatedYieldCurveDefinitionMaster.class);
-    /**
      * The meta-property for the {@code scheduler} property.
      */
     private final MetaProperty<ScheduledExecutorService> _scheduler = DirectMetaProperty.ofReadWrite(
@@ -582,7 +541,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
         "portfolioMaster",
         "snapshotMaster",
         "configMaster",
-        "yieldCurveDefinitionMaster",
         "scheduler",
         "clientTimeOut");
 
@@ -611,8 +569,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
           return _snapshotMaster;
         case 10395716:  // configMaster
           return _configMaster;
-        case -354852073:  // yieldCurveDefinitionMaster
-          return _yieldCurveDefinitionMaster;
         case -160710469:  // scheduler
           return _scheduler;
         case -893669642:  // clientTimeOut
@@ -702,14 +658,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
     }
 
     /**
-     * The meta-property for the {@code yieldCurveDefinitionMaster} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<InterpolatedYieldCurveDefinitionMaster> yieldCurveDefinitionMaster() {
-      return _yieldCurveDefinitionMaster;
-    }
-
-    /**
      * The meta-property for the {@code scheduler} property.
      * @return the meta-property, not null
      */
@@ -745,8 +693,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
           return ((FinancialUserManagerComponentFactory) bean).getSnapshotMaster();
         case 10395716:  // configMaster
           return ((FinancialUserManagerComponentFactory) bean).getConfigMaster();
-        case -354852073:  // yieldCurveDefinitionMaster
-          return ((FinancialUserManagerComponentFactory) bean).getYieldCurveDefinitionMaster();
         case -160710469:  // scheduler
           return ((FinancialUserManagerComponentFactory) bean).getScheduler();
         case -893669642:  // clientTimeOut
@@ -782,9 +728,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
         case 10395716:  // configMaster
           ((FinancialUserManagerComponentFactory) bean).setConfigMaster((ConfigMaster) newValue);
           return;
-        case -354852073:  // yieldCurveDefinitionMaster
-          ((FinancialUserManagerComponentFactory) bean).setYieldCurveDefinitionMaster((InterpolatedYieldCurveDefinitionMaster) newValue);
-          return;
         case -160710469:  // scheduler
           ((FinancialUserManagerComponentFactory) bean).setScheduler((ScheduledExecutorService) newValue);
           return;
@@ -804,7 +747,6 @@ public class FinancialUserManagerComponentFactory extends AbstractComponentFacto
       JodaBeanUtils.notNull(((FinancialUserManagerComponentFactory) bean)._portfolioMaster, "portfolioMaster");
       JodaBeanUtils.notNull(((FinancialUserManagerComponentFactory) bean)._snapshotMaster, "snapshotMaster");
       JodaBeanUtils.notNull(((FinancialUserManagerComponentFactory) bean)._configMaster, "configMaster");
-      JodaBeanUtils.notNull(((FinancialUserManagerComponentFactory) bean)._yieldCurveDefinitionMaster, "yieldCurveDefinitionMaster");
       super.validate(bean);
     }
 

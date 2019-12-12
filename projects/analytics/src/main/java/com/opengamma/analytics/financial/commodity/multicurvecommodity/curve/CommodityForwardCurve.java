@@ -7,6 +7,7 @@ package com.opengamma.analytics.financial.commodity.multicurvecommodity.curve;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.apache.commons.lang.Validate;
 
@@ -14,12 +15,11 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.analytics.math.curve.FunctionalDoublesCurve;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.util.serialization.InvokedSerializedForm;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A curve containing the (estimated) commodity forward  value at different maturities.
+ * A curve containing the (estimated) commodity forward value at different maturities.
  */
 public class CommodityForwardCurve {
 
@@ -35,7 +35,9 @@ public class CommodityForwardCurve {
 
   /**
    * Constructor from a curve object.
-   * @param fwdCurve The curve.
+   * 
+   * @param fwdCurve
+   *          The curve.
    */
   public CommodityForwardCurve(final DoublesCurve fwdCurve) {
     Validate.notNull(fwdCurve, "curve");
@@ -44,11 +46,16 @@ public class CommodityForwardCurve {
 
   /**
    * Constructor from the spot value, a discount curve and a convenience yield curve.
-   * @param spot The spot.
-   * @param discountCurve The discount curve.
-   * @param convenienceYieldCurve The convenience yield curve.
+   * 
+   * @param spot
+   *          The spot.
+   * @param discountCurve
+   *          The discount curve.
+   * @param convenienceYieldCurve
+   *          The convenience yield curve.
    */
-  public CommodityForwardCurve(final double spot, final YieldAndDiscountCurve discountCurve, final YieldAndDiscountCurve convenienceYieldCurve) {
+  public CommodityForwardCurve(final double spot, final YieldAndDiscountCurve discountCurve,
+      final YieldAndDiscountCurve convenienceYieldCurve) {
     Validate.notNull(discountCurve, "curve");
     Validate.notNull(convenienceYieldCurve, "curve");
     _fwdCurve = getForwardCurve(spot, discountCurve, convenienceYieldCurve);
@@ -56,7 +63,8 @@ public class CommodityForwardCurve {
 
   /**
    * Gets the underlying curve object.
-   * @return The  forward curve.
+   * 
+   * @return The forward curve.
    */
   public DoublesCurve getFwdCurve() {
     return _fwdCurve;
@@ -64,6 +72,7 @@ public class CommodityForwardCurve {
 
   /**
    * Returns the curve name.
+   * 
    * @return The name.
    */
   public String getName() {
@@ -72,7 +81,9 @@ public class CommodityForwardCurve {
 
   /**
    * Returns the estimated commodity forward value for a given time.
-   * @param time The time
+   * 
+   * @param time
+   *          The time
    * @return The commodity forward value.
    */
   public double getForwardValue(final Double time) {
@@ -81,6 +92,7 @@ public class CommodityForwardCurve {
 
   /**
    * Returns the estimated commodity forward value for a given time.
+   * 
    * @return The commodity forward value.
    */
   public double getSpotValue() {
@@ -89,6 +101,7 @@ public class CommodityForwardCurve {
 
   /**
    * Gets the number of parameters in a curve.
+   * 
    * @return The number of parameters
    */
   public int getNumberOfParameters() {
@@ -97,6 +110,7 @@ public class CommodityForwardCurve {
 
   /**
    * The list of underlying curves (up to one level).
+   * 
    * @return The list.
    */
   public List<String> getUnderlyingCurvesNames() {
@@ -105,9 +119,10 @@ public class CommodityForwardCurve {
 
   /**
    * Gets the sensitivities of the commodity forward to the curve parameters for a time.
-   * @param time The time
-   * @return The sensitivities. If the time is less than 1e<sup>-6</sup>, the rate is
-   * ill-defined and zero is returned.
+   * 
+   * @param time
+   *          The time
+   * @return The sensitivities. If the time is less than 1e<sup>-6</sup>, the rate is ill-defined and zero is returned.
    */
   public double[] getCommodityForwardParameterSensitivity(final double time) {
     final Double[] curveSensitivity = _fwdCurve.getYValueParameterSensitivity(time);
@@ -126,14 +141,7 @@ public class CommodityForwardCurve {
       final YieldAndDiscountCurve convenienceYieldCurve) {
     ArgumentChecker.notNull(discountCurve, "risk-free curve");
     ArgumentChecker.notNull(convenienceYieldCurve, "cost-of-carry curve");
-    final Function1D<Double, Double> f = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double t) {
-        return spot * convenienceYieldCurve.getDiscountFactor(t) / discountCurve.getDiscountFactor(t);
-      }
-
-    };
+    final Function<Double, Double> f = t -> spot * convenienceYieldCurve.getDiscountFactor(t) / discountCurve.getDiscountFactor(t);
     return new FunctionalDoublesCurve(f) {
       public Object writeReplace() {
         return new InvokedSerializedForm(CommodityForwardCurve.class, "getForwardCurve", spot, discountCurve, convenienceYieldCurve);
@@ -145,14 +153,7 @@ public class CommodityForwardCurve {
       final DoublesCurve fwdCurve) {
     ArgumentChecker.notNull(discountCurve, "discount curve");
     ArgumentChecker.notNull(fwdCurve, "convenience yield curve");
-    final Function1D<Double, Double> f = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double t) {
-        return -Math.log(fwdCurve.getYValue(t) / spot) / t - discountCurve.getInterestRate(t);
-      }
-
-    };
+    final Function<Double, Double> f = t -> -Math.log(fwdCurve.getYValue(t) / spot) / t - discountCurve.getInterestRate(t);
     return YieldCurve.from(new FunctionalDoublesCurve(f));
   }
 

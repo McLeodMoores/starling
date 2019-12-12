@@ -5,40 +5,48 @@
  */
 package com.opengamma.analytics.financial.model.finitedifference;
 
-import org.apache.commons.lang.Validate;
+import java.util.function.Function;
 
-import com.opengamma.analytics.math.function.Function1D;
+import org.apache.commons.lang.Validate;
 
 /**
  * Neumann boundary condition, i.e. du/dx(A,t) = f(t), where A is the boundary level, and f(t) is some specified function of time
  */
 public class NeumannBoundaryCondition implements BoundaryCondition {
 
-  private final Function1D<Double, Double> _timeValue;
+  private final Function<Double, Double> _timeValue;
   private final double _level;
   private final boolean _isLower;
 
   /**
-   * Neumann  boundary condition, i.e. du/dx(A,t) = f(t), where A is the boundary level, and f(t) is some specified function of time
-   * @param timeValue The value of u at the boundary, i.e. du/dx(A,t) = f(t)
-   * @param level The boundary level (A)
-   * @param isLower True if this represents a lower boundary
+   * Neumann boundary condition, i.e. du/dx(A,t) = f(t), where A is the boundary level, and f(t) is some specified function of time.
+   *
+   * @param timeValue
+   *          The value of u at the boundary, i.e. du/dx(A,t) = f(t)
+   * @param level
+   *          The boundary level (A)
+   * @param isLower
+   *          True if this represents a lower boundary
    */
-  public NeumannBoundaryCondition(final Function1D<Double, Double> timeValue, final double level, final boolean isLower) {
+  public NeumannBoundaryCondition(final Function<Double, Double> timeValue, final double level, final boolean isLower) {
     Validate.notNull(timeValue, "null timeValue");
     _timeValue = timeValue;
     _level = level;
     _isLower = isLower;
   }
 
+  /**
+   * Neumann boundary condition, i.e. du/dx(A,t) = C, where A is the boundary level, and C is some constant.
+   *
+   * @param fixedValue
+   *          The value of u at the boundary, i.e. du/dx(A,t) = C
+   * @param level
+   *          The boundary level (A)
+   * @param isLower
+   *          True if this represents a lower boundary
+   */
   public NeumannBoundaryCondition(final double fixedValue, final double level, final boolean isLower) {
-    _timeValue = new Function1D<Double, Double>() {
-
-      @Override
-      public Double apply(final Double x) {
-        return fixedValue;
-      }
-    };
+    _timeValue = x -> fixedValue;
     _level = level;
     _isLower = isLower;
   }

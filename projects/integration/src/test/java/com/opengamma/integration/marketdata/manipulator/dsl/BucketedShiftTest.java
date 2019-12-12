@@ -37,31 +37,9 @@ public class BucketedShiftTest {
     final CompositeStructureManipulator<?> manipulator = (CompositeStructureManipulator<?>) value;
     final List<?> manipulators = manipulator.getManipulators();
     assertEquals(1, manipulators.size());
-    final List<YieldCurveBucketedShift> shifts =
-        ImmutableList.of(
-            new YieldCurveBucketedShift(Period.ofMonths(3), Period.ofMonths(6), 0.001),
-            new YieldCurveBucketedShift(Period.ofYears(1), Period.ofYears(2), 0.002));
+    final List<YieldCurveBucketedShift> shifts = ImmutableList.of(new YieldCurveBucketedShift(Period.ofMonths(3), Period.ofMonths(6), 0.001),
+        new YieldCurveBucketedShift(Period.ofYears(1), Period.ofYears(2), 0.002));
     final YieldCurveBucketedShiftManipulator expected = new YieldCurveBucketedShiftManipulator(ScenarioShiftType.ABSOLUTE, shifts);
-    assertEquals(expected, manipulators.get(0));
-  }
-
-  @Test
-  public void yieldCurveData() {
-    final Scenario scenario = SimulationUtils.createScenarioFromDsl("src/test/groovy/YieldCurveDataBucketedShiftTest.groovy", null);
-    final ScenarioDefinition definition = scenario.createDefinition();
-    assertEquals("bucketed shift test", definition.getName());
-    final Map<DistinctMarketDataSelector, FunctionParameters> map = definition.getDefinitionMap();
-    final FunctionParameters params = map.get(new YieldCurveDataSelector(null, null, null, null, null));
-    assertNotNull(params);
-    final Object value = ((SimpleFunctionParameters) params).getValue(StructureManipulationFunction.EXPECTED_PARAMETER_NAME);
-    final CompositeStructureManipulator<?> manipulator = (CompositeStructureManipulator<?>) value;
-    final List<?> manipulators = manipulator.getManipulators();
-    assertEquals(1, manipulators.size());
-    final List<YieldCurveBucketedShift> shifts =
-        ImmutableList.of(
-            new YieldCurveBucketedShift(Period.ofMonths(3), Period.ofMonths(6), 0.001),
-            new YieldCurveBucketedShift(Period.ofYears(1), Period.ofYears(2), 0.002));
-    final YieldCurveDataBucketedShiftManipulator expected = new YieldCurveDataBucketedShiftManipulator(ScenarioShiftType.ABSOLUTE, shifts);
     assertEquals(expected, manipulators.get(0));
   }
 
