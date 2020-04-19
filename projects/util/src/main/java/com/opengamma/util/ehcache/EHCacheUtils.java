@@ -68,7 +68,8 @@ public final class EHCacheUtils {
   public static CacheManager createTestCacheManager(final String uniqueName) {
     ArgumentChecker.notNull(uniqueName, "uniqueName");
     if (UNIQUE_TEST_NAMES.putIfAbsent(uniqueName, uniqueName) != null) {
-      throw new OpenGammaRuntimeException("CacheManager has already been created with unique name: " + uniqueName);
+      return CacheManager.getCacheManager(uniqueName);
+      //throw new OpenGammaRuntimeException("CacheManager has already been created with unique name: " + uniqueName);
     }
     try {
       final InputStream configStream = getTestEhCacheConfig();

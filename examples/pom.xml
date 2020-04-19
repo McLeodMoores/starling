@@ -30,7 +30,6 @@
     <module>examples-simulated</module>
     <module>examples-bloomberg</module>
     <!--module>examples-quandl</module-->
-    <module>examples-quandl</module>
   </modules>
 
   <!-- ==================================================================== -->

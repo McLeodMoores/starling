@@ -56,7 +56,7 @@
     <module>provider</module>
     <module>provider-rest</module>
     <module>provider-rest-client</module>
-    <module>quandl</module>
+    <!--module>quandl</module-->
     <module>security</module>
     <module>server</module>
     <module>time-series</module>
