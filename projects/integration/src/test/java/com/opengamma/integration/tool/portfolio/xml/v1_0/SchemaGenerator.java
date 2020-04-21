@@ -35,8 +35,8 @@ public class SchemaGenerator {
     final DOMResult result = extractSchemaResult(ctx);
 
     final Document document = (Document) result.getNode();
-
-    final OutputFormat format = new OutputFormat(document);
+    
+    final OutputFormat format = new OutputFormat();
     format.setIndenting(true);
     final XMLSerializer serializer = new XMLSerializer(System.out, format);
     serializer.serialize(document);
