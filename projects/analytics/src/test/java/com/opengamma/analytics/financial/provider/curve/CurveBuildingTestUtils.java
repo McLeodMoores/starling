@@ -15,7 +15,7 @@ import java.util.Map;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.CurveUtils;
-import com.mcleodmoores.analytics.financial.curve.interestrate.CurveSetUpInterface;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.CurveSetUpInterface;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;

@@ -21,8 +21,8 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;

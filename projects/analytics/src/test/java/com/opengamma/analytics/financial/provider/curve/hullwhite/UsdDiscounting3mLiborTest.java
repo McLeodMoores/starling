@@ -19,8 +19,8 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.HullWhiteMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.HullWhiteMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.HullWhiteMethodCurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.HullWhiteMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;

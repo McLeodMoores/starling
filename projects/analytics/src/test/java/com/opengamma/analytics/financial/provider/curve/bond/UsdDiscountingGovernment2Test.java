@@ -20,9 +20,9 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.CurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodBondCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodBondCurveSetUp;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.CurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodBondCurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodBondCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;

@@ -19,8 +19,8 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.DirectForwardMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DirectForwardMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DirectForwardMethodCurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DirectForwardMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
