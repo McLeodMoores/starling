@@ -4,10 +4,11 @@
 package com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.threeten.bp.ZonedDateTime;
 
@@ -38,7 +39,11 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
+ * A base class for curve builders. These classes convert the information in {@link CurveSetUpInterface} and {@link CurveTypeSetUpInterface} into forms that the
+ * classes that perform the calibration and sensitivity calculations.
  *
+ * @param <T>
+ *          the type of the curve bundle produces
  */
 public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   private final List<List<String>> _curveNames;
@@ -120,73 +125,53 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     }
   }
 
-  public Pair<T, CurveBuildingBlockBundle> buildCurves(final ZonedDateTime valuationDate,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
-    MultiCurveBundle<GeneratorYDCurve>[] curveBundles = null;
+  /**
+   * Builds the curves at a particular valuation date and time.
+   *
+   * @param valuationDate
+   *          the valuation date, not null
+   * @return the curves and sensitivities
+   */
+  public Pair<T, CurveBuildingBlockBundle> buildCurves(final ZonedDateTime valuationDate) {
+    return buildCurves(valuationDate, Collections.emptyMap());
+  }
+
+  /**
+   * Builds the curves at a particular valuation date and time, using the latest fixings.
+   *
+   * @param valuationDate
+   *          the valuation date, not null
+   * @param fixings
+   *          the fixings, not null, can be empty
+   * @return the curves and sensitivities
+   */
+  public Pair<T, CurveBuildingBlockBundle> buildCurves(final ZonedDateTime valuationDate, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
     final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
-    curveBundles = new MultiCurveBundle[_curveNames.size()];
-    for (int i = 0; i < _curveNames.size(); i++) {
-      final List<String> curveNamesForUnit = _curveNames.get(i);
-      final SingleCurveBundle[] unitBundle = new SingleCurveBundle[curveNamesForUnit.size()];
-      for (int j = 0; j < curveNamesForUnit.size(); j++) {
-        final String curveName = curveNamesForUnit.get(j);
+    final List<MultiCurveBundle<GeneratorYDCurve>> curveBundles = new ArrayList<>();
+    for (final List<String> curveNamesForUnit : _curveNames) {
+      final List<SingleCurveBundle<GeneratorYDCurve>> unitBundle = new ArrayList<>();
+      for (final String curveName : curveNamesForUnit) {
         // TODO sensible behaviour if not set
-        final NodeOrderCalculator nodeOrderCalculator = new CurveUtils.NodeOrderCalculator(
-            _curveTypes.get(curveName).getNodeTimeCalculator());
+        final NodeOrderCalculator nodeOrderCalculator = new CurveUtils.NodeOrderCalculator(_curveTypes.get(curveName).getNodeTimeCalculator());
         final List<InstrumentDefinition<?>> nodesForCurve = _nodes.get(curveName);
         if (nodesForCurve == null) {
           throw new IllegalStateException("No nodes found for curve called " + curveName);
         }
-        final int nNodes = nodesForCurve.size();
-        final InstrumentDerivative[] instruments = new InstrumentDerivative[nNodes];
-        final double[] curveInitialGuess = new double[nNodes];
-        for (int k = 0; k < nNodes; k++) {
-          final InstrumentDefinition<?> definition = nodesForCurve.get(k);
-          instruments[k] = CurveUtils.convert(definition, fixings, valuationDate);
-        }
-        Arrays.sort(instruments, nodeOrderCalculator);
-        for (int k = 0; k < nNodes; k++) {
-          curveInitialGuess[k] = instruments[k].accept(CurveUtils.RATES_INITIALIZATION);
-        }
+        final List<InstrumentDerivative> instruments = nodesForCurve.stream().map(e -> CurveUtils.convert(e, fixings, valuationDate))
+            .sorted(nodeOrderCalculator).collect(Collectors.toList());
+        final double[] curveInitialGuess = instruments.stream().mapToDouble(e -> e.accept(CurveUtils.RATES_INITIALIZATION)).toArray();
         final GeneratorYDCurve instrumentGenerator = _curveTypes.get(curveName).buildCurveGenerator(valuationDate)
-            .finalGenerator(instruments);
+            .finalGenerator(instruments.toArray(new InstrumentDerivative[0]));
         generatorForCurve.put(curveName, instrumentGenerator);
-        unitBundle[j] = new SingleCurveBundle<>(curveName, instruments, instrumentGenerator.initialGuess(curveInitialGuess),
-            instrumentGenerator);
+        unitBundle.add(new SingleCurveBundle<>(curveName, instruments.toArray(new InstrumentDerivative[0]), instrumentGenerator.initialGuess(curveInitialGuess),
+            instrumentGenerator));
       }
-      curveBundles[i] = new MultiCurveBundle<>(unitBundle);
+      curveBundles.add(new MultiCurveBundle<>(unitBundle));
     }
-    return buildCurves(curveBundles, _knownBundle, _discountingCurves, _iborCurves, _overnightCurves, _fxMatrix, _knownDiscountingCurves,
-        _knownIborCurves, _knownOvernightCurves);
+    return buildCurves(curveBundles);
   }
 
-  abstract Pair<T, CurveBuildingBlockBundle> buildCurves(
-      MultiCurveBundle[] curveBundles,
-      CurveBuildingBlockBundle knownBundle,
-      List<Pair<String, UniqueIdentifiable>> discountingCurves,
-      List<Pair<String, List<IborTypeIndex>>> iborCurves,
-      List<Pair<String, List<OvernightIndex>>> overnightCurves,
-      FXMatrix fxMatrix,
-      Map<Currency, YieldAndDiscountCurve> knownDiscountingCurves,
-      Map<IborIndex, YieldAndDiscountCurve> knownIborCurves,
-      Map<IndexON, YieldAndDiscountCurve> knownOvernightCurves);
-
-  public Map<String, InstrumentDefinition<?>[]> getDefinitionsForCurves() {
-    final Map<String, InstrumentDefinition<?>[]> definitionsForCurves = new HashMap<>();
-    for (int i = 0; i < _curveNames.size(); i++) {
-      final List<String> curveNamesForUnit = _curveNames.get(i);
-      for (final String curveNameForUnit : curveNamesForUnit) {
-        final List<InstrumentDefinition<?>> nodes = _nodes.get(curveNameForUnit);
-        final int nNodes = nodes.size();
-        final InstrumentDefinition<?>[] definitions = new InstrumentDefinition[nNodes];
-        for (int k = 0; k < nNodes; k++) {
-          definitions[k] = nodes.get(k);
-        }
-        definitionsForCurves.put(curveNameForUnit, definitions);
-      }
-    }
-    return definitionsForCurves;
-  }
+  abstract Pair<T, CurveBuildingBlockBundle> buildCurves(List<MultiCurveBundle<GeneratorYDCurve>> curveBundles);
 
   List<List<String>> getCurveNames() {
     return _curveNames;

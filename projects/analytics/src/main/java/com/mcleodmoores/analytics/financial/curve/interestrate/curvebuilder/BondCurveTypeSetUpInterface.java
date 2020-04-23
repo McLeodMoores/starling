@@ -16,7 +16,8 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.tuple.Pair;
 
 /**
- *
+ * An interface for builders that describe how a bond curve is to be constructed. In addition to the functionality from {@link CurveTypeSetUpInterface}, this
+ * class defines which issuers can be priced using this curve.
  */
 public interface BondCurveTypeSetUpInterface extends CurveTypeSetUpInterface {
 
@@ -29,35 +30,36 @@ public interface BondCurveTypeSetUpInterface extends CurveTypeSetUpInterface {
   @Override
   BondCurveTypeSetUpInterface forIndex(OvernightIndex... indices);
 
+  /**
+   * Use this curve to price bonds with these issuers.
+   *
+   * @param issuer
+   *          the issuers, not null
+   * @return this builder
+   */
   BondCurveTypeSetUpInterface forIssuer(Pair<Object, LegalEntityFilter<LegalEntity>>... issuer);
 
   @Override
   BondCurveTypeSetUpInterface withInterpolator(Interpolator1D interpolator);
 
-  // TODO asSpread under to indicate subtraction?
   @Override
   BondCurveTypeSetUpInterface asSpreadOver(String otherCurveName);
 
-  // TODO curve operations setup to allow A = B + C + D logic
   @Override
   BondCurveTypeSetUpInterface functionalForm(CurveFunction function);
 
-  // TODO local dates would be better
   @Override
-
   BondCurveTypeSetUpInterface usingNodeDates(LocalDateTime... dates);
 
   @Override
   BondCurveTypeSetUpInterface continuousInterpolationOnYield();
 
-  // TODO not sure about this - having an argument is inconsistent
   @Override
   BondCurveTypeSetUpInterface periodicInterpolationOnYield(int compoundingPeriodsPerYear);
 
   @Override
   BondCurveTypeSetUpInterface continuousInterpolationOnDiscountFactors();
 
-  // TODO rename next 2 methods
   @Override
   BondCurveTypeSetUpInterface usingInstrumentMaturity();
 

@@ -9,7 +9,6 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.util.ArgumentChecker;
-import com.sun.istack.NotNull;
 
 /**
  * A builder interface that describes the steps to build a set of curves using root-finding i.e.
@@ -37,26 +36,26 @@ public interface CurveSetUpInterface {
    *          the names of the curves that are to be built, not null
    * @return this builder
    */
-  public CurveSetUpInterface building(@NotNull String... curveNames);
+  public CurveSetUpInterface building(String... curveNames);
 
   /**
-   * Tells the {@link CurveBuilder} that this / these curve / curves are to be built first.
+   * Tells the {@link CurveBuilder} that these curves are to be built first.
    *
    * @param curveNames
    *          the names of the curves that are to be built, not null
    * @return this builder
    */
-  public CurveSetUpInterface buildingFirst(@NotNull String... curveNames);
+  public CurveSetUpInterface buildingFirst(String... curveNames);
 
   /**
-   * Tells the {@link CurveBuilder} that this / these curves are to be built after any built in {@link #buildingFirst}. Generally, an exception should be thrown
-   * if {@link #buildingFirst} is not called.
+   * Tells the {@link CurveBuilder} that these curves are to be built after any built in {@link #buildingFirst}. Generally, an exception should be thrown if
+   * {@link #buildingFirst} is not called.
    *
    * @param curveNames
    *          the names of the curves that are to be built, not null
    * @return this builder
    */
-  public CurveSetUpInterface thenBuilding(@NotNull String... curveNames);
+  public CurveSetUpInterface thenBuilding(String... curveNames);
 
   /**
    * Produces a {@link CurveTypeSetUpInterface} that tells the {@link CurveBuilder} what each curve should be used for e.g. discounting payments in a particular
@@ -68,7 +67,7 @@ public interface CurveSetUpInterface {
    *          the name of the curve, not null
    * @return a {@link CurveTypeSetUpInterface}
    */
-  public CurveTypeSetUpInterface using(@NotNull String curveName);
+  public CurveTypeSetUpInterface using(String curveName);
 
   /**
    * Produces a {@link PreConstructedCurveTypeSetUp} that describes how the provided curve should be used.
@@ -77,7 +76,7 @@ public interface CurveSetUpInterface {
    *          the curve, not null
    * @return a {@link PreConstructedCurveTypeSetUp}
    */
-  public PreConstructedCurveTypeSetUp using(@NotNull YieldAndDiscountCurve curve);
+  public PreConstructedCurveTypeSetUp using(YieldAndDiscountCurve curve);
 
   /**
    * Adds a node to the curve.
@@ -88,7 +87,7 @@ public interface CurveSetUpInterface {
    *          the instrument to be used at this node, not null
    * @return this builder
    */
-  public CurveSetUpInterface addNode(@NotNull String curveName, @NotNull InstrumentDefinition<?> definition);
+  public CurveSetUpInterface addNode(String curveName, InstrumentDefinition<?> definition);
 
   /**
    * Removes all nodes for a particular curve. This method might not remove the curve name from the builder.
@@ -97,7 +96,7 @@ public interface CurveSetUpInterface {
    *          the name of the curve, not null
    * @return this builder
    */
-  public CurveSetUpInterface removeNodes(@NotNull String curveName);
+  public CurveSetUpInterface removeNodes(String curveName);
 
   /**
    * Removes all nodes for a particular curve. This method should remove the curve name from the builder.
@@ -106,10 +105,10 @@ public interface CurveSetUpInterface {
    *          the name of the curve, not null
    * @return this builder
    */
-  public CurveSetUpInterface removeCurve(@NotNull String curveName);
+  public CurveSetUpInterface removeCurve(String curveName);
 
   /**
-   * Gets a builder that will construct the curves as set up by this builder.
+   * Gets a curve builder that will construct the curves as defined.
    *
    * @return a curve builder
    */
@@ -129,7 +128,7 @@ public interface CurveSetUpInterface {
    *          the FX matrix, not null
    * @return this builder
    */
-  public CurveSetUpInterface addFxMatrix(@NotNull FXMatrix fxMatrix);
+  public CurveSetUpInterface addFxMatrix(FXMatrix fxMatrix);
 
   /**
    * Provides known data (curves and the Jacobians found from their construction) to the builder.
@@ -138,7 +137,7 @@ public interface CurveSetUpInterface {
    *          the known data, not null
    * @return this builder
    */
-  public CurveSetUpInterface withKnownBundle(@NotNull CurveBuildingBlockBundle bundle);
+  public CurveSetUpInterface withKnownBundle(CurveBuildingBlockBundle bundle);
 
   /**
    * Sets the absolute tolerance for the root-finder.
@@ -174,7 +173,7 @@ public interface CurveSetUpInterface {
    *          the method name, not null
    * @return this builder
    */
-  CurveSetUpInterface rootFindingMethodName(@NotNull String methodName);
+  CurveSetUpInterface rootFindingMethodName(String methodName);
 
   /**
    * Stores information about the root-finder that will be used for curve construction.
@@ -212,7 +211,7 @@ public interface CurveSetUpInterface {
       return _maxSteps;
     }
 
-    void setRootFinderName(@NotNull final String name) {
+    void setRootFinderName(final String name) {
       _rootFinderName = ArgumentChecker.notNull(name, "name");
     }
 

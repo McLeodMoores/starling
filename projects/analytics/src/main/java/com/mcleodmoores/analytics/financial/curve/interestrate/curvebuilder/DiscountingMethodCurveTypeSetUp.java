@@ -13,7 +13,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
-import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveAddYieldExisiting;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveAddYieldExisting;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolatedNode;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolated;
@@ -32,7 +32,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  *
  */
-//TODO needs a copy()
+// TODO needs a copy()
 public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp implements CurveTypeSetUpInterface {
   private String _baseCurveName;
   private Interpolator1D _interpolator;
@@ -58,9 +58,10 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   }
 
   /**
-   * Constructor that takes an existing builder. Note that this is not a copy constructor,
-   * i.e. any object references are shared.
-   * @param builder  the builder, not null
+   * Constructor that takes an existing builder. Note that this is not a copy constructor, i.e. any object references are shared.
+   * 
+   * @param builder
+   *          the builder, not null
    */
   DiscountingMethodCurveTypeSetUp(final DiscountingMethodCurveSetUp builder) {
     super(builder);
@@ -192,7 +193,8 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   /**
    * Gets the discounting curve identifier.
-   * @return  the identifier, can be null
+   * 
+   * @return the identifier, can be null
    */
   UniqueIdentifiable getDiscountingCurveId() {
     return _discountingCurveId;
@@ -200,7 +202,8 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   /**
    * Gets the ibor curve indices.
-   * @return  the indices, can be null or empty
+   * 
+   * @return the indices, can be null or empty
    */
   List<IborTypeIndex> getIborCurveIndices() {
     return _iborCurveIndices == null ? null : Collections.unmodifiableList(_iborCurveIndices);
@@ -208,7 +211,8 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   /**
    * Gets the overnight curve indices.
-   * @return  the indices, can be null or empty
+   * 
+   * @return the indices, can be null or empty
    */
   List<OvernightIndex> getOvernightCurveIndices() {
     return _overnightCurveIndices == null ? null : Collections.unmodifiableList(_overnightCurveIndices);
@@ -216,7 +220,8 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   /**
    * Gets the fixed node dates.
-   * @return  the fixed node dates, can be null or empty.
+   * 
+   * @return the fixed node dates, can be null or empty.
    */
   List<LocalDateTime> getFixedNodeDates() {
     return _dates == null ? null : Collections.unmodifiableList(_dates);
@@ -267,8 +272,8 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
       }
     }
     if (_baseCurveName != null) {
-      //TODO positive or negative spread
-      return new GeneratorCurveAddYieldExisiting(generator, false, _baseCurveName);
+      // TODO positive or negative spread
+      return new GeneratorCurveAddYieldExisting(generator, false, _baseCurveName);
     }
     return generator;
   }

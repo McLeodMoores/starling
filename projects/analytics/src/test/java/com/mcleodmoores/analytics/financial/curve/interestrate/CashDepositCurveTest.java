@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder;
+package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -56,14 +56,14 @@ public class CashDepositCurveTest {
       .withEndOfMonthConvention(EndOfMonthConvention.IGNORE_END_OF_MONTH)
       .withSpotLag(2)
       .build();
-  private static final Tenor[] CURVE_TENORS = new Tenor[] {Tenor.ON,
+  private static final Tenor[] CURVE_TENORS = new Tenor[] { Tenor.ON,
       Tenor.ONE_WEEK, Tenor.TWO_WEEKS, Tenor.THREE_WEEKS, Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS,
       Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS,
-      Tenor.THREE_YEARS, Tenor.FOUR_YEARS, Tenor.FIVE_YEARS};
-  private static final double[] MARKET_QUOTES = new double[] {0.002,
+      Tenor.THREE_YEARS, Tenor.FOUR_YEARS, Tenor.FIVE_YEARS };
+  private static final double[] MARKET_QUOTES = new double[] { 0.002,
       0.003, 0.0034, 0.0036, 0.004, 0.0047, 0.005,
       0.0052, 0.0058, 0.006, 0.0079, 0.01, 0.013,
-      0.017, 0.02, 0.026};
+      0.017, 0.02, 0.026 };
   private static final String CURVE_NAME = "USD DEPOSIT";
 
   private static final DiscountingMethodCurveSetUp CURVE_BUILDER = DiscountingMethodCurveBuilder.setUp()
@@ -84,8 +84,8 @@ public class CashDepositCurveTest {
    */
   @Test
   public void testDataInBundle() {
-    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result =
-        CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, Collections.<Index, ZonedDateTimeDoubleTimeSeries>emptyMap());
+    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE,
+        Collections.<Index, ZonedDateTimeDoubleTimeSeries> emptyMap());
     final MulticurveProviderDiscount curves = result.getFirst();
     assertEquals(curves.getDiscountingCurves().size(), 1);
     assertTrue(curves.getForwardIborCurves().isEmpty());
@@ -98,8 +98,8 @@ public class CashDepositCurveTest {
    */
   @Test
   public void testCurveInstrumentsPriceToZero() {
-    final MulticurveProviderDiscount curves =
-        CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, Collections.<Index, ZonedDateTimeDoubleTimeSeries>emptyMap()).getFirst();
+    final MulticurveProviderDiscount curves = CURVE_BUILDER.getBuilder()
+        .buildCurves(VALUATION_DATE, Collections.<Index, ZonedDateTimeDoubleTimeSeries> emptyMap()).getFirst();
     final Tenor startTenor = Tenor.of(Period.ZERO);
     for (int i = 0; i < CURVE_TENORS.length; i++) {
       final CashDefinition instrument = US_CONVENTION.toCurveInstrument(VALUATION_DATE, startTenor, CURVE_TENORS[i], 1, MARKET_QUOTES[i]);
@@ -112,8 +112,8 @@ public class CashDepositCurveTest {
    */
   @Test
   public void regression() {
-    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result =
-        CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, Collections.<Index, ZonedDateTimeDoubleTimeSeries>emptyMap());
+    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE,
+        Collections.<Index, ZonedDateTimeDoubleTimeSeries> emptyMap());
     final MulticurveProviderDiscount curves = result.getFirst();
     final DoublesCurve curve = ((YieldCurve) curves.getCurve(Currency.USD)).getCurve();
     assertTrue(curve instanceof InterpolatedDoublesCurve);
@@ -121,11 +121,11 @@ public class CashDepositCurveTest {
     final double[] xs = {
         0.0027397260273972603, 0.024657534246575342, 0.043835616438356165, 0.06301369863013699, 0.09315068493150686,
         0.16986301369863013, 0.25205479452054796, 0.33424657534246577, 0.4191780821917808, 0.5013698630136987, 0.7534246575342466,
-        1.0054794520547945, 2.010958904109589, 3.0081817501309978, 4.005479452054795, 5.005479452054795};
+        1.0054794520547945, 2.010958904109589, 3.0081817501309978, 4.005479452054795, 5.005479452054795 };
     final double[] ys = {
         0.0020277721451123724, 0.0028414907123070396, 0.0032837682202226234, 0.003518448852325246, 0.003942267128445193,
         0.004678824384064859, 0.005002689694397154, 0.005216404582490975, 0.005824626789509663, 0.006031192545802319,
-        0.00794331869023279, 0.010044529157004621, 0.012979749227564343, 0.016778393857520602, 0.019486415661266757, 0.024750823073002855};
+        0.00794331869023279, 0.010044529157004621, 0.012979749227564343, 0.016778393857520602, 0.019486415661266757, 0.024750823073002855 };
     assertArrayEquals(interpolated.getXDataAsPrimitive(), xs, EPS);
     assertArrayEquals(interpolated.getYDataAsPrimitive(), ys, EPS);
   }
