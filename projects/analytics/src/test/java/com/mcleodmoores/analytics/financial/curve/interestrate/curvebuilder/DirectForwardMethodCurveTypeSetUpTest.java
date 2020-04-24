@@ -5,7 +5,6 @@ package com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
-import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
@@ -42,7 +41,7 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Unit tests for {@link DiscountingMethodCurveTypeSetUp}.
+ * Unit tests for {@link DirectForwardMethodCurveTypeSetUp}.
  */
 @Test(groups = TestGroup.UNIT)
 public class DirectForwardMethodCurveTypeSetUpTest {
@@ -58,7 +57,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullBuilder() {
-    new DiscountingMethodCurveTypeSetUp(null);
+    new DirectForwardMethodCurveTypeSetUp(null);
   }
 
   /**
@@ -66,7 +65,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testNullBuilderMethodInputs() {
-    TestUtils.testNullBuilderMethodInputs(DiscountingMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class);
+    TestUtils.testNullBuilderMethodInputs(DirectForwardMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class);
   }
 
   /**
@@ -74,7 +73,26 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testEmptyBuilderMethodInputs() {
-    TestUtils.testEmptyBuilderMethodInputs(DiscountingMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class);
+    TestUtils.testEmptyBuilderMethodInputs(DirectForwardMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class);
+  }
+
+  /**
+   * Tests that only one ibor index can be set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testSingleIborIndex1() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES);
+  }
+
+  /**
+   * Tests that only one ibor index can be set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testSingleIborIndex2() {
+    DirectForwardMethodCurveTypeSetUp builder = new DirectForwardMethodCurveTypeSetUp();
+    builder = builder.forIndex(IBOR_INDICES[0]);
+    builder.forIndex(IBOR_INDICES[1]);
   }
 
   /**
@@ -82,7 +100,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFunctionalCurveState1() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .functionalForm(CurveFunction.NELSON_SIEGEL);
   }
@@ -92,7 +110,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFunctionalCurveState2() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) })
         .functionalForm(CurveFunction.NELSON_SIEGEL);
   }
@@ -102,7 +120,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFunctionalCurveState3() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .continuousInterpolationOnYield()
         .functionalForm(CurveFunction.NELSON_SIEGEL);
   }
@@ -112,7 +130,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFunctionalCurveState4() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .asSpreadOver("BASE")
         .functionalForm(CurveFunction.NELSON_SIEGEL);
   }
@@ -122,7 +140,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testFunctionalFormCurveGenerator1() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .functionalForm(CurveFunction.NELSON_SIEGEL);
     assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveYieldNelsonSiegel);
@@ -133,7 +151,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testInterpolatedCurveState() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .functionalForm(CurveFunction.NELSON_SIEGEL)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME));
   }
@@ -143,7 +161,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testInterpolatedCurveGenerator1() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME));
     assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveYieldInterpolated);
@@ -154,7 +172,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testInterpolatedCurveGenerator2() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .asSpreadOver("BASE")
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME));
@@ -166,7 +184,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFixedNodeCurveState() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .functionalForm(CurveFunction.NELSON_SIEGEL)
         .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) });
   }
@@ -176,7 +194,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFixedNodeGeneratorNoInterpolator() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) });
     setup.buildCurveGenerator(ZonedDateTime.now());
@@ -187,7 +205,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNumberOfNodes() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .usingNodeDates(new LocalDateTime[0])
@@ -199,7 +217,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testFixedNodeGenerator1() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) });
@@ -211,7 +229,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testFixedNodeGenerator2() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .asSpreadOver("BASE")
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
@@ -224,7 +242,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testInterpolatedOnYieldCurveState1() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .functionalForm(CurveFunction.NELSON_SIEGEL)
         .continuousInterpolationOnYield();
@@ -235,7 +253,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testInterpolatedOnYieldCurveState2() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .continuousInterpolationOnDiscountFactors()
         .continuousInterpolationOnYield();
@@ -246,7 +264,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testInterpolatorSetForInterpolatedOnYield() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .continuousInterpolationOnYield()
         .buildCurveGenerator(ZonedDateTime.now());
@@ -257,7 +275,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testInterpolatedOnYieldCurveGenerator1() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .continuousInterpolationOnYield();
@@ -271,7 +289,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testInterpolatedOnYieldCurveGenerator2() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .asSpreadOver("BASE")
@@ -286,7 +304,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testInterpolatedOnDiscountFactorCurveState1() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .functionalForm(CurveFunction.NELSON_SIEGEL)
         .continuousInterpolationOnDiscountFactors();
@@ -297,7 +315,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testInterpolatedOnDiscountFactorCurveState2() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .continuousInterpolationOnYield()
         .continuousInterpolationOnDiscountFactors();
@@ -308,7 +326,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testInterpolatorSetForInterpolatedOnDiscountFactors() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .continuousInterpolationOnDiscountFactors()
         .buildCurveGenerator(ZonedDateTime.now());
@@ -319,7 +337,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testInterpolatedOnDiscountFactorCurveGenerator1() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .continuousInterpolationOnDiscountFactors();
@@ -333,7 +351,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testInterpolatedOnDiscountFactorCurveGenerator2() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .asSpreadOver("BASE")
@@ -348,7 +366,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testCompoundingPeriodsPerYear() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .periodicInterpolationOnYield(0);
   }
 
@@ -357,7 +375,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testPeriodicCurveState1() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .functionalForm(CurveFunction.NELSON_SIEGEL)
         .periodicInterpolationOnYield(4);
   }
@@ -367,7 +385,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testPeriodicCurveState2() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .continuousInterpolationOnDiscountFactors()
         .periodicInterpolationOnYield(4);
   }
@@ -377,7 +395,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testInterpolatorSetForPeriodicCurve() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .periodicInterpolationOnYield(4)
         .buildCurveGenerator(ZonedDateTime.now());
@@ -388,7 +406,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testNoNodeDatesForPeriodicCurves1() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .periodicInterpolationOnYield(4)
@@ -400,7 +418,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testNoNodeDatesForPeriodicCurves2() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) })
@@ -412,7 +430,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testPeriodicCurveGenerator1() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .periodicInterpolationOnYield(4);
@@ -424,7 +442,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testPeriodicCurveGenerator2() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .asSpreadOver("BASE")
@@ -437,13 +455,13 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testGetters() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES);
+        .forIndex(IBOR_INDICES[0])
+        .forIndex(OVERNIGHT_INDICES[0]);
     assertEquals(setup.getDiscountingCurveId(), DISCOUNTING_ID);
-    assertArrayEquals(setup.getIborCurveIndices().toArray(new IborTypeIndex[0]), IBOR_INDICES);
-    assertArrayEquals(setup.getOvernightCurveIndices().toArray(new OvernightIndex[0]), OVERNIGHT_INDICES);
+    assertEquals(setup.getIborCurveIndices().toArray(new IborTypeIndex[0])[0], IBOR_INDICES[0]);
+    assertEquals(setup.getOvernightCurveIndices().toArray(new OvernightIndex[0])[0], OVERNIGHT_INDICES[0]);
   }
 
   /**
@@ -451,7 +469,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testSpreadCurveState() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .functionalForm(CurveFunction.NELSON_SIEGEL)
         .asSpreadOver("BASE");
   }
@@ -461,7 +479,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testBothNodeTimeCalculatorsNotSet1() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .usingInstrumentMaturity()
         .usingLastFixingEndTime();
   }
@@ -471,145 +489,9 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testBothNodeTimeCalculatorsNotSet2() {
-    new DiscountingMethodCurveTypeSetUp()
+    new DirectForwardMethodCurveTypeSetUp()
         .usingLastFixingEndTime()
         .usingInstrumentMaturity();
-  }
-
-  /**
-   * Tests the toString() method.
-   */
-  @Test
-  public void testToString() {
-    DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME));
-    assertEquals(setup.toString(), "DiscountingMethodCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear]");
-    setup = new DiscountingMethodCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .functionalForm(CurveFunction.NELSON_SIEGEL);
-    assertEquals(setup.toString(), "DiscountingMethodCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], functionalForm=NELSON_SIEGEL]");
-    setup = new DiscountingMethodCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .periodicInterpolationOnYield(4);
-    assertEquals(setup.toString(), "DiscountingMethodCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "periodsPerYear=4, interpolation on yield]");
-    setup = new DiscountingMethodCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnYield();
-    assertEquals(setup.toString(), "DiscountingMethodCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "interpolation on yield]");
-    setup = new DiscountingMethodCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnDiscountFactors();
-    assertEquals(setup.toString(), "DiscountingMethodCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "interpolation on discount factors]");
-    final LocalDateTime date = LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(0, 0));
-    setup = new DiscountingMethodCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnDiscountFactors()
-        .usingNodeDates(new LocalDateTime[] { date, date.plusDays(1) });
-    assertEquals(setup.toString(), "DiscountingMethodCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "nodeDates=[2000-01-01T00:00, 2000-01-02T00:00], "
-        + "interpolation on discount factors]");
-    setup = new DiscountingMethodCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnDiscountFactors()
-        .usingInstrumentMaturity();
-    assertEquals(setup.toString(), "DiscountingMethodCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "interpolation on discount factors, using instrument maturity]");
-    setup = new DiscountingMethodCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnDiscountFactors()
-        .usingLastFixingEndTime();
-    assertEquals(setup.toString(), "DiscountingMethodCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "interpolation on discount factors, using last fixing period end]");
-    setup = new DiscountingMethodCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnDiscountFactors()
-        .usingLastFixingEndTime()
-        .asSpreadOver("BASE");
-    assertEquals(setup.toString(), "DiscountingMethodCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "interpolation on discount factors, using last fixing period end, "
-        + "baseCurve=BASE]");
-  }
-
-  /**
-   * Test index array equivalence with multiple calls.
-   */
-  @Test
-  public void testMultipleForIndexCalls() {
-    final DiscountingMethodCurveTypeSetUp setup1 = new DiscountingMethodCurveTypeSetUp()
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES);
-    final DiscountingMethodCurveTypeSetUp setup2 = new DiscountingMethodCurveTypeSetUp()
-        .forIndex(IBOR_INDICES[0])
-        .forIndex(IBOR_INDICES[1])
-        .forIndex(OVERNIGHT_INDICES[0])
-        .forIndex(OVERNIGHT_INDICES[1]);
-    assertEquals(setup1.getIborCurveIndices(), setup2.getIborCurveIndices());
-    assertEquals(setup1.getOvernightCurveIndices(), setup2.getOvernightCurveIndices());
   }
 
   /**
@@ -617,15 +499,15 @@ public class DirectForwardMethodCurveTypeSetUpTest {
    */
   @Test
   public void testMultipleNodeDateCalls() {
-    final DiscountingMethodCurveTypeSetUp setup1 = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup1 = new DirectForwardMethodCurveTypeSetUp()
         .usingNodeDates(LocalDateTime.of(LocalDate.now(), LocalTime.of(12, 0)),
             LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(12, 0)),
             LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(12, 0)));
-    final DiscountingMethodCurveTypeSetUp setup2 = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup2 = new DirectForwardMethodCurveTypeSetUp()
         .usingNodeDates(LocalDateTime.of(LocalDate.now(), LocalTime.of(12, 0)))
         .usingNodeDates(LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(12, 0)),
             LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(12, 0)));
-    final DiscountingMethodCurveTypeSetUp setup3 = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup3 = new DirectForwardMethodCurveTypeSetUp()
         .usingNodeDates(LocalDateTime.of(LocalDate.now(), LocalTime.of(12, 0)))
         .usingNodeDates(LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(12, 0)))
         .usingNodeDates(LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(12, 0)));
@@ -636,7 +518,7 @@ public class DirectForwardMethodCurveTypeSetUpTest {
   /**
    * Tests that the different node point calculators produce different node points in the curve.
    */
-  @Test
+  @Test(expectedExceptions = IllegalStateException.class)
   public void testTimeCalculator() {
     final ZonedDateTime date = DateUtils.getUTCDate(2016, 12, 1);
     final ZonedDateTime fixingStart = DateUtils.getUTCDate(2017, 1, 1);
@@ -644,12 +526,12 @@ public class DirectForwardMethodCurveTypeSetUpTest {
     final ZonedDateTime payment = fixingEnd.plusDays(2);
     final IborTypeIndex ibor = new IborTypeIndex("I", Currency.USD, Tenor.THREE_MONTHS, 0, DayCounts.ACT_360,
         BusinessDayConventions.FOLLOWING, false);
-    final DiscountingMethodCurveTypeSetUp setup1 = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup1 = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(Currency.USD)
         .forIndex(ibor)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .usingInstrumentMaturity();
-    final DiscountingMethodCurveTypeSetUp setup2 = new DiscountingMethodCurveTypeSetUp()
+    final DirectForwardMethodCurveTypeSetUp setup2 = new DirectForwardMethodCurveTypeSetUp()
         .forDiscounting(Currency.USD)
         .forIndex(ibor)
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))

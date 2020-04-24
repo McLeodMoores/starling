@@ -11,6 +11,7 @@ import static org.testng.Assert.assertEquals;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -145,12 +146,12 @@ public class BrlDiscountingOvernight1Test extends CurveBuildingTests {
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesBeforeFixing = BUILDER_FOR_TEST.copy()
+    final Map<String, List<InstrumentDefinition<?>>> definitionsForCurvesBeforeFixing = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
-    final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesAfterFixing = BUILDER_FOR_TEST.copy()
+        .getNodes();
+    final Map<String, List<InstrumentDefinition<?>>> definitionsForCurvesAfterFixing = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
+        .getNodes();
     curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_BRL),
         BEFORE_TODAYS_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW,
         Currency.BRL);

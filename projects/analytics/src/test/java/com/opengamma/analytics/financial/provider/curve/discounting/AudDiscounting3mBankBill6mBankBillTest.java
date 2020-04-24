@@ -15,6 +15,7 @@ import static org.testng.AssertJUnit.assertEquals;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -68,12 +69,11 @@ import com.opengamma.util.tuple.Pair;
  * <li>Discounting, then 3m and 6m bank bill simultaneously;
  * <li>Discounting, 3m and 6m bank bill simultaneously.
  * </ul>
- * In the first case, the discounting curve has no sensitivities to either of the bank bill curves. In the second case, the discounting
- * curve has sensitivities to all curves, although the sensitivities to the bank bill curves should be zero.
+ * In the first case, the discounting curve has no sensitivities to either of the bank bill curves. In the second case, the discounting curve has sensitivities
+ * to all curves, although the sensitivities to the bank bill curves should be zero.
  * <p>
- * The discounting curve contains the overnight deposit rate and OIS. The 3m bank bill curve contains the 3m bank bill rate, 3m FRAs, 3m/3m
- * fixed / float swaps and 3m/6m basis swaps. The 6m bank bill curve contains the 6m bank bill rate, 3m/6m basis swaps and 6m/6m fixed /
- * float swaps.
+ * The discounting curve contains the overnight deposit rate and OIS. The 3m bank bill curve contains the 3m bank bill rate, 3m FRAs, 3m/3m fixed / float swaps
+ * and 3m/6m basis swaps. The 6m bank bill curve contains the 6m bank bill rate, 3m/6m basis swaps and 6m/6m fixed / float swaps.
  */
 @Test(groups = TestGroup.UNIT)
 public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
@@ -298,9 +298,9 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   @Test
   public void testInstrumentsInCurvePriceToZero() {
     // discounting then 3m then 6m
-    Map<String, InstrumentDefinition<?>[]> definitions;
+    Map<String, List<InstrumentDefinition<?>>> definitions;
     // before fixing
-    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_THEN_BANK_BILLS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
@@ -311,7 +311,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // after fixing
-    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_THEN_BANK_BILLS_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
@@ -323,7 +323,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // discounting and bank bills
     // before fixing
-    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
@@ -331,7 +331,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // after fixing
-    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING.getFirst(),
@@ -366,8 +366,8 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve has
-   * no sensitivity to the bank bill curve.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve has no sensitivity to
+   * the bank bill curve.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities
@@ -387,9 +387,8 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve is
-   * constructed before the bank bill curve. Sensitivities to the bank bill curve market data are calculated, but they should be equal to
-   * zero.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve is constructed before
+   * the bank bill curve. Sensitivities to the bank bill curve market data are calculated, but they should be equal to zero.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities

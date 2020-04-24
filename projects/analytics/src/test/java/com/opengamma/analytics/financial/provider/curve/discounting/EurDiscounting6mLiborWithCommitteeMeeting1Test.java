@@ -13,6 +13,7 @@ import static org.testng.AssertJUnit.assertEquals;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -61,8 +62,8 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Builds and tests a EUR discounting and 6m EURIBOR curves. The discounting curve has nodes that are shifted to ECB meeting dates. The
- * discounting curve is constructed first, then the EURIBOR curve.
+ * Builds and tests a EUR discounting and 6m EURIBOR curves. The discounting curve has nodes that are shifted to ECB meeting dates. The discounting curve is
+ * constructed first, then the EURIBOR curve.
  */
 @Test(groups = TestGroup.UNIT)
 public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildingTests {
@@ -208,9 +209,9 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy()
+    Map<String, List<InstrumentDefinition<?>>> definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
+        .getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
@@ -218,7 +219,7 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
+        .getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), AFTER_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);

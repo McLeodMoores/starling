@@ -12,6 +12,7 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -399,9 +400,9 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    Map<String, InstrumentDefinition<?>[]> definitions;
+    Map<String, List<InstrumentDefinition<?>>> definitions;
     // before fixing
-    definitions = BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_USD_DSC_FF), BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_USD_FWD_L3), BEFORE_FIXING.getFirst(),
@@ -411,7 +412,7 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_EUR_FWD_E3), BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // after fixing
-    definitions = BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_USD_DSC_FF), AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_USD_FWD_L3), AFTER_FIXING.getFirst(),
@@ -421,12 +422,12 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_EUR_FWD_E3), AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // before fixing
-    definitions = COLLATERAL_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = COLLATERAL_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_EUR_DSC_USDFF), COLLATERAL_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // after fixing
-    definitions = COLLATERAL_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = COLLATERAL_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_EUR_DSC_USDFF), COLLATERAL_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);

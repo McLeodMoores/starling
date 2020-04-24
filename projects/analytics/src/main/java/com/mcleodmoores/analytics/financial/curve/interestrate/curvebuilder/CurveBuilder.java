@@ -59,6 +59,28 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   private final CurveBuildingBlockBundle _knownBundle;
   private final Map<String, List<InstrumentDefinition<?>>> _nodes;
 
+  /**
+   * Constructor.
+   *
+   * @param curveNames
+   *          names of the curves to be constructed, not null
+   * @param discountingCurves
+   *          maps the curve name to a particular identifier that will use that curve for discounting, not null
+   * @param iborCurves
+   *          maps the curve name to ibor indices that will use that curve to calculate forward IBOR rates, not null
+   * @param overnightCurves
+   *          maps the curve name to overnight indices that will use that curve to calculate forward overnight rates, not null
+   * @param nodes
+   *          the nodes in each curve, not null
+   * @param curveTypes
+   *          the type of each curve, not null
+   * @param fxMatrix
+   *          any FX rates required to build the curves, can be null
+   * @param preConstructedCurves
+   *          pre-constructed curves, can be null
+   * @param knownBundle
+   *          sensitivity data for the pre-constructed curves, can be null
+   */
   CurveBuilder(final List<List<String>> curveNames,
       final List<Pair<String, UniqueIdentifiable>> discountingCurves,
       final List<Pair<String, List<IborTypeIndex>>> iborCurves,
@@ -71,6 +93,30 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     this(curveNames, discountingCurves, iborCurves, overnightCurves, null, nodes, curveTypes, fxMatrix, preConstructedCurves, knownBundle);
   }
 
+  /**
+   * Constructor.
+   *
+   * @param curveNames
+   *          names of the curves to be constructed, not null
+   * @param discountingCurves
+   *          maps the curve name to a particular identifier that will use that curve for discounting, not null
+   * @param iborCurves
+   *          maps the curve name to ibor indices that will use that curve to calculate forward IBOR rates, not null
+   * @param overnightCurves
+   *          maps the curve name to overnight indices that will use that curve to calculate forward overnight rates, not null
+   * @param issuerCurves
+   *          maps the curve name to bond issuers that will use that curve to discount payments, can be null
+   * @param nodes
+   *          the nodes in each curve, not null
+   * @param curveTypes
+   *          the type of each curve, not null
+   * @param fxMatrix
+   *          any FX rates required to build the curves, can be null
+   * @param preConstructedCurves
+   *          pre-constructed curves, can be null
+   * @param knownBundle
+   *          sensitivity data for the pre-constructed curves, can be null
+   */
   CurveBuilder(final List<List<String>> curveNames,
       final List<Pair<String, UniqueIdentifiable>> discountingCurves,
       final List<Pair<String, List<IborTypeIndex>>> iborCurves,
@@ -146,6 +192,8 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
    * @return the curves and sensitivities
    */
   public Pair<T, CurveBuildingBlockBundle> buildCurves(final ZonedDateTime valuationDate, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
+    ArgumentChecker.notNull(valuationDate, "valuationDate");
+    ArgumentChecker.notNull(fixings, "fixings");
     final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
     final List<MultiCurveBundle<GeneratorYDCurve>> curveBundles = new ArrayList<>();
     for (final List<String> curveNamesForUnit : _curveNames) {
@@ -193,8 +241,13 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     return _curveTypes;
   }
 
-  Map<String, List<InstrumentDefinition<?>>> getNodes() {
-    return _nodes;
+  /**
+   * Gets the node instruments used to construct the curves.
+   * 
+   * @return the node instruments
+   */
+  public Map<String, List<InstrumentDefinition<?>>> getNodes() {
+    return Collections.unmodifiableMap(_nodes);
   }
 
   Map<Currency, YieldAndDiscountCurve> getKnownDiscountingCurves() {

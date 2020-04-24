@@ -10,6 +10,7 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.fail;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.threeten.bp.ZonedDateTime;
@@ -50,14 +51,13 @@ import com.opengamma.util.tuple.Pair;
  */
 public class CurveBuildingTestUtils {
   private static final PresentValueDiscountingCalculator PVC = PresentValueDiscountingCalculator.getInstance();
-  private static final ParSpreadMarketQuoteDiscountingCalculator PAR_SPREAD_CALCULATOR =
-      ParSpreadMarketQuoteDiscountingCalculator.getInstance();
-  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator PAR_SPREAD_SENSITIVITY_CALCULATOR =
-      ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteDiscountingCalculator PAR_SPREAD_CALCULATOR = ParSpreadMarketQuoteDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator PAR_SPREAD_SENSITIVITY_CALCULATOR = ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator
+      .getInstance();
   private static final double TOLERANCE_ROOT = 1.0E-10;
   private static final int STEP_MAX = 100;
-  private static final MulticurveDiscountBuildingRepository CURVE_BUILDING_REPOSITORY =
-      new MulticurveDiscountBuildingRepository(TOLERANCE_ROOT, TOLERANCE_ROOT, STEP_MAX);
+  private static final MulticurveDiscountBuildingRepository CURVE_BUILDING_REPOSITORY = new MulticurveDiscountBuildingRepository(TOLERANCE_ROOT, TOLERANCE_ROOT,
+      STEP_MAX);
   private static final double EPS = 1e-8;
 
   @SuppressWarnings("unchecked")
@@ -112,13 +112,13 @@ public class CurveBuildingTestUtils {
     }
   }
 
-  public static <T> void curveConstructionTest(final InstrumentDefinition<?>[] definitions, final T curves,
+  public static <T> void curveConstructionTest(final List<InstrumentDefinition<?>> definitions, final T curves,
       final InstrumentDerivativeVisitor<T, MultipleCurrencyAmount> pvCalculator, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
       final FXMatrix fxMatrix, final ZonedDateTime valuationDate, final Currency valuationCurrency) {
     curveConstructionTest(definitions, curves, pvCalculator, fixingTs, fxMatrix, valuationDate, valuationCurrency, 1e-9);
   }
 
-  public static <T> void curveConstructionTest(final InstrumentDefinition<?>[] definitions, final T curves,
+  public static <T> void curveConstructionTest(final List<InstrumentDefinition<?>> definitions, final T curves,
       final InstrumentDerivativeVisitor<T, MultipleCurrencyAmount> pvCalculator, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
       final FXMatrix fxMatrix, final ZonedDateTime valuationDate, final Currency valuationCurrency, final double eps) {
     for (final InstrumentDefinition<?> definition : definitions) {
@@ -190,7 +190,7 @@ public class CurveBuildingTestUtils {
     final DoubleMatrix2D analyticSensitivities = curveToTestBlock.getSecond();
     final int curveToTestSize = curveToTestBlock.getFirst().getNbParameters(curveToTest);
     final int offsetIntoMatrix = curveToTestBlock.getFirst().getStart(sensitivityCurve);
-      // check sensitivities against those calculated using finite difference
+    // check sensitivities against those calculated using finite difference
     for (int i = 0; i < sensitivityCurveSize; i++) {
       final CurveSetUpInterface upBuilder = builder.copy().removeNodes(sensitivityCurve);
       final CurveSetUpInterface downBuilder = builder.copy().removeNodes(sensitivityCurve);

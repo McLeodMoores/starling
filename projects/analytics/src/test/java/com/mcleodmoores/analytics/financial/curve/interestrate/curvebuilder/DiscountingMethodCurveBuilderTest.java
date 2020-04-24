@@ -11,18 +11,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
+import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.CurveSetUpInterface.RootFinderSetUp;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.cash.DepositZeroDefinition;
 import com.opengamma.analytics.financial.interestrate.PeriodicInterestRate;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
+import com.opengamma.analytics.financial.provider.curve.MultiCurveBundle;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -40,9 +43,6 @@ import com.opengamma.util.tuple.Pairs;
  */
 @Test(groups = TestGroup.UNIT)
 public class DiscountingMethodCurveBuilderTest {
-  /**
-   *
-   */
   private static final RootFinderSetUp ROOT_FINDER = new RootFinderSetUp();
   private static final List<List<String>> CURVE_NAMES = Arrays.asList(Arrays.asList("A"), Arrays.asList("C"));
   private static final List<Pair<String, UniqueIdentifiable>> DISCOUNTING = Arrays.asList(Pairs.<String, UniqueIdentifiable> of("A", Currency.USD),
@@ -69,6 +69,8 @@ public class DiscountingMethodCurveBuilderTest {
   private static final FXMatrix FX = new FXMatrix(Currency.USD, Currency.EUR, 0.7);
   private static final Map<? extends PreConstructedCurveTypeSetUp, YieldAndDiscountCurve> KNOWN_CURVES = new HashMap<>();
   private static final CurveBuildingBlockBundle SENSITIVITIES = new CurveBuildingBlockBundle();
+  private static final DiscountingMethodCurveBuilder BUILDER = new DiscountingMethodCurveBuilder(CURVE_NAMES, DISCOUNTING, IBOR, OVERNIGHT, NODES, TYPES,
+      FX, KNOWN_CURVES, SENSITIVITIES, ROOT_FINDER);
 
   /**
    * Tests that the curve names cannot be null.
@@ -136,10 +138,42 @@ public class DiscountingMethodCurveBuilderTest {
   }
 
   /**
+   * Tests that the curve bundles cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullCurveBundle() {
+    BUILDER.buildCurves((List<MultiCurveBundle<GeneratorYDCurve>>) null);
+  }
+
+  /**
+   * Tests that the valuation date cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullValuationDate1() {
+    BUILDER.buildCurves(null, Collections.emptyMap());
+  }
+
+  /**
+   * Tests that the valuation date cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullValuationDate2() {
+    BUILDER.buildCurves((ZonedDateTime) null);
+  }
+
+  /**
+   * Tests that the fixing map cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullFixingMap() {
+    BUILDER.buildCurves(DateUtils.getUTCDate(2020, 1, 1), null);
+  }
+
+  /**
    * Tests that the discounting id can only be a currency.
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void testDiscountingId() {
+  public void testDiscountingIdsAreCurrencies() {
     final List<Pair<String, UniqueIdentifiable>> discountingCurves = Arrays.asList(Pairs.<String, UniqueIdentifiable> of("A", Currency.USD),
         Pairs.<String, UniqueIdentifiable> of("C", Country.US));
     final DiscountingMethodCurveBuilder builder = new DiscountingMethodCurveBuilder(CURVE_NAMES, discountingCurves, IBOR, OVERNIGHT, NODES, TYPES, FX,

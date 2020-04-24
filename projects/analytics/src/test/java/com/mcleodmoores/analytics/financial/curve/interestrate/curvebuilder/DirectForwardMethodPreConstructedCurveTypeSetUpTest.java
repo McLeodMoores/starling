@@ -4,7 +4,6 @@
 package com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
 
 import org.testng.annotations.Test;
 
@@ -67,32 +66,4 @@ public class DirectForwardMethodPreConstructedCurveTypeSetUpTest {
     assertEquals(OVERNIGHT, setup.getOvernightCurveIndices().toArray());
   }
 
-  /**
-   * Tests equals and hashCode.
-   */
-  @Test
-  public void testEqualsHashCode() {
-    final DirectForwardMethodPreConstructedCurveTypeSetUp setup = new DirectForwardMethodPreConstructedCurveTypeSetUp(SETUP);
-    setup.forDiscounting(CCY);
-    setup.forIndex(IBOR);
-    setup.forIndex(OVERNIGHT);
-    DirectForwardMethodPreConstructedCurveTypeSetUp other = new DirectForwardMethodPreConstructedCurveTypeSetUp(SETUP);
-    other.forDiscounting(CCY);
-    other.forIndex(IBOR);
-    other.forIndex(OVERNIGHT);
-    assertEquals(setup, other);
-    assertEquals(setup.hashCode(), other.hashCode());
-    other = new DirectForwardMethodPreConstructedCurveTypeSetUp(SETUP);
-    other.forIndex(IBOR);
-    other.forIndex(OVERNIGHT);
-    assertNotEquals(other, setup);
-    other = new DirectForwardMethodPreConstructedCurveTypeSetUp(SETUP);
-    other.forDiscounting(CCY);
-    other.forIndex(OVERNIGHT);
-    assertNotEquals(other, setup);
-    other = new DirectForwardMethodPreConstructedCurveTypeSetUp(SETUP);
-    other.forDiscounting(CCY);
-    other.forIndex(IBOR);
-    assertNotEquals(other, setup);
-  }
 }

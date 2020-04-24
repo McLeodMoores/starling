@@ -13,6 +13,7 @@ import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTest
 import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -62,12 +63,12 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Builds and tests discounting and 3m USD LIBOR curves using a one-factor Hull-White model. The discounting curve is built first and then
- * used when constructing the LIBOR curve. This means that the LIBOR curve has sensitivities to both discounting and LIBOR market data, but
- * the discounting curve only has sensitivities to the discounting curve.
+ * Builds and tests discounting and 3m USD LIBOR curves using a one-factor Hull-White model. The discounting curve is built first and then used when
+ * constructing the LIBOR curve. This means that the LIBOR curve has sensitivities to both discounting and LIBOR market data, but the discounting curve only has
+ * sensitivities to the discounting curve.
  * <p>
- * The discounting curve contains the overnight deposit rate and OIS swaps. The LIBOR curve contains the 3m LIBOR rate, LIBOR IMM futures
- * and deliverable swap futures.
+ * The discounting curve contains the overnight deposit rate and OIS swaps. The LIBOR curve contains the 3m LIBOR rate, LIBOR IMM futures and deliverable swap
+ * futures.
  */
 @Test(groups = TestGroup.UNIT)
 public class UsdDiscounting3mLiborTest extends CurveBuildingTests {
@@ -304,9 +305,9 @@ public class UsdDiscounting3mLiborTest extends CurveBuildingTests {
   @Test
   public void testInstrumentsInCurvePriceToZero() {
     // discounting then LIBOR
-    Map<String, InstrumentDefinition<?>[]> definitions;
+    Map<String, List<InstrumentDefinition<?>>> definitions;
     // before fixing
-    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), CONSECUTIVE_BEFORE_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD, EPS);
@@ -314,7 +315,7 @@ public class UsdDiscounting3mLiborTest extends CurveBuildingTests {
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD, EPS);
     // after fixing
-    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), CONSECUTIVE_AFTER_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD, EPS);
@@ -323,7 +324,7 @@ public class UsdDiscounting3mLiborTest extends CurveBuildingTests {
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD, EPS);
     // discounting and LIBOR
     // before fixing
-    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD, EPS);
@@ -331,7 +332,7 @@ public class UsdDiscounting3mLiborTest extends CurveBuildingTests {
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD, EPS);
     // after fixing
-    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), SIMULTANEOUS_AFTER_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD, EPS);
@@ -354,8 +355,8 @@ public class UsdDiscounting3mLiborTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve has
-   * no sensitivity to the LIBOR curve.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve has no sensitivity to
+   * the LIBOR curve.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities
@@ -373,8 +374,8 @@ public class UsdDiscounting3mLiborTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve is
-   * constructed before the LIBOR curve. Sensitivities to LIBOR market data are calculated, but they should be equal to zero.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve is constructed before
+   * the LIBOR curve. Sensitivities to LIBOR market data are calculated, but they should be equal to zero.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities

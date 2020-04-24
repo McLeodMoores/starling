@@ -13,14 +13,12 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.CurveTypeSetUpInterface;
-import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveTypeSetUp;
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.CurveTypeSetUpInterface.CurveFunction;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
-import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveAddYieldExisiting;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveAddYieldExisting;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolatedNode;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolated;
@@ -160,7 +158,7 @@ public class DiscountingMethodCurveTypeSetUpTest {
         .forDiscounting(DISCOUNTING_ID)
         .asSpreadOver("BASE")
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME));
-    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisiting);
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
   }
 
   /**
@@ -218,7 +216,7 @@ public class DiscountingMethodCurveTypeSetUpTest {
         .asSpreadOver("BASE")
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) });
-    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisiting);
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
   }
 
   /**
@@ -278,9 +276,9 @@ public class DiscountingMethodCurveTypeSetUpTest {
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .asSpreadOver("BASE")
         .continuousInterpolationOnYield();
-    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisiting);
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
     assertTrue(setup.usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) })
-        .buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisiting);
+        .buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
   }
 
   /**
@@ -340,9 +338,9 @@ public class DiscountingMethodCurveTypeSetUpTest {
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .asSpreadOver("BASE")
         .continuousInterpolationOnDiscountFactors();
-    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisiting);
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
     assertTrue(setup.usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) })
-        .buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisiting);
+        .buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
   }
 
   /**
@@ -431,7 +429,7 @@ public class DiscountingMethodCurveTypeSetUpTest {
         .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
         .asSpreadOver("BASE")
         .periodicInterpolationOnYield(4);
-    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisiting);
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
   }
 
   /**

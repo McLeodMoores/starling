@@ -4,7 +4,6 @@
 package com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
 
 import org.testng.annotations.Test;
 
@@ -67,32 +66,4 @@ public class HullWhiteMethodPreConstructedCurveTypeSetUpTest {
     assertEquals(OVERNIGHT, setup.getOvernightCurveIndices().toArray());
   }
 
-  /**
-   * Tests equals and hashCode.
-   */
-  @Test
-  public void testEqualsHashCode() {
-    final HullWhiteMethodPreConstructedCurveTypeSetUp setup = new HullWhiteMethodPreConstructedCurveTypeSetUp(SETUP);
-    setup.forDiscounting(CCY);
-    setup.forIndex(IBOR);
-    setup.forIndex(OVERNIGHT);
-    HullWhiteMethodPreConstructedCurveTypeSetUp other = new HullWhiteMethodPreConstructedCurveTypeSetUp(SETUP);
-    other.forDiscounting(CCY);
-    other.forIndex(IBOR);
-    other.forIndex(OVERNIGHT);
-    assertEquals(setup, other);
-    assertEquals(setup.hashCode(), other.hashCode());
-    other = new HullWhiteMethodPreConstructedCurveTypeSetUp(SETUP);
-    other.forIndex(IBOR);
-    other.forIndex(OVERNIGHT);
-    assertNotEquals(other, setup);
-    other = new HullWhiteMethodPreConstructedCurveTypeSetUp(SETUP);
-    other.forDiscounting(CCY);
-    other.forIndex(OVERNIGHT);
-    assertNotEquals(other, setup);
-    other = new HullWhiteMethodPreConstructedCurveTypeSetUp(SETUP);
-    other.forDiscounting(CCY);
-    other.forIndex(IBOR);
-    assertNotEquals(other, setup);
-  }
 }

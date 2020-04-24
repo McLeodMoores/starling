@@ -17,16 +17,13 @@ import java.util.Map;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.CurveSetUpInterface;
-import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveTypeSetUp;
-import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.HullWhiteMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.HullWhiteMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
+import com.opengamma.analytics.financial.model.interestrate.definition.HullWhiteOneFactorPiecewiseConstantParameters;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
@@ -51,7 +48,9 @@ public class HullWhiteMethodCurveSetUpTest {
       1. / 12);
   private static final CurveBuildingBlockBundle KNOWN;
   private static final FXMatrix FX = new FXMatrix(Currency.USD);
-
+  private static final HullWhiteOneFactorPiecewiseConstantParameters PARAMETERS = new HullWhiteOneFactorPiecewiseConstantParameters(0.01, new double[] { 0.2 },
+      new double[] { 1 });
+  private static final Currency CCY = Currency.USD;
   static {
     final LinkedHashMap<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> bundle = new LinkedHashMap<>();
     bundle.put("D", Pairs.of(new CurveBuildingBlock(), DoubleMatrix2D.EMPTY_MATRIX));
@@ -178,7 +177,7 @@ public class HullWhiteMethodCurveSetUpTest {
   public void testDuplicatedPreConstructedCurveForCurrency() {
     final YieldCurve curve1 = new YieldCurve("A", ConstantDoublesCurve.from(0.01));
     final YieldCurve curve2 = new YieldCurve("B", ConstantDoublesCurve.from(0.02));
-    new DiscountingMethodCurveTypeSetUp().using(curve1).forDiscounting(Currency.USD).using(curve2).forDiscounting(Currency.USD).getBuilder();
+    new HullWhiteMethodCurveTypeSetUp().using(curve1).forDiscounting(Currency.USD).using(curve2).forDiscounting(Currency.USD).getBuilder();
   }
 
   /**
@@ -189,7 +188,7 @@ public class HullWhiteMethodCurveSetUpTest {
     final IborTypeIndex index = new IborTypeIndex("", Currency.USD, Tenor.THREE_MONTHS, 2, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, false);
     final YieldCurve curve1 = new YieldCurve("A", ConstantDoublesCurve.from(0.01));
     final YieldCurve curve2 = new YieldCurve("B", ConstantDoublesCurve.from(0.02));
-    new DiscountingMethodCurveTypeSetUp().using(curve1).forIndex(index).using(curve2).forIndex(index).getBuilder();
+    new HullWhiteMethodCurveTypeSetUp().using(curve1).forIndex(index).using(curve2).forIndex(index).getBuilder();
   }
 
   /**
@@ -200,7 +199,7 @@ public class HullWhiteMethodCurveSetUpTest {
     final OvernightIndex index = new OvernightIndex("", Currency.USD, DayCounts.ACT_360, 0);
     final YieldCurve curve1 = new YieldCurve("A", ConstantDoublesCurve.from(0.01));
     final YieldCurve curve2 = new YieldCurve("B", ConstantDoublesCurve.from(0.02));
-    new DiscountingMethodCurveTypeSetUp().using(curve1).forIndex(index).using(curve2).forIndex(index).getBuilder();
+    new HullWhiteMethodCurveTypeSetUp().using(curve1).forIndex(index).using(curve2).forIndex(index).getBuilder();
   }
 
   /**
@@ -209,7 +208,7 @@ public class HullWhiteMethodCurveSetUpTest {
   @Test
   public void testCopy() {
     final HullWhiteMethodCurveSetUp setup1 = new HullWhiteMethodCurveSetUp()
-        .building("B").using("B").forDiscounting(Currency.EUR).addNode("B", INSTRUMENT_2);
+        .building("B").using("B").forDiscounting(Currency.EUR).addNode("B", INSTRUMENT_2).addHullWhiteParameters(PARAMETERS).forHullWhiteCurrency(CCY);
     HullWhiteMethodCurveSetUp setup2 = setup1.copy();
     assertNotSame(setup1.getBuilder().getDiscountingCurves(), setup2.getBuilder().getDiscountingCurves());
     setup2 = setup1.copy()
@@ -286,7 +285,9 @@ public class HullWhiteMethodCurveSetUpTest {
         .using("A").forDiscounting(Currency.USD)
         .addNode("A", INSTRUMENT_1)
         .using("B").forDiscounting(Currency.EUR)
-        .addNode("B", INSTRUMENT_2);
+        .addNode("B", INSTRUMENT_2)
+        .addHullWhiteParameters(PARAMETERS)
+        .forHullWhiteCurrency(CCY);
     final HullWhiteMethodCurveBuilder builder = setup.getBuilder();
     final List<Pair<String, UniqueIdentifiable>> discountingCurves = builder.getDiscountingCurves();
     assertEquals(discountingCurves.size(), 2);
@@ -308,7 +309,9 @@ public class HullWhiteMethodCurveSetUpTest {
     final HullWhiteMethodCurveSetUp setup = new HullWhiteMethodCurveSetUp()
         .building("A", "B").using("A").forDiscounting(Currency.USD).using("B").forDiscounting(Currency.EUR)
         .addNode("A", INSTRUMENT_1)
-        .addNode("B", INSTRUMENT_2);
+        .addNode("B", INSTRUMENT_2)
+        .addHullWhiteParameters(PARAMETERS)
+        .forHullWhiteCurrency(CCY);
     setup.removeNodes("A");
     assertTrue(setup.getBuilder().getNodes().containsKey("A"));
     assertNull(setup.getBuilder().getNodes().get("A"));
@@ -323,7 +326,9 @@ public class HullWhiteMethodCurveSetUpTest {
     final HullWhiteMethodCurveSetUp setup = new HullWhiteMethodCurveSetUp()
         .building("A", "B").using("A").forDiscounting(Currency.USD).using("B").forDiscounting(Currency.EUR)
         .addNode("A", INSTRUMENT_1)
-        .addNode("B", INSTRUMENT_2);
+        .addNode("B", INSTRUMENT_2)
+        .addHullWhiteParameters(PARAMETERS)
+        .forHullWhiteCurrency(CCY);
     setup.removeCurve("A");
     assertFalse(setup.getBuilder().getNodes().containsKey("A"));
     assertNull(setup.getBuilder().getNodes().get("A"));

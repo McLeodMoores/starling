@@ -15,6 +15,7 @@ import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTest
 import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -63,12 +64,11 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Builds and tests discounting and US government curves. The discounting curve is built first and then used when constructing the
- * government curve. This means that the government curve has sensitivities to both discounting and government market data, but the
- * discounting curve only has sensitivities to the discounting curve.
+ * Builds and tests discounting and US government curves. The discounting curve is built first and then used when constructing the government curve. This means
+ * that the government curve has sensitivities to both discounting and government market data, but the discounting curve only has sensitivities to the
+ * discounting curve.
  * <p>
- * The discounting curve contains the overnight deposit rate and OIS swaps. The government curve contains the overnight deposit rate and
- * bills.
+ * The discounting curve contains the overnight deposit rate and OIS swaps. The government curve contains the overnight deposit rate and bills.
  */
 @Test(groups = TestGroup.UNIT)
 public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
@@ -201,16 +201,16 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy()
+    Map<String, List<InstrumentDefinition<?>>> definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
+        .getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueIssuerCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueIssuerCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
+        .getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), AFTER_TODAYS_FIXING.getFirst(),
         PresentValueIssuerCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), AFTER_TODAYS_FIXING.getFirst(),
@@ -228,8 +228,8 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve. There are no
-   * sensitivities to the government curve.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve. There are no sensitivities to the
+   * government curve.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities

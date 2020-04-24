@@ -15,6 +15,7 @@ import static org.testng.Assert.assertEquals;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -68,13 +69,11 @@ import com.opengamma.util.tuple.Pair;
  * <li>Discounting, then LIBOR;
  * <li>Discounting and LIBOR simultaneously.
  * </ul>
- * In the second case, the discounting curve only has sensitivities to the discounting curve market data, while the LIBOR curve has
- * sensitivities to both the discounting and LIBOR market data. In the third case, both curves have sensitivities to the discounting and
- * LIBOR market data, although the discounting curve should have zero sensitivities to the LIBOR data. The discounting and LIBOR curves
- * (where constructed) should be equal in all cases.
+ * In the second case, the discounting curve only has sensitivities to the discounting curve market data, while the LIBOR curve has sensitivities to both the
+ * discounting and LIBOR market data. In the third case, both curves have sensitivities to the discounting and LIBOR market data, although the discounting curve
+ * should have zero sensitivities to the LIBOR data. The discounting and LIBOR curves (where constructed) should be equal in all cases.
  * <p>
- * The discounting curve contains the overnight deposit rate and OIS. The LIBOR curve contains the 3m LIBOR rate, 3m FRAs and 3m LIBOR / 6m
- * fixed swaps.
+ * The discounting curve contains the overnight deposit rate and OIS. The LIBOR curve contains the 3m LIBOR rate, 3m FRAs and 3m LIBOR / 6m fixed swaps.
  */
 @Test(groups = TestGroup.UNIT)
 public class UsdDiscounting3mLibor2Test extends CurveBuildingTests {
@@ -264,9 +263,9 @@ public class UsdDiscounting3mLibor2Test extends CurveBuildingTests {
   @Test
   public void testInstrumentsInCurvePriceToZero() {
     // discounting then LIBOR
-    Map<String, InstrumentDefinition<?>[]> definitions;
+    Map<String, List<InstrumentDefinition<?>>> definitions;
     // before fixing
-    definitions = DISCOUNTING_THEN_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = DISCOUNTING_THEN_LIBOR_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), DSC_THEN_LIBOR_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
@@ -274,7 +273,7 @@ public class UsdDiscounting3mLibor2Test extends CurveBuildingTests {
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     // after fixing
-    definitions = DISCOUNTING_THEN_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = DISCOUNTING_THEN_LIBOR_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), DSC_THEN_LIBOR_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
@@ -283,14 +282,14 @@ public class UsdDiscounting3mLibor2Test extends CurveBuildingTests {
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
     // discounting and LIBOR
     // before fixing
-    definitions = DISCOUNTING_AND_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = DISCOUNTING_AND_LIBOR_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), DSC_LIBOR_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_USD), DSC_LIBOR_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     // after fixing
-    definitions = DISCOUNTING_AND_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = DISCOUNTING_AND_LIBOR_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), DSC_LIBOR_SIMULTANEOUS_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
@@ -298,7 +297,7 @@ public class UsdDiscounting3mLibor2Test extends CurveBuildingTests {
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
     // discounting only
-    definitions = DISCOUNTING_ONLY_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = DISCOUNTING_ONLY_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), DSC_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
@@ -322,8 +321,8 @@ public class UsdDiscounting3mLibor2Test extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve has
-   * no sensitivity to the LIBOR curve.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve has no sensitivity to
+   * the LIBOR curve.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities
@@ -343,8 +342,8 @@ public class UsdDiscounting3mLibor2Test extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve is
-   * constructed before the LIBOR curve. Sensitivities to LIBOR market data are calculated, but they should be equal to zero.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve is constructed before
+   * the LIBOR curve. Sensitivities to LIBOR market data are calculated, but they should be equal to zero.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities

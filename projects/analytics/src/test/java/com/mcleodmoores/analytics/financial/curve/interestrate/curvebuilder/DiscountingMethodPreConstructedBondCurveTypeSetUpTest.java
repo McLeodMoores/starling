@@ -4,7 +4,6 @@
 package com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
 
 import org.testng.annotations.Test;
 
@@ -84,42 +83,4 @@ public class DiscountingMethodPreConstructedBondCurveTypeSetUpTest {
     assertEquals(new Pair[] { ISSUER }, setup.getIssuers().toArray());
   }
 
-  /**
-   * Tests equals and hashCode.
-   */
-  @Test
-  public void testEqualsHashCode() {
-    final DiscountingMethodPreConstructedBondCurveTypeSetUp setup = new DiscountingMethodPreConstructedBondCurveTypeSetUp(SETUP);
-    setup.forDiscounting(CCY);
-    setup.forIndex(IBOR);
-    setup.forIndex(OVERNIGHT);
-    setup.forIssuer(ISSUER);
-    DiscountingMethodPreConstructedBondCurveTypeSetUp other = new DiscountingMethodPreConstructedBondCurveTypeSetUp(SETUP);
-    other.forDiscounting(CCY);
-    other.forIndex(IBOR);
-    other.forIndex(OVERNIGHT);
-    other.forIssuer(ISSUER);
-    assertEquals(setup, other);
-    assertEquals(setup.hashCode(), other.hashCode());
-    other = new DiscountingMethodPreConstructedBondCurveTypeSetUp(SETUP);
-    other.forIndex(IBOR);
-    other.forIndex(OVERNIGHT);
-    other.forIssuer(ISSUER);
-    assertNotEquals(other, setup);
-    other = new DiscountingMethodPreConstructedBondCurveTypeSetUp(SETUP);
-    other.forDiscounting(CCY);
-    other.forIndex(OVERNIGHT);
-    other.forIssuer(ISSUER);
-    assertNotEquals(other, setup);
-    other = new DiscountingMethodPreConstructedBondCurveTypeSetUp(SETUP);
-    other.forDiscounting(CCY);
-    other.forIndex(IBOR);
-    other.forIssuer(ISSUER);
-    assertNotEquals(other, setup);
-    other = new DiscountingMethodPreConstructedBondCurveTypeSetUp(SETUP);
-    other.forDiscounting(CCY);
-    other.forIndex(IBOR);
-    other.forIndex(OVERNIGHT);
-    assertNotEquals(other, setup);
-  }
 }

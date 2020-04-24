@@ -89,8 +89,8 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
   }
 
   @Override
-  Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurves(
-      final List<MultiCurveBundle<GeneratorYDCurve>> curveBundles) {
+  Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurves(final List<MultiCurveBundle<GeneratorYDCurve>> curveBundles) {
+    ArgumentChecker.notNull(curveBundles, "curveBundles");
     if (getDiscountingCurves().stream().anyMatch(e -> !(e.getValue() instanceof Currency))) {
       throw new UnsupportedOperationException("Can only have Currency as the discounting curve id");
     }

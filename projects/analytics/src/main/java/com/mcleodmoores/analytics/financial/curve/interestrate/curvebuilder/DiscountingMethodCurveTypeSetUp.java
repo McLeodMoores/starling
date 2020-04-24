@@ -30,9 +30,30 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 
 /**
+ * A builder that describes how a curve is to be constructed with the discounting method. Example configurations are shown below.
  *
+ * <pre>
+ *    new DiscountingMethodCurveTypeSetUp()
+ *      .forDiscounting(Currency.USD)
+ *      .forIndex(new OvernightIndex("US FED FUNDS", Currency.USD, DayCounts.ACT_360, 1)
+ *      .withInterpolator(NamedInterpolator1dFactory("ModifiedPCHIP"))
+ *      .continuousInterpolationOnYield()
+ *      .usingInstrumentMaturity()
+ * </pre>
+ *
+ * This constructs a USD discounting and forward overnight curve that interpolates on continuous yields and uses the last maturity dates of the instruments that
+ * are used in its construction.
+ *
+ * <pre>
+ *    new DiscountingMethodCurveTypeSetUp()
+ *      .forIndex(new IborTypeIndex("USD 3M", Currency.USD, Tenor.THREE_MONTHS, 2, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, false),
+ *                new IborTypeIndex("USD 6M", Currency.USD, Tenor.SIX_MONTHS, 2, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, false)),
+ *      .withInterpolator(NamedInterpolator1dFactory("ModifiedPCHIP")
+ *      .usingLastFixingEndTime()
+ * </pre>
+ *
+ * This constructs a curve that calculates 3M and 6M USD LIBOR forward rates that uses the end date of the last fixing period of the instruments.
  */
-// TODO needs a copy()
 public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp implements CurveTypeSetUpInterface {
   private String _baseCurveName;
   private Interpolator1D _interpolator;
@@ -59,7 +80,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   /**
    * Constructor that takes an existing builder. Note that this is not a copy constructor, i.e. any object references are shared.
-   * 
+   *
    * @param builder
    *          the builder, not null
    */
@@ -193,7 +214,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   /**
    * Gets the discounting curve identifier.
-   * 
+   *
    * @return the identifier, can be null
    */
   UniqueIdentifiable getDiscountingCurveId() {
@@ -202,7 +223,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   /**
    * Gets the ibor curve indices.
-   * 
+   *
    * @return the indices, can be null or empty
    */
   List<IborTypeIndex> getIborCurveIndices() {
@@ -211,7 +232,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   /**
    * Gets the overnight curve indices.
-   * 
+   *
    * @return the indices, can be null or empty
    */
   List<OvernightIndex> getOvernightCurveIndices() {
@@ -220,7 +241,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   /**
    * Gets the fixed node dates.
-   * 
+   *
    * @return the fixed node dates, can be null or empty.
    */
   List<LocalDateTime> getFixedNodeDates() {
@@ -229,6 +250,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   @Override
   public GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate) {
+    ArgumentChecker.notNull(valuationDate, "valuationDate");
     final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator = getNodeTimeCalculator();
     if (_functionalForm != null) {
       switch (_functionalForm) {
@@ -244,11 +266,8 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
     GeneratorYDCurve generator;
     if (_dates != null) {
       ArgumentChecker.isTrue(_dates.size() > 1, "Must have at least two node dates to interpolate");
-      final double[] meetingTimes = new double[_dates.size()];
-      int i = 0;
-      for (final LocalDateTime date : _dates) {
-        meetingTimes[i++] = TimeCalculator.getTimeBetween(valuationDate, ZonedDateTime.of(date, valuationDate.getZone()));
-      }
+      final double[] meetingTimes = _dates.stream()
+          .mapToDouble(e -> TimeCalculator.getTimeBetween(valuationDate, ZonedDateTime.of(e, valuationDate.getZone()))).toArray();
       if (_continuousInterpolationOnYield) {
         generator = new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);
       } else if (_continuousInterpolationOnDiscountFactors) {

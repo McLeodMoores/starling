@@ -12,6 +12,7 @@ import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTest
 import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -411,7 +412,7 @@ public class UsdJpyDiscountingLiborXCcyTest extends CurveBuildingTests {
   private static void testInstrumentsInCurvePriceToZero(final CurveBuilder<MulticurveProviderDiscount> builder,
       final MulticurveProviderDiscount curves,
       final boolean beforeFixing) {
-    final Map<String, InstrumentDefinition<?>[]> definitions = builder.getDefinitionsForCurves();
+    final Map<String, List<InstrumentDefinition<?>>> definitions = builder.getNodes();
     final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs = beforeFixing ? FIXING_TS_WITHOUT_TODAY : FIXING_TS_WITH_TODAY;
     for (final String curveName : curves.getAllCurveNames()) {
       curveConstructionTest(definitions.get(curveName), curves, PresentValueDiscountingCalculator.getInstance(), fixingTs, FX_MATRIX, NOW,

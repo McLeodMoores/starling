@@ -13,6 +13,7 @@ import static org.testng.Assert.assertEquals;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -58,12 +59,10 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Builds and tests discounting and 3m USD LIBOR curves. The discounting curve is built first and then used when constructing the LIBOR
- * curve. This means that the LIBOR curve has sensitivities to both discounting and LIBOR market data, but the discounting curve only has
- * sensitivities to the discounting curve.
+ * Builds and tests discounting and 3m USD LIBOR curves. The discounting curve is built first and then used when constructing the LIBOR curve. This means that
+ * the LIBOR curve has sensitivities to both discounting and LIBOR market data, but the discounting curve only has sensitivities to the discounting curve.
  * <p>
- * The discounting curve contains the overnight deposit rate and OIS swaps. The LIBOR curve contains the 3m LIBOR rate and 3m LIBOR / 6m
- * fixed swaps.
+ * The discounting curve contains the overnight deposit rate and OIS swaps. The LIBOR curve contains the 3m LIBOR rate and 3m LIBOR / 6m fixed swaps.
  */
 @Test(groups = TestGroup.UNIT)
 public class UsdDiscounting3mLibor1Test extends CurveBuildingTests {
@@ -184,9 +183,9 @@ public class UsdDiscounting3mLibor1Test extends CurveBuildingTests {
   }
 
   /**
-   * The discounting curve is constructed first, then used the construct a 3m LIBOR curve. The inverse Jacobian for the discounting curve
-   * should be a square matrix, as it is decoupled from the LIBOR curve, and the inverse Jacobian for the LIBOR curve should contain
-   * sensitivities to both the LIBOR and discounting curve.
+   * The discounting curve is constructed first, then used the construct a 3m LIBOR curve. The inverse Jacobian for the discounting curve should be a square
+   * matrix, as it is decoupled from the LIBOR curve, and the inverse Jacobian for the LIBOR curve should contain sensitivities to both the LIBOR and
+   * discounting curve.
    */
   @Override
   @Test
@@ -205,9 +204,9 @@ public class UsdDiscounting3mLibor1Test extends CurveBuildingTests {
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy()
+    Map<String, List<InstrumentDefinition<?>>> definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
+        .getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
@@ -215,7 +214,7 @@ public class UsdDiscounting3mLibor1Test extends CurveBuildingTests {
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
+        .getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), AFTER_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
@@ -234,8 +233,8 @@ public class UsdDiscounting3mLibor1Test extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve. There are no
-   * sensitivities to the LIBOR curve.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve. There are no sensitivities to the
+   * LIBOR curve.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities

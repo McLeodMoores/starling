@@ -15,6 +15,7 @@ import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTest
 import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -222,9 +223,9 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    final Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy()
+    final Map<String, List<InstrumentDefinition<?>>> definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
+        .getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), AFTER_TODAYS_FIXING.getFirst(),
         PresentValueIssuerCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
@@ -238,8 +239,8 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the government curve to changes in the market data points used in the discounting and government curves.
-   * Sensitivities to the discounting curve are not available, as the curve was supplied as an external input.
+   * Tests the sensitivities of the government curve to changes in the market data points used in the discounting and government curves. Sensitivities to the
+   * discounting curve are not available, as the curve was supplied as an external input.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities

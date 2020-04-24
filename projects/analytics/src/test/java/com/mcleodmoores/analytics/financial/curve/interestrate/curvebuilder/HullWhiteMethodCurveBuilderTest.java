@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
+import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.CurveSetUpInterface.RootFinderSetUp;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.cash.DepositZeroDefinition;
@@ -24,6 +26,7 @@ import com.opengamma.analytics.financial.interestrate.PeriodicInterestRate;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.definition.HullWhiteOneFactorPiecewiseConstantParameters;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
+import com.opengamma.analytics.financial.provider.curve.MultiCurveBundle;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -180,7 +183,7 @@ public class HullWhiteMethodCurveBuilderTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurveBundle() {
-    BUILDER.buildCurvesForData(null);
+    BUILDER.buildCurves((List<MultiCurveBundle<GeneratorYDCurve>>) null);
   }
 
   /**
@@ -196,7 +199,7 @@ public class HullWhiteMethodCurveBuilderTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullValuationDate2() {
-    BUILDER.buildCurves(null);
+    BUILDER.buildCurves((ZonedDateTime) null);
   }
 
   /**

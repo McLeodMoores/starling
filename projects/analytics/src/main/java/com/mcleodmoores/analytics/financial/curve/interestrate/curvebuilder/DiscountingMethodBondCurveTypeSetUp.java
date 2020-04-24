@@ -13,7 +13,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
-import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveAddYieldExisiting;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveAddYieldExisting;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolatedNode;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolated;
@@ -33,7 +33,28 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Pair;
 
 /**
+ * A builder that describes how a bond curve is to be constructed with the discounting method. Example configurations are shown below.
  *
+ * <pre>
+ * new DiscountingMethodBondCurveTypeSetUp()
+ *     .forDiscounting(Currency.USD)
+ *     .forIssuer(issuer)
+ *     .withInterpolator(NamedInterpolator1dFactory("ModifiedPCHIP"))
+ *     .continuousInterpolationOnYield()
+ *     .usingInstrumentMaturity()
+ * </pre>
+ *
+ * This constructs a USD discounting and bond curve that interpolates on continuous yields and uses the last maturity dates of the instruments that are used in
+ * its construction.
+ *
+ * <pre>
+ * new DiscountingMethodBondCurveTypeSetUp()
+ *     .forDiscounting(Currency.USD)
+ *     .forIssuer(issuer)
+ *     .functionalForm(CurveFunction.NELSON_SIEGEL)
+ * </pre>
+ *
+ * This constructs a bond curve that discounts payments. The curve is a Nelson-Siegel fit.
  */
 public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCurveSetUp implements BondCurveTypeSetUpInterface {
   private String _baseCurveName;
@@ -61,9 +82,10 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
   }
 
   /**
-   * Constructor that takes an existing builder. Note that this is not a copy constructor,
-   * i.e. any object references are shared.
-   * @param builder  the builder, not null
+   * Constructor that takes an existing builder. Note that this is not a copy constructor, i.e. any object references are shared.
+   *
+   * @param builder
+   *          the builder, not null
    */
   DiscountingMethodBondCurveTypeSetUp(final DiscountingMethodBondCurveSetUp builder) {
     super(builder);
@@ -206,7 +228,8 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
 
   /**
    * Gets the discounting curve identifier.
-   * @return  the identifier, can be null
+   *
+   * @return the identifier, can be null
    */
   UniqueIdentifiable getDiscountingCurveId() {
     return _discountingCurveId;
@@ -214,7 +237,8 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
 
   /**
    * Gets the ibor curve indices.
-   * @return  the indices, can be null or empty
+   *
+   * @return the indices, can be null or empty
    */
   List<IborTypeIndex> getIborCurveIndices() {
     return _iborCurveIndices == null ? null : Collections.unmodifiableList(_iborCurveIndices);
@@ -222,7 +246,8 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
 
   /**
    * Gets the overnight curve indices.
-   * @return  the indices, can be null or empty
+   *
+   * @return the indices, can be null or empty
    */
   List<OvernightIndex> getOvernightCurveIndices() {
     return _overnightCurveIndices == null ? null : Collections.unmodifiableList(_overnightCurveIndices);
@@ -230,7 +255,8 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
 
   /**
    * Gets the issuers.
-   * @return  the issuers, can be null or empty
+   *
+   * @return the issuers, can be null or empty
    */
   List<Pair<Object, LegalEntityFilter<LegalEntity>>> getIssuers() {
     return _issuers == null ? null : Collections.unmodifiableList(_issuers);
@@ -238,7 +264,8 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
 
   /**
    * Gets the fixed node dates.
-   * @return  the fixed node dates, can be null or empty.
+   *
+   * @return the fixed node dates, can be null or empty.
    */
   List<LocalDateTime> getFixedNodeDates() {
     return _dates == null ? null : Collections.unmodifiableList(_dates);
@@ -289,8 +316,8 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
       }
     }
     if (_baseCurveName != null) {
-      //TODO positive or negative spread
-      return new GeneratorCurveAddYieldExisiting(generator, false, _baseCurveName);
+      // TODO positive or negative spread
+      return new GeneratorCurveAddYieldExisting(generator, false, _baseCurveName);
     }
     return generator;
   }

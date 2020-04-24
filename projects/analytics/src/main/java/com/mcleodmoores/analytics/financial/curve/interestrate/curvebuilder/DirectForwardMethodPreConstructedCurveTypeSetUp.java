@@ -3,12 +3,15 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  *
@@ -24,19 +27,27 @@ public class DirectForwardMethodPreConstructedCurveTypeSetUp extends DirectForwa
 
   @Override
   public DirectForwardMethodPreConstructedCurveTypeSetUp forDiscounting(final UniqueIdentifiable id) {
-    _discountingCurveId = id;
+    _discountingCurveId = ArgumentChecker.notNull(id, "id");
     return this;
   }
 
   @Override
   public DirectForwardMethodPreConstructedCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
-    _iborCurveIndices = Arrays.asList(indices);
+    ArgumentChecker.notEmpty(indices, "indices");
+    if (_iborCurveIndices == null) {
+      _iborCurveIndices = new ArrayList<>();
+    }
+    _iborCurveIndices.addAll(Arrays.asList(indices));
     return this;
   }
 
   @Override
   public DirectForwardMethodPreConstructedCurveTypeSetUp forIndex(final OvernightIndex... indices) {
-    _overnightCurveIndices = Arrays.asList(indices);
+    ArgumentChecker.notEmpty(indices, "indices");
+    if (_overnightCurveIndices == null) {
+      _overnightCurveIndices = new ArrayList<>();
+    }
+    _overnightCurveIndices.addAll(Arrays.asList(indices));
     return this;
   }
 
@@ -47,12 +58,12 @@ public class DirectForwardMethodPreConstructedCurveTypeSetUp extends DirectForwa
 
   @Override
   public List<IborTypeIndex> getIborCurveIndices() {
-    return _iborCurveIndices;
+    return _iborCurveIndices == null ? null : Collections.unmodifiableList(_iborCurveIndices);
   }
 
   @Override
   public List<OvernightIndex> getOvernightCurveIndices() {
-    return _overnightCurveIndices;
+    return _overnightCurveIndices == null ? null : Collections.unmodifiableList(_overnightCurveIndices);
   }
 
 }

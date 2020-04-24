@@ -13,6 +13,7 @@ import static org.testng.Assert.assertEquals;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -59,11 +60,9 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Builds and tests discounting and 3m USD LIBOR curves. The discounting curve is used as an external input when constructing the LIBOR
- * curve.
+ * Builds and tests discounting and 3m USD LIBOR curves. The discounting curve is used as an external input when constructing the LIBOR curve.
  * <p>
- * The discounting curve contains the overnight deposit rate and OIS swaps. The LIBOR curve contains the 3m LIBOR rate and 3m LIBOR / 6m
- * fixed swaps.
+ * The discounting curve contains the overnight deposit rate and OIS swaps. The LIBOR curve contains the 3m LIBOR rate and 3m LIBOR / 6m fixed swaps.
  */
 @Test(groups = TestGroup.UNIT)
 public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
@@ -218,12 +217,12 @@ public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    Map<String, InstrumentDefinition<?>[]> definitionsForCurvesBeforeFixing = DSC_BUILDER.copy()
+    Map<String, List<InstrumentDefinition<?>>> definitionsForCurvesBeforeFixing = DSC_BUILDER.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
-    Map<String, InstrumentDefinition<?>[]> definitionsForCurvesAfterFixing = DSC_BUILDER.copy()
+        .getNodes();
+    Map<String, List<InstrumentDefinition<?>>> definitionsForCurvesAfterFixing = DSC_BUILDER.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
+        .getNodes();
     curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_USD),
         DSC_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW,
         Currency.USD);
@@ -231,10 +230,10 @@ public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
         DSC_AFTER_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
     definitionsForCurvesBeforeFixing = LIBOR_BUILDER.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
+        .getNodes();
     definitionsForCurvesAfterFixing = LIBOR_BUILDER.copy()
         .getBuilder()
-        .getDefinitionsForCurves();
+        .getNodes();
     curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_FWD3_USD),
         LIBOR_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW,
         Currency.USD);

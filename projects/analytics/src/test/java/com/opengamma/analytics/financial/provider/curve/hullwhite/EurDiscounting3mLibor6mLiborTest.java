@@ -16,6 +16,7 @@ import static org.testng.Assert.assertEquals;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
@@ -67,18 +68,18 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Builds and tests EUR discounting and 3m and 6m EURIBOR curves using a one-factor Hull-White model to adjust for convexity. Curves are
- * constructed in two ways:
+ * Builds and tests EUR discounting and 3m and 6m EURIBOR curves using a one-factor Hull-White model to adjust for convexity. Curves are constructed in two
+ * ways:
  * <ul>
  * <li>Discounting, then 3m EURIBOR, then 6m EURIBOR curves;
  * <li>Discounting and the two EURIBOR curves simultaneously.
  * </ul>
- * In the first case, the discounting curve only has sensitivities to the market data used in its construction. In the second case, each
- * curve does have sensitivities to the other curves. The sensitivities of the discounting curve to the EURIBOR curves are zero, and the
- * sensitivities of the 3m and 6m EURIBOR curve to the market data in the other curve are zero.
+ * In the first case, the discounting curve only has sensitivities to the market data used in its construction. In the second case, each curve does have
+ * sensitivities to the other curves. The sensitivities of the discounting curve to the EURIBOR curves are zero, and the sensitivities of the 3m and 6m EURIBOR
+ * curve to the market data in the other curve are zero.
  * <p>
- * The discounting curve contains the EONIA rate and OIS. The 3m EURIBOR curve contains the 3m EURIBOR rate, EURIBOR futures, and 3m
- * floating / 1Y fixed swaps. The 6m EURIBOR curve contains the 6m EURIBOR rate, 6m FRAs and 6m floating / 1Y fixed swaps.
+ * The discounting curve contains the EONIA rate and OIS. The 3m EURIBOR curve contains the 3m EURIBOR rate, EURIBOR futures, and 3m floating / 1Y fixed swaps.
+ * The 6m EURIBOR curve contains the 6m EURIBOR rate, 6m FRAs and 6m floating / 1Y fixed swaps.
  */
 @Test(groups = TestGroup.UNIT)
 public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
@@ -338,10 +339,10 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    Map<String, InstrumentDefinition<?>[]> definitions;
+    Map<String, List<InstrumentDefinition<?>>> definitions;
     // discounting then 3m then 6m
     // before fixing
-    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), CONSECUTIVE_BEFORE_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
@@ -352,7 +353,7 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // after fixing
-    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), CONSECUTIVE_AFTER_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
@@ -364,7 +365,7 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // discounting and euribors
     // before fixing
-    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
@@ -375,7 +376,7 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // after fixing
-    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
+    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), SIMULTANEOUS_AFTER_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
@@ -406,8 +407,8 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve. The sensitivities
-   * of the discounting curve to the EURIBOR curves are not calculated when the curves are constructed consecutively.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve. The sensitivities of the discounting
+   * curve to the EURIBOR curves are not calculated when the curves are constructed consecutively.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities
@@ -429,8 +430,8 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the three curves. The sensitivities of
-   * the discounting curve to the EURIBOR curves should be zero.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the three curves. The sensitivities of the discounting curve
+   * to the EURIBOR curves should be zero.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities
@@ -456,8 +457,7 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the 3m EURIBOR curve to changes in the market data points used in the discounting curve and 3m EURIBOR
-   * curve.
+   * Tests the sensitivities of the 3m EURIBOR curve to changes in the market data points used in the discounting curve and 3m EURIBOR curve.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities
@@ -481,8 +481,8 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the 3m EURIBOR curve to changes in the market data points used in the three curves. The sensitivities of the
-   * 3m curve to the 6m curve should be zero.
+   * Tests the sensitivities of the 3m EURIBOR curve to changes in the market data points used in the three curves. The sensitivities of the 3m curve to the 6m
+   * curve should be zero.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities
@@ -567,8 +567,8 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests that the two curves (discounting and 6m EURIBOR) that do not have instruments requiring a convexity adjustment are the same as
-   * those produced by using discounting alone.
+   * Tests that the two curves (discounting and 6m EURIBOR) that do not have instruments requiring a convexity adjustment are the same as those produced by
+   * using discounting alone.
    */
   @Test
   public void testNonConvexInstruments() {
