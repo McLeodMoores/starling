@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.convention.interestrate;
+package com.mcleodmoores.analytics.financial.generator.interestrate;
 
 import java.util.Objects;
 
@@ -19,29 +19,30 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * A convention for cash rates (e.g. deposit, IBOR, etc.) that contains sufficient information to
- * build a {@link CashDefinition} when the fixing rate and start and end tenors are supplied:
+ * A generator for cash rates (e.g. deposit, IBOR, etc.) that contains sufficient information to build a {@link CashDefinition} when the fixing rate and start
+ * and end tenors are supplied:
  * <ul>
- *  <li> A business day convention to adjust dates for non-working days ({@link BusinessDayConvention}).
- *  <li> A working day calendar that contains information about weekends and holidays ({@link WorkingDayCalendar}).
- *  <li> The currency for which this convention is used.
- *  <li> A day count convention that calculates the times between dates ({@link DayCount}).
- *  <li> An end-of-month convention that determines the behaviour if the instrument payment date falls on the last day of a month.
- *  <li> The spot lag i.e. the number of days to adjust the start date of the instrument to move to the spot date.
+ * <li>A business day generator to adjust dates for non-working days ({@link BusinessDayConvention}).
+ * <li>A working day calendar that contains information about weekends and holidays ({@link WorkingDayCalendar}).
+ * <li>The currency for which this generator is used.
+ * <li>A day count generator that calculates the times between dates ({@link DayCount}).
+ * <li>An end-of-month generator that determines the behaviour if the instrument payment date falls on the last day of a month.
+ * <li>The spot lag i.e. the number of days to adjust the start date of the instrument to move to the spot date.
  * </ul>
  */
-public class CashConvention implements CurveDataConvention<CashDefinition> {
+public class CashGenerator implements CurveInstrumentGenerator<CashDefinition> {
 
   /**
-   * Gets the convention builder.
-   * @return  the builder
+   * Gets the generator builder.
+   *
+   * @return the builder
    */
   public static Builder builder() {
     return new Builder();
   }
 
   /**
-   * A builder for this convention.
+   * A builder for this generator.
    */
   public static class Builder {
     private BusinessDayConvention _businessDayConvention;
@@ -54,13 +55,15 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
     /**
      * Constructs the builder.
      */
-    /* package */Builder() {
+    /* package */ Builder() {
     }
 
     /**
-     * Sets the business day convention.
-     * @param businessDayConvention  the business day convention, not null
-     * @return  the builder
+     * Sets the business day generator.
+     *
+     * @param businessDayConvention
+     *          the business day generator, not null
+     * @return the builder
      */
     public Builder withBusinessDayConvention(final BusinessDayConvention businessDayConvention) {
       _businessDayConvention = ArgumentChecker.notNull(businessDayConvention, "businessDayConvention");
@@ -69,8 +72,10 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
     /**
      * Sets the calendar.
-     * @param calendar  the calendar, not null
-     * @return  the builder
+     *
+     * @param calendar
+     *          the calendar, not null
+     * @return the builder
      */
     public Builder withCalendar(final WorkingDayCalendar calendar) {
       _calendar = ArgumentChecker.notNull(calendar, "calendar");
@@ -79,8 +84,10 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
     /**
      * Sets the currency.
-     * @param currency  the currency, not null
-     * @return  the builder
+     *
+     * @param currency
+     *          the currency, not null
+     * @return the builder
      */
     public Builder withCurrency(final Currency currency) {
       _currency = ArgumentChecker.notNull(currency, "currency");
@@ -89,8 +96,10 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
     /**
      * Sets the day count.
-     * @param dayCount  the day count, not null
-     * @return  the builder
+     *
+     * @param dayCount
+     *          the day count, not null
+     * @return the builder
      */
     public Builder withDayCount(final DayCount dayCount) {
       _dayCount = ArgumentChecker.notNull(dayCount, "dayCount");
@@ -98,9 +107,11 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
     }
 
     /**
-     * Sets the end of month convention.
-     * @param isEom  the end of month convention, not null
-     * @return  the builder
+     * Sets the end of month generator.
+     *
+     * @param isEom
+     *          the end of month generator, not null
+     * @return the builder
      */
     public Builder withEndOfMonthConvention(final EndOfMonthConvention isEom) {
       _endOfMonth = ArgumentChecker.notNull(isEom, "isEom");
@@ -109,8 +120,10 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
     /**
      * Sets the spot lag.
-     * @param spotLag  the spot lag
-     * @return  the builder
+     *
+     * @param spotLag
+     *          the spot lag
+     * @return the builder
      */
     public Builder withSpotLag(final int spotLag) {
       _spotLag = spotLag;
@@ -118,12 +131,13 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
     }
 
     /**
-     * Builds the convention.
-     * @return  the convention
+     * Builds the generator.
+     *
+     * @return the generator
      */
-    public CashConvention build() {
+    public CashGenerator build() {
       if (_businessDayConvention == null) {
-        throw new IllegalStateException("The business day convention must be supplied");
+        throw new IllegalStateException("The business day generator must be supplied");
       }
       if (_calendar == null) {
         throw new IllegalStateException("The calendar must be supplied");
@@ -135,14 +149,15 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
         throw new IllegalStateException("The day count must be supplied");
       }
       if (_endOfMonth == null) {
-        throw new IllegalStateException("The end of month convention must be supplied");
+        throw new IllegalStateException("The end of month generator must be supplied");
       }
-      return new CashConvention(this);
+      return new CashGenerator(this);
     }
 
     /**
-     * Gets the business day convention.
-     * @return  the business day convention
+     * Gets the business day generator.
+     *
+     * @return the business day generator
      */
     /* package */ BusinessDayConvention getBusinessDayConvention() {
       return _businessDayConvention;
@@ -150,7 +165,8 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
     /**
      * Gets the calendar.
-     * @return  the calendar
+     *
+     * @return the calendar
      */
     /* package */ WorkingDayCalendar getCalendar() {
       return _calendar;
@@ -158,7 +174,8 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
     /**
      * Gets the currency.
-     * @return  the currency
+     *
+     * @return the currency
      */
     /* package */ Currency getCurrency() {
       return _currency;
@@ -166,15 +183,17 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
     /**
      * Gets the day count.
-     * @return  the day count
+     *
+     * @return the day count
      */
     /* package */ DayCount getDayCount() {
       return _dayCount;
     }
 
     /**
-     * Gets the end of month convention.
-     * @return  the end of month convention
+     * Gets the end of month generator.
+     *
+     * @return the end of month generator
      */
     /* package */ EndOfMonthConvention getEndOfMonthConvention() {
       return _endOfMonth;
@@ -182,7 +201,8 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
     /**
      * Gets the spot lag.
-     * @return  the spot lag
+     *
+     * @return the spot lag
      */
     /* package */ int getSpotLag() {
       return _spotLag;
@@ -197,10 +217,12 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
   private final boolean _endOfMonth;
 
   /**
-   * Constructs the convention.
-   * @param builder  the builder
+   * Constructs the generator.
+   *
+   * @param builder
+   *          the builder
    */
-  /* package */CashConvention(final Builder builder) {
+  CashGenerator(final Builder builder) {
     _currency = builder.getCurrency();
     _calendar = builder.getCalendar();
     _spotLag = builder.getSpotLag();
@@ -215,7 +237,7 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
           _endOfMonth = false;
           break;
         default:
-          throw new IllegalArgumentException("Unsupported end of month convention " + builder.getEndOfMonthConvention());
+          throw new IllegalArgumentException("Unsupported end of month generator " + builder.getEndOfMonthConvention());
       }
     } else {
       _endOfMonth = true;
@@ -243,7 +265,8 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
   /**
    * Gets the business day convention.
-   * @return  the business day convention
+   *
+   * @return the business day convention
    */
   public BusinessDayConvention getBusinessDayConvention() {
     return _businessDayConvention;
@@ -251,7 +274,8 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
   /**
    * Gets the calendar.
-   * @return  the calendar
+   *
+   * @return the calendar
    */
   public WorkingDayCalendar getCalendar() {
     return _calendar;
@@ -259,7 +283,8 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
   /**
    * Gets the currency.
-   * @return  the currency
+   *
+   * @return the currency
    */
   public Currency getCurrency() {
     return _currency;
@@ -267,7 +292,8 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
   /**
    * Gets the day count.
-   * @return  the day count
+   *
+   * @return the day count
    */
   public DayCount getDayCount() {
     return _dayCount;
@@ -275,7 +301,8 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
   /**
    * Returns true if the end of month is considered.
-   * @return  true if the end of month is considered
+   *
+   * @return true if the end of month is considered
    */
   public boolean isEndOfMonthConvention() {
     return _endOfMonth;
@@ -283,7 +310,8 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
 
   /**
    * Gets the spot lag.
-   * @return  the spot lag
+   *
+   * @return the spot lag
    */
   public int getSpotLag() {
     return _spotLag;
@@ -313,7 +341,7 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    final CashConvention other = (CashConvention) obj;
+    final CashGenerator other = (CashGenerator) obj;
     if (_endOfMonth != other._endOfMonth) {
       return false;
     }

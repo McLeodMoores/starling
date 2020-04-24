@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.convention.interestrate;
+package com.mcleodmoores.analytics.financial.generator.interestrate;
 
 import java.util.Objects;
 
@@ -26,31 +26,31 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * A convention for vanilla OIS that contains sufficient information to build a {@link SwapFixedONDefinition}
- * when the fixing rate and start and end tenors are supplied:
+ * A generator for vanilla OIS that contains sufficient information to build a {@link SwapFixedONDefinition} when the fixing rate and start and end tenors are
+ * supplied:
  * <ul>
- *  <li> The business day convention used for date adjustments.
- *  <li> A working day calendar that contains information about weekends and holidays.
- *  <li> The leg payment tenor.
- *  <li> Fields indicating the stub type and if the leg schedules are generated from the start or end of the
- *       swap.
- *  <li> The payment and spot lag.
- *  <li> The underlying index.
+ * <li>The business day generator used for date adjustments.
+ * <li>A working day calendar that contains information about weekends and holidays.
+ * <li>The leg payment tenor.
+ * <li>Fields indicating the stub type and if the leg schedules are generated from the start or end of the swap.
+ * <li>The payment and spot lag.
+ * <li>The underlying index.
  * </ul>
  */
 @SuppressWarnings("deprecation")
-public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefinition> {
+public class VanillaOisGenerator implements CurveInstrumentGenerator<SwapFixedONDefinition> {
 
   /**
-   * Gets the convention builder.
-   * @return  the builder
+   * Gets the generator builder.
+   *
+   * @return the builder
    */
-  public static VanillaOisConvention.Builder builder() {
+  public static VanillaOisGenerator.Builder builder() {
     return new Builder();
   }
 
   /**
-   * A builder for this convention.
+   * A builder for this generator.
    */
   public static class Builder {
     private BusinessDayConvention _businessDayConvention;
@@ -70,8 +70,10 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
 
     /**
      * Sets the business day convention.
-     * @param businessDayConvention  the business day convention, not null
-     * @return  the builder
+     *
+     * @param businessDayConvention
+     *          the business day convention, not null
+     * @return the builder
      */
     public Builder withBusinessDayConvention(final BusinessDayConvention businessDayConvention) {
       _businessDayConvention = ArgumentChecker.notNull(businessDayConvention, "businessDayConvention");
@@ -80,8 +82,10 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
 
     /**
      * Sets the end of month convention.
-     * @param endOfMonthConvention  the convention, not null
-     * @return  the builder
+     *
+     * @param endOfMonthConvention
+     *          the convention, not null
+     * @return the builder
      */
     public Builder withEndOfMonth(final EndOfMonthConvention endOfMonthConvention) {
       _endOfMonthConvention = ArgumentChecker.notNull(endOfMonthConvention, "endOfMonthConvention");
@@ -90,8 +94,10 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
 
     /**
      * Sets the working day calendar.
-     * @param calendar  the working day calendar, not null
-     * @return  the builder
+     *
+     * @param calendar
+     *          the working day calendar, not null
+     * @return the builder
      */
     public Builder withCalendar(final WorkingDayCalendar calendar) {
       _calendar = ArgumentChecker.notNull(calendar, "calendar");
@@ -100,8 +106,10 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
 
     /**
      * Sets the payment tenor.
-     * @param paymentTenor  the payment tenor, not null
-     * @return  the builder
+     *
+     * @param paymentTenor
+     *          the payment tenor, not null
+     * @return the builder
      */
     public Builder withPaymentTenor(final Tenor paymentTenor) {
       _paymentTenor = ArgumentChecker.notNull(paymentTenor, "paymentTenor");
@@ -110,8 +118,10 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
 
     /**
      * Sets the stub type.
-     * @param stubType  the stub type, not null
-     * @return  the builder
+     *
+     * @param stubType
+     *          the stub type, not null
+     * @return the builder
      */
     public Builder withStubType(final StubType stubType) {
       _stubType = ArgumentChecker.notNull(stubType, "stubType");
@@ -120,8 +130,10 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
 
     /**
      * Sets the payment lag.
-     * @param paymentLag  the payment lag, not negative
-     * @return  the builder
+     *
+     * @param paymentLag
+     *          the payment lag, not negative
+     * @return the builder
      */
     public Builder withPaymentLag(final int paymentLag) {
       _paymentLag = ArgumentChecker.notNegative(paymentLag, "paymentLag");
@@ -130,8 +142,10 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
 
     /**
      * Sets the spot lag.
-     * @param spotLag  the spot lag, not negative
-     * @return  the builder
+     *
+     * @param spotLag
+     *          the spot lag, not negative
+     * @return the builder
      */
     public Builder withSpotLag(final int spotLag) {
       _spotLag = ArgumentChecker.notNegative(spotLag, "spotLag");
@@ -140,8 +154,10 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
 
     /**
      * Sets the overnight index.
-     * @param underlyingIndex  the overnight index, not null
-     * @return  the builder
+     *
+     * @param underlyingIndex
+     *          the overnight index, not null
+     * @return the builder
      */
     public Builder withUnderlyingIndex(final OvernightIndex underlyingIndex) {
       _underlyingIndex = ArgumentChecker.notNull(underlyingIndex, "underlyingIndex");
@@ -149,18 +165,19 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
     }
 
     /**
-     * Builds the convention.
-     * @return  the convention
+     * Builds the generator.
+     *
+     * @return the generator
      */
-    public VanillaOisConvention build() {
+    public VanillaOisGenerator build() {
       if (_businessDayConvention == null) {
-        throw new IllegalStateException("The business day convention must be supplied");
+        throw new IllegalStateException("The business day generator must be supplied");
       }
       if (_calendar == null) {
         throw new IllegalStateException("The calendar must be supplied");
       }
       if (_endOfMonthConvention == null) {
-        throw new IllegalStateException("The end of month convention must be supplied");
+        throw new IllegalStateException("The end of month generator must be supplied");
       }
       if (_paymentTenor == null) {
         throw new IllegalStateException("The payment tenor must be supplied");
@@ -171,7 +188,7 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
       if (_underlyingIndex == null) {
         throw new IllegalStateException("The underlying index must be supplied");
       }
-      return new VanillaOisConvention(_businessDayConvention, _calendar, _paymentTenor, _paymentLag,
+      return new VanillaOisGenerator(_businessDayConvention, _calendar, _paymentTenor, _paymentLag,
           _spotLag, _underlyingIndex, _stubType, _endOfMonthConvention);
     }
   }
@@ -187,16 +204,24 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
   private final OvernightIndex _index;
 
   /**
-   * @param businessDayConvention  the swap leg business day convention
-   * @param calendar  the swap leg holiday calendar
-   * @param paymentTenor  the swap leg payment tenor
-   * @param paymentLag  the payment lag of the swap leg
-   * @param spotLag  the lag to the settlement date
-   * @param index  the underlying overnight index
-   * @param stubType  the payment schedule stub type
-   * @param endOfMonth  how dates at the end of months are handled
+   * @param businessDayConvention
+   *          the swap leg business day generator
+   * @param calendar
+   *          the swap leg holiday calendar
+   * @param paymentTenor
+   *          the swap leg payment tenor
+   * @param paymentLag
+   *          the payment lag of the swap leg
+   * @param spotLag
+   *          the lag to the settlement date
+   * @param index
+   *          the underlying overnight index
+   * @param stubType
+   *          the payment schedule stub type
+   * @param endOfMonth
+   *          how dates at the end of months are handled
    */
-  /* package */VanillaOisConvention(final BusinessDayConvention businessDayConvention, final WorkingDayCalendar calendar,
+  VanillaOisGenerator(final BusinessDayConvention businessDayConvention, final WorkingDayCalendar calendar,
       final Tenor paymentTenor, final int paymentLag, final int spotLag,
       final OvernightIndex index, final StubType stubType, final EndOfMonthConvention endOfMonth) {
     _businessDayConvention = businessDayConvention;
@@ -237,7 +262,7 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
         _endOfMonth = false;
         break;
       default:
-        throw new IllegalArgumentException("Unsupported end of month convention " + endOfMonth);
+        throw new IllegalArgumentException("Unsupported end of month generator " + endOfMonth);
     }
   }
 
@@ -294,7 +319,7 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
     if (getClass() != obj.getClass()) {
       return false;
     }
-    final VanillaOisConvention other = (VanillaOisConvention) obj;
+    final VanillaOisGenerator other = (VanillaOisGenerator) obj;
     if (_isLegGeneratedFromEnd != other._isLegGeneratedFromEnd) {
       return false;
     }

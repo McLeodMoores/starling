@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.convention.interestrate;
+package com.mcleodmoores.analytics.financial.generator.interestrate;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.analytics.financial.generator.interestrate.VanillaFixedIborSwapGenerator;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
@@ -30,16 +31,16 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Unit tests for {@link VanillaFixedIborSwapConvention}.
+ * Unit tests for {@link VanillaFixedIborSwapGenerator}.
  */
-public class VanillaFixedIborSwapConventionTest {
+public class VanillaFixedIborSwapGeneratorTest {
   private static final Tenor FIXED_LEG_TENOR = Tenor.SIX_MONTHS;
   private static final DayCount FIXED_LEG_DAYCOUNT = DayCounts.THIRTY_U_360;
   private static final StubType STUB_TYPE = StubType.LONG_END;
   private static final IborTypeIndex INDEX = new IborTypeIndex("NAME", Currency.USD, Tenor.THREE_MONTHS, 2,
       DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, true);
   private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
-  private static final VanillaFixedIborSwapConvention CONVENTION = VanillaFixedIborSwapConvention.builder()
+  private static final VanillaFixedIborSwapGenerator CONVENTION = VanillaFixedIborSwapGenerator.builder()
       .withCalendar(CALENDAR)
       .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
       .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
@@ -52,7 +53,7 @@ public class VanillaFixedIborSwapConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCalendar() {
-    VanillaFixedIborSwapConvention.builder()
+    VanillaFixedIborSwapGenerator.builder()
     .withCalendar(null)
     .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
     .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
@@ -65,7 +66,7 @@ public class VanillaFixedIborSwapConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCalendarIsSet() {
-    VanillaFixedIborSwapConvention.builder()
+    VanillaFixedIborSwapGenerator.builder()
     .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
     .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
     .withStub(STUB_TYPE)
@@ -78,7 +79,7 @@ public class VanillaFixedIborSwapConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullFixedLegDayCount() {
-    VanillaFixedIborSwapConvention.builder()
+    VanillaFixedIborSwapGenerator.builder()
     .withCalendar(CALENDAR)
     .withFixedLegDayCount(null)
     .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
@@ -91,7 +92,7 @@ public class VanillaFixedIborSwapConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFixedLegDayCountIsSet() {
-    VanillaFixedIborSwapConvention.builder()
+    VanillaFixedIborSwapGenerator.builder()
     .withCalendar(CALENDAR)
     .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
     .withStub(STUB_TYPE)
@@ -104,7 +105,7 @@ public class VanillaFixedIborSwapConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullFixedLegPaymentTenor() {
-    VanillaFixedIborSwapConvention.builder()
+    VanillaFixedIborSwapGenerator.builder()
     .withCalendar(CALENDAR)
     .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
     .withFixedLegPaymentTenor(null)
@@ -117,7 +118,7 @@ public class VanillaFixedIborSwapConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFixedLegPaymentTenorIsSet() {
-    VanillaFixedIborSwapConvention.builder()
+    VanillaFixedIborSwapGenerator.builder()
     .withCalendar(CALENDAR)
     .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
     .withStub(STUB_TYPE)
@@ -130,7 +131,7 @@ public class VanillaFixedIborSwapConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullStubType() {
-    VanillaFixedIborSwapConvention.builder()
+    VanillaFixedIborSwapGenerator.builder()
     .withCalendar(CALENDAR)
     .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
     .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
@@ -143,7 +144,7 @@ public class VanillaFixedIborSwapConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testStubTypeIsSet() {
-    VanillaFixedIborSwapConvention.builder()
+    VanillaFixedIborSwapGenerator.builder()
     .withCalendar(CALENDAR)
     .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
     .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
@@ -156,7 +157,7 @@ public class VanillaFixedIborSwapConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullIndex() {
-    VanillaFixedIborSwapConvention.builder()
+    VanillaFixedIborSwapGenerator.builder()
     .withCalendar(CALENDAR)
     .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
     .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
@@ -169,7 +170,7 @@ public class VanillaFixedIborSwapConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testIndexIsSet() {
-    VanillaFixedIborSwapConvention.builder()
+    VanillaFixedIborSwapGenerator.builder()
     .withCalendar(CALENDAR)
     .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
     .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
@@ -182,7 +183,7 @@ public class VanillaFixedIborSwapConventionTest {
    */
   @Test
   public void testObject() {
-    VanillaFixedIborSwapConvention other = VanillaFixedIborSwapConvention.builder()
+    VanillaFixedIborSwapGenerator other = VanillaFixedIborSwapGenerator.builder()
         .withCalendar(CALENDAR)
         .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
         .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
@@ -194,7 +195,7 @@ public class VanillaFixedIborSwapConventionTest {
     assertEquals(CONVENTION.toString(), "VanillaFixedIborSwapConvention [index=IborIndex[NAME, currency=USD, tenor=P3M, day count=Actual/360, "
         + "business day convention=Modified Following, spot lag=2, end-of-month], fixedLegPaymentTenor=Tenor[P6M], "
         + "fixedLegDayCount=30U/360, calendar=Saturday / Sunday: [SATURDAY, SUNDAY], stubType=LONG_END]");
-    other = VanillaFixedIborSwapConvention.builder()
+    other = VanillaFixedIborSwapGenerator.builder()
         .withCalendar(WeekendWorkingDayCalendar.FRIDAY_SATURDAY)
         .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
         .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
@@ -202,7 +203,7 @@ public class VanillaFixedIborSwapConventionTest {
         .withUnderlyingIndex(INDEX)
         .build();
     assertNotEquals(CONVENTION, other);
-    other = VanillaFixedIborSwapConvention.builder()
+    other = VanillaFixedIborSwapGenerator.builder()
       .withCalendar(CALENDAR)
       .withFixedLegDayCount(DayCounts.ACT_365)
       .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
@@ -210,7 +211,7 @@ public class VanillaFixedIborSwapConventionTest {
       .withUnderlyingIndex(INDEX)
       .build();
     assertNotEquals(CONVENTION, other);
-    other = VanillaFixedIborSwapConvention.builder()
+    other = VanillaFixedIborSwapGenerator.builder()
       .withCalendar(CALENDAR)
       .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
       .withFixedLegPaymentTenor(Tenor.ONE_YEAR)
@@ -218,7 +219,7 @@ public class VanillaFixedIborSwapConventionTest {
       .withUnderlyingIndex(INDEX)
       .build();
     assertNotEquals(CONVENTION, other);
-    other = VanillaFixedIborSwapConvention.builder()
+    other = VanillaFixedIborSwapGenerator.builder()
       .withCalendar(CALENDAR)
       .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
       .withFixedLegPaymentTenor(FIXED_LEG_TENOR)
@@ -226,7 +227,7 @@ public class VanillaFixedIborSwapConventionTest {
       .withUnderlyingIndex(INDEX)
       .build();
     assertNotEquals(CONVENTION, other);
-    other = VanillaFixedIborSwapConvention.builder()
+    other = VanillaFixedIborSwapGenerator.builder()
       .withCalendar(CALENDAR)
       .withFixedLegDayCount(FIXED_LEG_DAYCOUNT)
       .withFixedLegPaymentTenor(FIXED_LEG_TENOR)

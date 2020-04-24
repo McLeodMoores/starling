@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.convention.interestrate;
+package com.mcleodmoores.analytics.financial.generator.interestrate;
 
 import java.util.Objects;
 
@@ -24,29 +24,29 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- * A convention for vanilla fixed / IBOR swaps. The required fields are:
+ * A generator for vanilla fixed / IBOR swaps. The required fields are:
  * <ul>
- *  <li> A working day calendar that contains information about weekends and holidays ({@link WorkingDayCalendar}).
- *  <li> The fixed leg accrual / payment tenor.
- *  <li> The day count used to calculate the fixed leg accrual year fraction.
- *  <li> Fields indicating the stub type and if the leg schedules are generated from the start or end
- *       of the swap.
- *  <li> The underlying index - this is used to generate the floating leg.
+ * <li>A working day calendar that contains information about weekends and holidays ({@link WorkingDayCalendar}).
+ * <li>The fixed leg accrual / payment tenor.
+ * <li>The day count used to calculate the fixed leg accrual year fraction.
+ * <li>Fields indicating the stub type and if the leg schedules are generated from the start or end of the swap.
+ * <li>The underlying index - this is used to generate the floating leg.
  * </ul>
  */
 @SuppressWarnings("deprecation")
-public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapFixedIborDefinition> {
+public class VanillaFixedIborSwapGenerator implements CurveInstrumentGenerator<SwapFixedIborDefinition> {
 
   /**
-   * Gets the convention builder.
-   * @return  the builder
+   * Gets the generator builder.
+   * 
+   * @return the builder
    */
-  public static VanillaFixedIborSwapConvention.Builder builder() {
+  public static VanillaFixedIborSwapGenerator.Builder builder() {
     return new Builder();
   }
 
   /**
-   * A builder for this convention.
+   * A builder for this generator.
    */
   public static class Builder {
     private WorkingDayCalendar _calendar;
@@ -63,8 +63,10 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
 
     /**
      * Sets the working day calendar.
-     * @param calendar  the calendar, not null
-     * @return  the builder
+     * 
+     * @param calendar
+     *          the calendar, not null
+     * @return the builder
      */
     public Builder withCalendar(final WorkingDayCalendar calendar) {
       _calendar = ArgumentChecker.notNull(calendar, "calendar");
@@ -73,8 +75,10 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
 
     /**
      * Sets the stub type.
-     * @param stubType  the stub type, not null
-     * @return  the builder
+     * 
+     * @param stubType
+     *          the stub type, not null
+     * @return the builder
      */
     public Builder withStub(final StubType stubType) {
       _stubType = ArgumentChecker.notNull(stubType, "stubType");
@@ -83,8 +87,10 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
 
     /**
      * Sets the floating leg index.
-     * @param underlyingIndex  the floating leg index, not null
-     * @return  the builder
+     * 
+     * @param underlyingIndex
+     *          the floating leg index, not null
+     * @return the builder
      */
     public Builder withUnderlyingIndex(final IborTypeIndex underlyingIndex) {
       _underlyingIndex = ArgumentChecker.notNull(underlyingIndex, "underlyingIndex");
@@ -93,8 +99,10 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
 
     /**
      * Sets the fixed leg payment tenor.
-     * @param fixedLegPaymentTenor  the fixed leg payment tenor, not null
-     * @return  the builder
+     * 
+     * @param fixedLegPaymentTenor
+     *          the fixed leg payment tenor, not null
+     * @return the builder
      */
     public Builder withFixedLegPaymentTenor(final Tenor fixedLegPaymentTenor) {
       _fixedLegPaymentTenor = ArgumentChecker.notNull(fixedLegPaymentTenor, "fixedLegPaymenTenor");
@@ -103,8 +111,10 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
 
     /**
      * Sets the fixed leg day count.
-     * @param fixedLegDayCount  the fixed leg day count, not null
-     * @return  the builder
+     * 
+     * @param fixedLegDayCount
+     *          the fixed leg day count, not null
+     * @return the builder
      */
     public Builder withFixedLegDayCount(final DayCount fixedLegDayCount) {
       _fixedLegDayCount = ArgumentChecker.notNull(fixedLegDayCount, "fixedLegDayCount");
@@ -112,10 +122,11 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
     }
 
     /**
-     * Builds the convention.
-     * @return  the convention
+     * Builds the generator.
+     * 
+     * @return the generator
      */
-    public VanillaFixedIborSwapConvention build() {
+    public VanillaFixedIborSwapGenerator build() {
       if (_calendar == null) {
         throw new IllegalStateException("The calendar must be supplied");
       }
@@ -131,7 +142,7 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
       if (_underlyingIndex == null) {
         throw new IllegalStateException("The underlying index must be supplied");
       }
-      return new VanillaFixedIborSwapConvention(_calendar, _stubType, _underlyingIndex, _fixedLegPaymentTenor, _fixedLegDayCount);
+      return new VanillaFixedIborSwapGenerator(_calendar, _stubType, _underlyingIndex, _fixedLegPaymentTenor, _fixedLegDayCount);
     }
   }
 
@@ -142,14 +153,20 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
   private final IborTypeIndex _index;
 
   /**
-   * Constructs the convention.
-   * @param calendar  the working day calendar
-   * @param stubType  the stub type
-   * @param index  the index
-   * @param fixedLegPaymentTenor  the fixed leg payment tenor
-   * @param fixedLegDayCount  the fixed leg day count
+   * Constructs the generator.
+   * 
+   * @param calendar
+   *          the working day calendar
+   * @param stubType
+   *          the stub type
+   * @param index
+   *          the index
+   * @param fixedLegPaymentTenor
+   *          the fixed leg payment tenor
+   * @param fixedLegDayCount
+   *          the fixed leg day count
    */
-  /* package */VanillaFixedIborSwapConvention(final WorkingDayCalendar calendar, final StubType stubType, final IborTypeIndex index,
+  VanillaFixedIborSwapGenerator(final WorkingDayCalendar calendar, final StubType stubType, final IborTypeIndex index,
       final Tenor fixedLegPaymentTenor, final DayCount fixedLegDayCount) {
     _calendar = calendar;
     _stubType = stubType;
@@ -163,18 +180,17 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
       final double fixedRate) {
     final IborIndex index = IndexConverter.toIborIndex(_index);
     final ZonedDateTime spot = ScheduleCalculator.getAdjustedDate(date, _index.getSpotLag(), _calendar);
-    final ZonedDateTime settlementDate =
-        ScheduleCalculator.getAdjustedDate(spot, startTenor, _index.getBusinessDayConvention(), _calendar, _index.isEndOfMonth());
+    final ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(spot, startTenor, _index.getBusinessDayConvention(), _calendar,
+        _index.isEndOfMonth());
     final ZonedDateTime maturityDate = TenorUtils.adjustDateByTenor(settlementDate, endTenor);
     final Calendar holidays = CalendarAdapter.of(_calendar);
-    final AnnuityCouponFixedDefinition fixedLeg =
-        AnnuityCouponFixedDefinition.from(_index.getCurrency(), settlementDate, maturityDate, _fixedLegPaymentTenor.getPeriod(),
+    final AnnuityCouponFixedDefinition fixedLeg = AnnuityCouponFixedDefinition.from(_index.getCurrency(), settlementDate, maturityDate,
+        _fixedLegPaymentTenor.getPeriod(),
         holidays, _fixedLegDayCount, _index.getBusinessDayConvention(), _index.isEndOfMonth(), notional, fixedRate, true, _stubType);
     final AnnuityCouponIborDefinition iborLeg = AnnuityCouponIborDefinition.from(settlementDate, maturityDate, _index.getTenor().getPeriod(),
         notional, index, false, _index.getBusinessDayConvention(), _index.isEndOfMonth(), _index.getDayCount(), holidays, _stubType);
     return new SwapFixedIborDefinition(fixedLeg, iborLeg);
   }
-
 
   @Override
   public int hashCode() {
@@ -199,7 +215,7 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
     if (getClass() != obj.getClass()) {
       return false;
     }
-    final VanillaFixedIborSwapConvention other = (VanillaFixedIborSwapConvention) obj;
+    final VanillaFixedIborSwapGenerator other = (VanillaFixedIborSwapGenerator) obj;
     if (_stubType != other._stubType) {
       return false;
     }

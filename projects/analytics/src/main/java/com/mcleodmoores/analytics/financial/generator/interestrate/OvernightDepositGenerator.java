@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.convention.interestrate;
+package com.mcleodmoores.analytics.financial.generator.interestrate;
 
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
@@ -17,28 +17,28 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * An extension of the cash convention that represents an overnight deposit convention. The required
- * fields are:
+ * An extension of the cash generator that represents an overnight deposit generator. The required fields are:
  * <ul>
- *  <li> A working day calendar that contains information about weekends and holidays ({@link WorkingDayCalendar}).
- *  <li> The currency for which the convention is used.
- *  <li> A day count convention that calculates the times between dates ({@link DayCount}).
+ * <li>A working day calendar that contains information about weekends and holidays ({@link WorkingDayCalendar}).
+ * <li>The currency for which the generator is used.
+ * <li>A day count generator that calculates the times between dates ({@link DayCount}).
  * </ul>
  */
-public class OvernightDepositConvention extends CashConvention {
+public class OvernightDepositGenerator extends CashGenerator {
 
   /**
-   * Gets the convention builder.
-   * @return  the builder
+   * Gets the generator builder.
+   *
+   * @return the builder
    */
-  public static OvernightDepositConvention.Builder builder() {
+  public static OvernightDepositGenerator.Builder builder() {
     return new Builder();
   }
 
   /**
-   * A builder for this convention with methods overridden for covariant returns.
+   * A builder for this generator with methods overridden for covariant returns.
    */
-  public static class Builder extends CashConvention.Builder {
+  public static class Builder extends CashGenerator.Builder {
 
     @Override
     public Builder withCurrency(final Currency currency) {
@@ -59,7 +59,7 @@ public class OvernightDepositConvention extends CashConvention {
     }
 
     @Override
-    public OvernightDepositConvention build() {
+    public OvernightDepositGenerator build() {
       if (getCurrency() == null) {
         throw new IllegalStateException("The currency must be supplied");
       }
@@ -69,23 +69,25 @@ public class OvernightDepositConvention extends CashConvention {
       if (getDayCount() == null) {
         throw new IllegalStateException("The day count must be supplied");
       }
-      return new OvernightDepositConvention(this);
+      return new OvernightDepositGenerator(this);
     }
 
   }
 
   /**
-   * Constructs the convention.
-   * @param builder  the builder
+   * Constructs the generator.
+   *
+   * @param builder
+   *          the builder
    */
-  /* package */OvernightDepositConvention(final Builder builder) {
+  OvernightDepositGenerator(final Builder builder) {
     super(builder);
   }
 
   @Override
   public CashDefinition toCurveInstrument(final ZonedDateTime date, final Tenor startTenor, final Tenor endTenor, final double notional,
       final double fixedRate) {
-    ArgumentChecker.notNull(date, "valuationDate");
+    ArgumentChecker.notNull(date, "date");
     final ZonedDateTime startDate = TenorUtils.adjustDateByTenor(date, Tenor.of(Period.ZERO), getCalendar(), 0);
     final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, 1, getCalendar());
     final double accrualFactor = getDayCount().getDayCountFraction(startDate, endDate, CalendarAdapter.of(getCalendar()));
@@ -95,7 +97,7 @@ public class OvernightDepositConvention extends CashConvention {
   @Override
   public String toString() {
     final StringBuilder builder = new StringBuilder();
-    builder.append("OvernightDepositConvention [currency=");
+    builder.append("OvernightDepositGenerator [currency=");
     builder.append(getCurrency().getCode());
     builder.append(", calendar=");
     builder.append(getCalendar().getName());

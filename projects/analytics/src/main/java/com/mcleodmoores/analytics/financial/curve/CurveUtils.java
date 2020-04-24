@@ -118,7 +118,8 @@ public final class CurveUtils {
         final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries ts = data.get(coupon.getIndex());
       if (ts == null) {
-        throw new IllegalStateException("Could not get fixing series for " + coupon.getIndex());
+        return new ZonedDateTimeDoubleTimeSeries[] { ImmutableZonedDateTimeDoubleTimeSeries.ofEmptyUTC() };
+        // throw new IllegalStateException("Could not get fixing series for " + coupon.getIndex());
       }
       return new ZonedDateTimeDoubleTimeSeries[] { ts };
     }
@@ -128,7 +129,8 @@ public final class CurveUtils {
         final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries ts = data.get(coupon.getIndex());
       if (ts == null) {
-        throw new IllegalStateException("Could not get fixing series for " + coupon.getIndex());
+        return new ZonedDateTimeDoubleTimeSeries[] { ImmutableZonedDateTimeDoubleTimeSeries.ofEmptyUTC() };
+        // throw new IllegalStateException("Could not get fixing series for " + coupon.getIndex());
       }
       return new ZonedDateTimeDoubleTimeSeries[] { ts };
     }
@@ -148,7 +150,8 @@ public final class CurveUtils {
         final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries ts = data.get(fra.getIndex());
       if (ts == null) {
-        throw new IllegalStateException("Could not get fixing series for " + fra.getIndex());
+        return new ZonedDateTimeDoubleTimeSeries[] { ImmutableZonedDateTimeDoubleTimeSeries.ofEmptyUTC() };
+        // throw new IllegalStateException("Could not get fixing series for " + coupon.getIndex());
       }
       return new ZonedDateTimeDoubleTimeSeries[] { ts };
     }

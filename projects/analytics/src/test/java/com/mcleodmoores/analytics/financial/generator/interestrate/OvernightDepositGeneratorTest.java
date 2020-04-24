@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.convention.interestrate;
+package com.mcleodmoores.analytics.financial.generator.interestrate;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.analytics.financial.generator.interestrate.OvernightDepositGenerator;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
@@ -23,13 +24,13 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Unit tests for {@link OvernightDepositConvention}.
+ * Unit tests for {@link OvernightDepositGenerator}.
  */
-public class OvernightDepositConventionTest {
+public class OvernightDepositGeneratorTest {
   private static final Currency CCY = Currency.USD;
   private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final DayCount DAY_COUNT = DayCounts.ACT_360;
-  private static final OvernightDepositConvention CONVENTION = OvernightDepositConvention.builder().withCalendar(CALENDAR).withCurrency(CCY)
+  private static final OvernightDepositGenerator CONVENTION = OvernightDepositGenerator.builder().withCalendar(CALENDAR).withCurrency(CCY)
       .withDayCount(DAY_COUNT).build();
 
   /**
@@ -37,7 +38,7 @@ public class OvernightDepositConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCalendar() {
-    OvernightDepositConvention.builder().withCalendar(null);
+    OvernightDepositGenerator.builder().withCalendar(null);
   }
 
   /**
@@ -45,7 +46,7 @@ public class OvernightDepositConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrency() {
-    OvernightDepositConvention.builder().withCurrency(null);
+    OvernightDepositGenerator.builder().withCurrency(null);
   }
 
   /**
@@ -53,7 +54,7 @@ public class OvernightDepositConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullDayCount() {
-    OvernightDepositConvention.builder().withDayCount(null);
+    OvernightDepositGenerator.builder().withDayCount(null);
   }
 
   /**
@@ -61,7 +62,7 @@ public class OvernightDepositConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCalendarSet() {
-    OvernightDepositConvention.builder().withCurrency(CCY).withDayCount(DAY_COUNT).build();
+    OvernightDepositGenerator.builder().withCurrency(CCY).withDayCount(DAY_COUNT).build();
   }
 
   /**
@@ -69,7 +70,7 @@ public class OvernightDepositConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCurrencySet() {
-    OvernightDepositConvention.builder().withCalendar(CALENDAR).withDayCount(DAY_COUNT).build();
+    OvernightDepositGenerator.builder().withCalendar(CALENDAR).withDayCount(DAY_COUNT).build();
   }
 
   /**
@@ -77,7 +78,7 @@ public class OvernightDepositConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testDayCountSet() {
-    OvernightDepositConvention.builder().withCalendar(CALENDAR).withCurrency(CCY).build();
+    OvernightDepositGenerator.builder().withCalendar(CALENDAR).withCurrency(CCY).build();
   }
 
   /**
@@ -96,20 +97,20 @@ public class OvernightDepositConventionTest {
     assertEquals(CONVENTION.getCalendar(), CALENDAR);
     assertEquals(CONVENTION.getCurrency(), CCY);
     assertEquals(CONVENTION.getDayCount(), DAY_COUNT);
-    OvernightDepositConvention other = OvernightDepositConvention.builder().withCalendar(CALENDAR).withCurrency(CCY)
+    OvernightDepositGenerator other = OvernightDepositGenerator.builder().withCalendar(CALENDAR).withCurrency(CCY)
         .withDayCount(DAY_COUNT).build();
     assertEquals(CONVENTION, other);
     assertEquals(CONVENTION.hashCode(), other.hashCode());
     final String expected =
         "OvernightDepositConvention [currency=USD, calendar=Saturday / Sunday, dayCount=Actual/360]";
     assertEquals(CONVENTION.toString(), expected);
-    other = OvernightDepositConvention.builder().withCalendar(WeekendWorkingDayCalendar.FRIDAY_SATURDAY).withCurrency(CCY)
+    other = OvernightDepositGenerator.builder().withCalendar(WeekendWorkingDayCalendar.FRIDAY_SATURDAY).withCurrency(CCY)
         .withDayCount(DAY_COUNT).build();
     assertNotEquals(CONVENTION, other);
-    other = OvernightDepositConvention.builder().withCalendar(CALENDAR).withCurrency(Currency.EUR)
+    other = OvernightDepositGenerator.builder().withCalendar(CALENDAR).withCurrency(Currency.EUR)
         .withDayCount(DAY_COUNT).build();
     assertNotEquals(CONVENTION, other);
-    other = OvernightDepositConvention.builder().withCalendar(CALENDAR).withCurrency(CCY)
+    other = OvernightDepositGenerator.builder().withCalendar(CALENDAR).withCurrency(CCY)
         .withDayCount(DayCounts.ACT_365).build();
     assertNotEquals(CONVENTION, other);
   }

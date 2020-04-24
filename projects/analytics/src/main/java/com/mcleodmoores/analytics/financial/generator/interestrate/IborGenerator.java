@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.convention.interestrate;
+package com.mcleodmoores.analytics.financial.generator.interestrate;
 
 import java.util.Objects;
 
@@ -20,25 +20,26 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * A convention for IBOR rates that contains sufficient information to build a {@link DepositIborDefinition}
- * when the fixing rate and start and end tenors are supplied:
+ * A generator for IBOR deposits that contains sufficient information to build a {@link DepositIborDefinition} when the fixing rate and start and end tenors are
+ * supplied:
  * <ul>
- *   <li> A working day calendar that contains information about weekends and holidays ({@link WorkingDayCalendar}).
- *   <li> An underlying index ({@link IborTypeIndex}).
+ * <li>A working day calendar that contains information about weekends and holidays ({@link WorkingDayCalendar}).
+ * <li>An underlying index ({@link IborTypeIndex}).
  * </ul>
  */
-public class IborDepositConvention implements CurveDataConvention<DepositIborDefinition> {
+public class IborGenerator implements CurveInstrumentGenerator<DepositIborDefinition> {
 
   /**
-   * Gets the convention builder.
-   * @return  the builder
+   * Gets the generator builder.
+   *
+   * @return the builder
    */
   public static Builder builder() {
     return new Builder();
   }
 
   /**
-   * A builder for this convention.
+   * A builder for this generator.
    */
   public static class Builder {
     private WorkingDayCalendar _calendar;
@@ -47,13 +48,15 @@ public class IborDepositConvention implements CurveDataConvention<DepositIborDef
     /**
      * Constructs the builder.
      */
-    /* package */Builder() {
+    Builder() {
     }
 
     /**
      * Sets the calendar.
-     * @param calendar  the calendar, not null
-     * @return  the builder
+     *
+     * @param calendar
+     *          the calendar, not null
+     * @return the builder
      */
     public Builder withCalendar(final WorkingDayCalendar calendar) {
       _calendar = ArgumentChecker.notNull(calendar, "calendar");
@@ -62,8 +65,10 @@ public class IborDepositConvention implements CurveDataConvention<DepositIborDef
 
     /**
      * Sets the index.
-     * @param index  the index, not null
-     * @return  the builder
+     *
+     * @param index
+     *          the index, not null
+     * @return the builder
      */
     public Builder withIborIndex(final IborTypeIndex index) {
       _index = ArgumentChecker.notNull(index, "index");
@@ -71,17 +76,18 @@ public class IborDepositConvention implements CurveDataConvention<DepositIborDef
     }
 
     /**
-     * Builds the convention.
-     * @return  the convention
+     * Builds the generator.
+     *
+     * @return the generator
      */
-    public IborDepositConvention build() {
+    public IborGenerator build() {
       if (_index == null) {
         throw new IllegalStateException("The ibor index must be supplied");
       }
       if (_calendar == null) {
         throw new IllegalStateException("The calendar must be supplied");
       }
-      return new IborDepositConvention(_index, _calendar);
+      return new IborGenerator(_index, _calendar);
     }
   }
 
@@ -90,11 +96,14 @@ public class IborDepositConvention implements CurveDataConvention<DepositIborDef
   private final WorkingDayCalendar _calendar;
 
   /**
-   * Constructs the convention.
-   * @param index  the index
-   * @param calendar  the calendar
+   * Constructs the generator.
+   *
+   * @param index
+   *          the index
+   * @param calendar
+   *          the calendar
    */
-  /* package */ IborDepositConvention(final IborTypeIndex index, final WorkingDayCalendar calendar) {
+  IborGenerator(final IborTypeIndex index, final WorkingDayCalendar calendar) {
     _index = IndexConverter.toIborIndex(index);
     _calendar = calendar;
     _tenor = index.getTenor();
@@ -136,7 +145,7 @@ public class IborDepositConvention implements CurveDataConvention<DepositIborDef
     if (getClass() != obj.getClass()) {
       return false;
     }
-    final IborDepositConvention other = (IborDepositConvention) obj;
+    final IborGenerator other = (IborGenerator) obj;
     if (!Objects.equals(_index, other._index)) {
       return false;
     }
@@ -158,6 +167,5 @@ public class IborDepositConvention implements CurveDataConvention<DepositIborDef
     builder.append("]");
     return builder.toString();
   }
-
 
 }

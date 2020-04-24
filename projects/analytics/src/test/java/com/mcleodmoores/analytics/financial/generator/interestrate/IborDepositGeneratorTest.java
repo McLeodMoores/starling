@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.convention.interestrate;
+package com.mcleodmoores.analytics.financial.generator.interestrate;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.analytics.financial.generator.interestrate.IborGenerator;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
@@ -25,20 +26,20 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Unit tests for {@link IborDepositConvention}.
+ * Unit tests for {@link IborGenerator}.
  */
-public class IborDepositConventionTest {
+public class IborDepositGeneratorTest {
   private static final IborTypeIndex INDEX = new IborTypeIndex("NAME", Currency.USD, Tenor.THREE_MONTHS, 2,
       DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, true);
   private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
-  private static final IborDepositConvention CONVENTION = IborDepositConvention.builder().withCalendar(CALENDAR).withIborIndex(INDEX).build();
+  private static final IborGenerator CONVENTION = IborGenerator.builder().withCalendar(CALENDAR).withIborIndex(INDEX).build();
 
   /**
    * Tests that the calendar cannot be null.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCalendar() {
-    IborDepositConvention.builder().withCalendar(null).withIborIndex(INDEX);
+    IborGenerator.builder().withCalendar(null).withIborIndex(INDEX);
   }
 
   /**
@@ -46,7 +47,7 @@ public class IborDepositConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullIndex() {
-    IborDepositConvention.builder().withCalendar(CALENDAR).withIborIndex(null);
+    IborGenerator.builder().withCalendar(CALENDAR).withIborIndex(null);
   }
 
   /**
@@ -54,7 +55,7 @@ public class IborDepositConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCalendarSet() {
-    IborDepositConvention.builder().withIborIndex(INDEX).build();
+    IborGenerator.builder().withIborIndex(INDEX).build();
   }
 
   /**
@@ -62,7 +63,7 @@ public class IborDepositConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testIndexSet() {
-    IborDepositConvention.builder().withCalendar(CALENDAR).build();
+    IborGenerator.builder().withCalendar(CALENDAR).build();
   }
 
   /**
@@ -94,14 +95,14 @@ public class IborDepositConventionTest {
    */
   @Test
   public void testObject() {
-    IborDepositConvention other = IborDepositConvention.builder().withCalendar(CALENDAR).withIborIndex(INDEX).build();
+    IborGenerator other = IborGenerator.builder().withCalendar(CALENDAR).withIborIndex(INDEX).build();
     assertEquals(CONVENTION, other);
     assertEquals(CONVENTION.hashCode(), other.hashCode());
     assertEquals(CONVENTION.toString(), "IborDepositConvention [index=IborIndex[NAME, currency=USD, tenor=P3M, day count=Actual/360, "
         + "business day convention=Modified Following, spot lag=2, end-of-month], tenor=Tenor[P3M], calendar=Saturday / Sunday: [SATURDAY, SUNDAY]]");
-    other = IborDepositConvention.builder().withCalendar(WeekendWorkingDayCalendar.FRIDAY_SATURDAY).withIborIndex(INDEX).build();
+    other = IborGenerator.builder().withCalendar(WeekendWorkingDayCalendar.FRIDAY_SATURDAY).withIborIndex(INDEX).build();
     assertNotEquals(CONVENTION, other);
-    other = IborDepositConvention.builder()
+    other = IborGenerator.builder()
         .withCalendar(CALENDAR)
         .withIborIndex(new IborTypeIndex("NAME", Currency.USD, Tenor.THREE_MONTHS, 1, DayCounts.ACT_360,
             BusinessDayConventions.MODIFIED_FOLLOWING, true)).build();

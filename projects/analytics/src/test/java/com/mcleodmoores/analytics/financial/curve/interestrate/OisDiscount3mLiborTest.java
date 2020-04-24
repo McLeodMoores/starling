@@ -14,13 +14,13 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.convention.interestrate.CurveDataConvention.EndOfMonthConvention;
-import com.mcleodmoores.analytics.financial.convention.interestrate.IborDepositConvention;
-import com.mcleodmoores.analytics.financial.convention.interestrate.OvernightDepositConvention;
-import com.mcleodmoores.analytics.financial.convention.interestrate.VanillaFixedIborSwapConvention;
-import com.mcleodmoores.analytics.financial.convention.interestrate.VanillaOisConvention;
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveBuilder;
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.generator.interestrate.IborGenerator;
+import com.mcleodmoores.analytics.financial.generator.interestrate.OvernightDepositGenerator;
+import com.mcleodmoores.analytics.financial.generator.interestrate.VanillaFixedIborSwapGenerator;
+import com.mcleodmoores.analytics.financial.generator.interestrate.VanillaOisGenerator;
+import com.mcleodmoores.analytics.financial.generator.interestrate.CurveInstrumentGenerator.EndOfMonthConvention;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
@@ -81,12 +81,12 @@ public class OisDiscount3mLiborTest {
   private static final OvernightIndex FED_FUNDS_INDEX = new OvernightIndex("FED FUNDS", Currency.USD, DayCounts.ACT_360, 1);
   private static final IborTypeIndex LIBOR_INDEX = new IborTypeIndex("3M USD LIBOR", Currency.USD, Tenor.THREE_MONTHS, 2, DayCounts.ACT_360,
       BusinessDayConventions.MODIFIED_FOLLOWING, true);
-  private static final OvernightDepositConvention DEPOSIT = OvernightDepositConvention.builder()
+  private static final OvernightDepositGenerator DEPOSIT = OvernightDepositGenerator.builder()
       .withCurrency(Currency.USD)
       .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
       .withDayCount(DayCounts.ACT_360)
       .build();
-  private static final VanillaOisConvention OIS = VanillaOisConvention.builder()
+  private static final VanillaOisGenerator OIS = VanillaOisGenerator.builder()
       .withUnderlyingIndex(FED_FUNDS_INDEX)
       .withPaymentTenor(Tenor.ONE_YEAR)
       .withBusinessDayConvention(BusinessDayConventions.MODIFIED_FOLLOWING)
@@ -97,11 +97,11 @@ public class OisDiscount3mLiborTest {
       .withEndOfMonth(EndOfMonthConvention.IGNORE_END_OF_MONTH)
       .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
       .build();
-  private static final IborDepositConvention LIBOR_DEPOSIT = IborDepositConvention.builder()
+  private static final IborGenerator LIBOR_DEPOSIT = IborGenerator.builder()
       .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
       .withIborIndex(LIBOR_INDEX)
       .build();
-  private static final VanillaFixedIborSwapConvention FIXED_LIBOR = VanillaFixedIborSwapConvention.builder()
+  private static final VanillaFixedIborSwapGenerator FIXED_LIBOR = VanillaFixedIborSwapGenerator.builder()
       .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
       .withFixedLegDayCount(DayCounts.THIRTY_U_360)
       .withFixedLegPaymentTenor(Tenor.SIX_MONTHS)

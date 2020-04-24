@@ -17,7 +17,7 @@
     <listAttribute key="org.testng.eclipse.METHOD_TEST_LIST"/>
     <listAttribute key="org.testng.eclipse.PACKAGE_TEST_LIST">
         <listEntry value="com.mcleodmoores.analytics.convention.businessday"/>
-	<listEntry value="com.mcleodmoores.analytics.financial.convention.interestrate"/>
+	<listEntry value="com.mcleodmoores.analytics.financial.generator.interestrate"/>
 	<listEntry value="com.mcleodmoores.analytics.financial.curve"/>
 	<listEntry value="com.mcleodmoores.analytics.financial.curve.calculator"/>
 	<listEntry value="com.mcleodmoores.analytics.financial.curve.interestrate"/>

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.convention.interestrate;
+package com.mcleodmoores.analytics.financial.generator.interestrate;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -11,7 +11,8 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.convention.interestrate.CurveDataConvention.EndOfMonthConvention;
+import com.mcleodmoores.analytics.financial.generator.interestrate.CashGenerator;
+import com.mcleodmoores.analytics.financial.generator.interestrate.CurveInstrumentGenerator.EndOfMonthConvention;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
@@ -27,16 +28,16 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Unit tests for {@link CashConvention}.
+ * Unit tests for {@link CashGenerator}.
  */
-public class CashConventionTest {
+public class CashGeneratorTest {
   private static final Currency CCY = Currency.USD;
   private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final int SPOT_LAG = 2;
   private static final DayCount DAY_COUNT = DayCounts.ACT_360;
   private static final BusinessDayConvention BDC = BusinessDayConventions.MODIFIED_FOLLOWING;
   private static final EndOfMonthConvention EOM = EndOfMonthConvention.ADJUST_FOR_END_OF_MONTH;
-  private static final CashConvention CONVENTION = CashConvention.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY)
+  private static final CashGenerator CONVENTION = CashGenerator.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY)
       .withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM).withSpotLag(SPOT_LAG).build();
 
   /**
@@ -44,7 +45,7 @@ public class CashConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullBusinessDayConvention() {
-    CashConvention.builder().withBusinessDayConvention(null);
+    CashGenerator.builder().withBusinessDayConvention(null);
   }
 
   /**
@@ -52,7 +53,7 @@ public class CashConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCalendar() {
-    CashConvention.builder().withCalendar(null);
+    CashGenerator.builder().withCalendar(null);
   }
 
   /**
@@ -60,7 +61,7 @@ public class CashConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrency() {
-    CashConvention.builder().withCurrency(null);
+    CashGenerator.builder().withCurrency(null);
   }
 
   /**
@@ -68,7 +69,7 @@ public class CashConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullDayCount() {
-    CashConvention.builder().withDayCount(null);
+    CashGenerator.builder().withDayCount(null);
   }
 
   /**
@@ -76,7 +77,7 @@ public class CashConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullEndOfMonthConvention() {
-    CashConvention.builder().withEndOfMonthConvention(null);
+    CashGenerator.builder().withEndOfMonthConvention(null);
   }
 
   /**
@@ -84,7 +85,7 @@ public class CashConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testBusinessDayConventionSet() {
-    CashConvention.builder().withCalendar(CALENDAR).withCurrency(CCY).withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM)
+    CashGenerator.builder().withCalendar(CALENDAR).withCurrency(CCY).withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM)
     .withSpotLag(SPOT_LAG).build();
   }
 
@@ -93,7 +94,7 @@ public class CashConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCalendarSet() {
-    CashConvention.builder().withBusinessDayConvention(BDC).withCurrency(CCY).withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM)
+    CashGenerator.builder().withBusinessDayConvention(BDC).withCurrency(CCY).withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM)
     .withSpotLag(SPOT_LAG).build();
   }
 
@@ -102,7 +103,7 @@ public class CashConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCurrencySet() {
-    CashConvention.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM)
+    CashGenerator.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM)
     .withSpotLag(SPOT_LAG).build();
   }
 
@@ -111,7 +112,7 @@ public class CashConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testEomSet() {
-    CashConvention.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY).withDayCount(DAY_COUNT)
+    CashGenerator.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY).withDayCount(DAY_COUNT)
     .withSpotLag(SPOT_LAG).build();
   }
 
@@ -120,7 +121,7 @@ public class CashConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testDayCountSet() {
-    CashConvention.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY).withEndOfMonthConvention(EOM)
+    CashGenerator.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY).withEndOfMonthConvention(EOM)
     .withSpotLag(SPOT_LAG).build();
   }
 
@@ -159,29 +160,29 @@ public class CashConventionTest {
     assertEquals(CONVENTION.getDayCount(), DAY_COUNT);
     assertTrue(CONVENTION.isEndOfMonthConvention());
     assertEquals(CONVENTION.getSpotLag(), SPOT_LAG);
-    CashConvention other = CashConvention.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY)
+    CashGenerator other = CashGenerator.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY)
         .withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM).withSpotLag(SPOT_LAG).build();
     assertEquals(CONVENTION, other);
     assertEquals(CONVENTION.hashCode(), other.hashCode());
     final String expected =
         "CashConvention [currency=USD, calendar=Saturday / Sunday, spotLag=2, dayCount=Actual/360, businessDayConvention=Modified Following, endOfMonth=true]";
     assertEquals(CONVENTION.toString(), expected);
-    other = CashConvention.builder().withBusinessDayConvention(BusinessDayConventions.FOLLOWING).withCalendar(CALENDAR).withCurrency(CCY)
+    other = CashGenerator.builder().withBusinessDayConvention(BusinessDayConventions.FOLLOWING).withCalendar(CALENDAR).withCurrency(CCY)
         .withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM).withSpotLag(SPOT_LAG).build();
     assertNotEquals(CONVENTION, other);
-    other = CashConvention.builder().withBusinessDayConvention(BDC).withCalendar(WeekendWorkingDayCalendar.FRIDAY_SATURDAY).withCurrency(CCY)
+    other = CashGenerator.builder().withBusinessDayConvention(BDC).withCalendar(WeekendWorkingDayCalendar.FRIDAY_SATURDAY).withCurrency(CCY)
         .withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM).withSpotLag(SPOT_LAG).build();
     assertNotEquals(CONVENTION, other);
-    other = CashConvention.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(Currency.EUR)
+    other = CashGenerator.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(Currency.EUR)
         .withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM).withSpotLag(SPOT_LAG).build();
     assertNotEquals(CONVENTION, other);
-    other = CashConvention.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY)
+    other = CashGenerator.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY)
         .withDayCount(DAY_COUNT).withEndOfMonthConvention(EndOfMonthConvention.IGNORE_END_OF_MONTH).withSpotLag(SPOT_LAG).build();
     assertNotEquals(CONVENTION, other);
-    other = CashConvention.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY)
+    other = CashGenerator.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY)
         .withDayCount(DayCounts.ACT_365).withEndOfMonthConvention(EOM).withSpotLag(SPOT_LAG).build();
     assertNotEquals(CONVENTION, other);
-    other = CashConvention.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY)
+    other = CashGenerator.builder().withBusinessDayConvention(BDC).withCalendar(CALENDAR).withCurrency(CCY)
         .withDayCount(DAY_COUNT).withEndOfMonthConvention(EOM).withSpotLag(SPOT_LAG + 1).build();
     assertNotEquals(CONVENTION, other);
   }

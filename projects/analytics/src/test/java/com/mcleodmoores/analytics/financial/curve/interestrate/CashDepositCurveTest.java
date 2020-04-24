@@ -13,10 +13,10 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.convention.interestrate.CashConvention;
-import com.mcleodmoores.analytics.financial.convention.interestrate.CurveDataConvention.EndOfMonthConvention;
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveBuilder;
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.generator.interestrate.CashGenerator;
+import com.mcleodmoores.analytics.financial.generator.interestrate.CurveInstrumentGenerator.EndOfMonthConvention;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
@@ -48,7 +48,7 @@ public class CashDepositCurveTest {
   private static final ZonedDateTime VALUATION_DATE = DateUtils.getUTCDate(2017, 1, 3);
   private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
       FlatExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
-  private static final CashConvention US_CONVENTION = CashConvention.builder()
+  private static final CashGenerator US_CONVENTION = CashGenerator.builder()
       .withCurrency(Currency.USD)
       .withBusinessDayConvention(BusinessDayConventions.MODIFIED_FOLLOWING)
       .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)

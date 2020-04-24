@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.convention.interestrate;
+package com.mcleodmoores.analytics.financial.generator.interestrate;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -11,7 +11,8 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.convention.interestrate.CurveDataConvention.EndOfMonthConvention;
+import com.mcleodmoores.analytics.financial.generator.interestrate.VanillaOisGenerator;
+import com.mcleodmoores.analytics.financial.generator.interestrate.CurveInstrumentGenerator.EndOfMonthConvention;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.EmptyWorkingDayCalendar;
@@ -32,9 +33,9 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Unit tests for {@link VanillaOisConvention}.
+ * Unit tests for {@link VanillaOisGenerator}.
  */
-public class VanillaOisConventionTest {
+public class VanillaOisGeneratorTest {
   private static final BusinessDayConvention BDC = BusinessDayConventions.FOLLOWING;
   private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final Tenor PAYMENT_TENOR = Tenor.ONE_YEAR;
@@ -43,7 +44,7 @@ public class VanillaOisConventionTest {
   private static final int SPOT_LAG = 2;
   private static final OvernightIndex INDEX = new OvernightIndex("INDEX", Currency.USD, DayCounts.ACT_360, 1);
   private static final EndOfMonthConvention EOM = EndOfMonthConvention.IGNORE_END_OF_MONTH;
-  private static final VanillaOisConvention CONVENTION = VanillaOisConvention.builder()
+  private static final VanillaOisGenerator CONVENTION = VanillaOisGenerator.builder()
       .withBusinessDayConvention(BDC)
       .withCalendar(CALENDAR)
       .withEndOfMonth(EOM)
@@ -59,7 +60,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullBusinessDayConvention() {
-    VanillaOisConvention.builder().withBusinessDayConvention(null);
+    VanillaOisGenerator.builder().withBusinessDayConvention(null);
   }
 
   /**
@@ -67,7 +68,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testBusinessDayConventionIsSet() {
-    VanillaOisConvention.builder()
+    VanillaOisGenerator.builder()
     .withCalendar(CALENDAR)
     .withEndOfMonth(EOM)
     .withPaymentLag(PAYMENT_LAG)
@@ -83,7 +84,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCalendar() {
-    VanillaOisConvention.builder().withCalendar(null);
+    VanillaOisGenerator.builder().withCalendar(null);
   }
 
   /**
@@ -91,7 +92,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCalendarIsSet() {
-    VanillaOisConvention.builder()
+    VanillaOisGenerator.builder()
     .withBusinessDayConvention(BDC)
     .withEndOfMonth(EOM)
     .withPaymentLag(PAYMENT_LAG)
@@ -107,7 +108,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullEndOfMonthConvention() {
-    VanillaOisConvention.builder().withEndOfMonth(null);
+    VanillaOisGenerator.builder().withEndOfMonth(null);
   }
 
   /**
@@ -115,7 +116,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testEndOfMonthConventionIsSet() {
-    VanillaOisConvention.builder()
+    VanillaOisGenerator.builder()
     .withBusinessDayConvention(BDC)
     .withCalendar(CALENDAR)
     .withPaymentLag(PAYMENT_LAG)
@@ -131,7 +132,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativePaymentLeg() {
-    VanillaOisConvention.builder().withPaymentLag(-1);
+    VanillaOisGenerator.builder().withPaymentLag(-1);
   }
 
   /**
@@ -139,7 +140,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullPaymentTenor() {
-    VanillaOisConvention.builder().withPaymentTenor(null);
+    VanillaOisGenerator.builder().withPaymentTenor(null);
   }
 
   /**
@@ -147,7 +148,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testPaymentTenorIsSet() {
-    VanillaOisConvention.builder()
+    VanillaOisGenerator.builder()
     .withBusinessDayConvention(BDC)
     .withCalendar(CALENDAR)
     .withEndOfMonth(EOM)
@@ -162,7 +163,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNegativeSpotLag() {
-    VanillaOisConvention.builder().withSpotLag(-1);
+    VanillaOisGenerator.builder().withSpotLag(-1);
   }
 
   /**
@@ -170,7 +171,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullStubType() {
-    VanillaOisConvention.builder().withStubType(null);
+    VanillaOisGenerator.builder().withStubType(null);
   }
 
   /**
@@ -178,7 +179,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testStubTypeIsSet() {
-    VanillaOisConvention.builder()
+    VanillaOisGenerator.builder()
     .withBusinessDayConvention(BDC)
     .withCalendar(CALENDAR)
     .withEndOfMonth(EOM)
@@ -194,7 +195,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullIndex() {
-    VanillaOisConvention.builder().withUnderlyingIndex(null);
+    VanillaOisGenerator.builder().withUnderlyingIndex(null);
   }
 
   /**
@@ -202,7 +203,7 @@ public class VanillaOisConventionTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testIndexIsSet() {
-    VanillaOisConvention.builder()
+    VanillaOisGenerator.builder()
     .withBusinessDayConvention(BDC)
     .withCalendar(CALENDAR)
     .withEndOfMonth(EOM)
@@ -218,7 +219,7 @@ public class VanillaOisConventionTest {
    */
   @Test
   public void testObject() {
-    VanillaOisConvention other = VanillaOisConvention.builder()
+    VanillaOisGenerator other = VanillaOisGenerator.builder()
     .withBusinessDayConvention(BDC)
     .withCalendar(CALENDAR)
     .withEndOfMonth(EOM)
@@ -233,7 +234,7 @@ public class VanillaOisConventionTest {
     assertEquals(CONVENTION.toString(), "VanillaOisConvention [index=OvernightIndex[INDEX, currency=USD, day count=Actual/360, publication lag=1], "
         + "paymentTenor=Tenor[P1Y], endOfMonth=false, calendar=Saturday / Sunday: [SATURDAY, SUNDAY], businessDayConvention=BusinessDayConvention [Following], "
         + "isShortStub=true, isLegGeneratedFromEnd=false, paymentLag=1, spotLag=2]");
-    other = VanillaOisConvention.builder()
+    other = VanillaOisGenerator.builder()
         .withBusinessDayConvention(BusinessDayConventions.PRECEDING)
         .withCalendar(CALENDAR)
         .withEndOfMonth(EOM)
@@ -244,7 +245,7 @@ public class VanillaOisConventionTest {
         .withUnderlyingIndex(INDEX)
         .build();
     assertNotEquals(CONVENTION, other);
-    other = VanillaOisConvention.builder()
+    other = VanillaOisGenerator.builder()
         .withBusinessDayConvention(BDC)
         .withCalendar(WeekendWorkingDayCalendar.FRIDAY_SATURDAY)
         .withEndOfMonth(EOM)
@@ -255,7 +256,7 @@ public class VanillaOisConventionTest {
         .withUnderlyingIndex(INDEX)
         .build();
     assertNotEquals(CONVENTION, other);
-    other = VanillaOisConvention.builder()
+    other = VanillaOisGenerator.builder()
         .withBusinessDayConvention(BDC)
         .withCalendar(CALENDAR)
         .withEndOfMonth(EndOfMonthConvention.ADJUST_FOR_END_OF_MONTH)
@@ -266,7 +267,7 @@ public class VanillaOisConventionTest {
         .withUnderlyingIndex(INDEX)
         .build();
     assertNotEquals(CONVENTION, other);
-    other = VanillaOisConvention.builder()
+    other = VanillaOisGenerator.builder()
         .withBusinessDayConvention(BDC)
         .withCalendar(CALENDAR)
         .withEndOfMonth(EOM)
@@ -277,7 +278,7 @@ public class VanillaOisConventionTest {
         .withUnderlyingIndex(INDEX)
         .build();
     assertNotEquals(CONVENTION, other);
-    other = VanillaOisConvention.builder()
+    other = VanillaOisGenerator.builder()
         .withBusinessDayConvention(BDC)
         .withCalendar(CALENDAR)
         .withEndOfMonth(EOM)
@@ -288,7 +289,7 @@ public class VanillaOisConventionTest {
         .withUnderlyingIndex(INDEX)
         .build();
     assertNotEquals(CONVENTION, other);
-    other = VanillaOisConvention.builder()
+    other = VanillaOisGenerator.builder()
         .withBusinessDayConvention(BDC)
         .withCalendar(CALENDAR)
         .withEndOfMonth(EOM)
@@ -299,7 +300,7 @@ public class VanillaOisConventionTest {
         .withUnderlyingIndex(INDEX)
         .build();
     assertNotEquals(CONVENTION, other);
-    other = VanillaOisConvention.builder()
+    other = VanillaOisGenerator.builder()
         .withBusinessDayConvention(BDC)
         .withCalendar(CALENDAR)
         .withEndOfMonth(EOM)
@@ -310,7 +311,7 @@ public class VanillaOisConventionTest {
         .withUnderlyingIndex(INDEX)
         .build();
     assertNotEquals(CONVENTION, other);
-    other = VanillaOisConvention.builder()
+    other = VanillaOisGenerator.builder()
         .withBusinessDayConvention(BDC)
         .withCalendar(CALENDAR)
         .withEndOfMonth(EOM)
@@ -328,7 +329,7 @@ public class VanillaOisConventionTest {
    */
   @Test
   public void testGeneratorEquivalence() {
-    final VanillaOisConvention convention = VanillaOisConvention.builder()
+    final VanillaOisGenerator convention = VanillaOisGenerator.builder()
     .withBusinessDayConvention(BDC)
     .withCalendar(CALENDAR)
     .withEndOfMonth(EOM)
@@ -369,7 +370,7 @@ public class VanillaOisConventionTest {
   @Test
   public void testStubType() {
     // no lags, adjustments or holidays for these calculations
-    final VanillaOisConvention.Builder builder = VanillaOisConvention.builder()
+    final VanillaOisGenerator.Builder builder = VanillaOisGenerator.builder()
       .withBusinessDayConvention(BusinessDayConventions.NONE)
       .withCalendar(EmptyWorkingDayCalendar.INSTANCE)
       .withEndOfMonth(EndOfMonthConvention.IGNORE_END_OF_MONTH)

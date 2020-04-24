@@ -14,11 +14,11 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.convention.interestrate.CurveDataConvention.EndOfMonthConvention;
-import com.mcleodmoores.analytics.financial.convention.interestrate.OvernightDepositConvention;
-import com.mcleodmoores.analytics.financial.convention.interestrate.VanillaOisConvention;
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveBuilder;
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.generator.interestrate.OvernightDepositGenerator;
+import com.mcleodmoores.analytics.financial.generator.interestrate.VanillaOisGenerator;
+import com.mcleodmoores.analytics.financial.generator.interestrate.CurveInstrumentGenerator.EndOfMonthConvention;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
@@ -65,13 +65,13 @@ public class SimpleOvernightCurveTest {
       0.0025, 0.004, 0.005, 0.0071, 0.0098, 0.012,
       0.0146, 0.0153, 0.0169, 0.0171, 0.025, 0.0276,
       0.0295, 0.031 };
-  private static final OvernightDepositConvention DEPOSIT = OvernightDepositConvention.builder()
+  private static final OvernightDepositGenerator DEPOSIT = OvernightDepositGenerator.builder()
       .withCurrency(Currency.USD)
       .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
       .withDayCount(DayCounts.ACT_360)
       .build();
   private static final OvernightIndex INDEX = new OvernightIndex("FED FUNDS", Currency.USD, DayCounts.ACT_360, 1);
-  private static final VanillaOisConvention OIS = VanillaOisConvention.builder()
+  private static final VanillaOisGenerator OIS = VanillaOisGenerator.builder()
       .withUnderlyingIndex(INDEX)
       .withPaymentTenor(Tenor.ONE_YEAR)
       .withBusinessDayConvention(BusinessDayConventions.MODIFIED_FOLLOWING)

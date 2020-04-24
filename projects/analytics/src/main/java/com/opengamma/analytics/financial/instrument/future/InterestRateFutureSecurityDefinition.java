@@ -187,9 +187,7 @@ public class InterestRateFutureSecurityDefinition extends FuturesSecurityDefinit
    * @return The interest rate futures.
    */
   public static InterestRateFutureSecurityDefinition fromFixingPeriodStartDate(final ZonedDateTime fixingPeriodStartDate,
-      final IborIndex iborIndex,
-      final double notional,
-      final double paymentAccrualFactor, final String name, final WorkingDayCalendar calendar) {
+      final IborIndex iborIndex, final double notional, final double paymentAccrualFactor, final String name, final WorkingDayCalendar calendar) {
     return fromFixingPeriodStartDate(fixingPeriodStartDate, iborIndex, notional, paymentAccrualFactor, name, CalendarAdapter.of(calendar));
   }
 
