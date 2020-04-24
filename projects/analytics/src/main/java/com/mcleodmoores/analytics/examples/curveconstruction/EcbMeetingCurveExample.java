@@ -17,7 +17,6 @@ import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.Disc
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.generator.interestrate.CurveInstrumentGenerator.EndOfMonthConvention;
 import com.mcleodmoores.analytics.financial.generator.interestrate.IborGenerator;
-import com.mcleodmoores.analytics.financial.generator.interestrate.OvernightDepositGenerator;
 import com.mcleodmoores.analytics.financial.generator.interestrate.VanillaFixedIborSwapGenerator;
 import com.mcleodmoores.analytics.financial.generator.interestrate.VanillaOisGenerator;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -43,7 +42,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class EcbMeetingCurveExample {
   // valuation date/time
-  private static final LocalDate VALUATION_DATE = LocalDate.now();
+  private static final LocalDate VALUATION_DATE = LocalDate.of(2020, 4, 4);
   private static final LocalTime VALUATION_TIME = LocalTime.of(9, 0);
   private static final ZoneId VALUATION_ZONE = ZoneId.of("Europe/London");
 
@@ -64,11 +63,6 @@ public class EcbMeetingCurveExample {
       BusinessDayConventions.MODIFIED_FOLLOWING, true);
 
   // discounting curve instruments
-  private static final OvernightDepositGenerator OVERNIGHT = OvernightDepositGenerator.builder()
-      .withCurrency(Currency.EUR)
-      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
-      .withDayCount(DayCounts.ACT_360)
-      .build();
   private static final VanillaOisGenerator OIS = VanillaOisGenerator.builder()
       .withUnderlyingIndex(EONIA)
       .withPaymentTenor(Tenor.ONE_YEAR)
@@ -95,41 +89,39 @@ public class EcbMeetingCurveExample {
 
   // ECB meeting dates
   private static final LocalDateTime[] ECB_MEETING_DATES = new LocalDateTime[] {
-      LocalDateTime.of(2020, 3, 7, 10, 0),
-      LocalDateTime.of(2020, 4, 4, 10, 0),
-      LocalDateTime.of(2020, 5, 2, 10, 0),
-      LocalDateTime.of(2020, 6, 6, 10, 0),
-      LocalDateTime.of(2020, 7, 4, 10, 0),
-      LocalDateTime.of(2020, 8, 1, 10, 0),
-      LocalDateTime.of(2020, 9, 5, 10, 0),
-      LocalDateTime.of(2020, 10, 2, 10, 0),
-      LocalDateTime.of(2020, 11, 7, 10, 0),
-      LocalDateTime.of(2020, 12, 5, 10, 0),
-      LocalDateTime.of(2021, 1, 9, 10, 0),
-      LocalDateTime.of(2021, 2, 6, 10, 0) };
+      LocalDateTime.of(2020, 5, 7, 10, 0),
+      LocalDateTime.of(2020, 6, 4, 10, 0),
+      LocalDateTime.of(2020, 7, 2, 10, 0),
+      LocalDateTime.of(2020, 8, 6, 10, 0),
+      LocalDateTime.of(2020, 9, 4, 10, 0),
+      LocalDateTime.of(2020, 10, 1, 10, 0),
+      LocalDateTime.of(2020, 11, 5, 10, 0),
+      LocalDateTime.of(2020, 12, 2, 10, 0),
+      LocalDateTime.of(2021, 1, 7, 10, 0),
+      LocalDateTime.of(2021, 2, 5, 10, 0),
+      LocalDateTime.of(2021, 3, 9, 10, 0),
+      LocalDateTime.of(2021, 4, 6, 10, 0) };
 
-  private static final double OVERNIGHT_QUOTE = 0.0005;
   private static final double EURIBOR_6M_QUOTE = 0.0015;
   private static final double[] OIS_QUOTES = new double[] {
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400 };
+      0.0010,
+      0.0050,
+      0.0060,
+      0.0054,
+      0.0066,
+      0.0068,
+      0.0075,
+      0.0087,
+      0.01,
+      0.0102,
+      0.0105,
+      0.0106 };
   private static final double[] EURIBOR_6M_SWAP_QUOTES = new double[] {
-      0.0445,
-      0.0485,
-      0.0555,
-      0.0580,
-      0.0610
+      0.0145,
+      0.0185,
+      0.0255,
+      0.0280,
+      0.0310
   };
   private static final Tenor[] OIS_TENORS = new Tenor[] {
       Tenor.ONE_MONTH,
@@ -138,20 +130,12 @@ public class EcbMeetingCurveExample {
       Tenor.FOUR_MONTHS,
       Tenor.FIVE_MONTHS,
       Tenor.SIX_MONTHS,
+      Tenor.SEVEN_MONTHS,
+      Tenor.EIGHT_MONTHS,
       Tenor.NINE_MONTHS,
-      Tenor.ONE_YEAR,
-      Tenor.TWO_YEARS,
-      Tenor.THREE_YEARS,
-      Tenor.FOUR_YEARS,
-      Tenor.FIVE_YEARS,
-      Tenor.TEN_YEARS };
-  private static final int[] EURIBOR_N_FUTURE = new int[] {
-      2,
-      3,
-      5,
-      6,
-      7
-  };
+      Tenor.TEN_MONTHS,
+      Tenor.ELEVEN_MONTHS,
+      Tenor.ONE_YEAR };
   private static final Tenor[] EURIBOR_6M_SWAP_TENORS = new Tenor[] {
       Tenor.TWO_YEARS,
       Tenor.THREE_YEARS,
@@ -163,21 +147,44 @@ public class EcbMeetingCurveExample {
   private static final String DISCOUNTING_NAME = "EUR Dsc";
   private static final String FWD6_NAME = "EUR Fwd 6M";
 
-  public static void constructCurves(final PrintStream out) {
+  public static void constructCurvesUsingMeetingDates(final PrintStream out) {
     final ZonedDateTime valuationDate = ZonedDateTime.of(VALUATION_DATE, VALUATION_TIME, VALUATION_ZONE);
     // first construct the builder
     // build the discounting / overnight curve first, using ECB meeting dates as nodes
     // then build the 6m EURIBOR curve
     final DiscountingMethodCurveSetUp curveBuilder = DiscountingMethodCurveBuilder.setUp()
         .buildingFirst(DISCOUNTING_NAME)
-        .using(DISCOUNTING_NAME).forDiscounting(Currency.EUR).forIndex(EONIA)
-        .withInterpolator(INTERPOLATOR_1)
-        .usingNodeDates(ECB_MEETING_DATES)
-        .thenBuilding(FWD6_NAME)
-        .using(FWD6_NAME).forIndex(EURIBOR_6M_INDEX).withInterpolator(INTERPOLATOR_2);
+        .using(DISCOUNTING_NAME).forDiscounting(Currency.EUR).forIndex(EONIA).withInterpolator(INTERPOLATOR_1).usingNodeDates(ECB_MEETING_DATES)
+        .thenBuilding(FWD6_NAME).using(FWD6_NAME).forIndex(EURIBOR_6M_INDEX).withInterpolator(INTERPOLATOR_2);
     final Tenor startTenor = Tenor.of(Period.ZERO);
     // add the discounting curve nodes
-    curveBuilder.addNode(DISCOUNTING_NAME, OVERNIGHT.toCurveInstrument(valuationDate, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE));
+    IntStream.range(0, OIS_TENORS.length).forEach(
+        i -> curveBuilder.addNode(DISCOUNTING_NAME, OIS.toCurveInstrument(valuationDate, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i])));
+    // add the EURIBOR curve nodes
+    curveBuilder.addNode(FWD6_NAME, EURIBOR_6M.toCurveInstrument(valuationDate, startTenor, Tenor.SIX_MONTHS, 1, EURIBOR_6M_QUOTE));
+    IntStream.range(0, EURIBOR_6M_SWAP_QUOTES.length).forEach(
+        i -> curveBuilder.addNode(FWD6_NAME,
+            FIXED_EURIBOR_6M.toCurveInstrument(valuationDate, startTenor, EURIBOR_6M_SWAP_TENORS[i], 1, EURIBOR_6M_SWAP_QUOTES[i])));
+    // build the curves
+    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = curveBuilder.getBuilder().buildCurves(valuationDate);
+    final MulticurveProviderDiscount curves = result.getFirst();
+    final CurveBuildingBlockBundle inverseJacobians = result.getSecond();
+
+    out.println("\n" + curves.getAllNames());
+    curves.getAllCurves().entrySet().stream().forEach(e -> CurvePrintUtils.printAtNodes(out, e.getKey(), e.getValue()));
+    CurvePrintUtils.printJacobians(out, inverseJacobians, curveBuilder.getBuilder());
+  }
+
+  public static void constructCurves(final PrintStream out) {
+    final ZonedDateTime valuationDate = ZonedDateTime.of(VALUATION_DATE, VALUATION_TIME, VALUATION_ZONE);
+    // first construct the builder
+    // build the discounting / overnight curve first,
+    // then build the 6m EURIBOR curve
+    final DiscountingMethodCurveSetUp curveBuilder = DiscountingMethodCurveBuilder.setUp()
+        .buildingFirst(DISCOUNTING_NAME).using(DISCOUNTING_NAME).forDiscounting(Currency.EUR).forIndex(EONIA).withInterpolator(INTERPOLATOR_1)
+        .thenBuilding(FWD6_NAME).using(FWD6_NAME).forIndex(EURIBOR_6M_INDEX).withInterpolator(INTERPOLATOR_2);
+    final Tenor startTenor = Tenor.of(Period.ZERO);
+    // add the discounting curve nodes
     IntStream.range(0, OIS_TENORS.length).forEach(
         i -> curveBuilder.addNode(DISCOUNTING_NAME, OIS.toCurveInstrument(valuationDate, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i])));
     // add the EURIBOR curve nodes
@@ -196,6 +203,7 @@ public class EcbMeetingCurveExample {
   }
 
   public static void main(final String[] args) {
+    constructCurvesUsingMeetingDates(System.out);
     constructCurves(System.out);
     System.exit(0);
   }

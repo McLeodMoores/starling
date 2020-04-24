@@ -125,44 +125,44 @@ public class ConvexityAdjustmentExample {
   private static final double EURIBOR_3M_QUOTE = 0.001;
   private static final double EURIBOR_6M_QUOTE = 0.0015;
   private static final double[] OIS_QUOTES = new double[] {
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400,
-      0.0400 };
+      0.0010,
+      0.0050,
+      0.0060,
+      0.0054,
+      0.0066,
+      0.0068,
+      0.0075,
+      0.0087,
+      0.01,
+      0.015,
+      0.02,
+      0.03,
+      0.05 };
   private static final double[] EURIBOR_FUT_QUOTES = new double[] {
-      0.97,
-      0.965,
-      0.975,
-      0.965,
-      0.960,
-      0.960,
+      0.997,
+      0.9865,
+      0.9875,
+      0.9865,
+      0.9860,
+      0.9860,
   };
   private static final double[] EURIBOR_3M_SWAP_QUOTES = new double[] {
-      0.0420,
-      0.0430,
-      0.0470,
-      0.0540,
-      0.0570,
-      0.0600 };
+      0.0220,
+      0.0230,
+      0.0270,
+      0.0340,
+      0.0370,
+      0.0400 };
   private static final double[] EURIBOR_6M_FRA_QUOTES = new double[] {
-      0.044,
-      0.044
+      0.024,
+      0.024
   };
   private static final double[] EURIBOR_6M_SWAP_QUOTES = new double[] {
-      0.0445,
-      0.0485,
-      0.0555,
-      0.0580,
-      0.0610
+      0.0245,
+      0.0285,
+      0.0355,
+      0.0380,
+      0.0410
   };
   private static final Tenor[] OIS_TENORS = new Tenor[] {
       Tenor.ONE_MONTH,

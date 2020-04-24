@@ -14,11 +14,11 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveBuilder;
 import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.generator.interestrate.CurveInstrumentGenerator.EndOfMonthConvention;
 import com.mcleodmoores.analytics.financial.generator.interestrate.IborGenerator;
 import com.mcleodmoores.analytics.financial.generator.interestrate.OvernightDepositGenerator;
 import com.mcleodmoores.analytics.financial.generator.interestrate.VanillaFixedIborSwapGenerator;
 import com.mcleodmoores.analytics.financial.generator.interestrate.VanillaOisGenerator;
-import com.mcleodmoores.analytics.financial.generator.interestrate.CurveInstrumentGenerator.EndOfMonthConvention;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
@@ -116,15 +116,7 @@ public class OisDiscountingLiborCurveExample {
       Tenor.SEVEN_YEARS,
       Tenor.EIGHT_YEARS,
       Tenor.NINE_YEARS,
-      Tenor.TEN_YEARS,
-      Tenor.ofYears(12),
-      Tenor.ofYears(15),
-      Tenor.ofYears(20),
-      Tenor.ofYears(25),
-      Tenor.ofYears(30),
-      Tenor.ofYears(40),
-      Tenor.ofYears(50) };
-
+      Tenor.TEN_YEARS };
   // market quotes for the curve instruments
   private static final double OVERNIGHT_QUOTE = 0.0005;
   private static final double LIBOR_3M_QUOTE = 0.001;
@@ -149,22 +141,15 @@ public class OisDiscountingLiborCurveExample {
   private static final double[] LIBOR_SWAP_QUOTES = new double[] {
       0.003,
       0.005,
-      0.022,
-      0.025,
-      0.0287,
-      0.03,
-      0.0334,
-      0.0361,
-      0.0391,
-      0.0414,
-      0.0467,
-      0.05,
-      0.052,
-      0.054,
-      0.058,
-      0.06,
-      0.066,
-      0.07 };
+      0.012,
+      0.015,
+      0.0187,
+      0.02,
+      0.0234,
+      0.0261,
+      0.0291,
+      0.0314,
+      0.0367 };
 
   private static final String OIS_CURVE_NAME = "USD OIS";
   private static final String LIBOR_CURVE_NAME = "USD 3M LIBOR";
