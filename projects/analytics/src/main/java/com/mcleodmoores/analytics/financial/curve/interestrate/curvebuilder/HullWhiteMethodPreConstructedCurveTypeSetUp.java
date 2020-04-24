@@ -14,7 +14,7 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *
+ * A builder that contains information about any pre-constructed curves that will be used by the {@link HullWhiteMethodCurveBuilder}.
  */
 public class HullWhiteMethodPreConstructedCurveTypeSetUp extends HullWhiteMethodCurveSetUp implements PreConstructedCurveTypeSetUp {
   private UniqueIdentifiable _discountingCurveId;

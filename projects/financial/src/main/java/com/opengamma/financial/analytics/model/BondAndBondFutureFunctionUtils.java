@@ -66,7 +66,7 @@ public class BondAndBondFutureFunctionUtils {
   /**
    * Gets any additional value requirements that are required for conversion from securities to analytics objects. For bond futures, the future price time
    * series is required. For all other securities, an empty set is returned
-   * 
+   *
    * @param security
    *          The security, not null
    * @param timeSeriesResolver
@@ -105,7 +105,7 @@ public class BondAndBondFutureFunctionUtils {
 
   /**
    * Converts a bond or bond future trade into the {@link InstrumentDefinition} form that is used in the analytics library.
-   * 
+   *
    * @param context
    *          The execution context, not null
    * @param target
@@ -143,7 +143,7 @@ public class BondAndBondFutureFunctionUtils {
 
   /**
    * Converts a bond or bond future trade into the {@link InstrumentDerivative} form that is used in pricing functions in the analytics library.
-   * 
+   *
    * @param context
    *          The execution context, not null
    * @param target
@@ -161,7 +161,7 @@ public class BondAndBondFutureFunctionUtils {
     ArgumentChecker.isTrue(target.getType() == ComputationTargetType.TRADE, "Computation target must be a trade");
     final Trade trade = target.getTrade();
     final Security security = trade.getSecurity();
-    if (security instanceof BondSecurity & !(security instanceof InflationBondSecurity)) {
+    if (security instanceof BondSecurity && !(security instanceof InflationBondSecurity)) {
       return getBondDerivative(context, target, date);
     }
     if (security instanceof InflationBondSecurity) {
@@ -183,7 +183,7 @@ public class BondAndBondFutureFunctionUtils {
 
   /**
    * Converts a bond trade into the {@link InstrumentDerivative} form that is used in pricing functions in the the analytics library.
-   * 
+   *
    * @param context
    *          The execution context, not null
    * @param target
@@ -199,7 +199,7 @@ public class BondAndBondFutureFunctionUtils {
 
   /**
    * Converts a bond trade into the {@link InstrumentDerivative} form that is used in pricing functions in the the analytics library.
-   * 
+   *
    * @param context
    *          The execution context, not null
    * @param target
@@ -217,7 +217,7 @@ public class BondAndBondFutureFunctionUtils {
 
   /**
    * Converts a bill trade into the {@link InstrumentDerivative} form that is used in pricing functions in the the analytics library.
-   * 
+   *
    * @param context
    *          The execution context, not null
    * @param target
@@ -233,7 +233,7 @@ public class BondAndBondFutureFunctionUtils {
 
   /**
    * Converts a bond future trade into the {@link InstrumentDerivative} form that is used in pricing functions in the the analytics library.
-   * 
+   *
    * @param context
    *          The execution context, not null
    * @param target

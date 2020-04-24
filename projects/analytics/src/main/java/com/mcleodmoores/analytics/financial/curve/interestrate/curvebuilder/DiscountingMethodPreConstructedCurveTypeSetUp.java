@@ -14,7 +14,8 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- *
+ * A builder that contains information about any pre-constructed curves that will be used by the
+ * {@link DiscountingMethodCurveBuilder}.
  */
 public class DiscountingMethodPreConstructedCurveTypeSetUp extends DiscountingMethodCurveSetUp implements PreConstructedCurveTypeSetUp {
   private UniqueIdentifiable _discountingCurveId;

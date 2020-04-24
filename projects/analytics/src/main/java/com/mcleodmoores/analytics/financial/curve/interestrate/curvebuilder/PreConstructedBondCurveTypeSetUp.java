@@ -13,7 +13,7 @@ import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.tuple.Pair;
 
 /**
- *
+ * Extends {@link PreConstructedBondCurveTypeSetUp} to allow pre-constructed issuer curves.
  */
 public interface PreConstructedBondCurveTypeSetUp extends PreConstructedCurveTypeSetUp {
 
@@ -26,8 +26,20 @@ public interface PreConstructedBondCurveTypeSetUp extends PreConstructedCurveTyp
   @Override
   PreConstructedBondCurveTypeSetUp forIndex(OvernightIndex... indices);
 
+  /**
+   * Use this curve to discount payments by these issuere.
+   * 
+   * @param issuer
+   *          the issuers, not null
+   * @return this builder
+   */
   PreConstructedBondCurveTypeSetUp forIssuer(Pair<Object, LegalEntityFilter<LegalEntity>>... issuer);
 
+  /**
+   * Gets the issuers.
+   * 
+   * @return the issuers
+   */
   List<Pair<Object, LegalEntityFilter<LegalEntity>>> getIssuers();
 
 }

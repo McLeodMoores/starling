@@ -62,10 +62,10 @@ public final class ScheduleCalculator {
   // Already reviewed
 
   /**
-   * Return a good business date computed from a given date and shifted by a certain number of business days. If the number of shift days is
-   * 0, the return date is the next business day. If the number of shift days is non-zero (positive or negative), a 0 shift is first applied
-   * and then a one business day shift is applied as many time as the absolute value of the shift. If the shift is positive, the one
-   * business day is to the future, if the shift is negative, the one business day is to the past.
+   * Return a good business date computed from a given date and shifted by a certain number of business days. If the number of shift days is 0, the return date
+   * is the next business day. If the number of shift days is non-zero (positive or negative), a 0 shift is first applied and then a one business day shift is
+   * applied as many time as the absolute value of the shift. If the shift is positive, the one business day is to the future, if the shift is negative, the one
+   * business day is to the past.
    *
    * @param date
    *          The initial date.
@@ -102,10 +102,10 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Return a good business date computed from a given date and shifted by a certain number of business days. If the number of shift days is
-   * 0, the return date is the next business day. If the number of shift days is non-zero (positive or negative), a 0 shift is first applied
-   * and then a one business day shift is applied as many time as the absolute value of the shift. If the shift is positive, the one
-   * business day is to the future., if the shift is negative, the one business day is to the past.
+   * Return a good business date computed from a given date and shifted by a certain number of business days. If the number of shift days is 0, the return date
+   * is the next business day. If the number of shift days is non-zero (positive or negative), a 0 shift is first applied and then a one business day shift is
+   * applied as many time as the absolute value of the shift. If the shift is positive, the one business day is to the future., if the shift is negative, the
+   * one business day is to the past.
    *
    * @param date
    *          The initial date.
@@ -141,11 +141,10 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Return a good business dates computed from given array of date and shifted by a certain number of business days (one return date for
-   * each input date). If the number of shift days is 0, the return date is the next business day. If the number of shift days is non-zero
-   * (positive or negative), a 0 shift is first applied and then a one business day shift is applied as many time as the absolute value of
-   * the shift. If the shift is positive, the one business day is to the future., if the shift is negative, the one business day is to the
-   * past.
+   * Return a good business dates computed from given array of date and shifted by a certain number of business days (one return date for each input date). If
+   * the number of shift days is 0, the return date is the next business day. If the number of shift days is non-zero (positive or negative), a 0 shift is first
+   * applied and then a one business day shift is applied as many time as the absolute value of the shift. If the shift is positive, the one business day is to
+   * the future., if the shift is negative, the one business day is to the past.
    *
    * @param dates
    *          The initial dates.
@@ -165,11 +164,10 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Return a good business date computed from a given date and shifted by a certain number of business days. The number of business days is
-   * given by the getDays part of a peeriod. If the number of shift days is 0, the return date is the next business day. If the number of
-   * shift days is non-zero (positive or negative), a 0 shift is first applied and then a one business day shift is applied as many time as
-   * the absolute value of the shift. If the shift is positive, the one business day is to the future., if the shift is negative, the one
-   * business day is to the past.
+   * Return a good business date computed from a given date and shifted by a certain number of business days. The number of business days is given by the
+   * getDays part of a peeriod. If the number of shift days is 0, the return date is the next business day. If the number of shift days is non-zero (positive or
+   * negative), a 0 shift is first applied and then a one business day shift is applied as many time as the absolute value of the shift. If the shift is
+   * positive, the one business day is to the future., if the shift is negative, the one business day is to the past.
    *
    * @param date
    *          The initial date.
@@ -185,11 +183,10 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Return a good business date computed from a given date and shifted by a certain number of business days. The number of business days is
-   * given by the getDays part of a peeriod. If the number of shift days is 0, the return date is the next business day. If the number of
-   * shift days is non-zero (positive or negative), a 0 shift is first applied and then a one business day shift is applied as many time as
-   * the absolute value of the shift. If the shift is positive, the one business day is to the future., if the shift is negative, the one
-   * business day is to the past.
+   * Return a good business date computed from a given date and shifted by a certain number of business days. The number of business days is given by the
+   * getDays part of a peeriod. If the number of shift days is 0, the return date is the next business day. If the number of shift days is non-zero (positive or
+   * negative), a 0 shift is first applied and then a one business day shift is applied as many time as the absolute value of the shift. If the shift is
+   * positive, the one business day is to the future., if the shift is negative, the one business day is to the past.
    *
    * @param date
    *          The initial date.
@@ -209,10 +206,10 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Return a good business date computed from a given date and shifted by a certain number of business days. This version uses LocalDate.
-   * If the number of shift days is 0, the return date is the next business day. If the number of shift days is non-zero (positive or
-   * negative), a 0 shift is first applied and then a one business day shift is applied as many time as the absolute value of the shift. If
-   * the shift is positive, the one business day is to the future., if the shift is negative, the one business day is to the past.
+   * Return a good business date computed from a given date and shifted by a certain number of business days. This version uses LocalDate. If the number of
+   * shift days is 0, the return date is the next business day. If the number of shift days is non-zero (positive or negative), a 0 shift is first applied and
+   * then a one business day shift is applied as many time as the absolute value of the shift. If the shift is positive, the one business day is to the future.,
+   * if the shift is negative, the one business day is to the past.
    *
    * @param date
    *          The initial date.
@@ -302,9 +299,8 @@ public final class ScheduleCalculator {
    * @param calendar
    *          The calendar.
    * @param endOfMonthRule
-   *          True if end-of-month rule applies, false if it does not. The rule applies when the start date is the last business day of the
-   *          month and the period is a number of months or years, not days or weeks. When the rule applies, the end date is the last
-   *          business day of the month.
+   *          True if end-of-month rule applies, false if it does not. The rule applies when the start date is the last business day of the month and the period
+   *          is a number of months or years, not days or weeks. When the rule applies, the end date is the last business day of the month.
    * @return The end date.
    */
   // TODO test
@@ -318,7 +314,7 @@ public final class ScheduleCalculator {
     // Adjusted to month-end: when start date is last business day of the month, the end date is the last business day of the month.
     final boolean isStartDateEOM = startDate.getMonth() != getAdjustedDate(startDate, 1, calendar).getMonth();
     final Calendar previousCalendarType = CalendarAdapter.of(calendar);
-    if (tenor.getDays() == 0 & endOfMonthRule & isStartDateEOM) {
+    if (tenor.getDays() == 0 && endOfMonthRule && isStartDateEOM) {
       final BusinessDayConvention preceding = new PrecedingBusinessDayConvention();
       return preceding.adjustDate(previousCalendarType, endDate.with(TemporalAdjusters.lastDayOfMonth()));
     }
@@ -354,9 +350,8 @@ public final class ScheduleCalculator {
    * @param calendar
    *          The calendar.
    * @param endOfMonthRule
-   *          True if end-of-month rule applies, false if it does not. The rule applies when the start date is the last business day of the
-   *          month and the period is a number of months or years, not days or weeks. When the rule applies, the end date is the last
-   *          business day of the month.
+   *          True if end-of-month rule applies, false if it does not. The rule applies when the start date is the last business day of the month and the period
+   *          is a number of months or years, not days or weeks. When the rule applies, the end date is the last business day of the month.
    * @return The end date.
    */
   public static ZonedDateTime getAdjustedDate(final ZonedDateTime startDate, final Period tenor, final BusinessDayConvention convention,
@@ -393,9 +388,8 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Compute the end date of a period from the start date, period, conventions and roll date adjuster. If the roll date adjuster is end of
-   * month, then only apply when the start date is last business day of the month and the period is a number of months or years, not days or
-   * weeks.
+   * Compute the end date of a period from the start date, period, conventions and roll date adjuster. If the roll date adjuster is end of month, then only
+   * apply when the start date is last business day of the month and the period is a number of months or years, not days or weeks.
    *
    * @param startDate
    *          the start date
@@ -451,9 +445,8 @@ public final class ScheduleCalculator {
    * @param calendar
    *          The calendar.
    * @param endOfMonthRule
-   *          True if end-of-month rule applies, false if it does not. The rule applies when the start date is the last business day of the
-   *          month and the period is a number of months or years, not days or business days (ON, TN). When the rule applies, the end date
-   *          is the last business day of the month.
+   *          True if end-of-month rule applies, false if it does not. The rule applies when the start date is the last business day of the month and the period
+   *          is a number of months or years, not days or business days (ON, TN). When the rule applies, the end date is the last business day of the month.
    * @return The end date.
    */
   public static ZonedDateTime getAdjustedDate(final ZonedDateTime startDate, final Tenor tenor, final BusinessDayConvention convention,
@@ -469,7 +462,7 @@ public final class ScheduleCalculator {
     }
     // Adjusted to month-end: when start date is last business day of the month, the end date is the last business day of the month.
     final boolean isStartDateEOM = startDate.getMonth() != getAdjustedDate(startDate, 1, calendar).getMonth();
-    if (tenor.getPeriod().getDays() == 0 & endOfMonthRule & isStartDateEOM) {
+    if (tenor.getPeriod().getDays() == 0 && endOfMonthRule && isStartDateEOM) {
       final BusinessDayConvention preceding = new PrecedingBusinessDayConvention();
       return preceding.adjustDate(calendar, endDate.with(TemporalAdjusters.lastDayOfMonth()));
     }
@@ -531,8 +524,7 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Compute the end date of a period from the start date and a Ibor index. The period between the start date and the end date is the index
-   * tenor.
+   * Compute the end date of a period from the start date and a Ibor index. The period between the start date and the end date is the index tenor.
    *
    * @param startDate
    *          The period start date.
@@ -548,8 +540,7 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Compute the end date of a period from the start date and a Ibor index. The period between the start date and the end date is the index
-   * tenor.
+   * Compute the end date of a period from the start date and a Ibor index. The period between the start date and the end date is the index tenor.
    *
    * @param startDate
    *          the period start date
@@ -565,8 +556,8 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Compute the end dates of periods from the start dates and a Ibor index. The period between the start date and the end date is the index
-   * tenor. There is one return date for each input date.
+   * Compute the end dates of periods from the start dates and a Ibor index. The period between the start date and the end date is the index tenor. There is one
+   * return date for each input date.
    *
    * @param startDates
    *          The period start dates.
@@ -649,8 +640,8 @@ public final class ScheduleCalculator {
    * @param tenorPeriod
    *          The period between each date.
    * @param stubShort
-   *          In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer
-   *          (false) than the requested period.
+   *          In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer (false) than the
+   *          requested period.
    * @param fromEnd
    *          The dates in the schedule can be computed from the end date (true) or from the start date (false).
    * @return The date schedule (not including the start date).
@@ -737,8 +728,7 @@ public final class ScheduleCalculator {
    * @param calendar
    *          The calendar.
    * @param eomApply
-   *          The flag indicating if the EOM apply, i.e. if the flag is true, the adjusted date is the last business day of the unadjusted
-   *          date.
+   *          The flag indicating if the EOM apply, i.e. if the flag is true, the adjusted date is the last business day of the unadjusted date.
    * @return The adjusted dates.
    */
   public static ZonedDateTime[] getAdjustedDateSchedule(final ZonedDateTime[] dates, final BusinessDayConvention convention,
@@ -795,8 +785,8 @@ public final class ScheduleCalculator {
    * @param schedulePeriod
    *          The period between each date in the schedule.
    * @param stubShort
-   *          In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer
-   *          (false) than the requested period.
+   *          In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer (false) than the
+   *          requested period.
    * @param fromEnd
    *          The dates in the schedule can be computed from the end date (true) or from the start date (false).
    * @param convention
@@ -901,8 +891,8 @@ public final class ScheduleCalculator {
    * @param scheduleFrequency
    *          The frequency of dates in the schedule.
    * @param stubShort
-   *          In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer
-   *          (false) than the requested period.
+   *          In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer (false) than the
+   *          requested period.
    * @param fromEnd
    *          The dates in the schedule can be computed from the end date (true) or from the start date (false).
    * @param convention
@@ -932,8 +922,8 @@ public final class ScheduleCalculator {
    * @param tenorPeriod
    *          The period between each date.
    * @param stubShort
-   *          In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer
-   *          (false) than the requested period.
+   *          In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer (false) than the
+   *          requested period.
    * @param fromEnd
    *          The dates in the schedule can be computed from the end date (true) or from the start date (false).
    * @param convention
@@ -976,8 +966,8 @@ public final class ScheduleCalculator {
    * @param tenorTotal
    *          The total tenor.
    * @param stubShort
-   *          In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer
-   *          (false) than the requested period.
+   *          In case the the periods do not fit exactly between start and end date, is the remaining interval shorter (true) or longer (false) than the
+   *          requested period.
    * @param fromEnd
    *          The dates in the schedule can be computed from the end date (true) or from the start date (false).
    * @param index
@@ -1243,9 +1233,8 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Construct an array of dates according the a start date, an end date, the period between dates and the conventions. The start date is
-   * not included in the array. The date are constructed forward and the stub period, if any, is last. The end date is always included in
-   * the schedule.
+   * Construct an array of dates according the a start date, an end date, the period between dates and the conventions. The start date is not included in the
+   * array. The date are constructed forward and the stub period, if any, is last. The end date is always included in the schedule.
    *
    * @param startDate
    *          The reference initial date for the construction.
@@ -1313,9 +1302,8 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Construct an array of dates according the a start date, an end date, the period between dates and the conventions. The start date is
-   * not included in the array. The date are constructed forward and the stub period, if any, is last and short. The end date is always
-   * included in the schedule.
+   * Construct an array of dates according the a start date, an end date, the period between dates and the conventions. The start date is not included in the
+   * array. The date are constructed forward and the stub period, if any, is last and short. The end date is always included in the schedule.
    *
    * @param startDate
    *          The reference initial date for the construction.
@@ -1337,9 +1325,8 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Construct an array of dates according the a start date, an end date, the period between dates and the conventions. The start date is
-   * not included in the array. The date are constructed forward and the stub period, if any, is last. The end date is always included in
-   * the schedule.
+   * Construct an array of dates according the a start date, an end date, the period between dates and the conventions. The start date is not included in the
+   * array. The date are constructed forward and the stub period, if any, is last. The end date is always included in the schedule.
    *
    * @param startDate
    *          The reference initial date for the construction.
@@ -1364,9 +1351,8 @@ public final class ScheduleCalculator {
   }
 
   /**
-   * Construct an array of dates according the a start date, an end date, the period between dates and the conventions. The start date is
-   * not included in the array. The date are constructed forward and the stub period, if any, is short and last. The end date is always
-   * included in the schedule.
+   * Construct an array of dates according the a start date, an end date, the period between dates and the conventions. The start date is not included in the
+   * array. The date are constructed forward and the stub period, if any, is short and last. The end date is always included in the schedule.
    *
    * @param startDate
    *          The reference initial date for the construction.
