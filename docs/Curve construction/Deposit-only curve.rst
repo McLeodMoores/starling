@@ -1,6 +1,6 @@
-=============
-Deposit curve
-=============
+==============================
+A simple deposit curve example
+==============================
 
 The code for this example can be found here_.
 
@@ -61,6 +61,7 @@ add nodes to the curve
 
 =====
 
+**The code**
 
 .. code-block:: java
 
@@ -68,6 +69,7 @@ add nodes to the curve
   private static final LocalDate VALUATION_DATE = LocalDate.now();
   private static final LocalTime VALUATION_TIME = LocalTime.of(9, 0);
   private static final ZoneId VALUATION_ZONE = ZoneId.of("Europe/London");
+  
   // get the interpolator
   private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(
       MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
@@ -146,6 +148,7 @@ add nodes to the curve
 The result is a data bundle that contains the curves and an object that contains sensitivity (sensitivity of the curve to the yield) information.
 
 ========
+
 **The output**
 
 |curve plot|
@@ -154,46 +157,41 @@ The yields at the nodes are shown in the table below.
 
 USD DEPOSIT
 
-+------------+----------+
-|time (years)|yield (%) |	
-+============+==========+
-|0.002732    |0.005066  |
-+------------+----------+	 	
-|0.024590    |0.014734  |
-+------------+----------+	 	
-|0.043716    |0.021095  |	
-+------------+----------+	 	
-|0.062842	|0.032629   |
-+------------+----------+	 	
-|0.087432	|0.047739	|
-+------------+----------+	 	
-|0.172131	|0.099785   |	
-+------------+----------+	 	
-|0.254098	|0.150152   |	
-+------------+----------+	 	
-|0.344262	|0.205556   |
-+------------+----------+	 	
-|0.423497	|0.254244   |
-+------------+----------+	 	
-|0.505464	|0.304611   |	
-+------------+----------+	 	
-|0.757040	|0.459199   |
-+------------+----------+	 	
-|1.003616	|0.610714   |
-+------------+----------+	 	
-|2.003616	|1.225193   |
-+------------+----------+	 	
-|3.000876	|1.837988   |
-+------------+----------+	 	
-|4.005464	|2.455286   |
-+------------+----------+	 	
-|5.003616    |3.068628  |
-+------------+----------+	 	
-										
+========    ============    =========
+node        time (years)    yield (%) 
+========    ============    =========
+1            0.002732        0.005066  
+2            0.024590        0.014734 
+3            0.043716        0.021095  
+4            0.062842	        0.032629   
+5            0.087432	        0.047739	
+6            0.172131	        0.099785   
+7            0.254098	        0.150152   
+8            0.344262	        0.205556   
+9            0.423497	        0.254244   
+10            0.505464	        0.304611   	
+11            0.757040	        0.459199   
+12            1.003616	        0.610714   
+13            2.003616	        1.225193   
+14            3.000876	        1.837988   
+15            4.005464	        2.455286   
+16            5.003616        3.068628  	
+========    ============    =========
+
+The inverse Jacobian matrix is shown below.
+
+.. csv-table:: USD DEPOSIT
+    :header:     instrument/node,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+    :file: usd_deposit_jac.csv
 
 
-.. _here:
+The cash instrument has an initial and final payment, so, as expected, there are sensitivities at the early nodes and at the maturity. The sensitivities are distributed
+around the early nodes because the interpolation is not completely local. As the node points of the curve are defined to be at the maturity of the instrument, there is
+no such distribution for the sensitivities at the maturity.
+
+
+.. _here: https://github.com/McLeodMoores/starling/blob/curve/projects/analytics/src/main/java/com/mcleodmoores/analytics/examples/curveconstruction/CashDepositCurveExample.java
 
 .. _CashDefinition: https://github.com/McLeodMoores/starling/blob/master/projects/analytics/src/main/java/com/opengamma/analytics/financial/instrument/cash/CashDefinition.java
 
-.. image:: https://github.com/McLeodMoores/starling/blob/master/docs/Curve construction/usd_deposit.png
+.. |curve plot| image:: usd_deposit.png
