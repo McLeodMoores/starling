@@ -66,7 +66,7 @@ public class CurvePrintUtils {
     final Double[] t = ((YieldCurve) curve).getCurve().getXData();
     Arrays.stream(t).forEach(e -> out.print("\t" + TIME_FORMAT.format(e)));
     out.print("\n\tyield (%)");
-    Arrays.stream(t).forEach(e -> out.print("\t" + YIELD_FORMAT.format(curve.getInterestRate(100 * e))));
+    Arrays.stream(t).forEach(e -> out.print("\t" + YIELD_FORMAT.format(curve.getInterestRate(e) * 100)));
     out.println();
     out.println();
   }

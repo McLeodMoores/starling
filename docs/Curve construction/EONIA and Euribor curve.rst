@@ -1,52 +1,179 @@
-/**
- * Copyright (C) 2020 - present McLeod Moores Software Limited.  All rights reserved.
- */
-package com.mcleodmoores.analytics.examples.curveconstruction;
+=============================================
+A multi-curve EONIA and EURIBOR example
+=============================================
 
-import java.io.PrintStream;
-import java.util.stream.IntStream;
+The code for this example can be found here_.
 
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalTime;
-import org.threeten.bp.Period;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZonedDateTime;
+This example builds an EONIA curve that is used for discounting EUR payments and to calculate forward overnight rates, and a three-month and six-month EURIBOR curve that will calculate the appropriate forward EURIBOR rates.
+Two models are used to compare the difference between using a convexity adjustment (via a one-factor Hull-White model) and no adjustment.
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
-import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.HullWhiteMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.HullWhiteMethodCurveSetUp;
-import com.mcleodmoores.analytics.financial.generator.interestrate.CurveInstrumentGenerator.EndOfMonthConvention;
-import com.mcleodmoores.analytics.financial.generator.interestrate.FraGenerator;
-import com.mcleodmoores.analytics.financial.generator.interestrate.IborGenerator;
-import com.mcleodmoores.analytics.financial.generator.interestrate.OvernightDepositGenerator;
-import com.mcleodmoores.analytics.financial.generator.interestrate.QuarterlyStirFutureGenerator;
-import com.mcleodmoores.analytics.financial.generator.interestrate.VanillaFixedIborSwapGenerator;
-import com.mcleodmoores.analytics.financial.generator.interestrate.VanillaOisGenerator;
-import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
-import com.mcleodmoores.analytics.financial.index.OvernightIndex;
-import com.mcleodmoores.date.WeekendWorkingDayCalendar;
-import com.opengamma.analytics.financial.model.interestrate.definition.HullWhiteOneFactorPiecewiseConstantParameters;
-import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderDiscount;
-import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
-import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
-import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
-import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
-import com.opengamma.analytics.math.interpolation.factory.MonotonicConstrainedCubicSplineInterpolator1dAdapter;
-import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
-import com.opengamma.financial.convention.StubType;
-import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.daycount.DayCounts;
-import com.opengamma.util.money.Currency;
-import com.opengamma.util.time.Tenor;
-import com.opengamma.util.tuple.Pair;
+* decide on the model to be used
+* define the type (shape) of the curves
+* define the build order and uses of the curves 
+* add nodes to the curves
+* build
 
-/**
- * Demonstrates how to construct curves with and without a convexity adjustment.
- */
-public class ConvexityAdjustmentExample {
+**model**
+    Two models will be used to compare outputs: a one-factor Hull-White model and a discounting model with no convexity adjustment. In both cases, the root finder finds the spread over the fixed rates of the curve instruments that mean they price to zero.
+
+    The discounting model is set up using
+
+.. code-block:: java
+
+    builder = DiscountingMethodCurveBuilder.setUp();
+
+
+and the Hull-White model is set up using
+
+.. code-block:: java
+
+    hwBuilder = HullWhiteMethodCurveBuilder.setUp()
+        .addHullWhiteParameters(MODEL_PARAMETERS)
+        .forHullWhiteCurrency(Currency.EUR);
+
+The model parameters describe the mean reversion speed and piecewise constant volatility structure. In this example, the values are exaggerated to illustrate the differences between the models.
+
+**curve shape**
+    The EONIA curve will be interpolated using a double quadratic, while both EURIBOR curves will use a monotonic constrained cubic spline. These two interpolators use flat extrapolation on the left and linear extrapolation on the right
+
+.. code-block:: java
+
+      eoniaInterpolator = NamedInterpolator1dFactory.of(
+          DoubleQuadraticInterpolator1dAdapter.NAME,
+          FlatExtrapolator1dAdapter.NAME,
+          LinearExtrapolator1dAdapter.NAME);
+
+      euriborInterpolator = NamedInterpolator1dFactory.of(
+          MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
+          FlatExtrapolator1dAdapter.NAME,
+          LinearExtrapolator1dAdapter.NAME);
+
+**curve use**
+    Three curves will be created:
+    
+    * An EONIA curve *EONIA* that will be used to discount any EUR payments and to calculate forward overnight rates
+    * A 3 month EURIBOR curve *EURIBOR 3M* that will be used to calculate forward rates for the 3m EURIBOR index
+    * A 6 month EURIBOR curve *EURIBOR 6M* that will be used to calculate forward rates for the 6m EURIBOR index
+
+    The EONIA curve will be constructed first, then the 3M EURIBOR curve, then the 6M EURIBOR curve. This is possible because the 3M curve only has a dependency on the EONIA curve, and the 6M curve only has a dependency on the EONIA curve. If 3Mx6M basis swaps were used, the two EURIBOR curves would have to be constructed at the same time. For a detailed explanation of what the difference is between building the curves simultaneously and building them consecutively, please look at this example_.
+
+    First, the building order is defined:
+
+.. code-block:: java
+
+    hwBuilder
+        .buildingFirst("EONIA")
+        .thenBuilding("EURIBOR 3M")
+        .thenBuilding("EURIBOR 6M")
+
+Then, the use and shape of each curve is set:
+
+.. code-block:: java
+
+    hwBuilder
+        .using("EONIA").forDiscounting(Currency.EUR).forIndex(EONIA).withInterpolator(eoniaInterpolator)
+        .using("EURIBOR 3M").forIndex(EURIBOR_3M_INDEX).withInterpolator(euriborInterpolator)
+        .using("EURIBOR 6M").forIndex(EURIBOR_6M_INDEX).withInterpolator(euriborInterpolator);
+
+Similarly, the discounting curve is set up:
+
+.. code-block:: java
+
+    builder = DiscountingMethodCurveBuilder.setUp()
+        .buildingFirst("EONIA")
+        .thenBuilding("EURIBOR 3M")
+        .thenBuilding("EURIBOR 6M")
+        .using("EONIA").forDiscounting(Currency.EUR).forIndex(EONIA).withInterpolator(eoniaInterpolator)
+        .using("EURIBOR 3M").forIndex(EURIBOR_3M_INDEX).withInterpolator(euriborInterpolator)
+        .using("EURIBOR 6M").forIndex(EURIBOR_6M_INDEX).withInterpolator(euriborInterpolator);
+
+**add the nodal instruments**
+
+    The instruments used on each curves are:
+
+    * An overnight deposit and OIS on *EONIA*
+    * A 3m EURIBOR deposit, the 2nd, 3rd, 5th, 6th and 7th short-term interest rate futures, and fixed / 3 month EURIBOR swaps on *EURIBOR 3M*
+    * A 6m EURIBOR deposit, 3x9 and 6x12 FRAs, and fixed / 6 month EURIBOR swaps on *EURIBOR 6M*
+
+   Curve instrument generators are used to create the instruments:
+
+.. code-block:: java
+
+  overnight = OvernightDepositGenerator.builder()
+      .withCurrency(Currency.EUR)
+      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+      .withDayCount(DayCounts.ACT_360)
+      .build();
+      
+  ois = VanillaOisGenerator.builder()
+      .withUnderlyingIndex(EONIA)
+      .withPaymentTenor(Tenor.ONE_YEAR)
+      .withBusinessDayConvention(BusinessDayConventions.MODIFIED_FOLLOWING)
+      .withEndOfMonth(EndOfMonthConvention.ADJUST_FOR_END_OF_MONTH)
+      .withPaymentLag(2)
+      .withSpotLag(2)
+      .withStubType(StubType.SHORT_START)
+      .withEndOfMonth(EndOfMonthConvention.IGNORE_END_OF_MONTH)
+      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+      .build();
+      
+  euribor3m = IborGenerator.builder()
+      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+      .withIborIndex(EURIBOR_3M_INDEX)
+      .build();
+      
+  quarterlyFuture = QuarterlyStirFutureGenerator.builder()
+      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+      .withIborIndex(EURIBOR_3M_INDEX)
+      .withPaymentAccrualFactor(0.25)
+      .build();
+      
+  fixedEuribor3mSwap = VanillaFixedIborSwapGenerator.builder()
+      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+      .withFixedLegDayCount(DayCounts.THIRTY_U_360)
+      .withFixedLegPaymentTenor(Tenor.ONE_YEAR)
+      .withStub(StubType.SHORT_START)
+      .withUnderlyingIndex(EURIBOR_3M_INDEX)
+      .build();
+      
+  euribor6m = IborGenerator.builder()
+      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+      .withIborIndex(EURIBOR_6M_INDEX)
+      .build();
+      
+  euribor6mFra = FraGenerator.builder()
+      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+      .withIborIndex(EURIBOR_6M_INDEX)
+      .build();
+      
+  fixedEuribor6mSwap = VanillaFixedIborSwapGenerator.builder()
+      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+      .withFixedLegDayCount(DayCounts.THIRTY_U_360)
+      .withFixedLegPaymentTenor(Tenor.ONE_YEAR)
+      .withStub(StubType.SHORT_START)
+      .withUnderlyingIndex(EURIBOR_6M_INDEX)
+      .build();
+
+Adding the nodes to the discounting curve:
+
+.. code-block:: java
+
+    builder.addNode("EONIA", overnight.toCurveInstrument(valuationDate, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE));
+    IntStream.range(0, OIS_TENORS.length).forEach(
+        i -> builder.addNode("EONIA", ois.toCurveInstrument(valuationDate, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i])));
+
+    hwBuilder.addNode("EONIA", overnight.toCurveInstrument(valuationDate, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE));
+    IntStream.range(0, OIS_TENORS.length).forEach(
+        i -> hwBuilder.addNode("EONIA", ois.toCurveInstrument(valuationDate, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i])));
+
+The nodes for the 3m and 6m EURIBOR curves are added in the same way.
+
+=======================
+
+**The code**
+
+.. code-block:: java
+
   // valuation date/time
   private static final LocalDate VALUATION_DATE = LocalDate.now();
   private static final LocalTime VALUATION_TIME = LocalTime.of(9, 0);
@@ -215,12 +342,6 @@ public class ConvexityAdjustmentExample {
   private static final String FWD3_NAME = "EURIBOR 3M";
   private static final String FWD6_NAME = "EURIBOR 6M";
 
-  /**
-   * Constructs the curves using the Hull-White model.
-   *
-   * @param out
-   *          the output
-   */
   public static void constructCurvesWithAdjustment(final PrintStream out) {
     final ZonedDateTime valuationDate = ZonedDateTime.of(VALUATION_DATE, VALUATION_TIME, VALUATION_ZONE);
     final HullWhiteMethodCurveSetUp builder = HullWhiteMethodCurveBuilder.setUp()
@@ -257,20 +378,8 @@ public class ConvexityAdjustmentExample {
 
     // build the curves
     final Pair<HullWhiteOneFactorProviderDiscount, CurveBuildingBlockBundle> result = builder.getBuilder().buildCurves(valuationDate);
-    final HullWhiteOneFactorProviderDiscount curves = result.getFirst();
-    final CurveBuildingBlockBundle inverseJacobians = result.getSecond();
-
-    out.println("\n\nConvexity adjustment for: " + curves.getAllCurveNames());
-    curves.getMulticurveProvider().getAllCurves().entrySet().stream().forEach(e -> CurvePrintUtils.printAtNodes(out, e.getKey(), e.getValue()));
-    CurvePrintUtils.printJacobians(out, inverseJacobians, builder.getBuilder());
   }
 
-  /**
-   * Constructs curves.
-   *
-   * @param out
-   *          the output
-   */
   public static void constructCurvesWithoutAdjustment(final PrintStream out) {
     final ZonedDateTime valuationDate = ZonedDateTime.of(VALUATION_DATE, VALUATION_TIME, VALUATION_ZONE);
     final DiscountingMethodCurveSetUp builder = DiscountingMethodCurveBuilder.setUp()
@@ -305,22 +414,82 @@ public class ConvexityAdjustmentExample {
 
     // build the curves
     final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = builder.getBuilder().buildCurves(valuationDate);
-    final MulticurveProviderDiscount curves = result.getFirst();
-    final CurveBuildingBlockBundle inverseJacobians = result.getSecond();
-
-    out.println("\n\nNo convexity adjustment for: " + curves.getAllCurveNames());
-    curves.getAllCurves().entrySet().stream().forEach(e -> CurvePrintUtils.printAtNodes(out, e.getKey(), e.getValue()));
-    CurvePrintUtils.printJacobians(out, inverseJacobians, builder.getBuilder());
   }
 
-  /**
-   * @param args
-   *          ignored
-   */
-  public static void main(final String[] args) {
-    constructCurvesWithAdjustment(System.out);
-    constructCurvesWithoutAdjustment(System.out);
-    System.exit(0);
-  }
+====================
 
-}
+**The output**
+
+The curves generated using the Hull-White model are:
+
+|HW curve plot|
+
+For comparison, the curves generated without convexity adjustment are:
+
+|curve plot|
+
+The yields at the nodes are shown in the tables below
+
+EONIA
+
+=======   =============    =========================    ===============================
+node      time (years)     yield: no adjustment (%)     yield: convexity adjustment (%) 
+=======   =============    =========================    ===============================
+1           0.002732	       0.050833                    0.050833	
+2           0.095628	       0.120803                    0.120803
+3           0.174863	       0.502245                    0.502245
+4           0.256831	       0.598293                    0.598293	
+5           0.346995	       0.541722                    0.541722
+6           0.426230	       0.664704                    0.664704
+7           0.508197	       0.683801                    0.683801
+8           0.765259        0.758154                    0.758154
+9           1.006355        0.876471                    0.876471	
+10          2.011835        1.010370                    1.010370	
+11          3.009095	       1.520295                    1.520295	
+12          4.008197        2.032245	                   2.032245	
+13          5.006355	       3.091563                    3.091563
+14          10.006355       5.288720                    5.288720
+=======   =============    =========================    ===============================
+
+EURIBOR 3M
+
+=======   =============    =========================    ===============================
+node      time (years)     yield: no adjustment (%)     yield: convexity adjustment (%) 
+=======   =============    =========================    ===============================
+1           0.254098	           0.101654                    0.101654		
+2           0.636612	           0.175119                    0.194898		
+3           0.883068	           0.482887                    0.522051		
+4           1.006355	           2.187787                    2.187871		
+5           1.387177	           1.937512                    1.986987		
+6           1.633753            1.801656                   1.893323			
+7           1.880328            1.693622                    1.830857			
+8           2.003616            2.283950                    2.284695			
+9           3.000876            2.679565                    2.680090			
+10          5.003616            3.380333                    3.380648			
+11          7.006355            3.690184                    3.690409			
+12          10.003616           4.036491                    4.036649
+=======   =============    =========================    ===============================
+
+EURIBOR 6M
+
+=======   =============    =========================    ===============================
+node      time (years)     yield: no adjustment (%)     yield: convexity adjustment (%) 
+=======   =============    =========================    ===============================
+1           0.254098	           0.152442                    0.152442		
+2           0.757040	           1.661655                    1.661655			
+3           1.003616            1.278463                    1.278463			
+4           2.003616            2.427799                    2.427799			
+5           3.000876            2.823405                    2.823405			
+6           5.003616            3.526724                    3.526724			
+7           7.006355            3.785479                    3.785479			
+8           10.003616           4.136382                    4.136382
+=======   =============    =========================    ===============================
+
+
+.. _here: https://github.com/McLeodMoores/starling/blob/curve/projects/analytics/src/main/java/com/mcleodmoores/analytics/examples/curveconstruction/OisDiscountingLiborCurveExample.java
+
+.. _example: 
+
+.. |HW curve plot| image:: eonia_euribor_hw.png
+
+.. |curve plot| image:: eonia_euribor.png

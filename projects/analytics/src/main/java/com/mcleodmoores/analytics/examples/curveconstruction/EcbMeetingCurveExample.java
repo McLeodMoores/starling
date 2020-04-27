@@ -59,7 +59,7 @@ public class EcbMeetingCurveExample {
 
   // the underlying index objects for the swaps
   private static final OvernightIndex EONIA = new OvernightIndex("EONIA", Currency.EUR, DayCounts.ACT_360, 0);
-  private static final IborTypeIndex EURIBOR_6M_INDEX = new IborTypeIndex("EURIBOR 6M", Currency.EUR, Tenor.THREE_MONTHS, 2, DayCounts.ACT_360,
+  private static final IborTypeIndex EURIBOR_6M_INDEX = new IborTypeIndex("EURIBOR 6M", Currency.EUR, Tenor.SIX_MONTHS, 2, DayCounts.ACT_360,
       BusinessDayConventions.MODIFIED_FOLLOWING, true);
 
   // discounting curve instruments
@@ -149,7 +149,7 @@ public class EcbMeetingCurveExample {
 
   /**
    * Constructs the curve using user-supplied dates
-   * 
+   *
    * @param out
    *          the output
    */
@@ -183,7 +183,7 @@ public class EcbMeetingCurveExample {
 
   /**
    * Constructs the curves using node points derived from the instruments.
-   * 
+   *
    * @param out
    *          the output
    */

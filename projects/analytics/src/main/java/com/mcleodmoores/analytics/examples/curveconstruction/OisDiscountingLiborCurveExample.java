@@ -37,7 +37,7 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Constructs EUR OIS and EURIBOR curves.
+ * Constructs USD OIS and LIBOR curves.
  */
 public class OisDiscountingLiborCurveExample {
   // valuation date/time
