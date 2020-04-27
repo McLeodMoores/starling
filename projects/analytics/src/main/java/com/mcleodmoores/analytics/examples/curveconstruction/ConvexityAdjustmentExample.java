@@ -44,7 +44,7 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
 
 /**
- *
+ * Demonstrates how to construct curves with and without a convexity adjustment.
  */
 public class ConvexityAdjustmentExample {
   // valuation date/time
@@ -215,6 +215,12 @@ public class ConvexityAdjustmentExample {
   private static final String FWD3_NAME = "EUR Fwd 3M";
   private static final String FWD6_NAME = "EUR Fwd 6M";
 
+  /**
+   * Constructs the curves using the Hull-White model.
+   * 
+   * @param out
+   *          the output
+   */
   public static void constructCurvesWithAdjustment(final PrintStream out) {
     final ZonedDateTime valuationDate = ZonedDateTime.of(VALUATION_DATE, VALUATION_TIME, VALUATION_ZONE);
     final HullWhiteMethodCurveSetUp builder = HullWhiteMethodCurveBuilder.setUp()
@@ -259,6 +265,12 @@ public class ConvexityAdjustmentExample {
     CurvePrintUtils.printJacobians(out, inverseJacobians, builder.getBuilder());
   }
 
+  /**
+   * Constructs curves.
+   * 
+   * @param out
+   *          the output
+   */
   public static void constructCurvesWithoutAdjustment(final PrintStream out) {
     final ZonedDateTime valuationDate = ZonedDateTime.of(VALUATION_DATE, VALUATION_TIME, VALUATION_ZONE);
     final DiscountingMethodCurveSetUp builder = DiscountingMethodCurveBuilder.setUp()
@@ -301,6 +313,10 @@ public class ConvexityAdjustmentExample {
     CurvePrintUtils.printJacobians(out, inverseJacobians, builder.getBuilder());
   }
 
+  /**
+   * @param args
+   *          ignored
+   */
   public static void main(final String[] args) {
     constructCurvesWithAdjustment(System.out);
     constructCurvesWithoutAdjustment(System.out);

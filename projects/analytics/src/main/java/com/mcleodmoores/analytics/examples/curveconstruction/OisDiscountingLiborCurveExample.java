@@ -37,7 +37,7 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
 
 /**
- *
+ * Constructs EUR OIS and EURIBOR curves.
  */
 public class OisDiscountingLiborCurveExample {
   // valuation date/time
@@ -154,6 +154,12 @@ public class OisDiscountingLiborCurveExample {
   private static final String OIS_CURVE_NAME = "USD OIS";
   private static final String LIBOR_CURVE_NAME = "USD 3M LIBOR";
 
+  /**
+   * Constructs the curves at the same time.
+   *
+   * @param out
+   *          output
+   */
   public static void constructSimultaneousCurves(final PrintStream out) {
     final ZonedDateTime valuationDate = ZonedDateTime.of(VALUATION_DATE, VALUATION_TIME, VALUATION_ZONE);
     // first construct the builder
@@ -184,6 +190,12 @@ public class OisDiscountingLiborCurveExample {
     CurvePrintUtils.printJacobians(out, inverseJacobians, curveBuilder.getBuilder());
   }
 
+  /**
+   * Constructs the OIS curve first, then the EURIBOR curve.
+   *
+   * @param out
+   *          output
+   */
   public static void constructConsecutiveCurves(final PrintStream out) {
     final ZonedDateTime valuationDate = ZonedDateTime.of(VALUATION_DATE, VALUATION_TIME, VALUATION_ZONE);
     // first construct the builder
@@ -214,6 +226,10 @@ public class OisDiscountingLiborCurveExample {
     CurvePrintUtils.printJacobians(out, inverseJacobians, curveBuilder.getBuilder());
   }
 
+  /**
+   * @param args
+   *          ignored
+   */
   public static void main(final String[] args) {
     constructSimultaneousCurves(System.out);
     constructConsecutiveCurves(System.out);

@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.threeten.bp.Month;
 import org.threeten.bp.ZonedDateTime;
@@ -30,20 +31,35 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
+import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.util.tuple.Pair;
+import com.opengamma.util.tuple.Pairs;
 
 /**
- *
+ * Prints the output of curve construction.
  */
 public class CurvePrintUtils {
   private static final DecimalFormat TIME_FORMAT = new DecimalFormat("0.000000");
   private static final DecimalFormat YIELD_FORMAT = new DecimalFormat("0.000000");
   private static final DecimalFormat JACOBIAN_FORMAT = new DecimalFormat("0.000000");
 
+  /**
+   * Prints a yield curve.
+   *
+   * @param out
+   *          the output
+   * @param curveName
+   *          the curve name
+   * @param curve
+   *          the curve
+   */
   public static void printAtNodes(final PrintStream out, final String curveName, final YieldAndDiscountCurve curve) {
     if (!(curve instanceof YieldCurve)) {
       throw new UnsupportedOperationException("Can only print YieldCurve");
+    }
+    if (!(((YieldCurve) curve).getCurve() instanceof InterpolatedDoublesCurve)) {
+      throw new UnsupportedOperationException("Can only print interpolated curves");
     }
     out.println(curveName);
     out.print("\ttime (years)");
@@ -55,7 +71,42 @@ public class CurvePrintUtils {
     out.println();
   }
 
-  public static void printJacobians(final PrintStream out, final CurveBuildingBlockBundle inverseJacobians, final CurveBuilder curveBuilder) {
+  /**
+   * Prints a yield curve.
+   *
+   * @param out
+   *          the output
+   * @param curveName
+   *          the curve name
+   * @param curve
+   *          the curve
+   * @param start
+   *          the start time
+   * @param end
+   *          the end time
+   * @param delta
+   *          the delta
+   */
+  public static void printCurve(final PrintStream out, final String curveName, final YieldAndDiscountCurve curve, final double start,
+      final double end, final double delta) {
+    out.println();
+    IntStream.range(0, 1 + (int) ((end - start) / delta))
+        .mapToObj(i -> Pairs.of(start + i * delta, curve.getInterestRate(start + i * delta)))
+        .forEach(e -> out.println(e.getFirst() + "\t" + e.getSecond()));
+    out.println();
+  }
+
+  /**
+   * Prints the inverse Jacobians created during curve construction.
+   *
+   * @param out
+   *          the output
+   * @param inverseJacobians
+   *          the Jacobians
+   * @param curveBuilder
+   *          the curve builder
+   */
+  public static void printJacobians(final PrintStream out, final CurveBuildingBlockBundle inverseJacobians, final CurveBuilder<?> curveBuilder) {
     final Map<String, List<String>> nodeNames = new HashMap<>();
     for (final Object objectEntry : curveBuilder.getNodes().entrySet()) {
       final Map.Entry<String, List<InstrumentDefinition<?>>> entry = (Map.Entry<String, List<InstrumentDefinition<?>>>) objectEntry;

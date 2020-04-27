@@ -38,7 +38,7 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
 
 /**
- *
+ * Constructs curves where the node points are defined by the user.
  */
 public class EcbMeetingCurveExample {
   // valuation date/time
@@ -147,6 +147,12 @@ public class EcbMeetingCurveExample {
   private static final String DISCOUNTING_NAME = "EUR Dsc";
   private static final String FWD6_NAME = "EUR Fwd 6M";
 
+  /**
+   * Constructs the curve using user-supplied dates
+   * 
+   * @param out
+   *          the output
+   */
   public static void constructCurvesUsingMeetingDates(final PrintStream out) {
     final ZonedDateTime valuationDate = ZonedDateTime.of(VALUATION_DATE, VALUATION_TIME, VALUATION_ZONE);
     // first construct the builder
@@ -175,6 +181,12 @@ public class EcbMeetingCurveExample {
     CurvePrintUtils.printJacobians(out, inverseJacobians, curveBuilder.getBuilder());
   }
 
+  /**
+   * Constructs the curves using node points derived from the instruments.
+   * 
+   * @param out
+   *          the output
+   */
   public static void constructCurves(final PrintStream out) {
     final ZonedDateTime valuationDate = ZonedDateTime.of(VALUATION_DATE, VALUATION_TIME, VALUATION_ZONE);
     // first construct the builder
@@ -202,6 +214,10 @@ public class EcbMeetingCurveExample {
     CurvePrintUtils.printJacobians(out, inverseJacobians, curveBuilder.getBuilder());
   }
 
+  /**
+   * @param args
+   *          ignored
+   */
   public static void main(final String[] args) {
     constructCurvesUsingMeetingDates(System.out);
     constructCurves(System.out);

@@ -96,6 +96,12 @@ public class CashDepositCurveExample {
   // the curve name
   private static final String CURVE_NAME = "USD DEPOSIT";
 
+  /**
+   * Constructs the curves
+   *
+   * @param out
+   *          the output
+   */
   public static void constructCurve(final PrintStream out) {
     final ZonedDateTime valuationDate = ZonedDateTime.of(VALUATION_DATE, VALUATION_TIME, VALUATION_ZONE);
     // first construct the builder
@@ -116,6 +122,10 @@ public class CashDepositCurveExample {
     CurvePrintUtils.printJacobians(out, inverseJacobians, curveBuilder.getBuilder());
   }
 
+  /**
+   * @param args
+   *          ignored
+   */
   public static void main(final String[] args) {
     constructCurve(System.out);
     System.exit(0);
