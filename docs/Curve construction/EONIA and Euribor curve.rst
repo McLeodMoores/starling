@@ -59,115 +59,116 @@ The model parameters describe the mean reversion speed and piecewise constant vo
 
     First, the building order is defined:
 
-.. code-block:: java
+    .. code-block:: java
+    
+        hwBuilder
+            .buildingFirst("EONIA")
+            .thenBuilding("EURIBOR 3M")
+            .thenBuilding("EURIBOR 6M")
+    
+    Then, the use and shape of each curve is set:
+    
+    .. code-block:: java
+    
+        hwBuilder
+            .using("EONIA").forDiscounting(Currency.EUR).forIndex(EONIA).withInterpolator(eoniaInterpolator)
+            .using("EURIBOR 3M").forIndex(EURIBOR_3M_INDEX).withInterpolator(euriborInterpolator)
+            .using("EURIBOR 6M").forIndex(EURIBOR_6M_INDEX).withInterpolator(euriborInterpolator);
+    
+    Similarly, the discounting curve is set up:
 
-    hwBuilder
-        .buildingFirst("EONIA")
-        .thenBuilding("EURIBOR 3M")
-        .thenBuilding("EURIBOR 6M")
-
-Then, the use and shape of each curve is set:
-
-.. code-block:: java
-
-    hwBuilder
-        .using("EONIA").forDiscounting(Currency.EUR).forIndex(EONIA).withInterpolator(eoniaInterpolator)
-        .using("EURIBOR 3M").forIndex(EURIBOR_3M_INDEX).withInterpolator(euriborInterpolator)
-        .using("EURIBOR 6M").forIndex(EURIBOR_6M_INDEX).withInterpolator(euriborInterpolator);
-
-Similarly, the discounting curve is set up:
-
-.. code-block:: java
-
-    builder = DiscountingMethodCurveBuilder.setUp()
-        .buildingFirst("EONIA")
-        .thenBuilding("EURIBOR 3M")
-        .thenBuilding("EURIBOR 6M")
-        .using("EONIA").forDiscounting(Currency.EUR).forIndex(EONIA).withInterpolator(eoniaInterpolator)
-        .using("EURIBOR 3M").forIndex(EURIBOR_3M_INDEX).withInterpolator(euriborInterpolator)
-        .using("EURIBOR 6M").forIndex(EURIBOR_6M_INDEX).withInterpolator(euriborInterpolator);
+    .. code-block:: java
+    
+        builder = DiscountingMethodCurveBuilder.setUp()
+            .buildingFirst("EONIA")
+            .thenBuilding("EURIBOR 3M")
+            .thenBuilding("EURIBOR 6M")
+            .using("EONIA").forDiscounting(Currency.EUR).forIndex(EONIA).withInterpolator(eoniaInterpolator)
+            .using("EURIBOR 3M").forIndex(EURIBOR_3M_INDEX).withInterpolator(euriborInterpolator)
+            .using("EURIBOR 6M").forIndex(EURIBOR_6M_INDEX).withInterpolator(euriborInterpolator);
+            
 
 **add the nodal instruments**
 
-    The instruments used on each curves are:
+    The instruments used on each curve are:
 
     * An overnight deposit and OIS on *EONIA*
     * A 3m EURIBOR deposit, the 2nd, 3rd, 5th, 6th and 7th short-term interest rate futures, and fixed / 3 month EURIBOR swaps on *EURIBOR 3M*
     * A 6m EURIBOR deposit, 3x9 and 6x12 FRAs, and fixed / 6 month EURIBOR swaps on *EURIBOR 6M*
 
-   Curve instrument generators are used to create the instruments:
-
-.. code-block:: java
-
-  overnight = OvernightDepositGenerator.builder()
-      .withCurrency(Currency.EUR)
-      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
-      .withDayCount(DayCounts.ACT_360)
-      .build();
-      
-  ois = VanillaOisGenerator.builder()
-      .withUnderlyingIndex(EONIA)
-      .withPaymentTenor(Tenor.ONE_YEAR)
-      .withBusinessDayConvention(BusinessDayConventions.MODIFIED_FOLLOWING)
-      .withEndOfMonth(EndOfMonthConvention.ADJUST_FOR_END_OF_MONTH)
-      .withPaymentLag(2)
-      .withSpotLag(2)
-      .withStubType(StubType.SHORT_START)
-      .withEndOfMonth(EndOfMonthConvention.IGNORE_END_OF_MONTH)
-      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
-      .build();
-      
-  euribor3m = IborGenerator.builder()
-      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
-      .withIborIndex(EURIBOR_3M_INDEX)
-      .build();
-      
-  quarterlyFuture = QuarterlyStirFutureGenerator.builder()
-      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
-      .withIborIndex(EURIBOR_3M_INDEX)
-      .withPaymentAccrualFactor(0.25)
-      .build();
-      
-  fixedEuribor3mSwap = VanillaFixedIborSwapGenerator.builder()
-      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
-      .withFixedLegDayCount(DayCounts.THIRTY_U_360)
-      .withFixedLegPaymentTenor(Tenor.ONE_YEAR)
-      .withStub(StubType.SHORT_START)
-      .withUnderlyingIndex(EURIBOR_3M_INDEX)
-      .build();
-      
-  euribor6m = IborGenerator.builder()
-      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
-      .withIborIndex(EURIBOR_6M_INDEX)
-      .build();
-      
-  euribor6mFra = FraGenerator.builder()
-      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
-      .withIborIndex(EURIBOR_6M_INDEX)
-      .build();
-      
-  fixedEuribor6mSwap = VanillaFixedIborSwapGenerator.builder()
-      .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
-      .withFixedLegDayCount(DayCounts.THIRTY_U_360)
-      .withFixedLegPaymentTenor(Tenor.ONE_YEAR)
-      .withStub(StubType.SHORT_START)
-      .withUnderlyingIndex(EURIBOR_6M_INDEX)
-      .build();
-
-Adding the nodes to the discounting curve:
-
-.. code-block:: java
-
-    builder.addNode("EONIA", overnight.toCurveInstrument(valuationDate, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE));
-    IntStream.range(0, OIS_TENORS.length).forEach(
-        i -> builder.addNode("EONIA", ois.toCurveInstrument(valuationDate, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i])));
-
-    hwBuilder.addNode("EONIA", overnight.toCurveInstrument(valuationDate, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE));
-    IntStream.range(0, OIS_TENORS.length).forEach(
-        i -> hwBuilder.addNode("EONIA", ois.toCurveInstrument(valuationDate, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i])));
-
-The nodes for the 3m and 6m EURIBOR curves are added in the same way.
-
+    Curve instrument generators are used to create the instruments:
+    
+    .. code-block:: java
+    
+      overnight = OvernightDepositGenerator.builder()
+          .withCurrency(Currency.EUR)
+          .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+          .withDayCount(DayCounts.ACT_360)
+          .build();
+          
+      ois = VanillaOisGenerator.builder()
+          .withUnderlyingIndex(EONIA)
+          .withPaymentTenor(Tenor.ONE_YEAR)
+          .withBusinessDayConvention(BusinessDayConventions.MODIFIED_FOLLOWING)
+          .withEndOfMonth(EndOfMonthConvention.ADJUST_FOR_END_OF_MONTH)
+          .withPaymentLag(2)
+          .withSpotLag(2)
+          .withStubType(StubType.SHORT_START)
+          .withEndOfMonth(EndOfMonthConvention.IGNORE_END_OF_MONTH)
+          .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+          .build();
+          
+      euribor3m = IborGenerator.builder()
+          .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+          .withIborIndex(EURIBOR_3M_INDEX)
+          .build();
+          
+      quarterlyFuture = QuarterlyStirFutureGenerator.builder()
+          .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+          .withIborIndex(EURIBOR_3M_INDEX)
+          .withPaymentAccrualFactor(0.25)
+          .build();
+          
+      fixedEuribor3mSwap = VanillaFixedIborSwapGenerator.builder()
+          .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+          .withFixedLegDayCount(DayCounts.THIRTY_U_360)
+          .withFixedLegPaymentTenor(Tenor.ONE_YEAR)
+          .withStub(StubType.SHORT_START)
+          .withUnderlyingIndex(EURIBOR_3M_INDEX)
+          .build();
+          
+      euribor6m = IborGenerator.builder()
+          .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+          .withIborIndex(EURIBOR_6M_INDEX)
+          .build();
+          
+      euribor6mFra = FraGenerator.builder()
+          .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+          .withIborIndex(EURIBOR_6M_INDEX)
+          .build();
+          
+      fixedEuribor6mSwap = VanillaFixedIborSwapGenerator.builder()
+          .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+          .withFixedLegDayCount(DayCounts.THIRTY_U_360)
+          .withFixedLegPaymentTenor(Tenor.ONE_YEAR)
+          .withStub(StubType.SHORT_START)
+          .withUnderlyingIndex(EURIBOR_6M_INDEX)
+          .build();
+    
+    Adding the nodes to the discounting curve:
+    
+    .. code-block:: java
+    
+        builder.addNode("EONIA", overnight.toCurveInstrument(valuationDate, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE));
+        IntStream.range(0, OIS_TENORS.length).forEach(
+            i -> builder.addNode("EONIA", ois.toCurveInstrument(valuationDate, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i])));
+    
+        hwBuilder.addNode("EONIA", overnight.toCurveInstrument(valuationDate, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE));
+        IntStream.range(0, OIS_TENORS.length).forEach(
+            i -> hwBuilder.addNode("EONIA", ois.toCurveInstrument(valuationDate, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i])));
+    
+    The nodes for the 3m and 6m EURIBOR curves are added in the same way.
+    
 =======================
 
 **The code**
@@ -428,11 +429,11 @@ For comparison, the curves generated without convexity adjustment are:
 
 |curve plot|
 
-The yields at the nodes are shown in the tables below. As would be expected, the EONIA and EURIBOR 6M 
-curves are identical for both models. This is because the 6M curve only depends on the EONIA curve, 
+The yields at the nodes are shown in the tables below. As would be expected, the *EONIA* and *EURIBOR 6M* 
+curves are identical for both models. This is because the 6M curve only depends on the *EONIA* curve, 
 and neither contain any futures (i.e. the instruments that will have a convexity adjustment applied).
 
-EONIA
+*EONIA*
 
 =======   =============    =========================    ===============================
 node      time (years)     yield: no adjustment (%)     yield: convexity adjustment (%) 
@@ -453,7 +454,7 @@ node      time (years)     yield: no adjustment (%)     yield: convexity adjustm
 14          10.006355       5.288720                    5.288720
 =======   =============    =========================    ===============================
 
-EURIBOR 3M
+*EURIBOR 3M*
 
 =======   =============    =========================    ===============================
 node      time (years)     yield: no adjustment (%)     yield: convexity adjustment (%) 
@@ -472,7 +473,7 @@ node      time (years)     yield: no adjustment (%)     yield: convexity adjustm
 12          10.003616           4.036491                    4.036649
 =======   =============    =========================    ===============================
 
-EURIBOR 6M
+*EURIBOR 6M*
 
 =======   =============    =========================    ===============================
 node      time (years)     yield: no adjustment (%)     yield: convexity adjustment (%) 
@@ -492,10 +493,10 @@ The shape of the inverse Jacobian matrix is shown below, with non-zero sensitivi
 
 Some observations:
 
-    * As the curves are constructed consecutively, EONIA only has calculated sensitivities to itself, EURIBOR 3M has calculated sensitivities to itself and EONIA, and EURIBOR 6M has sensitivities to all curves
-    * As the first node of the EURIBOR 3M(6M) curve is at 3(6) months, there are no / very small sensitivities to any instruments with smaller tenor in the EONIA curve. 
+    * As the curves are constructed consecutively, *EONIA* only has calculated sensitivities to itself, *EURIBOR 3M* has calculated sensitivities to itself and *EONIA*, and *EURIBOR 6M* has sensitivities to all curves
+    * As the first node of the *EURIBOR 3M(6M)* curve is at 3(6) months, there are no / very small sensitivities to any instruments with smaller tenor in the *EONIA* curve. 
     * The shapes of the matrices are approximately lower-triangular, i.e. a lower-tenor instrument has no sensitivity to a higher-tenor instrument. The interpolator is not completely local, however, so the sensitivities can be distributed over adjacent nodes
-    * The EURIBOR 6M curve has no sensitivity to any of the instruments in the EURIBOR 3M curve. This is because there are no basis swaps in either curve
+    * The *EURIBOR 6M* curve has no sensitivity to any of the instruments in the *EURIBOR 3M* curve. This is because there are no basis swaps in either curve
 
 .. raw:: html
 
