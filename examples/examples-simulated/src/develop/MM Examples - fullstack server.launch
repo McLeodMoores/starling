@@ -10,5 +10,6 @@
     <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.mcleodmoores.examples.simulated.component.ExampleSimulatedComponentServer"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="examples-simulated"/>
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
     <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx4096m -Xms1024m -XX:MaxPermSize=512M -Dlogback.configurationFile=com/opengamma/util/warn-logback.xml -Dcommandmonitor.secret=OpenGamma -Xms1024m -Xmx4096m -XX:+UseConcMarkSweepGC"/>
 </launchConfiguration>
