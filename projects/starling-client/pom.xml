@@ -7,7 +7,7 @@
     <groupId>com.mcleodmoores.starling</groupId>
     <artifactId>starling-client</artifactId>
     <packaging>jar</packaging>
-    <version>2.1.0</version>
+    <version>2.1.1-SNAPSHOT</version>
     <properties>
         <joda-beans.version>1.14</joda-beans.version>
         <joda.beans.indent>2</joda.beans.indent>
@@ -123,84 +123,84 @@
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>component</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>util</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>time-series</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>engine</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>core</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>financial</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>integration</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>web</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>master</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>master-db</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>live-data</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>financial-types</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
