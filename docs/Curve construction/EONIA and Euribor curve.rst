@@ -1814,7 +1814,7 @@ Some observations:
     </html>
     
 
-.. _here: https://github.com/McLeodMoores/starling/blob/curve/projects/analytics/src/main/java/com/mcleodmoores/analytics/examples/curveconstruction/OisDiscountingLiborCurveExample.java
+.. _here: https://github.com/McLeodMoores/starling/blob/curve/projects/analytics/src/main/java/com/mcleodmoores/analytics/examples/curveconstruction/ConvexityAdjustmentExample.java
 
 .. _example: 
 
