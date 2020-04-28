@@ -310,7 +310,7 @@ public class ConvexityAdjustmentExample {
 
     out.println("\n\nNo convexity adjustment for: " + curves.getAllCurveNames());
     curves.getAllCurves().entrySet().stream().forEach(e -> CurvePrintUtils.printAtNodes(out, e.getKey(), e.getValue()));
-    CurvePrintUtils.printJacobians(out, inverseJacobians, builder.getBuilder());
+    // CurvePrintUtils.printJacobians(out, inverseJacobians, builder.getBuilder());
   }
 
   /**
