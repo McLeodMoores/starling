@@ -120,10 +120,10 @@ public class CurvePrintUtils {
       Arrays.stream(m.getData()).forEach(e2 -> {
         final String nodeName = names.next();
         out.print(nodeName);
-        // for (int i = 0; i < 20 - nodeName.length(); i++) {
-        out.print(",  ");
-        // }
-        Arrays.stream(e2).map(e3 -> Math.abs(e3) < 1e-6 ? 0 : e3).forEach(e3 -> out.print(",  " + JACOBIAN_FORMAT.format(e3)));
+        for (int i = 0; i < 20 - nodeName.length(); i++) {
+          out.print(" ");
+        }
+        Arrays.stream(e2).map(e3 -> Math.abs(e3) < 1e-6 ? 0 : e3).forEach(e3 -> out.print("\t" + JACOBIAN_FORMAT.format(e3)));
         out.println();
       });
     });

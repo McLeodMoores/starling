@@ -144,8 +144,8 @@ public class EcbMeetingCurveExample {
       Tenor.TEN_YEARS };
 
   // the curve names
-  private static final String DISCOUNTING_NAME = "EUR Dsc";
-  private static final String FWD6_NAME = "EUR Fwd 6M";
+  private static final String DISCOUNTING_NAME = "EONIA";
+  private static final String FWD6_NAME = "EURIBOR 6M";
 
   /**
    * Constructs the curve using user-supplied dates
@@ -161,7 +161,8 @@ public class EcbMeetingCurveExample {
     final DiscountingMethodCurveSetUp curveBuilder = DiscountingMethodCurveBuilder.setUp()
         .buildingFirst(DISCOUNTING_NAME)
         .using(DISCOUNTING_NAME).forDiscounting(Currency.EUR).forIndex(EONIA).withInterpolator(INTERPOLATOR_1).usingNodeDates(ECB_MEETING_DATES)
-        .thenBuilding(FWD6_NAME).using(FWD6_NAME).forIndex(EURIBOR_6M_INDEX).withInterpolator(INTERPOLATOR_2);
+        .thenBuilding(FWD6_NAME)
+        .using(FWD6_NAME).forIndex(EURIBOR_6M_INDEX).withInterpolator(INTERPOLATOR_2);
     final Tenor startTenor = Tenor.of(Period.ZERO);
     // add the discounting curve nodes
     IntStream.range(0, OIS_TENORS.length).forEach(
@@ -193,8 +194,10 @@ public class EcbMeetingCurveExample {
     // build the discounting / overnight curve first,
     // then build the 6m EURIBOR curve
     final DiscountingMethodCurveSetUp curveBuilder = DiscountingMethodCurveBuilder.setUp()
-        .buildingFirst(DISCOUNTING_NAME).using(DISCOUNTING_NAME).forDiscounting(Currency.EUR).forIndex(EONIA).withInterpolator(INTERPOLATOR_1)
-        .thenBuilding(FWD6_NAME).using(FWD6_NAME).forIndex(EURIBOR_6M_INDEX).withInterpolator(INTERPOLATOR_2);
+        .buildingFirst(DISCOUNTING_NAME)
+        .using(DISCOUNTING_NAME).forDiscounting(Currency.EUR).forIndex(EONIA).withInterpolator(INTERPOLATOR_1)
+        .thenBuilding(FWD6_NAME)
+        .using(FWD6_NAME).forIndex(EURIBOR_6M_INDEX).withInterpolator(INTERPOLATOR_2);
     final Tenor startTenor = Tenor.of(Period.ZERO);
     // add the discounting curve nodes
     IntStream.range(0, OIS_TENORS.length).forEach(
