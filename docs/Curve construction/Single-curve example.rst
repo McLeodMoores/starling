@@ -181,11 +181,341 @@ node        time (years)    yield (%)
 															
 The inverse Jacobian matrix is shown below.
 
-.. csv-table:: USD DEPOSIT
-    :header:     instrument/node,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
-    :file: usd_deposit_jac.csv
+.. raw:: html
 
-
+    <table border="1" class="docutils">
+    <caption>USD DEPOSIT</caption>
+    <colgroup>
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    <col width="6%" />
+    </colgroup>
+    <thead valign="bottom">
+    <tr><th class="head">instrument/node</th>
+    <th class="head">1</th>
+    <th class="head">2</th>
+    <th class="head">3</th>
+    <th class="head">4</th>
+    <th class="head">5</th>
+    <th class="head">6</th>
+    <th class="head">7</th>
+    <th class="head">8</th>
+    <th class="head">9</th>
+    <th class="head">10</th>
+    <th class="head">11</th>
+    <th class="head">12</th>
+    <th class="head">13</th>
+    <th class="head">14</th>
+    <th class="head">15</th>
+    <th class="head">16</th>
+    </tr>
+    </thead>
+    <tbody valign="top">
+    <tr><td>CASH 1D</td>
+    <td>1.016661</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 7D</td>
+    <td>0.196233</td>
+    <td>0.831433</td>
+    <td>-0.011047</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 14D</td>
+    <td>0.110381</td>
+    <td>0.022915</td>
+    <td>0.883252</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 21D</td>
+    <td>0.076787</td>
+    <td>0.015941</td>
+    <td>-0.004323</td>
+    <td>0.928066</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 1M</td>
+    <td>0.055190</td>
+    <td>0.011458</td>
+    <td>-0.003107</td>
+    <td>0</td>
+    <td>0.952807</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 2M</td>
+    <td>0.028033</td>
+    <td>0.005820</td>
+    <td>-0.001578</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0.983608</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 3M</td>
+    <td>0.018990</td>
+    <td>0.003942</td>
+    <td>-0.001069</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0.993547</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 4M</td>
+    <td>0.014017</td>
+    <td>0.002910</td>
+    <td>-0.000789</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0.998740</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 5M</td>
+    <td>0.011394</td>
+    <td>0.002365</td>
+    <td>-0.000641</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>1.001081</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 6M</td>
+    <td>0.009546</td>
+    <td>0.001982</td>
+    <td>-0.000537</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>1.002618</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 9M</td>
+    <td>0.006374</td>
+    <td>0.001323</td>
+    <td>-0.000359</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>1.002994</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 12M</td>
+    <td>0.004808</td>
+    <td>0.000998</td>
+    <td>-0.000271</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>1.000096</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 24M</td>
+    <td>0.002408</td>
+    <td>0.000500</td>
+    <td>-0.000136</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0.986066</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 35M</td>
+    <td>0.001608</td>
+    <td>0.000334</td>
+    <td>-0.000091</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0.962922</td>
+    <td>0</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 48M</td>
+    <td>0.001205</td>
+    <td>0.000250</td>
+    <td>-0.000068</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0.937135</td>
+    <td>0</td>
+    </tr>
+    <tr><td>CASH 60M</td>
+    <td>0.000964</td>
+    <td>0.000200</td>
+    <td>-0.000054</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0.895601</td>
+    </tr>
+    </tbody>
+    </table>
+    
 The cash instrument has an initial and final payment, so, as expected, there are sensitivities at the early nodes and at the maturity. The sensitivities are distributed
 around the early nodes because the interpolation is not completely local. As the node points of the curve are defined to be at the maturity of the instrument, there is
 no such distribution for the sensitivities at the maturity.
