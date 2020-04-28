@@ -7,6 +7,8 @@ The code for this example can be found here_.
 This example builds an EONIA curve that is used for discounting EUR payments and to calculate forward overnight rates, and a three-month and six-month EURIBOR curve that will calculate the appropriate forward EURIBOR rates.
 Two models are used to compare the difference between using a convexity adjustment (via a one-factor Hull-White model) and no adjustment.
 
+The process followed is:
+
 * decide on the model to be used
 * define the type (shape) of the curves
 * define the build order and uses of the curves 
