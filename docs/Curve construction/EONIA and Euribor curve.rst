@@ -495,10 +495,10 @@ The shape of the inverse Jacobian matrix is shown below, with non-zero sensitivi
 
 Some observations:
 
-    * As the curves are constructed consecutively, *EONIA* only has calculated sensitivities to itself, *EURIBOR 3M* has calculated sensitivities to itself and *EONIA*, and *EURIBOR 6M* has sensitivities to all curves
-    * As the first node of the *EURIBOR 3M(6M)* curve is at 3(6) months, there are no / very small sensitivities to any instruments with smaller tenor in the *EONIA* curve. 
-    * The shapes of the matrices are approximately lower-triangular, i.e. a lower-tenor instrument has no sensitivity to a higher-tenor instrument. The interpolator is not completely local, however, so the sensitivities can be distributed over adjacent nodes
-    * The *EURIBOR 6M* curve has no sensitivity to any of the instruments in the *EURIBOR 3M* curve. This is because there are no basis swaps in either curve
+* As the curves are constructed consecutively, *EONIA* only has calculated sensitivities to itself, *EURIBOR 3M* has calculated sensitivities to itself and *EONIA*, and *EURIBOR 6M* has sensitivities to all curves
+* As the first node of the *EURIBOR 3M(6M)* curve is at 3(6) months, there are no / very small sensitivities to any instruments with smaller tenor in the *EONIA* curve. 
+* The shapes of the matrices are approximately lower-triangular, i.e. a lower-tenor instrument has no sensitivity to a higher-tenor instrument. The interpolator is not completely local, however, so the sensitivities can be distributed over adjacent nodes
+* The *EURIBOR 6M* curve has no sensitivity to any of the instruments in the *EURIBOR 3M* curve. This is because there are no basis swaps in either curve
 
 .. raw:: html
 
