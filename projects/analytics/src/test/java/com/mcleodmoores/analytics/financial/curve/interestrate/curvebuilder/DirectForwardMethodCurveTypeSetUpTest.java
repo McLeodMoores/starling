@@ -1,0 +1,551 @@
+/**
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
+ */
+package com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
+import org.testng.annotations.Test;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.ZonedDateTime;
+
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.CurveTypeSetUpInterface.CurveFunction;
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveAddYieldExisting;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolated;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolatedNode;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolated;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolatedNode;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldNelsonSiegel;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldPeriodicInterpolated;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
+import com.opengamma.analytics.financial.instrument.index.IndexConverter;
+import com.opengamma.analytics.financial.instrument.payment.CouponIborDefinition;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
+import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.financial.convention.businessday.BusinessDayConventions;
+import com.opengamma.financial.convention.daycount.DayCounts;
+import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
+import com.opengamma.util.time.DateUtils;
+import com.opengamma.util.time.Tenor;
+
+/**
+ * Unit tests for {@link DirectForwardMethodCurveTypeSetUp}.
+ */
+@Test(groups = TestGroup.UNIT)
+public class DirectForwardMethodCurveTypeSetUpTest {
+  private static final UniqueIdentifiable DISCOUNTING_ID = Currency.USD;
+  private static final IborTypeIndex[] IBOR_INDICES = {
+      new IborTypeIndex("A", Currency.USD, Tenor.THREE_MONTHS, 2, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, true),
+      new IborTypeIndex("B", Currency.USD, Tenor.SIX_MONTHS, 2, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, true) };
+  private static final OvernightIndex[] OVERNIGHT_INDICES = { new OvernightIndex("A", Currency.USD, DayCounts.ACT_360, 1),
+      new OvernightIndex("B", Currency.USD, DayCounts.ACT_360, 1) };
+
+  /**
+   * Tests that the builder to copy cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullBuilder() {
+    new DirectForwardMethodCurveTypeSetUp(null);
+  }
+
+  /**
+   * Tests that nulls cannot be passed into builder methods.
+   */
+  @Test
+  public void testNullBuilderMethodInputs() {
+    TestUtils.testNullBuilderMethodInputs(DirectForwardMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class);
+  }
+
+  /**
+   * Tests that empty collections / arrays cannot be passed into builder methods.
+   */
+  @Test
+  public void testEmptyBuilderMethodInputs() {
+    TestUtils.testEmptyBuilderMethodInputs(DirectForwardMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class);
+  }
+
+  /**
+   * Tests that only one ibor index can be set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testSingleIborIndex1() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES);
+  }
+
+  /**
+   * Tests that only one ibor index can be set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testSingleIborIndex2() {
+    DirectForwardMethodCurveTypeSetUp builder = new DirectForwardMethodCurveTypeSetUp();
+    builder = builder.forIndex(IBOR_INDICES[0]);
+    builder.forIndex(IBOR_INDICES[1]);
+  }
+
+  /**
+   * Tests that a functional curve type cannot be created if an interpolated / fixed date curve type has already started to be constructed.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testFunctionalCurveState1() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .functionalForm(CurveFunction.NELSON_SIEGEL);
+  }
+
+  /**
+   * Tests that a functional curve type cannot be created if an interpolated / fixed date curve type has already started to be constructed.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testFunctionalCurveState2() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) })
+        .functionalForm(CurveFunction.NELSON_SIEGEL);
+  }
+
+  /**
+   * Tests that a functional curve type cannot be created if an interpolated / fixed date curve type has already started to be constructed.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testFunctionalCurveState3() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .continuousInterpolationOnYield()
+        .functionalForm(CurveFunction.NELSON_SIEGEL);
+  }
+
+  /**
+   * Tests that a functional curve type cannot be created as a spread over another curve.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testFunctionalCurveState4() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .asSpreadOver("BASE")
+        .functionalForm(CurveFunction.NELSON_SIEGEL);
+  }
+
+  /**
+   * Tests the functional form curve generator.
+   */
+  @Test
+  public void testFunctionalFormCurveGenerator1() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .functionalForm(CurveFunction.NELSON_SIEGEL);
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveYieldNelsonSiegel);
+  }
+
+  /**
+   * Tests that an interpolated curve type cannot be created if a functional form has already been supplied.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testInterpolatedCurveState() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .functionalForm(CurveFunction.NELSON_SIEGEL)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME));
+  }
+
+  /**
+   * Tests the interpolated curve generator.
+   */
+  @Test
+  public void testInterpolatedCurveGenerator1() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME));
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveYieldInterpolated);
+  }
+
+  /**
+   * Tests the interpolated curve generator.
+   */
+  @Test
+  public void testInterpolatedCurveGenerator2() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .asSpreadOver("BASE")
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME));
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
+  }
+
+  /**
+   * Tests that an fixed node curve type cannot be created if a functional form has already been supplied.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testFixedNodeCurveState() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .functionalForm(CurveFunction.NELSON_SIEGEL)
+        .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) });
+  }
+
+  /**
+   * Tests that the fixed node curve generator cannot be created without an interpolator.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testFixedNodeGeneratorNoInterpolator() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) });
+    setup.buildCurveGenerator(ZonedDateTime.now());
+  }
+
+  /**
+   * Tests that there must be at least 2 nodes.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNumberOfNodes() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .usingNodeDates(new LocalDateTime[0])
+        .buildCurveGenerator(ZonedDateTime.now());
+  }
+
+  /**
+   * Tests the fixed curve node generator.
+   */
+  @Test
+  public void testFixedNodeGenerator1() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) });
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveYieldInterpolatedNode);
+  }
+
+  /**
+   * Tests the fixed curve node generator.
+   */
+  @Test
+  public void testFixedNodeGenerator2() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .asSpreadOver("BASE")
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) });
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
+  }
+
+  /**
+   * Tests that an interpolated on yield curve type cannot be created if a functional form has already been set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testInterpolatedOnYieldCurveState1() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .functionalForm(CurveFunction.NELSON_SIEGEL)
+        .continuousInterpolationOnYield();
+  }
+
+  /**
+   * Tests that an interpolated on yield curve type cannot be created if the type has already been set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testInterpolatedOnYieldCurveState2() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .continuousInterpolationOnDiscountFactors()
+        .continuousInterpolationOnYield();
+  }
+
+  /**
+   * Tests that an interpolator must be set to interpolate on yields.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testInterpolatorSetForInterpolatedOnYield() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .continuousInterpolationOnYield()
+        .buildCurveGenerator(ZonedDateTime.now());
+  }
+
+  /**
+   * Tests the curve generator when interpolation on yield is explicitly chosen.
+   */
+  @Test
+  public void testInterpolatedOnYieldCurveGenerator1() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .continuousInterpolationOnYield();
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveYieldInterpolated);
+    assertTrue(setup.usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) })
+        .buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveYieldInterpolatedNode);
+  }
+
+  /**
+   * Tests the curve generator when interpolation on yield is explicitly chosen.
+   */
+  @Test
+  public void testInterpolatedOnYieldCurveGenerator2() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .asSpreadOver("BASE")
+        .continuousInterpolationOnYield();
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
+    assertTrue(setup.usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) })
+        .buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
+  }
+
+  /**
+   * Tests that an interpolated on discount factor curve type cannot be created if a functional form has already been set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testInterpolatedOnDiscountFactorCurveState1() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .functionalForm(CurveFunction.NELSON_SIEGEL)
+        .continuousInterpolationOnDiscountFactors();
+  }
+
+  /**
+   * Tests that an interpolated on discount factor curve type cannot be created if the type has already been set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testInterpolatedOnDiscountFactorCurveState2() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .continuousInterpolationOnYield()
+        .continuousInterpolationOnDiscountFactors();
+  }
+
+  /**
+   * Tests that an interpolator must be set to interpolate on discount factors.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testInterpolatorSetForInterpolatedOnDiscountFactors() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .continuousInterpolationOnDiscountFactors()
+        .buildCurveGenerator(ZonedDateTime.now());
+  }
+
+  /**
+   * Tests the curve generator when interpolation on discount factors is chosen.
+   */
+  @Test
+  public void testInterpolatedOnDiscountFactorCurveGenerator1() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .continuousInterpolationOnDiscountFactors();
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveDiscountFactorInterpolated);
+    assertTrue(setup.usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) })
+        .buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveDiscountFactorInterpolatedNode);
+  }
+
+  /**
+   * Tests the curve generator when interpolation on discount factors is chosen.
+   */
+  @Test
+  public void testInterpolatedOnDiscountFactorCurveGenerator2() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .asSpreadOver("BASE")
+        .continuousInterpolationOnDiscountFactors();
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
+    assertTrue(setup.usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) })
+        .buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
+  }
+
+  /**
+   * Tests that there must be at least one compounding period per year.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testCompoundingPeriodsPerYear() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .periodicInterpolationOnYield(0);
+  }
+
+  /**
+   * Tests that a periodically compounded curve cannot be created if a functional form has already been set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testPeriodicCurveState1() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .functionalForm(CurveFunction.NELSON_SIEGEL)
+        .periodicInterpolationOnYield(4);
+  }
+
+  /**
+   * Tests that a periodically compounded curve cannot be created if the type has already been set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testPeriodicCurveState2() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .continuousInterpolationOnDiscountFactors()
+        .periodicInterpolationOnYield(4);
+  }
+
+  /**
+   * Tests that an interpolator must be set to interpolate on yields.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testInterpolatorSetForPeriodicCurve() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .periodicInterpolationOnYield(4)
+        .buildCurveGenerator(ZonedDateTime.now());
+  }
+
+  /**
+   * Tests that node dates cannot be set for curves with periodic yields.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testNoNodeDatesForPeriodicCurves1() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .periodicInterpolationOnYield(4)
+        .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) });
+  }
+
+  /**
+   * Tests that node dates cannot be set for curves with periodic yields.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testNoNodeDatesForPeriodicCurves2() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .usingNodeDates(new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now().plusDays(1) })
+        .periodicInterpolationOnYield(4);
+  }
+
+  /**
+   * Tests the curve generator when a periodic curve is chosen.
+   */
+  @Test
+  public void testPeriodicCurveGenerator1() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .periodicInterpolationOnYield(4);
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveYieldPeriodicInterpolated);
+  }
+
+  /**
+   * Tests the curve generator when a periodic curve is chosen.
+   */
+  @Test
+  public void testPeriodicCurveGenerator2() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .asSpreadOver("BASE")
+        .periodicInterpolationOnYield(4);
+    assertTrue(setup.buildCurveGenerator(ZonedDateTime.now()) instanceof GeneratorCurveAddYieldExisting);
+  }
+
+  /**
+   * Tests the getters.
+   */
+  @Test
+  public void testGetters() {
+    final DirectForwardMethodCurveTypeSetUp setup = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(DISCOUNTING_ID)
+        .forIndex(IBOR_INDICES[0])
+        .forIndex(OVERNIGHT_INDICES[0]);
+    assertEquals(setup.getDiscountingCurveId(), DISCOUNTING_ID);
+    assertEquals(setup.getIborCurveIndices().toArray(new IborTypeIndex[0])[0], IBOR_INDICES[0]);
+    assertEquals(setup.getOvernightCurveIndices().toArray(new OvernightIndex[0])[0], OVERNIGHT_INDICES[0]);
+  }
+
+  /**
+   * Tests that a functional curve type cannot be created as a spread over another curve.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testSpreadCurveState() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .functionalForm(CurveFunction.NELSON_SIEGEL)
+        .asSpreadOver("BASE");
+  }
+
+  /**
+   * Tests that both node time calculators cannot be set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testBothNodeTimeCalculatorsNotSet1() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .usingInstrumentMaturity()
+        .usingLastFixingEndTime();
+  }
+
+  /**
+   * Tests that both node time calculators cannot be set.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testBothNodeTimeCalculatorsNotSet2() {
+    new DirectForwardMethodCurveTypeSetUp()
+        .usingLastFixingEndTime()
+        .usingInstrumentMaturity();
+  }
+
+  /**
+   * Test node date equivalence with multiple calls.
+   */
+  @Test
+  public void testMultipleNodeDateCalls() {
+    final DirectForwardMethodCurveTypeSetUp setup1 = new DirectForwardMethodCurveTypeSetUp()
+        .usingNodeDates(LocalDateTime.of(LocalDate.now(), LocalTime.of(12, 0)),
+            LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(12, 0)),
+            LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(12, 0)));
+    final DirectForwardMethodCurveTypeSetUp setup2 = new DirectForwardMethodCurveTypeSetUp()
+        .usingNodeDates(LocalDateTime.of(LocalDate.now(), LocalTime.of(12, 0)))
+        .usingNodeDates(LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(12, 0)),
+            LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(12, 0)));
+    final DirectForwardMethodCurveTypeSetUp setup3 = new DirectForwardMethodCurveTypeSetUp()
+        .usingNodeDates(LocalDateTime.of(LocalDate.now(), LocalTime.of(12, 0)))
+        .usingNodeDates(LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(12, 0)))
+        .usingNodeDates(LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(12, 0)));
+    assertEquals(setup1.getFixedNodeDates(), setup2.getFixedNodeDates());
+    assertEquals(setup1.getFixedNodeDates(), setup3.getFixedNodeDates());
+  }
+
+  /**
+   * Tests that the different node point calculators produce different node points in the curve.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testTimeCalculator() {
+    final ZonedDateTime date = DateUtils.getUTCDate(2016, 12, 1);
+    final ZonedDateTime fixingStart = DateUtils.getUTCDate(2017, 1, 1);
+    final ZonedDateTime fixingEnd = fixingStart.plusMonths(3);
+    final ZonedDateTime payment = fixingEnd.plusDays(2);
+    final IborTypeIndex ibor = new IborTypeIndex("I", Currency.USD, Tenor.THREE_MONTHS, 0, DayCounts.ACT_360,
+        BusinessDayConventions.FOLLOWING, false);
+    final DirectForwardMethodCurveTypeSetUp setup1 = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(Currency.USD)
+        .forIndex(ibor)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .usingInstrumentMaturity();
+    final DirectForwardMethodCurveTypeSetUp setup2 = new DirectForwardMethodCurveTypeSetUp()
+        .forDiscounting(Currency.USD)
+        .forIndex(ibor)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .usingLastFixingEndTime();
+    final CouponIborDefinition coupon = new CouponIborDefinition(Currency.USD, payment, fixingStart, fixingEnd, 0.25, 1, fixingStart,
+        fixingStart,
+        fixingEnd, 0.25, IndexConverter.toIborIndex(ibor), CalendarAdapter.of(WeekendWorkingDayCalendar.SATURDAY_SUNDAY));
+    final InstrumentDerivative[] data = new InstrumentDerivative[] { coupon.toDerivative(date) };
+    final GeneratorYDCurve generator1 = setup1.buildCurveGenerator(date).finalGenerator(data);
+    final GeneratorYDCurve generator2 = setup2.buildCurveGenerator(date).finalGenerator(data);
+    final double node1 = ((YieldCurve) generator1.generateCurve("A", new MulticurveProviderDiscount(), new double[] { 0.01 })).getCurve()
+        .getXData()[0];
+    final double node2 = ((YieldCurve) generator2.generateCurve("A", new MulticurveProviderDiscount(), new double[] { 0.01 })).getCurve()
+        .getXData()[0];
+    assertTrue(node1 > node2);
+  }
+}

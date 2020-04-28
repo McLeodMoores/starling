@@ -8,14 +8,14 @@ import com.opengamma.id.UniqueIdentifiable;
 /**
  *
  */
-public interface VolatilityProvider extends DataProvider {
+public interface VolatilityProvider<T> extends DataProvider {
 
   @Override
-  VolatilityProvider copy();
+  VolatilityProvider<T> copy();
 
   UniqueIdentifiable getIdentifier();
 
-  double getVolatility(double x, double y, double z);
+  double getVolatility(T axes);
 
   //FX
 //  double getVolatility(final Currency ccy1, final Currency ccy2, final double time, final double strike, final double forward);

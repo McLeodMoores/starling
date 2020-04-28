@@ -41,9 +41,9 @@ public class MixedLogNormalVolatilityModelTest {
   };
 
   static {
-    LEPTOKURTIC1 = new MixedLogNormalModelData(new double[] {0.8, 0.2 }, new double[] {0.2, 0.7 });
-    LEPTOKURTIC2 = new MixedLogNormalModelData(new double[] {0.8, 0.2 }, new double[] {0.2, 0.7 }, new double[] {1.1, 0.6 });
-    PLATYKURTIC = new MixedLogNormalModelData(new double[] {0.5, 0.5 }, new double[] {0.2, 0.2 }, new double[] {0.5, 1.5 });
+    LEPTOKURTIC1 = new MixedLogNormalModelData(new double[] { 0.8, 0.2 }, new double[] { 0.2, 0.7 });
+    LEPTOKURTIC2 = new MixedLogNormalModelData(new double[] { 0.8, 0.2 }, new double[] { 0.2, 0.7 }, new double[] { 1.1, 0.6 });
+    PLATYKURTIC = new MixedLogNormalModelData(new double[] { 0.5, 0.5 }, new double[] { 0.2, 0.2 }, new double[] { 0.5, 1.5 });
     final int n = 5;
     final double[] parms = new double[3 * n - 2];
     parms[0] = 0.2;
@@ -76,11 +76,12 @@ public class MixedLogNormalVolatilityModelTest {
     final EuropeanVanillaOption optionPlus = new EuropeanVanillaOption((1 + shift) * FORWARD, T, true);
     final EuropeanVanillaOption option = new EuropeanVanillaOption(FORWARD, T, true);
     final EuropeanVanillaOption optionMinus = new EuropeanVanillaOption((1 - shift) * FORWARD, T, true);
-    final MixedLogNormalModelData[] data = new MixedLogNormalModelData[] {LEPTOKURTIC1, LEPTOKURTIC2, PLATYKURTIC };
+    final MixedLogNormalModelData[] data = new MixedLogNormalModelData[] { LEPTOKURTIC1, LEPTOKURTIC2, PLATYKURTIC };
     final double[] skew = new double[3];
     final double[] kurt = new double[3];
     for (int i = 0; i < 3; i++) {
-      skew[i] = (VOL_FUNC.getVolatility(optionPlus, FORWARD, data[i]) - VOL_FUNC.getVolatility(optionMinus, FORWARD, data[i])) / 2 / shift / FORWARD;
+      skew[i] = (VOL_FUNC.getVolatility(optionPlus, FORWARD, data[i]) - VOL_FUNC.getVolatility(optionMinus, FORWARD, data[i])) / 2 / shift
+          / FORWARD;
       kurt[i] = (VOL_FUNC.getVolatility(optionPlus, FORWARD, data[i]) + VOL_FUNC.getVolatility(optionMinus, FORWARD, data[i])
           - 2 * VOL_FUNC.getVolatility(option, FORWARD, data[i])) / shift / shift / FORWARD / FORWARD;
     }

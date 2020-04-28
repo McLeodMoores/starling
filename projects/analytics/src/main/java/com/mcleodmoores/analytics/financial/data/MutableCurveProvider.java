@@ -10,7 +10,7 @@ import com.opengamma.id.UniqueIdentifiable;
 /**
  *
  */
-public interface MutableCurveProvider extends CurveProvider {
+public interface MutableCurveProvider extends IdCurveProvider {
 
   @Override
   MutableCurveProvider copy();
@@ -19,7 +19,7 @@ public interface MutableCurveProvider extends CurveProvider {
 
   boolean setIndexCurve(UniqueIdentifiable id, YieldAndDiscountCurve curve);
 
-  boolean setAll(CurveProvider provider);
+  boolean setAll(IdCurveProvider provider);
 
   boolean setFxMatrix(FXMatrix fxMatrix);
 

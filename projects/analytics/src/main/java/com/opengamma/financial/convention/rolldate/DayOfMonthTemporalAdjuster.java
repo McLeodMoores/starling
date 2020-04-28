@@ -23,13 +23,13 @@ public class DayOfMonthTemporalAdjuster implements TemporalAdjuster {
 
   /**
    * Public constructor.
-   * 
+   *
    * @param day
    *          day of a month
    */
   public DayOfMonthTemporalAdjuster(final int day) {
     ArgumentChecker.notNull(day, "day");
-    ArgumentChecker.isTrue(0 < day & day < 32, "day should be between 1 and 31");
+    ArgumentChecker.isTrue(0 < day && day < 32, "day should be between 1 and 31");
     _day = day;
   }
 

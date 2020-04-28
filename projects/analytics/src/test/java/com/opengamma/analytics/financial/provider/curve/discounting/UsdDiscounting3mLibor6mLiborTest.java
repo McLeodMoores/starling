@@ -22,8 +22,8 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.CurveUtils;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
@@ -164,11 +164,10 @@ public class UsdDiscounting3mLibor6mLiborTest {
       0.0020, 0.0030, 0.0040,
       0.0050, 0.0130 };
   /** Generators for the dsc USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_USD_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_DEPOSIT_ON_USD,
-      GENERATOR_DEPOSIT_ON_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD,
-      GENERATOR_OIS_USD,
-      GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD };
+  private static final GeneratorInstrument[] DSC_USD_GENERATORS = new GeneratorInstrument[] { GENERATOR_DEPOSIT_ON_USD,
+      GENERATOR_DEPOSIT_ON_USD, GENERATOR_OIS_USD,
+      GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD,
+      GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD };
   /** Tenors for the dsc USD curve */
   private static final Period[] DSC_USD_TENOR = new Period[] { Period.ofDays(0), Period.ofDays(1), Period.ofMonths(1), Period.ofMonths(2),
       Period.ofMonths(3),
@@ -187,9 +186,9 @@ public class UsdDiscounting3mLibor6mLiborTest {
   private static final double[] FWD3_USD_MARKET_QUOTES_2 = new double[] { 0.0045, 0.0045, 0.0045, 0.0050, 0.0060, 0.0080, 0.0075, 0.0090,
       0.0160 };
   /** Generators for the Fwd 3M USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD3_USD_GENERATORS_2 = new GeneratorInstrument<?>[] {
-      GENERATOR_USDLIBOR3M,
-      USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
+  private static final GeneratorInstrument[] FWD3_USD_GENERATORS_2 = new GeneratorInstrument[] { GENERATOR_USDLIBOR3M, USD6MLIBOR3M,
+      USD6MLIBOR3M, USD6MLIBOR3M,
+      USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
   /** Tenors for the Fwd 3M USD curve */
   private static final Period[] FWD3_USD_TENOR_2 = new Period[] { Period.ofMonths(0), Period.ofMonths(6), Period.ofYears(1),
       Period.ofYears(2),
@@ -206,10 +205,9 @@ public class UsdDiscounting3mLibor6mLiborTest {
       0.0160, 0.0200,
       0.0180 };
   /** Generators for the Fwd 3M USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD3_USD_GENERATORS_3 = new GeneratorInstrument<?>[] {
-      GENERATOR_USDLIBOR3M,
-      USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M,
-      USD6MLIBOR3M };
+  private static final GeneratorInstrument[] FWD3_USD_GENERATORS_3 = new GeneratorInstrument[] { GENERATOR_USDLIBOR3M, USD6MLIBOR3M,
+      USD6MLIBOR3M, USD6MLIBOR3M,
+      USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
   /** Tenors for the Fwd 3M USD curve */
   private static final Period[] FWD3_USD_TENOR_3 = new Period[] { Period.ofMonths(0), Period.ofMonths(6), Period.ofYears(1),
       Period.ofYears(2),
@@ -226,9 +224,9 @@ public class UsdDiscounting3mLibor6mLiborTest {
   private static final double[] FWD3_USD_MARKET_QUOTES_4 = new double[] { 0.0100, 0.0125, 0.0150, 0.0140, 0.0113, 0.0131, 0.0136, 0.0142,
       0.0146, 0.0135 };
   /** Generators for the Fwd 3M USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD3_USD_GENERATORS_4 = new GeneratorInstrument<?>[] {
-      GENERATOR_USDLIBOR3M,
-      USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
+  private static final GeneratorInstrument[] FWD3_USD_GENERATORS_4 = new GeneratorInstrument[] { GENERATOR_USDLIBOR3M, USD6MLIBOR3M,
+      USD6MLIBOR3M, USD6MLIBOR3M,
+      USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
   /** Tenors for the Fwd 3M USD curve */
   private static final Period[] FWD3_USD_TENOR_4 = new Period[] { Period.ofMonths(0), Period.ofYears(1), Period.ofYears(5),
       Period.ofYears(10),
@@ -242,10 +240,11 @@ public class UsdDiscounting3mLibor6mLiborTest {
 
   /** Market values for the Fwd 6M USD curve */
   private static final double[] FWD6_USD_MARKET_QUOTES = new double[] { 0.0065, 0.0055, 0.0080, 0.0170 };
-  /** Generators for the Fwd 6M USD curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD6_USD_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_USDLIBOR6M,
-      USD6MLIBOR6M, USD6MLIBOR6M, USD6MLIBOR6M };
+  /**
+   * Generators for the Fwd 6M USD curve
+   */
+  private static final GeneratorInstrument[] FWD6_USD_GENERATORS = new GeneratorInstrument[] { GENERATOR_USDLIBOR6M, USD6MLIBOR6M,
+      USD6MLIBOR6M, USD6MLIBOR6M };
   /** Tenors for the Fwd 6M USD curve */
   private static final Period[] FWD6_USD_TENOR = new Period[] { Period.ofMonths(0), Period.ofYears(2), Period.ofYears(5),
       Period.ofYears(10) };
@@ -255,86 +254,92 @@ public class UsdDiscounting3mLibor6mLiborTest {
       FWD6_USD_ATTR[loopins] = new GeneratorAttributeIR(FWD6_USD_TENOR[loopins]);
     }
   }
-
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_LIBOR_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex())
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex())
       .withInterpolator(INTERPOLATOR_LINEAR)
-      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
-      .withInterpolator(INTERPOLATOR_LINEAR)
-      .withKnownData(KNOWN_DATA);
+      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_LINEAR);
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_LIBOR_BUILDER_2 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex())
-      .withInterpolator(INTERPOLATOR_LL)
-      .continuousInterpolationOnDiscountFactors().thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD)
-      .forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LL).withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex())
+      .withInterpolator(INTERPOLATOR_LL).continuousInterpolationOnDiscountFactors()
+      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_LL);
   private static final DiscountingMethodCurveSetUp PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex())
-      .withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1).thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD)
-      .forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1)
-      .withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex())
+      .withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1)
+      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1);
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex())
-      .withInterpolator(INTERPOLATOR_DQ).thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD)
-      .forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
-      .withInterpolator(INTERPOLATOR_DQ).thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD)
-      .forIborIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex())
-      .withInterpolator(INTERPOLATOR_DQ).withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex())
+      .withInterpolator(INTERPOLATOR_DQ)
+      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_DQ)
+      .thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD).forIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_DQ);
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex())
-      .withInterpolator(INTERPOLATOR_DQ).thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD)
-      .forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
-      .withInterpolator(INTERPOLATOR_DQ).thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD)
-      .forIborIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex())
-      .withInterpolator(INTERPOLATOR_LINEAR).asSpreadOver(CURVE_NAME_FWD3_USD).withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex())
+      .withInterpolator(INTERPOLATOR_DQ)
+      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_DQ)
+      .thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD).forIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex())
+      .withInterpolator(INTERPOLATOR_LINEAR).asSpreadOver(CURVE_NAME_FWD3_USD);
   private static final DiscountingMethodCurveSetUp LIBOR_AND_DISCOUNTING_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
-      .withInterpolator(INTERPOLATOR_DQ).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD)
-      .forOvernightIndex(FED_FUNDS.toOvernightIndex())
-      .withInterpolator(INTERPOLATOR_DQ).withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD)
+      .using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_DQ);
   private static final DiscountingMethodCurveSetUp LIBOR_AND_DISCOUNTING_BUILDER_2 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex())
-      .withInterpolator(INTERPOLATOR_LINEAR).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD)
-      .forOvernightIndex(FED_FUNDS.toOvernightIndex())
-      .withInterpolator(INTERPOLATOR_LINEAR).asSpreadOver(CURVE_NAME_FWD3_USD).withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD)
+      .using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR)
+      .asSpreadOver(CURVE_NAME_FWD3_USD);
   static {
+    DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.addFxMatrix(FX_MATRIX);
+    DISCOUNTING_THEN_3M_LIBOR_BUILDER_2.addFxMatrix(FX_MATRIX);
+    PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.addFxMatrix(FX_MATRIX);
+    DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.addFxMatrix(FX_MATRIX);
+    DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.addFxMatrix(FX_MATRIX);
+    LIBOR_AND_DISCOUNTING_BUILDER_1.addFxMatrix(FX_MATRIX);
+    LIBOR_AND_DISCOUNTING_BUILDER_2.addFxMatrix(FX_MATRIX);
     for (int i = 0; i < DSC_USD_MARKET_QUOTES.length; i++) {
-      DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.withNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i], DSC_USD_ATTR[i], DSC_USD_MARKET_QUOTES[i]);
-      DISCOUNTING_THEN_3M_LIBOR_BUILDER_2.withNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i], DSC_USD_ATTR[i], DSC_USD_MARKET_QUOTES[i]);
-      PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.withNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i], DSC_USD_ATTR[i],
-          DSC_USD_MARKET_QUOTES[i]);
-      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.withNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i], DSC_USD_ATTR[i],
-          DSC_USD_MARKET_QUOTES[i]);
-      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.withNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i], DSC_USD_ATTR[i],
-          DSC_USD_MARKET_QUOTES[i]);
-      LIBOR_AND_DISCOUNTING_BUILDER_1.withNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i], DSC_USD_ATTR[i], DSC_USD_MARKET_QUOTES[i]);
-      LIBOR_AND_DISCOUNTING_BUILDER_2.withNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i], DSC_USD_ATTR[i], DSC_USD_MARKET_QUOTES[i]);
+      DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.addNode(CURVE_NAME_DSC_USD,
+          DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));
+      DISCOUNTING_THEN_3M_LIBOR_BUILDER_2.addNode(CURVE_NAME_DSC_USD,
+          DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));
+      PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.addNode(CURVE_NAME_DSC_USD,
+          DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));
+      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.addNode(CURVE_NAME_DSC_USD,
+          DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));
+      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.addNode(CURVE_NAME_DSC_USD,
+          DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));
+      LIBOR_AND_DISCOUNTING_BUILDER_1.addNode(CURVE_NAME_DSC_USD,
+          DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));
+      LIBOR_AND_DISCOUNTING_BUILDER_2.addNode(CURVE_NAME_DSC_USD,
+          DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));
     }
     for (int i = 0; i < FWD3_USD_MARKET_QUOTES_2.length; i++) {
-      DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.withNode(CURVE_NAME_FWD3_USD, FWD3_USD_GENERATORS_2[i], FWD3_USD_ATTR_2[i],
-          FWD3_USD_MARKET_QUOTES_2[i]);
-      DISCOUNTING_THEN_3M_LIBOR_BUILDER_2.withNode(CURVE_NAME_FWD3_USD, FWD3_USD_GENERATORS_2[i], FWD3_USD_ATTR_2[i],
-          FWD3_USD_MARKET_QUOTES_2[i]);
-      PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.withNode(CURVE_NAME_FWD3_USD, FWD3_USD_GENERATORS_2[i], FWD3_USD_ATTR_2[i],
-          FWD3_USD_MARKET_QUOTES_2[i]);
-      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.withNode(CURVE_NAME_FWD3_USD, FWD3_USD_GENERATORS_2[i], FWD3_USD_ATTR_2[i],
-          FWD3_USD_MARKET_QUOTES_2[i]);
-      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.withNode(CURVE_NAME_FWD3_USD, FWD3_USD_GENERATORS_2[i], FWD3_USD_ATTR_2[i],
-          FWD3_USD_MARKET_QUOTES_2[i]);
+      DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.addNode(CURVE_NAME_FWD3_USD,
+          FWD3_USD_GENERATORS_2[i].generateInstrument(NOW, FWD3_USD_MARKET_QUOTES_2[i], 1, FWD3_USD_ATTR_2[i]));
+      DISCOUNTING_THEN_3M_LIBOR_BUILDER_2.addNode(CURVE_NAME_FWD3_USD,
+          FWD3_USD_GENERATORS_2[i].generateInstrument(NOW, FWD3_USD_MARKET_QUOTES_2[i], 1, FWD3_USD_ATTR_2[i]));
+      PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.addNode(CURVE_NAME_FWD3_USD,
+          FWD3_USD_GENERATORS_2[i].generateInstrument(NOW, FWD3_USD_MARKET_QUOTES_2[i], 1, FWD3_USD_ATTR_2[i]));
+      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.addNode(CURVE_NAME_FWD3_USD,
+          FWD3_USD_GENERATORS_2[i].generateInstrument(NOW, FWD3_USD_MARKET_QUOTES_2[i], 1, FWD3_USD_ATTR_2[i]));
+      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.addNode(CURVE_NAME_FWD3_USD,
+          FWD3_USD_GENERATORS_2[i].generateInstrument(NOW, FWD3_USD_MARKET_QUOTES_2[i], 1, FWD3_USD_ATTR_2[i]));
     }
     for (int i = 0; i < FWD3_USD_MARKET_QUOTES_3.length; i++) {
-      LIBOR_AND_DISCOUNTING_BUILDER_1.withNode(CURVE_NAME_FWD3_USD, FWD3_USD_GENERATORS_3[i], FWD3_USD_ATTR_3[i],
-          FWD3_USD_MARKET_QUOTES_3[i]);
-      LIBOR_AND_DISCOUNTING_BUILDER_2.withNode(CURVE_NAME_FWD3_USD, FWD3_USD_GENERATORS_3[i], FWD3_USD_ATTR_3[i],
-          FWD3_USD_MARKET_QUOTES_3[i]);
+      LIBOR_AND_DISCOUNTING_BUILDER_1.addNode(CURVE_NAME_FWD3_USD,
+          FWD3_USD_GENERATORS_3[i].generateInstrument(NOW, FWD3_USD_MARKET_QUOTES_3[i], 1, FWD3_USD_ATTR_3[i]));
+      LIBOR_AND_DISCOUNTING_BUILDER_2.addNode(CURVE_NAME_FWD3_USD,
+          FWD3_USD_GENERATORS_3[i].generateInstrument(NOW, FWD3_USD_MARKET_QUOTES_3[i], 1, FWD3_USD_ATTR_3[i]));
     }
     for (int i = 0; i < FWD6_USD_MARKET_QUOTES.length; i++) {
-      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.withNode(CURVE_NAME_FWD6_USD, FWD6_USD_GENERATORS[i], FWD6_USD_ATTR[i],
-          FWD6_USD_MARKET_QUOTES[i]);
-      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.withNode(CURVE_NAME_FWD6_USD, FWD6_USD_GENERATORS[i], FWD6_USD_ATTR[i],
-          FWD6_USD_MARKET_QUOTES[i]);
+      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.addNode(CURVE_NAME_FWD6_USD,
+          FWD6_USD_GENERATORS[i].generateInstrument(NOW, FWD6_USD_MARKET_QUOTES[i], 1, FWD6_USD_ATTR[i]));
+      DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.addNode(CURVE_NAME_FWD6_USD,
+          FWD6_USD_GENERATORS[i].generateInstrument(NOW, FWD6_USD_MARKET_QUOTES[i], 1, FWD6_USD_ATTR[i]));
     }
   }
 
@@ -354,38 +359,26 @@ public class UsdDiscounting3mLibor6mLiborTest {
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> LIBOR_THEN_DSC_AFTER_FIXING_2;
 
   static {
-    DSC_THEN_3M_LIBOR_BEFORE_FIXING_1 = DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
-        .buildCurves(NOW);
-    DSC_THEN_3M_LIBOR_AFTER_FIXING_1 = DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder()
-        .buildCurves(NOW);
-    DSC_THEN_3M_LIBOR_BEFORE_FIXING_2 = DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
-        .buildCurves(NOW);
-    DSC_THEN_3M_LIBOR_AFTER_FIXING_2 = DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder()
-        .buildCurves(NOW);
-    PERIODIC_DSC_THEN_3M_LIBOR_BEFORE_FIXING = PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY)
-        .getBuilder()
-        .buildCurves(NOW);
-    PERIODIC_DSC_THEN_3M_LIBOR_AFTER_FIXING = PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY)
-        .getBuilder()
-        .buildCurves(NOW);
-    DSC_THEN_3M_THEN_6M_LIBOR_BEFORE_FIXING_1 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY)
-        .getBuilder()
-        .buildCurves(NOW);
-    DSC_THEN_3M_THEN_6M_LIBOR_AFTER_FIXING_1 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY)
-        .getBuilder()
-        .buildCurves(NOW);
-    DSC_THEN_3M_THEN_6M_LIBOR_BEFORE_FIXING_2 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY)
-        .getBuilder()
-        .buildCurves(NOW);
-    DSC_THEN_3M_THEN_6M_LIBOR_AFTER_FIXING_2 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.copy().withFixingTs(FIXING_TS_WITH_TODAY)
-        .getBuilder()
-        .buildCurves(NOW);
-    LIBOR_THEN_DSC_BEFORE_FIXING_1 = LIBOR_AND_DISCOUNTING_BUILDER_1.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
-        .buildCurves(NOW);
-    LIBOR_THEN_DSC_AFTER_FIXING_1 = LIBOR_AND_DISCOUNTING_BUILDER_1.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
-    LIBOR_THEN_DSC_BEFORE_FIXING_2 = LIBOR_AND_DISCOUNTING_BUILDER_2.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
-        .buildCurves(NOW);
-    LIBOR_THEN_DSC_AFTER_FIXING_2 = LIBOR_AND_DISCOUNTING_BUILDER_2.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+    DSC_THEN_3M_LIBOR_BEFORE_FIXING_1 = DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    DSC_THEN_3M_LIBOR_AFTER_FIXING_1 = DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
+    DSC_THEN_3M_LIBOR_BEFORE_FIXING_2 = DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    DSC_THEN_3M_LIBOR_AFTER_FIXING_2 = DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
+    PERIODIC_DSC_THEN_3M_LIBOR_BEFORE_FIXING = PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().getBuilder().buildCurves(NOW,
+        FIXING_TS_WITHOUT_TODAY);
+    PERIODIC_DSC_THEN_3M_LIBOR_AFTER_FIXING = PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.copy().getBuilder().buildCurves(NOW,
+        FIXING_TS_WITH_TODAY);
+    DSC_THEN_3M_THEN_6M_LIBOR_BEFORE_FIXING_1 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.copy().getBuilder().buildCurves(NOW,
+        FIXING_TS_WITHOUT_TODAY);
+    DSC_THEN_3M_THEN_6M_LIBOR_AFTER_FIXING_1 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1.copy().getBuilder().buildCurves(NOW,
+        FIXING_TS_WITH_TODAY);
+    DSC_THEN_3M_THEN_6M_LIBOR_BEFORE_FIXING_2 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.copy().getBuilder().buildCurves(NOW,
+        FIXING_TS_WITHOUT_TODAY);
+    DSC_THEN_3M_THEN_6M_LIBOR_AFTER_FIXING_2 = DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.copy().getBuilder().buildCurves(NOW,
+        FIXING_TS_WITH_TODAY);
+    LIBOR_THEN_DSC_BEFORE_FIXING_1 = LIBOR_AND_DISCOUNTING_BUILDER_1.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    LIBOR_THEN_DSC_AFTER_FIXING_1 = LIBOR_AND_DISCOUNTING_BUILDER_1.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
+    LIBOR_THEN_DSC_BEFORE_FIXING_2 = LIBOR_AND_DISCOUNTING_BUILDER_2.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    LIBOR_THEN_DSC_AFTER_FIXING_2 = LIBOR_AND_DISCOUNTING_BUILDER_2.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
 
   /** Standard USD discounting curve instrument definitions */
@@ -935,7 +928,7 @@ public class UsdDiscounting3mLibor6mLiborTest {
         final double[] rates = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
           derivatives[k] = CurveUtils.convert(definitions[i][j][k], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
-          rates[k] = definitions[i][j][k].accept(CurveUtils.RATES_INITIALIZATION);
+          rates[k] = derivatives[k].accept(CurveUtils.RATES_INITIALIZATION);
         }
         final GeneratorYDCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
         final double[] initialGuess = generator.initialGuess(rates);

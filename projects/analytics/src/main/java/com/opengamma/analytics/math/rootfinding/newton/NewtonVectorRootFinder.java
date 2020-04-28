@@ -34,18 +34,29 @@ public class NewtonVectorRootFinder extends VectorRootFinder {
   private final NewtonRootFinderMatrixUpdateFunction _updateFunction;
   private final MatrixAlgebra _algebra = new OGMatrixAlgebra();
 
+  /**
+   * @param absoluteTol
+   *          the root is found if the change in the x value between iterations is less than this value
+   * @param relativeTol
+   *          the root is found if the change in the x value relative to the scale is less than this value
+   * @param maxSteps
+   *          the maximum number of steps to calculate
+   * @param directionFunction
+   *          the direction function, not null
+   * @param initializationFunction
+   *          the initialization function, not null
+   * @param updateFunction
+   *          the update function, not null
+   */
   public NewtonVectorRootFinder(final double absoluteTol, final double relativeTol, final int maxSteps,
       final NewtonRootFinderDirectionFunction directionFunction,
       final NewtonRootFinderMatrixInitializationFunction initializationFunction, final NewtonRootFinderMatrixUpdateFunction updateFunction) {
-    ArgumentChecker.notNegative(absoluteTol, "absolute tolerance");
-    ArgumentChecker.notNegative(relativeTol, "relative tolerance");
-    ArgumentChecker.notNegative(maxSteps, "maxSteps");
-    _absoluteTol = absoluteTol;
-    _relativeTol = relativeTol;
-    _maxSteps = maxSteps;
-    _directionFunction = directionFunction;
-    _initializationFunction = initializationFunction;
-    _updateFunction = updateFunction;
+    _absoluteTol = ArgumentChecker.notNegative(absoluteTol, "absolute tolerance");
+    _relativeTol = ArgumentChecker.notNegative(relativeTol, "relative tolerance");
+    _maxSteps = ArgumentChecker.notNegative(maxSteps, "maxSteps");
+    _directionFunction = ArgumentChecker.notNull(directionFunction, "directionFunction");
+    _initializationFunction = ArgumentChecker.notNull(initializationFunction, "initializationFunction");
+    _updateFunction = ArgumentChecker.notNull(updateFunction, "updateFunction");
   }
 
   @Override

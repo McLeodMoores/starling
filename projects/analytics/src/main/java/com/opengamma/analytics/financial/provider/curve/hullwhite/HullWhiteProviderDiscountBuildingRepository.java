@@ -16,6 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.mcleodmoores.analytics.math.rootfinding.VectorRootFinderFactory;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
@@ -37,7 +38,7 @@ import com.opengamma.analytics.math.matrix.CommonsMatrixAlgebra;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.matrix.MatrixAlgebra;
-import com.opengamma.analytics.math.rootfinding.newton.BroydenVectorRootFinder;
+import com.opengamma.analytics.math.rootfinding.newton.NewtonVectorRootFinder;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.ObjectsPair;
@@ -52,21 +53,9 @@ import com.opengamma.util.tuple.Pairs;
 public class HullWhiteProviderDiscountBuildingRepository {
 
   /**
-   * The absolute tolerance for the root finder.
-   */
-  private final double _toleranceAbs;
-  /**
-   * The relative tolerance for the root finder.
-   */
-  private final double _toleranceRel;
-  /**
-   * The relative tolerance for the root finder.
-   */
-  private final int _stepMaximum;
-  /**
    * The root finder used for curve calibration.
    */
-  private final BroydenVectorRootFinder _rootFinder;
+  private final NewtonVectorRootFinder _rootFinder;
   /**
    * The matrix algebra used for matrix inversion.
    */
@@ -74,31 +63,56 @@ public class HullWhiteProviderDiscountBuildingRepository {
 
   /**
    * Constructor.
-   * @param toleranceAbs The absolute tolerance for the root finder.
-   * @param toleranceRel The relative tolerance for the root finder.
-   * @param stepMaximum The maximum number of step for the root finder.
+   *
+   * @param absTolerance
+   *          The absolute tolerance for the root finder.
+   * @param relTolerance
+   *          The relative tolerance for the root finder.
+   * @param maxSteps
+   *          The maximum number of step for the root finder.
    */
-  public HullWhiteProviderDiscountBuildingRepository(final double toleranceAbs, final double toleranceRel, final int stepMaximum) {
-    _toleranceAbs = toleranceAbs;
-    _toleranceRel = toleranceRel;
-    _stepMaximum = stepMaximum;
-    _rootFinder = new BroydenVectorRootFinder(_toleranceAbs, _toleranceRel, _stepMaximum,
+  public HullWhiteProviderDiscountBuildingRepository(final double absTolerance, final double relTolerance, final int maxSteps) {
+    this(absTolerance, relTolerance, maxSteps, "Broyden");
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param absTolerance
+   *          The absolute tolerance for the root finder.
+   * @param relTolerance
+   *          The relative tolerance for the root finder.
+   * @param maxSteps
+   *          The maximum number of step for the root finder.
+   */
+  public HullWhiteProviderDiscountBuildingRepository(final double absTolerance, final double relTolerance, final int maxSteps, final String rootFinderName) {
+    // TODO avoid cast
+    _rootFinder = (NewtonVectorRootFinder) VectorRootFinderFactory.of(rootFinderName, absTolerance, relTolerance, maxSteps,
         DecompositionFactory.getDecomposition(DecompositionFactory.SV_COLT_NAME));
-    // TODO: make the root finder flexible.
+    // TODO: create a way to select the SensitivityMatrixMulticurve calculator (with underlying curve or not)
   }
 
   /**
    * Build a unit of curves.
-   * @param instruments The instruments used for the unit calibration.
-   * @param initGuess The initial parameters guess.
-   * @param knownData The known data (fx rates, other curves, model parameters, ...)
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param generatorsMap The generators map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or
-   * converted present value).
-   * @param sensitivityCalculator The parameter sensitivity calculator.
+   *
+   * @param instruments
+   *          The instruments used for the unit calibration.
+   * @param initGuess
+   *          The initial parameters guess.
+   * @param knownData
+   *          The known data (fx rates, other curves, model parameters, ...)
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param generatorsMap
+   *          The generators map.
+   * @param calculator
+   *          The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param sensitivityCalculator
+   *          The parameter sensitivity calculator.
    * @return The new curves and the calibrated parameters.
    */
   private HullWhiteOneFactorProviderDiscount makeUnit(final InstrumentDerivative[] instruments, final double[] initGuess,
@@ -110,8 +124,8 @@ public class HullWhiteProviderDiscountBuildingRepository {
         forwardONMap, generatorsMap);
     final HullWhiteProviderDiscountBuildingData data = new HullWhiteProviderDiscountBuildingData(instruments, generator);
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> curveCalculator = new HullWhiteProviderDiscountFinderFunction(calculator, data);
-    final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator =
-        new HullWhiteProviderDiscountFinderJacobian(new ParameterSensitivityHullWhiteMatrixCalculator(sensitivityCalculator), data);
+    final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new HullWhiteProviderDiscountFinderJacobian(
+        new ParameterSensitivityHullWhiteMatrixCalculator(sensitivityCalculator), data);
     final double[] parameters = _rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initGuess)).getData();
     final HullWhiteOneFactorProviderDiscount newCurves = data.getGeneratorMarket().evaluate(new DoubleMatrix1D(parameters));
     return newCurves;
@@ -119,19 +133,25 @@ public class HullWhiteProviderDiscountBuildingRepository {
 
   /**
    * Construct the CurveBuildingBlock associated to all the curve built so far and updates the CurveBuildingBlockBundle.
-   * @param instruments  the instruments used for the block calibration
-   * @param hullWhite  the known curves including the current unit
-   * @param currentCurvesList  the names of the curve in the block being constructed
-   * @param blockBundle  the blocks to be updated
-   * @param sensitivityCalculator  the parameter sensitivity calculator for the value on which the calibration is done
-   * (usually ParSpreadMarketQuoteDiscountingProviderCalculator (recommended) or converted present value).
+   *
+   * @param instruments
+   *          the instruments used for the block calibration
+   * @param hullWhite
+   *          the known curves including the current unit
+   * @param currentCurvesList
+   *          the names of the curve in the block being constructed
+   * @param blockBundle
+   *          the blocks to be updated
+   * @param sensitivityCalculator
+   *          the parameter sensitivity calculator for the value on which the calibration is done (usually ParSpreadMarketQuoteDiscountingProviderCalculator
+   *          (recommended) or converted present value).
    */
   private static void updateBlockBundle(final InstrumentDerivative[] instruments, final HullWhiteOneFactorProviderDiscount hullWhite,
       final List<String> currentCurvesList, final CurveBuildingBlockBundle blockBundle,
       final InstrumentDerivativeVisitor<HullWhiteOneFactorProviderInterface, MulticurveSensitivity> sensitivityCalculator) {
     // Sensitivity calculator
-    final ParameterSensitivityHullWhiteUnderlyingMatrixCalculator parameterSensitivityCalculator =
-        new ParameterSensitivityHullWhiteUnderlyingMatrixCalculator(sensitivityCalculator);
+    final ParameterSensitivityHullWhiteUnderlyingMatrixCalculator parameterSensitivityCalculator = new ParameterSensitivityHullWhiteUnderlyingMatrixCalculator(
+        sensitivityCalculator);
     int loopc;
     final MulticurveProviderDiscount multicurves = hullWhite.getMulticurveProvider();
     final LinkedHashMap<String, Pair<Integer, Integer>> mapBlockOut = new LinkedHashMap<>();
@@ -143,8 +163,8 @@ public class HullWhiteProviderDiscountBuildingRepository {
     beforeCurveName.removeAll(currentCurves);
     final LinkedHashSet<String> allCurveName = new LinkedHashSet<>(beforeCurveName);
     allCurveName.addAll(currentCurves); // Manipulation to ensure that the new curves are at the end.
-    //Implementation note : if blockBundle don't contain a block for a specific curve then we remove this curve from  beforeCurveName.
-    //Because we can't compute the total bundle without the block for each curve. So we are computing a total bundle without this curve.
+    // Implementation note : if blockBundle don't contain a block for a specific curve then we remove this curve from beforeCurveName.
+    // Because we can't compute the total bundle without the block for each curve. So we are computing a total bundle without this curve.
     for (final String name : beforeCurveName) {
       if (!blockBundle.getData().containsKey(name)) {
         beforeCurveName.remove(name);
@@ -259,14 +279,21 @@ public class HullWhiteProviderDiscountBuildingRepository {
 
   /**
    * Build a block of curves.
-   * @param curveBundles The curve bundles, not null
-   * @param knownData The known data (fx rates, other curves, model parameters, ...)
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended)
-   * or converted present value).
-   * @param sensitivityCalculator The parameter sensitivity calculator.
+   *
+   * @param curveBundles
+   *          The curve bundles, not null
+   * @param knownData
+   *          The known data (fx rates, other curves, model parameters, ...)
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param calculator
+   *          The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param sensitivityCalculator
+   *          The parameter sensitivity calculator.
    * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlckBundle with the relevant inverse Jacobian Matrix.
    */
   public Pair<HullWhiteOneFactorProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDerivatives(final MultiCurveBundle<GeneratorYDCurve>[] curveBundles,
@@ -280,15 +307,23 @@ public class HullWhiteProviderDiscountBuildingRepository {
 
   /**
    * Build a block of curves.
-   * @param curveBundles The curve bundles, not null
-   * @param knownData The known data (fx rates, other curves, model parameters, ...)
-   * @param knownBlockBundle The already build CurveBuildingBlockBundle.
-   * @param discountingMap The discounting curves names map.
-   * @param forwardIborMap The forward curves names map.
-   * @param forwardONMap The forward curves names map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended)
-   * or converted present value).
-   * @param sensitivityCalculator The parameter sensitivity calculator.
+   *
+   * @param curveBundles
+   *          The curve bundles, not null
+   * @param knownData
+   *          The known data (fx rates, other curves, model parameters, ...)
+   * @param knownBlockBundle
+   *          The already build CurveBuildingBlockBundle.
+   * @param discountingMap
+   *          The discounting curves names map.
+   * @param forwardIborMap
+   *          The forward curves names map.
+   * @param forwardONMap
+   *          The forward curves names map.
+   * @param calculator
+   *          The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param sensitivityCalculator
+   *          The parameter sensitivity calculator.
    * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlckBundle with the relevant inverse Jacobian Matrix.
    */
   public Pair<HullWhiteOneFactorProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDerivatives(final MultiCurveBundle<GeneratorYDCurve>[] curveBundles,

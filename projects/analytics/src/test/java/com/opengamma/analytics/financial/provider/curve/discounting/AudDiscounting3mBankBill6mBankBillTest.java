@@ -15,20 +15,20 @@ import static org.testng.AssertJUnit.assertEquals;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositIbor;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositON;
@@ -69,12 +69,11 @@ import com.opengamma.util.tuple.Pair;
  * <li>Discounting, then 3m and 6m bank bill simultaneously;
  * <li>Discounting, 3m and 6m bank bill simultaneously.
  * </ul>
- * In the first case, the discounting curve has no sensitivities to either of the bank bill curves. In the second case, the discounting
- * curve has sensitivities to all curves, although the sensitivities to the bank bill curves should be zero.
+ * In the first case, the discounting curve has no sensitivities to either of the bank bill curves. In the second case, the discounting curve has sensitivities
+ * to all curves, although the sensitivities to the bank bill curves should be zero.
  * <p>
- * The discounting curve contains the overnight deposit rate and OIS. The 3m bank bill curve contains the 3m bank bill rate, 3m FRAs, 3m/3m
- * fixed / float swaps and 3m/6m basis swaps. The 6m bank bill curve contains the 6m bank bill rate, 3m/6m basis swaps and 6m/6m fixed /
- * float swaps.
+ * The discounting curve contains the overnight deposit rate and OIS. The 3m bank bill curve contains the 3m bank bill rate, 3m FRAs, 3m/3m fixed / float swaps
+ * and 3m/6m basis swaps. The 6m bank bill curve contains the 6m bank bill rate, 3m/6m basis swaps and 6m/6m fixed / float swaps.
  */
 @Test(groups = TestGroup.UNIT)
 public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
@@ -155,10 +154,9 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
       0.0400, 0.0400, 0.0400,
       0.0400 };
   /** Vanilla instrument generators for the discounting curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_AUD_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_DEPOSIT_ON_AUD,
-      GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD,
+  private static final GeneratorInstrument[] DSC_AUD_GENERATORS = new GeneratorInstrument[] { GENERATOR_DEPOSIT_ON_AUD, GENERATOR_OIS_AUD,
       GENERATOR_OIS_AUD,
+      GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD,
       GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD };
   /** Tenors for the discounting curve */
   private static final GeneratorAttributeIR[] DSC_AUD_ATTR;
@@ -175,9 +173,9 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   private static final double[] FWD3_AUD_MARKET_QUOTES = new double[] { 0.0420, 0.0420, 0.0420, 0.0420, 0.0430, 0.0470, 0.0020, 0.0020,
       0.0020 };
   /** Vanilla instrument generators for the 3m bank bill curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD3_AUD_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_AUDBB3M,
-      GENERATOR_FRA_3M, GENERATOR_FRA_3M, AUD3MBBSW3M, AUD3MBBSW3M, AUD3MBBSW3M, AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M };
+  private static final GeneratorInstrument[] FWD3_AUD_GENERATORS = new GeneratorInstrument[] { GENERATOR_AUDBB3M, GENERATOR_FRA_3M,
+      GENERATOR_FRA_3M, AUD3MBBSW3M, AUD3MBBSW3M, AUD3MBBSW3M, AUDBBSW3MBBSW6M,
+      AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M };
   /** Attribute generators for the 3m bank bill curve */
   private static final GeneratorAttributeIR[] FWD3_AUD_ATTR;
   static {
@@ -191,10 +189,11 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   }
   /** Market values for the 6m bank bill curve */
   private static final double[] FWD6_AUD_MARKET_QUOTES = new double[] { 0.0440, 0.0020, 0.0020, 0.0020, 0.0560, 0.0610, 0.0620 };
-  /** Vanilla instrument generators for the 6m bank bill curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD6_AUD_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_AUDBB6M,
-      AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M };
+  /**
+   * Vanilla instrument generators for the 6m bank bill curve
+   */
+  private static final GeneratorInstrument[] FWD6_AUD_GENERATORS = new GeneratorInstrument[] { GENERATOR_AUDBB6M, AUDBBSW3MBBSW6M,
+      AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M };
   /** Attribute generators for the 6m bank bill curve */
   private static final GeneratorAttributeIR[] FWD6_AUD_ATTR;
   static {
@@ -206,38 +205,41 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
       FWD6_AUD_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
     }
   }
-  /** Already known curve data - contains only an empty FX matrix */
-  private static final MulticurveProviderDiscount MULTICURVE_KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   /** Builder that constructs the discounting curve before the two bank bill curves */
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_BANK_BILLS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_AUD)
-      .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forOvernightIndex(AUD_OVERNIGHT_INDEX.toOvernightIndex())
+      .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forIndex(AUD_OVERNIGHT_INDEX.toOvernightIndex())
       .withInterpolator(INTERPOLATOR)
-      .thenBuilding(CURVE_NAME_FWD3_AUD, CURVE_NAME_FWD6_AUD).using(CURVE_NAME_FWD3_AUD)
-      .forIborIndex(AUD_3M_BANK_BILL_INDEX.toIborTypeIndex())
-      .withInterpolator(INTERPOLATOR).using(CURVE_NAME_FWD6_AUD).forIborIndex(AUD_6M_BANK_BILL_INDEX.toIborTypeIndex())
-      .withInterpolator(INTERPOLATOR)
-      .withKnownData(MULTICURVE_KNOWN_DATA);
+      .thenBuilding(CURVE_NAME_FWD3_AUD, CURVE_NAME_FWD6_AUD)
+      .using(CURVE_NAME_FWD3_AUD).forIndex(AUD_3M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_AUD).forIndex(AUD_6M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .addFxMatrix(FX_MATRIX);
   /** Builder that constructs three curves */
   private static final DiscountingMethodCurveSetUp DISCOUNTING_AND_BANK_BILLS_BUILDER = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_AUD, CURVE_NAME_FWD3_AUD, CURVE_NAME_FWD6_AUD).using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD)
-      .forOvernightIndex(AUD_OVERNIGHT_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR).using(CURVE_NAME_FWD3_AUD)
-      .forIborIndex(AUD_3M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR).using(CURVE_NAME_FWD6_AUD)
-      .forIborIndex(AUD_6M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR).withKnownData(MULTICURVE_KNOWN_DATA);
+      .building(CURVE_NAME_DSC_AUD, CURVE_NAME_FWD3_AUD, CURVE_NAME_FWD6_AUD)
+      .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forIndex(AUD_OVERNIGHT_INDEX.toOvernightIndex())
+      .withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_AUD).forIndex(AUD_3M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_AUD).forIndex(AUD_6M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .addFxMatrix(FX_MATRIX);
   static {
     for (int i = 0; i < DSC_AUD_MARKET_QUOTES.length; i++) {
-      DISCOUNTING_THEN_BANK_BILLS_BUILDER.withNode(CURVE_NAME_DSC_AUD, DSC_AUD_GENERATORS[i], DSC_AUD_ATTR[i], DSC_AUD_MARKET_QUOTES[i]);
-      DISCOUNTING_AND_BANK_BILLS_BUILDER.withNode(CURVE_NAME_DSC_AUD, DSC_AUD_GENERATORS[i], DSC_AUD_ATTR[i], DSC_AUD_MARKET_QUOTES[i]);
+      DISCOUNTING_THEN_BANK_BILLS_BUILDER.addNode(CURVE_NAME_DSC_AUD,
+          DSC_AUD_GENERATORS[i].generateInstrument(NOW, DSC_AUD_MARKET_QUOTES[i], 1, DSC_AUD_ATTR[i]));
+      DISCOUNTING_AND_BANK_BILLS_BUILDER.addNode(CURVE_NAME_DSC_AUD,
+          DSC_AUD_GENERATORS[i].generateInstrument(NOW, DSC_AUD_MARKET_QUOTES[i], 1, DSC_AUD_ATTR[i]));
     }
     for (int i = 0; i < FWD3_AUD_MARKET_QUOTES.length; i++) {
-      DISCOUNTING_THEN_BANK_BILLS_BUILDER.withNode(CURVE_NAME_FWD3_AUD, FWD3_AUD_GENERATORS[i], FWD3_AUD_ATTR[i],
-          FWD3_AUD_MARKET_QUOTES[i]);
-      DISCOUNTING_AND_BANK_BILLS_BUILDER.withNode(CURVE_NAME_FWD3_AUD, FWD3_AUD_GENERATORS[i], FWD3_AUD_ATTR[i], FWD3_AUD_MARKET_QUOTES[i]);
+      DISCOUNTING_THEN_BANK_BILLS_BUILDER.addNode(CURVE_NAME_FWD3_AUD,
+          FWD3_AUD_GENERATORS[i].generateInstrument(NOW, FWD3_AUD_MARKET_QUOTES[i], 1, FWD3_AUD_ATTR[i]));
+      DISCOUNTING_AND_BANK_BILLS_BUILDER.addNode(CURVE_NAME_FWD3_AUD,
+          FWD3_AUD_GENERATORS[i].generateInstrument(NOW, FWD3_AUD_MARKET_QUOTES[i], 1, FWD3_AUD_ATTR[i]));
     }
     for (int i = 0; i < FWD6_AUD_MARKET_QUOTES.length; i++) {
-      DISCOUNTING_THEN_BANK_BILLS_BUILDER.withNode(CURVE_NAME_FWD6_AUD, FWD6_AUD_GENERATORS[i], FWD6_AUD_ATTR[i],
-          FWD6_AUD_MARKET_QUOTES[i]);
-      DISCOUNTING_AND_BANK_BILLS_BUILDER.withNode(CURVE_NAME_FWD6_AUD, FWD6_AUD_GENERATORS[i], FWD6_AUD_ATTR[i], FWD6_AUD_MARKET_QUOTES[i]);
+      DISCOUNTING_THEN_BANK_BILLS_BUILDER.addNode(CURVE_NAME_FWD6_AUD,
+          FWD6_AUD_GENERATORS[i].generateInstrument(NOW, FWD6_AUD_MARKET_QUOTES[i], 1, FWD6_AUD_ATTR[i]));
+      DISCOUNTING_AND_BANK_BILLS_BUILDER.addNode(CURVE_NAME_FWD6_AUD,
+          FWD6_AUD_GENERATORS[i].generateInstrument(NOW, FWD6_AUD_MARKET_QUOTES[i], 1, FWD6_AUD_ATTR[i]));
     }
   }
   /** Simultaneous discounting and bank bill curves before today's fixing */
@@ -250,14 +252,12 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> DSC_THEN_BANK_BILLS_AFTER_FIXING;
 
   static {
-    DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
-        .buildCurves(NOW);
-    DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder()
-        .buildCurves(NOW);
-    DSC_THEN_BANK_BILLS_BEFORE_FIXING = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
-        .buildCurves(NOW);
-    DSC_THEN_BANK_BILLS_AFTER_FIXING = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder()
-        .buildCurves(NOW);
+    DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().buildCurves(NOW,
+        FIXING_TS_WITHOUT_TODAY);
+    DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().buildCurves(NOW,
+        FIXING_TS_WITH_TODAY);
+    DSC_THEN_BANK_BILLS_BEFORE_FIXING = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    DSC_THEN_BANK_BILLS_AFTER_FIXING = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
   /** Calculation tolerance */
   private static final double EPS = 1.0e-9;
@@ -298,10 +298,9 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   @Test
   public void testInstrumentsInCurvePriceToZero() {
     // discounting then 3m then 6m
-    Map<String, InstrumentDefinition<?>[]> definitions;
+    Map<String, List<InstrumentDefinition<?>>> definitions;
     // before fixing
-    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
-        .getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_THEN_BANK_BILLS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
@@ -312,7 +311,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // after fixing
-    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_THEN_BANK_BILLS_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
@@ -324,7 +323,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // discounting and bank bills
     // before fixing
-    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
@@ -332,7 +331,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // after fixing
-    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING.getFirst(),
@@ -367,8 +366,8 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve has
-   * no sensitivity to the bank bill curve.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve has no sensitivity to
+   * the bank bill curve.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities
@@ -388,9 +387,8 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve is
-   * constructed before the bank bill curve. Sensitivities to the bank bill curve market data are calculated, but they should be equal to
-   * zero.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the curves when the discounting curve is constructed before
+   * the bank bill curve. Sensitivities to the bank bill curve market data are calculated, but they should be equal to zero.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities
@@ -506,18 +504,18 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
     final int nbTest = 100;
 
     startTime = System.currentTimeMillis();
-    DiscountingMethodCurveBuilder builder = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder();
+    DiscountingMethodCurveBuilder builder = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder();
     for (int i = 0; i < nbTest; i++) {
-      builder.buildCurves(NOW);
+      builder.buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " x 3 curves construction / 2 units: " + (endTime - startTime) + " ms");
     // Performance note: Curve construction 2 units: 08-Nov-12: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 810 ms for 100 sets.
 
     startTime = System.currentTimeMillis();
-    builder = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder();
+    builder = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder();
     for (int looptest = 0; looptest < nbTest; looptest++) {
-      builder.buildCurves(NOW);
+      builder.buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " x 3 curves construction / 1 unit: " + (endTime - startTime) + " ms");

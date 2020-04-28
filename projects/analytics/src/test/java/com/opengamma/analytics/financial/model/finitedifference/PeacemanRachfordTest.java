@@ -28,7 +28,7 @@ public class PeacemanRachfordTest {
     final int xSteps = 100;
     final int ySteps = 100;
 
-    SPREAD_OPTION_TESTER.testAgaintBSPrice(SOLVER, timeSteps, xSteps, ySteps);
+    SPREAD_OPTION_TESTER.testAgainstBSPrice(SOLVER, timeSteps, xSteps, ySteps);
   }
 
   @Test(enabled = false)

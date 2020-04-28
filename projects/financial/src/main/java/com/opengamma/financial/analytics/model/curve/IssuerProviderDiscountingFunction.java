@@ -361,7 +361,7 @@ public class IssuerProviderDiscountingFunction
             }
             final InstrumentDerivative derivative = transaction.toDerivative(now);
             final GeneratorCurveYieldConstant generator = new GeneratorCurveYieldConstant();
-            singleCurves[j++] = new SingleCurveBundle<GeneratorYDCurve>(curveName, new InstrumentDerivative[] { derivative },
+            singleCurves[j++] = new SingleCurveBundle<>(curveName, new InstrumentDerivative[] { derivative },
                 generator.initialGuess(parameterGuessForCurves), generator);
           } else {
             throw new OpenGammaRuntimeException("Cannot handle specifications of type " + specification.getClass() + ": " + specification);
@@ -476,9 +476,9 @@ public class IssuerProviderDiscountingFunction
       if (underlyingCurveNames == null || underlyingCurveNames.isEmpty()) {
         // wasn't specified, so set equal to the curve type - keeps previous behaviour
         properties = bundleProperties.copy()
-                                     .withoutAny(UNDERLYING_CURVE_TYPE_PROPERTY)
-                                     .with(UNDERLYING_CURVE_TYPE_PROPERTY, bundleProperties.getValues(PROPERTY_CURVE_TYPE))
-                                     .get();
+            .withoutAny(UNDERLYING_CURVE_TYPE_PROPERTY)
+            .with(UNDERLYING_CURVE_TYPE_PROPERTY, bundleProperties.getValues(PROPERTY_CURVE_TYPE))
+            .get();
         bSpec = new ValueSpecification(bundleSpec.getValueName(), bundleSpec.getTargetSpecification(), properties);
         jSpec = new ValueSpecification(jacobianSpec.getValueName(), jacobianSpec.getTargetSpecification(), properties);
       } else {

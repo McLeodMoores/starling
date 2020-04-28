@@ -15,22 +15,22 @@ import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTest
 import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.CurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodBondCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodBondCurveSetUp;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.CurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodBondCurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodBondCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
-import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorBill;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositON;
@@ -42,13 +42,11 @@ import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
 import com.opengamma.analytics.financial.legalentity.LegalEntityShortName;
-import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.calculator.issuer.PresentValueIssuerCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingTests;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderDiscount;
-import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
@@ -66,12 +64,11 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Builds and tests discounting and US government curves. The discounting curve is built first and then used when constructing the
- * government curve. This means that the government curve has sensitivities to both discounting and government market data, but the
- * discounting curve only has sensitivities to the discounting curve.
+ * Builds and tests discounting and US government curves. The discounting curve is built first and then used when constructing the government curve. This means
+ * that the government curve has sensitivities to both discounting and government market data, but the discounting curve only has sensitivities to the
+ * discounting curve.
  * <p>
- * The discounting curve contains the overnight deposit rate and OIS swaps. The government curve contains the overnight deposit rate and
- * bills.
+ * The discounting curve contains the overnight deposit rate and OIS swaps. The government curve contains the overnight deposit rate and bills.
  */
 @Test(groups = TestGroup.UNIT)
 public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
@@ -131,28 +128,23 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   private static final String CURVE_NAME_DSC_USD = "USD Dsc";
   /** The government curve name */
   private static final String CURVE_NAME_GOVTUS_USD = "USD GOVT US";
-  /** Already known market data - contains only an empty FX matrix */
-  private static final IssuerProviderDiscount KNOWN_DATA = new IssuerProviderDiscount(new MulticurveProviderDiscount(FX_MATRIX),
-      new HashMap<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve>());
   /** The curve builder */
   private static final DiscountingMethodBondCurveSetUp BUILDER_FOR_TEST = DiscountingMethodBondCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex())
-      .withInterpolator(INTERPOLATOR)
-      .thenBuilding(CURVE_NAME_GOVTUS_USD).using(CURVE_NAME_GOVTUS_USD)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .thenBuilding(CURVE_NAME_GOVTUS_USD)
+      .using(CURVE_NAME_GOVTUS_USD)
       .forIssuer(Pairs.<Object, LegalEntityFilter<LegalEntity>> of(NAME_COUNTERPART, new LegalEntityShortName()))
-      .withInterpolator(INTERPOLATOR)
-      .withKnownData(KNOWN_DATA);
+      .withInterpolator(INTERPOLATOR);
   /** Market values for the discounting curve */
   private static final double[] DSC_USD_MARKET_QUOTES = new double[] { 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400,
       0.0400, 0.0400, 0.0400,
       0.0400 };
   /** Vanilla instrument generators for the discounting curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_USD_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_DEPOSIT_ON_USD,
-      GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD,
-      GENERATOR_OIS_USD,
-      GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD };
+  private static final GeneratorInstrument[] DSC_USD_GENERATORS = new GeneratorInstrument[] { GENERATOR_DEPOSIT_ON_USD, GENERATOR_OIS_USD,
+      GENERATOR_OIS_USD, GENERATOR_OIS_USD,
+      GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD,
+      GENERATOR_OIS_USD, GENERATOR_OIS_USD };
   /** Attribute generators for the discounting curve */
   private static final GeneratorAttributeIR[] DSC_USD_ATTR;
   static {
@@ -162,14 +154,14 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
     DSC_USD_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       DSC_USD_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
-      BUILDER_FOR_TEST.withNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i], DSC_USD_ATTR[i], DSC_USD_MARKET_QUOTES[i]);
+      BUILDER_FOR_TEST.addNode(CURVE_NAME_DSC_USD,
+          DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));
     }
   }
   /** Market values for the government curve */
   private static final double[] GOVTUS_USD_MARKET_QUOTES = new double[] { 0.0010, 0.0015, 0.0020, 0.0015 };
   /** Vanilla instrument generators for the government curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] GOVTUS_USD_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_DEPOSIT_ON_USGOVT,
+  private static final GeneratorInstrument[] GOVTUS_USD_GENERATORS = new GeneratorInstrument[] { GENERATOR_DEPOSIT_ON_USGOVT,
       GENERATOR_BILL[0], GENERATOR_BILL[1], GENERATOR_BILL[2] };
   /** Attribute generates for the government curve */
   private static final GeneratorAttributeIR[] GOVTUS_USD_ATTR;
@@ -178,7 +170,8 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
     GOVTUS_USD_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       GOVTUS_USD_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
-      BUILDER_FOR_TEST.withNode(CURVE_NAME_GOVTUS_USD, GOVTUS_USD_GENERATORS[i], GOVTUS_USD_ATTR[i], GOVTUS_USD_MARKET_QUOTES[i]);
+      BUILDER_FOR_TEST.addNode(CURVE_NAME_GOVTUS_USD,
+          GOVTUS_USD_GENERATORS[i].generateInstrument(NOW, GOVTUS_USD_MARKET_QUOTES[i], 1, GOVTUS_USD_ATTR[i]));
     }
   }
   /** Curves constructed before today's fixing */
@@ -187,8 +180,8 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   private static final Pair<IssuerProviderDiscount, CurveBuildingBlockBundle> AFTER_TODAYS_FIXING;
   // build curves before and after today's fixing
   static {
-    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
 
   @Override
@@ -208,17 +201,18 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
-        .getDefinitionsForCurves(NOW);
-    curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), BEFORE_TODAYS_FIXING.getFirst(), PresentValueIssuerCalculator.getInstance(),
-        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
+    Map<String, List<InstrumentDefinition<?>>> definitions = BUILDER_FOR_TEST.copy()
+        .getBuilder()
+        .getNodes();
+    curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), BEFORE_TODAYS_FIXING.getFirst(),
+        PresentValueIssuerCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), BEFORE_TODAYS_FIXING.getFirst(),
-        PresentValueIssuerCalculator.getInstance(),
-        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
-    definitions = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().getDefinitionsForCurves(NOW);
-    curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), AFTER_TODAYS_FIXING.getFirst(), PresentValueIssuerCalculator.getInstance(),
-        FIXING_TS_WITH_TODAY,
-        FX_MATRIX, NOW, Currency.USD);
+        PresentValueIssuerCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
+    definitions = BUILDER_FOR_TEST.copy()
+        .getBuilder()
+        .getNodes();
+    curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), AFTER_TODAYS_FIXING.getFirst(),
+        PresentValueIssuerCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), AFTER_TODAYS_FIXING.getFirst(),
         PresentValueIssuerCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
@@ -234,8 +228,8 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
   }
 
   /**
-   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve. There are no
-   * sensitivities to the government curve.
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the discounting curve. There are no sensitivities to the
+   * government curve.
    *
    * @param fullInverseJacobian
    *          analytic sensitivities
@@ -289,9 +283,9 @@ public class UsdDiscountingGovernment1Test extends CurveBuildingTests {
     final int nbTest = 100;
 
     startTime = System.currentTimeMillis();
-    final CurveBuilder<IssuerProviderDiscount> builder = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder();
+    final CurveBuilder<IssuerProviderDiscount> builder = BUILDER_FOR_TEST.copy().getBuilder();
     for (int i = 0; i < nbTest; i++) {
-      builder.buildCurves(NOW);
+      builder.buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " curve construction / 2 units: " + (endTime - startTime) + " ms");

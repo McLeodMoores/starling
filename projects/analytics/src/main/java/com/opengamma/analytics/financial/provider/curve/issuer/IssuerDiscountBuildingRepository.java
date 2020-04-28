@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.LinkedListMultimap;
+import com.mcleodmoores.analytics.math.rootfinding.VectorRootFinderFactory;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
@@ -39,7 +40,7 @@ import com.opengamma.analytics.math.matrix.CommonsMatrixAlgebra;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.matrix.MatrixAlgebra;
-import com.opengamma.analytics.math.rootfinding.newton.BroydenVectorRootFinder;
+import com.opengamma.analytics.math.rootfinding.newton.NewtonVectorRootFinder;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.ObjectsPair;
@@ -53,21 +54,9 @@ import com.opengamma.util.tuple.Pairs;
 public class IssuerDiscountBuildingRepository {
 
   /**
-   * The absolute tolerance for the root finder.
-   */
-  private final double _toleranceAbs;
-  /**
-   * The relative tolerance for the root finder.
-   */
-  private final double _toleranceRel;
-  /**
-   * The relative tolerance for the root finder.
-   */
-  private final int _stepMaximum;
-  /**
    * The root finder used for curve calibration.
    */
-  private final BroydenVectorRootFinder _rootFinder;
+  private final NewtonVectorRootFinder _rootFinder;
   /**
    * The matrix algebra used for matrix inversion.
    */
@@ -76,20 +65,33 @@ public class IssuerDiscountBuildingRepository {
   /**
    * Constructor.
    *
-   * @param toleranceAbs
+   * @param absTolerance
    *          The absolute tolerance for the root finder.
-   * @param toleranceRel
+   * @param relativeTolerance
    *          The relative tolerance for the root finder.
-   * @param stepMaximum
+   * @param maxSteps
    *          The maximum number of step for the root finder.
    */
-  public IssuerDiscountBuildingRepository(final double toleranceAbs, final double toleranceRel, final int stepMaximum) {
-    _toleranceAbs = toleranceAbs;
-    _toleranceRel = toleranceRel;
-    _stepMaximum = stepMaximum;
-    _rootFinder = new BroydenVectorRootFinder(_toleranceAbs, _toleranceRel, _stepMaximum,
+  public IssuerDiscountBuildingRepository(final double absTolerance, final double relativeTolerance, final int maxSteps) {
+    this(absTolerance, relativeTolerance, maxSteps, "Broyden");
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param absTolerance
+   *          The absolute tolerance for the root finder.
+   * @param relTolerance
+   *          The relative tolerance for the root finder.
+   * @param maxSteps
+   *          The maximum number of step for the root finder.
+   * @param rootFinderName
+   *          the name of the root finding method
+   */
+  public IssuerDiscountBuildingRepository(final double absTolerance, final double relTolerance, final int maxSteps, final String rootFinderName) {
+    // TODO avoid cast
+    _rootFinder = (NewtonVectorRootFinder) VectorRootFinderFactory.of(rootFinderName, absTolerance, relTolerance, maxSteps,
         DecompositionFactory.getDecomposition(DecompositionFactory.SV_COLT_NAME));
-    // TODO: make the root finder flexible.
     // TODO: create a way to select the SensitivityMatrixMulticurve calculator (with underlying curve or not)
   }
 
