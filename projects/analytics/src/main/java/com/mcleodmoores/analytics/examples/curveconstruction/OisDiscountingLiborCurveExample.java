@@ -191,7 +191,7 @@ public class OisDiscountingLiborCurveExample {
   }
 
   /**
-   * Constructs the OIS curve first, then the EURIBOR curve.
+   * Constructs the OIS curve first, then the LIBOR curve.
    *
    * @param out
    *          output
