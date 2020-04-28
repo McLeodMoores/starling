@@ -261,7 +261,7 @@ public class BondSecurityUSDiscountingMethodTest {
     final double df = CURVES.getMulticurveProvider().getDiscountFactor(CUR, REFERENCE_TIME_1);
     final double dirty = METHOD.dirtyPriceFromCurves(BOND_FIXED_SECURITY_1, CURVES);
     assertEquals(pv.getAmount(CUR) / df / BOND_FIXED_SECURITY_1.getCoupon().getNthPayment(0).getNotional(), dirty);
-    assertTrue(0.50 < dirty & dirty < 2.0);
+    assertTrue(0.50 < dirty && dirty < 2.0);
   }
 
   /**
@@ -589,8 +589,7 @@ public class BondSecurityUSDiscountingMethodTest {
   // }
 
   /**
-   * Tests that the clean price for consecutive dates in the future are relatively smooth (no jump due to miscalculated accrued or missing
-   * coupon).
+   * Tests that the clean price for consecutive dates in the future are relatively smooth (no jump due to miscalculated accrued or missing coupon).
    */
   @Test
   public void cleanPriceSmoothness() {

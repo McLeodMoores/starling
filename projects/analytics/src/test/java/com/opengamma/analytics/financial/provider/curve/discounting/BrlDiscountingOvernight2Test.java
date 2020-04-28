@@ -11,21 +11,21 @@ import static org.testng.Assert.assertEquals;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedCompoundedONCompounded;
@@ -94,13 +94,10 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
       0.10101, 0.10335, 0.10565,
       0.10725, 0.10865, 0.1098, 0.11085, 0.1113, 0.11165, 0.11205, 0.1127 };
   /** Vanilla instrument generators */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_BRL_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_OIS_BRL,
+  private static final GeneratorInstrument[] DSC_BRL_GENERATORS = new GeneratorInstrument[] {
       GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
-      GENERATOR_OIS_BRL,
       GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
-      GENERATOR_OIS_BRL,
-      GENERATOR_OIS_BRL };
+      GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL };
   /** Attributes for the curve */
   private static final GeneratorAttributeIR[] DSC_BRL_ATTR;
   static {
@@ -114,15 +111,14 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
       DSC_BRL_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
     }
   }
-  /** Already known market data - contains only an empty FX matrix */
-  private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   /** The curve builder */
-  private static final DiscountingMethodCurveSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp().building(CURVE_NAME_DSC_BRL)
-      .using(CURVE_NAME_DSC_BRL).forDiscounting(Currency.BRL).forOvernightIndex(CDI_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
-      .withKnownData(KNOWN_DATA);
+  private static final DiscountingMethodCurveSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
+      .building(CURVE_NAME_DSC_BRL)
+      .using(CURVE_NAME_DSC_BRL).forDiscounting(Currency.BRL).forIndex(CDI_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR);
   static {
     for (int i = 0; i < DSC_BRL_MARKET_QUOTES.length; i++) {
-      BUILDER_FOR_TEST.withNode(CURVE_NAME_DSC_BRL, DSC_BRL_GENERATORS[i], DSC_BRL_ATTR[i], DSC_BRL_MARKET_QUOTES[i]);
+      BUILDER_FOR_TEST.addNode(CURVE_NAME_DSC_BRL,
+          DSC_BRL_GENERATORS[i].generateInstrument(NOW, DSC_BRL_MARKET_QUOTES[i], 1, DSC_BRL_ATTR[i]));
     }
   }
   /** Curves constructed before today's fixing */
@@ -130,8 +126,8 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
   /** Curves constructed after today's fixing */
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> AFTER_TODAYS_FIXING;
   static {
-    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
 
   @Override
@@ -148,16 +144,18 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesBeforeFixing = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
-        .getDefinitionsForCurves(NOW);
-    final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesAfterFixing = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITH_TODAY).getBuilder()
-        .getDefinitionsForCurves(NOW);
-    curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_BRL), BEFORE_TODAYS_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.BRL);
-    curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_DSC_BRL), AFTER_TODAYS_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.BRL);
+    final Map<String, List<InstrumentDefinition<?>>> definitionsForCurvesBeforeFixing = BUILDER_FOR_TEST.copy()
+        .getBuilder()
+        .getNodes();
+    final Map<String, List<InstrumentDefinition<?>>> definitionsForCurvesAfterFixing = BUILDER_FOR_TEST.copy()
+        .getBuilder()
+        .getNodes();
+    curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_BRL),
+        BEFORE_TODAYS_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW,
+        Currency.BRL);
+    curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_DSC_BRL),
+        AFTER_TODAYS_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW,
+        Currency.BRL);
   }
 
   /**
@@ -191,9 +189,9 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
     final int nbTest = 100;
 
     startTime = System.currentTimeMillis();
-    final DiscountingMethodCurveBuilder builder = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder();
+    final DiscountingMethodCurveBuilder builder = BUILDER_FOR_TEST.copy().getBuilder();
     for (int i = 0; i < nbTest; i++) {
-      builder.buildCurves(NOW);
+      builder.buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " curve construction Brazilian CDI EUR 1 units: " + (endTime - startTime) + " ms");

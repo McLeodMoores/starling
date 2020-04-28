@@ -5,7 +5,7 @@ package com.mcleodmoores.analytics.financial.curve.calculator;
 
 import java.util.List;
 
-import com.mcleodmoores.analytics.financial.data.CurveProvider;
+import com.mcleodmoores.analytics.financial.data.IdCurveProvider;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.tuple.DoublesPair;
@@ -16,7 +16,7 @@ import com.opengamma.util.tuple.DoublesPair;
 public class CurveParameterSensitivityCalculator implements SensitivityCalculator<DoublesPair> {
 
   @Override
-  public double[] getSensitivities(final UniqueIdentifiable id, final CurveProvider curveProvider, final List<DoublesPair> pointSensitivities) {
+  public double[] getSensitivities(final UniqueIdentifiable id, final IdCurveProvider curveProvider, final List<DoublesPair> pointSensitivities) {
     final YieldAndDiscountCurve curve = curveProvider.getCurve(id);
     // want to only return results for cases where a curve is present, even if they're empty
     final int n = curve.getNumberOfParameters();

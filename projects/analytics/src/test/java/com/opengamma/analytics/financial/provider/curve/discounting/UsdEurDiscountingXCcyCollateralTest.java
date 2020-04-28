@@ -12,14 +12,15 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
@@ -40,6 +41,7 @@ import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedONMa
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapXCcyIborIbor;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
@@ -172,52 +174,51 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
   /** The USD collateral curve name */
   private static final String CURVE_NAME_EUR_DSC_USDFF = "EUR Dsc USD FedFund";
   /** Market values for the USD discounting curve */
-  /** Known market data */
-  private static final MulticurveProviderDiscount MULTICURVE_KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   /** Builder that constructs EUR and USD discounting, EURIBOR and LIBOR curves */
-  private static final DiscountingMethodCurveSetUp BUILDER = DiscountingMethodCurveBuilder.setUp().buildingFirst(CURVE_NAME_USD_DSC_FF)
-      .using(CURVE_NAME_USD_DSC_FF).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex())
+  private static final DiscountingMethodCurveSetUp BUILDER = DiscountingMethodCurveBuilder.setUp()
+      .buildingFirst(CURVE_NAME_USD_DSC_FF)
+      .using(CURVE_NAME_USD_DSC_FF).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex())
       .withInterpolator(INTERPOLATOR_LINEAR)
-      .thenBuilding(CURVE_NAME_USD_FWD_L3).using(CURVE_NAME_USD_FWD_L3).forIborIndex(LIBOR_INDEX.toIborTypeIndex())
+      .thenBuilding(CURVE_NAME_USD_FWD_L3)
+      .using(CURVE_NAME_USD_FWD_L3).forIndex(LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR)
+      .thenBuilding(CURVE_NAME_EUR_DSC_EO)
+      .using(CURVE_NAME_EUR_DSC_EO).forDiscounting(Currency.EUR).forIndex(EONIA_INDEX.toOvernightIndex())
       .withInterpolator(INTERPOLATOR_LINEAR)
-      .thenBuilding(CURVE_NAME_EUR_DSC_EO).using(CURVE_NAME_EUR_DSC_EO).forDiscounting(Currency.EUR)
-      .forOvernightIndex(EONIA_INDEX.toOvernightIndex())
-      .withInterpolator(INTERPOLATOR_LINEAR).thenBuilding(CURVE_NAME_EUR_FWD_E3).using(CURVE_NAME_EUR_FWD_E3)
-      .forIborIndex(EURIBOR_INDEX.toIborTypeIndex())
-      .withInterpolator(INTERPOLATOR_LINEAR).withKnownData(MULTICURVE_KNOWN_DATA);
+      .thenBuilding(CURVE_NAME_EUR_FWD_E3)
+      .using(CURVE_NAME_EUR_FWD_E3).forIndex(EURIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR);
   /** Market quotes for the USD discounting curve */
   private static final double[] USD_DSC_FF_MARKET_QUOTES = new double[] { 0.0015, 0.0015, 0.0010, 0.0010, 0.0010, 0.0010, 0.0010, 0.0010,
       0.0015, 0.0020,
       0.0035, 0.0050, 0.0130 };
   /** Vanilla instrument generators for the USD discounting curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] USD_DSC_FF_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_DEPOSIT_ON_USD,
-      GENERATOR_DEPOSIT_ON_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD,
+  private static final GeneratorInstrument[] USD_DSC_FF_GENERATORS = new GeneratorInstrument[] {
+      GENERATOR_DEPOSIT_ON_USD, GENERATOR_DEPOSIT_ON_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD,
       GENERATOR_OIS_USD,
-      GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD };
+      GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD };
   /** Attributes for the USD discounting curve */
   private static final GeneratorAttributeIR[] USD_DSC_FF_ATTR;
   static {
-    final Period[] tenors = new Period[] { Period.ofDays(0), Period.ofDays(1), Period.ofMonths(1), Period.ofMonths(2), Period.ofMonths(3),
-        Period.ofMonths(6),
-        Period.ofMonths(9), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5),
-        Period.ofYears(10) };
+    BUILDER.addFxMatrix(FX_MATRIX);
+    final Period[] tenors = new Period[] { Period.ofDays(0), Period.ofDays(1), Period.ofMonths(1), Period.ofMonths(2),
+        Period.ofMonths(3), Period.ofMonths(6), Period.ofMonths(9), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3),
+        Period.ofYears(4), Period.ofYears(5), Period.ofYears(10) };
     USD_DSC_FF_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < 2; i++) {
       USD_DSC_FF_ATTR[i] = new GeneratorAttributeIR(tenors[i], Period.ZERO);
-      BUILDER.withNode(CURVE_NAME_USD_DSC_FF, USD_DSC_FF_GENERATORS[i], USD_DSC_FF_ATTR[i], USD_DSC_FF_MARKET_QUOTES[i]);
+      BUILDER.addNode(CURVE_NAME_USD_DSC_FF,
+          USD_DSC_FF_GENERATORS[i].generateInstrument(NOW, USD_DSC_FF_MARKET_QUOTES[i], 1, USD_DSC_FF_ATTR[i]));
     }
     for (int i = 2; i < tenors.length; i++) {
       USD_DSC_FF_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
-      BUILDER.withNode(CURVE_NAME_USD_DSC_FF, USD_DSC_FF_GENERATORS[i], USD_DSC_FF_ATTR[i], USD_DSC_FF_MARKET_QUOTES[i]);
+      BUILDER.addNode(CURVE_NAME_USD_DSC_FF,
+          USD_DSC_FF_GENERATORS[i].generateInstrument(NOW, USD_DSC_FF_MARKET_QUOTES[i], 1, USD_DSC_FF_ATTR[i]));
     }
   }
   /** Market values for the USD LIBOR curve */
   private static final double[] USD_FWD_L3_MARKET_QUOTES = new double[] { 0.0045, 0.0045, 0.0045, 0.0045, 0.0060, 0.0070, 0.0080, 0.0160 };
   /** Vanilla instrument generators for the USD LIBOR curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] USD_FWD_L3_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_USDLIBOR3M,
-      GENERATOR_USD_FRA_3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
+  private static final GeneratorInstrument[] USD_FWD_L3_GENERATORS = new GeneratorInstrument[] {
+      GENERATOR_USDLIBOR3M, GENERATOR_USD_FRA_3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
   /** Attributes for the USD LIBOR curve */
   private static final GeneratorAttributeIR[] USD_FWD_L3_ATTR;
   static {
@@ -227,7 +228,8 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
     USD_FWD_L3_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       USD_FWD_L3_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
-      BUILDER.withNode(CURVE_NAME_USD_FWD_L3, USD_FWD_L3_GENERATORS[i], USD_FWD_L3_ATTR[i], USD_FWD_L3_MARKET_QUOTES[i]);
+      BUILDER.addNode(CURVE_NAME_USD_FWD_L3,
+          USD_FWD_L3_GENERATORS[i].generateInstrument(NOW, USD_FWD_L3_MARKET_QUOTES[i], 1, USD_FWD_L3_ATTR[i]));
     }
   }
   /** Market values for the EUR discounting curve */
@@ -235,11 +237,9 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
       0.0400, 0.0400,
       0.0400, 0.0400 };
   /** Vanilla instrument generators for the EUR discounting curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] EUR_DSC_EO_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_DEPOSIT_ON_EUR,
-      GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
-      GENERATOR_OIS_EUR,
-      GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR };
+  private static final GeneratorInstrument[] EUR_DSC_EO_GENERATORS = new GeneratorInstrument[] {
+      GENERATOR_DEPOSIT_ON_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
+      GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR };
   /** Attributes for the EUR discounting curve */
   private static final GeneratorAttributeIR[] EUR_DSC_EO_ATTR;
   static {
@@ -249,15 +249,15 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
     EUR_DSC_EO_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       EUR_DSC_EO_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
-      BUILDER.withNode(CURVE_NAME_EUR_DSC_EO, EUR_DSC_EO_GENERATORS[i], EUR_DSC_EO_ATTR[i], EUR_DSC_EO_MARKET_QUOTES[i]);
+      BUILDER.addNode(CURVE_NAME_EUR_DSC_EO,
+          EUR_DSC_EO_GENERATORS[i].generateInstrument(NOW, EUR_DSC_EO_MARKET_QUOTES[i], 1, EUR_DSC_EO_ATTR[i]));
     }
   }
   /** Market values for the EURIBOR curve */
   private static final double[] EUR_FWD_E3_MARKET_QUOTES = new double[] { 0.0045, 0.0045, 0.0045, 0.0045, 0.0050, 0.0060, 0.0085, 0.0160 };
   /** Vanilla instrument generators for the EURIBOR curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] EUR_FWD_E3_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_EURIBOR3M,
-      EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M };
+  private static final GeneratorInstrument[] EUR_FWD_E3_GENERATORS = new GeneratorInstrument[] {
+      GENERATOR_EURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M };
   /** Attributes for the EURIBOR curve */
   private static final GeneratorAttributeIR[] EUR_FWD_E3_ATTR;
   static {
@@ -267,7 +267,8 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
     EUR_FWD_E3_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       EUR_FWD_E3_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
-      BUILDER.withNode(CURVE_NAME_EUR_FWD_E3, EUR_FWD_E3_GENERATORS[i], EUR_FWD_E3_ATTR[i], EUR_FWD_E3_MARKET_QUOTES[i]);
+      BUILDER.addNode(CURVE_NAME_EUR_FWD_E3,
+          EUR_FWD_E3_GENERATORS[i].generateInstrument(NOW, EUR_FWD_E3_MARKET_QUOTES[i], 1, EUR_FWD_E3_ATTR[i]));
     }
   }
   /** Builds the EUR discounting with USD collateral curve */
@@ -281,8 +282,8 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
   /** Collateralised curve after fixing */
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> COLLATERAL_AFTER_FIXING;
   static {
-    BEFORE_FIXING = BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    AFTER_FIXING = BUILDER.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+    BEFORE_FIXING = BUILDER.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    AFTER_FIXING = BUILDER.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
   static {
     COLLATERAL_BUILDER = DiscountingMethodCurveBuilder.setUp().building(CURVE_NAME_EUR_DSC_USDFF).using(CURVE_NAME_EUR_DSC_USDFF)
@@ -294,11 +295,10 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
       0.0038, -0.0050, -0.0050,
       -0.0050, -0.0045, -0.0040 };
   /** Vanilla instrument generators for the EUR discounting with USD collateral curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] EUR_DSC_USDFF_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_DEPOSIT_ON_EUR,
-      GENERATOR_DEPOSIT_ON_EUR, GENERATOR_FX_EURUSD, GENERATOR_FX_EURUSD, GENERATOR_FX_EURUSD, GENERATOR_FX_EURUSD, GENERATOR_FX_EURUSD,
-      GENERATOR_FX_EURUSD,
-      EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M };
+  private static final GeneratorInstrument[] EUR_DSC_USDFF_GENERATORS = new GeneratorInstrument[] {
+      GENERATOR_DEPOSIT_ON_EUR, GENERATOR_DEPOSIT_ON_EUR, GENERATOR_FX_EURUSD, GENERATOR_FX_EURUSD, GENERATOR_FX_EURUSD,
+      GENERATOR_FX_EURUSD, GENERATOR_FX_EURUSD,
+      GENERATOR_FX_EURUSD, EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M };
   /** Attributes for the EUR discounting with USD collateral curve */
   private static final GeneratorAttribute[] EUR_DSC_USDFF_ATTR;
   static {
@@ -309,25 +309,38 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
     EUR_DSC_USDFF_ATTR = new GeneratorAttribute[tenors.length];
     for (int i = 0; i < 2; i++) {
       EUR_DSC_USDFF_ATTR[i] = new GeneratorAttributeIR(tenors[i], Period.ZERO);
-      COLLATERAL_BUILDER.withNode(CURVE_NAME_EUR_DSC_USDFF, EUR_DSC_USDFF_GENERATORS[i], EUR_DSC_USDFF_ATTR[i],
-          EUR_DSC_USDFF_MARKET_QUOTES[i]);
+      COLLATERAL_BUILDER.addNode(CURVE_NAME_EUR_DSC_USDFF,
+          EUR_DSC_USDFF_GENERATORS[i].generateInstrument(NOW, EUR_DSC_USDFF_MARKET_QUOTES[i], 1, EUR_DSC_USDFF_ATTR[i]));
     }
     for (int i = 2; i < tenors.length; i++) {
       EUR_DSC_USDFF_ATTR[i] = new GeneratorAttributeFX(tenors[i], FX_MATRIX);
-      COLLATERAL_BUILDER.withNode(CURVE_NAME_EUR_DSC_USDFF, EUR_DSC_USDFF_GENERATORS[i], EUR_DSC_USDFF_ATTR[i],
-          EUR_DSC_USDFF_MARKET_QUOTES[i]);
+      COLLATERAL_BUILDER.addNode(CURVE_NAME_EUR_DSC_USDFF,
+          EUR_DSC_USDFF_GENERATORS[i].generateInstrument(NOW, EUR_DSC_USDFF_MARKET_QUOTES[i], 1, EUR_DSC_USDFF_ATTR[i]));
     }
-    final MulticurveProviderDiscount knownDataBeforeFixing = BEFORE_FIXING.getFirst().copy();
-    knownDataBeforeFixing.removeCurve(Currency.EUR);
-    final MulticurveProviderDiscount knownDataAfterFixing = AFTER_FIXING.getFirst().copy();
-    knownDataAfterFixing.removeCurve(Currency.EUR);
-    COLLATERAL_BEFORE_FIXING = COLLATERAL_BUILDER.copy().withKnownData(knownDataBeforeFixing)
+    final YieldAndDiscountCurve usdCurveBeforeFixing = BEFORE_FIXING.getFirst().getCurve(Currency.USD);
+    final YieldAndDiscountCurve usdCurveAfterFixing = AFTER_FIXING.getFirst().getCurve(Currency.USD);
+    final YieldAndDiscountCurve libor3mCurveBeforeFixing = BEFORE_FIXING.getFirst().getCurve(LIBOR_INDEX);
+    final YieldAndDiscountCurve libor3mCurveAfterFixing = BEFORE_FIXING.getFirst().getCurve(LIBOR_INDEX);
+    final YieldAndDiscountCurve euribor3mCurveBeforeFixing = BEFORE_FIXING.getFirst().getCurve(EURIBOR_INDEX);
+    final YieldAndDiscountCurve euribor3mCurveAfterFixing = AFTER_FIXING.getFirst().getCurve(EURIBOR_INDEX);
+    final YieldAndDiscountCurve eoniaCurveBeforeFixing = BEFORE_FIXING.getFirst().getCurve(EONIA_INDEX);
+    final YieldAndDiscountCurve eoniaCurveAfterFixing = AFTER_FIXING.getFirst().getCurve(EONIA_INDEX);
+    COLLATERAL_BEFORE_FIXING = COLLATERAL_BUILDER.copy()
+        .using(usdCurveBeforeFixing).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex())
+        .using(euribor3mCurveBeforeFixing).forIndex(EURIBOR_INDEX.toIborTypeIndex())
+        .using(libor3mCurveBeforeFixing).forIndex(LIBOR_INDEX.toIborTypeIndex())
+        .using(eoniaCurveBeforeFixing).forIndex(EONIA_INDEX.toOvernightIndex())
+        .addFxMatrix(FX_MATRIX)
         .withKnownBundle(new CurveBuildingBlockBundle(new LinkedHashMap<>(BEFORE_FIXING.getSecond().getData())))
-        .withFixingTs(FIXING_TS_WITHOUT_TODAY)
-        .getBuilder().buildCurves(NOW);
-    COLLATERAL_AFTER_FIXING = COLLATERAL_BUILDER.copy().withKnownData(knownDataAfterFixing).withFixingTs(FIXING_TS_WITH_TODAY)
-        .withKnownBundle(new CurveBuildingBlockBundle(new LinkedHashMap<>(AFTER_FIXING.getSecond().getData()))).getBuilder()
-        .buildCurves(NOW);
+        .getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    COLLATERAL_AFTER_FIXING = COLLATERAL_BUILDER.copy()
+        .using(usdCurveAfterFixing).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex())
+        .using(euribor3mCurveAfterFixing).forIndex(EURIBOR_INDEX.toIborTypeIndex())
+        .using(libor3mCurveAfterFixing).forIndex(LIBOR_INDEX.toIborTypeIndex())
+        .using(eoniaCurveAfterFixing).forIndex(EONIA_INDEX.toOvernightIndex())
+        .addFxMatrix(FX_MATRIX)
+        .withKnownBundle(new CurveBuildingBlockBundle(new LinkedHashMap<>(AFTER_FIXING.getSecond().getData())))
+        .getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
 
   @Override
@@ -387,34 +400,34 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    Map<String, InstrumentDefinition<?>[]> definitions;
+    Map<String, List<InstrumentDefinition<?>>> definitions;
     // before fixing
-    definitions = BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().getDefinitionsForCurves(NOW);
-    curveConstructionTest(definitions.get(CURVE_NAME_USD_DSC_FF), BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
-        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
-    curveConstructionTest(definitions.get(CURVE_NAME_USD_FWD_L3), BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
-        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
-    curveConstructionTest(definitions.get(CURVE_NAME_EUR_DSC_EO), BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
-        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
-    curveConstructionTest(definitions.get(CURVE_NAME_EUR_FWD_E3), BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
-        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
+    definitions = BUILDER.copy().getBuilder().getNodes();
+    curveConstructionTest(definitions.get(CURVE_NAME_USD_DSC_FF), BEFORE_FIXING.getFirst(),
+        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
+    curveConstructionTest(definitions.get(CURVE_NAME_USD_FWD_L3), BEFORE_FIXING.getFirst(),
+        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
+    curveConstructionTest(definitions.get(CURVE_NAME_EUR_DSC_EO), BEFORE_FIXING.getFirst(),
+        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
+    curveConstructionTest(definitions.get(CURVE_NAME_EUR_FWD_E3), BEFORE_FIXING.getFirst(),
+        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // after fixing
-    definitions = BUILDER.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().getDefinitionsForCurves(NOW);
-    curveConstructionTest(definitions.get(CURVE_NAME_USD_DSC_FF), AFTER_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
-        FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
-    curveConstructionTest(definitions.get(CURVE_NAME_USD_FWD_L3), AFTER_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
-        FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
-    curveConstructionTest(definitions.get(CURVE_NAME_EUR_DSC_EO), AFTER_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
-        FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
-    curveConstructionTest(definitions.get(CURVE_NAME_EUR_FWD_E3), AFTER_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
-        FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
+    definitions = BUILDER.copy().getBuilder().getNodes();
+    curveConstructionTest(definitions.get(CURVE_NAME_USD_DSC_FF), AFTER_FIXING.getFirst(),
+        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
+    curveConstructionTest(definitions.get(CURVE_NAME_USD_FWD_L3), AFTER_FIXING.getFirst(),
+        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
+    curveConstructionTest(definitions.get(CURVE_NAME_EUR_DSC_EO), AFTER_FIXING.getFirst(),
+        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
+    curveConstructionTest(definitions.get(CURVE_NAME_EUR_FWD_E3), AFTER_FIXING.getFirst(),
+        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // before fixing
-    definitions = COLLATERAL_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitions = COLLATERAL_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_EUR_DSC_USDFF), COLLATERAL_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // after fixing
-    definitions = COLLATERAL_BUILDER.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitions = COLLATERAL_BUILDER.copy().getBuilder().getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_EUR_DSC_USDFF), COLLATERAL_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);

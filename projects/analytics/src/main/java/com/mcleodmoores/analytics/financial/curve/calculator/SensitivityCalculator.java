@@ -5,7 +5,7 @@ package com.mcleodmoores.analytics.financial.curve.calculator;
 
 import java.util.List;
 
-import com.mcleodmoores.analytics.financial.data.CurveProvider;
+import com.mcleodmoores.analytics.financial.data.IdCurveProvider;
 import com.opengamma.id.UniqueIdentifiable;
 
 /**
@@ -13,6 +13,6 @@ import com.opengamma.id.UniqueIdentifiable;
  */
 public interface SensitivityCalculator<SENSITIVITY_TYPE> {
 
-  double[] getSensitivities(UniqueIdentifiable id, CurveProvider curveProvider, List<SENSITIVITY_TYPE> pointSensitivities);
+  double[] getSensitivities(UniqueIdentifiable id, IdCurveProvider curveProvider, List<SENSITIVITY_TYPE> pointSensitivities);
 
 }

@@ -13,21 +13,22 @@ import static org.testng.AssertJUnit.assertEquals;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.DiscountingMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositIbor;
 import com.opengamma.analytics.financial.instrument.index.GeneratorFRA;
@@ -61,8 +62,8 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Builds and tests a EUR discounting and 6m EURIBOR curves. The discounting curve has nodes that are shifted to ECB meeting dates. The
- * discounting curve is constructed first, then the EURIBOR curve.
+ * Builds and tests a EUR discounting and 6m EURIBOR curves. The discounting curve has nodes that are shifted to ECB meeting dates. The discounting curve is
+ * constructed first, then the EURIBOR curve.
  */
 @Test(groups = TestGroup.UNIT)
 public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildingTests {
@@ -94,13 +95,13 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
   /** The previous week date */
   private static final ZonedDateTime PREVIOUS_DATE = NOW.minusDays(1);
   /** ECB meeting dates */
-  private static final ZonedDateTime[] MEETING_ECB_DATE = new ZonedDateTime[] { DateUtils.getUTCDate(2013, 3, 7),
-      DateUtils.getUTCDate(2013, 4, 4),
-      DateUtils.getUTCDate(2013, 5, 2), DateUtils.getUTCDate(2013, 6, 6), DateUtils.getUTCDate(2013, 7, 4),
-      DateUtils.getUTCDate(2013, 8, 1),
-      DateUtils.getUTCDate(2013, 9, 5), DateUtils.getUTCDate(2013, 10, 2), DateUtils.getUTCDate(2013, 11, 7),
-      DateUtils.getUTCDate(2013, 12, 5),
-      DateUtils.getUTCDate(2014, 1, 9), DateUtils.getUTCDate(2014, 2, 6) };
+  private static final LocalDateTime[] MEETING_ECB_DATE = new LocalDateTime[] {
+      LocalDateTime.of(2013, 3, 7, 0, 0), LocalDateTime.of(2013, 4, 4, 0, 0), LocalDateTime.of(2013, 5, 2, 0, 0),
+      LocalDateTime.of(2013, 6, 6, 0, 0),
+      LocalDateTime.of(2013, 7, 4, 0, 0), LocalDateTime.of(2013, 8, 1, 0, 0), LocalDateTime.of(2013, 9, 5, 0, 0),
+      LocalDateTime.of(2013, 10, 2, 0, 0),
+      LocalDateTime.of(2013, 11, 7, 0, 0), LocalDateTime.of(2013, 12, 5, 0, 0), LocalDateTime.of(2014, 1, 9, 0, 0),
+      LocalDateTime.of(2014, 2, 6, 0, 0) };
   /** Overnight rate fixing time series after today's fixing */
   private static final ZonedDateTimeDoubleTimeSeries TS_ON_EUR_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries
       .ofUTC(new ZonedDateTime[] { PREVIOUS_DATE, NOW }, new double[] { 0.07, 0.08 });
@@ -129,14 +130,11 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
   private static final String CURVE_NAME_FWD6_EUR = "EUR Fwd 6M";
   /** Market values for the dsc EUR curve */
   private static final double[] DSC_EUR_MARKET_QUOTES = new double[] { 0.0060, 0.0050, 0.0055, 0.0070, 0.0080, 0.0075, 0.0070, 0.0075,
-      0.0080, 0.0075, 0.0080,
-      0.0075 };
+      0.0080, 0.0075, 0.0080, 0.0075 };
   /** Vanilla instrument generators for the discounting curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_EUR_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_OIS_EUR,
+  private static final GeneratorInstrument[] DSC_EUR_GENERATORS = new GeneratorInstrument[] {
       GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
-      GENERATOR_OIS_EUR,
-      GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR };
+      GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR };
   /** Attribute generators for the discounting curve */
   private static final GeneratorAttributeIR[] DSC_EUR_ATTR;
   static {
@@ -152,9 +150,9 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
   /** Market values for the Fwd 3M EUR curve */
   private static final double[] FWD6_EUR_MARKET_QUOTES = new double[] { 0.0100, 0.0150, 0.0175, 0.0175, 0.0200, 0.00175, 0.0200, 0.00175 };
   /** Vanilla instrument generators for the EURIBOR curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD6_EUR_GENERATORS = new GeneratorInstrument<?>[] {
-      GENERATOR_EURIBOR6M,
-      GENERATOR_FRA_6M, GENERATOR_FRA_6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M };
+  private static final GeneratorInstrument[] FWD6_EUR_GENERATORS = new GeneratorInstrument[] {
+      GENERATOR_EURIBOR6M, GENERATOR_FRA_6M, GENERATOR_FRA_6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M,
+      EUR1YEURIBOR6M };
   /** Attribute generators for the EURIBOR curve */
   private static final GeneratorAttributeIR[] FWD6_EUR_ATTR;
   static {
@@ -166,22 +164,23 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
       FWD6_EUR_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
     }
   }
-  /** Already known data - contains only the FX matrix */
-  private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   /** The curve builder */
   private static final DiscountingMethodCurveSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_EUR)
-      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EONIA_INDEX.toOvernightIndex())
+      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forIndex(EONIA_INDEX.toOvernightIndex())
       .withInterpolator(LOG_LINEAR_INTERPOLATOR)
-      .usingNodeDates(MEETING_ECB_DATE).thenBuilding(CURVE_NAME_FWD6_EUR).using(CURVE_NAME_FWD6_EUR)
-      .forIborIndex(EURIBOR_6M_INDEX.toIborTypeIndex())
-      .withInterpolator(LINEAR_INTERPOLATOR).withKnownData(KNOWN_DATA);
+      .usingNodeDates(MEETING_ECB_DATE)
+      .thenBuilding(CURVE_NAME_FWD6_EUR)
+      .using(CURVE_NAME_FWD6_EUR).forIndex(EURIBOR_6M_INDEX.toIborTypeIndex()).withInterpolator(LINEAR_INTERPOLATOR)
+      .addFxMatrix(FX_MATRIX);
   static {
     for (int i = 0; i < DSC_EUR_MARKET_QUOTES.length; i++) {
-      BUILDER_FOR_TEST.withNode(CURVE_NAME_DSC_EUR, DSC_EUR_GENERATORS[i], DSC_EUR_ATTR[i], DSC_EUR_MARKET_QUOTES[i]);
+      BUILDER_FOR_TEST.addNode(CURVE_NAME_DSC_EUR,
+          DSC_EUR_GENERATORS[i].generateInstrument(NOW, DSC_EUR_MARKET_QUOTES[i], 1, DSC_EUR_ATTR[i]));
     }
     for (int i = 0; i < FWD6_EUR_MARKET_QUOTES.length; i++) {
-      BUILDER_FOR_TEST.withNode(CURVE_NAME_FWD6_EUR, FWD6_EUR_GENERATORS[i], FWD6_EUR_ATTR[i], FWD6_EUR_MARKET_QUOTES[i]);
+      BUILDER_FOR_TEST.addNode(CURVE_NAME_FWD6_EUR,
+          FWD6_EUR_GENERATORS[i].generateInstrument(NOW, FWD6_EUR_MARKET_QUOTES[i], 1, FWD6_EUR_ATTR[i]));
     }
   }
   /** Curves constructed before today's fixing */
@@ -189,8 +188,8 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
   /** Curves constructed after today's fixing */
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> AFTER_TODAYS_FIXING;
   static {
-    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
 
   @Override
@@ -210,15 +209,17 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
   @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder()
-        .getDefinitionsForCurves(NOW);
+    Map<String, List<InstrumentDefinition<?>>> definitions = BUILDER_FOR_TEST.copy()
+        .getBuilder()
+        .getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_EUR), BEFORE_TODAYS_FIXING.getFirst(),
-        PresentValueDiscountingCalculator.getInstance(),
-        FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
-    definitions = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+        PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
+    definitions = BUILDER_FOR_TEST.copy()
+        .getBuilder()
+        .getNodes();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), AFTER_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);

@@ -10,12 +10,13 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.fail;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.CurveUtils;
-import com.mcleodmoores.analytics.financial.curve.interestrate.CurveSetUpInterface;
+import com.mcleodmoores.analytics.financial.curve.interestrate.curvebuilder.CurveSetUpInterface;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
@@ -50,14 +51,13 @@ import com.opengamma.util.tuple.Pair;
  */
 public class CurveBuildingTestUtils {
   private static final PresentValueDiscountingCalculator PVC = PresentValueDiscountingCalculator.getInstance();
-  private static final ParSpreadMarketQuoteDiscountingCalculator PAR_SPREAD_CALCULATOR =
-      ParSpreadMarketQuoteDiscountingCalculator.getInstance();
-  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator PAR_SPREAD_SENSITIVITY_CALCULATOR =
-      ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteDiscountingCalculator PAR_SPREAD_CALCULATOR = ParSpreadMarketQuoteDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator PAR_SPREAD_SENSITIVITY_CALCULATOR = ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator
+      .getInstance();
   private static final double TOLERANCE_ROOT = 1.0E-10;
   private static final int STEP_MAX = 100;
-  private static final MulticurveDiscountBuildingRepository CURVE_BUILDING_REPOSITORY =
-      new MulticurveDiscountBuildingRepository(TOLERANCE_ROOT, TOLERANCE_ROOT, STEP_MAX);
+  private static final MulticurveDiscountBuildingRepository CURVE_BUILDING_REPOSITORY = new MulticurveDiscountBuildingRepository(TOLERANCE_ROOT, TOLERANCE_ROOT,
+      STEP_MAX);
   private static final double EPS = 1e-8;
 
   @SuppressWarnings("unchecked")
@@ -77,7 +77,7 @@ public class CurveBuildingTestUtils {
         final double[] initialGuess = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
           derivatives[k] = CurveUtils.convert(definitions[i][j][k], fixingTs, valuationDate);
-          initialGuess[k] = definitions[i][j][k].accept(CurveUtils.RATES_INITIALIZATION);
+          initialGuess[k] = derivatives[k].accept(CurveUtils.RATES_INITIALIZATION);
         }
         final GeneratorYDCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
         singleCurves[j] = new SingleCurveBundle<>(curveNames[i][j], derivatives, initialGuess, generator);
@@ -112,13 +112,13 @@ public class CurveBuildingTestUtils {
     }
   }
 
-  public static <T> void curveConstructionTest(final InstrumentDefinition<?>[] definitions, final T curves,
+  public static <T> void curveConstructionTest(final List<InstrumentDefinition<?>> definitions, final T curves,
       final InstrumentDerivativeVisitor<T, MultipleCurrencyAmount> pvCalculator, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
       final FXMatrix fxMatrix, final ZonedDateTime valuationDate, final Currency valuationCurrency) {
     curveConstructionTest(definitions, curves, pvCalculator, fixingTs, fxMatrix, valuationDate, valuationCurrency, 1e-9);
   }
 
-  public static <T> void curveConstructionTest(final InstrumentDefinition<?>[] definitions, final T curves,
+  public static <T> void curveConstructionTest(final List<InstrumentDefinition<?>> definitions, final T curves,
       final InstrumentDerivativeVisitor<T, MultipleCurrencyAmount> pvCalculator, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
       final FXMatrix fxMatrix, final ZonedDateTime valuationDate, final Currency valuationCurrency, final double eps) {
     for (final InstrumentDefinition<?> definition : definitions) {
@@ -177,8 +177,8 @@ public class CurveBuildingTestUtils {
   }
 
   public static <T extends ParameterProviderInterface> void assertFiniteDifferenceSensitivities(final CurveBuildingBlockBundle fullInverseJacobian,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final CurveSetUpInterface<T> builder, final String curveToTest,
-      final String sensitivityCurve, final ZonedDateTime valuationTime, final GeneratorInstrument<? extends GeneratorAttribute>[] generators,
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final CurveSetUpInterface builder, final String curveToTest,
+      final String sensitivityCurve, final ZonedDateTime valuationTime, final GeneratorInstrument[] generators,
       final GeneratorAttribute[] attributes, final double[] marketQuotes, final boolean expectZeroSensitivities) {
     final double bump = 1e-6;
     final Pair<CurveBuildingBlock, DoubleMatrix2D> curveToTestBlock = fullInverseJacobian.getBlock(curveToTest);
@@ -190,18 +190,21 @@ public class CurveBuildingTestUtils {
     final DoubleMatrix2D analyticSensitivities = curveToTestBlock.getSecond();
     final int curveToTestSize = curveToTestBlock.getFirst().getNbParameters(curveToTest);
     final int offsetIntoMatrix = curveToTestBlock.getFirst().getStart(sensitivityCurve);
-      // check sensitivities against those calculated using finite difference
+    // check sensitivities against those calculated using finite difference
     for (int i = 0; i < sensitivityCurveSize; i++) {
-      final Pair<T, CurveBuildingBlockBundle> upResults = builder.copy()
-          .withFixingTs(fixingTs)
-          .getBuilder()
-          .replaceMarketQuote(sensitivityCurve, generators[i], attributes[i], marketQuotes[i] + bump)
-          .buildCurves(valuationTime);
-      final Pair<T, CurveBuildingBlockBundle> downResults = builder.copy()
-          .withFixingTs(fixingTs)
-          .getBuilder()
-          .replaceMarketQuote(sensitivityCurve, generators[i], attributes[i], marketQuotes[i] - bump)
-          .buildCurves(valuationTime);
+      final CurveSetUpInterface upBuilder = builder.copy().removeNodes(sensitivityCurve);
+      final CurveSetUpInterface downBuilder = builder.copy().removeNodes(sensitivityCurve);
+      for (int j = 0; j < sensitivityCurveSize; j++) {
+        if (i == j) {
+          upBuilder.addNode(sensitivityCurve, generators[j].generateInstrument(valuationTime, marketQuotes[j] + bump, 1, attributes[j]));
+          downBuilder.addNode(sensitivityCurve, generators[j].generateInstrument(valuationTime, marketQuotes[j] - bump, 1, attributes[j]));
+        } else {
+          upBuilder.addNode(sensitivityCurve, generators[j].generateInstrument(valuationTime, marketQuotes[j], 1, attributes[j]));
+          downBuilder.addNode(sensitivityCurve, generators[j].generateInstrument(valuationTime, marketQuotes[j], 1, attributes[j]));
+        }
+      }
+      final Pair<? extends ParameterProviderInterface, CurveBuildingBlockBundle> upResults = upBuilder.getBuilder().buildCurves(valuationTime, fixingTs);
+      final Pair<? extends ParameterProviderInterface, CurveBuildingBlockBundle> downResults = downBuilder.getBuilder().buildCurves(valuationTime, fixingTs);
       final Double[] upYields = getYData(upResults.getFirst(), curveToTest);
       final Double[] downYields = getYData(downResults.getFirst(), curveToTest);
       final int offset = i + offsetIntoMatrix;

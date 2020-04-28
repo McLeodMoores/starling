@@ -14,7 +14,7 @@ public class MonotonicityPreservingCubicSplineInterpolator1D extends PiecewisePo
   private static final long serialVersionUID = 1L;
 
   /**
-   * If the primary interpolation method is not specified, the cubic spline interpolation with natrual endpoint conditions is used.
+   * If the primary interpolation method is not specified, the cubic spline interpolation with natural endpoint conditions is used.
    */
   public MonotonicityPreservingCubicSplineInterpolator1D() {
     super(new MonotonicityPreservingCubicSplineInterpolator(new NaturalSplineInterpolator()));

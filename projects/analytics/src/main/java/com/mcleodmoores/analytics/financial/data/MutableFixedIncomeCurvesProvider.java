@@ -166,7 +166,7 @@ public class MutableFixedIncomeCurvesProvider implements MutableCurveProvider, D
   }
 
   @Override
-  public boolean setAll(final CurveProvider provider) {
+  public boolean setAll(final IdCurveProvider provider) {
     return false;
   }
 

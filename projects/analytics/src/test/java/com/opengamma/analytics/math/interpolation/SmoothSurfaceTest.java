@@ -32,7 +32,7 @@ import cern.jet.random.engine.RandomEngine;
  */
 @Test(groups = TestGroup.UNIT)
 public class SmoothSurfaceTest {
-//FIXME this test does nothing - either delete or add some real tests
+  // FIXME this test does nothing - either delete or add some real tests
   protected static final RandomEngine RANDOM = new MersenneTwister64(MersenneTwister.DEFAULT_SEED);
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1, RANDOM);
   private static final double EPS = 1e-5;
@@ -49,9 +49,9 @@ public class SmoothSurfaceTest {
     for (int i = 0; i < 20; i++) {
       x = 10 * RANDOM.nextDouble();
       y = 10 * RANDOM.nextDouble();
-      NODE_POS.add(new double[] {x, y});
-      FLAT_DATA.add(Pairs.of(new double[] {x, y}, VALUE));
-      NOISY_DATA.add(Pairs.of(new double[] {x, y}, VALUE + 0.1 * NORMAL.nextRandom()));
+      NODE_POS.add(new double[] { x, y });
+      FLAT_DATA.add(Pairs.of(new double[] { x, y }, VALUE));
+      NOISY_DATA.add(Pairs.of(new double[] { x, y }, VALUE + 0.1 * NORMAL.nextRandom()));
     }
   }
 
@@ -67,7 +67,8 @@ public class SmoothSurfaceTest {
     fit(NOISY_DATA, basisFunction, true, NODE_POS);
   }
 
-  private void fit(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction, final boolean isNormalized, final List<double[]> nodePos) {
+  private void fit(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction, final boolean isNormalized,
+      final List<double[]> nodePos) {
     final Function1D<DoubleMatrix1D, Double> fom = new Function1D<DoubleMatrix1D, Double>() {
 
       @SuppressWarnings("synthetic-access")
@@ -83,20 +84,20 @@ public class SmoothSurfaceTest {
     final ScalarMinimizer lineMinimizer = new BrentMinimizer1D();
     final ConjugateGradientVectorMinimizer minimizer = new ConjugateGradientVectorMinimizer(lineMinimizer, 1e-3, 1000);
 
-        final double[] start = new double[nodePos.size()];
-        for (int i = 0; i < start.length; i++) {
-          start[i] = VALUE;
-        }
+    final double[] start = new double[nodePos.size()];
+    for (int i = 0; i < start.length; i++) {
+      start[i] = VALUE;
+    }
 
     final DoubleMatrix1D res = minimizer.minimize(fom, new DoubleMatrix1D(start));
     final double chiSquare = fom.evaluate(res);
-     System.out.println(res);
-     System.out.println("chi2: " + chiSquare);
+    System.out.println(res);
+    System.out.println("chi2: " + chiSquare);
 
-     final List<Pair<double[], Double>> weights = combineWeightsAndPos(nodePos, res);
-     System.out.println("Pelenty: " + getPlenty(data, basisFunction, weights, isNormalized));
+    final List<Pair<double[], Double>> weights = combineWeightsAndPos(nodePos, res);
+    System.out.println("Pelenty: " + getPlenty(data, basisFunction, weights, isNormalized));
 
-     printSurface(basisFunction, weights, isNormalized);
+    printSurface(basisFunction, weights, isNormalized);
   }
 
   private static List<Pair<double[], Double>> combineWeightsAndPos(final List<double[]> nodePos, final DoubleMatrix1D weights) {
@@ -109,7 +110,8 @@ public class SmoothSurfaceTest {
     return weightsAndPos;
   }
 
-  private void printSurface(final Function1D<Double, Double> basisFunction, final List<Pair<double[], Double>> weights, final boolean isNormalized) {
+  private void printSurface(final Function1D<Double, Double> basisFunction, final List<Pair<double[], Double>> weights,
+      final boolean isNormalized) {
 
     // printout
     final double[] x = new double[2];
@@ -133,7 +135,8 @@ public class SmoothSurfaceTest {
     }
   }
 
-  private double getChiSquared(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction, final List<Pair<double[], Double>> weights, final boolean isNormalized) {
+  private double getChiSquared(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction,
+      final List<Pair<double[], Double>> weights, final boolean isNormalized) {
     final int n = data.size();
     double sum = 0;
     double[] x;
@@ -146,7 +149,8 @@ public class SmoothSurfaceTest {
     return sum;
   }
 
-  private double getPlenty(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction, final List<Pair<double[], Double>> weights, final boolean isNormalized) {
+  private double getPlenty(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction,
+      final List<Pair<double[], Double>> weights, final boolean isNormalized) {
 
     double sum = 0;
     for (final Pair<double[], Double> pair : data) {
@@ -169,7 +173,8 @@ public class SmoothSurfaceTest {
     return Math.sqrt(res);
   }
 
-  private double[][] getHessian(final Function1D<Double, Double> basisFunction, final List<Pair<double[], Double>> weights, final double[] x, final boolean isNormalized) {
+  private double[][] getHessian(final Function1D<Double, Double> basisFunction, final List<Pair<double[], Double>> weights,
+      final double[] x, final boolean isNormalized) {
 
     final int n = x.length;
 
@@ -185,7 +190,8 @@ public class SmoothSurfaceTest {
     return res;
   }
 
-  private double getSecondDev(final Function1D<Double, Double> basisFunction, final List<Pair<double[], Double>> weights, final double[] x, final boolean isNormalized, final int i, final int j) {
+  private double getSecondDev(final Function1D<Double, Double> basisFunction, final List<Pair<double[], Double>> weights, final double[] x,
+      final boolean isNormalized, final int i, final int j) {
     if (i == j) {
       final double f_x = SMOOTHER.evaluate(basisFunction, weights, x, isNormalized);
       final double[] temp = Arrays.copyOf(x, x.length);
