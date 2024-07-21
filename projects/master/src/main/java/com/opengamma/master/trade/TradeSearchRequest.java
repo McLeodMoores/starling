@@ -145,7 +145,7 @@ public class TradeSearchRequest extends AbstractSearchRequest {
     if (getTradeIdSearch() == null) {
       setTradeIdSearch(ExternalIdSearch.of(tradeIds));
     } else {
-      setTradeIdSearch(getSecurityIdSearch().withExternalIdsAdded(tradeIds));
+      setTradeIdSearch(getTradeIdSearch().withExternalIdsAdded(tradeIds));
     }
   }
 
@@ -173,7 +173,7 @@ public class TradeSearchRequest extends AbstractSearchRequest {
     if (getTradeObjectIds() != null && !getTradeObjectIds().contains(document.getObjectId())) {
       return false;
     }
-    if (getSecurityIdSearch() != null && !getSecurityIdSearch().matches(trade.getExternalTradeIds())) {
+    if (getTradeIdSearch() != null && !getTradeIdSearch().matches(trade.getExternalTradeIds())) {
       return false;
     }
     return true;
@@ -208,26 +208,7 @@ public class TradeSearchRequest extends AbstractSearchRequest {
     return _tradeObjectIds;
   }
 
-  /**
-   * Gets the the {@code TradeObjectIds} property.
-   * Note that an empty set will return no Trades.
-   * @return the property, not null
-   */
-  public final Property<Set<ObjectId>> TradeObjectIds() {
-    return metaBean().TradeObjectIds().createProperty(this);
-  }
-
   //-----------------------------------------------------------------------
-  /**
-   * Gets the set of trade object identifiers, null to not limit by trade object identifiers.
-   * Each returned Trade will contain at least one of these trades.
-   * Note that an empty list will return no Trades.
-   * @return the value of the property
-   */
-  public Set<ObjectId> getTradeObjectIds() {
-    return _tradeObjectIds;
-  }
-
   /**
    * Gets the the {@code tradeObjectIds} property.
    * Each returned Trade will contain at least one of these trades.
@@ -248,19 +229,19 @@ public class TradeSearchRequest extends AbstractSearchRequest {
   }
 
   /**
-   * Sets the security external identifiers to match, null to not match on security identifiers.
-   * @param securityIdSearch  the new value of the property
+   * Sets the trade id identifiers to match, null to not match on trade identifiers.
+   * @param tradeIdSearch  the new value of the property
    */
-  public void setSecurityIdSearch(ExternalIdSearch securityIdSearch) {
+  public void setTradeIdSearch(ExternalIdSearch tradeIdSearch) {
     this._tradeIdSearch = tradeIdSearch;
   }
 
   /**
-   * Gets the the {@code securityIdSearch} property.
+   * Gets the the {@code tradeIdSearch} property.
    * @return the property, not null
    */
-  public final Property<ExternalIdSearch> securityIdSearch() {
-    return metaBean().securityIdSearch().createProperty(this);
+  public final Property<ExternalIdSearch> tradeIdSearch() {
+    return metaBean().tradeIdSearch().createProperty(this);
   }
 
   //-----------------------------------------------------------------------
@@ -273,8 +254,8 @@ public class TradeSearchRequest extends AbstractSearchRequest {
    * search is useful for exact machine searching.
    * @return the value of the property
    */
-  public String getSecurityIdValue() {
-    return _securityIdValue;
+  public String getTradeIdValue() {
+    return _tradeIdValue;
   }
 
   /**
@@ -284,14 +265,14 @@ public class TradeSearchRequest extends AbstractSearchRequest {
    * and does not match against the key. Wildcards are allowed.
    * This method is suitable for human searching, whereas the {@code externalIdSearch}
    * search is useful for exact machine searching.
-   * @param securityIdValue  the new value of the property
+   * @param tradeIdValue  the new value of the property
    */
-  public void setSecurityIdValue(String securityIdValue) {
-    this._securityIdValue = securityIdValue;
+  public void setTradeIdValue(String tradeIdValue) {
+    this._tradeIdValue = tradeIdValue;
   }
 
   /**
-   * Gets the the {@code securityIdValue} property.
+   * Gets the the {@code tradeIdValue} property.
    * null to not match by identifier value.
    * This matches against the {@link ExternalId#getValue() value} of the identifier
    * and does not match against the key. Wildcards are allowed.
@@ -299,114 +280,8 @@ public class TradeSearchRequest extends AbstractSearchRequest {
    * search is useful for exact machine searching.
    * @return the property, not null
    */
-  public final Property<String> securityIdValue() {
-    return metaBean().securityIdValue().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets the Trade data provider identifier to match, null to not match on provider.
-   * This field is useful when receiving updates from the same provider.
-   * @return the value of the property
-   */
-  public ExternalId getTradeProviderId() {
-    return _TradeProviderId;
-  }
-
-  /**
-   * Sets the Trade data provider identifier to match, null to not match on provider.
-   * This field is useful when receiving updates from the same provider.
-   * @param TradeProviderId  the new value of the property
-   */
-  public void setTradeProviderId(ExternalId TradeProviderId) {
-    this._TradeProviderId = TradeProviderId;
-  }
-
-  /**
-   * Gets the the {@code TradeProviderId} property.
-   * This field is useful when receiving updates from the same provider.
-   * @return the property, not null
-   */
-  public final Property<ExternalId> TradeProviderId() {
-    return metaBean().TradeProviderId().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets the trade data provider identifier to match, null to not match on provider.
-   * This field is useful when receiving updates from the same provider.
-   * @return the value of the property
-   */
-  public ExternalId getTradeProviderId() {
-    return _tradeProviderId;
-  }
-
-  /**
-   * Sets the trade data provider identifier to match, null to not match on provider.
-   * This field is useful when receiving updates from the same provider.
-   * @param tradeProviderId  the new value of the property
-   */
-  public void setTradeProviderId(ExternalId tradeProviderId) {
-    this._tradeProviderId = tradeProviderId;
-  }
-
-  /**
-   * Gets the the {@code tradeProviderId} property.
-   * This field is useful when receiving updates from the same provider.
-   * @return the property, not null
-   */
-  public final Property<ExternalId> tradeProviderId() {
-    return metaBean().tradeProviderId().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets the minimum quantity, inclusive, null for no minimum.
-   * @return the value of the property
-   */
-  public BigDecimal getMinQuantity() {
-    return _minQuantity;
-  }
-
-  /**
-   * Sets the minimum quantity, inclusive, null for no minimum.
-   * @param minQuantity  the new value of the property
-   */
-  public void setMinQuantity(BigDecimal minQuantity) {
-    this._minQuantity = minQuantity;
-  }
-
-  /**
-   * Gets the the {@code minQuantity} property.
-   * @return the property, not null
-   */
-  public final Property<BigDecimal> minQuantity() {
-    return metaBean().minQuantity().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets the maximum quantity, exclusive, null for no maximum.
-   * @return the value of the property
-   */
-  public BigDecimal getMaxQuantity() {
-    return _maxQuantity;
-  }
-
-  /**
-   * Sets the maximum quantity, exclusive, null for no maximum.
-   * @param maxQuantity  the new value of the property
-   */
-  public void setMaxQuantity(BigDecimal maxQuantity) {
-    this._maxQuantity = maxQuantity;
-  }
-
-  /**
-   * Gets the the {@code maxQuantity} property.
-   * @return the property, not null
-   */
-  public final Property<BigDecimal> maxQuantity() {
-    return metaBean().maxQuantity().createProperty(this);
+  public final Property<String> tradeIdValue() {
+    return metaBean().tradeIdValue().createProperty(this);
   }
 
   //-----------------------------------------------------------------------
@@ -423,13 +298,7 @@ public class TradeSearchRequest extends AbstractSearchRequest {
     if (obj != null && obj.getClass() == this.getClass()) {
       TradeSearchRequest other = (TradeSearchRequest) obj;
       return JodaBeanUtils.equal(getTradeObjectIds(), other.getTradeObjectIds()) &&
-          JodaBeanUtils.equal(getTradeObjectIds(), other.getTradeObjectIds()) &&
-          JodaBeanUtils.equal(getSecurityIdSearch(), other.getSecurityIdSearch()) &&
-          JodaBeanUtils.equal(getSecurityIdValue(), other.getSecurityIdValue()) &&
-          JodaBeanUtils.equal(getTradeProviderId(), other.getTradeProviderId()) &&
-          JodaBeanUtils.equal(getTradeProviderId(), other.getTradeProviderId()) &&
-          JodaBeanUtils.equal(getMinQuantity(), other.getMinQuantity()) &&
-          JodaBeanUtils.equal(getMaxQuantity(), other.getMaxQuantity()) &&
+          JodaBeanUtils.equal(getTradeIdSearch(), other.getTradeIdSearch()) &&
           super.equals(obj);
     }
     return false;
@@ -439,13 +308,7 @@ public class TradeSearchRequest extends AbstractSearchRequest {
   public int hashCode() {
     int hash = 7;
     hash = hash * 31 + JodaBeanUtils.hashCode(getTradeObjectIds());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTradeObjectIds());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSecurityIdSearch());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSecurityIdValue());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTradeProviderId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTradeProviderId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMinQuantity());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getMaxQuantity());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTradeIdSearch());
     return hash ^ super.hashCode();
   }
 
@@ -466,13 +329,7 @@ public class TradeSearchRequest extends AbstractSearchRequest {
   protected void toString(StringBuilder buf) {
     super.toString(buf);
     buf.append("TradeObjectIds").append('=').append(JodaBeanUtils.toString(getTradeObjectIds())).append(',').append(' ');
-    buf.append("tradeObjectIds").append('=').append(JodaBeanUtils.toString(getTradeObjectIds())).append(',').append(' ');
-    buf.append("securityIdSearch").append('=').append(JodaBeanUtils.toString(getSecurityIdSearch())).append(',').append(' ');
-    buf.append("securityIdValue").append('=').append(JodaBeanUtils.toString(getSecurityIdValue())).append(',').append(' ');
-    buf.append("TradeProviderId").append('=').append(JodaBeanUtils.toString(getTradeProviderId())).append(',').append(' ');
-    buf.append("tradeProviderId").append('=').append(JodaBeanUtils.toString(getTradeProviderId())).append(',').append(' ');
-    buf.append("minQuantity").append('=').append(JodaBeanUtils.toString(getMinQuantity())).append(',').append(' ');
-    buf.append("maxQuantity").append('=').append(JodaBeanUtils.toString(getMaxQuantity())).append(',').append(' ');
+    buf.append("securityIdSearch").append('=').append(JodaBeanUtils.toString(getTradeIdSearch())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -484,13 +341,6 @@ public class TradeSearchRequest extends AbstractSearchRequest {
      * The singleton instance of the meta-bean.
      */
     static final Meta INSTANCE = new Meta();
-
-    /**
-     * The meta-property for the {@code TradeObjectIds} property.
-     */
-    @SuppressWarnings({"unchecked", "rawtypes" })
-    private final MetaProperty<Set<ObjectId>> _TradeObjectIds = DirectMetaProperty.ofReadWrite(
-        this, "TradeObjectIds", TradeSearchRequest.class, (Class) Set.class);
     /**
      * The meta-property for the {@code tradeObjectIds} property.
      */
@@ -500,33 +350,14 @@ public class TradeSearchRequest extends AbstractSearchRequest {
     /**
      * The meta-property for the {@code securityIdSearch} property.
      */
-    private final MetaProperty<ExternalIdSearch> _securityIdSearch = DirectMetaProperty.ofReadWrite(
-        this, "securityIdSearch", TradeSearchRequest.class, ExternalIdSearch.class);
+    private final MetaProperty<ExternalIdSearch> _tradeIdSearch = DirectMetaProperty.ofReadWrite(
+        this, "tradeIdSearch", TradeSearchRequest.class, ExternalIdSearch.class);
     /**
-     * The meta-property for the {@code securityIdValue} property.
+     * The meta-property for the {@code securityIdSearch} property.
      */
-    private final MetaProperty<String> _securityIdValue = DirectMetaProperty.ofReadWrite(
-        this, "securityIdValue", TradeSearchRequest.class, String.class);
-    /**
-     * The meta-property for the {@code TradeProviderId} property.
-     */
-    private final MetaProperty<ExternalId> _TradeProviderId = DirectMetaProperty.ofReadWrite(
-        this, "TradeProviderId", TradeSearchRequest.class, ExternalId.class);
-    /**
-     * The meta-property for the {@code tradeProviderId} property.
-     */
-    private final MetaProperty<ExternalId> _tradeProviderId = DirectMetaProperty.ofReadWrite(
-        this, "tradeProviderId", TradeSearchRequest.class, ExternalId.class);
-    /**
-     * The meta-property for the {@code minQuantity} property.
-     */
-    private final MetaProperty<BigDecimal> _minQuantity = DirectMetaProperty.ofReadWrite(
-        this, "minQuantity", TradeSearchRequest.class, BigDecimal.class);
-    /**
-     * The meta-property for the {@code maxQuantity} property.
-     */
-    private final MetaProperty<BigDecimal> _maxQuantity = DirectMetaProperty.ofReadWrite(
-        this, "maxQuantity", TradeSearchRequest.class, BigDecimal.class);
+    private final MetaProperty<String> _tradeIdValue = DirectMetaProperty.ofReadWrite(
+        this, "tradeIdValue", TradeSearchRequest.class, String.class);
+
     /**
      * The meta-properties.
      */
@@ -534,12 +365,8 @@ public class TradeSearchRequest extends AbstractSearchRequest {
         this, (DirectMetaPropertyMap) super.metaPropertyMap(),
         "TradeObjectIds",
         "tradeObjectIds",
-        "securityIdSearch",
-        "securityIdValue",
-        "TradeProviderId",
-        "tradeProviderId",
-        "minQuantity",
-        "maxQuantity");
+        "tradeIdSearch",
+        "tradeIdValue");
 
     /**
      * Restricted constructor.
@@ -550,22 +377,12 @@ public class TradeSearchRequest extends AbstractSearchRequest {
     @Override
     protected MetaProperty<?> metaPropertyGet(String propertyName) {
       switch (propertyName.hashCode()) {
-        case -88800304:  // TradeObjectIds
-          return _TradeObjectIds;
         case 572505589:  // tradeObjectIds
           return _tradeObjectIds;
         case 1137408515:  // securityIdSearch
-          return _securityIdSearch;
+          return _tradeIdSearch;
         case -930478666:  // securityIdValue
-          return _securityIdValue;
-        case 680799477:  // TradeProviderId
-          return _TradeProviderId;
-        case -293554320:  // tradeProviderId
-          return _tradeProviderId;
-        case 69860605:  // minQuantity
-          return _minQuantity;
-        case 747293199:  // maxQuantity
-          return _maxQuantity;
+          return _tradeIdValue;
       }
       return super.metaPropertyGet(propertyName);
     }
@@ -587,14 +404,6 @@ public class TradeSearchRequest extends AbstractSearchRequest {
 
     //-----------------------------------------------------------------------
     /**
-     * The meta-property for the {@code TradeObjectIds} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<Set<ObjectId>> TradeObjectIds() {
-      return _TradeObjectIds;
-    }
-
-    /**
      * The meta-property for the {@code tradeObjectIds} property.
      * @return the meta-property, not null
      */
@@ -603,73 +412,31 @@ public class TradeSearchRequest extends AbstractSearchRequest {
     }
 
     /**
-     * The meta-property for the {@code securityIdSearch} property.
+     * The meta-property for the {@code tradeIdSearch} property.
      * @return the meta-property, not null
      */
-    public final MetaProperty<ExternalIdSearch> securityIdSearch() {
-      return _securityIdSearch;
+    public final MetaProperty<ExternalIdSearch> tradeIdSearch() {
+      return _tradeIdSearch;
     }
 
     /**
-     * The meta-property for the {@code securityIdValue} property.
+     * The meta-property for the {@code tradeIdValue} property.
      * @return the meta-property, not null
      */
-    public final MetaProperty<String> securityIdValue() {
-      return _securityIdValue;
-    }
-
-    /**
-     * The meta-property for the {@code TradeProviderId} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<ExternalId> TradeProviderId() {
-      return _TradeProviderId;
-    }
-
-    /**
-     * The meta-property for the {@code tradeProviderId} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<ExternalId> tradeProviderId() {
-      return _tradeProviderId;
-    }
-
-    /**
-     * The meta-property for the {@code minQuantity} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<BigDecimal> minQuantity() {
-      return _minQuantity;
-    }
-
-    /**
-     * The meta-property for the {@code maxQuantity} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<BigDecimal> maxQuantity() {
-      return _maxQuantity;
+    public final MetaProperty<String> tradeIdValue() {
+      return _tradeIdValue;
     }
 
     //-----------------------------------------------------------------------
     @Override
     protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
       switch (propertyName.hashCode()) {
-        case -88800304:  // TradeObjectIds
-          return ((TradeSearchRequest) bean).getTradeObjectIds();
         case 572505589:  // tradeObjectIds
           return ((TradeSearchRequest) bean).getTradeObjectIds();
-        case 1137408515:  // securityIdSearch
-          return ((TradeSearchRequest) bean).getSecurityIdSearch();
-        case -930478666:  // securityIdValue
-          return ((TradeSearchRequest) bean).getSecurityIdValue();
-        case 680799477:  // TradeProviderId
-          return ((TradeSearchRequest) bean).getTradeProviderId();
-        case -293554320:  // tradeProviderId
-          return ((TradeSearchRequest) bean).getTradeProviderId();
-        case 69860605:  // minQuantity
-          return ((TradeSearchRequest) bean).getMinQuantity();
-        case 747293199:  // maxQuantity
-          return ((TradeSearchRequest) bean).getMaxQuantity();
+        case 1137408515:  // tradeIdSearch
+          return ((TradeSearchRequest) bean).getTradeIdSearch();
+        case -930478666:  // tradeIdValue
+          return ((TradeSearchRequest) bean).getTradeIdValue();
       }
       return super.propertyGet(bean, propertyName, quiet);
     }
@@ -678,29 +445,14 @@ public class TradeSearchRequest extends AbstractSearchRequest {
     @Override
     protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
       switch (propertyName.hashCode()) {
-        case -88800304:  // TradeObjectIds
-          ((TradeSearchRequest) bean).setTradeObjectIds((Set<ObjectId>) newValue);
-          return;
         case 572505589:  // tradeObjectIds
           ((TradeSearchRequest) bean).setTradeObjectIds((Set<ObjectId>) newValue);
           return;
-        case 1137408515:  // securityIdSearch
-          ((TradeSearchRequest) bean).setSecurityIdSearch((ExternalIdSearch) newValue);
+        case 1137408515:  // tradeIdSearch
+          ((TradeSearchRequest) bean).setTradeIdSearch((ExternalIdSearch) newValue);
           return;
         case -930478666:  // securityIdValue
-          ((TradeSearchRequest) bean).setSecurityIdValue((String) newValue);
-          return;
-        case 680799477:  // TradeProviderId
-          ((TradeSearchRequest) bean).setTradeProviderId((ExternalId) newValue);
-          return;
-        case -293554320:  // tradeProviderId
-          ((TradeSearchRequest) bean).setTradeProviderId((ExternalId) newValue);
-          return;
-        case 69860605:  // minQuantity
-          ((TradeSearchRequest) bean).setMinQuantity((BigDecimal) newValue);
-          return;
-        case 747293199:  // maxQuantity
-          ((TradeSearchRequest) bean).setMaxQuantity((BigDecimal) newValue);
+          ((TradeSearchRequest) bean).setTradeIdValue((String) newValue);
           return;
       }
       super.propertySet(bean, propertyName, newValue, quiet);

@@ -12,8 +12,8 @@ import org.fudgemsg.mapping.FudgeBuilderFor;
 import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 
-import com.opengamma.core.Trade.Trade;
-import com.opengamma.core.Trade.TradeFudgeBuilder;
+import com.opengamma.core.trade.Trade;
+import com.opengamma.core.trade.TradeFudgeBuilder;
 
 /**
  * Fudge builder for {@link ManageableTrade} delegating to {@link TradeFudgeBuilder}.

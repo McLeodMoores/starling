@@ -75,12 +75,7 @@ implements Trade, MutableUniqueIdentifiable, UniqueIdentifiable, Serializable {
    */
   @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
-  /**
-   * The trades that the make up the Trade, not null.
-   * An empty list usually means that trade data is unavailable.
-   */
-  @PropertyDefinition
-  private final ManageableTrade _trade;
+
   /**
    * The general purpose Trade attributes.
    * These can be used to add arbitrary additional information to the object
@@ -104,10 +99,9 @@ implements Trade, MutableUniqueIdentifiable, UniqueIdentifiable, Serializable {
   }
 
   /**
-   * Creates a Trade from an amount of a security.
+   * Creates a Trade from a bundle of external trade ids.
    *
-   * @param quantity  the amount of the Trade, not null
-   * @param securityId  the security identifier, not null
+   * @param externalTradeIds  the external trade identifiers, not null
    */
   public ManageableTrade(final ExternalIdBundle externalTradeIds) {
     ArgumentChecker.notNull(externalTradeIds, "externalTradeIds");
@@ -119,7 +113,7 @@ implements Trade, MutableUniqueIdentifiable, UniqueIdentifiable, Serializable {
    *
    * @param copyFrom  the Trade to copy from, not null
    */
-  public ManageableTrade(final ManageableTrade copyFrom) {
+  public ManageableTrade(final Trade copyFrom) {
     ArgumentChecker.notNull(copyFrom, "copyFrom");
     _uniqueId = copyFrom.getUniqueId();
     _externalTradeIds = JodaBeanUtils.clone(copyFrom.getExternalTradeIds());
@@ -203,41 +197,6 @@ implements Trade, MutableUniqueIdentifiable, UniqueIdentifiable, Serializable {
   }
 
   //-----------------------------------------------------------------------
-
-  @Override
-  public Counterparty getCounterparty() {
-    return null;
-  }
-
-  @Override
-  public LocalDate getTradeDate() {
-    return null;
-  }
-
-  @Override
-  public OffsetTime getTradeTime() {
-    return null;
-  }
-
-  @Override
-  public Double getPremium() {
-    return 0.0;
-  }
-
-  @Override
-  public Currency getPremiumCurrency() {
-    return null;
-  }
-
-  @Override
-  public LocalDate getPremiumDate() {
-    return null;
-  }
-
-  @Override
-  public OffsetTime getPremiumTime() {
-    return null;
-  }
 
   /**
    * Gets the unique identifier of the Trade.
@@ -329,17 +288,7 @@ implements Trade, MutableUniqueIdentifiable, UniqueIdentifiable, Serializable {
    * @return the property, not null
    */
   public final Property<ExternalIdBundle> externalTradeIds() {
-    return metaBean().providerId().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets the the {@code name} property.
-   * 
-   * @return the property, not null
-   */
-  public final Property<String> name() {
-    return metaBean().name().createProperty(this);
+    return metaBean()._externalTradeIds.createProperty(this);
   }
 
   //-----------------------------------------------------------------------

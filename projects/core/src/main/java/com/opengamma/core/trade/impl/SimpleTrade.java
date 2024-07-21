@@ -26,14 +26,14 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetTime;
 
 import com.google.common.collect.Maps;
-import com.opengamma.core.LinkUtils;
-import com.opengamma.core.position.Counterparty;
 import com.opengamma.core.trade.Trade;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.MutableUniqueIdentifiable;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
+
+import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  * A simple mutable implementation of {@code Trade}.
@@ -51,50 +51,10 @@ public class SimpleTrade extends DirectBean
   @PropertyDefinition(overrideGet = true, overrideSet = true)
   private UniqueId _uniqueId;
   /**
-   * The number of units in the trade.
-   */
-  @PropertyDefinition(overrideGet = true)
-  private BigDecimal _quantity;
-  /**
    * The bundle of external trade ids, not null.
    */
   @PropertyDefinition(validate = "notNull", overrideGet = true)
   private ExternalIdBundle _externalTradeIds;
-  /**
-   * The counterparty.
-   */
-  @PropertyDefinition(overrideGet = true)
-  private Counterparty _counterparty;
-  /**
-   * The trade date.
-   */
-  @PropertyDefinition(overrideGet = true)
-  private LocalDate _tradeDate;
-  /**
-   * The trade time with offset, null if not known.
-   */
-  @PropertyDefinition(overrideGet = true)
-  private OffsetTime _tradeTime;
-  /**
-   * Amount paid for trade at time of purchase, null if not known.
-   */
-  @PropertyDefinition(overrideGet = true)
-  private Double _premium;
-  /**
-   * Currency of payment at time of purchase, null if not known.
-   */
-  @PropertyDefinition(overrideGet = true)
-  private Currency _premiumCurrency;
-  /**
-   * Date of premium payment, null if not known.
-   */
-  @PropertyDefinition(overrideGet = true)
-  private LocalDate _premiumDate;
-  /**
-   * Time of premium payment, null if not known.
-   */
-  @PropertyDefinition(overrideGet = true)
-  private OffsetTime _premiumTime;
   /**
    * The general purpose trade attributes.
    * These can be used to add arbitrary additional information to the object
@@ -110,47 +70,15 @@ public class SimpleTrade extends DirectBean
 
   }
 
-  /**
-   * Creates a trade from a positionId, an amount of a security identified by key, counterparty and tradeinstant.
-   *
-   * @param externalTradeIds  the external trade ids, not null
-   * @param quantity  the amount of the trade, not null
-   * @param counterparty  the counterparty, not null
-   * @param tradeDate  the trade date, not null
-   * @param tradeTime  the trade time with offset, may be null
-   */
-  public SimpleTrade(final ExternalIdBundle externalTradeIds, final BigDecimal quantity, final Counterparty counterparty,
-                     final LocalDate tradeDate, final OffsetTime tradeTime) {
-    ArgumentChecker.notNull(externalTradeIds, "externalTradeIds");
-    ArgumentChecker.notNull(quantity, "quantity");
-    ArgumentChecker.notNull(counterparty, "counterparty");
-    ArgumentChecker.notNull(tradeDate, "tradeDate");
-    _quantity = quantity;
-    _counterparty = counterparty;
-    _tradeDate = tradeDate;
-    _tradeTime = tradeTime;
-    _externalTradeIds = externalTradeIds;
-  }
 
   /**
-   * Creates a trade from a positionId, an amount of a security, counterparty and trade instant.
+   * Creates a trade.
    *
    * @param externalTradeIds  the external trade ids, not null
-   * @param quantity  the amount of the trade, not null
-   * @param counterparty  the counterparty, not null
-   * @param tradeDate  the trade date, not null
-   * @param tradeTime  the trade time with offset, may be null
    */
-  public SimpleTrade(final ExternalIdBundle externalTradeIds,  final BigDecimal quantity, final Counterparty counterparty, final LocalDate tradeDate,
-                     final OffsetTime tradeTime) {
+  public SimpleTrade(final ExternalIdBundle externalTradeIds) {
     ArgumentChecker.notNull(externalTradeIds, "externalTradeIds");
-    ArgumentChecker.notNull(quantity, "quantity");
-    ArgumentChecker.notNull(counterparty, "counterparty");
-    ArgumentChecker.notNull(tradeDate, "tradeDate");
-    _quantity = quantity;
-    _counterparty = counterparty;
-    _tradeDate = tradeDate;
-    _tradeTime = tradeTime;
+
     _externalTradeIds = externalTradeIds;
   }
 
@@ -162,31 +90,12 @@ public class SimpleTrade extends DirectBean
   public SimpleTrade(final Trade copyFrom) {
     ArgumentChecker.notNull(copyFrom, "copyFrom");
     _uniqueId = copyFrom.getUniqueId();
-    _quantity = copyFrom.getQuantity();
-    _counterparty = copyFrom.getCounterparty();
-    _tradeDate = copyFrom.getTradeDate();
-    _tradeTime = copyFrom.getTradeTime();
-    _premium = copyFrom.getPremium();
-    _premiumCurrency = copyFrom.getPremiumCurrency();
-    _premiumDate = copyFrom.getPremiumDate();
-    _premiumTime = copyFrom.getPremiumTime();
     _externalTradeIds = copyFrom.getExternalTradeIds();
     setAttributes(copyFrom.getAttributes());
   }
 
   //-------------------------------------------------------------------------
-  /**
-   * Gets the target security from the link.
-   * <p>
-   * This convenience method gets the target security from the link.
-   * This is guaranteed to return a security within an analytic function.
-   *
-   * @return the security link, null if target not resolved in the link
-   */
-  @Override
-  public Security getSecurity() {
-    return _securityLink.getTarget();
-  }
+
 
   //-------------------------------------------------------------------------
   @Override
@@ -213,15 +122,7 @@ public class SimpleTrade extends DirectBean
         .append("Trade[")
         .append(getUniqueId())
         .append(", ")
-        .append(getQuantity())
-        .append(' ')
-        .append(LinkUtils.best(getSecurityLink()))
-        .append(", ")
-        .append(getCounterparty())
-        .append(", ")
-        .append(getTradeDate())
-        .append(" ")
-        .append(getTradeTime())
+        .append(getExternalTradeIds())
         .append(']')
         .toString();
   }
@@ -273,241 +174,32 @@ public class SimpleTrade extends DirectBean
   }
 
   //-----------------------------------------------------------------------
-  /**
-   * Gets the number of units in the trade.
-   * @return the value of the property
-   */
-  @Override
-  public BigDecimal getQuantity() {
-    return _quantity;
-  }
-
-  /**
-   * Sets the number of units in the trade.
-   * @param quantity  the new value of the property
-   */
-  public void setQuantity(BigDecimal quantity) {
-    this._quantity = quantity;
-  }
-
-  /**
-   * Gets the the {@code quantity} property.
-   * @return the property, not null
-   */
-  public final Property<BigDecimal> quantity() {
-    return metaBean().quantity().createProperty(this);
-  }
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the link referencing the security, not null.
-   * This may also hold the resolved security.
+   * Gets the external trade ids, not null.
    * @return the value of the property, not null
    */
   @Override
-  public SecurityLink getSecurityLink() {
-    return _securityLink;
+  public ExternalIdBundle getExternalTradeIds() {
+    return _externalTradeIds;
   }
 
   /**
-   * Sets the link referencing the security, not null.
-   * This may also hold the resolved security.
-   * @param securityLink  the new value of the property, not null
+   * Sets the external trade id bundle, not null.
+   * @param externalTradeIds  the new value of the property, not null
    */
-  public void setSecurityLink(SecurityLink securityLink) {
-    JodaBeanUtils.notNull(securityLink, "securityLink");
-    this._securityLink = securityLink;
+  public void setExternalTradeIds(ExternalIdBundle externalTradeIds) {
+    JodaBeanUtils.notNull(externalTradeIds, "externalTradeIds");
+    this._externalTradeIds = externalTradeIds;
   }
 
   /**
-   * Gets the the {@code securityLink} property.
-   * This may also hold the resolved security.
+   * Gets the {@code externalTradeIds} property.
    * @return the property, not null
    */
-  public final Property<SecurityLink> securityLink() {
-    return metaBean().securityLink().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets the counterparty.
-   * @return the value of the property
-   */
-  @Override
-  public Counterparty getCounterparty() {
-    return _counterparty;
-  }
-
-  /**
-   * Sets the counterparty.
-   * @param counterparty  the new value of the property
-   */
-  public void setCounterparty(Counterparty counterparty) {
-    this._counterparty = counterparty;
-  }
-
-  /**
-   * Gets the the {@code counterparty} property.
-   * @return the property, not null
-   */
-  public final Property<Counterparty> counterparty() {
-    return metaBean().counterparty().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets the trade date.
-   * @return the value of the property
-   */
-  @Override
-  public LocalDate getTradeDate() {
-    return _tradeDate;
-  }
-
-  /**
-   * Sets the trade date.
-   * @param tradeDate  the new value of the property
-   */
-  public void setTradeDate(LocalDate tradeDate) {
-    this._tradeDate = tradeDate;
-  }
-
-  /**
-   * Gets the the {@code tradeDate} property.
-   * @return the property, not null
-   */
-  public final Property<LocalDate> tradeDate() {
-    return metaBean().tradeDate().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets the trade time with offset, null if not known.
-   * @return the value of the property
-   */
-  @Override
-  public OffsetTime getTradeTime() {
-    return _tradeTime;
-  }
-
-  /**
-   * Sets the trade time with offset, null if not known.
-   * @param tradeTime  the new value of the property
-   */
-  public void setTradeTime(OffsetTime tradeTime) {
-    this._tradeTime = tradeTime;
-  }
-
-  /**
-   * Gets the the {@code tradeTime} property.
-   * @return the property, not null
-   */
-  public final Property<OffsetTime> tradeTime() {
-    return metaBean().tradeTime().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets amount paid for trade at time of purchase, null if not known.
-   * @return the value of the property
-   */
-  @Override
-  public Double getPremium() {
-    return _premium;
-  }
-
-  /**
-   * Sets amount paid for trade at time of purchase, null if not known.
-   * @param premium  the new value of the property
-   */
-  public void setPremium(Double premium) {
-    this._premium = premium;
-  }
-
-  /**
-   * Gets the the {@code premium} property.
-   * @return the property, not null
-   */
-  public final Property<Double> premium() {
-    return metaBean().premium().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets currency of payment at time of purchase, null if not known.
-   * @return the value of the property
-   */
-  @Override
-  public Currency getPremiumCurrency() {
-    return _premiumCurrency;
-  }
-
-  /**
-   * Sets currency of payment at time of purchase, null if not known.
-   * @param premiumCurrency  the new value of the property
-   */
-  public void setPremiumCurrency(Currency premiumCurrency) {
-    this._premiumCurrency = premiumCurrency;
-  }
-
-  /**
-   * Gets the the {@code premiumCurrency} property.
-   * @return the property, not null
-   */
-  public final Property<Currency> premiumCurrency() {
-    return metaBean().premiumCurrency().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets date of premium payment, null if not known.
-   * @return the value of the property
-   */
-  @Override
-  public LocalDate getPremiumDate() {
-    return _premiumDate;
-  }
-
-  /**
-   * Sets date of premium payment, null if not known.
-   * @param premiumDate  the new value of the property
-   */
-  public void setPremiumDate(LocalDate premiumDate) {
-    this._premiumDate = premiumDate;
-  }
-
-  /**
-   * Gets the the {@code premiumDate} property.
-   * @return the property, not null
-   */
-  public final Property<LocalDate> premiumDate() {
-    return metaBean().premiumDate().createProperty(this);
-  }
-
-  //-----------------------------------------------------------------------
-  /**
-   * Gets time of premium payment, null if not known.
-   * @return the value of the property
-   */
-  @Override
-  public OffsetTime getPremiumTime() {
-    return _premiumTime;
-  }
-
-  /**
-   * Sets time of premium payment, null if not known.
-   * @param premiumTime  the new value of the property
-   */
-  public void setPremiumTime(OffsetTime premiumTime) {
-    this._premiumTime = premiumTime;
-  }
-
-  /**
-   * Gets the the {@code premiumTime} property.
-   * @return the property, not null
-   */
-  public final Property<OffsetTime> premiumTime() {
-    return metaBean().premiumTime().createProperty(this);
+  public final Property<ExternalIdBundle> externalTradeIds() {
+    return metaBean().externalTradeIds().createProperty(this);
   }
 
   //-----------------------------------------------------------------------
@@ -559,15 +251,7 @@ public class SimpleTrade extends DirectBean
     if (obj != null && obj.getClass() == this.getClass()) {
       SimpleTrade other = (SimpleTrade) obj;
       return JodaBeanUtils.equal(getUniqueId(), other.getUniqueId()) &&
-          JodaBeanUtils.equal(getQuantity(), other.getQuantity()) &&
-          JodaBeanUtils.equal(getSecurityLink(), other.getSecurityLink()) &&
-          JodaBeanUtils.equal(getCounterparty(), other.getCounterparty()) &&
-          JodaBeanUtils.equal(getTradeDate(), other.getTradeDate()) &&
-          JodaBeanUtils.equal(getTradeTime(), other.getTradeTime()) &&
-          JodaBeanUtils.equal(getPremium(), other.getPremium()) &&
-          JodaBeanUtils.equal(getPremiumCurrency(), other.getPremiumCurrency()) &&
-          JodaBeanUtils.equal(getPremiumDate(), other.getPremiumDate()) &&
-          JodaBeanUtils.equal(getPremiumTime(), other.getPremiumTime()) &&
+          JodaBeanUtils.equal(getExternalTradeIds(), other.getExternalTradeIds()) &&
           JodaBeanUtils.equal(getAttributes(), other.getAttributes());
     }
     return false;
@@ -577,15 +261,7 @@ public class SimpleTrade extends DirectBean
   public int hashCode() {
     int hash = getClass().hashCode();
     hash = hash * 31 + JodaBeanUtils.hashCode(getUniqueId());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getQuantity());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getSecurityLink());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getCounterparty());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTradeDate());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getTradeTime());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPremium());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPremiumCurrency());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPremiumDate());
-    hash = hash * 31 + JodaBeanUtils.hashCode(getPremiumTime());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getExternalTradeIds());
     hash = hash * 31 + JodaBeanUtils.hashCode(getAttributes());
     return hash;
   }
@@ -606,71 +282,24 @@ public class SimpleTrade extends DirectBean
     private final MetaProperty<UniqueId> _uniqueId = DirectMetaProperty.ofReadWrite(
         this, "uniqueId", SimpleTrade.class, UniqueId.class);
     /**
-     * The meta-property for the {@code quantity} property.
+     * The meta-property for the {@code externalTradeIds} property.
      */
-    private final MetaProperty<BigDecimal> _quantity = DirectMetaProperty.ofReadWrite(
-        this, "quantity", SimpleTrade.class, BigDecimal.class);
-    /**
-     * The meta-property for the {@code securityLink} property.
-     */
-    private final MetaProperty<SecurityLink> _securityLink = DirectMetaProperty.ofReadWrite(
-        this, "securityLink", SimpleTrade.class, SecurityLink.class);
-    /**
-     * The meta-property for the {@code counterparty} property.
-     */
-    private final MetaProperty<Counterparty> _counterparty = DirectMetaProperty.ofReadWrite(
-        this, "counterparty", SimpleTrade.class, Counterparty.class);
-    /**
-     * The meta-property for the {@code tradeDate} property.
-     */
-    private final MetaProperty<LocalDate> _tradeDate = DirectMetaProperty.ofReadWrite(
-        this, "tradeDate", SimpleTrade.class, LocalDate.class);
-    /**
-     * The meta-property for the {@code tradeTime} property.
-     */
-    private final MetaProperty<OffsetTime> _tradeTime = DirectMetaProperty.ofReadWrite(
-        this, "tradeTime", SimpleTrade.class, OffsetTime.class);
-    /**
-     * The meta-property for the {@code premium} property.
-     */
-    private final MetaProperty<Double> _premium = DirectMetaProperty.ofReadWrite(
-        this, "premium", SimpleTrade.class, Double.class);
-    /**
-     * The meta-property for the {@code premiumCurrency} property.
-     */
-    private final MetaProperty<Currency> _premiumCurrency = DirectMetaProperty.ofReadWrite(
-        this, "premiumCurrency", SimpleTrade.class, Currency.class);
-    /**
-     * The meta-property for the {@code premiumDate} property.
-     */
-    private final MetaProperty<LocalDate> _premiumDate = DirectMetaProperty.ofReadWrite(
-        this, "premiumDate", SimpleTrade.class, LocalDate.class);
-    /**
-     * The meta-property for the {@code premiumTime} property.
-     */
-    private final MetaProperty<OffsetTime> _premiumTime = DirectMetaProperty.ofReadWrite(
-        this, "premiumTime", SimpleTrade.class, OffsetTime.class);
+    private final MetaProperty<ExternalIdBundle> _externalTradeIds = DirectMetaProperty.ofReadWrite(
+        this, "externalTradeIds", SimpleTrade.class, ExternalIdBundle.class);
+
     /**
      * The meta-property for the {@code attributes} property.
      */
-    @SuppressWarnings({"unchecked", "rawtypes" })
-    private final MetaProperty<Map<String, String>> _attributes = DirectMetaProperty.ofReadWrite(
-        this, "attributes", SimpleTrade.class, (Class) Map.class);
+    @SuppressWarnings({"unchecked", "raw"})
+    private final MetaProperty<Map<String, String>> _attributes = DirectMetaProperty.ofReadWrite(this, "attributes",
+                                                                                                 SimpleTrade.class, (Class) Map.class);
     /**
      * The meta-properties.
      */
     private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
         this, null,
         "uniqueId",
-        "quantity",
-        "securityLink",
-        "counterparty",
-        "tradeDate",
-        "tradeTime",
-        "premium",
-        "premiumCurrency",
-        "premiumDate",
-        "premiumTime",
+        "externalTradeIds",
         "attributes");
 
     /**
@@ -684,24 +313,8 @@ public class SimpleTrade extends DirectBean
       switch (propertyName.hashCode()) {
         case -294460212:  // uniqueId
           return _uniqueId;
-        case -1285004149:  // quantity
-          return _quantity;
-        case 807992154:  // securityLink
-          return _securityLink;
-        case -1651301782:  // counterparty
-          return _counterparty;
-        case 752419634:  // tradeDate
-          return _tradeDate;
-        case 752903761:  // tradeTime
-          return _tradeTime;
-        case -318452137:  // premium
-          return _premium;
-        case 1136581512:  // premiumCurrency
-          return _premiumCurrency;
-        case 651701925:  // premiumDate
-          return _premiumDate;
-        case 652186052:  // premiumTime
-          return _premiumTime;
+        case -1285004149:  // externalTradeIds
+          return _externalTradeIds;
         case 405645655:  // attributes
           return _attributes;
       }
@@ -733,75 +346,11 @@ public class SimpleTrade extends DirectBean
     }
 
     /**
-     * The meta-property for the {@code quantity} property.
+     * The meta-property for the {@code externalTradeIds} property.
      * @return the meta-property, not null
      */
-    public final MetaProperty<BigDecimal> quantity() {
-      return _quantity;
-    }
-
-    /**
-     * The meta-property for the {@code securityLink} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<SecurityLink> securityLink() {
-      return _securityLink;
-    }
-
-    /**
-     * The meta-property for the {@code counterparty} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<Counterparty> counterparty() {
-      return _counterparty;
-    }
-
-    /**
-     * The meta-property for the {@code tradeDate} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<LocalDate> tradeDate() {
-      return _tradeDate;
-    }
-
-    /**
-     * The meta-property for the {@code tradeTime} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<OffsetTime> tradeTime() {
-      return _tradeTime;
-    }
-
-    /**
-     * The meta-property for the {@code premium} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<Double> premium() {
-      return _premium;
-    }
-
-    /**
-     * The meta-property for the {@code premiumCurrency} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<Currency> premiumCurrency() {
-      return _premiumCurrency;
-    }
-
-    /**
-     * The meta-property for the {@code premiumDate} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<LocalDate> premiumDate() {
-      return _premiumDate;
-    }
-
-    /**
-     * The meta-property for the {@code premiumTime} property.
-     * @return the meta-property, not null
-     */
-    public final MetaProperty<OffsetTime> premiumTime() {
-      return _premiumTime;
+    public final MetaProperty<ExternalIdBundle> externalTradeIds() {
+      return _externalTradeIds;
     }
 
     /**
@@ -818,24 +367,8 @@ public class SimpleTrade extends DirectBean
       switch (propertyName.hashCode()) {
         case -294460212:  // uniqueId
           return ((SimpleTrade) bean).getUniqueId();
-        case -1285004149:  // quantity
-          return ((SimpleTrade) bean).getQuantity();
-        case 807992154:  // securityLink
-          return ((SimpleTrade) bean).getSecurityLink();
-        case -1651301782:  // counterparty
-          return ((SimpleTrade) bean).getCounterparty();
-        case 752419634:  // tradeDate
-          return ((SimpleTrade) bean).getTradeDate();
-        case 752903761:  // tradeTime
-          return ((SimpleTrade) bean).getTradeTime();
-        case -318452137:  // premium
-          return ((SimpleTrade) bean).getPremium();
-        case 1136581512:  // premiumCurrency
-          return ((SimpleTrade) bean).getPremiumCurrency();
-        case 651701925:  // premiumDate
-          return ((SimpleTrade) bean).getPremiumDate();
-        case 652186052:  // premiumTime
-          return ((SimpleTrade) bean).getPremiumTime();
+        case -1285004149:  // external trade ids
+          return ((SimpleTrade) bean).getExternalTradeIds();
         case 405645655:  // attributes
           return ((SimpleTrade) bean).getAttributes();
       }
@@ -849,32 +382,8 @@ public class SimpleTrade extends DirectBean
         case -294460212:  // uniqueId
           ((SimpleTrade) bean).setUniqueId((UniqueId) newValue);
           return;
-        case -1285004149:  // quantity
-          ((SimpleTrade) bean).setQuantity((BigDecimal) newValue);
-          return;
-        case 807992154:  // securityLink
-          ((SimpleTrade) bean).setSecurityLink((SecurityLink) newValue);
-          return;
-        case -1651301782:  // counterparty
-          ((SimpleTrade) bean).setCounterparty((Counterparty) newValue);
-          return;
-        case 752419634:  // tradeDate
-          ((SimpleTrade) bean).setTradeDate((LocalDate) newValue);
-          return;
-        case 752903761:  // tradeTime
-          ((SimpleTrade) bean).setTradeTime((OffsetTime) newValue);
-          return;
-        case -318452137:  // premium
-          ((SimpleTrade) bean).setPremium((Double) newValue);
-          return;
-        case 1136581512:  // premiumCurrency
-          ((SimpleTrade) bean).setPremiumCurrency((Currency) newValue);
-          return;
-        case 651701925:  // premiumDate
-          ((SimpleTrade) bean).setPremiumDate((LocalDate) newValue);
-          return;
-        case 652186052:  // premiumTime
-          ((SimpleTrade) bean).setPremiumTime((OffsetTime) newValue);
+        case -1285004149:  // external trade ids
+          ((SimpleTrade) bean).setExternalTradeIds((ExternalIdBundle) newValue);
           return;
         case 405645655:  // attributes
           ((SimpleTrade) bean).setAttributes((Map<String, String>) newValue);
@@ -885,7 +394,7 @@ public class SimpleTrade extends DirectBean
 
     @Override
     protected void validate(Bean bean) {
-      JodaBeanUtils.notNull(((SimpleTrade) bean)._securityLink, "securityLink");
+      JodaBeanUtils.notNull(((SimpleTrade) bean)._externalTradeIds, "externalTradeIds");
       JodaBeanUtils.notNull(((SimpleTrade) bean)._attributes, "attributes");
     }
 

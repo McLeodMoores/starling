@@ -108,7 +108,7 @@ public class TradeDocument extends AbstractDocument implements Serializable {
    * Gets the the {@code trade} property.
    * @return the property, not null
    */
-  public final Property<ManageabTrade> trade() {
+  public final Property<ManageableTrade> trade() {
     return metaBean().trade().createProperty(this);
   }
 
